@@ -40,6 +40,10 @@ namespace Consolus
             ClearSelection();
         }
 
+        public int VisibleCharacterStart { get; internal set; }
+
+        public int VisibleCharacterEnd { get; internal set; }
+
         public int SelectionStart { get; set; }
 
 
@@ -204,8 +208,10 @@ namespace Consolus
             }
         }
         
-        public void Render(TextWriter writer, bool renderEscape = true)
+        public void Render(ConsoleTextWriter writer, bool renderEscape = true)
         {
+            VisibleCharacterStart = writer.VisibleCharacterCount;
+
             if (HasSelection)
             {
                 RenderWithSelection(writer, renderEscape);
@@ -216,9 +222,11 @@ namespace Consolus
                 RenderInternal(writer, 0, Count, renderEscape);
                 if (renderEscape) RenderLeadingTrailingStyles(writer, true, false);
             }
+
+            VisibleCharacterEnd = writer.VisibleCharacterCount - 1;
         }
 
-        private void RenderWithSelection(TextWriter writer, bool renderEscape = true)
+        private void RenderWithSelection(ConsoleTextWriter writer, bool renderEscape = true)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
@@ -261,7 +269,7 @@ namespace Consolus
             if (renderEscape) RenderLeadingTrailingStyles(writer, true, false);
         }
 
-        private void RenderInternal(TextWriter writer, int start, int end, bool escape, List<ConsoleStyle> runningStyles = null)
+        private void RenderInternal(ConsoleTextWriter writer, int start, int end, bool escape, List<ConsoleStyle> runningStyles = null)
         {
             for(int i = start; i < end; i++)
             {
@@ -281,7 +289,29 @@ namespace Consolus
                         }
                     }
                 }
-                writer.Write(c.Value);
+
+                var charValue = c.Value;
+
+                // Fill the remaining line with space to clear the space
+                if (charValue == '\n')
+                {
+                    var toComplete = Console.BufferWidth - writer.VisibleCharacterCount % Console.BufferWidth;
+                    for (int j = 0; j < toComplete; j++)
+                    {
+                        writer.Write(' ');
+                    }
+                    writer.VisibleCharacterCount += toComplete;
+                }
+
+                if (charValue == '\n' || charValue >= ' ')
+                {
+                    writer.Write(charValue);
+                }
+
+                if (charValue != '\n' || charValue >= ' ')
+                {
+                    writer.VisibleCharacterCount++;
+                }
             }
         }
 

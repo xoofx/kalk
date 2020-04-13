@@ -20,27 +20,33 @@ namespace Consolus
 
         public TextWriter Backend { get; }
 
-        public void WriteBatch()
+        public void Commit()
         {
+            VisibleCharacterCount = 0;
             Backend.Write(_buffer, 0, _count);
             _count = 0;
         }
 
         public override void Write(char[] buffer, int index, int count)
         {
-            EnsureCapacity(_count + count);
-            Array.Copy(buffer, index, _buffer, _count, count);
-            _count += count;
+            for (int i = 0; i < count; i++)
+            {
+                Write(buffer[index + i]);
+            }
         }
 
         public override void Write(string value)
         {
             if (value == null) return;
-            EnsureCapacity(_count + value.Length);
-            value.CopyTo(0, _buffer, _count, value.Length);
-            _count += value.Length;
+            for (int i = 0; i < value.Length; i++)
+            {
+                Write(value[i]);
+            }
         }
 
+        public int VisibleCharacterCount { get; internal set; }
+
+        
         public override void Write(char value)
         {
             WriteInternal(value);

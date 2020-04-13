@@ -143,5 +143,10 @@ namespace Consolus
         {
             return !left.Equals(right);
         }
+
+        public override string ToString()
+        {
+            return EscapeSequence;
+        }
     }
 }

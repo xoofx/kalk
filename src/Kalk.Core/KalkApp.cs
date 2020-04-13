@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -12,10 +14,11 @@ namespace Kalk.Core
 {
     public class KalkApp
     {
+        private bool _clearBeforeNextDisplay;
+
         public KalkApp()
         {
             Repl = new ConsoleRepl();
-            Repl.Prompt = ">>> ";
             Repl.OnTextCompletion = (text, back) =>
             {
                 if (text.StartsWith("s"))
@@ -36,27 +39,60 @@ namespace Kalk.Core
                 return null;
             };
 
-            var context = new TemplateContext {StrictVariables = true};
+            //Repl.TextAfterLine.Append('\n');
+            //Repl.TextAfterLine.Append(ConsoleStyle.Red);
+            //Repl.TextAfterLine.Append("This is a red text right after");
+
+            var context = new TemplateContext
+            {
+                EnableRelaxedMemberAccess = false,
+                StrictVariables = true
+            };
 
             context.BuiltinObject.Import("exit", new Action(Exit));
+            context.BuiltinObject.Import("clear", new Action(Clear));
             context.BuiltinObject.Import("log", new Func<double, double>(Log));
 
-            object result = null;
-            string error = null;
+            context.BuiltinObject.Import("kb", new Func<object, object>(Kb));
+            context.BuiltinObject.Import("mb", new Func<object, object>(Mb));
+            context.BuiltinObject.Import("gb", new Func<object, object>(Gb));
+            context.BuiltinObject.Import("tb", new Func<object, object>(Tb));
+            context.BuiltinObject.Import("im", new Func<object, object>(ComplexNumber));
+
+            var parserOptions = new ParserOptions()
+            {
+                Units = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
+                {
+                    {"kb", "kb"},
+                    {"mb", "mb"},
+                    {"gb", "gb"},
+                    {"tb", "tb"},
+                    { "i", "im"},
+                }
+            };
+
             Template script = null;
 
             Repl.OnTextValidatingEnter = text =>
             {
+                object result = null;
+                string error = null;
+                int column = -1;
                 try
                 {
-                    script = Template.Parse(text, lexerOptions: new LexerOptions() { Mode = ScriptMode.ScriptOnly });
+                    script = Template.Parse(text, parserOptions: parserOptions, lexerOptions: new LexerOptions() { Mode = ScriptMode.ScriptOnly, Level = ScriptSyntaxLevel.Scientific });
 
                     if (script.HasErrors)
                     {
                         var errorBuilder = new StringBuilder();
                         foreach (var message in script.Messages)
                         {
-                            errorBuilder.Append(message.ToString());
+                            if (errorBuilder.Length > 0) errorBuilder.AppendLine();
+                            if (column <= 0 && message.Type == ParserMessageType.Error)
+                            {
+                                column = message.Span.Start.Column;
+                            }
+                            errorBuilder.Append(message.Message);
                         }
 
                         error = errorBuilder.ToString();
@@ -68,28 +104,37 @@ namespace Kalk.Core
                         {
                             return false;
                         }
+
+                        Repl.TextAfterLine.Clear();
                     }
                 }
                 catch (Exception ex)
                 {
-                    error = ex.Message; 
+                    if (ex is ScriptRuntimeException scriptEx)
+                    {
+                        column = scriptEx.Span.Start.Column;
+                        error = scriptEx.OriginalMessage;
+                    }
+                    else
+                    {
+                        error = ex.Message;
+                    }
                 }
 
-                return true;
-            };
-
-
-            Repl.OnTextValidatedEnter = text =>
-            {
-                try
+                if (error != null)
                 {
-                    if (error != null)
+                    Repl.TextAfterLine.Clear();
+                    Repl.TextAfterLine.Append('\n');
+                    Repl.TextAfterLine.Append(ConsoleStyle.Red);
+                    Repl.TextAfterLine.Append(error);
+                    if (column >= 0 && column <= Repl.EditLine.Count)
                     {
-                        Console.WriteLine(error);
-                        error = null;
-                        return;
+                        Repl.CursorIndex = column;
                     }
-
+                    return false;
+                }
+                else
+                {
                     if (result != null)
                     {
                         context.Write(script.Page.Span, result);
@@ -101,27 +146,95 @@ namespace Kalk.Core
                         output.Builder.Length = 0;
                     }
 
-                    result = null;
-
-                    if (!string.IsNullOrWhiteSpace(resultStr))
+                    Repl.TextAfterLine.Clear();
+                    Repl.TextAfterLine.Append('\n');
+                    if (resultStr != string.Empty)
                     {
-                        Console.WriteLine($"  {resultStr}");
+                        Repl.TextAfterLine.Append(resultStr);
+                        Repl.TextAfterLine.Append('\n');
                     }
                 }
-                catch (Exception ex)
+
+                return true;
+            };
+
+
+            Repl.OnTextValidatedEnter = text =>
+            {
+                if (_clearBeforeNextDisplay)
                 {
-                    Console.WriteLine(ex.Message);
+                    Repl.Clear();
+                    _clearBeforeNextDisplay = false;
                 }
             };
-            //editor.OnTextValidateEnter += s =>
-            //{
-            //    Console.WriteLine();
-            //}
+        }
+
+        public void Clear()
+        {
+            _clearBeforeNextDisplay = true;
         }
 
         public static double Log(double value)
         {
             return Math.Log(value);
+        }
+
+        public static object Kb(object value)
+        {
+            if (value == null) return null;
+            if (value is int vInt32) return (long)vInt32 * 1024;
+            if (value is long vInt64) return vInt64 * 1024;
+
+            throw new ArgumentOutOfRangeException(nameof(value));
+        }
+
+        public static object Mb(object value)
+        {
+            if (value == null) return null;
+            if (value is int vInt32)
+            {
+                return (long)vInt32 * 1024 * 1024;
+            }
+            if (value is long vInt64) return vInt64 * 1024 * 1024;
+
+            throw new ArgumentOutOfRangeException(nameof(value));
+        }
+
+        public static object Gb(object value)
+        {
+            if (value == null) return null;
+            if (value is int vInt32) return (long)vInt32 * 1024 * 1024 * 1024;
+            if (value is long vInt64) return vInt64 * 1024 * 1024 * 1024;
+
+            throw new ArgumentOutOfRangeException(nameof(value));
+        }
+
+        public static object ComplexNumber(object value)
+        {
+            if (value == null) return null;
+
+            if (value is double vFloat64) return new Complex(0, vFloat64);
+            if (value is float vFloat32) return new Complex(0, vFloat32);
+            if (value is long vInt64) return new Complex(0, vInt64);
+            if (value is int vInt32) return new Complex(0, vInt32);
+
+            throw new ArgumentOutOfRangeException(nameof(value));
+        }
+
+        public static object Tb(object value)
+        {
+            if (value == null) return null;
+            if (value is int vInt32)
+            {
+                return new BigInteger(vInt32) * 1024 * 1024 * 1024 * 1024;
+            }
+
+            if (value is long vInt64)
+            {
+                return new BigInteger(vInt64) * 1024 * 1024 * 1024 * 1024;
+            }
+
+            return value;
         }
 
         public void Exit()

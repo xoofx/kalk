@@ -11,12 +11,7 @@ namespace Consolus
         // http://ascii-table.com/ansi-escape-sequences-vt-100.php
 
         private int _stackIndex;
-        private readonly ConsoleTextWriter _consoleWriter;
-        private int _previousDisplayLength;
-        private int _cursorIndex;
-        private int _promptSize;
-        private ConsoleText _prompt;
-
+        private readonly ConsoleRenderer _consoleRenderer;
         
         public static bool IsSelf()
         {
@@ -31,12 +26,13 @@ namespace Consolus
         {
             SupportEscapeSequences = ConsoleHelper.SupportEscapeSequences;
             Console.TreatControlCAsInput = true;
-            _consoleWriter = new ConsoleTextWriter(Console.Out);
+            _consoleRenderer = new ConsoleRenderer();
             _stackIndex = -1;
-            Line = new ConsoleText();
+            EditLine = _consoleRenderer.EditLine;
             History = new List<string>();
-            Prompt = "> ";
-            SelectionIndex = -1;
+            Prompt = _consoleRenderer.BeforeEditLine;
+            Prompt.Append(">>> ");
+            TextAfterLine = _consoleRenderer.AfterEditLine;
             Console.CursorVisible = true;
             ExitOnNextEval = false;
         }
@@ -45,13 +41,8 @@ namespace Consolus
 
         public int CursorIndex
         {
-            get => _cursorIndex;
-            set
-            {
-                var lineTop = LineTop;
-                _cursorIndex = value;
-                UpdateCursorPosition(lineTop);
-            }
+            get => _consoleRenderer.CursorIndex;
+            set => _consoleRenderer.CursorIndex = value;
         }
 
         public bool ExitOnNextEval { get; set; }
@@ -64,13 +55,11 @@ namespace Consolus
 
         public string LocalClipboard { get; set; }
 
-        public ConsoleText Line { get; }
+        public ConsoleText EditLine { get; }
 
-        public ConsoleText Prompt
-        {
-            get => _prompt;
-            set => _prompt = value ?? throw new ArgumentNullException();
-        }
+        public ConsoleText Prompt { get; }
+
+        public ConsoleText TextAfterLine { get; }
 
         public Func<string, bool> OnTextValidatingEnter { get; set; }
 
@@ -78,23 +67,10 @@ namespace Consolus
 
         public Func<string, bool, string> OnTextCompletion { get; set; }
 
-        public bool HasSelection => SelectionIndex >= 0 && CursorIndex != SelectionIndex;
+        public bool HasSelection => _consoleRenderer.HasSelection;
 
-        public int SelectionStartIndex => HasSelection ? SelectionIndex < CursorIndex ? SelectionIndex : CursorIndex : -1;
+        public int SelectionIndex => _consoleRenderer.SelectionIndex;
 
-        public int SelectionEndIndex => HasSelection ? SelectionIndex < CursorIndex ? CursorIndex : SelectionIndex : -1;
-
-        public int SelectionIndex { get; private set; }
-
-        public int LineTop
-        {
-            get
-            {
-                var currentLine = (_promptSize + CursorIndex) / Console.BufferWidth;
-                return Console.CursorTop - currentLine;
-            }
-        }
-       
         public void Begin()
         {
             CursorIndex = 0;
@@ -103,7 +79,7 @@ namespace Consolus
 
         public void End()
         {
-            CursorIndex = Line.Count;
+            CursorIndex = EditLine.Count;
             UpdateSelection();
         }
 
@@ -135,7 +111,7 @@ namespace Consolus
                     while (cursorIndex > 0)
                     {
                         cursorIndex--;
-                        var newCategory = GetCharCategory(Line[cursorIndex].Value);
+                        var newCategory = GetCharCategory(EditLine[cursorIndex].Value);
                         if (newCategory != UnicodeCategory.SpaceSeparator)
                         {
                             category = newCategory;
@@ -146,7 +122,7 @@ namespace Consolus
                     while (cursorIndex > 0)
                     {
                         cursorIndex--;
-                        var newCategory = GetCharCategory(Line[cursorIndex].Value);
+                        var newCategory = GetCharCategory(EditLine[cursorIndex].Value);
                         
                         if (category.HasValue)
                         {
@@ -175,11 +151,11 @@ namespace Consolus
 
         private int FindNextWordRight(int cursorIndex)
         {
-            var category = GetCharCategory(Line[cursorIndex].Value);
+            var category = GetCharCategory(EditLine[cursorIndex].Value);
 
-            while (cursorIndex < Line.Count)
+            while (cursorIndex < EditLine.Count)
             {
-                var newCategory = GetCharCategory(Line[cursorIndex].Value);
+                var newCategory = GetCharCategory(EditLine[cursorIndex].Value);
                 if (newCategory != category)
                 {
                     break;
@@ -187,9 +163,9 @@ namespace Consolus
                 cursorIndex++;
             }
 
-            while (cursorIndex < Line.Count)
+            while (cursorIndex < EditLine.Count)
             {
-                var newCategory = GetCharCategory(Line[cursorIndex].Value);
+                var newCategory = GetCharCategory(EditLine[cursorIndex].Value);
                 if (newCategory != UnicodeCategory.SpaceSeparator)
                 {
                     break;
@@ -203,7 +179,7 @@ namespace Consolus
         public void MoveRight(bool word = false)
         {
             var cursorIndex = CursorIndex;
-            if (cursorIndex < Line.Count)
+            if (cursorIndex < EditLine.Count)
             {
                 if (word)
                 {
@@ -228,7 +204,7 @@ namespace Consolus
 
             for (int i = from; i <= to; i++)
             {
-                text.Append(Line[i].Value);
+                text.Append(EditLine[i].Value);
             }
 
             bool useLocalClipboard = true;
@@ -275,32 +251,17 @@ namespace Consolus
 
         public void BeginSelection()
         {
-            if (SelectionIndex >= 0) return;
-            SelectionIndex = CursorIndex;
+            _consoleRenderer.BeginSelection();
         }
 
         public void EndSelection()
         {
-            if (SelectionIndex < 0) return;
-            SelectionIndex = -1;
-            Display();
+            _consoleRenderer.EndSelection();
         }
 
         public void RemoveSelection()
         {
-            if (!HasSelection) return;
-
-            var start = SelectionStartIndex;
-            var count = SelectionEndIndex - start;
-
-            for (int i = 0; i < count; i++)
-            {
-                Line.RemoveAt(start);
-            }
-
-            var cursorIndex = start;
-            SelectionIndex = -1;
-            Display(cursorIndex);
+            _consoleRenderer.RemoveSelection();
         }
 
         public void Backspace(bool word)
@@ -321,13 +282,13 @@ namespace Consolus
                 while (cursorIndex > 0 && cursorIndex > newCursorIndex)
                 {
                     cursorIndex--;
-                    Line.RemoveAt(cursorIndex);
+                    EditLine.RemoveAt(cursorIndex);
                 }
             }
             else
             {
                 cursorIndex--;
-                Line.RemoveAt(cursorIndex);
+                EditLine.RemoveAt(cursorIndex);
             }
 
             Display(cursorIndex);
@@ -342,20 +303,20 @@ namespace Consolus
             }
 
             var cursorIndex = CursorIndex;
-            if (cursorIndex < Line.Count)
+            if (cursorIndex < EditLine.Count)
             {
                 if (word)
                 {
                     var count = FindNextWordRight(cursorIndex) - cursorIndex;
                     while (count > 0)
                     {
-                        Line.RemoveAt(cursorIndex);
+                        EditLine.RemoveAt(cursorIndex);
                         count--;
                     }
                 }
                 else
                 {
-                    Line.RemoveAt(cursorIndex);
+                    EditLine.RemoveAt(cursorIndex);
                 }
 
                 Display();
@@ -369,14 +330,14 @@ namespace Consolus
             EndSelection();
 
             // Don't update if it is already empty
-            if (Line.Count == 0 && string.IsNullOrEmpty(text)) return;
+            if (EditLine.Count == 0 && string.IsNullOrEmpty(text)) return;
 
-            Line.Clear();
+            EditLine.Clear();
             foreach (var c in text)
             {
-                Line.Add(c);
+                EditLine.Add(c);
             }
-            Display(Line.Count);
+            Display(EditLine.Count);
         }
 
         public void Write(string text)
@@ -394,7 +355,7 @@ namespace Consolus
             for(int i = index; i < end; i++)
             {
                 var c = text[i];
-                Line.Insert(cursorIndex, c);
+                EditLine.Insert(cursorIndex, c);
                 cursorIndex++;
             }
             Display(cursorIndex);
@@ -403,7 +364,7 @@ namespace Consolus
         public void Write(ConsoleStyle style)
         {
             var cursorIndex = CursorIndex;
-            Line.Insert(cursorIndex, style);
+            EditLine.Insert(cursorIndex, style);
             Display(cursorIndex);
         }
 
@@ -416,12 +377,12 @@ namespace Consolus
             EndSelection();
 
             var cursorIndex = CursorIndex;
-            Line.Insert(cursorIndex, c);
+            EditLine.Insert(cursorIndex, c);
             cursorIndex++;
             Display(cursorIndex);
         }
 
-        public string Enter()
+        public void Enter()
         {
             if (HasSelection)
             {
@@ -429,35 +390,38 @@ namespace Consolus
             }
             End();
 
-            var text = Line.Count == 0 ? string.Empty : Line.ToString();
+            var text = EditLine.Count == 0 ? string.Empty : EditLine.ToString();
 
             // Try to validate the string
             if (OnTextValidatingEnter != null && !OnTextValidatingEnter(text))
             {
-                return text;
+                Display();
             }
-            
-            Line.Clear();
-
-            if (!string.IsNullOrEmpty(text))
+            else
             {
-                History.Add(text);
+                Display(reset: true);
+
+                // Propagate enter validation
+                OnTextValidatedEnter?.Invoke(text);
+
+                if (!string.IsNullOrEmpty(text))
+                {
+                    History.Add(text);
+                }
+
+                _stackIndex = -1;
+
+                if (!ExitOnNextEval)
+                {
+                    Display(0);
+                }
             }
-            _stackIndex = -1;
+        }
 
-            Console.WriteLine();
-            _promptSize = 0;
-            _cursorIndex = 0;
-            _previousDisplayLength = 0;
-
-            // Propagate enter validation
-            OnTextValidatedEnter?.Invoke(text);
-
-            if (!ExitOnNextEval)
-            {
-                Display(0);
-            }
-            return text;
+        public void Clear()
+        {
+            _consoleRenderer.Reset();
+            Console.Clear();
         }
 
         public void Completion(bool backward)
@@ -471,7 +435,7 @@ namespace Consolus
             while (cursorIndex > 0)
             {
                 cursorIndex--;
-                var newCategory = GetCharCategory(Line[cursorIndex].Value);
+                var newCategory = GetCharCategory(EditLine[cursorIndex].Value);
                 
                 if (category.HasValue)
                 {
@@ -506,7 +470,7 @@ namespace Consolus
             var builder = new StringBuilder();
             for (int i = cursorIndex; i < CursorIndex; i++)
             {
-                builder.Append(Line[i].Value);
+                builder.Append(EditLine[i].Value);
             }
             var text = builder.ToString();
 
@@ -516,7 +480,7 @@ namespace Consolus
                 int length = text.Length;
                 while (length > 0)
                 {
-                    Line.RemoveAt(cursorIndex);
+                    EditLine.RemoveAt(cursorIndex);
                     length--;
                 }
 
@@ -534,9 +498,12 @@ namespace Consolus
         public void Exit()
         {
             End();
-            var text = new ConsoleText();
-            text.Append(ConsoleStyle.BrightRed).Append("^C");
-            text.Render(Console.Out);
+
+            Display(reset: true);
+
+            Console.Write($"{ConsoleStyle.BrightRed}^C");
+            Console.ResetColor();
+
             if (!ConsoleHelper.IsWindows)
             {
                 Console.WriteLine();
@@ -557,247 +524,187 @@ namespace Consolus
             {
                 var key = ReadKey();
 
-                bool hasControl = (key.Modifiers & ConsoleModifiers.Control) != 0;
-                bool hasShift = (key.Modifiers & ConsoleModifiers.Shift) != 0;
+                try
+                {
+                    ProcessKey(key);
+                }
+                catch (Exception ex)
+                {
+                    TextAfterLine.Clear();
+                    TextAfterLine.Append("\n");
+                    TextAfterLine.Append(ConsoleStyle.Red);
+                    TextAfterLine.Append(ex.ToString());
+                    Display(reset: true); // re-display the current line with the exception
 
-                // Only support selection if we have support for escape sequences
-                if (SupportEscapeSequences && hasShift)
-                {
-                    BeginSelection();
-                }
-
-                bool hasCopyPaste = false;
-                if (HasSelection && hasControl)
-                {
-                    if (key.Key == ConsoleKey.C || key.Key == ConsoleKey.X)
-                    {
-                        hasCopyPaste = true;
-                        CopySelectionToClipboard();
-                    }
-                    if (key.Key == ConsoleKey.X)
-                    {
-                        RemoveSelection();
-                    }
-                }
-
-                if (!hasCopyPaste && hasControl && key.Key == ConsoleKey.C)
-                {
-                    Exit();
-                    continue;
-                }
-
-                if (hasControl && key.Key == ConsoleKey.V)
-                {
-                    var clipboard = GetClipboardText();
-                    if (clipboard != null)
-                    {
-                        int previousIndex = 0;
-                        while (true)
-                        {
-                            int matchIndex = clipboard.IndexOf('\n', previousIndex);
-                            int index = matchIndex;
-                            bool exit = false;
-                            if (index < 0)
-                            {
-                                index = clipboard.Length;
-                                exit = true;
-                            }
-
-                            while (index > 0 && index < clipboard.Length && clipboard[index - 1] == '\r')
-                            {
-                                index--;
-                            }
-                            Write(clipboard, previousIndex, index - previousIndex);
-                            
-                            if (exit)
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                previousIndex = matchIndex + 1;
-                                // Otherwise we have a new line
-                                Enter(); 
-                            }
-                        }
-                    }
-                }
-                if (key.Key == ConsoleKey.Backspace)
-                {
-                    Backspace(hasControl);
-                    _stackIndex = -1;
-                }
-                else if (key.Key == ConsoleKey.Delete)
-                {
-                    Delete(hasControl);
-                    _stackIndex = -1;
-                }
-                else if (hasControl && key.Key == ConsoleKey.R)
-                {
-                    Write(ConsoleStyle.BrightRed);
-                }
-                else if (hasControl && key.Key == ConsoleKey.U)
-                {
-                    Write(ConsoleStyle.Underline);
-                }
-                else if (hasControl && key.Key == ConsoleKey.B)
-                {
-                    Write(ConsoleStyle.BrightYellow);
-                }
-                else if (hasControl && key.Key == ConsoleKey.N)
-                {
-                    Write(ConsoleStyle.Reset);
-                }
-                else if (key.Key == ConsoleKey.LeftArrow)
-                {
-                    MoveLeft(hasControl);
-                }
-                else if (key.Key == ConsoleKey.RightArrow)
-                {
-                    MoveRight(hasControl);
-                }
-                else if (key.Key == ConsoleKey.Home)
-                {
-                    Begin();
-                }
-                else if (key.Key == ConsoleKey.End || (hasShift && key.Key == ConsoleKey.F)) // Case for WSL?
-                {
-                    End();
-                }
-                else if (key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.DownArrow)
-                {
-                    var newStackIndex = _stackIndex + (key.Key == ConsoleKey.DownArrow ? -1 : 1);
-                    if (newStackIndex < 0 || newStackIndex >= History.Count)
-                    {
-                        if (newStackIndex < 0)
-                        {
-                            SetLine(string.Empty);
-                            _stackIndex = -1;
-                        }
-                    }
-                    else
-                    {
-                        _stackIndex = newStackIndex;
-                        var index = (History.Count - 1) - _stackIndex;
-
-                        SetLine(History[index]);
-                    }
-                }
-                //else if (hasControl && key.Key == ConsoleKey.R)
-                //{
-                //    Console.WriteLine(string.Concat(Esc, Header1, "Yo, this is a header", Esc, EndSequence));
-                //}
-                else if (key.Key == ConsoleKey.Enter)
-                {
-                    Enter();
-                }
-                else if (key.Key == ConsoleKey.Tab)
-                {
-                    Completion(hasShift);
-                }
-                else if (key.KeyChar >= ' ')
-                {
-                    //Console.Title = $"{key.Modifiers} {key.Key} {key.KeyChar} {(int)key.KeyChar:x}";
-                    Write(key.KeyChar);
-                }
-
-                // Remove selection if shift is no longer selected
-                if (!hasShift)
-                {
-                    EndSelection();
+                    // Display the next line
+                    Display();
                 }
             }
         }
 
-        private void ResetStyle()
+        protected virtual void ProcessKey(ConsoleKeyInfo key)
         {
-            if (SupportEscapeSequences)
+            bool hasControl = (key.Modifiers & ConsoleModifiers.Control) != 0;
+            bool hasShift = (key.Modifiers & ConsoleModifiers.Shift) != 0;
+
+            // Only support selection if we have support for escape sequences
+            if (SupportEscapeSequences && hasShift)
             {
-                ConsoleStyle.Reset.Render(_consoleWriter);
+                BeginSelection();
             }
-            else
+
+            bool hasCopyPaste = false;
+            if (HasSelection && hasControl)
             {
-                Console.ResetColor();
+                if (key.Key == ConsoleKey.C || key.Key == ConsoleKey.X)
+                {
+                    hasCopyPaste = true;
+                    CopySelectionToClipboard();
+                }
+                if (key.Key == ConsoleKey.X)
+                {
+                    RemoveSelection();
+                }
+            }
+
+            if (!hasCopyPaste && hasControl && key.Key == ConsoleKey.C)
+            {
+                Exit();
+                return;
+            }
+
+            if (hasControl && key.Key == ConsoleKey.V)
+            {
+                var clipboard = GetClipboardText();
+                if (clipboard != null)
+                {
+                    int previousIndex = 0;
+                    while (true)
+                    {
+                        int matchIndex = clipboard.IndexOf('\n', previousIndex);
+                        int index = matchIndex;
+                        bool exit = false;
+                        if (index < 0)
+                        {
+                            index = clipboard.Length;
+                            exit = true;
+                        }
+
+                        while (index > 0 && index < clipboard.Length && clipboard[index - 1] == '\r')
+                        {
+                            index--;
+                        }
+                        Write(clipboard, previousIndex, index - previousIndex);
+
+                        if (exit)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            previousIndex = matchIndex + 1;
+                            // Otherwise we have a new line
+                            Enter();
+                        }
+                    }
+                }
+            }
+            if (key.Key == ConsoleKey.Backspace)
+            {
+                Backspace(hasControl);
+                _stackIndex = -1;
+                hasShift = false;
+            }
+            else if (key.Key == ConsoleKey.Delete)
+            {
+                Delete(hasControl);
+                _stackIndex = -1;
+                hasShift = false;
+            }
+            else if (hasControl && key.Key == ConsoleKey.R)
+            {
+                Write(ConsoleStyle.BrightRed);
+            }
+            else if (hasControl && key.Key == ConsoleKey.U)
+            {
+                Write(ConsoleStyle.Underline);
+            }
+            else if (hasControl && key.Key == ConsoleKey.B)
+            {
+                Write(ConsoleStyle.BrightYellow);
+            }
+            else if (hasControl && key.Key == ConsoleKey.N)
+            {
+                Write(ConsoleStyle.Reset);
+            }
+            else if (key.Key == ConsoleKey.LeftArrow)
+            {
+                MoveLeft(hasControl);
+            }
+            else if (key.Key == ConsoleKey.RightArrow)
+            {
+                MoveRight(hasControl);
+            }
+            else if (key.Key == ConsoleKey.Home)
+            {
+                Begin();
+            }
+            else if (key.Key == ConsoleKey.End || (hasShift && key.Key == ConsoleKey.F)) // Case for WSL?
+            {
+                End();
+            }
+            else if (key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.DownArrow)
+            {
+                var newStackIndex = _stackIndex + (key.Key == ConsoleKey.DownArrow ? -1 : 1);
+                if (newStackIndex < 0 || newStackIndex >= History.Count)
+                {
+                    if (newStackIndex < 0)
+                    {
+                        SetLine(string.Empty);
+                        _stackIndex = -1;
+                    }
+                }
+                else
+                {
+                    _stackIndex = newStackIndex;
+                    var index = (History.Count - 1) - _stackIndex;
+
+                    SetLine(History[index]);
+                }
+            }
+            //else if (hasControl && key.Key == ConsoleKey.R)
+            //{
+            //    Console.WriteLine(string.Concat(Esc, Header1, "Yo, this is a header", Esc, EndSequence));
+            //}
+            else if (key.Key == ConsoleKey.Enter)
+            {
+                Enter();
+            }
+            else if (key.Key == ConsoleKey.Tab)
+            {
+                Completion(hasShift);
+            }
+            else if (key.KeyChar >= ' ')
+            {
+                //Console.Title = $"{key.Modifiers} {key.Key} {key.KeyChar} {(int)key.KeyChar:x}";
+                Write(key.KeyChar);
+            }
+
+            // Remove selection if shift is no longer selected
+            if (!hasShift)
+            {
+                EndSelection();
             }
         }
 
-        public void Display(int? newCursorIndex = null)
+        public void Display(int? newCursorIndex = null, bool reset = false)
         {
-            Console.CursorVisible = false;
-            Console.SetCursorPosition(0, LineTop);
-
-            if (SupportEscapeSequences)
-            {
-                ConsoleStyle.Reset.Render(_consoleWriter);
-            }
-            else
-            {
-                Console.ResetColor();
-            }
-
-            Prompt.Render(_consoleWriter);
-
-            Line.SelectionStart = SelectionStartIndex;
-            Line.SelectionEnd = SelectionEndIndex;
-
-            Line.Render(_consoleWriter, SupportEscapeSequences);
-
-            // Fill remaining space with space
-            var newLength = Prompt.Count + Line.Count;
-            var visualLength = newLength;
-            if (newLength < _previousDisplayLength)
-            {
-                if (SupportEscapeSequences)
-                {
-                    ConsoleStyle.Reset.Render(_consoleWriter);
-                }
-
-                for (int i = newLength; i < _previousDisplayLength; i++)
-                {
-                    _consoleWriter.Write(' ');
-                }
-                visualLength = _previousDisplayLength;
-            }
-
-            if (SupportEscapeSequences)
-            {
-                ConsoleStyle.Reset.Render(_consoleWriter);
-            }
-
-            _consoleWriter.WriteBatch();
-
-            if (!SupportEscapeSequences)
-            {
-                Console.ResetColor();
-            }
-
-            _previousDisplayLength = newLength;
-
-            // Calculate the current line based on the visual
-            var lineTop = Console.CursorTop - (visualLength - 1)  / Console.BufferWidth;
-
-            _promptSize = Prompt.Count;
-            if (newCursorIndex.HasValue)
-            {
-                _cursorIndex = newCursorIndex.Value;
-            }
-
-            UpdateCursorPosition(lineTop);
-            Console.CursorVisible = true;
+            _consoleRenderer.Render(newCursorIndex, reset);
         }
 
         private void DebugCursorPosition(string text = null)
         {
             Console.Title = $"x:{Console.CursorLeft} y:{Console.CursorTop} (Size w:{Console.BufferWidth} h:{Console.BufferHeight}){(text == null ? string.Empty: " " + text)}";
-        }
-
-        private void UpdateCursorPosition(int lineTop)
-        {
-            var position = _promptSize + _cursorIndex;
-
-            var deltaX = position % Console.BufferWidth;
-            var deltaY = position / Console.BufferWidth;
-            Console.SetCursorPosition(deltaX, lineTop + deltaY);
         }
     }
 }

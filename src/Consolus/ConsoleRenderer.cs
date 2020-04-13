@@ -15,7 +15,7 @@ namespace Consolus
             SupportEscapeSequences = ConsoleHelper.SupportEscapeSequences;
             _consoleWriter = new ConsoleTextWriter(Console.Out);
             BeforeEditLine = new ConsoleText();
-            Line = new ConsoleText();
+            EditLine = new ConsoleText();
             AfterEditLine = new ConsoleText();
             SelectionIndex = -1;
         }
@@ -36,7 +36,7 @@ namespace Consolus
             get => _cursorIndex;
             set
             {
-                if (value < 0 || value > Line.Count) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be >= 0 and <= {Line.Count}");
+                if (value < 0 || value > EditLine.Count) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be >= 0 and <= {EditLine.Count}");
 
                 var lineTop = LineTop;
                 _cursorIndex = value;
@@ -54,7 +54,7 @@ namespace Consolus
         
         public ConsoleText BeforeEditLine { get; }
 
-        public ConsoleText Line { get; }
+        public ConsoleText EditLine { get; }
 
         public ConsoleText AfterEditLine { get; }
 
@@ -71,9 +71,36 @@ namespace Consolus
             Render();
         }
 
-        public void Render(int? newCursorIndex = null)
+        public void RemoveSelection()
         {
-            //Console.CursorVisible = false;
+            if (!HasSelection) return;
+
+            var start = SelectionStartIndex;
+            var count = SelectionEndIndex - start;
+
+            for (int i = 0; i < count; i++)
+            {
+                if (start >= EditLine.Count) break;
+                EditLine.RemoveAt(start);
+            }
+
+            var cursorIndex = start;
+            SelectionIndex = -1;
+            Render(cursorIndex);
+        }
+
+        public void Reset()
+        {
+            AfterEditLine.Clear();
+            EditLine.Clear();
+            _cursorIndex = 0;
+            _beforeEditLineSize = 0;
+            _previousDisplayLength = 0;
+        }
+
+        public void Render(int? newCursorIndex = null, bool reset = false)
+        {
+            Console.CursorVisible = false;
             Console.SetCursorPosition(0, LineTop);
 
             if (SupportEscapeSequences)
@@ -86,14 +113,15 @@ namespace Consolus
             }
 
             BeforeEditLine.Render(_consoleWriter);
-            Line.SelectionStart = SelectionStartIndex;
-            Line.SelectionEnd = SelectionEndIndex;
-            Line.Render(_consoleWriter, SupportEscapeSequences);
+
+            EditLine.SelectionStart = SelectionStartIndex;
+            EditLine.SelectionEnd = SelectionEndIndex;
+            EditLine.Render(_consoleWriter, SupportEscapeSequences);
 
             AfterEditLine.Render(_consoleWriter);
 
             // Fill remaining space with space
-            var newLength = BeforeEditLine.Count + Line.Count + AfterEditLine.Count;
+            var newLength = _consoleWriter.VisibleCharacterCount;
             var visualLength = newLength;
             if (newLength < _previousDisplayLength)
             {
@@ -114,7 +142,7 @@ namespace Consolus
                 ConsoleStyle.Reset.Render(_consoleWriter);
             }
 
-            _consoleWriter.WriteBatch();
+            _consoleWriter.Commit();
 
             if (!SupportEscapeSequences)
             {
@@ -123,17 +151,25 @@ namespace Consolus
 
             _previousDisplayLength = newLength;
 
-            // Calculate the current line based on the visual
-            var lineTop = Console.CursorTop - (visualLength - 1) / Console.BufferWidth;
-
-            _beforeEditLineSize = BeforeEditLine.Count;
-            if (newCursorIndex.HasValue)
+            if (!reset)
             {
-                _cursorIndex = newCursorIndex.Value;
+                // Calculate the current line based on the visual
+                var lineTop = Console.CursorTop - (visualLength - 1) / Console.BufferWidth;
+
+                _beforeEditLineSize = EditLine.VisibleCharacterStart;
+                if (newCursorIndex.HasValue)
+                {
+                    _cursorIndex = newCursorIndex.Value;
+                }
+
+                UpdateCursorPosition(lineTop);
+            }
+            else
+            {
+                Reset();
             }
 
-            UpdateCursorPosition(lineTop);
-            //Console.CursorVisible = true;
+            Console.CursorVisible = true;
         }
         
         private void UpdateCursorPosition(int lineTop)
