@@ -16,7 +16,6 @@ namespace Kalk.Core
 {
     public class KalkApp
     {
-        private bool _clearBeforeNextDisplay;
         private readonly TemplateContext _scriptContext;
         private LexerOptions _lexerOptions;
         private ParserOptions _parserOptions;
@@ -24,6 +23,7 @@ namespace Kalk.Core
         private Stopwatch _clockInput;
         private string _lastText;
         private readonly List<Token> _lastTokens;
+        private readonly ScriptObject _variables;
 
         private static readonly TokenType[] MatchPairs = new[]
         {
@@ -41,6 +41,8 @@ namespace Kalk.Core
             OnErrorToNextLineMaxDelayInMilliseconds = 200;
 
             _lastTokens = new List<Token>();
+
+            NextOutput = new ConsoleText();
 
             Repl = new ConsoleRepl();
             Repl.BeforeRender = OnBeforeRendering;
@@ -77,6 +79,8 @@ namespace Kalk.Core
                 StrictVariables = true
             };
 
+            _scriptContext.BuiltinObject.Import("help", new Action<ScriptExpression>(Help));
+            _scriptContext.BuiltinObject.Import("reset", new Action(Reset));
             _scriptContext.BuiltinObject.Import("exit", new Action(Exit));
             _scriptContext.BuiltinObject.Import("clear", new Action(Clear));
             _scriptContext.BuiltinObject.Import("log", new Func<double, double>(Log));
@@ -88,6 +92,9 @@ namespace Kalk.Core
             _scriptContext.BuiltinObject.Import("gb", new Func<object, object>(Gb));
             _scriptContext.BuiltinObject.Import("tb", new Func<object, object>(Tb));
             _scriptContext.BuiltinObject.Import("im", new Func<object, object>(ComplexNumber));
+
+            _variables = new ScriptObject();
+            _scriptContext.PushGlobal(_variables);
 
             _builtins = new ScriptObject();
             foreach (var builtin in _scriptContext.BuiltinObject)
@@ -143,13 +150,15 @@ namespace Kalk.Core
                     }
                     else
                     {
+                        Repl.AfterEditLine.Clear();
+                        NextOutput.Clear();
+
                         result = _scriptContext.Evaluate(script.Page);
+
                         if (Repl.ExitOnNextEval)
                         {
                             return false;
                         }
-
-                        Repl.AfterEditLine.Clear();
                     }
                 }
                 catch (Exception ex)
@@ -199,28 +208,41 @@ namespace Kalk.Core
                     }
 
                     Repl.AfterEditLine.Clear();
-                    Repl.AfterEditLine.Append('\n');
-                    if (resultStr != string.Empty)
+                    bool hasOutput = resultStr != string.Empty || NextOutput.Count > 0;
+                    if (!Repl.IsClean || hasOutput)
                     {
-                        Repl.AfterEditLine.Append(ConsoleStyle.Bold);
-                        Repl.AfterEditLine.Append(resultStr);
                         Repl.AfterEditLine.Append('\n');
+
+                        bool hasNextOutput = NextOutput.Count > 0;
+                        if (hasNextOutput)
+                        {
+                            Repl.AfterEditLine.AddRange(NextOutput);
+                            NextOutput.Clear();
+                        }
+
+                        if (resultStr != string.Empty)
+                        {
+                            if (hasNextOutput)
+                            {
+                                Repl.AfterEditLine.AppendLine();
+                            }
+                            Repl.AfterEditLine.Append(ConsoleStyle.Bold);
+                            Repl.AfterEditLine.Append(resultStr);
+                        }
+
+                        if (hasOutput)
+                        {
+                            Repl.AfterEditLine.AppendLine();
+                        }
                     }
                 }
 
                 return true;
             };
-
-
-            Repl.OnTextValidatedEnter = text =>
-            {
-                if (_clearBeforeNextDisplay)
-                {
-                    Repl.Clear();
-                    _clearBeforeNextDisplay = false;
-                }
-            };
         }
+
+        public ConsoleText NextOutput { get; }
+
 
         private void UpdateMatchingBraces()
         {
@@ -390,7 +412,7 @@ namespace Kalk.Core
 
         public void Clear()
         {
-            _clearBeforeNextDisplay = true;
+            Repl.Clear();
         }
 
         public static double Log(double value)
@@ -461,6 +483,23 @@ namespace Kalk.Core
         public void Exit()
         {
             Repl.ExitOnNextEval = true;
+        }
+
+        public void Reset()
+        {
+            _variables.Clear();
+        }
+
+        public void Help(ScriptExpression expression = null)
+        {
+            if (NextOutput.Count > 0) NextOutput.AppendLine();
+            NextOutput.Append(ConsoleStyle.Green).Append("This is a text").Append("\n");
+            if (expression != null)
+            {
+                NextOutput.Append($"Asking about command : {expression}");
+            }
+            NextOutput.AppendLine();
+            NextOutput.Append(ConsoleStyle.White).Append("This is another text");
         }
         
         public ConsoleRepl Repl { get; }

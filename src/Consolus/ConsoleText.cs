@@ -281,6 +281,31 @@ namespace Consolus
             return this;
         }
 
+        public ConsoleText AppendLine()
+        {
+            Add('\n');
+            return this;
+        }
+
+        public void AddRange(ConsoleText text)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            foreach(var c in text._leadingStyles)
+            {
+                InsertInternal(Count, c);
+            }
+
+            foreach(var c in text._chars)
+            {
+                InsertInternal(Count, c);
+            }
+
+            foreach (var c in text._trailingStyles)
+            {
+                InsertInternal(Count, c);
+            }
+        }
+
         public ConsoleText Append(ConsoleStyle style, bool enabled)
         {
             Add(style, enabled);

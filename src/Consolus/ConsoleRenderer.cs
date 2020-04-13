@@ -32,6 +32,8 @@ namespace Consolus
             }
         }
 
+        public bool IsClean => _previousDisplayLength == 0;
+
         public bool EnableCursorChanged { get; set; }
 
         public int CursorIndex

@@ -343,7 +343,11 @@ namespace Consolus
             }
             else
             {
-                Render(reset: true);
+                bool isNotEmpty = !IsClean || EditLine.Count > 0 || AfterEditLine.Count > 0;
+                if (isNotEmpty)
+                {
+                    Render(reset: true);
+                }
 
                 // Propagate enter validation
                 OnTextValidatedEnter?.Invoke(text);
