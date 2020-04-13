@@ -14,10 +14,11 @@ namespace Consolus
         {
             SupportEscapeSequences = ConsoleHelper.SupportEscapeSequences;
             _consoleWriter = new ConsoleTextWriter(Console.Out);
-            BeforeEditLine = new ConsoleText();
+            Prompt = new ConsoleText();
             EditLine = new ConsoleText();
             AfterEditLine = new ConsoleText();
             SelectionIndex = -1;
+            EnableCursorChanged = true;
         }
 
         public bool SupportEscapeSequences { get; set; }
@@ -31,6 +32,8 @@ namespace Consolus
             }
         }
 
+        public bool EnableCursorChanged { get; set; }
+
         public int CursorIndex
         {
             get => _cursorIndex;
@@ -39,9 +42,22 @@ namespace Consolus
                 if (value < 0 || value > EditLine.Count) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be >= 0 and <= {EditLine.Count}");
 
                 var lineTop = LineTop;
+                bool changed = _cursorIndex != value;
                 _cursorIndex = value;
                 UpdateCursorPosition(lineTop);
+                if (changed)
+                {
+                    NotifyCursorChanged();
+                }
             }
+        }
+
+        public Action CursorChanged { get; set; }
+
+        private void NotifyCursorChanged()
+        {
+            var cursorChanged = CursorChanged;
+            if (EnableCursorChanged) CursorChanged?.Invoke();
         }
 
         public bool HasSelection => SelectionIndex >= 0 && CursorIndex != SelectionIndex;
@@ -52,11 +68,13 @@ namespace Consolus
 
         public int SelectionIndex { get; private set; }
         
-        public ConsoleText BeforeEditLine { get; }
+        public ConsoleText Prompt { get; }
 
         public ConsoleText EditLine { get; }
 
         public ConsoleText AfterEditLine { get; }
+
+        public Action BeforeRender { get; set; }
 
         public void BeginSelection()
         {
@@ -100,6 +118,9 @@ namespace Consolus
 
         public void Render(int? newCursorIndex = null, bool reset = false)
         {
+            // Invoke before rendering to update the highlighting
+            BeforeRender?.Invoke();
+
             Console.CursorVisible = false;
             Console.SetCursorPosition(0, LineTop);
 
@@ -112,7 +133,7 @@ namespace Consolus
                 Console.ResetColor();
             }
 
-            BeforeEditLine.Render(_consoleWriter);
+            Prompt.Render(_consoleWriter);
 
             EditLine.SelectionStart = SelectionStartIndex;
             EditLine.SelectionEnd = SelectionEndIndex;
@@ -159,7 +180,13 @@ namespace Consolus
                 _beforeEditLineSize = EditLine.VisibleCharacterStart;
                 if (newCursorIndex.HasValue)
                 {
+                    bool changed = _cursorIndex != newCursorIndex.Value;
                     _cursorIndex = newCursorIndex.Value;
+
+                    if (changed)
+                    {
+                        NotifyCursorChanged();
+                    }
                 }
 
                 UpdateCursorPosition(lineTop);

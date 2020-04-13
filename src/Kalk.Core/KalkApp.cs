@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -15,10 +17,33 @@ namespace Kalk.Core
     public class KalkApp
     {
         private bool _clearBeforeNextDisplay;
+        private readonly TemplateContext _scriptContext;
+        private LexerOptions _lexerOptions;
+        private ParserOptions _parserOptions;
+        private ScriptObject _builtins;
+        private Stopwatch _clockInput;
+        private string _lastText;
+        private readonly List<Token> _lastTokens;
+
+        private static readonly TokenType[] MatchPairs = new[]
+        {
+            TokenType.OpenParent,
+            TokenType.CloseParent,
+            TokenType.OpenBracket,
+            TokenType.CloseBracket,
+            TokenType.OpenBrace,
+            TokenType.CloseBrace,
+        };
 
         public KalkApp()
         {
+            _clockInput = Stopwatch.StartNew();
+            OnErrorToNextLineMaxDelayInMilliseconds = 200;
+
+            _lastTokens = new List<Token>();
+
             Repl = new ConsoleRepl();
+            Repl.BeforeRender = OnBeforeRendering;
             Repl.OnTextCompletion = (text, back) =>
             {
                 if (text.StartsWith("s"))
@@ -39,27 +64,38 @@ namespace Kalk.Core
                 return null;
             };
 
+            Repl.Prompt.Clear();
+            Repl.Prompt.Append(ConsoleStyle.BrightBlack).Append(">>> ").Append(ConsoleStyle.BrightBlack, false);
+
             //Repl.TextAfterLine.Append('\n');
             //Repl.TextAfterLine.Append(ConsoleStyle.Red);
             //Repl.TextAfterLine.Append("This is a red text right after");
 
-            var context = new TemplateContext
+            _scriptContext = new TemplateContext
             {
                 EnableRelaxedMemberAccess = false,
                 StrictVariables = true
             };
 
-            context.BuiltinObject.Import("exit", new Action(Exit));
-            context.BuiltinObject.Import("clear", new Action(Clear));
-            context.BuiltinObject.Import("log", new Func<double, double>(Log));
+            _scriptContext.BuiltinObject.Import("exit", new Action(Exit));
+            _scriptContext.BuiltinObject.Import("clear", new Action(Clear));
+            _scriptContext.BuiltinObject.Import("log", new Func<double, double>(Log));
+            _scriptContext.BuiltinObject.Import("cos", new Func<double, double>(Math.Cos));
+            _scriptContext.BuiltinObject.Import("sin", new Func<double, double>(Math.Sin));
 
-            context.BuiltinObject.Import("kb", new Func<object, object>(Kb));
-            context.BuiltinObject.Import("mb", new Func<object, object>(Mb));
-            context.BuiltinObject.Import("gb", new Func<object, object>(Gb));
-            context.BuiltinObject.Import("tb", new Func<object, object>(Tb));
-            context.BuiltinObject.Import("im", new Func<object, object>(ComplexNumber));
+            _scriptContext.BuiltinObject.Import("kb", new Func<object, object>(Kb));
+            _scriptContext.BuiltinObject.Import("mb", new Func<object, object>(Mb));
+            _scriptContext.BuiltinObject.Import("gb", new Func<object, object>(Gb));
+            _scriptContext.BuiltinObject.Import("tb", new Func<object, object>(Tb));
+            _scriptContext.BuiltinObject.Import("im", new Func<object, object>(ComplexNumber));
 
-            var parserOptions = new ParserOptions()
+            _builtins = new ScriptObject();
+            foreach (var builtin in _scriptContext.BuiltinObject)
+            {
+                _builtins[builtin.Key] = builtin.Value;
+            }
+            
+            _parserOptions = new ParserOptions()
             {
                 Units = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
                 {
@@ -68,19 +104,27 @@ namespace Kalk.Core
                     {"gb", "gb"},
                     {"tb", "tb"},
                     { "i", "im"},
-                }
+                },
+                CollectTokens = true,
             };
+
+            _lexerOptions = new LexerOptions() {Mode = ScriptMode.ScriptOnly, Level = ScriptSyntaxLevel.Scientific};
 
             Template script = null;
 
+            Repl.EditLine.Changed = OnTextChanged;
+
             Repl.OnTextValidatingEnter = text =>
             {
+                var elapsed = _clockInput.ElapsedMilliseconds;
+                _clockInput.Restart();
+
                 object result = null;
                 string error = null;
                 int column = -1;
                 try
                 {
-                    script = Template.Parse(text, parserOptions: parserOptions, lexerOptions: new LexerOptions() { Mode = ScriptMode.ScriptOnly, Level = ScriptSyntaxLevel.Scientific });
+                    script = Parse(text);
 
                     if (script.HasErrors)
                     {
@@ -99,13 +143,13 @@ namespace Kalk.Core
                     }
                     else
                     {
-                        result = context.Evaluate(script.Page);
+                        result = _scriptContext.Evaluate(script.Page);
                         if (Repl.ExitOnNextEval)
                         {
                             return false;
                         }
 
-                        Repl.TextAfterLine.Clear();
+                        Repl.AfterEditLine.Clear();
                     }
                 }
                 catch (Exception ex)
@@ -123,35 +167,44 @@ namespace Kalk.Core
 
                 if (error != null)
                 {
-                    Repl.TextAfterLine.Clear();
-                    Repl.TextAfterLine.Append('\n');
-                    Repl.TextAfterLine.Append(ConsoleStyle.Red);
-                    Repl.TextAfterLine.Append(error);
+                    Repl.AfterEditLine.Clear();
+                    Repl.AfterEditLine.Append('\n');
+                    Repl.AfterEditLine.Append(ConsoleStyle.Red);
+                    Repl.AfterEditLine.Append(error);
                     if (column >= 0 && column <= Repl.EditLine.Count)
                     {
+                        Repl.EnableCursorChanged = false;
                         Repl.CursorIndex = column;
+                        Repl.EnableCursorChanged = true;
                     }
-                    return false;
+
+                    if (elapsed < OnErrorToNextLineMaxDelayInMilliseconds)
+                    {
+                        Repl.AfterEditLine.Append('\n');
+                    }
+
+                    return elapsed < OnErrorToNextLineMaxDelayInMilliseconds;
                 }
                 else
                 {
                     if (result != null)
                     {
-                        context.Write(script.Page.Span, result);
+                        _scriptContext.Write(script.Page.Span, result);
                     }
-                    var resultStr = context.Output.ToString();
-                    var output = context.Output as StringBuilderOutput;
+                    var resultStr = _scriptContext.Output.ToString();
+                    var output = _scriptContext.Output as StringBuilderOutput;
                     if (output != null)
                     {
                         output.Builder.Length = 0;
                     }
 
-                    Repl.TextAfterLine.Clear();
-                    Repl.TextAfterLine.Append('\n');
+                    Repl.AfterEditLine.Clear();
+                    Repl.AfterEditLine.Append('\n');
                     if (resultStr != string.Empty)
                     {
-                        Repl.TextAfterLine.Append(resultStr);
-                        Repl.TextAfterLine.Append('\n');
+                        Repl.AfterEditLine.Append(ConsoleStyle.Bold);
+                        Repl.AfterEditLine.Append(resultStr);
+                        Repl.AfterEditLine.Append('\n');
                     }
                 }
 
@@ -169,6 +222,172 @@ namespace Kalk.Core
             };
         }
 
+        private void UpdateMatchingBraces()
+        {
+            if (_lastText == null) return;
+
+            var tokenIndex = FindTokenIndexFromColumnIndex(Repl.CursorIndex);
+
+            if (tokenIndex >= 0)
+            {
+                var token = _lastTokens[tokenIndex];
+                int matchTokenIndex = -1;
+                
+                // Find there is a pair to match
+                int currentType = -1;
+                for (var i = 0; i < MatchPairs.Length; i++)
+                {
+                    var match = MatchPairs[i];
+                    if (match == token.Type)
+                    {
+                        currentType = i;
+                        break;
+                    }
+                }
+
+                if (currentType >= 0)
+                {
+                    var other = token.Type;
+                    var toFind = (currentType & 1) == 0 ? MatchPairs[currentType + 1]: MatchPairs[currentType - 1];
+
+                    int found = -1;
+                    var delta = (currentType & 1) == 0 ? 1 : -1;
+
+                    for (int j = tokenIndex + delta; j >= 0 && j < _lastTokens.Count; j += delta)
+                    {
+                        var nextToken = _lastTokens[j];
+                        if (nextToken.Type == toFind)
+                        {
+                            found++;
+                            if (found == 0)
+                            {
+                                matchTokenIndex = j;
+                                break;
+                            }
+                        }
+                        else if (nextToken.Type == other)
+                        {
+                            found--;
+                        }
+                    }
+
+                    bool match = matchTokenIndex >= 0;
+
+                    var tokenStart = token.Start.Column;
+                    Repl.EditLine.EnableStyleAt(tokenStart, ConsoleStyle.Underline);
+                    Repl.EditLine.EnableStyleAt(tokenStart, match ? ConsoleStyle.Bold : ConsoleStyle.BrightRed);
+                    Repl.EditLine.DisableStyleAt(tokenStart + 1, match ? ConsoleStyle.Bold : ConsoleStyle.BrightRed);
+                    Repl.EditLine.DisableStyleAt(tokenStart + 1, ConsoleStyle.Underline);
+
+                    if (match)
+                    {
+                        var tokenMatch = _lastTokens[matchTokenIndex].Start.Column;
+                        Repl.EditLine.EnableStyleAt(tokenMatch, ConsoleStyle.Underline);
+                        Repl.EditLine.EnableStyleAt(tokenMatch, ConsoleStyle.Bold);
+                        Repl.EditLine.DisableStyleAt(tokenMatch + 1, ConsoleStyle.Bold);
+                        Repl.EditLine.DisableStyleAt(tokenMatch + 1, ConsoleStyle.Underline);
+                    }
+                }
+            }
+        }
+
+        private int FindTokenIndexFromColumnIndex(int index)
+        {
+            for (var i = 0; i < _lastTokens.Count; i++)
+            {
+                var token = _lastTokens[i];
+                var start = token.Start.Column;
+                var end = token.End.Column;
+                if (start >= 0 && end >= 0 && start <= end && end < Repl.EditLine.Count)
+                {
+                    if (index >= start && index <= end)
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        public long OnErrorToNextLineMaxDelayInMilliseconds { get; set; }
+
+
+        private Template Parse(string text)
+        {
+            var template = Template.Parse(text, parserOptions: _parserOptions, lexerOptions: _lexerOptions);
+            _lastTokens.Clear();
+            _lastTokens.AddRange(template.Tokens);
+            return template;
+        }
+
+        private void OnTextChanged()
+        {
+            _lastText = Repl.EditLine.ToString();
+            Parse(_lastText);
+        }
+
+        private void OnBeforeRendering()
+        {
+            UpdateSyntaxHighlighting();
+            UpdateMatchingBraces();
+        }
+        
+        private void UpdateSyntaxHighlighting()
+        {
+            Repl.EditLine.ClearStyles();
+
+            if (_lastText == null) return;
+
+            bool isPreviousNotDot = true;
+            foreach (var token in _lastTokens)
+            {
+                var styleOpt = GetStyle(token, _lastText, isPreviousNotDot);
+                isPreviousNotDot = token.Type != TokenType.Dot;
+
+                if (styleOpt.HasValue)
+                {
+                    var style = styleOpt.Value;
+                    var start = token.Start.Column;
+                    var end = token.End.Column;
+                    if (start >= 0 && end >= 0 && start <= end && end < Repl.EditLine.Count)
+                    {
+                        Repl.EditLine.EnableStyleAt(start, style);
+                        Repl.EditLine.DisableStyleAt(end + 1, style);
+                    }
+                }
+            }
+        }
+       
+        private ConsoleStyle? GetStyle(Token token, string text, bool isPreviousNotDot)
+        {
+            switch (token.Type)
+            {
+                case TokenType.Integer:
+                case TokenType.HexaInteger:
+                case TokenType.BinaryInteger:
+                case TokenType.Float:
+                    return ConsoleStyle.Bold;
+                case TokenType.String:
+                case TokenType.VerbatimString:
+                    return ConsoleStyle.BrightCyan;
+                case TokenType.Comment:
+                case TokenType.CommentMulti:
+                    return ConsoleStyle.BrightGreen;
+                case TokenType.Identifier:
+                    var key = token.GetText(text);
+                    
+                    if (isPreviousNotDot && _builtins.ContainsKey(key))
+                    {
+                        return ConsoleStyle.Cyan;
+                    }
+
+                    return ConsoleStyle.BrightYellow;
+                default:
+                    return null;
+            }
+        }
+
         public void Clear()
         {
             _clearBeforeNextDisplay = true;
@@ -176,6 +395,8 @@ namespace Kalk.Core
 
         public static double Log(double value)
         {
+            if (value < 0) throw new ArgumentOutOfRangeException(nameof(value), $"Invalid value {value} for log. Expecting >= 0.");
+
             return Math.Log(value);
         }
 
@@ -258,7 +479,14 @@ namespace Kalk.Core
                 // ignore
             }
 
-            Console.WriteLine("kalk 1.0.0 - Copyright (c) 2020 Alexandre Mutel");
+            if (ConsoleHelper.SupportEscapeSequences)
+            {
+                Console.WriteLine($"{ConsoleStyle.BrightRed}k{ConsoleStyle.BrightYellow}a{ConsoleStyle.BrightGreen}l{ConsoleStyle.BrightCyan}k{ConsoleStyle.Reset} 1.0.0 - Copyright (c) 2020 Alexandre Mutel");
+            }
+            else
+            {
+                Console.WriteLine("kalk 1.0.0 - Copyright (c) 2020 Alexandre Mutel");
+            }
 
             //Console.CursorVisible = false;
             //Console.Write("test");
@@ -290,6 +518,7 @@ namespace Kalk.Core
 
             try
             {
+                _clockInput.Restart();
                 Repl.Run();
             }
             catch (Exception ex)

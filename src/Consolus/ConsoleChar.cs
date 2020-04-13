@@ -7,10 +7,10 @@ namespace Consolus
         public ConsoleChar(char value)
         {
             Value = value;
-            Escapes = null;
+            StyleMarkers = null;
         }
 
-        public List<ConsoleStyle> Escapes;
+        public List<ConsoleStyleMarker> StyleMarkers;
 
         public char Value;
 

@@ -6,12 +6,11 @@ using System.Text;
 
 namespace Consolus
 {
-    public class ConsoleRepl
+    public class ConsoleRepl : ConsoleRenderer
     {
         // http://ascii-table.com/ansi-escape-sequences-vt-100.php
 
         private int _stackIndex;
-        private readonly ConsoleRenderer _consoleRenderer;
         
         public static bool IsSelf()
         {
@@ -24,25 +23,12 @@ namespace Consolus
 
         public ConsoleRepl()
         {
-            SupportEscapeSequences = ConsoleHelper.SupportEscapeSequences;
             Console.TreatControlCAsInput = true;
-            _consoleRenderer = new ConsoleRenderer();
-            _stackIndex = -1;
-            EditLine = _consoleRenderer.EditLine;
-            History = new List<string>();
-            Prompt = _consoleRenderer.BeforeEditLine;
             Prompt.Append(">>> ");
-            TextAfterLine = _consoleRenderer.AfterEditLine;
+            _stackIndex = -1;
+            History = new List<string>();
             Console.CursorVisible = true;
             ExitOnNextEval = false;
-        }
-
-        public bool SupportEscapeSequences { get; }
-
-        public int CursorIndex
-        {
-            get => _consoleRenderer.CursorIndex;
-            set => _consoleRenderer.CursorIndex = value;
         }
 
         public bool ExitOnNextEval { get; set; }
@@ -55,39 +41,29 @@ namespace Consolus
 
         public string LocalClipboard { get; set; }
 
-        public ConsoleText EditLine { get; }
-
-        public ConsoleText Prompt { get; }
-
-        public ConsoleText TextAfterLine { get; }
-
         public Func<string, bool> OnTextValidatingEnter { get; set; }
 
         public Action<string> OnTextValidatedEnter { get; set; }
 
         public Func<string, bool, string> OnTextCompletion { get; set; }
 
-        public bool HasSelection => _consoleRenderer.HasSelection;
-
-        public int SelectionIndex => _consoleRenderer.SelectionIndex;
-
         public void Begin()
         {
             CursorIndex = 0;
-            UpdateSelection();
+            Render();
         }
 
         public void End()
         {
             CursorIndex = EditLine.Count;
-            UpdateSelection();
+            Render();
         }
 
         public void UpdateSelection()
         {
             if (SelectionIndex >= 0)
             {
-                Display();
+                Render();
             }
         }
         
@@ -145,7 +121,7 @@ namespace Consolus
             }
 
             CursorIndex = cursorIndex;
-            UpdateSelection();
+            Render();
         }
 
 
@@ -191,7 +167,7 @@ namespace Consolus
                 }
             }
             CursorIndex = cursorIndex;
-            UpdateSelection();
+            Render();
         }
         
         public void CopySelectionToClipboard()
@@ -249,21 +225,6 @@ namespace Consolus
             return null;
         }
 
-        public void BeginSelection()
-        {
-            _consoleRenderer.BeginSelection();
-        }
-
-        public void EndSelection()
-        {
-            _consoleRenderer.EndSelection();
-        }
-
-        public void RemoveSelection()
-        {
-            _consoleRenderer.RemoveSelection();
-        }
-
         public void Backspace(bool word)
         {
             if (HasSelection)
@@ -279,11 +240,9 @@ namespace Consolus
             {
                 MoveLeft(true);
                 var newCursorIndex = CursorIndex;
-                while (cursorIndex > 0 && cursorIndex > newCursorIndex)
-                {
-                    cursorIndex--;
-                    EditLine.RemoveAt(cursorIndex);
-                }
+                var length = cursorIndex - CursorIndex;
+                EditLine.RemoveRangeAt(newCursorIndex, length);
+                cursorIndex = newCursorIndex;
             }
             else
             {
@@ -291,7 +250,7 @@ namespace Consolus
                 EditLine.RemoveAt(cursorIndex);
             }
 
-            Display(cursorIndex);
+            Render(cursorIndex);
         }
 
         public void Delete(bool word)
@@ -308,18 +267,14 @@ namespace Consolus
                 if (word)
                 {
                     var count = FindNextWordRight(cursorIndex) - cursorIndex;
-                    while (count > 0)
-                    {
-                        EditLine.RemoveAt(cursorIndex);
-                        count--;
-                    }
+                    EditLine.RemoveRangeAt(cursorIndex, count);
                 }
                 else
                 {
                     EditLine.RemoveAt(cursorIndex);
                 }
 
-                Display();
+                Render();
             }
         }
 
@@ -332,12 +287,8 @@ namespace Consolus
             // Don't update if it is already empty
             if (EditLine.Count == 0 && string.IsNullOrEmpty(text)) return;
 
-            EditLine.Clear();
-            foreach (var c in text)
-            {
-                EditLine.Add(c);
-            }
-            Display(EditLine.Count);
+            EditLine.ReplaceBy(text);
+            Render(EditLine.Count);
         }
 
         public void Write(string text)
@@ -349,23 +300,16 @@ namespace Consolus
         public void Write(string text, int index, int length)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
-
-            var cursorIndex = CursorIndex;
-            var end = index + length;
-            for(int i = index; i < end; i++)
-            {
-                var c = text[i];
-                EditLine.Insert(cursorIndex, c);
-                cursorIndex++;
-            }
-            Display(cursorIndex);
+            var cursorIndex = CursorIndex + length;
+            EditLine.InsertRange(CursorIndex, text, index, length);
+            Render(cursorIndex);
         }
 
         public void Write(ConsoleStyle style)
         {
             var cursorIndex = CursorIndex;
-            EditLine.Insert(cursorIndex, style);
-            Display(cursorIndex);
+            EditLine.EnableStyleAt(cursorIndex, style);
+            Render(cursorIndex);
         }
 
         public void Write(char c)
@@ -379,7 +323,7 @@ namespace Consolus
             var cursorIndex = CursorIndex;
             EditLine.Insert(cursorIndex, c);
             cursorIndex++;
-            Display(cursorIndex);
+            Render(cursorIndex);
         }
 
         public void Enter()
@@ -395,11 +339,11 @@ namespace Consolus
             // Try to validate the string
             if (OnTextValidatingEnter != null && !OnTextValidatingEnter(text))
             {
-                Display();
+                Render();
             }
             else
             {
-                Display(reset: true);
+                Render(reset: true);
 
                 // Propagate enter validation
                 OnTextValidatedEnter?.Invoke(text);
@@ -413,14 +357,14 @@ namespace Consolus
 
                 if (!ExitOnNextEval)
                 {
-                    Display(0);
+                    Render(0);
                 }
             }
         }
 
         public void Clear()
         {
-            _consoleRenderer.Reset();
+            Reset();
             Console.Clear();
         }
 
@@ -478,11 +422,7 @@ namespace Consolus
             if (newText != null && newText != text)
             {
                 int length = text.Length;
-                while (length > 0)
-                {
-                    EditLine.RemoveAt(cursorIndex);
-                    length--;
-                }
+                EditLine.RemoveRangeAt(cursorIndex, length);
 
                 CursorIndex = cursorIndex;
                 Write(newText);
@@ -499,7 +439,7 @@ namespace Consolus
         {
             End();
 
-            Display(reset: true);
+            Render(reset: true);
 
             Console.Write($"{ConsoleStyle.BrightRed}^C");
             Console.ResetColor();
@@ -518,7 +458,7 @@ namespace Consolus
 
             // https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences
 
-            Display();
+            Render();
 
             while (!ExitOnNextEval)
             {
@@ -530,14 +470,14 @@ namespace Consolus
                 }
                 catch (Exception ex)
                 {
-                    TextAfterLine.Clear();
-                    TextAfterLine.Append("\n");
-                    TextAfterLine.Append(ConsoleStyle.Red);
-                    TextAfterLine.Append(ex.ToString());
-                    Display(reset: true); // re-display the current line with the exception
+                    AfterEditLine.Clear();
+                    AfterEditLine.Append("\n");
+                    AfterEditLine.Append(ConsoleStyle.Red);
+                    AfterEditLine.Append(ex.ToString());
+                    Render(reset: true); // re-display the current line with the exception
 
                     // Display the next line
-                    Display();
+                    Render();
                 }
             }
         }
@@ -649,7 +589,7 @@ namespace Consolus
             {
                 Begin();
             }
-            else if (key.Key == ConsoleKey.End || (hasShift && key.Key == ConsoleKey.F)) // Case for WSL?
+            else if (key.Key == ConsoleKey.End) // Case for WSL?
             {
                 End();
             }
@@ -695,11 +635,6 @@ namespace Consolus
             {
                 EndSelection();
             }
-        }
-
-        public void Display(int? newCursorIndex = null, bool reset = false)
-        {
-            _consoleRenderer.Render(newCursorIndex, reset);
         }
 
         private void DebugCursorPosition(string text = null)

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Consolus
 {
-    public enum ControlStyleKind
+    public enum ConsoleStyleKind
     {
         Color,
         Format,
@@ -47,18 +47,18 @@ namespace Consolus
         public static readonly ConsoleStyle BackgroundBrightMagenta = new ConsoleStyle("\u001b[45;1m");
         public static readonly ConsoleStyle BackgroundBrightCyan = new ConsoleStyle("\u001b[46;1m");
         public static readonly ConsoleStyle BackgroundBrightWhite = new ConsoleStyle("\u001b[47;1m");
-        public static readonly ConsoleStyle Bold = new ConsoleStyle("\u001b[1m", ControlStyleKind.Format);
-        public static readonly ConsoleStyle Underline = new ConsoleStyle("\u001b[4m", ControlStyleKind.Format);
-        public static readonly ConsoleStyle Reversed = new ConsoleStyle("\u001b[7m", ControlStyleKind.Format);
-        public static readonly ConsoleStyle Reset = new ConsoleStyle("\u001b[0m", ControlStyleKind.Reset);
+        public static readonly ConsoleStyle Bold = new ConsoleStyle("\u001b[1m", ConsoleStyleKind.Format);
+        public static readonly ConsoleStyle Underline = new ConsoleStyle("\u001b[4m", ConsoleStyleKind.Format);
+        public static readonly ConsoleStyle Reversed = new ConsoleStyle("\u001b[7m", ConsoleStyleKind.Format);
+        public static readonly ConsoleStyle Reset = new ConsoleStyle("\u001b[0m", ConsoleStyleKind.Reset);
 
         public ConsoleStyle(string escapeSequence) : this()
         {
             EscapeSequence = escapeSequence;
-            Kind = ControlStyleKind.Color;
+            Kind = ConsoleStyleKind.Color;
         }
 
-        public ConsoleStyle(string escapeSequence, ControlStyleKind kind) : this()
+        public ConsoleStyle(string escapeSequence, ConsoleStyleKind kind) : this()
         {
             EscapeSequence = escapeSequence;
             Kind = kind;
@@ -66,7 +66,8 @@ namespace Consolus
 
         public readonly string EscapeSequence;
 
-        public readonly ControlStyleKind Kind;
+        public readonly ConsoleStyleKind Kind;
+
 
         public void Render(TextWriter writer)
         {
