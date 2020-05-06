@@ -53,7 +53,7 @@ namespace kalk
             //}
 
             //return;
-            var app = new KalkApp();
+            var app = new KalkConsoleRepl();
             app.Repl.GetClipboardTextImpl = TextCopy.Clipboard.GetText;
             app.Repl.SetClipboardTextImpl = TextCopy.Clipboard.SetText;
             app.Run();

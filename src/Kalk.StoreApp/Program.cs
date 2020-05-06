@@ -8,7 +8,7 @@ namespace Kalk
         [STAThread]
         static void Main(string[] args)
         {
-            var app = new KalkApp();
+            var app = new KalkConsoleRepl();
             app.Repl.GetClipboardTextImpl = TextCopy.Clipboard.GetText;
             app.Repl.SetClipboardTextImpl = TextCopy.Clipboard.SetText;
             app.Run();

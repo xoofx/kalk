@@ -23,6 +23,8 @@ namespace Consolus
 
         public bool SupportEscapeSequences { get; set; }
 
+        public ConsoleTextWriter ConsoleWriter => _consoleWriter;
+        
         public int LineTop
         {
             get
@@ -190,6 +192,8 @@ namespace Consolus
                         NotifyCursorChanged();
                     }
                 }
+
+                if (_cursorIndex > EditLine.Count) _cursorIndex = EditLine.Count;
 
                 UpdateCursorPosition(lineTop);
             }

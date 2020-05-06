@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 
 namespace Consolus
 {
@@ -11,6 +13,8 @@ namespace Consolus
         // http://ascii-table.com/ansi-escape-sequences-vt-100.php
 
         private int _stackIndex;
+        private readonly BlockingCollection<ConsoleKeyInfo> _keys;
+        private Thread _thread;
         
         public static bool IsSelf()
         {
@@ -29,9 +33,13 @@ namespace Consolus
             History = new List<string>();
             Console.CursorVisible = true;
             ExitOnNextEval = false;
+            PendingTextToEnter = new Queue<string>();
+            _keys = new BlockingCollection<ConsoleKeyInfo>();
         }
 
         public bool ExitOnNextEval { get; set; }
+
+        public Func<CancellationTokenSource> GetCancellationTokenSource { get; set; }
 
         public List<string> History { get; }
 
@@ -41,11 +49,15 @@ namespace Consolus
 
         public string LocalClipboard { get; set; }
 
-        public Func<string, bool> OnTextValidatingEnter { get; set; }
+        public Func<string, bool, bool> OnTextValidatingEnter { get; set; }
 
         public Action<string> OnTextValidatedEnter { get; set; }
 
         public Func<string, bool, string> OnTextCompletion { get; set; }
+
+        private Queue<string> PendingTextToEnter { get; }
+
+        public bool Evaluating { get; private set; }
 
         public void Begin()
         {
@@ -57,6 +69,12 @@ namespace Consolus
         {
             CursorIndex = EditLine.Count;
             Render();
+        }
+
+        public void EnqueuePendingTextToEnter(string text)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            PendingTextToEnter.Enqueue(text);
         }
 
         public void UpdateSelection()
@@ -326,7 +344,24 @@ namespace Consolus
             Render(cursorIndex);
         }
 
-        public void Enter()
+        public bool Enter(bool hasControl)
+        {
+            if (EnterInternal(hasControl))
+            {
+                while (PendingTextToEnter.Count > 0)
+                {
+                    var newTextToEnter = PendingTextToEnter.Dequeue();
+                    EditLine.Clear();
+                    EditLine.Append(newTextToEnter);
+                    if (!EnterInternal(hasControl)) return false;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EnterInternal(bool hasControl)
         {
             if (HasSelection)
             {
@@ -335,35 +370,50 @@ namespace Consolus
             End();
 
             var text = EditLine.Count == 0 ? string.Empty : EditLine.ToString();
-
+            
             // Try to validate the string
-            if (OnTextValidatingEnter != null && !OnTextValidatingEnter(text))
+            if (OnTextValidatingEnter != null)
             {
-                Render();
-            }
-            else
-            {
-                bool isNotEmpty = !IsClean || EditLine.Count > 0 || AfterEditLine.Count > 0;
-                if (isNotEmpty)
+                bool isValid = false;
+                try
                 {
-                    Render(reset: true);
+                    Evaluating = true;
+                    isValid = OnTextValidatingEnter(text, hasControl);
+                }
+                finally
+                {
+                    Evaluating = false;
                 }
 
-                // Propagate enter validation
-                OnTextValidatedEnter?.Invoke(text);
-
-                if (!string.IsNullOrEmpty(text))
+                if (!isValid)
                 {
-                    History.Add(text);
-                }
-
-                _stackIndex = -1;
-
-                if (!ExitOnNextEval)
-                {
-                    Render(0);
+                    Render();
+                    return false;
                 }
             }
+
+            bool isNotEmpty = !IsClean || EditLine.Count > 0 || AfterEditLine.Count > 0;
+            if (isNotEmpty)
+            {
+                Render(reset: true);
+            }
+
+            // Propagate enter validation
+            OnTextValidatedEnter?.Invoke(text);
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                History.Add(text);
+            }
+
+            _stackIndex = -1;
+
+            if (!ExitOnNextEval)
+            {
+                Render(0);
+            }
+
+            return true;
         }
 
         public void Clear()
@@ -458,6 +508,25 @@ namespace Consolus
         
         public void Run()
         {
+            // Clear any previous running thread
+            if (_thread != null)
+            {
+                try
+                {
+                    _thread.Abort();
+                }
+                catch
+                {
+                    // ignore
+                }
+
+                _thread = null;
+            }
+
+            // Start the thread for pulling the console keys
+            _thread = new Thread(ThreadReadKeys) {IsBackground = true, Name = "Consolus.ThreadReadKeys"};
+            _thread.Start();
+            
             _stackIndex = -1;
 
             // https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences
@@ -466,8 +535,7 @@ namespace Consolus
 
             while (!ExitOnNextEval)
             {
-                var key = ReadKey();
-
+                var key = _keys.Take();
                 try
                 {
                     ProcessKey(key);
@@ -476,12 +544,28 @@ namespace Consolus
                 {
                     AfterEditLine.Clear();
                     AfterEditLine.Append("\n");
-                    AfterEditLine.Append(ConsoleStyle.Red);
+                    AfterEditLine.Begin(ConsoleStyle.Red);
                     AfterEditLine.Append(ex.ToString());
                     Render(reset: true); // re-display the current line with the exception
 
                     // Display the next line
                     Render();
+                }
+            }
+        }
+        
+        private void ThreadReadKeys()
+        {
+            while (!ExitOnNextEval)
+            {
+                var key = ReadKey();
+                if (Evaluating && (key.Modifiers & ConsoleModifiers.Control) != 0 && key.Key == ConsoleKey.C)
+                {
+                    GetCancellationTokenSource()?.Cancel();
+                }
+                else
+                {
+                    _keys.Add(key);
                 }
             }
         }
@@ -548,7 +632,7 @@ namespace Consolus
                         {
                             previousIndex = matchIndex + 1;
                             // Otherwise we have a new line
-                            Enter();
+                            Enter(true);
                         }
                     }
                 }
@@ -622,7 +706,7 @@ namespace Consolus
             //}
             else if (key.Key == ConsoleKey.Enter)
             {
-                Enter();
+                Enter(hasControl);
             }
             else if (key.Key == ConsoleKey.Tab)
             {

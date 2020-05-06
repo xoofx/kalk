@@ -275,9 +275,23 @@ namespace Consolus
             return this;
         }
 
-        public ConsoleText Append(ConsoleStyle style)
+        public ConsoleText Begin(ConsoleStyle style)
         {
             Add(style);
+            return this;
+        }
+
+        public ConsoleText End(ConsoleStyle style)
+        {
+            Add(style, false);
+            return this;
+        }
+
+        public ConsoleText AppendLine(string text)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            AddInternal(text);
+            Add('\n');
             return this;
         }
 
@@ -315,13 +329,17 @@ namespace Consolus
         public ConsoleText Append(string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
+            AddInternal(text);
+            NotifyChanged();
+            return this;
+        }
+
+        private void AddInternal(string text)
+        {
             foreach (var c in text)
             {
                 InsertInternal(Count, c);
             }
-
-            NotifyChanged();
-            return this;
         }
 
         public void EnableStyleAt(int index, ConsoleStyle style)
