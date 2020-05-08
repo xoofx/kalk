@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Consolus;
 using Scriban;
+using Scriban.Functions;
 using Scriban.Parsing;
 using Scriban.Runtime;
 using Scriban.Syntax;
@@ -30,6 +32,8 @@ namespace Kalk.Core
 
             RegisterFunction("list", new Action(ListVariables), CategoryGeneral);
             RegisterFunction("del", new Action<ScriptVariable>(DeleteVariable), CategoryGeneral);
+
+            RegisterFunction("keys", DelegateCustomFunction.CreateFunc<object, IEnumerable>(Keys), CategoryGeneral);
             
             //Builtins.SetValue("empty", EmptyScriptObject.Default, true);
             var clear = new Action<ScriptExpression>(Clear);
@@ -44,20 +48,15 @@ namespace Kalk.Core
             Builtins.Import("tb", new Func<object, object>(Tb));
             Builtins.Import("i", new Func<object, object>(ComplexNumber));
 
-            Builtins.Import("unit", new Func<ScriptVariable, string, KalkUnit, ScriptVariable, KalkUnit>(Unit));
+            RegisterUnitFunctions();
 
             RegisterDocumentation();
         }
 
-        public KalkUnit Unit(ScriptVariable name, string description = null, KalkUnit unitValue = null, ScriptVariable symbol = null)
+        [KalkDoc("keys")]
+        public IEnumerable Keys(object obj)
         {
-            var unit = new KalkDefinitionUnit(name.Name)
-            {
-                Description = description,
-                Symbol = symbol?.Name,
-                Value = unitValue,
-            };
-            return unit;
+            return ObjectFunctions.Keys(this, obj);
         }
 
         partial void RegisterDocumentation();

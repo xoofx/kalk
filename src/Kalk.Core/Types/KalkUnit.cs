@@ -6,7 +6,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public abstract class KalkUnit : KalkReadOnlyObject, IScriptCustomType
+    public abstract class KalkUnit : KalkReadOnlyObject, IScriptCustomBinaryOperation, IScriptCustomUnaryOperation
     {
         protected KalkUnit()
         {
@@ -23,13 +23,6 @@ namespace Kalk.Core
             result = null;
             return false;
         }
-
-        public bool TryConvertTo(TemplateContext context, SourceSpan span, Type type, out object value)
-        {
-            value = null;
-            return false;
-        }
-
     }
 
     // s	second	time
@@ -52,7 +45,7 @@ namespace Kalk.Core
         {
         }
         
-        public override string Kind => "operation";
+        public override string Kind => "unit operation";
 
         public object Left { get; set; }
 
@@ -110,7 +103,7 @@ namespace Kalk.Core
             Name = name;
         }
 
-        public override string Kind => "definition";
+        public override string Kind => "unit definition";
 
         public string Name { get; }
 
@@ -120,8 +113,10 @@ namespace Kalk.Core
 
         public string Prefix { get; set; }
 
-        public KalkUnit Value { get; set; }
+        public bool IsUser { get; set; }
 
+        public KalkUnit Value { get; set; }
+        
         public override string ToString()
         {
             return Symbol;

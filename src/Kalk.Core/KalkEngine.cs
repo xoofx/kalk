@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Consolus;
+using MathNet.Numerics.Statistics.Mcmc;
 using Scriban;
 using Scriban.Helpers;
 using Scriban.Parsing;
@@ -30,27 +31,29 @@ namespace Kalk.Core
         public KalkEngine(bool tokens = false) : base(new ScriptObject())
         {
             Builtins = BuiltinObject;
+            Units = new ScriptObject();
+            Config = new KalkConfig();
+            Variables = new ScriptVariables(this);
             Descriptors = new Dictionary<string, KalkDescriptor>();
             EnableRelaxedMemberAccess = false;
             ErrorForStatementFunctionAsExpression = true;
             StrictVariables = true;
             UseScientific = true;
+            LoopLimit = int.MaxValue; // no limites for loops
             RecursiveLimit = int.MaxValue; // no limits (still guarded by Scriban)
 
             _cancellationTokenSource = new CancellationTokenSource();
 
             RegisterFunctions();
 
-            Config = new KalkConfig();
             RegisterVariable("config", Config, CategoryGeneral);
 
-            Variables = new ScriptVariables(this);
+            PushGlobal(Units);
             PushGlobal(Variables);
 
             // Put the special history $ object as local
             SetValue(ScriptVariable.Create("", ScriptVariableScope.Local), Builtins["history"]);
-
-
+            
             _parserOptions = new ParserOptions();
 
             _mapUnitNameToFunctionName = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
@@ -92,6 +95,8 @@ namespace Kalk.Core
         public KalkConfig Config { get; }
 
         public ScriptObject Variables { get; }
+
+        public ScriptObject Units { get; }
 
         public Dictionary<string, KalkDescriptor> Descriptors { get; }
 
