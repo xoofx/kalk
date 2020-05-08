@@ -6,22 +6,27 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public class KalkVectorConstructor<T> : IScriptCustomFunction where T : struct, IEquatable<T>, IFormattable
+    public class KalkMatrixConstructor<T> : IScriptCustomFunction where T : struct, IEquatable<T>, IFormattable
     {
-        private readonly int _dimension;
-
-        public KalkVectorConstructor(int dimension)
+        public KalkMatrixConstructor(int row, int column)
         {
-            _dimension = dimension;
+            if (row <= 0) throw new ArgumentOutOfRangeException(nameof(row));
+            if (column <= 0) throw new ArgumentOutOfRangeException(nameof(column));
+            RowLength = row;
+            ColumnLength = column;
         }
+
+        public int RowLength { get; }
+
+        public int ColumnLength { get; }
 
         public int RequiredParameterCount => 1;
 
-        public int ParameterCount => _dimension;
+        public int ParameterCount => RowLength * ColumnLength;
 
         public bool HasVariableParams => false;
 
-        public Type ReturnType => typeof(KalkVector<T>);
+        public Type ReturnType => typeof(KalkMatrix<T>);
 
         public ScriptParameterInfo GetParameterInfo(int index)
         {
@@ -30,7 +35,7 @@ namespace Kalk.Core
 
         public object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
         {
-            var vector = new KalkVector<T>(_dimension);
+            var vector = new KalkMatrix<T>(RowLength, ColumnLength);
             for (int i = 0; i < arguments.Count; i++)
             {
                 vector[i] = context.ToObject<T>(callerContext.Span, arguments[i]);

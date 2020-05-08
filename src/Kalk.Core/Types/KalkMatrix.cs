@@ -3,9 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Numerics;
 using System.Text;
-using MathNet.Numerics.LinearAlgebra.Storage;
 using Scriban;
 using Scriban.Helpers;
 using Scriban.Parsing;
@@ -14,37 +12,34 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public abstract class KalkVector : KalkObject
+    public abstract class KalkMatrix
     {
-        public abstract int Length { get; }
+        protected KalkMatrix(int row, int column)
+        {
+            if (row <= 0) throw new ArgumentOutOfRangeException(nameof(row));
+            if (column <= 0) throw new ArgumentOutOfRangeException(nameof(column));
+            RowLength = row;
+            ColumnLength = column;
+        }
+
+        public int RowLength { get; }
+
+        public int ColumnLength { get; }
     }
-    
-    public class KalkVector<T> : KalkVector, IScriptTransformable, IFormattable, IList, IScriptObject, IEquatable<KalkVector<T>>, IKalkVectorObject<T>, IScriptCustomType where T: struct, IEquatable<T>, IFormattable
+
+    public class KalkMatrix<T> : KalkMatrix, IScriptTransformable, IFormattable, IList, IScriptObject, IEquatable<KalkMatrix<T>>, IKalkMatrixObject<T>, IScriptCustomType where T: struct, IEquatable<T>, IFormattable
     {
-        private const int x_IndexOffset = 2;
         private readonly T[] _values;
 
-        public KalkVector(int dimension)
+        public KalkMatrix(int row, int column) : base(row, column)
         {
-            if (dimension <= 0) throw new ArgumentOutOfRangeException(nameof(dimension));
-            _values = new T[dimension];
+            _values = new T[row * column];
         }
 
-        public KalkVector(IList<T> list)
-        {
-            _values = list.ToArray();
-        }
-
-        public KalkVector(KalkVector<T> values)
+        public KalkMatrix(KalkMatrix<T> values) : base(values.RowLength, values.ColumnLength)
         {
             _values = (T[])values._values.Clone();
         }
-
-        public override int Length => _values.Length;
-
-        public override string Kind => $"{typeof(T).ScriptPrettyName()}{Length.ToString(CultureInfo.InvariantCulture)}";
-        
-        public Type ElementType => typeof(T);
 
         public T this[int index]
         {
@@ -52,42 +47,84 @@ namespace Kalk.Core
             set => _values[index] = value;
         }
 
-        public object GetElement(int index)
+        public KalkVector<T> GetRow(int index)
         {
-            return _values[index];
+            if ((uint)index >= (uint)RowLength) throw new ArgumentOutOfRangeException(nameof(index));
+
+            var row = new KalkVector<T>(ColumnLength);
+            for (int i = 0; i < ColumnLength; i++)
+            {
+                row[i] = _values[ColumnLength * index + i];
+            }
+
+            return row;
         }
 
-        public void SetElement(int index, object value)
+        public void SetRow(int index, KalkVector<T> value)
         {
-            _values[index] = (T)value;
+            if ((uint)index >= (uint)RowLength) throw new ArgumentOutOfRangeException(nameof(index));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (value.Length != ColumnLength) throw new ArgumentOutOfRangeException(nameof(value), $"Invalid vector size. The vector has a length of {value.Length} while the row of this matrix is expecting {ColumnLength} elements.");
+
+            for (int i = 0; i < ColumnLength; i++)
+            {
+                _values[ColumnLength * index + i] = value[i];
+            }
         }
 
-        public KalkVector<T> Clone()
+        public KalkVector<T> GetColumn(int index)
         {
-            return new KalkVector<T>(this);
+            if ((uint)index >= (uint)RowLength) throw new ArgumentOutOfRangeException(nameof(index));
+
+            var column = new KalkVector<T>(RowLength);
+            for (int i = 0; i < RowLength; i++)
+            {
+                column[i] = _values[ColumnLength * i + index];
+            }
+
+            return column;
         }
 
-        public override IScriptObject Clone(bool deep)
+        public void SetColumn(int index, KalkVector<T> value)
+        {
+            if ((uint)index >= (uint)RowLength) throw new ArgumentOutOfRangeException(nameof(index));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (value.Length != RowLength) throw new ArgumentOutOfRangeException(nameof(value), $"Invalid vector size. The vector has a length of {value.Length} while the column of this matrix is expecting {RowLength} elements.");
+
+            for (int i = 0; i < RowLength; i++)
+            {
+                _values[ColumnLength * i + index] = value[i];
+            }
+        }
+
+        public KalkMatrix<T> Clone()
+        {
+            return new KalkMatrix<T>(this);
+        }
+
+        public IScriptObject Clone(bool deep)
         {
             return Clone();
         }
+
+        public object Transform(Func<T, T> apply)
+        {
+            var newValue = Clone();
+            for (int i = 0; i < _values.Length; i++)
+            {
+                var result = apply(_values[i]);
+                newValue._values[i] = (T)result;
+            }
+            return newValue;
+        }
+
+        public Type ElementType => typeof(T);
 
         public bool CanTransform(Type transformType)
         {
             return typeof(T) == typeof(int) && (typeof(long) == transformType || typeof(int) == transformType) ||
                    (typeof(T) == typeof(float) && (typeof(double) == transformType || typeof(float) == transformType) ||
                     typeof(T) == typeof(double) && typeof(double) == transformType);
-        }
-
-        public object Transform(Func<T, T> apply)
-        {
-            var newValue = Clone();
-            for (int i = 0; i < Length; i++)
-            {
-                var result = apply(_values[i]);
-                newValue._values[i] = (T)result;
-            }
-            return newValue;
         }
 
         public object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
@@ -103,9 +140,10 @@ namespace Kalk.Core
         {
             var context = formatProvider as TemplateContext;
             var builder = new StringBuilder();
-            builder.Append(typeof(T).ScriptPrettyName()).Append(Length.ToString(CultureInfo.InvariantCulture));
+            builder.Append(typeof(T).ScriptPrettyName()).Append(RowLength.ToString(CultureInfo.InvariantCulture))
+                .Append('x').Append(ColumnLength.ToString(CultureInfo.InvariantCulture));
             builder.Append('(');
-            for(int i = 0; i < Length; i++)
+            for(int i = 0; i < _values.Length; i++)
             {
                 if (i > 0) builder.Append(", ");
                 builder.Append(context != null ? context.ObjectToString(_values[i]) : _values[i].ToString(null, formatProvider));
@@ -119,17 +157,17 @@ namespace Kalk.Core
             ((ICollection) _values).CopyTo(array, index);
         }
 
-        public override int Count => Length;
+        public int Count => RowLength;
 
         public bool IsSynchronized => ((ICollection) _values).IsSynchronized;
 
         public object SyncRoot => ((ICollection) _values).SyncRoot;
 
-        public override IEnumerable<string> GetMembers()
+        public IEnumerable<string> GetMembers()
         {
             if (_values == null) yield break;
 
-            for(int i = 0; i < Length; i++)
+            for(int i = 0; i < _values.Length; i++)
             {
                 switch (i)
                 {
@@ -148,7 +186,7 @@ namespace Kalk.Core
             }
         }
 
-        public override bool Contains(string member)
+        public bool Contains(string member)
         {
             if (member.Length < 1) return false;
 
@@ -162,44 +200,28 @@ namespace Kalk.Core
             return true;
         }
 
-        public int Add(object value)
-        {
-            return ((IList) _values).Add(value);
-        }
+        public int Add(object value) => throw new NotSupportedException("This type does not support this operation");
 
         public void Clear()
         {
             Array.Clear(_values, 0, _values.Length);
         }
 
-        public bool Contains(object value)
-        {
-            return ((IList) _values).Contains(value);
-        }
+        public bool Contains(object value) => throw new NotSupportedException("This type does not support this operation");
 
-        public int IndexOf(object value)
-        {
-            return ((IList) _values).IndexOf(value);
-        }
+        public int IndexOf(object value) => throw new NotSupportedException("This type does not support this operation");
 
-        public void Insert(int index, object value)
-        {
-            ((IList) _values).Insert(index, value);
-        }
+        public void Insert(int index, object value) => throw new NotSupportedException("This type does not support this operation");
 
-        public void Remove(object value)
-        {
-            ((IList) _values).Remove(value);
-        }
+        public void Remove(object value) => throw new NotSupportedException("This type does not support this operation");
 
-        public void RemoveAt(int index)
-        {
-            ((IList) _values).RemoveAt(index);
-        }
-
+        public void RemoveAt(int index) => throw new NotSupportedException("This type does not support this operation");
+        
         public bool IsFixedSize => ((IList) _values).IsFixedSize;
 
-        public override bool IsReadOnly
+        public bool IsReadOnly => false;
+
+        bool IScriptObject.IsReadOnly
         {
             get => false;
             set => throw new InvalidOperationException("Cannot set this instance readonly");
@@ -207,11 +229,11 @@ namespace Kalk.Core
 
         object IList.this[int index]
         {
-            get => ((IList) _values)[index];
-            set => ((IList) _values)[index] = value;
+            get => GetRow(index);
+            set => SetRow(index, (KalkVector<T>)value);
         }
 
-        public override bool TryGetValue(TemplateContext context, SourceSpan span, string member, out object result)
+        public bool TryGetValue(TemplateContext context, SourceSpan span, string member, out object result)
         {
             result = null;
             if (_values == null) return false;
@@ -220,7 +242,7 @@ namespace Kalk.Core
             List<T> list = null;
             foreach (var index in ForEachMemberPart(span, member, true))
             {
-                var value = index <= 1 ? context.ToObject<T>(span, index): _values[index - x_IndexOffset];
+                var value = index < 0 ? context.ToObject<T>(span, index): _values[index];
 
                 if (result == null)
                 {
@@ -238,7 +260,7 @@ namespace Kalk.Core
 
             if (list != null)
             {
-                result = new KalkVector<T>(list);
+                //result = new KalkMatrix<T>(list);
             }
 
             return true;
@@ -253,23 +275,17 @@ namespace Kalk.Core
                 int index;
                 switch (c)
                 {
-                    case '0':
+                    case 'x':
                         index = 0;
                         break;
-                    case '1':
+                    case 'y':
                         index = 1;
                         break;
-                    case 'x':
-                        index = x_IndexOffset;
-                        break;
-                    case 'y':
-                        index = 3;
-                        break;
                     case 'z':
-                        index = 4;
+                        index = 2;
                         break;
                     case 'w':
-                        index = 5;
+                        index = 3;
                         break;
                     default:
                         if (throwIfInvalid)
@@ -289,7 +305,7 @@ namespace Kalk.Core
                     break;
                 }
 
-                if (index - x_IndexOffset < Length)
+                if (index < _values.Length)
                 {
                     yield return index;
                 }
@@ -297,7 +313,7 @@ namespace Kalk.Core
                 {
                     if (throwIfInvalid)
                     {
-                        throw new ScriptRuntimeException(span, $"Swizzle swizzle {c} is out of range ({index}) for this vector length ({Length})");
+                        throw new ScriptRuntimeException(span, $"Swizzle swizzle {c} is out of range ({index}) for this vector length ({RowLength})");
                     }
                     else
                     {
@@ -308,29 +324,29 @@ namespace Kalk.Core
             }
         }
 
-        public override bool CanWrite(string member)
+        public bool CanWrite(string member)
         {
             return true;
         }
 
-        public override bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
+        public bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
         {
             var tValue = context.ToObject<T>(span, value);
             foreach (var index in ForEachMemberPart(span, member, true))
             {
-                if (index <= 1) throw new ScriptRuntimeException(span, $"Swizzle with 0 or 1 are not supporting when setting values");
-                _values[index - x_IndexOffset] = tValue;
+                if (index < 0) throw new ScriptRuntimeException(span, $"Swizzle with 0 or 1 are not supporting when setting values");
+                _values[index] = tValue;
             }
 
             return true;
         }
 
-        public override bool Remove(string member)
+        public bool Remove(string member)
         {
             throw new InvalidOperationException($"Cannot remove member {member} for {this.GetType()}");
         }
 
-        public override void SetReadOnly(string member, bool readOnly)
+        public void SetReadOnly(string member, bool readOnly)
         {
             throw new InvalidOperationException($"Cannot set readonly member {member} for {this.GetType()}");
         }
@@ -338,8 +354,8 @@ namespace Kalk.Core
         public bool TryEvaluate(TemplateContext context, SourceSpan span, ScriptBinaryOperator op, SourceSpan leftSpan, object leftValue, SourceSpan rightSpan, object rightValue, out object result)
         {
             result = null;
-            var leftVector = leftValue as KalkVector<T>;
-            var rightVector = rightValue as KalkVector<T>;
+            var leftVector = leftValue as KalkMatrix<T>;
+            var rightVector = rightValue as KalkMatrix<T>;
             if (leftVector == null && rightVector == null) return false;
             
             switch (op)
@@ -372,12 +388,11 @@ namespace Kalk.Core
                 case ScriptBinaryOperator.Substract:
                 case ScriptBinaryOperator.Multiply:
                 {
-                    var opResult = new KalkVector<T>(leftVector.Length);
-                    for (int i = 0; i < opResult.Length; i++)
+                    var opResult = new KalkMatrix<T>(leftVector.RowLength, leftVector.ColumnLength);
+                    for (int i = 0; i < opResult._values.Length; i++)
                     {
                         opResult[i] = context.ToObject<T>(span, ScriptBinaryExpression.Evaluate(context, span, op, leftVector[i], rightVector[i]));
                     }
-
                     result = opResult;
                     return true;
                 }
@@ -410,16 +425,17 @@ namespace Kalk.Core
             return false;
         }
 
-        public bool Equals(KalkVector<T> other)
+        public bool Equals(KalkMatrix<T> other)
         {
             if (other == null) return false;
-            if (Length != other.Length) return false;
+            if (RowLength != other.RowLength || ColumnLength != other.ColumnLength) return false;
             var values = _values;
             var otherValues = other._values;
             for (int i = 0; i < values.Length; i++)
             {
                 if (values[i].Equals(otherValues[i])) return false;
             }
+
             return true;
         }
 
@@ -428,13 +444,13 @@ namespace Kalk.Core
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((KalkVector<T>) obj);
+            return Equals((KalkMatrix<T>) obj);
         }
 
         public override int GetHashCode()
         {
             var values = _values;
-            int hashCode = values.Length;
+            int hashCode = (RowLength * 397) ^ ColumnLength;
             for (int i = 0; i < values.Length; i++)
             {
                 hashCode = (hashCode * 397) ^ values[i].GetHashCode();
@@ -442,10 +458,12 @@ namespace Kalk.Core
             return hashCode;
         }
 
-
         public IEnumerator GetEnumerator()
         {
-            return ((IEnumerable) _values).GetEnumerator();
+            for (int i = 0; i < RowLength; i++)
+            {
+                yield return GetRow(i);
+            }
         }
 
         public bool TryEvaluate(TemplateContext context, SourceSpan span, ScriptUnaryOperator op, object rightValue, out object result)
@@ -453,12 +471,12 @@ namespace Kalk.Core
             throw new NotImplementedException();
         }
 
-        public static bool operator ==(KalkVector<T> left, KalkVector<T> right)
+        public static bool operator ==(KalkMatrix<T> left, KalkMatrix<T> right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(KalkVector<T> left, KalkVector<T> right)
+        public static bool operator !=(KalkMatrix<T> left, KalkMatrix<T> right)
         {
             return !Equals(left, right);
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -15,9 +16,8 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public partial class KalkEngine
+    public partial class KalkEngine : TemplateContext
     {
-        private readonly TemplateContext _context;
         private readonly LexerOptions _lexerOptions;
         private readonly ParserOptions _parserOptions;
         private object _lastResult = null;
@@ -27,27 +27,28 @@ namespace Kalk.Core
         private Action _showInputAction = null;
         private CancellationTokenSource _cancellationTokenSource;
 
-        public KalkEngine(bool tokens = false)
+        public KalkEngine(bool tokens = false) : base(new ScriptObject())
         {
-            Builtins = new ScriptObject();
-            _context = new EngineTemplateContext(this, Builtins)
-            {
-                EnableRelaxedMemberAccess = false,
-                ErrorForStatementFunctionAsExpression = true,
-                StrictVariables = true,
-                UseScientific = true,
-                RecursiveLimit = int.MaxValue, // no limits (still guarded by Scriban)
-            };
+            Builtins = BuiltinObject;
+            Descriptors = new Dictionary<string, KalkDescriptor>();
+            EnableRelaxedMemberAccess = false;
+            ErrorForStatementFunctionAsExpression = true;
+            StrictVariables = true;
+            UseScientific = true;
+            RecursiveLimit = int.MaxValue; // no limits (still guarded by Scriban)
 
             _cancellationTokenSource = new CancellationTokenSource();
 
             RegisterFunctions();
 
+            Config = new KalkConfig();
+            RegisterVariable("config", Config, CategoryGeneral);
+
             Variables = new ScriptVariables(this);
-            _context.PushGlobal(Variables);
+            PushGlobal(Variables);
 
             // Put the special history $ object as local
-            _context.SetValue(ScriptVariable.Create("", ScriptVariableScope.Local), Builtins["history"]);
+            SetValue(ScriptVariable.Create("", ScriptVariableScope.Local), Builtins["history"]);
 
 
             _parserOptions = new ParserOptions();
@@ -88,10 +89,12 @@ namespace Kalk.Core
 
         public ScriptObject Builtins { get; }
 
+        public KalkConfig Config { get; }
+
         public ScriptObject Variables { get; }
 
-        public TemplateContext Context => _context;
-        
+        public Dictionary<string, KalkDescriptor> Descriptors { get; }
+
         public IKalkEngineWriter Writer { get; set; }
 
         public Action OnExit { get; set; }
@@ -123,11 +126,11 @@ namespace Kalk.Core
             }
             return template;
         }
-        
-        public object Evaluate(ScriptPage script)
+
+        public object EvaluatePage(ScriptPage script)
         {
             RecordInput(script);
-            return _context.Evaluate(script);
+            return Evaluate(script);
         }
 
         public void RecordInput(ScriptPage toRewrite)
@@ -135,7 +138,7 @@ namespace Kalk.Core
             _hasResultOrVariableSet = false;
             _showInputAction = () =>
             {
-                var newScript = toRewrite.Format(new ScriptFormatterOptions(_context, ScriptLang.Scientific, ScriptFormatterFlags.ExplicitClean));
+                var newScript = toRewrite.Format(new ScriptFormatterOptions(this, ScriptLang.Scientific, ScriptFormatterFlags.ExplicitClean));
                 var output = newScript.ToString();
                 WriteHighlight($"# {output}");
             };
@@ -174,7 +177,7 @@ namespace Kalk.Core
                 int lineNumber;
                 try
                 {
-                    lineNumber = Context.ToInt(new SourceSpan(), line);
+                    lineNumber = ToInt(new SourceSpan(), line);
                 }
                 catch
                 {
@@ -273,11 +276,19 @@ namespace Kalk.Core
             OnExit?.Invoke();
         }
 
-        private void Clear(ScriptExpression expr = null)
+        /// <summary>
+        /// Clears the screen (by default) or the history (e.g clear history).
+        /// </summary>
+        /// <param name="what">An optional argument specifying what to clear. Can be of the following value:
+        /// * screen: to clear the screen (default if not passed)
+        /// * history: to clear the history
+        /// </param>
+        [KalkDoc("cls")]
+        public void Clear(ScriptExpression what = null)
         {
-            if (expr != null)
+            if (what != null)
             {
-                if (expr is ScriptVariableGlobal variable)
+                if (what is ScriptVariableGlobal variable)
                 {
                     switch (variable.Name)
                     {
@@ -294,16 +305,157 @@ namespace Kalk.Core
             OnClear?.Invoke();
         }
 
-        private void Help(ScriptExpression expression = null)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expression"></param>
+        public void Help(ScriptExpression expression = null)
         {
             if (Writer == null) return;
 
-            var text = new ConsoleText();
-            text.Begin(ConsoleStyle.Green).AppendLine("This is a text").End(ConsoleStyle.Green);
-            text.AppendLine();
-            text.Begin(ConsoleStyle.Bold).Append($"This is working: {expression}").End(ConsoleStyle.Bold);
+            var name = expression?.ToString();
+            if (name != null && name != "help")
+            {
+                if (Descriptors.TryGetValue(name, out var descriptor))
+                {
+                    WriteHelpForDescriptor(descriptor);
+                    return;
+                }
 
-            Writer.Write(text);
+                throw new ArgumentException($"The builtin function `{name}` does not exist", nameof(expression));
+            }
+
+
+            var random = new Random();
+            WriteHighlight($"# help [name]");
+            if (name == "help")
+            {
+                WriteHighlight($"#");
+                WriteHighlight($"# Example");
+                WriteHighlight($"  help # Display a list of function and topic names to get help from.");
+                WriteHighlight($"  help {Descriptors.Select(x => x.Key).ElementAt(random.Next(0, Descriptors.Count - 1))} # Display the help for the specific function or topic.");
+            }
+
+            if (name == null)
+            {
+                var categoryToDescriptors = Descriptors.GroupBy(x => x.Value.Category).ToDictionary(x => x.Key, y => y.Select(x => x.Value).Distinct().ToList());
+                WriteHighlight($"#");
+                foreach (var categoryPair in categoryToDescriptors.OrderBy(x => x.Key))
+                {
+                    var list = categoryPair.Value;
+                    WriteHighlight($"# {categoryPair.Key}");
+
+                    var builder = new StringBuilder();
+                    var names = list.SelectMany(x => x.Names).OrderBy(x => x).ToList();
+
+                    WriteHighlightAligned("    - ", string.Join(", ", names));
+                    WriteHighlight("");
+                }
+            }
+        }
+
+        private static List<string> SplitStringBySpaceAndKeepSpace(string text)
+        {
+            // normalize line endings with \n
+            text = text.Replace("\r\n", "\n").Replace("\r", "\n");
+            var list = new List<string>();
+            var builder = new StringBuilder();
+            bool isCurrentWhiteSpace = false;
+            for(int i = 0; i < text.Length; i++)
+            {
+                var c = text[i];
+                if (char.IsWhiteSpace(c))
+                {
+                    if (builder.Length > 0)
+                    {
+                        list.Add(builder.ToString());
+                        builder.Length = 0;
+                    }
+
+                    // We put "\n" separately
+                    if (c == '\n')
+                    {
+                        list.Add("\n");
+                        continue;
+                    }
+
+                    isCurrentWhiteSpace = true;
+                }
+                else if (isCurrentWhiteSpace)
+                {
+                    list.Add(builder.ToString());
+                    builder.Length = 0;
+                    isCurrentWhiteSpace = false;
+                }
+                builder.Append(c);
+            }
+
+            if (builder.Length > 0)
+            {
+                list.Add(builder.ToString());
+            }
+
+            return list;
+        }
+
+        private void WriteHighlightAligned(string prefix, string text, string nextPrefix = null)
+        {
+            var list = SplitStringBySpaceAndKeepSpace(text);
+            if (list.Count == 0) return;
+
+            var builder = new StringBuilder();
+            bool lineHasItem = false;
+
+            var maxColumn = Math.Min(Config.HelpMaxColumn, Console.BufferWidth);
+
+            if (nextPrefix == null)
+            {
+                nextPrefix = prefix.StartsWith("#") ? "#" + new string(' ', prefix.Length - 1) : new string(' ', prefix.Length);
+            }
+
+            bool isFirstItem = false;
+            foreach (var item in list)
+            {
+                while (true)
+                {
+                    if (builder.Length == 0)
+                    {
+                        lineHasItem = false;
+                        builder.Append(prefix);
+                        prefix = nextPrefix;
+                        isFirstItem = true;
+                    }
+
+                    var nextLineLength = builder.Length + item.Length + 2;
+
+                    if (item != "\n" && (nextLineLength < maxColumn || !lineHasItem))
+                    {
+                        if (isFirstItem && string.IsNullOrWhiteSpace(item))
+                        {
+                            // Don't append a space at the beginning of a line
+                        }
+                        else
+                        {
+                            builder.Append(item);
+                            lineHasItem = true;
+                            isFirstItem = false;
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        WriteHighlight(builder.ToString());
+                        builder.Length = 0;
+                        break;
+                    }
+                }
+            }
+
+            if (builder.Length > 0)
+            {
+                WriteHighlight(builder.ToString());
+            }
         }
 
         private void ListVariables()
@@ -389,7 +541,7 @@ namespace Kalk.Core
             }
             else
             {
-                WriteHighlight($"{name} = {Context.ObjectToString(value)}");
+                WriteHighlight($"{name} = {ObjectToString(value)}");
             }
         }
 
@@ -412,51 +564,39 @@ namespace Kalk.Core
             return !(leftExpression is ScriptVariable variable) || variable.Name != "help";
         }
         
-        private class EngineTemplateContext : TemplateContext
+        public override TemplateContext Write(SourceSpan span, object textAsObject)
         {
-            private readonly KalkEngine _engine;
+            SetLastResult(textAsObject);
+            WriteHighlightVariableAndValueToConsole("out", textAsObject);
+            return this;
+        }
 
-            public EngineTemplateContext(KalkEngine engine, ScriptObject builtins) : base(builtins)
+        public override string ObjectToString(object value)
+        {
+            if (value is float f32)
             {
-                _engine = engine;
+                if (float.IsNegativeInfinity(f32)) return "-inf";
+                if (float.IsInfinity(f32)) return "inf";
+                if (float.IsNaN(f32)) return "nan";
+            }
+            else if (value is double f64)
+            {
+                if (double.IsNegativeInfinity(f64)) return "-inf";
+                if (double.IsInfinity(f64)) return "inf";
+                if (double.IsNaN(f64)) return "nan";
             }
 
-            public KalkEngine Engine => _engine;
-            
-            public override TemplateContext Write(SourceSpan span, object textAsObject)
+            return base.ObjectToString(value);
+        }
+
+        protected override IObjectAccessor GetMemberAccessorImpl(object target)
+        {
+            if (target != null && target.GetType().IsPrimitiveOrDecimal())
             {
-                _engine.SetLastResult(textAsObject);
-                _engine.WriteHighlightVariableAndValueToConsole("out", textAsObject);
-                return this;
+                return PrimitiveSwizzleAccessor.Default;
             }
 
-            public override string ObjectToString(object value)
-            {
-                if (value is float f32)
-                {
-                    if (float.IsNegativeInfinity(f32)) return "-inf";
-                    if (float.IsInfinity(f32)) return "inf";
-                    if (float.IsNaN(f32)) return "nan";
-                }
-                else if (value is double f64)
-                {
-                    if (double.IsNegativeInfinity(f64)) return "-inf";
-                    if (double.IsInfinity(f64)) return "inf";
-                    if (double.IsNaN(f64)) return "nan";
-                }
-
-                return base.ObjectToString(value);
-            }
-
-            protected override IObjectAccessor GetMemberAccessorImpl(object target)
-            {
-                if (target != null && target.GetType().IsPrimitiveOrDecimal())
-                {
-                    return PrimitiveSwizzleAccessor.Default;
-                }
-
-                return base.GetMemberAccessorImpl(target);
-            }
+            return base.GetMemberAccessorImpl(target);
         }
 
         private class ScriptVariables : ScriptObject
@@ -534,15 +674,43 @@ namespace Kalk.Core
         //    return ParseExpressionResult.Continue;
         //}
 
-        public KalkUnit Unit(ScriptVariable name, string description = null, ScriptExpression expression = null, ScriptVariable symbol = null)
+        private void WriteHelpForDescriptor(KalkDescriptor descriptor)
         {
-            var unit = new KalkSimpleUnit(name.Name)
+            var parentless = descriptor.IsCommand && descriptor.Params.Count <= 1;
+            var args = string.Join(", ", descriptor.Params.Select(x => x.IsOptional ? $"[{x.Name}]" :x.Name));
+
+            var syntax = string.Join("/", descriptor.Names);
+
+            if (!string.IsNullOrEmpty(args))
             {
-                Expression = expression, 
-                Description = description, 
-                Symbol = symbol?.Name
-            };
-            return unit;
+                syntax += parentless ? $" {args}" : $"({args})";
+            }
+
+            WriteHighlight($"# {syntax}");
+            WriteHighlight($"#");
+            if (string.IsNullOrEmpty(descriptor.Description))
+            {
+                WriteHighlight($"#   No documentation available.");
+            }
+            else
+            {
+                WriteHighlightAligned($"#   ", descriptor.Description);
+                if (descriptor.Params.Count > 0)
+                {
+                    WriteHighlight($"#");
+                    WriteHighlight($"# Parameters");
+                    foreach (var par in descriptor.Params)
+                    {
+                        WriteHighlightAligned($"#   - {par.Name}: ", par.Description);
+                    }
+                }
+                if (!string.IsNullOrEmpty(descriptor.Returns))
+                {
+                    WriteHighlight($"#");
+                    WriteHighlight($"# Returns");
+                    WriteHighlightAligned($"#   ", descriptor.Returns);
+                }
+            }
         }
 
         internal void UpdateEdit(ConsoleText text)

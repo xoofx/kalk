@@ -1,136 +1,264 @@
 ﻿using System;
+using System.Numerics;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
-using Scriban.Syntax;
 
 namespace Kalk.Core
 {
     public partial class KalkEngine
     {
-        public const string MathCategory = "Math Functions";
+        public const string CategoryMathConstants = "Math Constants";
+        public const string CategoryMathFunctions = "Math Functions";
+        public const string CategoryVectorConstructors = "Vector Constructors";
 
-        private static readonly Func<double, double> LogFunc = Math.Log;
+        private Func<long, long> FibFunc;
+        private Func<object, object> AbsFunc;
         private static readonly Func<double, double> CosFunc = Math.Cos;
         private static readonly Func<double, double> AcosFunc = Math.Acos;
         private static readonly Func<double, double> CoshFunc = Math.Cosh;
-        //private static readonly Func<double, double> AcoshFunc = Math.Acosh;
+        private static readonly Func<double, double> CotFunc = MathNet.Numerics.Trig.Cot;
+        private static readonly Func<double, double> AcoshFunc = MathNet.Numerics.Trig.Acosh;
         private static readonly Func<double, double> SinFunc = Math.Sin;
         private static readonly Func<double, double> AsinFunc = Math.Asin;
         private static readonly Func<double, double> SinhFunc = Math.Sinh;
-        //private static readonly Func<double, double> AsinhFunc = Math.Asinh;
-        private static readonly Func<double, double> SqrtFunc = Math.Sqrt;
-        private static readonly Func<double, double> TanFunc = Math.Tan;
-        private static readonly Func<double, double> ExpFunc = Math.Exp;
-        private static readonly Func<double, double> SignFunc = SignFuncImpl;
+        private static readonly Func<double, double> AsinhFunc = MathNet.Numerics.Trig.Asinh;
 
+        private static readonly Func<double, double> TanFunc = Math.Tan;
+        private static readonly Func<double, double> TanhFunc = Math.Tanh;
+        private static readonly Func<double, double> AtanFunc = Math.Atan;
+        private static readonly Func<double, double> AtanhFunc = MathNet.Numerics.Trig.Atanh;
+        private static readonly Func<double, double, double> Atan2Func = Math.Atan2;
+
+        private static readonly Func<double, double> SqrtFunc = Math.Sqrt;
+        private static readonly Func<double, double> LogFunc = Math.Log;
+        private static readonly Func<double, double> ExpFunc = Math.Exp;
+
+        private static readonly Func<double, double> RoundFunc = Math.Round;
+        private static readonly Func<double, double> FloorFunc= Math.Floor;
+        private static readonly Func<double, double> CeilFunc = Math.Ceiling;
+        private Func<object, object> SignFunc;
+
+        /// <summary>
+        /// Defines the "Not a Number" constant for a double.
+        /// </summary>
+        [KalkDoc("nan")] public const double Nan = double.NaN;
+
+        /// <summary>
+        /// Defines the infinity constant for a double.
+        /// </summary>
+        [KalkDoc("inf")] public const double Inf = double.PositiveInfinity;
+
+        /// <summary>
+        /// Defines the PI constant. pi = 3.14159265358979
+        /// </summary>
+        [KalkDoc("pi")] public const double Pi = Math.PI;
+
+        /// <summary>
+        /// Defines the natural logarithmic base. e = 2.71828182845905
+        /// </summary>
+        [KalkDoc("e")] public const double E = Math.E;
 
         private void RegisterMathFunctions()
         {
-            Builtins.SetValue("nan", double.NaN, true);
-            Builtins.SetValue("inf", double.PositiveInfinity, true);
+            FibFunc = Fibonacci;
+            AbsFunc = AbsImpl;
+            SignFunc = SignFuncImpl;
 
-            Builtins.SetValue("log", DelegateCustomFunction.CreateFunc<KalkValue, object>(Log), true);
-            Builtins.SetValue("cos", DelegateCustomFunction.CreateFunc<KalkValue, object>(Cos), true);
-            Builtins.SetValue("sin", DelegateCustomFunction.CreateFunc<KalkValue, object>(Sin), true);
+            RegisterConstant("nan", Nan, CategoryMathConstants);
+            RegisterConstant("inf", double.PositiveInfinity, CategoryMathConstants);
+            RegisterConstant("pi", Math.PI, CategoryMathConstants);
+            RegisterConstant("e", Math.E, CategoryMathConstants);
 
-            Builtins.SetValue("int2", new KalkVectorConstructor<int>(2), true);
+            RegisterFunction("abs", Abs, CategoryMathFunctions);
+            RegisterFunction("sign",Sign, CategoryMathFunctions);
+            RegisterFunction("fib", Fib, CategoryMathFunctions);
 
-            Builtins.SetValue("float2", new KalkVectorConstructor<float>(2), true);
-            Builtins.SetValue("float3", new KalkVectorConstructor<float>(3), true);
-            Builtins.SetValue("float4", new KalkVectorConstructor<float>(4), true);
-            Builtins.SetValue("float8", new KalkVectorConstructor<float>(8), true);
+            RegisterFunction("cos", Cos, CategoryMathFunctions);
+            RegisterFunction("acos", Acos, CategoryMathFunctions);
+            RegisterFunction("cosh", Cosh, CategoryMathFunctions);
+            RegisterFunction("acosh", Acosh, CategoryMathFunctions);
+            
+            RegisterFunction("sin", Sin, CategoryMathFunctions);
+            RegisterFunction("asin", Asin, CategoryMathFunctions);
+            RegisterFunction("sinh", Sinh, CategoryMathFunctions);
+            RegisterFunction("asinh", Asinh, CategoryMathFunctions);
 
-            Builtins.SetValue("double2", new KalkVectorConstructor<double>(2), true);
-            Builtins.SetValue("double3", new KalkVectorConstructor<double>(3), true);
-            Builtins.SetValue("double4", new KalkVectorConstructor<double>(4), true);
-            Builtins.SetValue("double8", new KalkVectorConstructor<double>(8), true);
+            RegisterFunction("tan", Tan, CategoryMathFunctions);
+            RegisterFunction("atan", Atan, CategoryMathFunctions);
+            RegisterFunction("tanh", Tanh, CategoryMathFunctions);
+            RegisterFunction("atanh", Atanh, CategoryMathFunctions);
+            //RegisterFunction("atan2", Atan2, MathFunctionsCategory);
 
-            Builtins.Import("fib", new Func<int, long>(Fibonacci));
+            RegisterFunction("sqrt", Sqrt, CategoryMathFunctions);
+            RegisterFunction("log", Log, CategoryMathFunctions);
+            RegisterFunction("exp", Exp, CategoryMathFunctions);
 
-            Builtins.SetValue("pi", Math.PI, true);
-            Builtins.SetValue("e", Math.E, true);
+            RegisterFunction("round", Round, CategoryMathFunctions);
+            RegisterFunction("floor", Floor, CategoryMathFunctions);
+            RegisterFunction("ceil", Ceiling, CategoryMathFunctions);
+            
+            RegisterFunction("int1", new KalkVectorConstructor<int>(1), CategoryVectorConstructors);
+            RegisterFunction("int2", new KalkVectorConstructor<int>(2), CategoryVectorConstructors);
+            RegisterFunction("int3", new KalkVectorConstructor<int>(3), CategoryVectorConstructors);
+            RegisterFunction("int4", new KalkVectorConstructor<int>(4), CategoryVectorConstructors);
+            RegisterFunction("int8", new KalkVectorConstructor<int>(8), CategoryVectorConstructors);
+
+            RegisterFunction("float1", new KalkVectorConstructor<float>(1), CategoryVectorConstructors);
+            RegisterFunction("float2", new KalkVectorConstructor<float>(2), CategoryVectorConstructors);
+            RegisterFunction("float3", new KalkVectorConstructor<float>(3), CategoryVectorConstructors);
+            RegisterFunction("float4", new KalkVectorConstructor<float>(4), CategoryVectorConstructors);
+            RegisterFunction("float8", new KalkVectorConstructor<float>(8), CategoryVectorConstructors);
+
+            RegisterFunction("double1", new KalkVectorConstructor<double>(1), CategoryVectorConstructors);
+            RegisterFunction("double2", new KalkVectorConstructor<double>(2), CategoryVectorConstructors);
+            RegisterFunction("double3", new KalkVectorConstructor<double>(3), CategoryVectorConstructors);
+            RegisterFunction("double4", new KalkVectorConstructor<double>(4), CategoryVectorConstructors);
+            RegisterFunction("double8", new KalkVectorConstructor<double>(8), CategoryVectorConstructors);
+
+
+            RegisterFunction("float4x4", new KalkMatrixConstructor<float>(4, 4), CategoryVectorConstructors);
         }
 
 
+        public object Fib(KalkLongValue x) => x.Transform(this, CurrentSpan, FibFunc);
 
-        [KalkFunction("fib", Category = MathCategory)]
-        public long Fibonacci(int value)
+
+        public void Test()
         {
+            {
+                var descriptor = Descriptors["abs"];
+                descriptor.Description = "Returns the absolute value of the specified value.";
+                descriptor.Returns = "The absolute value of the x parameter.";
+                descriptor.Params.Add(new KalkParamDescriptor("x", "The specified value."));
+            }
+        }
 
-            Context.CheckAbort();
+        /// <summary>
+        /// Returns the absolute value of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The absolute value of the <paramref name="x"/> parameter.</returns>
+        [KalkDoc("abs")]
+        public object Abs(KalkValue x) => x.Transform(this, CurrentSpan, AbsFunc);
+
+        /// <summary>
+        /// Returns an integer that indicates the sign of a number.
+        /// </summary>
+        /// <param name="x">A signed number.</param>
+        /// <returns>
+        /// A number that indicates the sign of x:
+        ///  - -1 if x is less than zero
+        ///  - 0 if x is equal to zero
+        ///  - 1 if x is greater than zero.
+        /// </returns>
+        [KalkDoc("sign")]
+        public object Sign(KalkValue x) => x.Transform(this, CurrentSpan, SignFunc);
+        
+        public object Cos(KalkDoubleValue x) => x.Transform(this, CurrentSpan, CosFunc);
+
+        public object Acos(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AcosFunc);
+
+        public object Cosh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, CoshFunc);
+
+        public object Acosh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AcoshFunc);
+
+        public object Sin(KalkDoubleValue x) => x.Transform(this, CurrentSpan, SinFunc);
+
+        public object Asin(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AsinFunc);
+
+        public object Sinh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, SinhFunc);
+
+        public object Asinh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AsinhFunc);
+
+
+        public object Tan(KalkDoubleValue x) => x.Transform(this, CurrentSpan, TanFunc);
+        public object Atan(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AtanFunc);
+        public object Tanh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, TanhFunc);
+        public object Atanh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AtanhFunc);
+        //public object Atan2(KalkDoubleValue x) => x.Transform(this, CurrentSpan, Atan2Func);
+
+        public object Sqrt(KalkDoubleValue x) => x.Transform(this, CurrentSpan, SqrtFunc);
+        public object Log(KalkDoubleValue x) => x.Transform(this, CurrentSpan, LogFunc);
+        public object Exp(KalkDoubleValue x) => x.Transform(this, CurrentSpan, ExpFunc);
+
+        public object Round(KalkDoubleValue x) => x.Transform(this, CurrentSpan, RoundFunc);
+        public object Floor(KalkDoubleValue x) => x.Transform(this, CurrentSpan, FloorFunc);
+        public object Ceiling(KalkDoubleValue x) => x.Transform(this, CurrentSpan, CeilFunc);
+
+        private object SignFuncImpl(object value)
+        {
+            if (value == null) return null;
+
+            var type = value.GetType();
+            if (type == typeof(int))
+            {
+                return Math.Sign((int)value);
+            }
+            if (type == typeof(float))
+            {
+                return Math.Sign((float)value);
+            }
+            if (type == typeof(double))
+            {
+                return Math.Sign((double)value);
+            }
+            if (type == typeof(long))
+            {
+                return Math.Sign((long)value);
+            }
+            if (type == typeof(decimal))
+            {
+                return Math.Sign((decimal)value);
+            }
+            if (type == typeof(BigInteger))
+            {
+                return ((BigInteger)value).Sign;
+            }
+
+            return Math.Sign(ToObject<double>(CurrentSpan, value));
+        }
+
+        private long Fibonacci(long value)
+        {
+            CheckAbort();
             if (value < 0) throw new ArgumentOutOfRangeException(nameof(value), "The value must be > 0");
             if (value == 0) return 0;
             if (value == 1) return 1;
             return Fibonacci(value - 1) + Fibonacci(value - 2);
         }
 
-       
-        [KalkFunction("log", Category = MathCategory)]
-        public object Log(KalkValue value) => value.Transform(_context, _context.CurrentSpan, LogFunc);
-
-        [KalkFunction("cos", Category = MathCategory)]
-        public object Cos(KalkValue value) => value.Transform(_context, _context.CurrentSpan, CosFunc);
-
-        [KalkFunction("acos", Category = MathCategory)]
-        public object Acos(KalkValue value) => value.Transform(_context, _context.CurrentSpan, AcosFunc);
-
-        [KalkFunction("cosh", Category = MathCategory)]
-        public object Cosh(KalkValue value) => value.Transform(_context, _context.CurrentSpan, CoshFunc);
-
-        //[KalkFunction("acosh", Category = MathCategory)]
-        //public static object Acosh(KalkValue value) => value.Transform(AcoshFunc);
-
-        [KalkFunction("sin", Category = MathCategory)]
-        public object Sin(KalkValue value) => value.Transform(_context, _context.CurrentSpan, SinFunc);
-
-        [KalkFunction("asin", Category = MathCategory)]
-        public object Asin(KalkValue value) => value.Transform(_context, _context.CurrentSpan, AsinFunc);
-
-        [KalkFunction("sinh", Category = MathCategory)]
-        public object Sinh(KalkValue value) => value.Transform(_context, _context.CurrentSpan, SinhFunc);
-
-        //[KalkFunction("asinh", Category = MathCategory)]
-        //public static object Asinh(KalkValue value) => value.Transform(AsinhFunc);
-
-        [KalkFunction("sqrt", Category = MathCategory)]
-        public object Sqrt(KalkValue value) => value.Transform(_context, _context.CurrentSpan, SqrtFunc);
-
-        [KalkFunction("tan", Category = MathCategory)]
-        public object Tan(KalkValue value) => value.Transform(_context, _context.CurrentSpan, TanFunc);
-
-        [KalkFunction("exp", Category = MathCategory)]
-        public object Exp(KalkValue value) => value.Transform(_context, _context.CurrentSpan, ExpFunc);
-
-        private static double SignFuncImpl(double value)
+        private object AbsImpl(object value)
         {
-            return Math.Sign(value);
+            if (value == null) return null;
+
+            var type = value.GetType();
+            if (type == typeof(int))
+            {
+                return Math.Abs((int) value);
+            }
+            if (type == typeof(float))
+            {
+                return Math.Abs((float)value);
+            }
+            if (type == typeof(double))
+            {
+                return Math.Abs((double)value);
+            }
+            if (type == typeof(long))
+            {
+                return Math.Abs((long)value);
+            }
+            if (type == typeof(decimal))
+            {
+                return Math.Abs((decimal)value);
+            }
+            if (type == typeof(BigInteger))
+            {
+                return BigInteger.Abs((BigInteger)value);
+            }
+
+            return Math.Abs(ToObject<double>(CurrentSpan, value));
         }
-    }
-
-
-    public struct KalkValue : IScriptConvertibleFrom, IKalkTransformable
-    {
-        public IKalkTransformable Transformable;
-
-        public double Value;
-
-        public object Transform(TemplateContext context, SourceSpan span, Func<double, double> apply)
-        {
-            if (Transformable != null) return Transformable.Transform(context, span, apply);
-            return apply(Value);
-        }
-        
-        public bool TryConvertFrom(TemplateContext context, SourceSpan span, object value)
-        {
-            if (value is IKalkTransformable valuable) Transformable = valuable;
-            else Value = context.ToObject<double>(span, value);
-            return true;
-        }
-    }
-
-    public interface IKalkTransformable
-    {
-        object Transform(TemplateContext context, SourceSpan span, Func<double, double> apply);
     }
 }

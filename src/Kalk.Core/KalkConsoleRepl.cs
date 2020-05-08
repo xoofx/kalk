@@ -88,7 +88,7 @@ namespace Kalk.Core
         private bool OnTextValidatingEnterInternal(string text, bool hasControl)
         {
             _cancellationTokenSource  = new CancellationTokenSource();
-            _engine.Context.CancellationToken = _cancellationTokenSource.Token;
+            _engine.CancellationToken = _cancellationTokenSource.Token;
 
             var elapsed = _clockInput.ElapsedMilliseconds;
             Template script = null;
@@ -121,7 +121,7 @@ namespace Kalk.Core
                     Repl.AfterEditLine.Clear();
                     NextOutput.Clear();
 
-                    result = _engine.Evaluate(script.Page);
+                    result = _engine.EvaluatePage(script.Page);
 
                     if (Repl.ExitOnNextEval)
                     {
@@ -168,10 +168,10 @@ namespace Kalk.Core
             {
                 if (result != null)
                 {
-                    _engine.Context.Write(script.Page.Span, result);
+                    _engine.Write(script.Page.Span, result);
                 }
-                var resultStr = _engine.Context.Output.ToString();
-                var output = _engine.Context.Output as StringBuilderOutput;
+                var resultStr = _engine.Output.ToString();
+                var output = _engine.Output as StringBuilderOutput;
                 if (output != null)
                 {
                     output.Builder.Length = 0;
@@ -280,8 +280,12 @@ namespace Kalk.Core
             _engine.Version();
             FlushWrite();
             
-            WriteHighlight("# Type `help` for more information. Not already a sponsor? Go to https://github.com/sponsors/xoofx");
-            
+            WriteHighlight("# Type `help` for more information.");
+            if (!_engine.Config.Sponsoring)
+            {
+                WriteHighlight("# Not already a sponsor? Help kalk by sponsoring it at https://github.com/sponsors/xoofx");
+            }
+
             //Console.CursorVisible = false;
             //Console.Write("test");
             //Console.CursorVisible = true;
@@ -325,7 +329,7 @@ namespace Kalk.Core
         void IKalkEngineWriter.Write(SourceSpan span, object textAsObject)
         {
             if (NextOutput.Count > 0) NextOutput.AppendLine();
-            NextOutput.Append(_engine.Context.ObjectToString(textAsObject));
+            NextOutput.Append(_engine.ObjectToString(textAsObject));
         }
 
         void IKalkEngineWriter.Write(ConsoleText text)

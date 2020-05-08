@@ -1,12 +1,17 @@
 ﻿using System;
 using Scriban;
 using Scriban.Parsing;
+using Scriban.Runtime;
 using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public abstract class KalkUnit : IScriptCustomType
+    public abstract class KalkUnit : KalkReadOnlyObject, IScriptCustomType
     {
+        protected KalkUnit()
+        {
+        }
+        
         public bool TryEvaluate(TemplateContext context, SourceSpan span, ScriptBinaryOperator op, SourceSpan leftSpan, object leftValue, SourceSpan rightSpan, object rightValue, out object result)
         {
             result = null;
@@ -24,33 +29,88 @@ namespace Kalk.Core
             value = null;
             return false;
         }
+
     }
 
     // s	second	time
-    // m	metre	length
+    // m	meter	length
     // kg	kilogram	mass
     // A	ampere	electric current
     // K	kelvin	thermodynamic temperature
     // mol	mole	amount of substance
     // cd	candela	luminous intensity
-
-
-    public class KalkComplexUnit : KalkUnit
+    public class KalkOperationUnit : KalkUnit
     {
-        public ScriptExpression Expression { get; set; }
+        private static readonly (string, Func<KalkReadOnlyObject, object> getter)[] MemberDefs = {
+            ("kind", unit => unit.Kind),
+            ("left", unit => ((KalkOperationUnit)unit).Left),
+            ("operator", unit => ((KalkOperationUnit)unit).Operator),
+            ("right", unit => ((KalkOperationUnit)unit).Right),
+        };
+
+        public KalkOperationUnit()
+        {
+        }
+        
+        public override string Kind => "operation";
+
+        public object Left { get; set; }
+
+        /// <summary>
+        /// Gets or sets the operator. Supported: /, *, ^
+        /// </summary>
+        public string Operator { get; set; }
+
+        public object Right { get; set; }
 
         public override string ToString()
         {
-            return Expression?.ToString();
+            return $"{Left}{Operator}{Right}";
+        }
+
+        protected override (string, Func<KalkReadOnlyObject, object> getter)[] Members => MemberDefs;
+
+        public override IScriptObject Clone(bool deep)
+        {
+            var operationUnity = new KalkOperationUnit()
+            {
+                Left = Left,
+                Operator = Operator,
+                Right = Right,
+            };
+            if (deep)
+            {
+                if (Left is KalkUnit leftUnit)
+                {
+                    operationUnity.Left = leftUnit.Clone(deep);
+                }
+                if (Right is KalkUnit rightUnit )
+                {
+                    operationUnity.Right = rightUnit.Clone(deep);
+                }
+            }
+
+            return operationUnity;
         }
     }
 
-    public class KalkSimpleUnit : KalkUnit
+    public class KalkDefinitionUnit : KalkUnit
     {
-        public KalkSimpleUnit(string name)
+        private static readonly (string, Func<KalkReadOnlyObject, object> getter)[] MemberDefs = {
+            ("kind", unit => unit.Kind),
+            ("name", unit => ((KalkDefinitionUnit)unit).Name),
+            ("symbol", unit => ((KalkDefinitionUnit)unit).Symbol),
+            ("description", unit => ((KalkDefinitionUnit)unit).Description),
+            ("prefix", unit => ((KalkDefinitionUnit)unit).Prefix),
+            ("value", unit => ((KalkDefinitionUnit)unit).Value),
+        };
+
+        public KalkDefinitionUnit(string name)
         {
             Name = name;
         }
+
+        public override string Kind => "definition";
 
         public string Name { get; }
 
@@ -60,16 +120,26 @@ namespace Kalk.Core
 
         public string Prefix { get; set; }
 
-        public ScriptExpression Expression { get; set; }
+        public KalkUnit Value { get; set; }
 
         public override string ToString()
         {
-            if (Symbol != null)
+            return Symbol;
+        }
+
+        protected override (string, Func<KalkReadOnlyObject, object> getter)[] Members => MemberDefs;
+
+        public override IScriptObject Clone(bool deep)
+        {
+            var operationUnity = new KalkDefinitionUnit(Name)
             {
-                if (Expression != null) return $"{Name},{Symbol}: {Expression}";
-                return $"{Name},{Symbol}";
-            }
-            return Name;
+                Symbol = Symbol,
+                Description = Description,
+                Prefix = Prefix,
+                Value = Value
+            };
+            operationUnity.Value = (KalkUnit)Value?.Clone(deep);
+            return operationUnity;
         }
     }
 }
