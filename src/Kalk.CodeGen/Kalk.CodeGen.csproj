@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\Kalk.Core\Types\KalkDescriptor.cs">
+    <Compile Include="..\Kalk.Core\Model\KalkDescriptor.cs">
       <Link>KalkDescriptor.cs</Link>
     </Compile>
   </ItemGroup>
