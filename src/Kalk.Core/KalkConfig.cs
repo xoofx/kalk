@@ -21,11 +21,5 @@ namespace Kalk.Core
                 SetValue("help_max_column", value, false);
             }
         }
-
-        public bool Sponsoring
-        {
-            get => GetSafeValue<bool>("sponsoring");
-            set => SetValue("sponsoring", value, false);
-        }
     }
 }

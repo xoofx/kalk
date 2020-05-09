@@ -41,15 +41,7 @@ namespace Kalk.Core
             RegisterFunction("out", new Func<object>(Last), CategoryGeneral);
 
             RegisterMathFunctions();
-
-            Builtins.Import("kb", new Func<object, object>(Kb));
-            Builtins.Import("mb", new Func<object, object>(Mb));
-            Builtins.Import("gb", new Func<object, object>(Gb));
-            Builtins.Import("tb", new Func<object, object>(Tb));
-            Builtins.Import("i", new Func<object, object>(ComplexNumber));
-
             RegisterUnitFunctions();
-
             RegisterDocumentation();
         }
 

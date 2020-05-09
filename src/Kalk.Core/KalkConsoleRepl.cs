@@ -280,11 +280,7 @@ namespace Kalk.Core
             _engine.Version();
             FlushWrite();
             
-            WriteHighlight("# Type `help` for more information.");
-            if (!_engine.Config.Sponsoring)
-            {
-                WriteHighlight("# Not already a sponsor? Help kalk by sponsoring it at https://github.com/sponsors/xoofx");
-            }
+            WriteHighlight("# Type `help` for more information and at https://github.com/xoofx/kalk");
 
             //Console.CursorVisible = false;
             //Console.Write("test");

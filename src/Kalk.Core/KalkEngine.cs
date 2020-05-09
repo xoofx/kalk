@@ -31,7 +31,7 @@ namespace Kalk.Core
         public KalkEngine(bool tokens = false) : base(new ScriptObject())
         {
             Builtins = BuiltinObject;
-            Units = new ScriptObject();
+            Units = new KalkUnits();
             Config = new KalkConfig();
             Variables = new ScriptVariables(this);
             Descriptors = new Dictionary<string, KalkDescriptor>();
@@ -96,7 +96,8 @@ namespace Kalk.Core
 
         public ScriptObject Variables { get; }
 
-        public ScriptObject Units { get; }
+        [KalkDoc("units")]
+        public KalkUnits Units { get; }
 
         public Dictionary<string, KalkDescriptor> Descriptors { get; }
 

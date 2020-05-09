@@ -14,7 +14,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public abstract class KalkVector : KalkObject
+    public abstract class KalkVector : KalkNumber
     {
         public abstract int Length { get; }
     }
@@ -337,6 +337,15 @@ namespace Kalk.Core
 
         public bool TryEvaluate(TemplateContext context, SourceSpan span, ScriptBinaryOperator op, SourceSpan leftSpan, object leftValue, SourceSpan rightSpan, object rightValue, out object result)
         {
+            if (leftValue is KalkExpression leftExpression)
+            {
+                return leftExpression.TryEvaluate(context, span, op, leftSpan, leftValue, rightSpan, rightValue, out result);
+            }
+            if (rightValue is KalkExpression rightExpression)
+            {
+                return rightExpression.TryEvaluate(context, span, op, leftSpan, leftValue, rightSpan, rightValue, out result);
+            }
+
             result = null;
             var leftVector = leftValue as KalkVector<T>;
             var rightVector = rightValue as KalkVector<T>;

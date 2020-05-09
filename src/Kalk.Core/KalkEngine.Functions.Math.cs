@@ -65,6 +65,8 @@ namespace Kalk.Core
             AbsFunc = AbsImpl;
             SignFunc = SignFuncImpl;
 
+            Builtins.Import("i", new Func<object, object>(ComplexNumber));
+
             RegisterConstant("nan", Nan, CategoryMathConstants);
             RegisterConstant("inf", double.PositiveInfinity, CategoryMathConstants);
             RegisterConstant("pi", Math.PI, CategoryMathConstants);

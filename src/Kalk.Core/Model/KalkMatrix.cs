@@ -12,7 +12,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public abstract class KalkMatrix
+    public abstract class KalkMatrix : KalkNumber
     {
         protected KalkMatrix(int row, int column)
         {
@@ -102,10 +102,12 @@ namespace Kalk.Core
             return new KalkMatrix<T>(this);
         }
 
-        public IScriptObject Clone(bool deep)
+        public override IScriptObject Clone(bool deep)
         {
             return Clone();
         }
+
+        public override string Kind => $"{typeof(T).ScriptPrettyName()}{RowLength.ToString(CultureInfo.InvariantCulture)}x{ColumnLength.ToString(CultureInfo.InvariantCulture)}";
 
         public object Transform(Func<T, T> apply)
         {
@@ -157,13 +159,13 @@ namespace Kalk.Core
             ((ICollection) _values).CopyTo(array, index);
         }
 
-        public int Count => RowLength;
+        public override int Count => RowLength;
 
         public bool IsSynchronized => ((ICollection) _values).IsSynchronized;
 
         public object SyncRoot => ((ICollection) _values).SyncRoot;
 
-        public IEnumerable<string> GetMembers()
+        public override IEnumerable<string> GetMembers()
         {
             if (_values == null) yield break;
 
@@ -186,7 +188,7 @@ namespace Kalk.Core
             }
         }
 
-        public bool Contains(string member)
+        public override bool Contains(string member)
         {
             if (member.Length < 1) return false;
 
@@ -219,9 +221,7 @@ namespace Kalk.Core
         
         public bool IsFixedSize => ((IList) _values).IsFixedSize;
 
-        public bool IsReadOnly => false;
-
-        bool IScriptObject.IsReadOnly
+        public override bool IsReadOnly
         {
             get => false;
             set => throw new InvalidOperationException("Cannot set this instance readonly");
@@ -233,7 +233,7 @@ namespace Kalk.Core
             set => SetRow(index, (KalkVector<T>)value);
         }
 
-        public bool TryGetValue(TemplateContext context, SourceSpan span, string member, out object result)
+        public override bool TryGetValue(TemplateContext context, SourceSpan span, string member, out object result)
         {
             result = null;
             if (_values == null) return false;
@@ -324,12 +324,12 @@ namespace Kalk.Core
             }
         }
 
-        public bool CanWrite(string member)
+        public override bool CanWrite(string member)
         {
             return true;
         }
 
-        public bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
+        public override bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
         {
             var tValue = context.ToObject<T>(span, value);
             foreach (var index in ForEachMemberPart(span, member, true))
@@ -341,18 +341,28 @@ namespace Kalk.Core
             return true;
         }
 
-        public bool Remove(string member)
+        public override bool Remove(string member)
         {
             throw new InvalidOperationException($"Cannot remove member {member} for {this.GetType()}");
         }
 
-        public void SetReadOnly(string member, bool readOnly)
+        public override void SetReadOnly(string member, bool readOnly)
         {
             throw new InvalidOperationException($"Cannot set readonly member {member} for {this.GetType()}");
         }
 
         public bool TryEvaluate(TemplateContext context, SourceSpan span, ScriptBinaryOperator op, SourceSpan leftSpan, object leftValue, SourceSpan rightSpan, object rightValue, out object result)
         {
+            if (leftValue is KalkExpression leftExpression)
+            {
+                return leftExpression.TryEvaluate(context, span, op, leftSpan, leftValue, rightSpan, rightValue, out result);
+            }
+
+            if (rightValue is KalkExpression rightExpression)
+            {
+                return rightExpression.TryEvaluate(context, span, op, leftSpan, leftValue, rightSpan, rightValue, out result);
+            }
+
             result = null;
             var leftVector = leftValue as KalkMatrix<T>;
             var rightVector = rightValue as KalkMatrix<T>;

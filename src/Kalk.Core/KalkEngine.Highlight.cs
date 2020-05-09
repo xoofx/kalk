@@ -181,9 +181,16 @@ namespace Kalk.Core
                 case TokenType.Identifier:
                     var key = token.GetText(text);
 
-                    if (isPreviousNotDot && Builtins.ContainsKey(key))
+                    if (isPreviousNotDot)
                     {
-                        return ConsoleStyle.Cyan;
+                        if (Builtins.ContainsKey(key))
+                        {
+                            return ConsoleStyle.Cyan;
+                        }
+                        else if (Units.ContainsKey(key))
+                        {
+                            return ConsoleStyle.Yellow;
+                        }
                     }
 
                     return ConsoleStyle.BrightYellow;

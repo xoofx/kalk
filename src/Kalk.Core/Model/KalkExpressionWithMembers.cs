@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using Scriban;
 using Scriban.Parsing;
+using Scriban.Runtime;
+using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public abstract class KalkReadOnlyObject : KalkObject
+    public abstract class KalkExpressionWithMembers : KalkExpression
     {
-        protected abstract (string, Func<KalkReadOnlyObject, object> getter)[] Members { get; }
+        protected abstract (string, Func<KalkExpressionWithMembers, object> getter)[] Members { get; }
 
         public override int Count => Members.Length;
 
@@ -47,5 +51,6 @@ namespace Kalk.Core
         public override bool Remove(string member) => false;
 
         public override void SetReadOnly(string member, bool readOnly) => throw new NotSupportedException("A member of Unit is readonly by default and cannot be modified");
+
     }
 }
