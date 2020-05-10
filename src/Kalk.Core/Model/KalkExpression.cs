@@ -13,6 +13,7 @@ namespace Kalk.Core
     {
         protected KalkExpression()
         {
+            OriginalExpression = this;
         }
 
         public override string ToString()

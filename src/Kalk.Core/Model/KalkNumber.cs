@@ -11,7 +11,6 @@ namespace Kalk.Core
             return value is KalkNumber || (value != null && value.GetType().IsNumber());
         }
 
-
         public static bool AlmostEqual(double left, double right)
         {
             return left.AlmostEqual(right);

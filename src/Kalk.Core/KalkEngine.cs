@@ -30,8 +30,11 @@ namespace Kalk.Core
 
         public KalkEngine(bool tokens = false) : base(new ScriptObject())
         {
+            KalkSettings.Initialize();
+
             Builtins = BuiltinObject;
             Units = new KalkUnits();
+            Currencies = new KalkCurrencies(Units);
             Config = new KalkConfig();
             Variables = new ScriptVariables(this);
             Descriptors = new Dictionary<string, KalkDescriptor>();
@@ -77,6 +80,8 @@ namespace Kalk.Core
             _lastResult = 0;
 
             HistoryList = new List<string>();
+
+            InitializeFromConfig();
         }
 
         private void DeleteVariable(ScriptVariable variable)
@@ -96,8 +101,16 @@ namespace Kalk.Core
 
         public ScriptObject Variables { get; }
 
+        /// <summary>
+        /// If used in an expression, returns an object containing all units defined.
+        /// Otherwise it will display units in a friendly format.
+        /// </summary>
         [KalkDoc("units")]
         public KalkUnits Units { get; }
+
+
+        [KalkDoc("currencies")]
+        public KalkCurrencies Currencies { get; }
 
         public Dictionary<string, KalkDescriptor> Descriptors { get; }
 
@@ -405,7 +418,7 @@ namespace Kalk.Core
             return list;
         }
 
-        private void WriteHighlightAligned(string prefix, string text, string nextPrefix = null)
+        public void WriteHighlightAligned(string prefix, string text, string nextPrefix = null)
         {
             var list = SplitStringBySpaceAndKeepSpace(text);
             if (list.Count == 0) return;
@@ -453,7 +466,6 @@ namespace Kalk.Core
                     {
                         WriteHighlight(builder.ToString());
                         builder.Length = 0;
-                        break;
                     }
                 }
             }
@@ -718,6 +730,13 @@ namespace Kalk.Core
                 }
             }
         }
+
+
+        private void InitializeFromConfig()
+        {
+            KalkCurrency.ConfigureCurrencies(this);
+        }
+
 
         internal void UpdateEdit(ConsoleText text)
         {

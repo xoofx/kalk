@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Scriban;
@@ -7,7 +8,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public class KalkSymbol : KalkExpressionWithMembers, IScriptCustomFunction
+    public class KalkSymbol : KalkExpressionWithMembers, IScriptCustomFunction, IScriptCustomImplicitMultiplyPrecedence
     {
         private static readonly (string, Func<KalkExpressionWithMembers, object> getter)[] MemberDefs = {
             ("kind", unit => unit.Kind),
@@ -21,6 +22,8 @@ namespace Kalk.Core
         public KalkSymbol(string name)
         {
             Name = name;
+            Symbol = name;
+            Derived = new List<KalkSymbol>();
         }
 
         public override string Kind => "symbol definition";
@@ -37,6 +40,10 @@ namespace Kalk.Core
 
         public KalkExpression Value { get; set; }
 
+        public List<KalkSymbol> Derived { get; }
+
+        public KalkSymbol Parent { get; set; }
+
         public override string ToString(string format, IFormatProvider formatProvider)
         {
             return Symbol;
@@ -46,16 +53,7 @@ namespace Kalk.Core
 
         public override IScriptObject Clone(bool deep)
         {
-            var operationUnity = new KalkSymbol(Name)
-            {
-                Symbol = Symbol,
-                Description = Description,
-                Prefix = Prefix,
-                IsUser =  IsUser,
-                Value = Value
-            };
-            operationUnity.Value = (KalkExpression)Value?.Clone(deep);
-            return operationUnity;
+            throw new NotSupportedException("Cloning a symbol is not supported");
         }
 
         protected override bool EqualsImpl(TemplateContext context, KalkExpression right)
@@ -77,7 +75,7 @@ namespace Kalk.Core
             throw new NotSupportedException("A Unit symbol does not support arguments.");
         }
 
-        public object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
+        public virtual object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
         {
             if (!(callerContext.Parent is ScriptExpressionStatement))
             {
@@ -94,11 +92,25 @@ namespace Kalk.Core
             }
             if (Prefix != null)
             {
-                builder.Append($", prefix: {Prefix}");
+                builder.Append($", prefix: \"{Prefix}\"");
             }
 
             builder.Append(")");
             engine.WriteHighlight(builder.ToString());
+
+            if (Derived.Count > 0)
+            {
+                builder.Length = 0;
+                for (var i = 0; i < Derived.Count; i++)
+                {
+                    var derived = Derived[i];
+                    if (i > 0) builder.Append(", ");
+                    builder.Append($"{derived.Name}/{derived.Symbol}");
+                }
+
+                engine.WriteHighlightAligned("  - ", builder.ToString());
+            }
+
             return null;
         }
 

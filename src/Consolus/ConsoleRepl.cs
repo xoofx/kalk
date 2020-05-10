@@ -483,12 +483,6 @@ namespace Consolus
             }
         }
 
-        private ConsoleKeyInfo ReadKey()
-        {
-            var key = Console.ReadKey(true);
-            return key;
-        }
-
         public void Exit()
         {
             End();
@@ -558,7 +552,7 @@ namespace Consolus
         {
             while (!ExitOnNextEval)
             {
-                var key = ReadKey();
+                var key = Console.ReadKey(true);
                 if (Evaluating && (key.Modifiers & ConsoleModifiers.Control) != 0 && key.Key == ConsoleKey.C)
                 {
                     GetCancellationTokenSource()?.Cancel();
