@@ -17,7 +17,18 @@ namespace Kalk.Core
             _units = units;
         }
 
-        public int Count => _units.Count;
+        public int Count
+        {
+            get
+            {
+                int count = 0;
+                foreach (var unitPair in _units)
+                {
+                    if (unitPair.Value is KalkCurrency) count++;
+                }
+                return count;
+            }
+        }
 
         public IEnumerable<string> GetMembers()
         {
@@ -35,7 +46,7 @@ namespace Kalk.Core
 
         public bool IsReadOnly
         {
-            get => _units.IsReadOnly;
+            get => false;
             set => _units.IsReadOnly = value;
         }
 
@@ -74,7 +85,7 @@ namespace Kalk.Core
 
         public ScriptParameterInfo GetParameterInfo(int index)
         {
-            throw new NotSupportedException("Units don't have any parameters.");
+            throw new NotSupportedException("Currencies don't have any parameters.");
         }
 
         public object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)

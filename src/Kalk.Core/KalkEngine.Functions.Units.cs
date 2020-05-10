@@ -113,11 +113,38 @@ namespace Kalk.Core
                 baseCurrency = unit as KalkCurrency;
                 if (baseCurrency != null)
                 {
-                    //unit.Value = null;
+                    // It is already the default unit
+                    if (unit.Value == null) return baseCurrency;
+
+                    var existingBase = GetSafeBaseCurrencyFromConfig();
+                    var existingConvert = (KalkBinaryExpression) unit.Value;
+                    unit.Value = null;
+
+                    // ratio USD = 1.1 EUR
+                    var ratio = ToObject<double>(CurrentSpan, existingConvert.Left);
+
+                    existingBase.Value = new KalkBinaryExpression(1.0, ScriptBinaryOperator.Multiply, baseCurrency);
+
+                    foreach (var currency in Units.Values.OfType<KalkCurrency>())
+                    {
+                        if (currency == baseCurrency) continue;
+
+                        var existingRatio = ToObject<double>(CurrentSpan, ((KalkBinaryExpression) currency.Value).Left);
+                        currency.Value = new KalkBinaryExpression(existingRatio / ratio, ScriptBinaryOperator.Multiply, baseCurrency);
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException($"Cannot create a new base currency for the existing unity `{unit}`.", nameof(name));
                 }
             }
             else
             {
+                if (Currencies.Count > 0)
+                {
+                    throw new ArgumentException($"Cannot create a new base currency when there are already currencies. You need to first create this currency relative to the existing base `{GetSafeBaseCurrencyFromConfig().Name}` currency", nameof(name));
+                }
+
                 baseCurrency = new KalkCurrency(name)
                 {
                     Description = "Default Currency"

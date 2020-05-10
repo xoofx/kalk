@@ -12,6 +12,8 @@ namespace Kalk.Core
 {
     public class KalkCurrency : KalkSymbol
     {
+        private const int CurrencyColumnAlign = 27;
+
         private const string ExchangeRatesApi = "https://api.exchangeratesapi.io/latest";
 
         private const string LatestKnownRates =
@@ -57,7 +59,7 @@ namespace Kalk.Core
                 currencyDesc = $"{formattedNumber,-8} {Name} => 1 {engine.GetSafeBaseCurrencyFromConfig().Name}";
             }
 
-            engine.WriteHighlight($"{currencyCmd, -25} # {currencyDesc}");
+            engine.WriteHighlight($"{currencyCmd, -CurrencyColumnAlign} # {currencyDesc}");
 
             return null;
         }
@@ -92,9 +94,6 @@ namespace Kalk.Core
                 engine.RegisterCurrency(currencyName, currencyValue);
             }
         }
-
-
-
 
         private static ScriptObject DownloadExchangeRates()
         {
