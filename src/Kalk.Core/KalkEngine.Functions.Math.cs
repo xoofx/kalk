@@ -119,11 +119,17 @@ namespace Kalk.Core
             RegisterFunction("double8", new KalkVectorConstructor<double>(8), CategoryVectorConstructors);
 
 
+            RegisterFunction("rgb", new RgbDelegate(Rgb), CategoryVectorConstructors);
+            RegisterFunction("rgba", new RgbaDelegate(Rgba), CategoryVectorConstructors);
+
             RegisterFunction("float4x4", new KalkMatrixConstructor<float>(4, 4), CategoryVectorConstructors);
         }
 
 
         public object Fib(KalkLongValue x) => x.Transform(this, CurrentSpan, FibFunc);
+
+        protected delegate KalkColorRgb RgbDelegate(object rgb, params int[] others);
+        protected delegate KalkColorRgba RgbaDelegate(int rgb, params int[] others);
 
 
         public void Test()
@@ -134,6 +140,50 @@ namespace Kalk.Core
                 descriptor.Returns = "The absolute value of the x parameter.";
                 descriptor.Params.Add(new KalkParamDescriptor("x", "The specified value."));
             }
+        }
+
+        [KalkDoc("rgb")]
+        public KalkColorRgb Rgb(object rgb, params int[] others)
+        {
+            if (others.Length == 0)
+            {
+                if (rgb is string rgbStr)
+                {
+                    try
+                    {
+                        return new KalkColorRgb(int.Parse(rgbStr.TrimStart('#'), System.Globalization.NumberStyles.HexNumber));
+                    }
+                    catch
+                    {
+                        throw new ArgumentOutOfRangeException($"Expecting an hexadecimal rgb string (e.g #FF80C2) instead of {rgbStr}");
+                    }
+                }
+
+                return new KalkColorRgb(ToObject<int>(CurrentSpan, rgb));
+            }
+
+            if (others.Length == 2)
+            {
+                return new KalkColorRgb(ToObject<int>(CurrentSpan, rgb), others[0], others[1]);
+            }
+
+            throw new ArgumentException("Invalid number of arguments. Expecting 3 arguments for `rgb(r,g,b)` or one argument `rgb(0xRRGGBB)`.");
+        }
+
+        [KalkDoc("rgba")]
+        public KalkColorRgba Rgba(int rgba, params int[] others)
+        {
+            if (others.Length == 0)
+            {
+                return new KalkColorRgba(rgba);
+            }
+
+            if (others.Length == 3)
+            {
+                return new KalkColorRgba(rgba, others[0], others[1], others[2]);
+            }
+
+            throw new ArgumentException("Invalid number of arguments. Expecting 4 arguments for `rgba(r,g,b, a)` or one argument `rgb(0xRRGGBBAA)`.");
         }
 
         /// <summary>

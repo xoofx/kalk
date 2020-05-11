@@ -51,29 +51,6 @@ namespace Kalk.Core
 
         protected override (string, Func<KalkExpressionWithMembers, object> getter)[] Members => MemberDefs;
 
-        public override IScriptObject Clone(bool deep)
-        {
-            var operationUnity = new KalkBinaryExpression()
-            {
-                Left = Left,
-                Operator = Operator,
-                Right = Right,
-            };
-            if (deep)
-            {
-                if (Left is KalkExpression leftUnit)
-                {
-                    operationUnity.Left = leftUnit.Clone(deep);
-                }
-                if (Right is KalkExpression rightUnit )
-                {
-                    operationUnity.Right = rightUnit.Clone(deep);
-                }
-            }
-
-            return operationUnity;
-        }
-
         protected override bool EqualsImpl(TemplateContext context, KalkExpression other)
         {
             var otherBin = (KalkBinaryExpression) other;

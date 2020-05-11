@@ -9,7 +9,7 @@ namespace Kalk.Core
     internal class KalkExpressionSimplifier
     {
         private readonly TemplateContext _context;
-        private double _value;
+        private object _value;
         private List<KalkBinaryExpression> _powers;
         
         public KalkExpressionSimplifier(TemplateContext context)
@@ -18,7 +18,7 @@ namespace Kalk.Core
             _value = 1;
         }
         
-        public (double, KalkExpression) Canonical(KalkExpression value)
+        public (object, KalkExpression) Canonical(KalkExpression value)
         {
             Collect(value);
             SquashPowers();
@@ -175,7 +175,9 @@ namespace Kalk.Core
                     var subSimplifier = new KalkExpressionSimplifier(_context);
                     subSimplifier.Collect(binary.Left);
 
-                    if (!KalkNumber.AlmostEqual(subSimplifier._value, 1.0))
+                    var subValue = _context.ToObject<double>(_context.CurrentSpan, subSimplifier._value);
+
+                    if (!KalkNumber.AlmostEqual(subValue, 1.0))
                     {
                         var result = ScriptBinaryExpression.Evaluate(_context, _context.CurrentSpan, ScriptBinaryOperator.Power, subSimplifier._value, binary.Right);
                         SquashValue(result);
@@ -200,7 +202,7 @@ namespace Kalk.Core
 
         private void SquashValue(object value)
         {
-            _value = (double)ScriptBinaryExpression.Evaluate(_context, _context.CurrentSpan, ScriptBinaryOperator.Multiply, _value, _context.ToObject<double>(_context.CurrentSpan, value));
+            _value = ScriptBinaryExpression.Evaluate(_context, _context.CurrentSpan, ScriptBinaryOperator.Multiply, _value, value);
         }
     }
 }

@@ -51,11 +51,6 @@ namespace Kalk.Core
 
         protected override (string, Func<KalkExpressionWithMembers, object> getter)[] Members => MemberDefs;
 
-        public override IScriptObject Clone(bool deep)
-        {
-            throw new NotSupportedException("Cloning a symbol is not supported");
-        }
-
         protected override bool EqualsImpl(TemplateContext context, KalkExpression right)
         {
             // If we reach here, that means that the symbols are necessarily not equal

@@ -57,6 +57,8 @@ namespace Kalk.Core
                 return null;
             };
 
+            engine.AllowEscapeSequences = Repl.SupportEscapeSequences;
+
             Repl.Prompt.Clear();
             Repl.Prompt.Begin(ConsoleStyle.BrightBlack).Append(">>> ").Append(ConsoleStyle.BrightBlack, false);
             Repl.GetCancellationTokenSource = () => _cancellationTokenSource;

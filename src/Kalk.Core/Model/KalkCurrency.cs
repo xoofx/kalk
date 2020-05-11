@@ -46,9 +46,9 @@ namespace Kalk.Core
             {
                 var value = (KalkBinaryExpression) Value;
 
-                var valueToBase = 1.0 / (double) value.Left;
+                var valueToBase = 1.0m / (decimal) value.Left;
                 var format = "#0.0###";
-                if (valueToBase < 0.0001)
+                if (valueToBase < 0.0001m)
                 {
                     format = null;
                 }
@@ -90,7 +90,7 @@ namespace Kalk.Core
             foreach (var keyPair in values)
             {
                 var currencyName = keyPair.Key;
-                var currencyValue = engine.ToObject<double>(engine.CurrentSpan, keyPair.Value);
+                var currencyValue = engine.ToObject<decimal>(engine.CurrentSpan, keyPair.Value);
                 engine.RegisterCurrency(currencyName, currencyValue);
             }
         }
@@ -118,13 +118,13 @@ namespace Kalk.Core
             try
             {
                 // Parse the rates returned by the HttpClient
-                var expr = Template.Parse(rates, lexerOptions: new LexerOptions() { Mode = ScriptMode.ScriptOnly});
+                var expr = Template.Parse(rates, parserOptions: new ParserOptions() { ParseFloatAsDecimal  = true }, lexerOptions: new LexerOptions() { Mode = ScriptMode.ScriptOnly});
                 return expr.Evaluate() as ScriptObject;
             }
             catch
             {
                 // Parse the rates returned by the HttpClient
-                var expr = Template.Parse(LatestKnownRates, lexerOptions: new LexerOptions() { Mode = ScriptMode.ScriptOnly });
+                var expr = Template.Parse(LatestKnownRates, parserOptions: new ParserOptions() { ParseFloatAsDecimal = true }, lexerOptions: new LexerOptions() { Mode = ScriptMode.ScriptOnly });
                 return expr.Evaluate() as ScriptObject;
             }
         }

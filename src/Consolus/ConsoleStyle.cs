@@ -64,6 +64,16 @@ namespace Consolus
             Kind = kind;
         }
 
+        public static ConsoleStyle Rgb(int r, int g, int b)
+        {
+            return new ConsoleStyle($"\x1b[38;2;{r};{g};{b}m", ConsoleStyleKind.Color);
+        }
+
+        public static ConsoleStyle BackgroundRgb(int r, int g, int b)
+        {
+            return new ConsoleStyle($"\x1b[48;2;{r};{g};{b}m", ConsoleStyleKind.Color);
+        }
+        
         public readonly string EscapeSequence;
 
         public readonly ConsoleStyleKind Kind;

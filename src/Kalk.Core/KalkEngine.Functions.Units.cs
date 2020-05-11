@@ -28,7 +28,7 @@ namespace Kalk.Core
             RegisterFunction("unit", new Func<ScriptVariable, string, ScriptVariable, KalkExpression, string, KalkExpression>(DefineUserUnit), CategoryUnitsAndCurrencies);
             
             RegisterVariable("currencies", Currencies, CategoryUnitsAndCurrencies);
-            RegisterFunction("currency", new Func<ScriptVariable, double?, KalkCurrency>(Currency), CategoryUnitsAndCurrencies);
+            RegisterFunction("currency", new Func<ScriptVariable, decimal?, KalkCurrency>(Currency), CategoryUnitsAndCurrencies);
 
             RegisterFunction("to", new Func<KalkExpression, KalkExpression, KalkExpression>(ConvertTo), CategoryUnitsAndCurrencies);
 
@@ -58,7 +58,7 @@ namespace Kalk.Core
         }
 
         [KalkDoc("currency")]
-        public KalkCurrency Currency(ScriptVariable name = null, double? value = null)
+        public KalkCurrency Currency(ScriptVariable name = null, decimal? value = null)
         {
             return GetOrSetCurrency(name?.Name, value);
         }
@@ -73,7 +73,7 @@ namespace Kalk.Core
             throw new ScriptRuntimeException(CurrentSpan, $"Unable to find base currency `{Config.BaseCurrency}` defined from `config.{KalkConfig.BaseCurrencyProp}`");
         }
 
-        public KalkCurrency GetOrSetCurrency(string name = null, double? value = null)
+        public KalkCurrency GetOrSetCurrency(string name = null, decimal? value = null)
         {
             if (name == null)
             {
@@ -92,7 +92,7 @@ namespace Kalk.Core
             {
                 if (symbol is KalkCurrency currency)
                 {
-                    currency.Value = new KalkBinaryExpression(1.0 / value, ScriptBinaryOperator.Multiply, GetSafeBaseCurrencyFromConfig());
+                    currency.Value = new KalkBinaryExpression(1.0m / value, ScriptBinaryOperator.Multiply, GetSafeBaseCurrencyFromConfig());
                     return currency;
                 }
                 throw new ScriptRuntimeException(CurrentSpan, $"Unable to define currency `{name}` as it is already attached to a different unit: {symbol}.");
@@ -121,15 +121,15 @@ namespace Kalk.Core
                     unit.Value = null;
 
                     // ratio USD = 1.1 EUR
-                    var ratio = ToObject<double>(CurrentSpan, existingConvert.Left);
+                    var ratio = ToObject<decimal>(CurrentSpan, existingConvert.Left);
 
-                    existingBase.Value = new KalkBinaryExpression(1.0, ScriptBinaryOperator.Multiply, baseCurrency);
+                    existingBase.Value = new KalkBinaryExpression(1.0m, ScriptBinaryOperator.Multiply, baseCurrency);
 
                     foreach (var currency in Units.Values.OfType<KalkCurrency>())
                     {
                         if (currency == baseCurrency) continue;
 
-                        var existingRatio = ToObject<double>(CurrentSpan, ((KalkBinaryExpression) currency.Value).Left);
+                        var existingRatio = ToObject<decimal>(CurrentSpan, ((KalkBinaryExpression) currency.Value).Left);
                         currency.Value = new KalkBinaryExpression(existingRatio / ratio, ScriptBinaryOperator.Multiply, baseCurrency);
                     }
                 }
@@ -158,11 +158,11 @@ namespace Kalk.Core
         }
 
 
-        public KalkCurrency RegisterCurrency(string name, double value, bool isUser = false)
+        public KalkCurrency RegisterCurrency(string name, decimal value, bool isUser = false)
         {
             if (value <= 0 || KalkNumber.AlmostEqual(value, 0.0f)) throw new ArgumentOutOfRangeException(nameof(value), "The currency value must be > 0");
 
-            return (KalkCurrency)RegisterUnit(name, $"Currency {name}", null, new KalkBinaryExpression(1.0/value, ScriptBinaryOperator.Multiply, GetSafeBaseCurrencyFromConfig()), null, isUser, true);
+            return (KalkCurrency)RegisterUnit(name, $"Currency {name}", null, new KalkBinaryExpression(1.0m/value, ScriptBinaryOperator.Multiply, GetSafeBaseCurrencyFromConfig()), null, isUser, true);
         }
 
         [KalkDoc("unit")]

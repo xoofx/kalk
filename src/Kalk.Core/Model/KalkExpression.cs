@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using MathNet.Numerics.LinearAlgebra.Complex;
 using Scriban;
 using Scriban.Helpers;
 using Scriban.Parsing;
@@ -31,6 +32,11 @@ namespace Kalk.Core
         }
 
         public KalkExpression OriginalExpression { get; set; }
+
+        public sealed override IScriptObject Clone(bool deep)
+        {
+            throw new NotSupportedException("This expression cannot be cloned.");
+        }
 
         protected abstract bool EqualsImpl(TemplateContext context, KalkExpression right);
 
@@ -77,16 +83,16 @@ namespace Kalk.Core
                                     result = !almostEqual;
                                     break;
                                 case ScriptBinaryOperator.CompareLessOrEqual:
-                                    result = almostEqual || leftValueMultiplier < rightValueMultiplier;
+                                    result = almostEqual || ScriptBinaryExpression.Evaluate(context, span, op, leftSpan, leftValueMultiplier, rightSpan, rightValueMultiplier) is bool v1 && v1;
                                     break;
                                 case ScriptBinaryOperator.CompareGreaterOrEqual:
-                                    result = almostEqual || leftValueMultiplier > rightValueMultiplier;
+                                    result = almostEqual || ScriptBinaryExpression.Evaluate(context, span, op, leftSpan, leftValueMultiplier, rightSpan, rightValueMultiplier) is bool v2 && v2;
                                     break;
                                 case ScriptBinaryOperator.CompareLess:
-                                    result = leftValueMultiplier < rightValueMultiplier;
+                                    result = ScriptBinaryExpression.Evaluate(context, span, op, leftSpan, leftValueMultiplier, rightSpan, rightValueMultiplier) is bool v3 && v3;
                                     break;
                                 case ScriptBinaryOperator.CompareGreater:
-                                    result = leftValueMultiplier > rightValueMultiplier;
+                                    result = ScriptBinaryExpression.Evaluate(context, span, op, leftSpan, leftValueMultiplier, rightSpan, rightValueMultiplier) is bool v4 && v4;
                                     break;
                             }
                         }
@@ -146,7 +152,7 @@ namespace Kalk.Core
                             throw new ScriptRuntimeException(span, $"Cannot {(op == ScriptBinaryOperator.Add ? "add" : "subtract")} the expression. Units are not matching. The left expression with unit `{newLeftExpr}` is not matching the right expression with unit `{newRightExpr}`.");
                         }
 
-                        result = new KalkBinaryExpression(op == ScriptBinaryOperator.Add ? leftValueMultiplier + rightValueMultiplier : leftValueMultiplier - rightValueMultiplier, ScriptBinaryOperator.Multiply, newLeftExpr)
+                        result = new KalkBinaryExpression(ScriptBinaryExpression.Evaluate(context, span, op, leftSpan, leftValueMultiplier, rightSpan, rightValueMultiplier), ScriptBinaryOperator.Multiply, newLeftExpr)
                         {
                             OriginalExpression = new KalkBinaryExpression(leftValue, op, rightValue)
                         };

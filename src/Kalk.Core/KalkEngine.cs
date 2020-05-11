@@ -32,9 +32,12 @@ namespace Kalk.Core
         {
             KalkSettings.Initialize();
 
+            Console.OutputEncoding = KalkAsciiTable.EncodingExtendedAscii;
+
             Builtins = BuiltinObject;
             Units = new KalkUnits();
             Currencies = new KalkCurrencies(Units);
+            AsciiTable = new KalkAsciiTable();
             Config = new KalkConfig();
             Variables = new ScriptVariables(this);
             Descriptors = new Dictionary<string, KalkDescriptor>();
@@ -94,6 +97,8 @@ namespace Kalk.Core
         {
             return _lastResult;
         }
+
+        public bool AllowEscapeSequences { get; set; }
 
         public ScriptObject Builtins { get; }
 
@@ -520,7 +525,7 @@ namespace Kalk.Core
             }
         }
 
-        internal void WriteHighlight(string scriptText)
+        internal void WriteHighlight(string scriptText, IKalkConsolable consolable = null)
         {
             _tempConsoleText.Clear();
 
@@ -528,6 +533,12 @@ namespace Kalk.Core
 
             // Highlight line per line
             Highlight(_tempConsoleText);
+
+            if (consolable != null)
+            {
+                consolable.ToConsole(this, _tempConsoleText);
+            }
+
             Writer.Write(_tempConsoleText);
         }
 
@@ -548,18 +559,13 @@ namespace Kalk.Core
 
         private void WriteHighlightVariableAndValueToConsole(string name, object value)
         {
-            if (value is string)
-            {
-                value = $"\"{value}\"";
-            }
-
             if (value is ScriptFunction function && !function.IsAnonymous)
             {
                 WriteHighlight($"{value}");
             }
             else
             {
-                WriteHighlight($"{name} = {ObjectToString(value)}");
+                WriteHighlight($"{name} = {ObjectToString(value, true)}", value as IKalkConsolable);
             }
         }
 
@@ -589,7 +595,7 @@ namespace Kalk.Core
             return this;
         }
 
-        public override string ObjectToString(object value)
+        public override string ObjectToString(object value, bool escape = false)
         {
             if (value is float f32)
             {
@@ -604,7 +610,7 @@ namespace Kalk.Core
                 if (double.IsNaN(f64)) return "nan";
             }
 
-            return base.ObjectToString(value);
+            return base.ObjectToString(value, escape);
         }
 
         protected override IObjectAccessor GetMemberAccessorImpl(object target)

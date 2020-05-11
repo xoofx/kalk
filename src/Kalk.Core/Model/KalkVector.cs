@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
@@ -49,9 +50,15 @@ namespace Kalk.Core
         public T this[int index]
         {
             get => _values[index];
-            set => _values[index] = value;
+            set => SetComponent(index, value);
         }
 
+        object IList.this[int index]
+        {
+            get => this[index];
+            set => this[index] = (T)value;
+        }
+        
         public object GetElement(int index)
         {
             return _values[index];
@@ -59,10 +66,15 @@ namespace Kalk.Core
 
         public void SetElement(int index, object value)
         {
-            _values[index] = (T)value;
+            this[index] = (T)value;
         }
 
-        public KalkVector<T> Clone()
+        protected virtual void SetComponent(int index, T value)
+        {
+            _values[index] = value;
+        }
+
+        public virtual KalkVector<T> Clone()
         {
             return new KalkVector<T>(this);
         }
@@ -85,7 +97,7 @@ namespace Kalk.Core
             for (int i = 0; i < Length; i++)
             {
                 var result = apply(_values[i]);
-                newValue._values[i] = (T)result;
+                newValue[i] = (T)result;
             }
             return newValue;
         }
@@ -99,7 +111,7 @@ namespace Kalk.Core
             });
         }
 
-        public string ToString(string format, IFormatProvider formatProvider)
+        public virtual string ToString(string format, IFormatProvider formatProvider)
         {
             var context = formatProvider as TemplateContext;
             var builder = new StringBuilder();
@@ -127,22 +139,21 @@ namespace Kalk.Core
 
         public override IEnumerable<string> GetMembers()
         {
-            if (_values == null) yield break;
-
-            for(int i = 0; i < Length; i++)
+            for (int i = 0; i < Math.Min(4, Length); i++)
             {
                 switch (i)
                 {
-                    case 0: yield return "x";
+                    case 0:
+                        yield return "x";
                         break;
-                    case 1: yield return "y";
+                    case 1:
+                        yield return "y";
                         break;
-                    case 2: yield return "z";
+                    case 2:
+                        yield return "z";
                         break;
-                    case 3: yield return "w";
-                        break;
-                    default:
-                        yield return $"{"xyzw"[i % 4]}{(i / 4 + 1).ToString(CultureInfo.InvariantCulture)}";
+                    case 3:
+                        yield return "w";
                         break;
                 }
             }
@@ -162,10 +173,7 @@ namespace Kalk.Core
             return true;
         }
 
-        public int Add(object value)
-        {
-            return ((IList) _values).Add(value);
-        }
+        public int Add(object value) => throw new NotSupportedException();
 
         public void Clear()
         {
@@ -182,33 +190,18 @@ namespace Kalk.Core
             return ((IList) _values).IndexOf(value);
         }
 
-        public void Insert(int index, object value)
-        {
-            ((IList) _values).Insert(index, value);
-        }
+        public void Insert(int index, object value) => throw new NotSupportedException();
+        
+        public void Remove(object value) => throw new NotSupportedException();
 
-        public void Remove(object value)
-        {
-            ((IList) _values).Remove(value);
-        }
+        public void RemoveAt(int index) => throw new NotSupportedException();
 
-        public void RemoveAt(int index)
-        {
-            ((IList) _values).RemoveAt(index);
-        }
-
-        public bool IsFixedSize => ((IList) _values).IsFixedSize;
+        public bool IsFixedSize => true;
 
         public override bool IsReadOnly
         {
             get => false;
             set => throw new InvalidOperationException("Cannot set this instance readonly");
-        }
-
-        object IList.this[int index]
-        {
-            get => ((IList) _values)[index];
-            set => ((IList) _values)[index] = value;
         }
 
         public override bool TryGetValue(TemplateContext context, SourceSpan span, string member, out object result)
@@ -238,15 +231,35 @@ namespace Kalk.Core
 
             if (list != null)
             {
-                result = new KalkVector<T>(list);
+                result = NewVector(list);
             }
 
             return true;
         }
 
+        protected virtual KalkVector<T> NewVector(IList<T> list) => new KalkVector<T>(list);
+        
+        private enum ComponentUsed
+        {
+            none,
+            rgba,
+            xyzw,
+        }
 
+
+        private static ScriptRuntimeException InvalidMixOfSwizzles(SourceSpan span, ComponentUsed used, char c)
+        {
+            return new ScriptRuntimeException(span, $"Cannot mix the swizzle `{c}` with swizzles in the domain {used}.");
+        }
+
+        private ScriptRuntimeException InvalidUsageOfXYZW(SourceSpan span, char c)
+        {
+            return new ScriptRuntimeException(span, $"The swizzle `{c}` is not supported by this {Kind} type.");
+        }
+        
         private IEnumerable<int> ForEachMemberPart(SourceSpan span, string member, bool throwIfInvalid)
         {
+            var componentUsed = ComponentUsed.none;
             for (int i = 0; i < member.Length; i++)
             {
                 var c = member[i];
@@ -261,15 +274,43 @@ namespace Kalk.Core
                         break;
                     case 'x':
                         index = x_IndexOffset;
+                        if (componentUsed == ComponentUsed.rgba) throw InvalidMixOfSwizzles(span, componentUsed, c);
+                        componentUsed = ComponentUsed.xyzw;
+                        break;
+                    case 'r':
+                        index = x_IndexOffset;
+                        if (componentUsed == ComponentUsed.xyzw) throw InvalidMixOfSwizzles(span, componentUsed, c);
+                        componentUsed = ComponentUsed.rgba;
                         break;
                     case 'y':
-                        index = 3;
+                        index = x_IndexOffset + 1;
+                        if (componentUsed == ComponentUsed.rgba) throw InvalidMixOfSwizzles(span, componentUsed, c);
+                        componentUsed = ComponentUsed.xyzw;
+                        break;
+                    case 'g':
+                        index = x_IndexOffset + 1;
+                        if (componentUsed == ComponentUsed.xyzw) throw InvalidMixOfSwizzles(span, componentUsed, c);
+                        componentUsed = ComponentUsed.rgba;
                         break;
                     case 'z':
-                        index = 4;
+                        index = x_IndexOffset + 2;
+                        if (componentUsed == ComponentUsed.rgba) throw InvalidMixOfSwizzles(span, componentUsed, c);
+                        componentUsed = ComponentUsed.xyzw;
+                        break;
+                    case 'b':
+                        index = x_IndexOffset + 2;
+                        if (componentUsed == ComponentUsed.xyzw) throw InvalidMixOfSwizzles(span, componentUsed, c);
+                        componentUsed = ComponentUsed.rgba;
                         break;
                     case 'w':
-                        index = 5;
+                        index = x_IndexOffset + 2;
+                        if (componentUsed == ComponentUsed.rgba) throw InvalidMixOfSwizzles(span, componentUsed, c);
+                        componentUsed = ComponentUsed.xyzw;
+                        break;
+                    case 'a':
+                        index = x_IndexOffset + 3;
+                        if (componentUsed == ComponentUsed.xyzw) throw InvalidMixOfSwizzles(span, componentUsed, c);
+                        componentUsed = ComponentUsed.rgba;
                         break;
                     default:
                         if (throwIfInvalid)
@@ -316,24 +357,31 @@ namespace Kalk.Core
         public override bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
         {
             var tValue = context.ToObject<T>(span, value);
-            foreach (var index in ForEachMemberPart(span, member, true))
+
+            // Verify access (TODO: could be more optimized for single element .x access)
+            var bitArray = new BitArray(Count);
+            var list = new List<int>(ForEachMemberPart(span, member, true));
+            for (var i = 0; i < list.Count; i++)
             {
+                var index = list[i];
                 if (index <= 1) throw new ScriptRuntimeException(span, $"Swizzle with 0 or 1 are not supporting when setting values");
-                _values[index - x_IndexOffset] = tValue;
+                int finalIndex = index - x_IndexOffset;
+                if (bitArray[finalIndex]) throw new ScriptRuntimeException(span, $"Invalid duplicated swizzle `{member[i]}`");
+                bitArray[finalIndex] = true;
+            }
+
+            foreach (var index in list)
+            {
+                this[index] = tValue;
             }
 
             return true;
         }
 
-        public override bool Remove(string member)
-        {
-            throw new InvalidOperationException($"Cannot remove member {member} for {this.GetType()}");
-        }
+        public override bool Remove(string member) => throw new NotSupportedException();
 
-        public override void SetReadOnly(string member, bool readOnly)
-        {
-            throw new InvalidOperationException($"Cannot set readonly member {member} for {this.GetType()}");
-        }
+        public override void SetReadOnly(string member, bool readOnly) => throw new NotSupportedException();
+
 
         public bool TryEvaluate(TemplateContext context, SourceSpan span, ScriptBinaryOperator op, SourceSpan leftSpan, object leftValue, SourceSpan rightSpan, object rightValue, out object result)
         {
@@ -381,7 +429,7 @@ namespace Kalk.Core
                 case ScriptBinaryOperator.Substract:
                 case ScriptBinaryOperator.Multiply:
                 {
-                    var opResult = new KalkVector<T>(leftVector.Length);
+                    var opResult = NewVector(leftVector.Length);
                     for (int i = 0; i < opResult.Length; i++)
                     {
                         opResult[i] = context.ToObject<T>(span, ScriptBinaryExpression.Evaluate(context, span, op, leftVector[i], rightVector[i]));
@@ -412,6 +460,8 @@ namespace Kalk.Core
 
             return false;
         }
+
+        protected virtual KalkVector<T> NewVector(int length) => new KalkVector<T>(length);
 
         public bool TryConvertTo(TemplateContext context, SourceSpan span, Type type, out object value)
         {
