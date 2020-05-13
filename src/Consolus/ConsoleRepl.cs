@@ -505,39 +505,44 @@ namespace Consolus
 
             ExitOnNextEval = true;
         }
-        
+
+        private static readonly bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
         public void Run()
         {
-            // Clear any previous running thread
-            if (_thread != null)
+            if (IsWindows)
             {
-                try
+                // Clear any previous running thread
+                if (_thread != null)
                 {
-                    _thread.Abort();
-                }
-                catch
-                {
-                    // ignore
+                    try
+                    {
+                        _thread.Abort();
+                    }
+                    catch
+                    {
+                        // ignore
+                    }
+
+                    _thread = null;
                 }
 
-                _thread = null;
+                _thread = new Thread(ThreadReadKeys) {IsBackground = true, Name = "Consolus.ThreadReadKeys"};
+                _thread.Start();
             }
 
-            // Start the thread for pulling the console keys
-            _thread = new Thread(ThreadReadKeys) {IsBackground = true, Name = "Consolus.ThreadReadKeys"};
-            _thread.Start();
-            
             _stackIndex = -1;
 
             // https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences
 
             Render();
-
             while (!ExitOnNextEval)
             {
-                var key = _keys.Take();
                 try
                 {
+                    ConsoleKeyInfo key;
+                    key = IsWindows ? _keys.Take() : Console.ReadKey(true);
+
                     ProcessKey(key);
                 }
                 catch (Exception ex)

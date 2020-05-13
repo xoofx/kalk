@@ -275,7 +275,7 @@ namespace Kalk.Core
             try
             {
                 KalkConsoleKey kalkKey = arg;
-                Console.Title = $"Key {StringFunctions.Escape(arg.KeyChar.ToString())} {arg.Key} {arg.Modifiers} - parsed {kalkKey}";
+                //Console.Title = $"Key {StringFunctions.Escape(arg.KeyChar.ToString())} {arg.Key} {arg.Modifiers} - parsed {kalkKey}";
 
                 if (cursorIndex >= 0 && cursorIndex <= line.Count)
                 {
