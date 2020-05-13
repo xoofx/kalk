@@ -37,25 +37,6 @@ namespace Kalk.Core
 
             Repl = new ConsoleRepl();
             Repl.BeforeRender = OnBeforeRendering;
-            Repl.OnTextCompletion = (text, back) =>
-            {
-                if (text.StartsWith("s"))
-                {
-                    return "sin";
-                }
-
-                if (text.StartsWith("h"))
-                {
-                    return "help";
-                }
-
-                if (text.StartsWith("tad"))
-                {
-                    return "tadaboom";
-                }
-
-                return null;
-            };
 
             engine.AllowEscapeSequences = Repl.SupportEscapeSequences;
 

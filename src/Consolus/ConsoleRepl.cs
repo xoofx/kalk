@@ -59,8 +59,6 @@ namespace Consolus
 
         public Action<string> OnTextValidatedEnter { get; set; }
 
-        public Func<string, bool, string> OnTextCompletion { get; set; }
-
         private Queue<string> PendingTextToEnter { get; }
 
         public bool Evaluating { get; private set; }
@@ -428,67 +426,6 @@ namespace Consolus
             Console.Clear();
         }
 
-        public void Completion(bool backward)
-        {
-            if (OnTextCompletion == null) return;
-
-            var cursorIndex = CursorIndex;
-            UnicodeCategory? category = null;
-            bool hasValidText = false;
-
-            while (cursorIndex > 0)
-            {
-                cursorIndex--;
-                var newCategory = GetCharCategory(EditLine[cursorIndex].Value);
-                
-                if (category.HasValue)
-                {
-                    if (newCategory != category.Value)
-                    {
-                        cursorIndex++;
-                        break;
-                    }
-                }
-                else
-                {
-                    category = newCategory;
-                }
-
-                switch (newCategory)
-                {
-                    case UnicodeCategory.UppercaseLetter:
-                    case UnicodeCategory.LowercaseLetter:
-                    case UnicodeCategory.TitlecaseLetter:
-                    case UnicodeCategory.ModifierLetter:
-                    case UnicodeCategory.OtherLetter:
-                    case UnicodeCategory.NonSpacingMark:
-                    case UnicodeCategory.DecimalDigitNumber:
-                    case UnicodeCategory.ModifierSymbol:
-                    case UnicodeCategory.ConnectorPunctuation:
-                        break;
-                    default:
-                        return;
-                }
-            }
-
-            var builder = new StringBuilder();
-            for (int i = cursorIndex; i < CursorIndex; i++)
-            {
-                builder.Append(EditLine[i].Value);
-            }
-            var text = builder.ToString();
-
-            var newText = OnTextCompletion(text, backward);
-            if (newText != null && newText != text)
-            {
-                int length = text.Length;
-                EditLine.RemoveRangeAt(cursorIndex, length);
-
-                CursorIndex = cursorIndex;
-                Write(newText);
-            }
-        }
-
         public void Exit()
         {
             End();
@@ -726,10 +663,6 @@ namespace Consolus
             else if (key.Key == ConsoleKey.Enter)
             {
                 Enter(hasControl);
-            }
-            else if (key.Key == ConsoleKey.Tab)
-            {
-                Completion(hasShift);
             }
             else if (key.KeyChar >= ' ')
             {

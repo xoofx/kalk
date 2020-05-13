@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -29,7 +31,10 @@ namespace Kalk.Core
         private readonly ConsoleText _initializingText;
         private readonly bool _isInitializing;
         private bool _nextLetterIsSymbolShortcut;
-
+        private int _startIndexForCompletion;
+        private readonly List<string> _completionMatchingList;
+        private int _currentIndexInCompletionMatchingList;
+        
         private KalkShortcutKeyMap _currentShortcutKeyMap;
 
         public KalkEngine(bool tokens = false) : base(new ScriptObject())
@@ -46,6 +51,7 @@ namespace Kalk.Core
             AsciiTable = new KalkAsciiTable();
             Shortcuts = new KalkShortcuts();
             _currentShortcutKeyMap = Shortcuts.ShortcutKeyMap;
+            _completionMatchingList = new List<string>();
             Config = new KalkConfig();
             Variables = new ScriptVariables(this);
             Descriptors = new Dictionary<string, KalkDescriptor>();
@@ -274,6 +280,17 @@ namespace Kalk.Core
         {
             try
             {
+                if (arg.Key == ConsoleKey.Tab)
+                {
+                    if (OnCompletionRequested(arg, line, ref cursorIndex))
+                    {
+                        return true;
+                    }
+                }
+
+                // Reset any completion if we are getting here
+                ResetCompletion();
+
                 KalkConsoleKey kalkKey = arg;
                 //Console.Title = $"Key {StringFunctions.Escape(arg.KeyChar.ToString())} {arg.Key} {arg.Modifiers} - parsed {kalkKey}";
 
@@ -311,6 +328,175 @@ namespace Kalk.Core
             }
 
             return false;
+        }
+
+
+        private static bool IsIdentifierCharacter(char c)
+        {
+            var newCategory = GetCharCategory(c);
+
+            switch (newCategory)
+            {
+                case UnicodeCategory.UppercaseLetter:
+                case UnicodeCategory.LowercaseLetter:
+                case UnicodeCategory.TitlecaseLetter:
+                case UnicodeCategory.ModifierLetter:
+                case UnicodeCategory.OtherLetter:
+                case UnicodeCategory.NonSpacingMark:
+                case UnicodeCategory.DecimalDigitNumber:
+                case UnicodeCategory.ModifierSymbol:
+                case UnicodeCategory.ConnectorPunctuation:
+                    return true;
+            }
+
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsFirstIdentifierLetter(char c)
+        {
+            return c == '_' || char.IsLetter(c);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsIdentifierLetter(char c)
+        {
+            return IsFirstIdentifierLetter(c) || char.IsDigit(c);
+        }
+
+        private static UnicodeCategory GetCharCategory(char c)
+        {
+            if (c == '_' || (c >= '0' && c <= '9')) return UnicodeCategory.LowercaseLetter;
+            c = char.ToLowerInvariant(c);
+            return char.GetUnicodeCategory(c);
+        }
+
+        private bool OnCompletionRequested(ConsoleKeyInfo arg, ConsoleText line, ref int cursorIndex)
+        {
+            // Nothing to complete
+            if (cursorIndex == 0) return false;
+
+            // We expect to have at least:
+            // - one letter identifier before the before the cursor
+            // - no letter identifier on the cursor (e.g middle of an existing identifier)
+            if (cursorIndex < line.Count && IsIdentifierLetter(line[cursorIndex].Value) || !IsIdentifierLetter(line[cursorIndex - 1].Value))
+            {
+                return false;
+            }
+
+            if (!HasPendingCompletion)
+            {
+                if (!CollectCompletionList(line, cursorIndex))
+                {
+                    return false;
+                }
+            }
+
+            return OnCompletionRequested(arg.Modifiers == ConsoleModifiers.Shift, line, ref cursorIndex);
+        }
+
+        private void ResetCompletion()
+        {
+            _currentIndexInCompletionMatchingList = 0;
+            _completionMatchingList.Clear();
+        }
+
+        private bool CollectCompletionList(ConsoleText line, int cursorIndex)
+        {
+            var text = line.ToString();
+            var lexer = new Lexer(text, options: _lexerOptions);
+            var tokens = lexer.ToList();
+
+            // Find that we are in a correct place
+            var index = FindTokenIndexFromColumnIndex(cursorIndex, text.Length, tokens);
+            if (index >= 0)
+            {
+                // If we are in the middle of a comment/integer/float/string
+                // we don't expect to make any completion
+                var token = tokens[index];
+                switch (token.Type)
+                {
+                    case TokenType.Comment:
+                    case TokenType.CommentMulti:
+                    case TokenType.Identifier:
+                    case TokenType.IdentifierSpecial:
+                    case TokenType.Integer:
+                    case TokenType.HexaInteger:
+                    case TokenType.BinaryInteger:
+                    case TokenType.Float:
+                    case TokenType.String:
+                    case TokenType.ImplicitString:
+                    case TokenType.VerbatimString:
+                        return false;
+                }
+            }
+
+            // Look for the start of the work to complete
+            _startIndexForCompletion = cursorIndex - 1;
+            while (_startIndexForCompletion >= 0)
+            {
+                var c = text[_startIndexForCompletion];
+                if (!IsIdentifierLetter(c))
+                {
+                    break;
+                }
+
+                _startIndexForCompletion--;
+            }
+            _startIndexForCompletion++;
+
+            if (!IsFirstIdentifierLetter(text[_startIndexForCompletion]))
+            {
+                return false;
+            }
+
+            var startTextToFind = text.Substring(_startIndexForCompletion, cursorIndex - _startIndexForCompletion);
+
+            Collect(startTextToFind, Variables.Keys, _completionMatchingList);
+            Collect(startTextToFind, Builtins.Keys, _completionMatchingList);
+
+            // If we are not able to match anything from builtin and user variables/functions
+            // continue on units
+            if (_completionMatchingList.Count == 0)
+            {
+                Collect(startTextToFind, Units.Keys, _completionMatchingList);
+            }
+            return true;
+        }
+
+        private bool HasPendingCompletion => _currentIndexInCompletionMatchingList < _completionMatchingList.Count;
+        
+        private bool OnCompletionRequested(bool backward, ConsoleText line, ref int cursorIndex)
+        {
+            if (_currentIndexInCompletionMatchingList >= _completionMatchingList.Count) return false;
+
+            var index = _startIndexForCompletion;
+            var newText = _completionMatchingList[_currentIndexInCompletionMatchingList];
+
+            line.RemoveRangeAt(index, cursorIndex - index);
+            line.Insert(index, newText);
+            cursorIndex = index + newText.Length;
+            
+            // Go to next word
+            _currentIndexInCompletionMatchingList = (_currentIndexInCompletionMatchingList + (backward ? -1 : 1));
+
+            // Wrap the result
+            if (_currentIndexInCompletionMatchingList >= _completionMatchingList.Count) _currentIndexInCompletionMatchingList = 0;
+            if (_currentIndexInCompletionMatchingList < 0) _currentIndexInCompletionMatchingList = _completionMatchingList.Count - 1;
+
+            return true;
+        }
+
+
+        private void Collect(string startText, IEnumerable<string> keys, List<string> matchingList)
+        {
+            foreach (var key in keys)
+            {
+                if (key.StartsWith(startText))
+                {
+                    matchingList.Add(key);
+                }
+            }
         }
         
         internal void UpdateEdit(ConsoleText text, int cursorIndex)

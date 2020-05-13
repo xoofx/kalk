@@ -295,7 +295,7 @@ namespace Kalk.Core
 
             if (matchingBraces == null) return;
 
-            var tokenIndex = FindTokenIndexFromColumnIndex(cursorIndex, text, tokens);
+            var tokenIndex = FindTokenIndexFromColumnIndex(cursorIndex, text.Count, tokens);
             var matchingCurrent = matchingBraces.Where(x => x.Item1 == tokenIndex || x.Item2 == tokenIndex).Select(x => ((int, int)?) x).FirstOrDefault();
 
             // Color current matching braces
@@ -326,14 +326,14 @@ namespace Kalk.Core
             }
         }
 
-        private int FindTokenIndexFromColumnIndex(int index, ConsoleText text, List<Token> tokens)
+        private int FindTokenIndexFromColumnIndex(int index, int textCount, List<Token> tokens)
         {
             for (var i = 0; i < tokens.Count; i++)
             {
                 var token = tokens[i];
                 var start = token.Start.Column;
                 var end = token.End.Column;
-                if (start >= 0 && end >= 0 && start <= end && end < text.Count)
+                if (start >= 0 && end >= 0 && start <= end && end < textCount)
                 {
                     if (index >= start && index <= end)
                     {
