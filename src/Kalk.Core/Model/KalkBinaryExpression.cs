@@ -1,5 +1,6 @@
 ﻿using System;
 using Scriban;
+using Scriban.Parsing;
 using Scriban.Runtime;
 using Scriban.Syntax;
 
@@ -9,25 +10,25 @@ namespace Kalk.Core
     {
         private static readonly (string, Func<KalkExpressionWithMembers, object> getter)[] MemberDefs = {
             ("kind", unit => unit.Kind),
-            ("left", unit => ((KalkBinaryExpression)unit).Left),
+            ("value", unit => ((KalkBinaryExpression)unit).Value),
             ("operator", unit => ((KalkBinaryExpression)unit).OperatorText),
-            ("right", unit => ((KalkBinaryExpression)unit).Right),
+            ("unit", unit => ((KalkBinaryExpression)unit).Unit),
         };
 
         public KalkBinaryExpression()
         {
         }
 
-        public KalkBinaryExpression(object left, ScriptBinaryOperator @operator, object right)
+        public KalkBinaryExpression(object value, ScriptBinaryOperator @operator, object unit)
         {
-            Left = left;
+            Value = value;
             Operator = @operator;
-            Right = right;
+            Unit = unit;
         }
 
         public override string Kind => "binary expression";
 
-        public object Left { get; set; }
+        public object Value { get; set; }
 
         /// <summary>
         /// Gets or sets the operator. Supported: /, *, ^
@@ -36,16 +37,20 @@ namespace Kalk.Core
 
         public string OperatorText => Operator.ToText();
 
-        public object Right { get; set; }
+        public object Unit { get; set; }
+
+        public override object GetValue() => Value;
+
+        public override KalkUnit GetUnit() => Unit as KalkUnit;
 
         public override string ToString(string format, IFormatProvider formatProvider)
         {
             switch (Operator)
             {
                 case ScriptBinaryOperator.Power:
-                    return (Left is ScriptBinaryExpression) ? $"({string.Format(formatProvider, "{0}",Left)}){OperatorText}{string.Format(formatProvider, "{0}", Right)}" : $"{string.Format(formatProvider, "{0}", Left)}{OperatorText}{string.Format(formatProvider, "{0}", Right)}";
+                    return (Value is ScriptBinaryExpression) ? $"({string.Format(formatProvider, "{0}",Value)}){OperatorText}{string.Format(formatProvider, "{0}", Unit)}" : $"{string.Format(formatProvider, "{0}", Value)}{OperatorText}{string.Format(formatProvider, "{0}", Unit)}";
                 default:
-                    return $"{string.Format(formatProvider, "{0}", Left)} {OperatorText} {string.Format(formatProvider, "{0}", Right)}";
+                    return $"{string.Format(formatProvider, "{0}", Value)} {OperatorText} {string.Format(formatProvider, "{0}", Unit)}";
             }
         }
 
@@ -56,37 +61,37 @@ namespace Kalk.Core
             var otherBin = (KalkBinaryExpression) other;
             if (Operator != otherBin.Operator) return false;
 
-            if (Left is KalkExpression && otherBin.Left.GetType() != Left.GetType()) return false;
-            if (Right is KalkExpression && otherBin.Right.GetType() != Right.GetType()) return false;
+            if (Value is KalkExpression && otherBin.Value.GetType() != Value.GetType()) return false;
+            if (Unit is KalkExpression && otherBin.Unit.GetType() != Unit.GetType()) return false;
 
-            if (Left is KalkExpression leftExpr)
+            if (Value is KalkExpression leftExpr)
             {
-                if (!Equals(context, leftExpr, (KalkExpression) otherBin.Left))
+                if (!Equals(context, leftExpr, (KalkExpression) otherBin.Value))
                 {
                     return false;
                 }
             }
             else
             {
-                var leftValue = context.ToObject<double>(context.CurrentSpan, Left);
-                var otherLeftValue = context.ToObject<double>(context.CurrentSpan, otherBin.Left);
+                var leftValue = context.ToObject<double>(context.CurrentSpan, Value);
+                var otherLeftValue = context.ToObject<double>(context.CurrentSpan, otherBin.Value);
                 if (!KalkNumber.AlmostEqual(leftValue, otherLeftValue))
                 {
                     return false;
                 }
             }
 
-            if (Right is KalkExpression rightExpr)
+            if (Unit is KalkExpression rightExpr)
             {
-                if (!Equals(context, rightExpr, (KalkExpression)otherBin.Right))
+                if (!Equals(context, rightExpr, (KalkExpression)otherBin.Unit))
                 {
                     return false;
                 }
             }
             else
             {
-                var rightValue = context.ToObject<double>(context.CurrentSpan, Right);
-                var otherRightValue = context.ToObject<double>(context.CurrentSpan, otherBin.Right);
+                var rightValue = context.ToObject<double>(context.CurrentSpan, Unit);
+                var otherRightValue = context.ToObject<double>(context.CurrentSpan, otherBin.Unit);
                 if (!KalkNumber.AlmostEqual(rightValue, otherRightValue))
                 {
                     return false;

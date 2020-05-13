@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Xml;
 using System.Xml.Linq;
 using Kalk.Core;
@@ -41,9 +42,15 @@ namespace Kalk.CodeGen
             var scriban = solution.Projects.First(x => x.Name == "Scriban");
             project = project.AddMetadataReferences(scriban.MetadataReferences);
 
-            var refMathNet = Path.Combine(homePath, ".nuget", "packages", "mathnet.numerics", "4.9.1", "lib", "netstandard2.0", "MathNet.Numerics.dll");
-            project = project.AddMetadataReference(MetadataReference.CreateFromFile(refMathNet));
-            
+            {
+                var refPackage = Path.Combine(homePath, ".nuget", "packages", "mathnet.numerics", "4.9.1", "lib", "netstandard2.0", "MathNet.Numerics.dll");
+                project = project.AddMetadataReference(MetadataReference.CreateFromFile(refPackage));
+            }
+            {
+                var refPackage = Path.Combine(homePath, ".nuget", "packages", "System.Text.Encoding.CodePages", "4.7.0", "lib", "netstandard2.0", "System.Text.Encoding.CodePages.dll");
+                project = project.AddMetadataReference(MetadataReference.CreateFromFile(refPackage));
+            }
+
             var compilation = await project.GetCompilationAsync();
 
             var errors = compilation.GetDiagnostics().Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error).ToList();
@@ -179,21 +186,24 @@ namespace Kalk.Core
             }
 
             var element = (XElement) node;
-            var builder = new StringBuilder();
+            string text;
             if (element.Name == "paramref")
             {
-                return element.Attribute("name").Value;
+                text = element.Attribute("name")?.Value ?? string.Empty;
             }
-            
-            foreach (var subElement in element.Nodes())
+            else
             {
-                builder.Append(GetCleanedString(subElement));
+
+                var builder = new StringBuilder();
+                foreach (var subElement in element.Nodes())
+                {
+                    builder.Append(GetCleanedString(subElement));
+                }
+
+                text = builder.ToString();
             }
-
-            return builder.ToString();
+            return HttpUtility.HtmlDecode(text);
         }
-
-
 
         private class ConsoleProgressReporter : IProgress<ProjectLoadProgress>
         {

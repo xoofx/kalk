@@ -30,17 +30,17 @@ namespace Kalk.Core
                 for (var i = 0; i < _powers.Count; i++)
                 {
                     var power = _powers[i];
-                    var powerValue = _context.ToObject<double>(_context.CurrentSpan, power.Right);
+                    var powerValue = _context.ToObject<double>(_context.CurrentSpan, power.Unit);
                     if (powerValue < 0)
                     {
                         powerValue = -powerValue;
-                        power.Right = powerValue;
+                        power.Unit = powerValue;
                         object left = leftValue ?? (object)1.0;
-                        leftValue = new KalkBinaryExpression(left, ScriptBinaryOperator.Divide, KalkNumber.AlmostEqual(powerValue, 1.0) ? power.Left : power);
+                        leftValue = new KalkBinaryExpression(left, ScriptBinaryOperator.Divide, KalkNumber.AlmostEqual(powerValue, 1.0) ? power.Value : power);
                     }
                     else
                     {
-                        var nextMul = KalkNumber.AlmostEqual(powerValue, 1.0) ? (KalkSymbol) power.Left : (KalkExpression) power;
+                        var nextMul = KalkNumber.AlmostEqual(powerValue, 1.0) ? (KalkUnit) power.Value : (KalkExpression) power;
                         leftValue = leftValue == null ? nextMul : new KalkBinaryExpression(leftValue, ScriptBinaryOperator.Multiply, nextMul);
                     }
                 }
@@ -52,8 +52,8 @@ namespace Kalk.Core
 
         private int SortPowerPerSymbol(KalkBinaryExpression left, KalkBinaryExpression right)
         {
-            var leftSymbol = (KalkSymbol) left.Left;
-            var rightSymbol = (KalkSymbol) right.Left;
+            var leftSymbol = (KalkUnit) left.Value;
+            var rightSymbol = (KalkUnit) right.Value;
 
             Debug.Assert(leftSymbol.Value == null);
             Debug.Assert(rightSymbol.Value == null);
@@ -63,8 +63,8 @@ namespace Kalk.Core
 
         private int SortPowerPerPower(KalkBinaryExpression left, KalkBinaryExpression right)
         {
-            var leftPowerValue = _context.ToObject<double>(_context.CurrentSpan, left.Right);
-            var rightPowerValue = _context.ToObject<double>(_context.CurrentSpan, right.Right);
+            var leftPowerValue = _context.ToObject<double>(_context.CurrentSpan, left.Unit);
+            var rightPowerValue = _context.ToObject<double>(_context.CurrentSpan, right.Unit);
 
             var comparePower = rightPowerValue.CompareTo(leftPowerValue);
             if (comparePower != 0) return comparePower;
@@ -83,10 +83,10 @@ namespace Kalk.Core
             for (var i = 0; i < _powers.Count; i++)
             {
                 var power = _powers[i];
-                if (previousPower != null && ReferenceEquals(power.Left, previousPower.Left))
+                if (previousPower != null && ReferenceEquals(power.Value, previousPower.Value))
                 {
-                    var powerResult = ScriptBinaryExpression.Evaluate(_context, _context.CurrentSpan, ScriptBinaryOperator.Add, power.Right, previousPower.Right);
-                    _powers[i - 1] = new KalkBinaryExpression(power.Left, ScriptBinaryOperator.Power, powerResult);
+                    var powerResult = ScriptBinaryExpression.Evaluate(_context, _context.CurrentSpan, ScriptBinaryOperator.Add, power.Unit, previousPower.Unit);
+                    _powers[i - 1] = new KalkBinaryExpression(power.Value, ScriptBinaryOperator.Power, powerResult);
                     _powers.RemoveAt(i);
                     i--;
                     continue;
@@ -99,7 +99,7 @@ namespace Kalk.Core
             for (var i = 0; i < _powers.Count; i++)
             {
                 var power = _powers[i];
-                var powerValue = _context.ToObject<double>(_context.CurrentSpan, power.Right);
+                var powerValue = _context.ToObject<double>(_context.CurrentSpan, power.Unit);
                 if (Math.Abs(powerValue) < (float.Epsilon * 4))
                 {
                     _powers.RemoveAt(i);
@@ -128,7 +128,7 @@ namespace Kalk.Core
         {
             if (value == null) return;
 
-            if (value is KalkSymbol symbol)
+            if (value is KalkUnit symbol)
             {
                 if (symbol.Value != null)
                 {
@@ -145,23 +145,23 @@ namespace Kalk.Core
                 if (binary.Operator == ScriptBinaryOperator.Multiply)
                 {
                     var leftSimplifier = new KalkExpressionSimplifier(_context);
-                    leftSimplifier.Collect(binary.Left);
+                    leftSimplifier.Collect(binary.Value);
                     Collect(leftSimplifier);
 
                     var rightSimplifier = new KalkExpressionSimplifier(_context);
-                    rightSimplifier.Collect(binary.Right);
+                    rightSimplifier.Collect(binary.Unit);
                     Collect(rightSimplifier);
                 }
                 else if (binary.Operator == ScriptBinaryOperator.Divide)
                 {
-                    Collect(binary.Left);
-                    if (binary.Right is KalkExpression)
+                    Collect(binary.Value);
+                    if (binary.Unit is KalkExpression)
                     {
-                        Collect(new KalkBinaryExpression(binary.Right, ScriptBinaryOperator.Power, -1));
+                        Collect(new KalkBinaryExpression(binary.Unit, ScriptBinaryOperator.Power, -1));
                     }
                     else
                     {
-                        var result = ScriptBinaryExpression.Evaluate(_context, _context.CurrentSpan, ScriptBinaryOperator.Divide, 1, binary.Right);
+                        var result = ScriptBinaryExpression.Evaluate(_context, _context.CurrentSpan, ScriptBinaryOperator.Divide, 1, binary.Unit);
                         SquashValue(result);
                     }
                 }
@@ -173,13 +173,13 @@ namespace Kalk.Core
                     // (a * b^2) ^ 5
                     // a ^ 5 * b ^ 10
                     var subSimplifier = new KalkExpressionSimplifier(_context);
-                    subSimplifier.Collect(binary.Left);
+                    subSimplifier.Collect(binary.Value);
 
                     var subValue = _context.ToObject<double>(_context.CurrentSpan, subSimplifier._value);
 
                     if (!KalkNumber.AlmostEqual(subValue, 1.0))
                     {
-                        var result = ScriptBinaryExpression.Evaluate(_context, _context.CurrentSpan, ScriptBinaryOperator.Power, subSimplifier._value, binary.Right);
+                        var result = ScriptBinaryExpression.Evaluate(_context, _context.CurrentSpan, ScriptBinaryOperator.Power, subSimplifier._value, binary.Unit);
                         SquashValue(result);
                     }
 
@@ -187,8 +187,8 @@ namespace Kalk.Core
                     {
                         foreach (var powerExpression in subSimplifier._powers)
                         {
-                            var powerResult = ScriptBinaryExpression.Evaluate(_context, _context.CurrentSpan, ScriptBinaryOperator.Multiply, powerExpression.Right, binary.Right);
-                            var newPower = new KalkBinaryExpression(powerExpression.Left, ScriptBinaryOperator.Power, powerResult);
+                            var powerResult = ScriptBinaryExpression.Evaluate(_context, _context.CurrentSpan, ScriptBinaryOperator.Multiply, powerExpression.Unit, binary.Unit);
+                            var newPower = new KalkBinaryExpression(powerExpression.Value, ScriptBinaryOperator.Power, powerResult);
                             _powers.Add(newPower);
                         }
                     }

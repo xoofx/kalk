@@ -178,6 +178,16 @@ namespace Consolus
             NotifyChanged();
         }
 
+        public void Insert(int index, string text)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            for (int i = 0; i < text.Length; i++)
+            {
+                InsertInternal(index + i, text[i]);
+            }
+            NotifyChanged();
+        }
+
         private void InsertInternal(int index, ConsoleChar item)
         {
             // Copy any leading/trailing escapes

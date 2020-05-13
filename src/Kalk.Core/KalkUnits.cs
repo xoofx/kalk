@@ -25,12 +25,12 @@ namespace Kalk.Core
             throw new NotSupportedException("Units don't have any parameters.");
         }
         
-        public bool TryGetValue(string key, out KalkSymbol value)
+        public bool TryGetValue(string key, out KalkUnit value)
         {
             value = null;
             if (TryGetValue(null, new SourceSpan(), key, out var valueObj))
             {
-                value = (KalkSymbol) valueObj;
+                value = (KalkUnit) valueObj;
                 return true;
             }
             return false;
@@ -52,22 +52,22 @@ namespace Kalk.Core
                 return this;
             }
 
-            Display((KalkEngine) context, "Builtin Units", symbol => symbol.GetType() == typeof(KalkSymbol) && !symbol.IsUser);
-            Display((KalkEngine)context, "User Defined Units", symbol => symbol.GetType() == typeof(KalkSymbol) && symbol.IsUser);
+            Display((KalkEngine) context, "Builtin Units", symbol => symbol.GetType() == typeof(KalkUnit) && !symbol.IsUser);
+            Display((KalkEngine)context, "User Defined Units", symbol => symbol.GetType() == typeof(KalkUnit) && symbol.IsUser);
 
             return null;
         }
 
-        public void Display(KalkEngine engine, string title, Func<KalkSymbol, bool> filter, bool addBlankLine = true)
+        public void Display(KalkEngine engine, string title, Func<KalkUnit, bool> filter, bool addBlankLine = true)
         {
             if (engine == null) throw new ArgumentNullException(nameof(engine));
             if (title == null) throw new ArgumentNullException(nameof(title));
 
-            var alreadyPrinted = new HashSet<KalkSymbol>();
+            var alreadyPrinted = new HashSet<KalkUnit>();
             bool isFirst = true;
             foreach (var unitKey in this.Keys.OrderBy(x => x))
             {
-                var unit = this[unitKey] as KalkSymbol;
+                var unit = this[unitKey] as KalkUnit;
                 if (unit == null || !alreadyPrinted.Add(unit) || unit.Parent != null || (filter != null && !filter(unit))) continue;
 
                 if (isFirst)

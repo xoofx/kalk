@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
@@ -20,36 +21,40 @@ namespace Kalk.Core
 {
     public partial class KalkEngine
     {
-        private const string CategoryGeneral = "General";
+        private bool _registerAsSystem;
+
+        private const string SystemFileName = "system.kalk";
 
         private void RegisterFunctions()
         {
-            RegisterFunction("help", new Action<ScriptExpression>(Help), CategoryGeneral);
-            RegisterFunction("version", new Action(Version), CategoryGeneral);
-            RegisterFunction("reset", new Action(Reset), CategoryGeneral);
-            RegisterFunction("exit", new Action(Exit), CategoryGeneral);
-            RegisterFunction("history", new Action<object>(History), CategoryGeneral);
-
-            RegisterFunction("list", new Action(ListVariables), CategoryGeneral);
-            RegisterFunction("del", new Action<ScriptVariable>(DeleteVariable), CategoryGeneral);
-
-            RegisterFunction("keys", DelegateCustomFunction.CreateFunc<object, IEnumerable>(Keys), CategoryGeneral);
-            
-            //Builtins.SetValue("empty", EmptyScriptObject.Default, true);
-            var clear = new Action<ScriptExpression>(Clear);
-            RegisterFunction("cls,clear", clear, CategoryGeneral);
-            RegisterFunction("out", new Func<object>(Last), CategoryGeneral);
-
+            RegisterIntrinsics();
+            RegisterGeneralFunctions();
             RegisterMathFunctions();
-            RegisterUnitFunctions();
             RegisterDeveloperFunctions();
+            RegisterUnitFunctions();
             RegisterDocumentation();
+
+            // Register last the system file
+            RegisterSystemFile();
         }
 
-        [KalkDoc("keys")]
-        public IEnumerable Keys(object obj)
+        private void RegisterSystemFile()
         {
-            return ObjectFunctions.Keys(this, obj);
+            // Register all units
+            var unitsFilePath = Path.Combine(KalkEngineFolder, SystemFileName);
+            try
+            {
+                _registerAsSystem = true;
+                LoadFile(unitsFilePath);
+            }
+            catch (Exception ex)
+            {
+                WriteError($"Unable to load units from `{unitsFilePath}`. Reason:\n{ex.Message}");
+            }
+            finally
+            {
+                _registerAsSystem = false;
+            }
         }
 
         partial void RegisterDocumentation();

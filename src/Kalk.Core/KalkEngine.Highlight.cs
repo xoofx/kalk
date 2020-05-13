@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Consolus;
 using Scriban.Parsing;
 using Scriban.Runtime;
+using Scriban.Syntax;
 
 namespace Kalk.Core
 {
@@ -18,6 +20,186 @@ namespace Kalk.Core
             TokenType.OpenBrace,
             TokenType.CloseBrace,
         };
+
+        private static List<string> SplitStringBySpaceAndKeepSpace(string text)
+        {
+            // normalize line endings with \n
+            text = text.Replace("\r\n", "\n").Replace("\r", "\n");
+            var list = new List<string>();
+            var builder = new StringBuilder();
+            bool isCurrentWhiteSpace = false;
+            for (int i = 0; i < text.Length; i++)
+            {
+                var c = text[i];
+                if (char.IsWhiteSpace(c))
+                {
+                    if (builder.Length > 0)
+                    {
+                        list.Add(builder.ToString());
+                        builder.Length = 0;
+                    }
+
+                    // We put "\n" separately
+                    if (c == '\n')
+                    {
+                        list.Add("\n");
+                        continue;
+                    }
+
+                    isCurrentWhiteSpace = true;
+                }
+                else if (isCurrentWhiteSpace)
+                {
+                    list.Add(builder.ToString());
+                    builder.Length = 0;
+                    isCurrentWhiteSpace = false;
+                }
+                builder.Append(c);
+            }
+
+            if (builder.Length > 0)
+            {
+                list.Add(builder.ToString());
+            }
+
+            return list;
+        }
+
+
+        private void WriteHighlightVariableAndValueToConsole(string name, object value)
+        {
+            if (value is ScriptFunction function && !function.IsAnonymous)
+            {
+                WriteHighlight($"{value}");
+            }
+            else
+            {
+                WriteHighlight($"{name} = {ObjectToString(value, true)}", value as IKalkConsolable);
+            }
+        }
+
+        public void WriteHighlightAligned(string prefix, string text, string nextPrefix = null)
+        {
+            var list = SplitStringBySpaceAndKeepSpace(text);
+            if (list.Count == 0) return;
+
+            var builder = new StringBuilder();
+            bool lineHasItem = false;
+
+            var maxColumn = Math.Min(Config.HelpMaxColumn, Console.BufferWidth);
+
+            if (nextPrefix == null)
+            {
+                nextPrefix = prefix.StartsWith("#") ? "#" + new string(' ', prefix.Length - 1) : new string(' ', prefix.Length);
+            }
+
+            bool isFirstItem = false;
+
+            int index = 0;
+            while(index < list.Count)
+            {
+                var item = list[index];
+
+                if (builder.Length == 0)
+                {
+                    lineHasItem = false;
+                    builder.Append(prefix);
+                    prefix = nextPrefix;
+                    isFirstItem = true;
+                }
+
+                var nextLineLength = builder.Length + item.Length + 2;
+
+                if (item != "\n" && (nextLineLength < maxColumn || !lineHasItem))
+                {
+                    if (isFirstItem && string.IsNullOrWhiteSpace(item))
+                    {
+                        // Don't append a space at the beginning of a line
+                    }
+                    else
+                    {
+                        builder.Append(item);
+                        lineHasItem = true;
+                        isFirstItem = false;
+                    }
+                    index++;
+                }
+                else
+                {
+                    WriteHighlight(builder.ToString());
+                    if (item == "\n") index++;
+                    builder.Length = 0;
+                }
+            }
+
+            if (builder.Length > 0)
+            {
+                WriteHighlight(builder.ToString());
+            }
+        }
+
+        internal void WriteError(string scriptText)
+        {
+            if (scriptText == null) throw new ArgumentNullException(nameof(scriptText));
+
+            var output = _isInitializing ? _initializingText : _tempConsoleText;
+
+            if (Writer != null)
+            {
+                if (output.Count > 0)
+                {
+                    Writer.Write(output);
+                }
+                output.Clear();
+            }
+
+            output.Append(ConsoleStyle.Red, true);
+            output.Append(scriptText);
+            output.Append(ConsoleStyle.Red, false);
+
+            if (Writer != null)
+            {
+                Writer.Write(output);
+                output.Clear();
+            }
+        }
+
+        internal void WriteHighlight(string scriptText, IKalkConsolable consolable = null)
+        {
+            var output = _isInitializing ? _initializingText : _tempConsoleText;
+
+            if (Writer != null)
+            {
+                if (output.Count > 0)
+                {
+                    Writer.Write(output);
+                }
+                output.Clear();
+            }
+
+            output.Append(scriptText);
+
+            // Highlight line per line
+            Highlight(output);
+
+            if (consolable != null)
+            {
+                consolable.ToConsole(this, output);
+            }
+
+            if (Writer != null)
+            {
+                Writer.Write(output);
+                output.Clear();
+
+                // Output any errors that happened during initialization
+                if (!_isInitializing && _initializingText.Count > 0)
+                {
+                    Writer.Write(_initializingText);
+                    _initializingText.Clear();
+                }
+            }
+        }
 
         public void Highlight(ConsoleText text, int cursorIndex = -1)
         {

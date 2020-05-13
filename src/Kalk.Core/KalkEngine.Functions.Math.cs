@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Numerics;
 using Scriban;
 using Scriban.Parsing;
@@ -69,7 +70,7 @@ namespace Kalk.Core
 
             RegisterConstant("nan", Nan, CategoryMathConstants);
             RegisterConstant("inf", double.PositiveInfinity, CategoryMathConstants);
-            RegisterConstant("pi", Math.PI, CategoryMathConstants);
+            RegisterConstant("pi,π", Math.PI, CategoryMathConstants);
             RegisterConstant("e", Math.E, CategoryMathConstants);
 
             RegisterFunction("abs", Abs, CategoryMathFunctions);
@@ -118,7 +119,6 @@ namespace Kalk.Core
             RegisterFunction("double4", new KalkVectorConstructor<double>(4), CategoryVectorConstructors);
             RegisterFunction("double8", new KalkVectorConstructor<double>(8), CategoryVectorConstructors);
 
-
             RegisterFunction("rgb", new RgbDelegate(Rgb), CategoryVectorConstructors);
             RegisterFunction("rgba", new RgbaDelegate(Rgba), CategoryVectorConstructors);
 
@@ -142,6 +142,20 @@ namespace Kalk.Core
             }
         }
 
+        [KalkDoc("i")]
+        public static object ComplexNumber(object value = null)
+        {
+            if (value == null) return new KalkComplex(0, 1);
+
+            if (value is BigInteger bigInt) return new KalkComplex(0, (double)bigInt);
+            if (value is double vFloat64) return new KalkComplex(0, vFloat64);
+            if (value is float vFloat32) return new KalkComplex(0, vFloat32);
+            if (value is long vInt64) return new KalkComplex(0, vInt64);
+            if (value is int vInt32) return new KalkComplex(0, vInt32);
+
+            throw new ArgumentOutOfRangeException(nameof(value));
+        }
+        
         [KalkDoc("rgb")]
         public KalkColorRgb Rgb(object rgb, params int[] others)
         {

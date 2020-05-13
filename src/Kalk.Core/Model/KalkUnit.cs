@@ -8,22 +8,24 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public class KalkSymbol : KalkExpressionWithMembers, IScriptCustomFunction, IScriptCustomImplicitMultiplyPrecedence
+    public class KalkUnit : KalkExpressionWithMembers, IScriptCustomFunction, IScriptCustomImplicitMultiplyPrecedence
     {
         private static readonly (string, Func<KalkExpressionWithMembers, object> getter)[] MemberDefs = {
             ("kind", unit => unit.Kind),
-            ("name", unit => ((KalkSymbol)unit).Name),
-            ("symbol", unit => ((KalkSymbol)unit).Symbol),
-            ("description", unit => ((KalkSymbol)unit).Description),
-            ("prefix", unit => ((KalkSymbol)unit).Prefix),
-            ("value", unit => ((KalkSymbol)unit).Value),
+            ("name", unit => ((KalkUnit)unit).Name),
+            ("symbol", unit => ((KalkUnit)unit).Symbol),
+            ("description", unit => ((KalkUnit)unit).Description),
+            ("prefix", unit => ((KalkUnit)unit).Prefix),
+            ("plural", unit => ((KalkUnit)unit).Plural),
+            ("value", unit => ((KalkUnit)unit).Value),
         };
 
-        public KalkSymbol(string name)
+        public KalkUnit(string name)
         {
             Name = name;
             Symbol = name;
-            Derived = new List<KalkSymbol>();
+            Plural = name + "s";
+            Derived = new List<KalkUnit>();
         }
 
         public override string Kind => "symbol definition";
@@ -38,11 +40,17 @@ namespace Kalk.Core
 
         public bool IsUser { get; set; }
 
+        public string Plural { get; set; }
+
         public KalkExpression Value { get; set; }
 
-        public List<KalkSymbol> Derived { get; }
+        public List<KalkUnit> Derived { get; }
 
-        public KalkSymbol Parent { get; set; }
+        public KalkUnit Parent { get; set; }
+
+        public override object GetValue() => 1.0;
+
+        public override KalkUnit GetUnit() => this;
 
         public override string ToString(string format, IFormatProvider formatProvider)
         {

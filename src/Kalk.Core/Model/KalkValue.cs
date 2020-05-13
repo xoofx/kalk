@@ -86,7 +86,28 @@ namespace Kalk.Core
             return context.ToObject<double>(span, value);
         }
     }
-    
+
+
+    public class KalkTrigDoubleValue : KalkDoubleValue
+    {
+        public override Type ElementType => typeof(double);
+
+        public override bool CanTransform(Type transformType)
+        {
+            return transformType == typeof(double) || transformType == typeof(float);
+        }
+
+        protected override bool CanTransform(IScriptTransformable valuable)
+        {
+            return valuable.CanTransform(typeof(double));
+        }
+
+        protected override object Accept(TemplateContext context, SourceSpan span, object value)
+        {
+            return context.ToObject<double>(span, value);
+        }
+    }
+
     public class KalkLongValue : KalkValue
     {
         public override Type ElementType => typeof(long);

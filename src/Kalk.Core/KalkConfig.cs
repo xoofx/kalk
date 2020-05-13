@@ -37,11 +37,21 @@ namespace Kalk.Core
             }
         }
 
+        internal bool RegisteringBaseCurrency { get; set; }
+
         public override bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
         {
             if (member == BaseCurrencyProp)
             {
-                ValidateCurrency(context, span, member, value);
+                var engine = (KalkEngine) context;
+                if (engine != null && !RegisteringBaseCurrency)
+                {
+                    engine.RegisterBaseCurrency(value?.ToString());
+                }
+                else
+                {
+                    ValidateCurrency(context, span, member, value);
+                }
             }
 
             return base.TrySetValue(context, span, member, value, readOnly);

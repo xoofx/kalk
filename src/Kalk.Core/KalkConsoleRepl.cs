@@ -67,7 +67,7 @@ namespace Kalk.Core
             //Repl.TextAfterLine.Append(ConsoleStyle.Red);
             //Repl.TextAfterLine.Append("This is a red text right after");
 
-
+            Repl.TryPreProcessKey = TryPreProcessKey;
 
             Repl.EditLine.Changed = OnTextChanged;
 
@@ -86,7 +86,7 @@ namespace Kalk.Core
                 _clockInput.Restart();
             }
         }
-        
+
         private bool OnTextValidatingEnterInternal(string text, bool hasControl)
         {
             _cancellationTokenSource  = new CancellationTokenSource();
@@ -222,9 +222,14 @@ namespace Kalk.Core
 
         public long OnErrorToNextLineMaxDelayInMilliseconds { get; set; }
 
+        private bool TryPreProcessKey(ConsoleKeyInfo arg, ref int cursorIndex)
+        {
+            return _engine.OnKey(arg, Repl.EditLine, ref cursorIndex);
+        }
+        
         private void OnTextChanged()
         {
-            _engine.UpdateEdit(Repl.EditLine);
+            _engine.UpdateEdit(Repl.EditLine, Repl.CursorIndex);
         }
 
         private void OnBeforeRendering()

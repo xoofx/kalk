@@ -40,6 +40,12 @@ namespace Consolus
         public bool ExitOnNextEval { get; set; }
 
         public Func<CancellationTokenSource> GetCancellationTokenSource { get; set; }
+        
+        public PreProcessKeyDelegate TryPreProcessKey { get; set; }
+
+        public delegate bool PreProcessKeyDelegate(ConsoleKeyInfo key, ref int cursorIndex);
+        
+        public Action<ConsoleKeyInfo> PostProcessKey { get; set; }
 
         public List<string> History { get; }
 
@@ -539,11 +545,11 @@ namespace Consolus
                     AfterEditLine.Clear();
                     AfterEditLine.Append("\n");
                     AfterEditLine.Begin(ConsoleStyle.Red);
-                    AfterEditLine.Append(ex.ToString());
-                    Render(reset: true); // re-display the current line with the exception
+                    AfterEditLine.Append(ex.Message);
+                    Render(); // re-display the current line with the exception
 
                     // Display the next line
-                    Render();
+                    //Render();
                 }
             }
         }
@@ -631,7 +637,21 @@ namespace Consolus
                     }
                 }
             }
-            if (key.Key == ConsoleKey.Backspace)
+
+
+            // Try to pre-process key
+            var cursorIndex = CursorIndex;
+            if (TryPreProcessKey != null && TryPreProcessKey(key, ref cursorIndex))
+            {
+                if (SelectionIndex >= 0)
+                {
+                    RemoveSelection();
+                }
+                EndSelection();
+
+                Render(cursorIndex);
+            }
+            else if (key.Key == ConsoleKey.Backspace)
             {
                 Backspace(hasControl);
                 _stackIndex = -1;
@@ -716,6 +736,12 @@ namespace Consolus
             if (!hasShift)
             {
                 EndSelection();
+            }
+
+            // Post-process key
+            if (PostProcessKey != null)
+            {
+                PostProcessKey(key);
             }
         }
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
@@ -9,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using Consolus;
 using Scriban;
 using Scriban.Functions;
@@ -20,37 +22,19 @@ namespace Kalk.Core
 {
     public partial class KalkEngine
     {
-        private const string CategoryUnitsAndCurrencies = "Unit & Currency Functions";
+        private const string CategoryUnitsAndCurrencies = "Symbol, Unit & Currency Functions";
 
         private void RegisterUnitFunctions()
         {
             RegisterVariable("units", Units, CategoryUnitsAndCurrencies);
-            RegisterFunction("unit", new Func<ScriptVariable, string, ScriptVariable, KalkExpression, string, KalkExpression>(DefineUserUnit), CategoryUnitsAndCurrencies);
+            RegisterFunction("unit", new Func<ScriptVariable, string, ScriptVariable, KalkExpression, string, string, KalkExpression>(DefineUserUnit), CategoryUnitsAndCurrencies);
             
             RegisterVariable("currencies", Currencies, CategoryUnitsAndCurrencies);
             RegisterFunction("currency", new Func<ScriptVariable, decimal?, KalkCurrency>(Currency), CategoryUnitsAndCurrencies);
 
             RegisterFunction("to", new Func<KalkExpression, KalkExpression, KalkExpression>(ConvertTo), CategoryUnitsAndCurrencies);
-
-            // Register SI units
-            RegisterUnit("second", "SI Time", "s", prefix: "m,µ,n,p,f,a,z,y");
-            RegisterUnit("meter", "SI Length", "m", prefix: "decimal");
-            RegisterUnit("gram", "SI Mass", "g", prefix: "decimal");
-            RegisterUnit("ampere", "SI Electric current", "A", prefix: "decimal");
-            RegisterUnit("kelvin", "SI Thermodynamic temperature", "K", prefix: "decimal");
-            RegisterUnit("mole", "SI Amount of substance", "mol", prefix: "decimal");
-            RegisterUnit("candela", "SI Luminous intensity", "cd", prefix: "decimal");
-
-            // Binary units
-            RegisterUnit("bit", "A digital information, data size", "b", prefix: "Y,Z,E,P,T,G,M,k,binary");
-            RegisterUnit("byte", "An octet, composed of 8 bits", "B", new KalkBinaryExpression(8, ScriptBinaryOperator.Multiply, Units["b"]), prefix: "Y,Z,E,P,T,G,M,k,binary");
-
-            // Time units
-            RegisterUnit("minute", "time in minutes", "min", new KalkBinaryExpression(60, ScriptBinaryOperator.Multiply, Units["s"]));
-            RegisterUnit("hour", "time in hours", "h", new KalkBinaryExpression(60, ScriptBinaryOperator.Multiply, Units["min"]));
-            RegisterUnit("day", "time in days", "day", new KalkBinaryExpression(24, ScriptBinaryOperator.Multiply, Units["h"]));
         }
-
+        
         [KalkDoc("to")]
         public KalkExpression ConvertTo(KalkExpression src, KalkExpression dst)
         {
@@ -121,7 +105,7 @@ namespace Kalk.Core
                     unit.Value = null;
 
                     // ratio USD = 1.1 EUR
-                    var ratio = ToObject<decimal>(CurrentSpan, existingConvert.Left);
+                    var ratio = ToObject<decimal>(CurrentSpan, existingConvert.Value);
 
                     existingBase.Value = new KalkBinaryExpression(1.0m, ScriptBinaryOperator.Multiply, baseCurrency);
 
@@ -129,7 +113,7 @@ namespace Kalk.Core
                     {
                         if (currency == baseCurrency) continue;
 
-                        var existingRatio = ToObject<decimal>(CurrentSpan, ((KalkBinaryExpression) currency.Value).Left);
+                        var existingRatio = ToObject<decimal>(CurrentSpan, ((KalkBinaryExpression) currency.Value).Value);
                         currency.Value = new KalkBinaryExpression(existingRatio / ratio, ScriptBinaryOperator.Multiply, baseCurrency);
                     }
                 }
@@ -152,7 +136,14 @@ namespace Kalk.Core
                 Units.Add(name, baseCurrency);
             }
 
-            Config.BaseCurrency = name;
+            Config.RegisteringBaseCurrency = true;
+            try
+            {
+                Config.BaseCurrency = name;
+            } finally
+            {
+                Config.RegisteringBaseCurrency = false;
+            }
 
             return baseCurrency;
         }
@@ -161,19 +152,21 @@ namespace Kalk.Core
         public KalkCurrency RegisterCurrency(string name, decimal value, bool isUser = false)
         {
             if (value <= 0 || KalkNumber.AlmostEqual(value, 0.0f)) throw new ArgumentOutOfRangeException(nameof(value), "The currency value must be > 0");
-
-            return (KalkCurrency)RegisterUnit(name, $"Currency {name}", null, new KalkBinaryExpression(1.0m/value, ScriptBinaryOperator.Multiply, GetSafeBaseCurrencyFromConfig()), null, isUser, true);
+            return (KalkCurrency)RegisterUnit(name, $"Currency {name}", null, new KalkBinaryExpression(1.0m/value, ScriptBinaryOperator.Multiply, GetSafeBaseCurrencyFromConfig()), isUser: isUser, isCurrency:true);
         }
 
         [KalkDoc("unit")]
-        public KalkExpression DefineUserUnit(ScriptVariable name, string description = null, ScriptVariable symbol = null, KalkExpression value = null, string prefix = null)
+        public KalkExpression DefineUserUnit(ScriptVariable name, string description = null, ScriptVariable symbol = null, KalkExpression value = null, string plural = null, string prefix = null)
         {
-            return RegisterUnit(name?.Name, description, symbol?.Name, value, prefix, true);
+            return RegisterUnit(name?.Name, description, symbol?.Name, value, plural, prefix, isUser: true);
         }
 
-        public KalkExpression RegisterUnit(string name, string description = null, string symbol = null, KalkExpression value = null, string prefix = null, bool isUser = false, bool isCurrency = false)
+        public KalkExpression RegisterUnit(string name, string description = null, string symbol = null, KalkExpression value = null, string plural = null, string prefix = null, bool isUser = false, bool isCurrency = false)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
+
+            // Override isUser
+            if (_registerAsSystem) isUser = false;
 
             CheckVariableAvailable(name, nameof(name), false);
 
@@ -213,28 +206,49 @@ namespace Kalk.Core
                 CheckVariableAvailable(prefixWithSymbol, nameof(name), false);
             }
 
-            var unit = isCurrency ? new KalkCurrency(name) : new KalkSymbol(name);
+            var unit = isCurrency ? new KalkCurrency(name) : new KalkUnit(name);
             unit.Description = description;
             unit.Symbol = symbol ?? name;
             unit.Value = value;
             unit.IsUser = isUser;
             unit.Prefix = prefix;
+            if (plural != null)
+            {
+                unit.Plural = plural;
+            }
 
             if (unit.Symbol != unit.Name)
             {
                 CheckVariableAvailable(unit.Symbol, nameof(symbol), false);
-                Units.Add(unit.Symbol, unit);
             }
+
+            if (unit.Plural != unit.Name)
+            {
+                CheckVariableAvailable(unit.Plural, nameof(plural), false);
+            }
+
+            // Here we are all done after checking everything
 
             Units.Add(name, unit);
 
+
+            if (unit.Symbol != unit.Name)
+            {
+                Units.Add(unit.Symbol, unit);
+            }
+
+            if (unit.Plural != unit.Name)
+            {
+                Units.Add(unit.Plural, unit);
+            }
+            
             // Register prefixes
             foreach (var prefixDesc in prefixList)
             {
                 var prefixWithName = $"{prefixDesc.Name}{name}";
                 var prefixWithSymbol = $"{prefixDesc.Prefix}{symbol}";
 
-                var unitPrefix = new KalkSymbol(prefixWithName)
+                var unitPrefix = new KalkUnit(prefixWithName)
                 {
                     Description = description,
                     Symbol = prefixWithSymbol,

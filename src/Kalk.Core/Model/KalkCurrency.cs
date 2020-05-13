@@ -10,7 +10,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public class KalkCurrency : KalkSymbol
+    public class KalkCurrency : KalkUnit
     {
         private const int CurrencyColumnAlign = 27;
 
@@ -21,11 +21,13 @@ namespace Kalk.Core
 
         public KalkCurrency(string name) : base(name)
         {
+            Plural = name;
         }
 
         public override string Kind => "currency";
 
-
+        public override object GetValue() => 1.0m;
+        
         public override object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
         {
             if (!(callerContext.Parent is ScriptExpressionStatement))
@@ -46,7 +48,7 @@ namespace Kalk.Core
             {
                 var value = (KalkBinaryExpression) Value;
 
-                var valueToBase = 1.0m / (decimal) value.Left;
+                var valueToBase = 1.0m / (decimal) value.Value;
                 var format = "#0.0###";
                 if (valueToBase < 0.0001m)
                 {

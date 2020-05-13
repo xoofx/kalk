@@ -10,12 +10,19 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public abstract class KalkExpression : KalkObject, IScriptCustomBinaryOperation, IScriptCustomUnaryOperation, IFormattable
+
+
+    public abstract class KalkExpression : KalkObject, IScriptCustomBinaryOperation, IScriptCustomUnaryOperation, IFormattable, IScriptTransformable
     {
         protected KalkExpression()
         {
             OriginalExpression = this;
         }
+
+        public abstract object GetValue();
+
+        public abstract KalkUnit GetUnit();
+
 
         public override string ToString()
         {
@@ -195,5 +202,19 @@ namespace Kalk.Core
             var value = context.ToObject<double>(span, result);
             return new KalkBinaryExpression(value, ScriptBinaryOperator.Multiply, dst.OriginalExpression);
         }
+
+        public Type ElementType => typeof(double);
+
+        public bool CanTransform(Type transformType)
+        {
+            return transformType == typeof(double) || transformType == typeof(float);
+        }
+
+
+        public object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
+        {
+            return apply(GetValue());
+        }
+
     }
 }
