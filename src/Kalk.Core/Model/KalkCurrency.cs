@@ -61,7 +61,7 @@ namespace Kalk.Core
                 currencyDesc = $"{formattedNumber,-8} {Name} => 1 {engine.GetSafeBaseCurrencyFromConfig().Name}";
             }
 
-            engine.WriteHighlight($"{currencyCmd, -CurrencyColumnAlign} # {currencyDesc}");
+            engine.WriteHighlightLine($"{currencyCmd, -CurrencyColumnAlign} # {currencyDesc}");
 
             return null;
         }

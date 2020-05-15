@@ -34,10 +34,11 @@ namespace Kalk.Core
         private int _startIndexForCompletion;
         private readonly List<string> _completionMatchingList;
         private int _currentIndexInCompletionMatchingList;
+        private bool _isFirstWriteForEval;
         
         private KalkShortcutKeyMap _currentShortcutKeyMap;
 
-        public KalkEngine(bool tokens = false) : base(new ScriptObject())
+        public KalkEngine() : base(new KalkObjectWithAlias())
         {
             KalkSettings.Initialize();
             KalkEngineFolder = Path.GetDirectoryName(typeof(KalkEngine).Assembly.Location ?? Process.GetCurrentProcess().MainModule?.FileName);
@@ -45,11 +46,16 @@ namespace Kalk.Core
             // Enforce UTF8 encoding
             Console.OutputEncoding = Encoding.UTF8;
             EnableEngineOutput = true;
+            Repl = new ConsoleRepl();
+            
             Builtins = BuiltinObject;
-            Units = new KalkUnits();
+            ((KalkObjectWithAlias)Builtins).Engine = this;
+
+            Units = new KalkUnits(this);
             Currencies = new KalkCurrencies(Units);
             AsciiTable = new KalkAsciiTable();
             Shortcuts = new KalkShortcuts();
+            Aliases = new KalkAliases();
             _currentShortcutKeyMap = Shortcuts.ShortcutKeyMap;
             _completionMatchingList = new List<string>();
             Config = new KalkConfig();
@@ -104,6 +110,8 @@ namespace Kalk.Core
 
         public ScriptObject Variables { get; }
 
+        public KalkAliases Aliases { get; }
+
         public bool EnableEngineOutput { get; set; }
 
         /// <summary>
@@ -123,16 +131,11 @@ namespace Kalk.Core
 
         public IKalkEngineWriter Writer { get; set; }
 
-        public Action OnExit { get; set; }
-
         public Action OnClear { get; set; }
 
         public bool HasExit { get; private set; }
 
         public List<string> HistoryList { get; }
-
-        public Action<string> OnEnterNextText { get; set; }
-
 
         private static readonly Regex MatchHistoryRegex = new Regex(@"^\s*!(\d+)\s*");
 
@@ -162,6 +165,7 @@ namespace Kalk.Core
 
         public object EvaluatePage(ScriptPage script)
         {
+            _isFirstWriteForEval = true;
             RecordInput(script);
             return Evaluate(script);
         }
@@ -173,7 +177,7 @@ namespace Kalk.Core
             {
                 var newScript = toRewrite.Format(new ScriptFormatterOptions(this, ScriptLang.Scientific, ScriptFormatterFlags.ExplicitClean));
                 var output = newScript.ToString();
-                WriteHighlight($"# {output}");
+                WriteHighlightLine($"# {output}");
             };
         }
         
@@ -241,22 +245,19 @@ namespace Kalk.Core
             return base.GetMemberAccessorImpl(target);
         }
 
-        private class ScriptVariables : ScriptObject
+        private class ScriptVariables : KalkObjectWithAlias
         {
-            private readonly KalkEngine _engine;
-
-            public ScriptVariables(KalkEngine engine)
+            public ScriptVariables(KalkEngine engine) : base(engine)
             {
-                _engine = engine;
             }
 
             public override bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
             {
                 if (base.TrySetValue(context, span, member, value, readOnly))
                 {
-                    if (_engine.EnableEngineOutput)
+                    if (Engine.EnableEngineOutput)
                     {
-                        _engine.RecordSetVariable(member, value);
+                        Engine.RecordSetVariable(member, value);
                     }
                     return true;
                 }
@@ -490,7 +491,7 @@ namespace Kalk.Core
 
         private void Collect(string startText, IEnumerable<string> keys, List<string> matchingList)
         {
-            foreach (var key in keys)
+            foreach (var key in keys.OrderBy(x => x))
             {
                 if (key.StartsWith(startText))
                 {
@@ -553,5 +554,4 @@ namespace Kalk.Core
             //}
         }
     }
-
 }

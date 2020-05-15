@@ -28,10 +28,7 @@ namespace Kalk.CodeGen
             });
 
             
-            string homePath = (Environment.OSVersion.Platform == PlatformID.Unix || 
-                               Environment.OSVersion.Platform == PlatformID.MacOSX)
-                ? Environment.GetEnvironmentVariable("HOME")
-                : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+
 
             var srcFolder = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"../../../.."));
             
@@ -41,6 +38,12 @@ namespace Kalk.CodeGen
             var project = solution.Projects.First(x => x.Name == "Kalk.Core");
             var scriban = solution.Projects.First(x => x.Name == "Scriban");
             project = project.AddMetadataReferences(scriban.MetadataReferences);
+
+
+            string homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
+                               Environment.OSVersion.Platform == PlatformID.MacOSX)
+                ? Environment.GetEnvironmentVariable("HOME")
+                : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
 
             {
                 var refPackage = Path.Combine(homePath, ".nuget", "packages", "mathnet.numerics", "4.9.1", "lib", "netstandard2.0", "MathNet.Numerics.dll");

@@ -13,20 +13,21 @@ namespace Kalk.Core
 
         public object Value;
 
-        public object Transform<T>(TemplateContext context, SourceSpan span, Func<T, T> apply)
+        public object Transform<TFrom, TTo>(TemplateContext context, SourceSpan span, Func<TFrom, TTo> apply)
         {
             if (Transformable != null)
             {
                 return Transformable.Transform(context, span, value =>
                 {
-                    var nestedValue = (KalkValue) context.ToObject(span, value, this.GetType());
+                    var nestedValue = (KalkValue)context.ToObject(span, value, this.GetType());
                     // Recursively apply the transformation with the same value
                     return nestedValue.Transform(context, span, apply);
                 });
             }
 
-            return apply(context.ToObject<T>(span, Value));
+            return apply(context.ToObject<TFrom>(span, Value));
         }
+
 
         public virtual Type ElementType => typeof(object);
 
@@ -127,4 +128,25 @@ namespace Kalk.Core
             return context.ToObject<long>(span, value);
         }
     }
+
+    public class KalkIntValue : KalkValue
+    {
+        public override Type ElementType => typeof(int);
+
+        public override bool CanTransform(Type transformType)
+        {
+            return transformType == typeof(int);
+        }
+
+        protected override bool CanTransform(IScriptTransformable valuable)
+        {
+            return valuable.CanTransform(typeof(int));
+        }
+
+        protected override object Accept(TemplateContext context, SourceSpan span, object value)
+        {
+            return context.ToObject<int>(span, value);
+        }
+    }
+
 }

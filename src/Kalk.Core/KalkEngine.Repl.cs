@@ -1,59 +1,56 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Numerics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using Consolus;
 using Scriban;
+using Scriban.Functions;
 using Scriban.Parsing;
 using Scriban.Runtime;
 using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public class KalkConsoleRepl : IKalkEngineWriter
+    public partial class KalkEngine
     {
-        private readonly KalkEngine _engine;
-        private readonly Stopwatch _clockInput;
-        private CancellationTokenSource _cancellationTokenSource;
+        private Stopwatch _clockReplInput;
 
-        public KalkConsoleRepl() : this(new KalkEngine(true))
+        public ConsoleRepl Repl { get; }
+
+        public int OnErrorToNextLineMaxDelayInMilliseconds { get; set; }
+
+        public ConsoleText NextOutput { get; protected set; }
+
+
+        private void InitializeRepl()
         {
-        }
-        
-        public KalkConsoleRepl(KalkEngine engine)
-        {
-            _engine = engine ?? throw new ArgumentNullException(nameof(engine));
-            _engine.Writer = this;
-            _clockInput = Stopwatch.StartNew();
+            Writer = new ReplWriter(this);
+            _clockReplInput = Stopwatch.StartNew();
             OnErrorToNextLineMaxDelayInMilliseconds = 300;
 
-            _engine.OnClear = Clear;
-            _engine.OnExit = Exit;
-
+            OnClear = Clear;
             NextOutput = new ConsoleText();
 
-            Repl = new ConsoleRepl();
             Repl.BeforeRender = OnBeforeRendering;
-
-            engine.AllowEscapeSequences = Repl.SupportEscapeSequences;
+            Repl.GetCancellationTokenSource = () => _cancellationTokenSource;
+            Repl.TryPreProcessKey = TryPreProcessKey;
+            Repl.EditLine.Changed = OnTextChanged;
+            Repl.OnTextValidatingEnter = OnTextValidatingEnter;
 
             Repl.Prompt.Clear();
             Repl.Prompt.Begin(ConsoleStyle.BrightBlack).Append(">>> ").Append(ConsoleStyle.BrightBlack, false);
-            Repl.GetCancellationTokenSource = () => _cancellationTokenSource;
 
-            //Repl.TextAfterLine.Append('\n');
-            //Repl.TextAfterLine.Append(ConsoleStyle.Red);
-            //Repl.TextAfterLine.Append("This is a red text right after");
-
-            Repl.TryPreProcessKey = TryPreProcessKey;
-
-            Repl.EditLine.Changed = OnTextChanged;
-
-            Repl.OnTextValidatingEnter = OnTextValidatingEnter;
-            _engine.OnEnterNextText = OnEnterNextText;
+            AllowEscapeSequences = Repl.SupportEscapeSequences;
         }
 
         private bool OnTextValidatingEnter(string text, bool hasControl)
@@ -64,16 +61,16 @@ namespace Kalk.Core
             }
             finally
             {
-                _clockInput.Restart();
+                _clockReplInput.Restart();
             }
         }
 
         private bool OnTextValidatingEnterInternal(string text, bool hasControl)
         {
-            _cancellationTokenSource  = new CancellationTokenSource();
-            _engine.CancellationToken = _cancellationTokenSource.Token;
+            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken = _cancellationTokenSource.Token;
 
-            var elapsed = _clockInput.ElapsedMilliseconds;
+            var elapsed = _clockReplInput.ElapsedMilliseconds;
             Template script = null;
 
             object result = null;
@@ -82,7 +79,7 @@ namespace Kalk.Core
             bool isCancelled = false;
             try
             {
-                script = _engine.Parse(text);
+                script = Parse(text);
 
                 if (script.HasErrors)
                 {
@@ -104,7 +101,7 @@ namespace Kalk.Core
                     Repl.AfterEditLine.Clear();
                     NextOutput.Clear();
 
-                    result = _engine.EvaluatePage(script.Page);
+                    result = EvaluatePage(script.Page);
 
                     if (Repl.ExitOnNextEval)
                     {
@@ -151,10 +148,10 @@ namespace Kalk.Core
             {
                 if (result != null)
                 {
-                    _engine.Write(script.Page.Span, result);
+                    Write(script.Page.Span, result);
                 }
-                var resultStr = _engine.Output.ToString();
-                var output = _engine.Output as StringBuilderOutput;
+                var resultStr = Output.ToString();
+                var output = Output as StringBuilderOutput;
                 if (output != null)
                 {
                     output.Builder.Length = 0;
@@ -196,31 +193,27 @@ namespace Kalk.Core
 
         private void OnEnterNextText(string textToEnter)
         {
-            Repl.EnqueuePendingTextToEnter(textToEnter);
+            Repl?.EnqueuePendingTextToEnter(textToEnter);
         }
-
-        public ConsoleText NextOutput { get; }
-
-        public long OnErrorToNextLineMaxDelayInMilliseconds { get; set; }
 
         private bool TryPreProcessKey(ConsoleKeyInfo arg, ref int cursorIndex)
         {
-            return _engine.OnKey(arg, Repl.EditLine, ref cursorIndex);
+            return OnKey(arg, Repl.EditLine, ref cursorIndex);
         }
-        
+
         private void OnTextChanged()
         {
-            _engine.UpdateEdit(Repl.EditLine, Repl.CursorIndex);
+            UpdateEdit(Repl.EditLine, Repl.CursorIndex);
         }
 
         private void OnBeforeRendering()
         {
             UpdateSyntaxHighlighting();
         }
-        
+
         private void UpdateSyntaxHighlighting()
         {
-            _engine.Highlight(Repl.EditLine, Repl.CursorIndex);
+            Highlight(Repl.EditLine, Repl.CursorIndex);
         }
 
         public void Clear()
@@ -229,30 +222,16 @@ namespace Kalk.Core
             NextOutput.Clear();
         }
 
-        public void Exit()
+        public void ReplExit()
         {
+            if (Repl == null) return;
             Repl.ExitOnNextEval = true;
-        }
-        
-        public ConsoleRepl Repl { get; }
-
-        private void WriteHighlight(string text)
-        {
-            _engine.WriteHighlight(text);
-            FlushWrite();
-        }
-
-        private void FlushWrite()
-        {
-            NextOutput.AppendLine();
-            NextOutput.Render(Repl.ConsoleWriter);
-            Repl.ConsoleWriter.Commit();
-            NextOutput.Clear();
-            Repl.Reset();
         }
 
         public void Run()
         {
+            InitializeRepl();
+
             try
             {
                 if (ConsoleRepl.IsSelf())
@@ -265,42 +244,13 @@ namespace Kalk.Core
                 // ignore
             }
 
-            _engine.Version();
-            FlushWrite();
-            
-            WriteHighlight("# Type `help` for more information and at https://github.com/xoofx/kalk");
-
-            //Console.CursorVisible = false;
-            //Console.Write("test");
-            //Console.CursorVisible = true;
-            //var key = Console.ReadKey(true);
-            //var left = Console.CursorLeft;
-            //var top = Console.CursorTop;
-            //int count = 0;
-            //var clock = Stopwatch.StartNew();
-            //while (true)
-            //{
-            //    var key = Console.ReadKey(true);
-            //    if ((key.Modifiers & ConsoleModifiers.Control) != 0 && key.Key == ConsoleKey.C)
-            //    {
-            //        break;
-            //    }
-            //    clock.Reset();
-            //    Console.SetCursorPosition(left, top);
-            //    var builder = new StringBuilder();
-            //    for (int i = 0; i < 2048; i++)
-            //    {
-            //        builder.Append('0' + ((count + i) % 10));
-            //        //Console.Write('0' + ((count + i) % 10));
-            //    }
-            //    Console.Write(builder.ToString());
-            //    Console.Title = "Elapsed: " + clock.Elapsed.TotalMilliseconds;
-            //    count++;
-            //}
+            Version();
+            WriteHighlightLine();
+            WriteHighlightLine("# Type `help` for more information and at https://github.com/xoofx/kalk");
 
             try
             {
-                _clockInput.Restart();
+                _clockReplInput.Restart();
                 Repl.Run();
             }
             catch (Exception ex)
@@ -310,16 +260,20 @@ namespace Kalk.Core
             }
         }
 
-        void IKalkEngineWriter.Write(SourceSpan span, object textAsObject)
+        private class ReplWriter : IKalkEngineWriter
         {
-            if (NextOutput.Count > 0) NextOutput.AppendLine();
-            NextOutput.Append(_engine.ObjectToString(textAsObject));
-        }
+            private readonly KalkEngine _engine;
 
-        void IKalkEngineWriter.Write(ConsoleText text)
-        {
-            if (NextOutput.Count > 0) NextOutput.AppendLine();
-            NextOutput.AddRange(text);
+            public ReplWriter(KalkEngine engine)
+            {
+                _engine = engine;
+            }
+
+            public void Write(ConsoleText text)
+            {
+                var nextOutput = _engine.NextOutput;
+                nextOutput.AddRange(text);
+            }
         }
     }
 }

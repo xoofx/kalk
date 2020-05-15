@@ -13,7 +13,7 @@ namespace Kalk.Core
         public const string CategoryMathFunctions = "Math Functions";
         public const string CategoryVectorConstructors = "Vector Constructors";
 
-        private Func<long, long> FibFunc;
+        private Func<int, BigInteger> FibFunc;
         private Func<object, object> AbsFunc;
         private static readonly Func<double, double> CosFunc = Math.Cos;
         private static readonly Func<double, double> AcosFunc = Math.Acos;
@@ -70,7 +70,7 @@ namespace Kalk.Core
 
             RegisterConstant("nan", Nan, CategoryMathConstants);
             RegisterConstant("inf", double.PositiveInfinity, CategoryMathConstants);
-            RegisterConstant("pi,π", Math.PI, CategoryMathConstants);
+            RegisterConstant("pi", Math.PI, CategoryMathConstants);
             RegisterConstant("e", Math.E, CategoryMathConstants);
 
             RegisterFunction("abs", Abs, CategoryMathFunctions);
@@ -126,7 +126,7 @@ namespace Kalk.Core
         }
 
 
-        public object Fib(KalkLongValue x) => x.Transform(this, CurrentSpan, FibFunc);
+        public object Fib(KalkIntValue x) => x.Transform(this, CurrentSpan, FibFunc);
 
         protected delegate KalkColorRgb RgbDelegate(object rgb, params int[] others);
         protected delegate KalkColorRgba RgbaDelegate(int rgb, params int[] others);
@@ -285,13 +285,33 @@ namespace Kalk.Core
             return Math.Sign(ToObject<double>(CurrentSpan, value));
         }
 
-        private long Fibonacci(long value)
+        private BigInteger Fibonacci(int value)
         {
-            CheckAbort();
             if (value < 0) throw new ArgumentOutOfRangeException(nameof(value), "The value must be > 0");
-            if (value == 0) return 0;
-            if (value == 1) return 1;
-            return Fibonacci(value - 1) + Fibonacci(value - 2);
+            if (value == 0) return BigInteger.Zero;
+            if (value == 1) return BigInteger.One;
+
+            var fn = BigInteger.Zero;
+            var fn1 = BigInteger.One;
+            var n = (uint) value;
+            
+            for (uint bit = (0x80000000 >> BitOperations.LeadingZeroCount(n)); bit != 0; bit >>= 1)
+            {
+                // F(2n) = F(n) * (2*F(n+1) - F(n)).
+                // F(2n+1) = F(n+1)^2 + F(n)^2.
+                var f2n = fn * ((fn1 << 1) - fn);
+                var f2n1 = fn1 * fn1 + fn * fn;
+                fn = f2n;
+                fn1 = f2n1;
+
+                if ((n & bit) != 0)
+                {
+                    var nfn1 = fn + fn1;
+                    fn = fn1;
+                    fn1 = nfn1;
+                }
+            }
+            return fn;
         }
 
         private object AbsImpl(object value)

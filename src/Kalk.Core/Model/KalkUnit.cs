@@ -99,7 +99,7 @@ namespace Kalk.Core
             }
 
             builder.Append(")");
-            engine.WriteHighlight(builder.ToString());
+            engine.WriteHighlightLine(builder.ToString());
 
             if (Derived.Count > 0)
             {

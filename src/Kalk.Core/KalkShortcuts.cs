@@ -28,7 +28,7 @@ namespace Kalk.Core
 
         public ScriptParameterInfo GetParameterInfo(int index)
         {
-            throw new NotSupportedException("Symbols don't have any parameters.");
+            throw new NotSupportedException("Shortcuts don't have any parameters.");
         }
        
         public void AddSymbolShortcut(KalkShortcut shortcut)
@@ -104,15 +104,15 @@ namespace Kalk.Core
 
                 if (isFirst)
                 {
-                    engine.WriteHighlight($"# {title}");
+                    engine.WriteHighlightLine($"# {title}");
                 }
                 else if (addBlankLine)
                 {
-                    engine.WriteHighlight("");
+                    engine.WriteHighlightLine("");
                 }
                 isFirst = false;
 
-                engine.WriteHighlight(shortcut.ToString());
+                engine.WriteHighlightLine(shortcut.ToString());
             }
         }
         

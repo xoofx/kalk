@@ -43,6 +43,10 @@ namespace Kalk.Core
             // shortcut keys
             RegisterVariable("shortcuts", Shortcuts, CategoryGeneral);
             RegisterFunction("shortcut", new DefineShortcutDelegate(Shortcut), CategoryGeneral);
+
+            // alias
+            RegisterVariable("aliases", Aliases, CategoryGeneral);
+            RegisterFunction("alias", new DefineAliasDelegate(Alias), CategoryGeneral);
         }
 
         private delegate object EvaluateDelegate(string text, bool output = false);
@@ -70,29 +74,29 @@ namespace Kalk.Core
 
 
             var random = new Random();
-            WriteHighlight($"# help [name]");
+            WriteHighlightLine($"# help [name]");
             if (name == "help")
             {
-                WriteHighlight($"#");
-                WriteHighlight($"# Example");
-                WriteHighlight($"  help # Display a list of function and topic names to get help from.");
-                WriteHighlight($"  help {Descriptors.Select(x => x.Key).ElementAt(random.Next(0, Descriptors.Count - 1))} # Display the help for the specific function or topic.");
+                WriteHighlightLine($"#");
+                WriteHighlightLine($"# Example");
+                WriteHighlightLine($"  help # Display a list of function and topic names to get help from.");
+                WriteHighlightLine($"  help {Descriptors.Select(x => x.Key).ElementAt(random.Next(0, Descriptors.Count - 1))} # Display the help for the specific function or topic.");
             }
 
             if (name == null)
             {
                 var categoryToDescriptors = Descriptors.GroupBy(x => x.Value.Category).ToDictionary(x => x.Key, y => y.Select(x => x.Value).Distinct().ToList());
-                WriteHighlight($"#");
+                WriteHighlightLine($"#");
                 foreach (var categoryPair in categoryToDescriptors.OrderBy(x => x.Key))
                 {
                     var list = categoryPair.Value;
-                    WriteHighlight($"# {categoryPair.Key}");
+                    WriteHighlightLine($"# {categoryPair.Key}");
 
                     var builder = new StringBuilder();
                     var names = list.SelectMany(x => x.Names).OrderBy(x => x).ToList();
 
                     WriteHighlightAligned("    - ", string.Join(", ", names));
-                    WriteHighlight("");
+                    WriteHighlightLine("");
                 }
             }
         }
@@ -109,19 +113,19 @@ namespace Kalk.Core
                 syntax += parentless ? $" {args}" : $"({args})";
             }
 
-            WriteHighlight($"# {syntax}");
-            WriteHighlight($"#");
+            WriteHighlightLine($"# {syntax}");
+            WriteHighlightLine($"#");
             if (string.IsNullOrEmpty(descriptor.Description))
             {
-                WriteHighlight($"#   No documentation available.");
+                WriteHighlightLine($"#   No documentation available.");
             }
             else
             {
                 WriteHighlightAligned($"#   ", descriptor.Description);
                 if (descriptor.Params.Count > 0)
                 {
-                    WriteHighlight($"#");
-                    WriteHighlight($"# Parameters");
+                    WriteHighlightLine($"#");
+                    WriteHighlightLine($"# Parameters");
                     foreach (var par in descriptor.Params)
                     {
                         WriteHighlightAligned($"#   - {par.Name}: ", par.Description);
@@ -129,8 +133,8 @@ namespace Kalk.Core
                 }
                 if (!string.IsNullOrEmpty(descriptor.Returns))
                 {
-                    WriteHighlight($"#");
-                    WriteHighlight($"# Returns");
+                    WriteHighlightLine($"#");
+                    WriteHighlightLine($"# Returns");
                     WriteHighlightAligned($"#   ", descriptor.Returns);
                 }
             }
@@ -174,7 +178,7 @@ namespace Kalk.Core
             // Highlight line per line
             if (Variables.Count == 0)
             {
-                WriteHighlight("# No variables");
+                WriteHighlightLine("# No variables");
                 return;
             }
 
@@ -194,7 +198,7 @@ namespace Kalk.Core
                 }
                 if (writeHeading)
                 {
-                    WriteHighlight("# Variables");
+                    WriteHighlightLine("# Variables");
                     writeHeading = false;
                 }
                 WriteHighlightVariableAndValueToConsole(variableKeyPair.Key, variableKeyPair.Value);
@@ -203,7 +207,7 @@ namespace Kalk.Core
             // Write functions
             if (functions != null)
             {
-                WriteHighlight("# Functions");
+                WriteHighlightLine("# Functions");
                 foreach (var variableKeyPair in functions)
                 {
                     WriteHighlightVariableAndValueToConsole(variableKeyPair.Key, variableKeyPair.Value);
@@ -225,16 +229,16 @@ namespace Kalk.Core
                 Variables.Remove(variable.Name);
                 if (previousValue is ScriptFunction function && !function.IsAnonymous)
                 {
-                    WriteHighlight($"# Function `{function}` deleted.");
+                    WriteHighlightLine($"# Function `{function}` deleted.");
                 }
                 else
                 {
-                    WriteHighlight($"# Variable `{variable.Name} == {ObjectToString(previousValue, true)}` deleted.");
+                    WriteHighlightLine($"# Variable `{variable.Name} == {ObjectToString(previousValue, true)}` deleted.");
                 }
             }
             else
             {
-                WriteHighlight($"# Variable `{variable.Name}` not found");
+                WriteHighlightLine($"# Variable `{variable.Name}` not found");
             }
         }
 
@@ -245,7 +249,7 @@ namespace Kalk.Core
         public void Exit()
         {
             HasExit = true;
-            OnExit?.Invoke();
+            ReplExit();
         }
 
         public void ClearHistory()
@@ -286,7 +290,7 @@ namespace Kalk.Core
 
             if (HistoryList.Count == 0)
             {
-                WriteHighlight("# History empty");
+                WriteHighlightLine("# History empty");
                 return;
             }
 
@@ -304,7 +308,7 @@ namespace Kalk.Core
 
                 if (lineNumber >= 0 && lineNumber < HistoryList.Count)
                 {
-                    OnEnterNextText?.Invoke(HistoryList[lineNumber]);
+                    OnEnterNextText(HistoryList[lineNumber]);
                 }
                 else if (lineNumber < 0)
                 {
@@ -312,7 +316,7 @@ namespace Kalk.Core
                     if (lineNumber < 0) lineNumber = 0;
                     for (int i = lineNumber; i < HistoryList.Count; i++)
                     {
-                        WriteHighlight($"{i}: {HistoryList[i]}");
+                        WriteHighlightLine($"{i}: {HistoryList[i]}");
                     }
                 }
                 else
@@ -324,7 +328,7 @@ namespace Kalk.Core
             {
                 for (int i = 0; i < HistoryList.Count; i++)
                 {
-                    WriteHighlight($"{i}: {HistoryList[i]}");
+                    WriteHighlightLine($"{i}: {HistoryList[i]}");
                 }
             }
         }
@@ -466,6 +470,28 @@ namespace Kalk.Core
 
             var shortcut = new KalkShortcut(name.Name, keyList, !_registerAsSystem);
             Shortcuts.AddSymbolShortcut(shortcut);
+        }
+
+
+        private delegate void DefineAliasDelegate(ScriptVariable name, params ScriptVariable[] aliases);
+
+        [KalkDoc("alias")]
+        public void Alias(ScriptVariable name, params ScriptVariable[] aliases)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (aliases.Length == 0)
+            {
+                throw new ArgumentException("Invalid arguments. Missing a key associated to a symbol.", nameof(aliases));
+            }
+
+            var names = new List<string>();
+            for (int i = 0; i < aliases.Length; i++)
+            {
+                names.Add(aliases[i].Name);
+            }
+
+            var alias = new KalkAlias(name.Name, names, !_registerAsSystem);
+            Aliases.AddAlias(alias);
         }
     }
 }

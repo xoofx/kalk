@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Scriban;
 using Scriban.Parsing;
@@ -10,8 +9,15 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public class KalkUnits : KalkObjectWithAlias, IScriptCustomFunction
+    public class KalkAliases : ScriptObject, IScriptCustomFunction
     {
+        public KalkAliases()
+        {
+            Aliases = new Dictionary<string, string>();
+        }
+
+        public Dictionary<string, string> Aliases { get; }
+
         public int RequiredParameterCount => 0;
 
         public int ParameterCount => 0;
@@ -20,21 +26,33 @@ namespace Kalk.Core
 
         public Type ReturnType => typeof(object);
 
-        public KalkUnits(KalkEngine engine) : base(engine)
-        {
-        }
-        
         public ScriptParameterInfo GetParameterInfo(int index)
         {
-            throw new NotSupportedException("Units don't have any parameters.");
+            throw new NotSupportedException("Aliases don't have any parameters.");
+        }
+       
+        public void AddAlias(KalkAlias alias)
+        {
+            if (alias == null) throw new ArgumentNullException(nameof(alias));
+            Add(alias.Name, alias);
+
+            foreach (string aliasName in alias.Aliases)
+            {
+                Aliases[aliasName] = alias.Name;
+            }
+        }
+
+        public bool TryGetAlias(string name, out string alias)
+        {
+            return Aliases.TryGetValue(name, out alias);
         }
         
-        public bool TryGetValue(string key, out KalkUnit value)
+        public bool TryGetValue(string key, out KalkAlias value)
         {
             value = null;
             if (TryGetValue(null, new SourceSpan(), key, out var valueObj))
             {
-                value = (KalkUnit) valueObj;
+                value = (KalkAlias) valueObj;
                 return true;
             }
             return false;
@@ -42,11 +60,11 @@ namespace Kalk.Core
         
         public override bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
         {
-            // In the case of using KalkUnits outside of the scripting engine
+            // In the case of using KalkSymbols outside of the scripting engine
             if (context == null) return base.TrySetValue(null, span, member, value, readOnly);
 
             // Otherwise, we are not allowing to modify this object.
-            throw new ScriptRuntimeException(span, "Units object can't be modified directly. You need to use the command `unit` instead.");
+            throw new ScriptRuntimeException(span, "Aliases object can't be modified directly. You need to use the command `shortcut` instead.");
         }
 
         public object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
@@ -56,23 +74,21 @@ namespace Kalk.Core
                 return this;
             }
 
-            Display((KalkEngine) context, "Builtin Units", symbol => symbol.GetType() == typeof(KalkUnit) && !symbol.IsUser);
-            Display((KalkEngine)context, "User Defined Units", symbol => symbol.GetType() == typeof(KalkUnit) && symbol.IsUser);
-
+            Display((KalkEngine)context, "Builtin Aliases", filter => !filter.IsUser);
+            Display((KalkEngine) context, "User-defined Aliases", filter => filter.IsUser);
             return null;
         }
 
-        public void Display(KalkEngine engine, string title, Func<KalkUnit, bool> filter, bool addBlankLine = true)
+        public void Display(KalkEngine engine, string title, Func<KalkAlias, bool> filter = null, bool addBlankLine = false)
         {
             if (engine == null) throw new ArgumentNullException(nameof(engine));
             if (title == null) throw new ArgumentNullException(nameof(title));
 
-            var alreadyPrinted = new HashSet<KalkUnit>();
             bool isFirst = true;
-            foreach (var unitKey in this.Keys.OrderBy(x => x))
+            foreach (var aliasKey in this.Keys.OrderBy(x => x))
             {
-                var unit = this[unitKey] as KalkUnit;
-                if (unit == null || !alreadyPrinted.Add(unit) || unit.Parent != null || (filter != null && !filter(unit))) continue;
+                var alias = this[aliasKey] as KalkAlias;
+                if (alias == null || (filter != null && !filter(alias))) continue;
 
                 if (isFirst)
                 {
@@ -84,7 +100,7 @@ namespace Kalk.Core
                 }
                 isFirst = false;
 
-                unit.Invoke(engine, engine.CurrentNode, null, null);
+                engine.WriteHighlightLine(alias.ToString());
             }
         }
         

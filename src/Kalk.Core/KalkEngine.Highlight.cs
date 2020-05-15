@@ -70,11 +70,11 @@ namespace Kalk.Core
         {
             if (value is ScriptFunction function && !function.IsAnonymous)
             {
-                WriteHighlight($"{value}");
+                WriteHighlightLine($"{value}");
             }
             else
             {
-                WriteHighlight($"{name} = {ObjectToString(value, true)}", value as IKalkConsolable);
+                WriteHighlightLine($"{name} = {ObjectToString(value, true)}", value as IKalkConsolable);
             }
         }
 
@@ -126,7 +126,7 @@ namespace Kalk.Core
                 }
                 else
                 {
-                    WriteHighlight(builder.ToString());
+                    WriteHighlightLine(builder.ToString());
                     if (item == "\n") index++;
                     builder.Length = 0;
                 }
@@ -134,7 +134,7 @@ namespace Kalk.Core
 
             if (builder.Length > 0)
             {
-                WriteHighlight(builder.ToString());
+                WriteHighlightLine(builder.ToString());
             }
         }
 
@@ -164,6 +164,27 @@ namespace Kalk.Core
             }
         }
 
+        internal void WriteHighlightLine(string scriptText, IKalkConsolable consolable = null)
+        {
+            WriteHighlight(scriptText, consolable);
+            WriteHighlightLine();
+        }
+
+        internal void WriteHighlightLine()
+        {
+            if (_isFirstWriteForEval)
+            {
+                Repl.ConsoleWriter.WriteLine();
+                _isFirstWriteForEval = false;
+            }
+
+            NextOutput.AppendLine();
+            NextOutput.Render(Repl.ConsoleWriter);
+            Repl.ConsoleWriter.Commit();
+            NextOutput.Clear();
+            Repl.Reset();
+        }
+
         internal void WriteHighlight(string scriptText, IKalkConsolable consolable = null)
         {
             var output = _isInitializing ? _initializingText : _tempConsoleText;
@@ -190,15 +211,20 @@ namespace Kalk.Core
             if (Writer != null)
             {
                 Writer.Write(output);
-                output.Clear();
 
                 // Output any errors that happened during initialization
                 if (!_isInitializing && _initializingText.Count > 0)
                 {
                     Writer.Write(_initializingText);
-                    _initializingText.Clear();
                 }
             }
+
+            if (!_isInitializing && _initializingText.Count > 0)
+            {
+                _initializingText.Clear();
+            }
+
+            output.Clear();
         }
 
         public void Highlight(ConsoleText text, int cursorIndex = -1)

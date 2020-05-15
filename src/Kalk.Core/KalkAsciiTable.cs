@@ -132,10 +132,10 @@ namespace Kalk.Core
 
                     if (y == 0)
                     {
-                        engine.WriteHighlight($"{"ASCII controls",alignControls}  {"ASCII printable characters",-(columnWidth * 2 + alignStandard + 2)} {"Extended ASCII Characters"}");
+                        engine.WriteHighlightLine($"{"ASCII controls",alignControls}  {"ASCII printable characters",-(columnWidth * 2 + alignStandard + 2)} {"Extended ASCII Characters"}");
                     }
 
-                    engine.WriteHighlight(builder.ToString());
+                    engine.WriteHighlightLine(builder.ToString());
                 }
 
                 void OutputColumn(StringBuilder output, int columnIndex, string text)
