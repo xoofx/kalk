@@ -132,7 +132,7 @@ namespace Kalk.Core
 
         private void WriteInt32(uint u32, bool forFloat)
         {
-            WriteHighlightLine($"    # 0x_{u32 >> 16:X4}_{u32 & 0xFFFF:X4}");
+            WriteHighlightLine($"    = 0x_{u32 >> 16:X4}_{u32 & 0xFFFF:X4}");
             var builder = new StringBuilder();
 
             // Prints the hexa version
@@ -145,7 +145,7 @@ namespace Kalk.Core
                 var v = (byte)(0xF & (u32 >> (i * 4)));
                 builder.Append(v.ToString("X1"));
             }
-            WriteHighlightLine($"    # {builder}");
+            WriteHighlightLine($"    = {builder}");
 
             if (forFloat)
             {
@@ -167,7 +167,7 @@ namespace Kalk.Core
                 builder.Append('0', leadingZero);
                 if (v != 0) builder.Append(Convert.ToString(v, 2));
             }
-            WriteHighlightLine($"    # {builder}");
+            WriteHighlightLine($"    = {builder}");
         }
 
         private void WriteInt64(long i64)
@@ -184,7 +184,7 @@ namespace Kalk.Core
 
         private void WriteUInt64(ulong u64, bool forDouble)
         {
-            WriteHighlightLine($"    # 0x_{u64 >> 32:X8}_{((uint)u64) & 0xFFFFFFFF:X8}");
+            WriteHighlightLine($"    = 0x_{u64 >> 32:X8}_{((uint)u64) & 0xFFFFFFFF:X8}");
             var builder = new StringBuilder();
 
             // Prints the hexa version
@@ -197,7 +197,7 @@ namespace Kalk.Core
                 var v = (byte)(0xF & (u64 >> (i * 4)));
                 builder.Append(v.ToString("X1"));
             }
-            WriteHighlightLine($"    # {builder}");
+            WriteHighlightLine($"    = {builder}");
 
             if (forDouble)
             {
@@ -219,7 +219,7 @@ namespace Kalk.Core
                 builder.Append('0', leadingZero);
                 if (v != 0) builder.Append(Convert.ToString(v, 2));
             }
-            WriteHighlightLine($"    # {builder}");
+            WriteHighlightLine($"    = {builder}");
         }
 
         private void WriteDouble(double f64, string title)
@@ -249,7 +249,7 @@ namespace Kalk.Core
             var leadingFractionZero = BitOperations.LeadingZeroCount(fraction) - 12;
             builder.Append('0', leadingFractionZero);
             if (fraction != 0) builder.Append(Convert.ToString((long)fraction, 2));
-            WriteHighlightLine($"    # {builder}");
+            WriteHighlightLine($"    = {builder}");
         }
 
         private void WriteFloat(float f32)
@@ -278,7 +278,7 @@ namespace Kalk.Core
             var leadingFractionZero = BitOperations.LeadingZeroCount(fraction) - 9;
             builder.Append('0', leadingFractionZero);
             if (fraction != 0) builder.Append(Convert.ToString((long)fraction, 2));
-            WriteHighlightLine($"    # {builder}");
+            WriteHighlightLine($"    = {builder}f");
         }
 
         public void WriteHighlightAligned(string prefix, string text, string nextPrefix = null)
