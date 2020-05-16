@@ -70,6 +70,11 @@ namespace Kalk.Core
             RegisterFunction(name, new DelegateCustomFunction(del), category);
         }
 
+        public void RegisterFunction(string name, Func<object, bool> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+        
         public void RegisterFunction(string name, Func<double, double> func, string category)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);

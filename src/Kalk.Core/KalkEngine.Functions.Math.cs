@@ -47,6 +47,9 @@ namespace Kalk.Core
         private static readonly Func<double, double> CeilFunc = Math.Ceiling;
         private static readonly Func<double, double> TruncFunc= Math.Truncate;
         private Func<object, object> SignFunc;
+        private static readonly Func<object, bool> IsFiniteFunc = IsFiniteFuncImpl;
+        private static readonly Func<object, bool> IsInfFunc = IsInfFuncImpl;
+        private static readonly Func<object, bool> IsNanFunc = IsNanFuncImpl;
 
         /// <summary>
         /// Defines the "Not a Number" constant for a double.
@@ -117,6 +120,10 @@ namespace Kalk.Core
             RegisterFunction("floor", Floor, CategoryMathFunctions);
             RegisterFunction("ceil", Ceiling, CategoryMathFunctions);
             RegisterFunction("trunc", Trunc, CategoryMathFunctions);
+            
+            RegisterFunction("isfinite", IsFinite, CategoryMathFunctions);
+            RegisterFunction("isinf", IsInf, CategoryMathFunctions);
+            RegisterFunction("isnan", IsNan, CategoryMathFunctions);
 
             RegisterFunction("asdouble", (Func<object, double>)AsDouble, CategoryMathFunctions);
             RegisterFunction("aslong", (Func<object, long>)AsLong, CategoryMathFunctions);
@@ -158,7 +165,6 @@ namespace Kalk.Core
             RegisterFunction("all", DelegateCustomFunction.CreateFunc<object, bool>(All), CategoryMathFunctions);
             RegisterFunction("any", DelegateCustomFunction.CreateFunc<object, bool>(Any), CategoryMathFunctions);
         }
-
 
         [KalkDoc("fib")]
         public object Fib(KalkIntValue x) => x.Transform(this, CurrentSpan, FibFunc);
@@ -307,8 +313,14 @@ namespace Kalk.Core
         public object Ceiling(KalkDoubleValue x) => x.Transform(this, CurrentSpan, CeilFunc);
         [KalkDoc("trunc")]
         public object Trunc(KalkDoubleValue x) => x.Transform(this, CurrentSpan, TruncFunc);
-
-
+        
+        [KalkDoc("isfinite")]
+        public object IsFinite(KalkCompositeValue x) => x.Transform(this, CurrentSpan, IsFiniteFunc);
+        [KalkDoc("isinf")]
+        public object IsInf(KalkCompositeValue x) => x.Transform(this, CurrentSpan, IsInfFunc);
+        [KalkDoc("isnan")]
+        public object IsNan(KalkCompositeValue x) => x.Transform(this, CurrentSpan, IsNanFunc);
+        
         private delegate object SumDelegate(object value, params object[] values);
 
         [KalkDoc("sum")]
@@ -408,6 +420,26 @@ namespace Kalk.Core
             return x - Math.Truncate(x);
         }
 
+        private static bool IsFiniteFuncImpl(object arg)
+        {
+            if (arg is float f32) return float.IsFinite(f32);
+            if (arg is double f64) return double.IsFinite(f64);
+            return true;
+        }
+
+        private static bool IsInfFuncImpl(object arg)
+        {
+            if (arg is float f32) return float.IsInfinity(f32);
+            if (arg is double f64) return double.IsInfinity(f64);
+            return false;
+        }
+
+        private static bool IsNanFuncImpl(object arg)
+        {
+            if (arg is float f32) return float.IsNaN(f32);
+            if (arg is double f64) return double.IsNaN(f64);
+            return false;
+        }
 
         private object SignFuncImpl(object value)
         {
