@@ -75,7 +75,7 @@ namespace Kalk.Core
             {
                 var leftValue = context.ToObject<double>(context.CurrentSpan, Value);
                 var otherLeftValue = context.ToObject<double>(context.CurrentSpan, otherBin.Value);
-                if (!KalkNumber.AlmostEqual(leftValue, otherLeftValue))
+                if (!KalkValue.AlmostEqual(leftValue, otherLeftValue))
                 {
                     return false;
                 }
@@ -92,7 +92,7 @@ namespace Kalk.Core
             {
                 var rightValue = context.ToObject<double>(context.CurrentSpan, Unit);
                 var otherRightValue = context.ToObject<double>(context.CurrentSpan, otherBin.Unit);
-                if (!KalkNumber.AlmostEqual(rightValue, otherRightValue))
+                if (!KalkValue.AlmostEqual(rightValue, otherRightValue))
                 {
                     return false;
                 }

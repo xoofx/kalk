@@ -15,14 +15,15 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public abstract class KalkVector : KalkNumber
+    public abstract class KalkVector : KalkValue
     {
         public abstract int Length { get; }
 
         public abstract object GetComponent(int index);
         
     }
-    
+
+
     public class KalkVector<T> : KalkVector, IScriptTransformable, IFormattable, IList, IScriptObject, IEquatable<KalkVector<T>>, IKalkVectorObject<T>, IScriptCustomType where T: struct, IEquatable<T>, IFormattable
     {
         private const int x_IndexOffset = 2;
@@ -55,8 +56,12 @@ namespace Kalk.Core
             return _values[index];
         }
 
-        public override string Kind => $"{typeof(T).ScriptPrettyName()}{Length.ToString(CultureInfo.InvariantCulture)}";
-        
+        public override string Kind => $"{ElementTypeName}{Length.ToString(CultureInfo.InvariantCulture)}";
+
+
+        private string ElementTypeName => typeof(T) == typeof(KalkBool) ? "bool" : typeof(T).ScriptPrettyName();
+
+
         public Type ElementType => typeof(T);
 
         public T this[int index]
@@ -127,7 +132,7 @@ namespace Kalk.Core
         {
             var context = formatProvider as TemplateContext;
             var builder = new StringBuilder();
-            builder.Append(typeof(T).ScriptPrettyName()).Append(Length.ToString(CultureInfo.InvariantCulture));
+            builder.Append(Kind);
             builder.Append('(');
             for(int i = 0; i < Length; i++)
             {
@@ -420,36 +425,56 @@ namespace Kalk.Core
             var leftVector = leftValue as KalkVector<T>;
             var rightVector = rightValue as KalkVector<T>;
             if (leftVector == null && rightVector == null) return false;
+            if (leftVector != null && rightVector != null && leftVector.Length != rightVector.Length)
+            {
+                return false;
+            }
+
+            if (leftVector == null)
+            {
+                leftVector = NewVector(rightVector.Length);
+                var leftComponentValue = context.ToObject<T>(span, leftValue);
+                for (int i = 0; i < leftVector.Length; i++)
+                {
+                    leftVector[i] = leftComponentValue;
+                }
+            }
+
+            if (rightVector == null)
+            {
+                rightVector = NewVector(leftVector.Length);
+                var rightComponentValue = context.ToObject<T>(span, rightValue);
+                for (int i = 0; i < rightVector.Length; i++)
+                {
+                    rightVector[i] = rightComponentValue;
+                }
+            }
             
             switch (op)
             {
                 case ScriptBinaryOperator.CompareEqual:
-                    result = leftVector.Equals(rightVector);
-                    return true;
                 case ScriptBinaryOperator.CompareNotEqual:
-                    result = !leftVector.Equals(rightVector);
+                case ScriptBinaryOperator.CompareLessOrEqual:
+                case ScriptBinaryOperator.CompareGreaterOrEqual:
+                case ScriptBinaryOperator.CompareLess:
+                case ScriptBinaryOperator.CompareGreater:
+                    var vbool = new KalkVector<KalkBool>(leftVector.Length);
+                    for (int i = 0; i < leftVector.Length; i++)
+                    {
+                        vbool[i] = (bool)ScriptBinaryExpression.Evaluate(context, span, op, leftVector[i], rightVector[i]);
+                    }
+                    result = vbool;
                     return true;
-                //case ScriptBinaryOperator.CompareLessOrEqual:
-                //    break;
-                //case ScriptBinaryOperator.CompareGreaterOrEqual:
-                //    break;
-                //case ScriptBinaryOperator.CompareLess:
-                //    break;
-                //case ScriptBinaryOperator.CompareGreater:
-                //    break;
-                //case ScriptBinaryOperator.LiquidContains:
-                //    break;
-                //case ScriptBinaryOperator.LiquidStartsWith:
-                //    break;
-                //case ScriptBinaryOperator.LiquidEndsWith:
-                //    break;
-                //case ScriptBinaryOperator.LiquidHasKey:
-                //    break;
-                //case ScriptBinaryOperator.LiquidHasValue:
-                //    break;
+
                 case ScriptBinaryOperator.Add:
                 case ScriptBinaryOperator.Substract:
                 case ScriptBinaryOperator.Multiply:
+                case ScriptBinaryOperator.Divide:
+                case ScriptBinaryOperator.DivideRound:
+                case ScriptBinaryOperator.Modulus:
+                case ScriptBinaryOperator.ShiftLeft:
+                case ScriptBinaryOperator.ShiftRight:
+                case ScriptBinaryOperator.Power:
                 {
                     var opResult = NewVector(leftVector.Length);
                     for (int i = 0; i < opResult.Length; i++)
@@ -460,27 +485,22 @@ namespace Kalk.Core
                     result = opResult;
                     return true;
                 }
-                case ScriptBinaryOperator.Divide:
-                    break;
-                case ScriptBinaryOperator.DivideRound:
-                    break;
-                case ScriptBinaryOperator.Modulus:
-                    break;
-                case ScriptBinaryOperator.ShiftLeft:
-                    break;
-                case ScriptBinaryOperator.ShiftRight:
-                    break;
-                case ScriptBinaryOperator.Power:
-                    break;
-                case ScriptBinaryOperator.RangeInclude:
-                    break;
-                case ScriptBinaryOperator.RangeExclude:
-                    break;
-                case ScriptBinaryOperator.Custom:
-                    break;
             }
 
             return false;
+        }
+
+        public bool TryEvaluate(TemplateContext context, SourceSpan span, ScriptUnaryOperator op, object rightValue, out object result)
+        {
+            var previousVector = (KalkVector<T>) rightValue;
+            var newVector = previousVector.Clone();
+            for (int i = 0; i < newVector.Length; i++)
+            {
+                newVector[i] = (T) ScriptUnaryExpression.Evaluate(context, span, op, newVector[i]);
+            }
+
+            result = newVector;
+            return true;
         }
 
         protected virtual KalkVector<T> NewVector(int length) => new KalkVector<T>(length);
@@ -529,10 +549,7 @@ namespace Kalk.Core
             return ((IEnumerable) _values).GetEnumerator();
         }
 
-        public bool TryEvaluate(TemplateContext context, SourceSpan span, ScriptUnaryOperator op, object rightValue, out object result)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public static bool operator ==(KalkVector<T> left, KalkVector<T> right)
         {

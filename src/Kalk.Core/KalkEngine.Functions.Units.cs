@@ -151,7 +151,7 @@ namespace Kalk.Core
 
         public KalkCurrency RegisterCurrency(string name, decimal value, bool isUser = false)
         {
-            if (value <= 0 || KalkNumber.AlmostEqual(value, 0.0f)) throw new ArgumentOutOfRangeException(nameof(value), "The currency value must be > 0");
+            if (value <= 0 || KalkValue.AlmostEqual(value, 0.0f)) throw new ArgumentOutOfRangeException(nameof(value), "The currency value must be > 0");
             return (KalkCurrency)RegisterUnit(name, $"Currency {name}", null, new KalkBinaryExpression(1.0m/value, ScriptBinaryOperator.Multiply, GetSafeBaseCurrencyFromConfig()), isUser: isUser, isCurrency:true);
         }
 

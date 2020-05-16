@@ -13,7 +13,7 @@ namespace Kalk.Core
     {
         public const string CategoryMathConstants = "Math Constants";
         public const string CategoryMathFunctions = "Math Functions";
-        public const string CategoryVectorConstructors = "Vector Constructors";
+        public const string CategoryTypeConstructors = "Type Constructors";
 
         private Func<int, BigInteger> FibFunc;
         private Func<object, object> AbsFunc;
@@ -121,28 +121,37 @@ namespace Kalk.Core
             RegisterFunction("asdouble", (Func<object, double>)AsDouble, CategoryMathFunctions);
             RegisterFunction("aslong", (Func<object, long>)AsLong, CategoryMathFunctions);
 
-            RegisterFunction("int", new KalkVectorConstructor<int>(1), CategoryVectorConstructors);
-            RegisterFunction("int2", new KalkVectorConstructor<int>(2), CategoryVectorConstructors);
-            RegisterFunction("int3", new KalkVectorConstructor<int>(3), CategoryVectorConstructors);
-            RegisterFunction("int4", new KalkVectorConstructor<int>(4), CategoryVectorConstructors);
-            RegisterFunction("int8", new KalkVectorConstructor<int>(8), CategoryVectorConstructors);
+            RegisterFunction("int", new KalkVectorConstructor<int>(1), CategoryTypeConstructors);
+            RegisterFunction("int2", new KalkVectorConstructor<int>(2), CategoryTypeConstructors);
+            RegisterFunction("int3", new KalkVectorConstructor<int>(3), CategoryTypeConstructors);
+            RegisterFunction("int4", new KalkVectorConstructor<int>(4), CategoryTypeConstructors);
+            RegisterFunction("int8", new KalkVectorConstructor<int>(8), CategoryTypeConstructors);
+            RegisterFunction("int16", new KalkVectorConstructor<int>(16), CategoryTypeConstructors);
 
-            RegisterFunction("float", new KalkVectorConstructor<float>(1), CategoryVectorConstructors);
-            RegisterFunction("float2", new KalkVectorConstructor<float>(2), CategoryVectorConstructors);
-            RegisterFunction("float3", new KalkVectorConstructor<float>(3), CategoryVectorConstructors);
-            RegisterFunction("float4", new KalkVectorConstructor<float>(4), CategoryVectorConstructors);
-            RegisterFunction("float8", new KalkVectorConstructor<float>(8), CategoryVectorConstructors);
+            RegisterFunction("bool", new KalkVectorConstructor<KalkBool>(1), CategoryTypeConstructors);
+            RegisterFunction("bool2", new KalkVectorConstructor<KalkBool>(2), CategoryTypeConstructors);
+            RegisterFunction("bool3", new KalkVectorConstructor<KalkBool>(3), CategoryTypeConstructors);
+            RegisterFunction("bool4", new KalkVectorConstructor<KalkBool>(4), CategoryTypeConstructors);
+            RegisterFunction("bool8", new KalkVectorConstructor<KalkBool>(8), CategoryTypeConstructors);
+            RegisterFunction("bool16", new KalkVectorConstructor<KalkBool>(16), CategoryTypeConstructors);
 
-            RegisterFunction("double", new KalkVectorConstructor<double>(1), CategoryVectorConstructors);
-            RegisterFunction("double2", new KalkVectorConstructor<double>(2), CategoryVectorConstructors);
-            RegisterFunction("double3", new KalkVectorConstructor<double>(3), CategoryVectorConstructors);
-            RegisterFunction("double4", new KalkVectorConstructor<double>(4), CategoryVectorConstructors);
-            RegisterFunction("double8", new KalkVectorConstructor<double>(8), CategoryVectorConstructors);
+            RegisterFunction("float", new KalkVectorConstructor<float>(1), CategoryTypeConstructors);
+            RegisterFunction("float2", new KalkVectorConstructor<float>(2), CategoryTypeConstructors);
+            RegisterFunction("float3", new KalkVectorConstructor<float>(3), CategoryTypeConstructors);
+            RegisterFunction("float4", new KalkVectorConstructor<float>(4), CategoryTypeConstructors);
+            RegisterFunction("float8", new KalkVectorConstructor<float>(8), CategoryTypeConstructors);
+            RegisterFunction("float16", new KalkVectorConstructor<float>(16), CategoryTypeConstructors);
 
-            RegisterFunction("rgb", new KalkColorRgbConstructor(), CategoryVectorConstructors);
-            RegisterFunction("rgba", new KalkColorRgbaConstructor(), CategoryVectorConstructors);
+            RegisterFunction("double", new KalkVectorConstructor<double>(1), CategoryTypeConstructors);
+            RegisterFunction("double2", new KalkVectorConstructor<double>(2), CategoryTypeConstructors);
+            RegisterFunction("double3", new KalkVectorConstructor<double>(3), CategoryTypeConstructors);
+            RegisterFunction("double4", new KalkVectorConstructor<double>(4), CategoryTypeConstructors);
+            RegisterFunction("double8", new KalkVectorConstructor<double>(8), CategoryTypeConstructors);
 
-            RegisterFunction("float4x4", new KalkMatrixConstructor<float>(4, 4), CategoryVectorConstructors);
+            RegisterFunction("rgb", new KalkColorRgbConstructor(), CategoryTypeConstructors);
+            RegisterFunction("rgba", new KalkColorRgbaConstructor(), CategoryTypeConstructors);
+
+            RegisterFunction("float4x4", new KalkMatrixConstructor<float>(4, 4), CategoryTypeConstructors);
 
             RegisterFunction("sum", new SumDelegate(Sum), CategoryMathFunctions);
         }
@@ -175,7 +184,7 @@ namespace Kalk.Core
         /// <param name="x">The specified value.</param>
         /// <returns>The absolute value of the <paramref name="x"/> parameter.</returns>
         [KalkDoc("abs")]
-        public object Abs(KalkValue x) => x.Transform(this, CurrentSpan, AbsFunc);
+        public object Abs(KalkCompositeValue x) => x.Transform(this, CurrentSpan, AbsFunc);
 
         /// <summary>
         /// Returns an integer that indicates the sign of a number.
@@ -188,7 +197,7 @@ namespace Kalk.Core
         ///  - 1 if x is greater than zero.
         /// </returns>
         [KalkDoc("sign")]
-        public object Sign(KalkValue x) => x.Transform(this, CurrentSpan, SignFunc);
+        public object Sign(KalkCompositeValue x) => x.Transform(this, CurrentSpan, SignFunc);
 
         [KalkDoc("cos")]
         public object Cos(KalkDoubleValue x) => x.Transform(this, CurrentSpan, CosFunc);

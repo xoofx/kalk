@@ -50,12 +50,12 @@ namespace Kalk.Core
         public bool TryEvaluate(TemplateContext context, SourceSpan span, ScriptBinaryOperator op, SourceSpan leftSpan, object leftValue, SourceSpan rightSpan, object rightValue, out object result)
         {
             var leftExpr = leftValue as KalkExpression;
-            if (leftExpr is null && !KalkNumber.IsNumber(leftValue))
+            if (leftExpr is null && !KalkValue.IsNumber(leftValue))
             {
                 throw new ScriptRuntimeException(leftSpan, "Expecting a number, vector or matrix");
             }
             var rightExpr = rightValue as KalkExpression;
-            if (rightExpr is null && !KalkNumber.IsNumber(rightValue))
+            if (rightExpr is null && !KalkValue.IsNumber(rightValue))
             {
                 throw new ScriptRuntimeException(rightSpan, "Expecting a number, vector or matrix");
             }
@@ -80,7 +80,7 @@ namespace Kalk.Core
                         var exprEquals = Equals(context, newLeftExpr, newRightExpr);
                         if (exprEquals)
                         {
-                            var almostEqual = KalkNumber.AlmostEqual(leftValueMultiplier, rightValueMultiplier);
+                            var almostEqual = KalkValue.AlmostEqual(leftValueMultiplier, rightValueMultiplier);
                             switch (op)
                             {
                                 case ScriptBinaryOperator.CompareEqual:
@@ -131,7 +131,7 @@ namespace Kalk.Core
                         var (valueMul, valueExpr) = simplifier.Canonical(new KalkBinaryExpression(leftValue, op, rightValue));
                         var valueBinExpr = valueExpr as KalkBinaryExpression;
 
-                        result = KalkNumber.AlmostEqual(valueMul, 1.0) && valueBinExpr == null ? valueExpr ?? (object)1.0 : valueExpr == null ? valueMul : (object)new KalkBinaryExpression(valueMul, ScriptBinaryOperator.Multiply, valueExpr)
+                        result = KalkValue.AlmostEqual(valueMul, 1.0) && valueBinExpr == null ? valueExpr ?? (object)1.0 : valueExpr == null ? valueMul : (object)new KalkBinaryExpression(valueMul, ScriptBinaryOperator.Multiply, valueExpr)
                         {
                             OriginalExpression = new KalkBinaryExpression(leftValue, op, rightValue)
                         };

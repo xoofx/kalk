@@ -12,7 +12,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public abstract class KalkMatrix : KalkNumber
+    public abstract class KalkMatrix : KalkValue
     {
         protected KalkMatrix(int row, int column)
         {

@@ -36,11 +36,11 @@ namespace Kalk.Core
                         powerValue = -powerValue;
                         power.Unit = powerValue;
                         object left = leftValue ?? (object)1.0;
-                        leftValue = new KalkBinaryExpression(left, ScriptBinaryOperator.Divide, KalkNumber.AlmostEqual(powerValue, 1.0) ? power.Value : power);
+                        leftValue = new KalkBinaryExpression(left, ScriptBinaryOperator.Divide, KalkValue.AlmostEqual(powerValue, 1.0) ? power.Value : power);
                     }
                     else
                     {
-                        var nextMul = KalkNumber.AlmostEqual(powerValue, 1.0) ? (KalkUnit) power.Value : (KalkExpression) power;
+                        var nextMul = KalkValue.AlmostEqual(powerValue, 1.0) ? (KalkUnit) power.Value : (KalkExpression) power;
                         leftValue = leftValue == null ? nextMul : new KalkBinaryExpression(leftValue, ScriptBinaryOperator.Multiply, nextMul);
                     }
                 }
@@ -177,7 +177,7 @@ namespace Kalk.Core
 
                     var subValue = _context.ToObject<double>(_context.CurrentSpan, subSimplifier._value);
 
-                    if (!KalkNumber.AlmostEqual(subValue, 1.0))
+                    if (!KalkValue.AlmostEqual(subValue, 1.0))
                     {
                         var result = ScriptBinaryExpression.Evaluate(_context, _context.CurrentSpan, ScriptBinaryOperator.Power, subSimplifier._value, binary.Unit);
                         SquashValue(result);

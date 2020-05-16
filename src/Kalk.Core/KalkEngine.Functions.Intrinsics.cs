@@ -6,6 +6,8 @@ using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -20,17 +22,16 @@ namespace Kalk.Core
 {
     public partial class KalkEngine
     {
-        private const string CategoryDevelopers = "Developer Functions";
+        private const string CategoryIntrinsics = "Vector HW Intrinsics Functions";
 
-        private void RegisterDeveloperFunctions()
+        private void RegisterIntrinsics()
         {
-            RegisterVariable("ascii", AsciiTable, CategoryDevelopers);
+            //Vector256<short> value = Vector256.Create((byte)1).As<byte, short>();
+            //var result = Avx2.Add(value, value);
+            //for (int i = 0; i < Vector256<short>.Count ; i++)
+            //{
+            //    Console.WriteLine(result.GetElement(i));
+            //}
         }
-
-        /// <summary>
-        /// Returns the ascii table or print
-        /// </summary>
-        [KalkDoc("ascii")]
-        public KalkAsciiTable AsciiTable { get; }
    }
 }

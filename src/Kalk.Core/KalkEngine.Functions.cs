@@ -105,7 +105,7 @@ namespace Kalk.Core
             RegisterFunction(name, Wrap(func), category);
         }
 
-        public void RegisterFunction(string name, Func<KalkValue, object> func, string category)
+        public void RegisterFunction(string name, Func<KalkCompositeValue, object> func, string category)
         {
             RegisterFunction(name, Wrap(func), category);
         }
@@ -152,7 +152,7 @@ namespace Kalk.Core
             return DelegateCustomFunction.CreateFunc(func);
         }
 
-        private static DelegateCustomFunction Wrap(Func<KalkValue, object> func)
+        private static DelegateCustomFunction Wrap(Func<KalkCompositeValue, object> func)
         {
             return DelegateCustomFunction.CreateFunc(func);
         }
