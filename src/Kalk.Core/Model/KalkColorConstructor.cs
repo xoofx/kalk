@@ -12,13 +12,13 @@ namespace Kalk.Core
         {
         }
 
-        protected override int GetLength(object arg, bool singleArg)
+        protected override int GetLength(object arg)
         {
             if (arg is string)
             {
                 return Dimension;
             }
-            return base.GetLength(arg, singleArg);
+            return base.GetLength(arg);
         }
 
         protected abstract override KalkVector<int> NewVector(int dimension);
@@ -39,7 +39,7 @@ namespace Kalk.Core
             }
         }
 
-        protected override void ProcessArgument(TemplateContext context, SourceSpan span, ref int index, object arg, int argIndex, int argLength, KalkVector<int> vector, bool singleArg)
+        protected override void ProcessSingleArgument(TemplateContext context, SourceSpan span, ref int index, object arg, KalkVector<int> vector)
         {
             int value;
             switch (arg)
@@ -51,19 +51,11 @@ namespace Kalk.Core
                     }
                     catch
                     {
-                        throw new ScriptArgumentException(argIndex, $"Expecting an hexadecimal rgb string (e.g #FF80C2) instead of {rgbStr}");
+                        throw new ScriptArgumentException(0, $"Expecting an hexadecimal rgb string (e.g #FF80C2) instead of {rgbStr}");
                     }
                     break;
                 default:
-                    if (singleArg && arg.GetType().IsNumber())
-                    {
-                        value = GetArgumentValue(context, span, arg);
-                    }
-                    else
-                    {
-                        base.ProcessArgument(context, span, ref index, arg, argIndex, argLength, vector, singleArg);
-                        return;
-                    }
+                    value = GetArgumentValue(context, span, arg);
                     break;
             }
 

@@ -23,8 +23,7 @@ namespace Kalk.Core
         
     }
 
-
-    public class KalkVector<T> : KalkVector, IScriptTransformable, IFormattable, IList, IScriptObject, IEquatable<KalkVector<T>>, IKalkVectorObject<T>, IScriptCustomType where T: struct, IEquatable<T>, IFormattable
+    public class KalkVector<T> : KalkVector, IScriptTransformable, IFormattable, IList, IScriptObject, IKalkVectorObject<T>, IScriptCustomType
     {
         private const int x_IndexOffset = 2;
         private readonly T[] _values;
@@ -57,11 +56,9 @@ namespace Kalk.Core
         }
 
         public override string Kind => $"{ElementTypeName}{Length.ToString(CultureInfo.InvariantCulture)}";
-
-
-        private string ElementTypeName => typeof(T) == typeof(KalkBool) ? "bool" : typeof(T).ScriptPrettyName();
-
-
+        
+        private string ElementTypeName => typeof(T).ScriptPrettyName();
+        
         public Type ElementType => typeof(T);
 
         public T this[int index]
@@ -137,7 +134,8 @@ namespace Kalk.Core
             for(int i = 0; i < Length; i++)
             {
                 if (i > 0) builder.Append(", ");
-                builder.Append(context != null ? context.ObjectToString(_values[i]) : _values[i].ToString(null, formatProvider));
+                var valueToFormat = _values[i];
+                builder.Append(context != null ? context.ObjectToString(valueToFormat) : valueToFormat is IFormattable formattable ? formattable.ToString(null, formatProvider) : valueToFormat.ToString());
             }
             builder.Append(')');
             return builder.ToString();
@@ -458,7 +456,7 @@ namespace Kalk.Core
                 case ScriptBinaryOperator.CompareGreaterOrEqual:
                 case ScriptBinaryOperator.CompareLess:
                 case ScriptBinaryOperator.CompareGreater:
-                    var vbool = new KalkVector<KalkBool>(leftVector.Length);
+                    var vbool = new KalkVector<bool>(leftVector.Length);
                     for (int i = 0; i < leftVector.Length; i++)
                     {
                         vbool[i] = (bool)ScriptBinaryExpression.Evaluate(context, span, op, leftVector[i], rightVector[i]);
@@ -510,55 +508,10 @@ namespace Kalk.Core
             value = null;
             return false;
         }
-
-        public bool Equals(KalkVector<T> other)
-        {
-            if (other == null) return false;
-            if (Length != other.Length) return false;
-            var values = _values;
-            var otherValues = other._values;
-            for (int i = 0; i < values.Length; i++)
-            {
-                if (values[i].Equals(otherValues[i])) return false;
-            }
-            return true;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((KalkVector<T>) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            var values = _values;
-            int hashCode = values.Length;
-            for (int i = 0; i < values.Length; i++)
-            {
-                hashCode = (hashCode * 397) ^ values[i].GetHashCode();
-            }
-            return hashCode;
-        }
-
-
+      
         public IEnumerator GetEnumerator()
         {
             return ((IEnumerable) _values).GetEnumerator();
-        }
-
-
-
-        public static bool operator ==(KalkVector<T> left, KalkVector<T> right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(KalkVector<T> left, KalkVector<T> right)
-        {
-            return !Equals(left, right);
         }
     }
 }

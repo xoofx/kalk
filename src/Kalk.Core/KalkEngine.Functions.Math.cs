@@ -135,12 +135,12 @@ namespace Kalk.Core
             RegisterFunction("int8", new KalkVectorConstructor<int>(8), CategoryTypeConstructors);
             RegisterFunction("int16", new KalkVectorConstructor<int>(16), CategoryTypeConstructors);
 
-            RegisterFunction("bool", new KalkVectorConstructor<KalkBool>(1), CategoryTypeConstructors);
-            RegisterFunction("bool2", new KalkVectorConstructor<KalkBool>(2), CategoryTypeConstructors);
-            RegisterFunction("bool3", new KalkVectorConstructor<KalkBool>(3), CategoryTypeConstructors);
-            RegisterFunction("bool4", new KalkVectorConstructor<KalkBool>(4), CategoryTypeConstructors);
-            RegisterFunction("bool8", new KalkVectorConstructor<KalkBool>(8), CategoryTypeConstructors);
-            RegisterFunction("bool16", new KalkVectorConstructor<KalkBool>(16), CategoryTypeConstructors);
+            RegisterFunction("bool", new KalkVectorConstructor<bool>(1), CategoryTypeConstructors);
+            RegisterFunction("bool2", new KalkVectorConstructor<bool>(2), CategoryTypeConstructors);
+            RegisterFunction("bool3", new KalkVectorConstructor<bool>(3), CategoryTypeConstructors);
+            RegisterFunction("bool4", new KalkVectorConstructor<bool>(4), CategoryTypeConstructors);
+            RegisterFunction("bool8", new KalkVectorConstructor<bool>(8), CategoryTypeConstructors);
+            RegisterFunction("bool16", new KalkVectorConstructor<bool>(16), CategoryTypeConstructors);
 
             RegisterFunction("float", new KalkVectorConstructor<float>(1), CategoryTypeConstructors);
             RegisterFunction("float2", new KalkVectorConstructor<float>(2), CategoryTypeConstructors);

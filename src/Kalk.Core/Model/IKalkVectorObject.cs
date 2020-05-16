@@ -9,11 +9,10 @@ namespace Kalk.Core
         Type ElementType { get; }
     }
 
-    public interface IKalkVectorObject<T> : IKalkVectorObject where T : struct, IEquatable<T>, IFormattable
+    public interface IKalkVectorObject<T> : IKalkVectorObject
     {
         object Transform(Func<T, T> apply);
     }
-
 
     public interface IKalkMatrixObject
     {
@@ -24,7 +23,7 @@ namespace Kalk.Core
         Type ElementType { get; }
     }
 
-    public interface IKalkMatrixObject<T> : IKalkMatrixObject where T : struct, IEquatable<T>, IFormattable
+    public interface IKalkMatrixObject<T> : IKalkMatrixObject
     {
         object Transform(Func<T, T> apply);
     }

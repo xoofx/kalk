@@ -1,17 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Collections;
 using Scriban;
+using Scriban.Parsing;
 using Scriban.Runtime;
 using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public class KalkMatrixConstructor<T> : IScriptCustomFunction where T : struct, IEquatable<T>, IFormattable
+    public class KalkMatrixConstructor<T> : KalkConstructor
     {
         public KalkMatrixConstructor(int row, int column)
         {
-            if (row <= 0) throw new ArgumentOutOfRangeException(nameof(row));
-            if (column <= 0) throw new ArgumentOutOfRangeException(nameof(column));
             RowLength = row;
             ColumnLength = column;
         }
@@ -20,31 +18,64 @@ namespace Kalk.Core
 
         public int ColumnLength { get; }
 
-        public int RequiredParameterCount => 1;
-
-        public int ParameterCount => RowLength * ColumnLength;
-
-        public bool HasVariableParams => false;
-
-        public Type ReturnType => typeof(KalkMatrix<T>);
-
-        public ScriptParameterInfo GetParameterInfo(int index)
+        public override object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
         {
-            return new ScriptParameterInfo(typeof(object), "");
-        }
-
-        public object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
-        {
-            var vector = new KalkMatrix<T>(RowLength, ColumnLength);
-            for (int i = 0; i < arguments.Count; i++)
+            var matrix = new KalkMatrix<T>(RowLength, ColumnLength);
+            int index = 0;
+            int columnIndex = 0;
+            var maxTotal = ColumnLength * RowLength;
+            var span = callerContext.Span;
+            if (arguments.Count == 1)
             {
-                vector[i] = context.ToObject<T>(callerContext.Span, arguments[i]);
+                var value = context.ToObject<T>(span, arguments[0]);
+                for (int j = 0; j < ColumnLength * RowLength; j++)
+                {
+                    matrix[index++] = value;
+                }
             }
-            return vector;
-        }
+            else
+            {
+                for (var i = 0; i < arguments.Count; i++)
+                {
+                    var arg = arguments[i];
+                    var argLength = arg is IList list ? list.Count : 1;
 
-#if !SCRIBAN_NO_ASYNC
-        public ValueTask<object> InvokeAsync(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement) => new ValueTask<object>(Invoke(context, callerContext, arguments, blockStatement));
-#endif
+                    var length = columnIndex + argLength;
+                    if (length > ColumnLength)
+                    {
+                        throw new ScriptArgumentException(i, $"Invalid number of arguments crossing a row. Expecting {ColumnLength} arguments instead of {length} for {matrix.Kind}.");
+                    }
+
+                    if (length == ColumnLength)
+                    {
+                        columnIndex = 0;
+                    }
+                    else
+                    {
+                        columnIndex += argLength;
+                    }
+
+                    if (arg is IList listToAdd)
+                    {
+                        for (int j = 0; j < argLength; j++)
+                        {
+                            matrix[index++] = context.ToObject<T>(span, listToAdd[j]);
+                        }
+                    }
+                    else
+                    {
+                        var value = context.ToObject<T>(span, arg);
+                        matrix[index++] = value;
+                    }
+                }
+            }
+
+            if (index != maxTotal)
+            {
+                throw new ScriptArgumentException(arguments.Count - 1, $"Invalid number of arguments. Expecting {maxTotal} arguments instead of {index} for {matrix.Kind}.");
+            }
+            
+            return matrix;
+        }
     }
 }

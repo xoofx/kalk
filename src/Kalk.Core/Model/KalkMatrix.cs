@@ -27,7 +27,7 @@ namespace Kalk.Core
         public int ColumnLength { get; }
     }
 
-    public class KalkMatrix<T> : KalkMatrix, IScriptTransformable, IFormattable, IList, IScriptObject, IEquatable<KalkMatrix<T>>, IKalkMatrixObject<T>, IScriptCustomType where T: struct, IEquatable<T>, IFormattable
+    public class KalkMatrix<T> : KalkMatrix, IScriptTransformable, IFormattable, IList, IKalkMatrixObject<T>, IScriptCustomType
     {
         private readonly T[] _values;
 
@@ -107,7 +107,10 @@ namespace Kalk.Core
             return Clone();
         }
 
-        public override string Kind => $"{typeof(T).ScriptPrettyName()}{RowLength.ToString(CultureInfo.InvariantCulture)}x{ColumnLength.ToString(CultureInfo.InvariantCulture)}";
+        public override string Kind => $"{ElementTypeName}{RowLength.ToString(CultureInfo.InvariantCulture)}x{ColumnLength.ToString(CultureInfo.InvariantCulture)}";
+
+        private string ElementTypeName => typeof(T).ScriptPrettyName();
+
 
         public object Transform(Func<T, T> apply)
         {
@@ -148,7 +151,8 @@ namespace Kalk.Core
             for(int i = 0; i < _values.Length; i++)
             {
                 if (i > 0) builder.Append(", ");
-                builder.Append(context != null ? context.ObjectToString(_values[i]) : _values[i].ToString(null, formatProvider));
+                var valueToFormat = _values[i];
+                builder.Append(context != null ? context.ObjectToString(valueToFormat) : valueToFormat is IFormattable formattable ? formattable.ToString(null, formatProvider) : valueToFormat.ToString());
             }
             builder.Append(')');
             return builder.ToString();
@@ -364,66 +368,69 @@ namespace Kalk.Core
             }
 
             result = null;
-            var leftVector = leftValue as KalkMatrix<T>;
-            var rightVector = rightValue as KalkMatrix<T>;
-            if (leftVector == null && rightVector == null) return false;
-            
+            var leftMatrix = leftValue as KalkMatrix<T>;
+            var rightMatrix = rightValue as KalkMatrix<T>;
+            if (leftMatrix == null && rightMatrix == null) return false;
+            if (leftMatrix != null && rightMatrix != null && (leftMatrix.RowLength != rightMatrix.RowLength || leftMatrix.ColumnLength != rightMatrix.ColumnLength))
+            {
+                return false;
+            }
+
+            if (leftMatrix == null)
+            {
+                leftMatrix = new KalkMatrix<T>(rightMatrix.RowLength, rightMatrix.ColumnLength);
+                var leftComponentValue = context.ToObject<T>(span, leftValue);
+                for (int i = 0; i < leftMatrix._values.Length; i++)
+                {
+                    leftMatrix[i] = leftComponentValue;
+                }
+            }
+
+            if (rightMatrix == null)
+            {
+                rightMatrix = new KalkMatrix<T>(leftMatrix.RowLength, leftMatrix.ColumnLength);
+                var rightComponentValue = context.ToObject<T>(span, rightValue);
+                for (int i = 0; i < rightMatrix._values.Length; i++)
+                {
+                    rightMatrix[i] = rightComponentValue;
+                }
+            }
+
             switch (op)
             {
                 case ScriptBinaryOperator.CompareEqual:
-                    result = leftVector.Equals(rightVector);
-                    return true;
                 case ScriptBinaryOperator.CompareNotEqual:
-                    result = !leftVector.Equals(rightVector);
+                case ScriptBinaryOperator.CompareLessOrEqual:
+                case ScriptBinaryOperator.CompareGreaterOrEqual:
+                case ScriptBinaryOperator.CompareLess:
+                case ScriptBinaryOperator.CompareGreater:
+                    var vbool = new KalkMatrix<bool>(leftMatrix.RowLength, leftMatrix.ColumnLength);
+                    for (int i = 0; i < vbool._values.Length; i++)
+                    {
+                        vbool[i] = (bool)ScriptBinaryExpression.Evaluate(context, span, op, leftMatrix._values[i], rightMatrix._values[i]);
+                    }
+                    result = vbool;
                     return true;
-                //case ScriptBinaryOperator.CompareLessOrEqual:
-                //    break;
-                //case ScriptBinaryOperator.CompareGreaterOrEqual:
-                //    break;
-                //case ScriptBinaryOperator.CompareLess:
-                //    break;
-                //case ScriptBinaryOperator.CompareGreater:
-                //    break;
-                //case ScriptBinaryOperator.LiquidContains:
-                //    break;
-                //case ScriptBinaryOperator.LiquidStartsWith:
-                //    break;
-                //case ScriptBinaryOperator.LiquidEndsWith:
-                //    break;
-                //case ScriptBinaryOperator.LiquidHasKey:
-                //    break;
-                //case ScriptBinaryOperator.LiquidHasValue:
-                //    break;
+
                 case ScriptBinaryOperator.Add:
                 case ScriptBinaryOperator.Substract:
                 case ScriptBinaryOperator.Multiply:
+                case ScriptBinaryOperator.Divide:
+                case ScriptBinaryOperator.DivideRound:
+                case ScriptBinaryOperator.Modulus:
+                case ScriptBinaryOperator.ShiftLeft:
+                case ScriptBinaryOperator.ShiftRight:
+                case ScriptBinaryOperator.Power:
                 {
-                    var opResult = new KalkMatrix<T>(leftVector.RowLength, leftVector.ColumnLength);
+                    var opResult = new KalkMatrix<T>(leftMatrix.RowLength, leftMatrix.ColumnLength);
                     for (int i = 0; i < opResult._values.Length; i++)
                     {
-                        opResult[i] = context.ToObject<T>(span, ScriptBinaryExpression.Evaluate(context, span, op, leftVector[i], rightVector[i]));
+                        opResult[i] = context.ToObject<T>(span, ScriptBinaryExpression.Evaluate(context, span, op, leftMatrix._values[i], rightMatrix._values[i]));
                     }
+
                     result = opResult;
                     return true;
                 }
-                case ScriptBinaryOperator.Divide:
-                    break;
-                case ScriptBinaryOperator.DivideRound:
-                    break;
-                case ScriptBinaryOperator.Modulus:
-                    break;
-                case ScriptBinaryOperator.ShiftLeft:
-                    break;
-                case ScriptBinaryOperator.ShiftRight:
-                    break;
-                case ScriptBinaryOperator.Power:
-                    break;
-                case ScriptBinaryOperator.RangeInclude:
-                    break;
-                case ScriptBinaryOperator.RangeExclude:
-                    break;
-                case ScriptBinaryOperator.Custom:
-                    break;
             }
 
             return false;

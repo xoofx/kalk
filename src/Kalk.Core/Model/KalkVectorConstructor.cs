@@ -8,7 +8,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public class KalkVectorConstructor<T> : IScriptCustomFunction where T : struct, IEquatable<T>, IFormattable
+    public class KalkVectorConstructor<T> : KalkConstructor
     {
         private readonly int _dimension;
 
@@ -19,37 +19,32 @@ namespace Kalk.Core
 
         public int Dimension => _dimension;
 
-        public int RequiredParameterCount => 1;
-
-        public int ParameterCount => 1;
-
-        public bool HasVariableParams => true;
-
-        public virtual Type ReturnType => typeof(KalkVector<T>);
-
-        public ScriptParameterInfo GetParameterInfo(int index)
-        {
-            return new ScriptParameterInfo(typeof(object), "");
-        }
-
-        public object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
+        public override object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
         {
             if (_dimension == 1) return context.ToObject<T>(callerContext.Span, arguments[0]);
 
             var vector = NewVector(_dimension);
             int index = 0;
-            var singleArg = arguments.Count == 1;
-            for (var i = 0; i < arguments.Count; i++)
+            var span = callerContext.Span;
+            if (arguments.Count == 1)
             {
-                var arg = arguments[i];
-                var argLength = GetLength(arg, singleArg);
-
-                var length = index + argLength;
-                if (length > _dimension)
+                ProcessSingleArgument(context, span, ref index, arguments[0], vector);
+            }
+            else
+            {
+                for (var i = 0; i < arguments.Count; i++)
                 {
-                    throw new ScriptArgumentException(i, $"Invalid number of arguments. Expecting {_dimension} arguments instead of {length} for {vector.Kind}.");
+                    var arg = arguments[i];
+                    var argLength = GetLength(arg);
+
+                    var length = index + argLength;
+                    if (length > _dimension)
+                    {
+                        throw new ScriptArgumentException(i, $"Invalid number of arguments. Expecting {_dimension} arguments instead of {length} for {vector.Kind}.");
+                    }
+
+                    ProcessArgument(context, callerContext.Span, ref index, arg, i, argLength, vector);
                 }
-                ProcessArgument(context, callerContext.Span, ref index, arg, i, argLength, vector, singleArg);
             }
 
             if (index != _dimension)
@@ -61,14 +56,23 @@ namespace Kalk.Core
             return vector;
         }
 
-        protected virtual KalkVector<T> NewVector(int dimension) => new KalkVector<T>(dimension);
-
-        protected virtual int GetLength(object arg, bool singleArg)
+        protected virtual void ProcessSingleArgument(TemplateContext context, SourceSpan span, ref int index, object arg, KalkVector<T> vector)
         {
-            return arg is IList list ? list.Count : singleArg ? Dimension : 1;
+            var value = GetArgumentValue(context, span, arg);
+            for (int j = 0; j < _dimension; j++)
+            {
+                vector[index++] = value;
+            }
         }
 
-        protected virtual void ProcessArgument(TemplateContext context, SourceSpan span, ref int index, object arg, int argIndex, int argLength, KalkVector<T> vector, bool singleArg)
+        protected virtual KalkVector<T> NewVector(int dimension) => new KalkVector<T>(dimension);
+
+        protected virtual int GetLength(object arg)
+        {
+            return arg is IList list ? list.Count : 1;
+        }
+
+        protected virtual void ProcessArgument(TemplateContext context, SourceSpan span, ref int index, object arg, int argIndex, int argLength, KalkVector<T> vector)
         {
             if (arg is IList listToAdd)
             {
@@ -80,17 +84,7 @@ namespace Kalk.Core
             else
             {
                 var value = GetArgumentValue(context, span, arg);
-                if (singleArg)
-                {
-                    for (int j = 0; j < _dimension; j++)
-                    {
-                        vector[index++] = value;
-                    }
-                }
-                else
-                {
-                    vector[index++] = value;
-                }
+                vector[index++] = value;
             }
         }
 
@@ -98,9 +92,5 @@ namespace Kalk.Core
         {
             return context.ToObject<T>(span, value);
         }
-
-#if !SCRIBAN_NO_ASYNC
-        public ValueTask<object> InvokeAsync(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement) => new ValueTask<object>(Invoke(context, callerContext, arguments, blockStatement));
-#endif
     }
 }
