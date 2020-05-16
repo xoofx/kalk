@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using Consolus;
 using Scriban.Parsing;
@@ -75,7 +76,209 @@ namespace Kalk.Core
             else
             {
                 WriteHighlightLine($"{name} = {ObjectToString(value, true)}", value as IKalkConsolable);
+                WriteValueWithDisplayMode(value);
             }
+        }
+
+        private void WriteValueWithDisplayMode(object value)
+        {
+            switch (Config.Display)
+            {
+                case KalkDisplayMode.Standard: return;
+                case KalkDisplayMode.Developer:
+                    if (value is int i32)
+                    {
+                        WriteInt32(i32);
+                    }
+                    else if (value is uint u32)
+                    {
+                        WriteUInt32(u32);
+                    }
+                    else if (value is long i64)
+                    {
+                        WriteInt64(i64);
+                    }
+                    else if (value is ulong u64)
+                    {
+                        WriteUInt64(u64);
+                    }
+                    else if (value is float f32)
+                    {
+                        WriteFloat(f32);
+                    }
+                    else if (value is double f64)
+                    {
+                        WriteDouble(f64, "IEEE 754 - double - 64-bit");
+                    }
+                    else if (value is decimal dec)
+                    {
+                        WriteDouble((double)dec, "Decimal 128-bit displayed as IEEE 754 - double - 64-bit");
+                    }
+                    return;
+            }
+        }
+        
+        private void WriteInt32(int i32)
+        {
+            WriteHighlightLine($"    # int - 32-bit");
+            WriteInt32((uint)i32, false);
+        }
+
+        private void WriteUInt32(uint u32)
+        {
+            WriteHighlightLine($"    # uint - 32-bit");
+            WriteInt32(u32, false);
+        }
+
+        private void WriteInt32(uint u32, bool forFloat)
+        {
+            WriteHighlightLine($"    # 0x_{u32 >> 16:X4}_{u32 & 0xFFFF:X4}");
+            var builder = new StringBuilder();
+
+            // Prints the hexa version
+            // # 0x____3____F____F____8____0____0____0____0
+            builder.Append("0x");
+            for (int i = 7; i >= 0; i--)
+            {
+                builder.Append("____");
+
+                var v = (byte)(0xF & (u32 >> (i * 4)));
+                builder.Append(v.ToString("X1"));
+            }
+            WriteHighlightLine($"    # {builder}");
+
+            if (forFloat)
+            {
+                // Prints the float IEE754 mask
+                // #    seee eeee efff ffff ffff ffff ffff ffff
+                WriteHighlightLine($"    #    seee eeee efff ffff ffff ffff ffff ffff");
+            }
+
+            // Prints the binary version
+            // # 0b_0011_1111_1111_1000_0000_0000_0000_0000
+            builder.Length = 0;
+            builder.Append("0b");
+            for (int i = 7; i >= 0; i--)
+            {
+                builder.Append('_');
+
+                var v = (byte)(0xF & (u32 >> (i * 4)));
+                var leadingZero = BitOperations.LeadingZeroCount(v) - 28;
+                builder.Append('0', leadingZero);
+                if (v != 0) builder.Append(Convert.ToString(v, 2));
+            }
+            WriteHighlightLine($"    # {builder}");
+        }
+
+        private void WriteInt64(long i64)
+        {
+            WriteHighlightLine($"    # long - 64-bit");
+            WriteUInt64((ulong)i64, false);
+        }
+
+        private void WriteUInt64(ulong u64)
+        {
+            WriteHighlightLine($"    # ulong - 64-bit");
+            WriteUInt64(u64, false);
+        }
+
+        private void WriteUInt64(ulong u64, bool forDouble)
+        {
+            WriteHighlightLine($"    # 0x_{u64 >> 32:X8}_{((uint)u64) & 0xFFFFFFFF:X8}");
+            var builder = new StringBuilder();
+
+            // Prints the hexa version
+            // # 0x____3____F____F____8____0____0____0____0____0____0____0____0____0____0____0____0
+            builder.Append("0x");
+            for (int i = 15; i >= 0; i--)
+            {
+                builder.Append("____");
+
+                var v = (byte)(0xF & (u64 >> (i * 4)));
+                builder.Append(v.ToString("X1"));
+            }
+            WriteHighlightLine($"    # {builder}");
+
+            if (forDouble)
+            {
+                // Prints the double IEE754 mask
+                // #    seee eeee eeee ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff
+                WriteHighlightLine($"    #    seee eeee eeee ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff");
+            }
+
+            // Prints the binary version
+            // # 0b_0011_1111_1111_1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000
+            builder.Length = 0;
+            builder.Append("0b");
+            for (int i = 15; i >= 0; i--)
+            {
+                builder.Append('_');
+
+                var v = (byte)(0xF & (u64 >> (i * 4)));
+                var leadingZero = BitOperations.LeadingZeroCount(v) - 28;
+                builder.Append('0', leadingZero);
+                if (v != 0) builder.Append(Convert.ToString(v, 2));
+            }
+            WriteHighlightLine($"    # {builder}");
+        }
+
+        private void WriteDouble(double f64, string title)
+        {
+            var u64 = (ulong)BitConverter.DoubleToInt64Bits(f64);
+            WriteHighlightLine($"    # {title}");
+            WriteHighlightLine($"    #");
+            WriteUInt64(u64, true);
+
+            // Prints the 16 bits indices
+            WriteHighlightLine($"    #   63                48                  32                  16                   0");
+
+            // Prints the binary version
+            // #   s        eeee               ffffffffffffffffffffffffffffffffffffffffffffffffffff
+            WriteHighlightLine($"    #");
+            WriteHighlightLine($"    # sign    exponent              |-------------------- fraction --------------------|");
+            // #   1 * 2 ^ (1023 - 1023) * 0b1.1000000000000000000000000000000000000000000000000000
+            var sign = (u64 >> 63);
+            var exponent = (u64 >> 52) & 0b_111_11111111;
+            var fraction = (u64 << 12) >> 12;
+
+            var builder = new StringBuilder();
+            builder.Append(sign != 0 ? " -1" : "  1");
+            builder.Append(" * 2 ^ (");
+            // exponent == 0 => subnormals
+            builder.Append($"{(exponent == 0 ? 1 : exponent),4} - 1023) * 0b{(exponent == 0 ? '0' : '1')}.");
+            var leadingFractionZero = BitOperations.LeadingZeroCount(fraction) - 12;
+            builder.Append('0', leadingFractionZero);
+            if (fraction != 0) builder.Append(Convert.ToString((long)fraction, 2));
+            WriteHighlightLine($"    # {builder}");
+        }
+
+        private void WriteFloat(float f32)
+        {
+            var u32 = (uint)BitConverter.SingleToInt32Bits(f32);
+            WriteHighlightLine($"    # IEEE 754 - float - 32-bit");
+            WriteHighlightLine($"    #");
+            WriteInt32(u32, true);
+
+            // Prints the 16 bits indices
+            WriteHighlightLine($"    #   31      24        16         8         0");
+
+            WriteHighlightLine($"    #");
+            WriteHighlightLine($"    #  sign   exponent            |------ fraction -----|");
+            //                                 #   1 * 2 ^ (127 - 127) * 0b1.10000000000000000000000
+
+            var sign = (u32 >> 31);
+            var exponent = (u32 >> 23) & 0b_111_11111111;
+            var fraction = (u32 << 9) >> 9;
+
+            var builder = new StringBuilder();
+            builder.Append(sign != 0 ? " -1" : "  1");
+            builder.Append(" * 2 ^ (");
+            // exponent == 0 => subnormals
+            builder.Append($"{(exponent == 0 ? 1 : exponent),3} - 127) * 0b{(exponent == 0 ? '0' : '1')}.");
+            var leadingFractionZero = BitOperations.LeadingZeroCount(fraction) - 9;
+            builder.Append('0', leadingFractionZero);
+            if (fraction != 0) builder.Append(Convert.ToString((long)fraction, 2));
+            WriteHighlightLine($"    # {builder}");
         }
 
         public void WriteHighlightAligned(string prefix, string text, string nextPrefix = null)

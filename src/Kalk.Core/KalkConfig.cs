@@ -10,12 +10,15 @@ namespace Kalk.Core
         public const int DefaultHelpMinColumn = 30;
         public const int DefaultHelpMaxColumn = 100;
         public const string DefaultBaseCurrency = "EUR";
+        public const string DefaultDisplay = "std";
 
         public const string BaseCurrencyProp = "base_currency";
+        public const string DisplayProp = "display";
 
         public KalkConfig()
         {
             HelpMaxColumn = DefaultHelpMaxColumn;
+            Display = DefaultDisplay;
         }
         
         public int HelpMaxColumn
@@ -27,6 +30,27 @@ namespace Kalk.Core
                 SetValue("help_max_column", value, false);
             }
         }
+
+        public string Display
+        {
+            get
+            {
+                var mode = GetSafeValue<string>(DisplayProp, DefaultDisplay);
+                // Normalize the display in case it was messed up in config
+                if (!KalkDisplayMode.TryNormalize(mode, out _))
+                {
+                    mode = KalkDisplayMode.Standard;
+                    this[DisplayProp] = mode;
+                }
+                return mode;
+            }
+            set
+            {
+                if (value == null) value = DefaultDisplay;
+                SetValue(DisplayProp, value, false);
+            }
+        }
+
         public string BaseCurrency
         {
             get => GetSafeValue<string>(BaseCurrencyProp, DefaultBaseCurrency);
@@ -53,6 +77,10 @@ namespace Kalk.Core
                     ValidateCurrency(context, span, member, value);
                 }
             }
+            else if (member == DisplayProp)
+            {
+                ValidateDisplay(context, span, member, value);
+            }
 
             return base.TrySetValue(context, span, member, value, readOnly);
         }
@@ -63,10 +91,15 @@ namespace Kalk.Core
             var valueStr = value.ToString();
             KalkCurrency.CheckValid(span, valueStr);
         }
-
-        public void Validate(TemplateContext context)
+        
+        private static void ValidateDisplay(TemplateContext context, SourceSpan span, string member, object value)
         {
-            //
+            if (value == null) throw new ScriptRuntimeException(span, "Display must be non null.");
+            var mode = value.ToString();
+            if (!KalkDisplayMode.TryNormalize(mode, out _))
+            {
+                throw new ScriptRuntimeException(span, $"Invalid display name `{mode}`. Expecting `std` or `dev`.");
+            }
         }
     }
 }

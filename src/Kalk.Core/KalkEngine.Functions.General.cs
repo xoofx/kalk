@@ -13,6 +13,28 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
+    public static class KalkDisplayMode
+    {
+        public const string Standard = "std";
+
+        public const string Developer = "dev";
+
+        public static bool TryNormalize(string mode, out string fullMode)
+        {
+            fullMode = null;
+            switch (mode)
+            {
+                case Standard:
+                    fullMode = "Standard";
+                    return true;
+                case "dev":
+                    fullMode = "Developer";
+                    return true;
+            }
+            return false;
+        }
+    }
+
     public partial class KalkEngine
     {
         private const string CategoryGeneral = "General";
@@ -47,9 +69,27 @@ namespace Kalk.Core
             // alias
             RegisterVariable("aliases", Aliases, CategoryGeneral);
             RegisterFunction("alias", new DefineAliasDelegate(Alias), CategoryGeneral);
+
+            // Change display mode
+            RegisterVariable("display", DelegateCustomFunction.Create<ScriptVariable>(Display), CategoryGeneral);
         }
 
         private delegate object EvaluateDelegate(string text, bool output = false);
+
+
+        [KalkDoc("display")]
+        public void Display(ScriptVariable name = null)
+        {
+            var mode = name?.Name ?? Config.Display;
+
+            if (!KalkDisplayMode.TryNormalize(mode, out var fullMode))
+            {
+                throw new ArgumentException($"Invalid display name `{mode}`. Expecting `std` or `dev`.", nameof(name));
+            }
+
+            Config.Display = mode;
+            WriteHighlightLine($"# Display mode: {mode} ({fullMode})");
+        }
         
         /// <summary>
         /// 

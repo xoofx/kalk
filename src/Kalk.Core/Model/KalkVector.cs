@@ -18,6 +18,9 @@ namespace Kalk.Core
     public abstract class KalkVector : KalkNumber
     {
         public abstract int Length { get; }
+
+        public abstract object GetComponent(int index);
+        
     }
     
     public class KalkVector<T> : KalkVector, IScriptTransformable, IFormattable, IList, IScriptObject, IEquatable<KalkVector<T>>, IKalkVectorObject<T>, IScriptCustomType where T: struct, IEquatable<T>, IFormattable
@@ -42,6 +45,11 @@ namespace Kalk.Core
         }
 
         public override int Length => _values.Length;
+
+        public override object GetComponent(int index)
+        {
+            return _values[index];
+        }
 
         public override string Kind => $"{typeof(T).ScriptPrettyName()}{Length.ToString(CultureInfo.InvariantCulture)}";
         

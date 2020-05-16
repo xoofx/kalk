@@ -70,6 +70,26 @@ namespace Kalk.Core
             RegisterFunction(name, new DelegateCustomFunction(del), category);
         }
 
+        public void RegisterFunction(string name, Func<double, double> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
+        public void RegisterFunction(string name, Func<object, double> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
+        public void RegisterFunction(string name, Func<object, long> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
+        public void RegisterFunction(string name, Func<double, double, double> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
         public void RegisterFunction(string name, Func<KalkDoubleValue, object> func, string category)
         {
             RegisterFunction(name, Wrap(func), category);
@@ -88,6 +108,11 @@ namespace Kalk.Core
         public void RegisterFunction(string name, Func<KalkValue, object> func, string category)
         {
             RegisterFunction(name, Wrap(func), category);
+        }
+
+        public void RegisterFunction(string name, Func<object, object> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
         public void RegisterFunction(string name, IScriptCustomFunction func, string category)

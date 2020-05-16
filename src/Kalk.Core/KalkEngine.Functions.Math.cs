@@ -29,15 +29,21 @@ namespace Kalk.Core
         private static readonly Func<double, double> TanhFunc = Math.Tanh;
         private static readonly Func<double, double> AtanFunc = Math.Atan;
         private static readonly Func<double, double> AtanhFunc = MathNet.Numerics.Trig.Atanh;
-        private static readonly Func<double, double, double> Atan2Func = Math.Atan2;
 
+        private static readonly Func<double, double> RsqrtFunc = x => 1.0 / Math.Sqrt(x);
         private static readonly Func<double, double> SqrtFunc = Math.Sqrt;
         private static readonly Func<double, double> LogFunc = Math.Log;
+        private static readonly Func<double, double> Log10Func = Math.Log10;
+        private static readonly Func<double, double> Log2Func = Math.Log2;
         private static readonly Func<double, double> ExpFunc = Math.Exp;
+        private static readonly Func<double, double> Exp2Func = x => Math.Pow(2, x);
+
+        private static readonly Func<double, double> FracFunc = FracImpl;
 
         private static readonly Func<double, double> RoundFunc = Math.Round;
         private static readonly Func<double, double> FloorFunc= Math.Floor;
         private static readonly Func<double, double> CeilFunc = Math.Ceiling;
+        private static readonly Func<double, double> TruncFunc= Math.Truncate;
         private Func<object, object> SignFunc;
 
         /// <summary>
@@ -91,29 +97,41 @@ namespace Kalk.Core
             RegisterFunction("atan", Atan, CategoryMathFunctions);
             RegisterFunction("tanh", Tanh, CategoryMathFunctions);
             RegisterFunction("atanh", Atanh, CategoryMathFunctions);
-            //RegisterFunction("atan2", Atan2, MathFunctionsCategory);
 
+            RegisterFunction("atan2", Atan2, CategoryMathFunctions);
+
+            RegisterFunction("rsqrt", Rsqrt, CategoryMathFunctions);
             RegisterFunction("sqrt", Sqrt, CategoryMathFunctions);
             RegisterFunction("log", Log, CategoryMathFunctions);
+            RegisterFunction("log2", Log2, CategoryMathFunctions);
+            RegisterFunction("log10", Log10, CategoryMathFunctions);
             RegisterFunction("exp", Exp, CategoryMathFunctions);
+            RegisterFunction("exp2", Exp2, CategoryMathFunctions);
+            RegisterFunction("pow", Pow, CategoryMathFunctions);
 
+            RegisterFunction("fmod", Fmod, CategoryMathFunctions);
+            RegisterFunction("frac", Frac, CategoryMathFunctions);
             RegisterFunction("round", Round, CategoryMathFunctions);
             RegisterFunction("floor", Floor, CategoryMathFunctions);
             RegisterFunction("ceil", Ceiling, CategoryMathFunctions);
-            
-            RegisterFunction("int1", new KalkVectorConstructor<int>(1), CategoryVectorConstructors);
+            RegisterFunction("trunc", Trunc, CategoryMathFunctions);
+
+            RegisterFunction("asdouble", (Func<object, double>)AsDouble, CategoryMathFunctions);
+            RegisterFunction("aslong", (Func<object, long>)AsLong, CategoryMathFunctions);
+
+            RegisterFunction("int", new KalkVectorConstructor<int>(1), CategoryVectorConstructors);
             RegisterFunction("int2", new KalkVectorConstructor<int>(2), CategoryVectorConstructors);
             RegisterFunction("int3", new KalkVectorConstructor<int>(3), CategoryVectorConstructors);
             RegisterFunction("int4", new KalkVectorConstructor<int>(4), CategoryVectorConstructors);
             RegisterFunction("int8", new KalkVectorConstructor<int>(8), CategoryVectorConstructors);
 
-            RegisterFunction("float1", new KalkVectorConstructor<float>(1), CategoryVectorConstructors);
+            RegisterFunction("float", new KalkVectorConstructor<float>(1), CategoryVectorConstructors);
             RegisterFunction("float2", new KalkVectorConstructor<float>(2), CategoryVectorConstructors);
             RegisterFunction("float3", new KalkVectorConstructor<float>(3), CategoryVectorConstructors);
             RegisterFunction("float4", new KalkVectorConstructor<float>(4), CategoryVectorConstructors);
             RegisterFunction("float8", new KalkVectorConstructor<float>(8), CategoryVectorConstructors);
 
-            RegisterFunction("double1", new KalkVectorConstructor<double>(1), CategoryVectorConstructors);
+            RegisterFunction("double", new KalkVectorConstructor<double>(1), CategoryVectorConstructors);
             RegisterFunction("double2", new KalkVectorConstructor<double>(2), CategoryVectorConstructors);
             RegisterFunction("double3", new KalkVectorConstructor<double>(3), CategoryVectorConstructors);
             RegisterFunction("double4", new KalkVectorConstructor<double>(4), CategoryVectorConstructors);
@@ -126,21 +144,12 @@ namespace Kalk.Core
         }
 
 
+        [KalkDoc("fib")]
         public object Fib(KalkIntValue x) => x.Transform(this, CurrentSpan, FibFunc);
 
         protected delegate KalkColorRgb RgbDelegate(object rgb, params int[] others);
         protected delegate KalkColorRgba RgbaDelegate(int rgb, params int[] others);
 
-
-        public void Test()
-        {
-            {
-                var descriptor = Descriptors["abs"];
-                descriptor.Description = "Returns the absolute value of the specified value.";
-                descriptor.Returns = "The absolute value of the x parameter.";
-                descriptor.Params.Add(new KalkParamDescriptor("x", "The specified value."));
-            }
-        }
 
         [KalkDoc("i")]
         public static object ComplexNumber(object value = null)
@@ -220,37 +229,142 @@ namespace Kalk.Core
         /// </returns>
         [KalkDoc("sign")]
         public object Sign(KalkValue x) => x.Transform(this, CurrentSpan, SignFunc);
-        
+
+        [KalkDoc("cos")]
         public object Cos(KalkDoubleValue x) => x.Transform(this, CurrentSpan, CosFunc);
 
+        [KalkDoc("acos")]
         public object Acos(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AcosFunc);
 
+        [KalkDoc("cosh")]
         public object Cosh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, CoshFunc);
 
+        [KalkDoc("acosh")]
         public object Acosh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AcoshFunc);
 
+        [KalkDoc("sin")]
         public object Sin(KalkDoubleValue x) => x.Transform(this, CurrentSpan, SinFunc);
 
+        [KalkDoc("asin")]
         public object Asin(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AsinFunc);
 
+        [KalkDoc("sinh")]
         public object Sinh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, SinhFunc);
 
+        [KalkDoc("asinh")]
         public object Asinh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AsinhFunc);
 
+        [KalkDoc("fmod")]
+        public double Fmod(double x, double y) => x % y;
 
+        [KalkDoc("frac")]
+        public object Frac(KalkDoubleValue x) => x.Transform(this, CurrentSpan, FracFunc);
+
+        [KalkDoc("tan")]
         public object Tan(KalkDoubleValue x) => x.Transform(this, CurrentSpan, TanFunc);
+        [KalkDoc("atan")]
         public object Atan(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AtanFunc);
+        [KalkDoc("tanh")]
         public object Tanh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, TanhFunc);
+        [KalkDoc("atanh")]
         public object Atanh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AtanhFunc);
-        //public object Atan2(KalkDoubleValue x) => x.Transform(this, CurrentSpan, Atan2Func);
+        
+        [KalkDoc("atan2")]
+        public double Atan2(double y, double x) => Math.Atan2(y, x);
 
+        [KalkDoc("rsqrt")]
+        public object Rsqrt(KalkDoubleValue x) => x.Transform(this, CurrentSpan, RsqrtFunc);
+        [KalkDoc("sqrt")]
         public object Sqrt(KalkDoubleValue x) => x.Transform(this, CurrentSpan, SqrtFunc);
+        [KalkDoc("log")]
         public object Log(KalkDoubleValue x) => x.Transform(this, CurrentSpan, LogFunc);
+        [KalkDoc("log2")]
+        public object Log2(KalkDoubleValue x) => x.Transform(this, CurrentSpan, Log2Func);
+        [KalkDoc("log10")]
+        public object Log10(KalkDoubleValue x) => x.Transform(this, CurrentSpan, Log10Func);
+        [KalkDoc("exp")]
         public object Exp(KalkDoubleValue x) => x.Transform(this, CurrentSpan, ExpFunc);
+        [KalkDoc("exp2")]
+        public object Exp2(KalkDoubleValue x) => x.Transform(this, CurrentSpan, Exp2Func);
 
+        [KalkDoc("pow")]
+        public double Pow(double x, double y) => Math.Pow(x, y);
+
+
+        [KalkDoc("round")]
         public object Round(KalkDoubleValue x) => x.Transform(this, CurrentSpan, RoundFunc);
+        [KalkDoc("floor")]
         public object Floor(KalkDoubleValue x) => x.Transform(this, CurrentSpan, FloorFunc);
+        [KalkDoc("ceil")]
         public object Ceiling(KalkDoubleValue x) => x.Transform(this, CurrentSpan, CeilFunc);
+        [KalkDoc("trunc")]
+        public object Trunc(KalkDoubleValue x) => x.Transform(this, CurrentSpan, TruncFunc);
+        
+        [KalkDoc("asdouble")]
+        public double AsDouble(object x)
+        {
+            if (x is double d) return d;
+            if (x is float f) return f;
+            if (x is int intValue)
+            {
+                unsafe
+                {
+                    var uVal = (ulong) ((long) intValue);
+                    return *(double*) &uVal;
+                }
+            }
+
+            if (x is long longValue)
+            {
+                unsafe
+                {
+                    var uVal = (ulong)longValue;
+                    return *(double*)&uVal;
+                }
+            }
+
+            var bigInteger = ToObject<BigInteger>(CurrentSpan, x);
+            unsafe
+            {
+                var value = (ulong) bigInteger;
+                return *(double*) &value;
+            }
+        }
+
+        [KalkDoc("aslong")]
+        public long AsLong(object x)
+        {
+            if (x is long longValue) return longValue;
+            if (x is int intValue) return intValue;
+            if (x is double f64)
+            {
+                unsafe
+                {
+                    return *(long*)&f64;
+                }
+            }
+            if (x is float f32)
+            {
+                unsafe
+                {
+                    double v = f32;
+                    return *(long*)&v;
+                }
+            }
+
+            return (long)ToObject<BigInteger>(CurrentSpan, x);
+        }
+
+
+        private static double FracImpl(double x)
+        {
+            if (x < 0)
+            {
+                return 1.0 + x + Math.Truncate(-x);
+            }
+            return x - Math.Truncate(x);
+        }
+
 
         private object SignFuncImpl(object value)
         {
@@ -297,8 +411,8 @@ namespace Kalk.Core
             
             for (uint bit = (0x80000000 >> BitOperations.LeadingZeroCount(n)); bit != 0; bit >>= 1)
             {
-                // F(2n) = F(n) * (2*F(n+1) - F(n)).
-                // F(2n+1) = F(n+1)^2 + F(n)^2.
+                // F(2n) = F(n) * (2*F(n+1) - F(n))
+                // F(2n+1) = F(n+1)^2 + F(n)^2
                 var f2n = fn * ((fn1 << 1) - fn);
                 var f2n1 = fn1 * fn1 + fn * fn;
                 fn = f2n;
