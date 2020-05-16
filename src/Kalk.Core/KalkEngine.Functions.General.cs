@@ -70,8 +70,9 @@ namespace Kalk.Core
             RegisterVariable("aliases", Aliases, CategoryGeneral);
             RegisterFunction("alias", new DefineAliasDelegate(Alias), CategoryGeneral);
 
-            // Change display mode
+            // misc display/print...
             RegisterVariable("display", DelegateCustomFunction.Create<ScriptVariable>(Display), CategoryGeneral);
+            RegisterVariable("print", DelegateCustomFunction.Create<object>(Print), CategoryGeneral);
         }
 
         private delegate object EvaluateDelegate(string text, bool output = false);
@@ -89,6 +90,12 @@ namespace Kalk.Core
 
             Config.Display = mode;
             WriteHighlightLine($"# Display mode: {mode} ({fullMode})");
+        }
+
+        [KalkDoc("print")]
+        public void Print(object value)
+        {
+            WriteHighlightLine(ObjectToString(value), highlight: false);
         }
         
         /// <summary>

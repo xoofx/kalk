@@ -367,9 +367,9 @@ namespace Kalk.Core
             }
         }
 
-        internal void WriteHighlightLine(string scriptText, IKalkConsolable consolable = null)
+        internal void WriteHighlightLine(string scriptText, IKalkConsolable consolable = null, bool highlight = true)
         {
-            WriteHighlight(scriptText, consolable);
+            WriteHighlight(scriptText, consolable, highlight);
             WriteHighlightLine();
         }
 
@@ -388,7 +388,7 @@ namespace Kalk.Core
             Repl.Reset();
         }
 
-        internal void WriteHighlight(string scriptText, IKalkConsolable consolable = null)
+        internal void WriteHighlight(string scriptText, IKalkConsolable consolable = null, bool highlight = true)
         {
             var output = _isInitializing ? _initializingText : _tempConsoleText;
 
@@ -403,8 +403,11 @@ namespace Kalk.Core
 
             output.Append(scriptText);
 
-            // Highlight line per line
-            Highlight(output);
+            if (highlight)
+            {
+                // Highlight line per line
+                Highlight(output);
+            }
 
             if (consolable != null)
             {
