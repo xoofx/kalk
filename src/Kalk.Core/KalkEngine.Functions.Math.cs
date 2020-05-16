@@ -154,6 +154,9 @@ namespace Kalk.Core
             RegisterFunction("float4x4", new KalkMatrixConstructor<float>(4, 4), CategoryTypeConstructors);
 
             RegisterFunction("sum", new SumDelegate(Sum), CategoryMathFunctions);
+
+            RegisterFunction("all", DelegateCustomFunction.CreateFunc<object, bool>(All), CategoryMathFunctions);
+            RegisterFunction("any", DelegateCustomFunction.CreateFunc<object, bool>(Any), CategoryMathFunctions);
         }
 
 
@@ -178,6 +181,42 @@ namespace Kalk.Core
             throw new ArgumentOutOfRangeException(nameof(value));
         }
         
+        [KalkDoc("all")]
+        public bool All(object x)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (x is IEnumerable it)
+            {
+                foreach(var item in it)
+                {
+                    if (!ToBool(CurrentSpan, item))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return ToBool(CurrentSpan, x);
+        }
+
+        [KalkDoc("any")]
+        public bool Any(object x)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (x is IEnumerable it)
+            {
+                foreach (var item in it)
+                {
+                    if (ToBool(CurrentSpan, item))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return ToBool(CurrentSpan, x);
+        }
+
         /// <summary>
         /// Returns the absolute value of the specified value.
         /// </summary>
