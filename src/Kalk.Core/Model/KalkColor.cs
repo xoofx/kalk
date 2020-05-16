@@ -47,7 +47,34 @@ namespace Kalk.Core
 
         public abstract override KalkVector<int> Clone();
 
-        protected override KalkVector<int> NewVector(IList<int> list) => list.Count == 4 ? new KalkColorRgba(list[0], list[1], list[2], list[3]) : list.Count == 3 ? new KalkColorRgb(list[0], list[1], list[2]) : base.NewVector(list);
+        private static float Clamp01(float value) => Math.Clamp(value, 0.0f, 1.0f);
+
+        protected override KalkVector NewVector(ComponentUsed components, IList<int> list)
+        {
+            if (components == ComponentUsed.xyzw)
+            {
+                if (list.Count == 4)
+                {
+                    return new KalkVector<float>(Clamp01(list[0] / 255.0f), Clamp01(list[1] / 255.0f), Clamp01(list[2] / 255.0f), Clamp01(list[3] / 255.0f));
+                }
+
+                if (list.Count == 3)
+                {
+                    return new KalkVector<float>(Clamp01(list[0] / 255.0f), Clamp01(list[1] / 255.0f), Clamp01(list[2] / 255.0f));
+                }
+
+                if (list.Count == 2)
+                {
+                    return new KalkVector<float>(Clamp01(list[0] / 255.0f), Clamp01(list[1] / 255.0f));
+                }
+
+                throw new InvalidOperationException("Cannot create a float vector type from this rgba components");
+            }
+            else
+            {
+                return list.Count == 4 ? new KalkColorRgba(list[0], list[1], list[2], list[3]) : list.Count == 3 ? new KalkColorRgb(list[0], list[1], list[2]) : base.NewVector(components, list);
+            }
+        }
 
         protected abstract override KalkVector<int> NewVector(int length);
 

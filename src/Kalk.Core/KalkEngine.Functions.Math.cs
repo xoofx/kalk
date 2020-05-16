@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Numerics;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
+using Scriban.Syntax;
 
 namespace Kalk.Core
 {
@@ -137,10 +139,12 @@ namespace Kalk.Core
             RegisterFunction("double4", new KalkVectorConstructor<double>(4), CategoryVectorConstructors);
             RegisterFunction("double8", new KalkVectorConstructor<double>(8), CategoryVectorConstructors);
 
-            RegisterFunction("rgb", new RgbDelegate(Rgb), CategoryVectorConstructors);
-            RegisterFunction("rgba", new RgbaDelegate(Rgba), CategoryVectorConstructors);
+            RegisterFunction("rgb", new KalkColorRgbConstructor(), CategoryVectorConstructors);
+            RegisterFunction("rgba", new KalkColorRgbaConstructor(), CategoryVectorConstructors);
 
             RegisterFunction("float4x4", new KalkMatrixConstructor<float>(4, 4), CategoryVectorConstructors);
+
+            RegisterFunction("sum", new SumDelegate(Sum), CategoryMathFunctions);
         }
 
 
@@ -165,50 +169,6 @@ namespace Kalk.Core
             throw new ArgumentOutOfRangeException(nameof(value));
         }
         
-        [KalkDoc("rgb")]
-        public KalkColorRgb Rgb(object rgb, params int[] others)
-        {
-            if (others.Length == 0)
-            {
-                if (rgb is string rgbStr)
-                {
-                    try
-                    {
-                        return new KalkColorRgb(int.Parse(rgbStr.TrimStart('#'), System.Globalization.NumberStyles.HexNumber));
-                    }
-                    catch
-                    {
-                        throw new ArgumentOutOfRangeException($"Expecting an hexadecimal rgb string (e.g #FF80C2) instead of {rgbStr}");
-                    }
-                }
-
-                return new KalkColorRgb(ToObject<int>(CurrentSpan, rgb));
-            }
-
-            if (others.Length == 2)
-            {
-                return new KalkColorRgb(ToObject<int>(CurrentSpan, rgb), others[0], others[1]);
-            }
-
-            throw new ArgumentException("Invalid number of arguments. Expecting 3 arguments for `rgb(r,g,b)` or one argument `rgb(0xRRGGBB)`.");
-        }
-
-        [KalkDoc("rgba")]
-        public KalkColorRgba Rgba(int rgba, params int[] others)
-        {
-            if (others.Length == 0)
-            {
-                return new KalkColorRgba(rgba);
-            }
-
-            if (others.Length == 3)
-            {
-                return new KalkColorRgba(rgba, others[0], others[1], others[2]);
-            }
-
-            throw new ArgumentException("Invalid number of arguments. Expecting 4 arguments for `rgba(r,g,b, a)` or one argument `rgb(0xRRGGBBAA)`.");
-        }
-
         /// <summary>
         /// Returns the absolute value of the specified value.
         /// </summary>
@@ -299,7 +259,42 @@ namespace Kalk.Core
         public object Ceiling(KalkDoubleValue x) => x.Transform(this, CurrentSpan, CeilFunc);
         [KalkDoc("trunc")]
         public object Trunc(KalkDoubleValue x) => x.Transform(this, CurrentSpan, TruncFunc);
-        
+
+
+        private delegate object SumDelegate(object value, params object[] values);
+
+        [KalkDoc("sum")]
+        public object Sum(object value, params object[] values)
+        {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+
+            object result = value;
+            if (value is IEnumerable it)
+            {
+                bool resetFirst = true;
+                foreach(var nextValue in it)
+                {
+                    if (resetFirst)
+                    {
+                        result = nextValue;
+                        resetFirst = false;
+                    }
+                    else
+                    {
+                        result = ScriptBinaryExpression.Evaluate(this, CurrentSpan, ScriptBinaryOperator.Add, result, nextValue);
+                    }
+                }
+            }
+
+            foreach (var nextValue in values)
+            {
+                result = ScriptBinaryExpression.Evaluate(this, CurrentSpan, ScriptBinaryOperator.Add, result, nextValue);
+            }
+            
+            return result;
+        }
+
+
         [KalkDoc("asdouble")]
         public double AsDouble(object x)
         {

@@ -39,6 +39,10 @@ namespace Kalk.Core
             _values = list.ToArray();
         }
 
+        public KalkVector(T v1, T v2) => _values = new T[2] { v1, v2 };
+        public KalkVector(T v1, T v2, T v3) => _values = new T[3] { v1, v2, v3 };
+        public KalkVector(T v1, T v2, T v3, T v4) => _values = new T[4] { v1, v2, v3, v4 };
+
         public KalkVector(KalkVector<T> values)
         {
             _values = (T[])values._values.Clone();
@@ -219,6 +223,17 @@ namespace Kalk.Core
 
             if (member.Length < 1) return false;
             List<T> list = null;
+
+            bool isXyzw = false;
+            foreach (var c in member)
+            {
+                if ("xyzw".Contains(c))
+                {
+                    isXyzw = true;
+                    break;
+                }
+            }
+
             foreach (var index in ForEachMemberPart(span, member, true))
             {
                 var value = index <= 1 ? context.ToObject<T>(span, index): _values[index - x_IndexOffset];
@@ -239,15 +254,15 @@ namespace Kalk.Core
 
             if (list != null)
             {
-                result = NewVector(list);
+                result = NewVector(isXyzw ? ComponentUsed.xyzw : ComponentUsed.rgba, list);
             }
 
             return true;
         }
 
-        protected virtual KalkVector<T> NewVector(IList<T> list) => new KalkVector<T>(list);
+        protected virtual KalkVector NewVector(ComponentUsed components, IList<T> list) => new KalkVector<T>(list);
         
-        private enum ComponentUsed
+        protected enum ComponentUsed
         {
             none,
             rgba,
@@ -264,6 +279,56 @@ namespace Kalk.Core
         {
             return new ScriptRuntimeException(span, $"The swizzle `{c}` is not supported by this {Kind} type.");
         }
+
+
+        private static ComponentUsed GetComponentUsed(char c, out int index)
+        {
+            var componentUsed = ComponentUsed.none;
+            index = -1;
+            switch (c)
+            {
+                case '0':
+                    index = 0;
+                    break;
+                case '1':
+                    index = 1;
+                    break;
+                case 'x':
+                    index = x_IndexOffset;
+                    componentUsed = ComponentUsed.xyzw;
+                    break;
+                case 'r':
+                    index = x_IndexOffset;
+                    componentUsed = ComponentUsed.rgba;
+                    break;
+                case 'y':
+                    index = x_IndexOffset + 1;
+                    componentUsed = ComponentUsed.xyzw;
+                    break;
+                case 'g':
+                    index = x_IndexOffset + 1;
+                    componentUsed = ComponentUsed.rgba;
+                    break;
+                case 'z':
+                    index = x_IndexOffset + 2;
+                    componentUsed = ComponentUsed.xyzw;
+                    break;
+                case 'b':
+                    index = x_IndexOffset + 2;
+                    componentUsed = ComponentUsed.rgba;
+                    break;
+                case 'w':
+                    index = x_IndexOffset + 2;
+                    componentUsed = ComponentUsed.xyzw;
+                    break;
+                case 'a':
+                    index = x_IndexOffset + 3;
+                    componentUsed = ComponentUsed.rgba;
+                    break;
+            }
+
+            return componentUsed;
+        }
         
         private IEnumerable<int> ForEachMemberPart(SourceSpan span, string member, bool throwIfInvalid)
         {
@@ -272,65 +337,14 @@ namespace Kalk.Core
             {
                 var c = member[i];
                 int index;
-                switch (c)
+                
+                var newComponentUsed = GetComponentUsed(c, out index);
+                if (newComponentUsed == ComponentUsed.none && throwIfInvalid)
                 {
-                    case '0':
-                        index = 0;
-                        break;
-                    case '1':
-                        index = 1;
-                        break;
-                    case 'x':
-                        index = x_IndexOffset;
-                        if (componentUsed == ComponentUsed.rgba) throw InvalidMixOfSwizzles(span, componentUsed, c);
-                        componentUsed = ComponentUsed.xyzw;
-                        break;
-                    case 'r':
-                        index = x_IndexOffset;
-                        if (componentUsed == ComponentUsed.xyzw) throw InvalidMixOfSwizzles(span, componentUsed, c);
-                        componentUsed = ComponentUsed.rgba;
-                        break;
-                    case 'y':
-                        index = x_IndexOffset + 1;
-                        if (componentUsed == ComponentUsed.rgba) throw InvalidMixOfSwizzles(span, componentUsed, c);
-                        componentUsed = ComponentUsed.xyzw;
-                        break;
-                    case 'g':
-                        index = x_IndexOffset + 1;
-                        if (componentUsed == ComponentUsed.xyzw) throw InvalidMixOfSwizzles(span, componentUsed, c);
-                        componentUsed = ComponentUsed.rgba;
-                        break;
-                    case 'z':
-                        index = x_IndexOffset + 2;
-                        if (componentUsed == ComponentUsed.rgba) throw InvalidMixOfSwizzles(span, componentUsed, c);
-                        componentUsed = ComponentUsed.xyzw;
-                        break;
-                    case 'b':
-                        index = x_IndexOffset + 2;
-                        if (componentUsed == ComponentUsed.xyzw) throw InvalidMixOfSwizzles(span, componentUsed, c);
-                        componentUsed = ComponentUsed.rgba;
-                        break;
-                    case 'w':
-                        index = x_IndexOffset + 2;
-                        if (componentUsed == ComponentUsed.rgba) throw InvalidMixOfSwizzles(span, componentUsed, c);
-                        componentUsed = ComponentUsed.xyzw;
-                        break;
-                    case 'a':
-                        index = x_IndexOffset + 3;
-                        if (componentUsed == ComponentUsed.xyzw) throw InvalidMixOfSwizzles(span, componentUsed, c);
-                        componentUsed = ComponentUsed.rgba;
-                        break;
-                    default:
-                        if (throwIfInvalid)
-                        {
-                            throw new ScriptRuntimeException(span, $"Invalid swizzle {c}. Expecting only x,y,z,w.");
-                        }
-                        else
-                        {
-                            index = -1;
-                        }
-                        break;
+                    throw new ScriptRuntimeException(span, $"Invalid swizzle {c}. Expecting only x,y,z,w.");
                 }
+
+                if (componentUsed != ComponentUsed.none && newComponentUsed != componentUsed) throw InvalidMixOfSwizzles(span, componentUsed, c);
 
                 if (index < 0)
                 {
