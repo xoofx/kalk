@@ -323,7 +323,7 @@ namespace Kalk.Core
                     componentUsed = ComponentUsed.rgba;
                     break;
                 case 'w':
-                    index = x_IndexOffset + 2;
+                    index = x_IndexOffset + 3;
                     componentUsed = ComponentUsed.xyzw;
                     break;
                 case 'a':
@@ -399,7 +399,7 @@ namespace Kalk.Core
 
             foreach (var index in list)
             {
-                this[index] = tValue;
+                this[index - x_IndexOffset] = tValue;
             }
 
             return true;
