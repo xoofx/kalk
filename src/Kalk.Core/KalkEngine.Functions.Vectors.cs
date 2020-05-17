@@ -66,16 +66,16 @@ namespace Kalk.Core
         }
         
         [KalkDoc("int")]
-        public int CreateInt(object value = null) => value == null ? 0 : ToObject<int>(CurrentSpan, value);
+        public int CreateInt(object value = null) => value == null ? 0 : ToObject<int>(0, value);
 
         [KalkDoc("bool")]
-        public bool CreateBool(object value = null) => value != null && ToObject<bool>(CurrentSpan, value);
+        public bool CreateBool(object value = null) => value != null && ToObject<bool>(0, value);
 
         [KalkDoc("float")]
-        public float CreateFloat(object value = null) => value == null ? 0.0f : ToObject<float>(CurrentSpan, value);
+        public float CreateFloat(object value = null) => value == null ? 0.0f : ToObject<float>(0, value);
 
         [KalkDoc("double")]
-        public double CreateDouble(object value = null) => value == null ? 0.0 : ToObject<double>(CurrentSpan, value);
+        public double CreateDouble(object value = null) => value == null ? 0.0 : ToObject<double>(0, value);
 
         [KalkDoc("int2")]
         public KalkVector<int> CreateInt2(params object[] arguments) => Int2Constructor.Invoke(this, arguments);
@@ -138,7 +138,7 @@ namespace Kalk.Core
         public object CreateVector(ScriptVariable name, int dimension, params object[] arguments)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
-            if (dimension <= 1) throw new ArgumentOutOfRangeException(nameof(dimension));
+            if (dimension <= 1) throw new ArgumentOutOfRangeException(nameof(dimension), "Invalid dimension. Expecting a value > 1.");
             switch (name.Name)
             {
                 case "int":
@@ -184,7 +184,7 @@ namespace Kalk.Core
                     return new KalkVectorConstructor<double>(dimension).Invoke(this, arguments);
             }
 
-            throw new ArgumentException($"Unsupported vector type {name.Name}. Only bool, int, float and double are supported");
+            throw new ArgumentException($"Unsupported vector type {name.Name}. Only bool, int, float and double are supported", nameof(name));
         }
 
 
@@ -193,5 +193,22 @@ namespace Kalk.Core
 
         [KalkDoc("rgba")]
         public KalkColorRgba CreateRgba(params object[] arguments) => (KalkColorRgba)RgbaConstructor.Invoke(this, arguments);
+
+
+        protected T ToObject<T>(int arg, object value)
+        {
+            try
+            {
+                return ToObject<T>(CurrentSpan, value);
+            }
+            catch (ScriptRuntimeException ex)
+            {
+                throw new ScriptArgumentException(arg, ex.OriginalMessage);
+            }
+            catch (Exception ex)
+            {
+                throw new ScriptArgumentException(arg, ex.Message);
+            }
+        }
     }
 }

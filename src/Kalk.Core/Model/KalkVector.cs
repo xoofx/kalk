@@ -92,7 +92,7 @@ namespace Kalk.Core
                         case 16: return"float16";
                     }
                 }
-                else if (typeof(T) == typeof(float))
+                else if (typeof(T) == typeof(double))
                 {
                     switch (Length)
                     {
