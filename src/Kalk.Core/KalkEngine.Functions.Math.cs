@@ -19,17 +19,16 @@ namespace Kalk.Core
         private static readonly Func<double, double> CosFunc = Math.Cos;
         private static readonly Func<double, double> AcosFunc = Math.Acos;
         private static readonly Func<double, double> CoshFunc = Math.Cosh;
-        private static readonly Func<double, double> CotFunc = MathNet.Numerics.Trig.Cot;
-        private static readonly Func<double, double> AcoshFunc = MathNet.Numerics.Trig.Acosh;
+        private static readonly Func<double, double> AcoshFunc = Math.Acosh;
         private static readonly Func<double, double> SinFunc = Math.Sin;
         private static readonly Func<double, double> AsinFunc = Math.Asin;
         private static readonly Func<double, double> SinhFunc = Math.Sinh;
-        private static readonly Func<double, double> AsinhFunc = MathNet.Numerics.Trig.Asinh;
+        private static readonly Func<double, double> AsinhFunc = Math.Asinh;
 
         private static readonly Func<double, double> TanFunc = Math.Tan;
         private static readonly Func<double, double> TanhFunc = Math.Tanh;
         private static readonly Func<double, double> AtanFunc = Math.Atan;
-        private static readonly Func<double, double> AtanhFunc = MathNet.Numerics.Trig.Atanh;
+        private static readonly Func<double, double> AtanhFunc = Math.Atanh;
 
         private static readonly Func<double, double> RsqrtFunc = x => 1.0 / Math.Sqrt(x);
         private static readonly Func<double, double> SqrtFunc = Math.Sqrt;
@@ -133,7 +132,7 @@ namespace Kalk.Core
         }
 
         [KalkDoc("fib")]
-        public object Fib(KalkIntValue x) => x.Transform(this, CurrentSpan, FibFunc);
+        public object Fib(KalkIntValue x) => x.TransformArg(this, FibFunc);
 
         protected delegate KalkColorRgb RgbDelegate(object rgb, params int[] others);
         protected delegate KalkColorRgba RgbaDelegate(int rgb, params int[] others);
@@ -194,7 +193,7 @@ namespace Kalk.Core
         /// <param name="x">The specified value.</param>
         /// <returns>The absolute value of the <paramref name="x"/> parameter.</returns>
         [KalkDoc("abs")]
-        public object Abs(KalkCompositeValue x) => x.Transform(this, CurrentSpan, AbsFunc);
+        public object Abs(KalkCompositeValue x) => x.TransformArg(this, AbsFunc);
 
         /// <summary>
         /// Returns an integer that indicates the sign of a number.
@@ -207,84 +206,84 @@ namespace Kalk.Core
         ///  - 1 if x is greater than zero.
         /// </returns>
         [KalkDoc("sign")]
-        public object Sign(KalkCompositeValue x) => x.Transform(this, CurrentSpan, SignFunc);
+        public object Sign(KalkCompositeValue x) => x.TransformArg(this, SignFunc);
 
         [KalkDoc("cos")]
-        public object Cos(KalkDoubleValue x) => x.Transform(this, CurrentSpan, CosFunc);
+        public object Cos(KalkDoubleValue x) => x.TransformArg(this, CosFunc);
 
         [KalkDoc("acos")]
-        public object Acos(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AcosFunc);
+        public object Acos(KalkDoubleValue x) => x.TransformArg(this, AcosFunc);
 
         [KalkDoc("cosh")]
-        public object Cosh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, CoshFunc);
+        public object Cosh(KalkDoubleValue x) => x.TransformArg(this, CoshFunc);
 
         [KalkDoc("acosh")]
-        public object Acosh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AcoshFunc);
+        public object Acosh(KalkDoubleValue x) => x.TransformArg(this, AcoshFunc);
 
         [KalkDoc("sin")]
-        public object Sin(KalkDoubleValue x) => x.Transform(this, CurrentSpan, SinFunc);
+        public object Sin(KalkDoubleValue x) => x.TransformArg(this, SinFunc);
 
         [KalkDoc("asin")]
-        public object Asin(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AsinFunc);
+        public object Asin(KalkDoubleValue x) => x.TransformArg(this, AsinFunc);
 
         [KalkDoc("sinh")]
-        public object Sinh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, SinhFunc);
+        public object Sinh(KalkDoubleValue x) => x.TransformArg(this, SinhFunc);
 
         [KalkDoc("asinh")]
-        public object Asinh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AsinhFunc);
+        public object Asinh(KalkDoubleValue x) => x.TransformArg(this, AsinhFunc);
 
         [KalkDoc("fmod")]
         public double Fmod(double x, double y) => x % y;
 
         [KalkDoc("frac")]
-        public object Frac(KalkDoubleValue x) => x.Transform(this, CurrentSpan, FracFunc);
+        public object Frac(KalkDoubleValue x) => x.TransformArg(this, FracFunc);
 
         [KalkDoc("tan")]
-        public object Tan(KalkDoubleValue x) => x.Transform(this, CurrentSpan, TanFunc);
+        public object Tan(KalkDoubleValue x) => x.TransformArg(this, TanFunc);
         [KalkDoc("atan")]
-        public object Atan(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AtanFunc);
+        public object Atan(KalkDoubleValue x) => x.TransformArg(this, AtanFunc);
         [KalkDoc("tanh")]
-        public object Tanh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, TanhFunc);
+        public object Tanh(KalkDoubleValue x) => x.TransformArg(this, TanhFunc);
         [KalkDoc("atanh")]
-        public object Atanh(KalkDoubleValue x) => x.Transform(this, CurrentSpan, AtanhFunc);
+        public object Atanh(KalkDoubleValue x) => x.TransformArg(this, AtanhFunc);
         
         [KalkDoc("atan2")]
         public double Atan2(double y, double x) => Math.Atan2(y, x);
 
         [KalkDoc("rsqrt")]
-        public object Rsqrt(KalkDoubleValue x) => x.Transform(this, CurrentSpan, RsqrtFunc);
+        public object Rsqrt(KalkDoubleValue x) => x.TransformArg(this, RsqrtFunc);
         [KalkDoc("sqrt")]
-        public object Sqrt(KalkDoubleValue x) => x.Transform(this, CurrentSpan, SqrtFunc);
+        public object Sqrt(KalkDoubleValue x) => x.TransformArg(this, SqrtFunc);
         [KalkDoc("log")]
-        public object Log(KalkDoubleValue x) => x.Transform(this, CurrentSpan, LogFunc);
+        public object Log(KalkDoubleValue x) => x.TransformArg(this, LogFunc);
         [KalkDoc("log2")]
-        public object Log2(KalkDoubleValue x) => x.Transform(this, CurrentSpan, Log2Func);
+        public object Log2(KalkDoubleValue x) => x.TransformArg(this, Log2Func);
         [KalkDoc("log10")]
-        public object Log10(KalkDoubleValue x) => x.Transform(this, CurrentSpan, Log10Func);
+        public object Log10(KalkDoubleValue x) => x.TransformArg(this, Log10Func);
         [KalkDoc("exp")]
-        public object Exp(KalkDoubleValue x) => x.Transform(this, CurrentSpan, ExpFunc);
+        public object Exp(KalkDoubleValue x) => x.TransformArg(this, ExpFunc);
         [KalkDoc("exp2")]
-        public object Exp2(KalkDoubleValue x) => x.Transform(this, CurrentSpan, Exp2Func);
+        public object Exp2(KalkDoubleValue x) => x.TransformArg(this, Exp2Func);
 
         [KalkDoc("pow")]
         public double Pow(double x, double y) => Math.Pow(x, y);
 
 
         [KalkDoc("round")]
-        public object Round(KalkDoubleValue x) => x.Transform(this, CurrentSpan, RoundFunc);
+        public object Round(KalkDoubleValue x) => x.TransformArg(this, RoundFunc);
         [KalkDoc("floor")]
-        public object Floor(KalkDoubleValue x) => x.Transform(this, CurrentSpan, FloorFunc);
+        public object Floor(KalkDoubleValue x) => x.TransformArg(this, FloorFunc);
         [KalkDoc("ceil")]
-        public object Ceiling(KalkDoubleValue x) => x.Transform(this, CurrentSpan, CeilFunc);
+        public object Ceiling(KalkDoubleValue x) => x.TransformArg(this, CeilFunc);
         [KalkDoc("trunc")]
-        public object Trunc(KalkDoubleValue x) => x.Transform(this, CurrentSpan, TruncFunc);
+        public object Trunc(KalkDoubleValue x) => x.TransformArg(this, TruncFunc);
         
         [KalkDoc("isfinite")]
-        public object IsFinite(KalkCompositeValue x) => x.Transform(this, CurrentSpan, IsFiniteFunc);
+        public object IsFinite(KalkCompositeValue x) => x.TransformArg(this, IsFiniteFunc);
         [KalkDoc("isinf")]
-        public object IsInf(KalkCompositeValue x) => x.Transform(this, CurrentSpan, IsInfFunc);
+        public object IsInf(KalkCompositeValue x) => x.TransformArg(this, IsInfFunc);
         [KalkDoc("isnan")]
-        public object IsNan(KalkCompositeValue x) => x.Transform(this, CurrentSpan, IsNanFunc);
+        public object IsNan(KalkCompositeValue x) => x.TransformArg(this, IsNanFunc);
         
         private delegate object SumDelegate(object value, params object[] values);
 
@@ -343,7 +342,7 @@ namespace Kalk.Core
                 }
             }
 
-            var bigInteger = ToObject<BigInteger>(CurrentSpan, x);
+            var bigInteger = ToObject<BigInteger>(0, x);
             unsafe
             {
                 var value = (ulong) bigInteger;
@@ -372,7 +371,7 @@ namespace Kalk.Core
                 }
             }
 
-            return (long)ToObject<BigInteger>(CurrentSpan, x);
+            return (long)ToObject<BigInteger>(0, x);
         }
 
 
@@ -436,7 +435,7 @@ namespace Kalk.Core
                 return ((BigInteger)value).Sign;
             }
 
-            return Math.Sign(ToObject<double>(CurrentSpan, value));
+            return Math.Sign(ToObject<double>(0, value));
         }
 
         private BigInteger Fibonacci(int value)
@@ -498,7 +497,7 @@ namespace Kalk.Core
                 return BigInteger.Abs((BigInteger)value);
             }
 
-            return Math.Abs(ToObject<double>(CurrentSpan, value));
+            return Math.Abs(ToObject<double>(0, value));
         }
     }
 }

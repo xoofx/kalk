@@ -13,19 +13,36 @@ namespace Kalk.Core
 
         public object Value;
 
-        public object Transform<TFrom, TTo>(TemplateContext context, SourceSpan span, Func<TFrom, TTo> apply)
+
+        public object TransformArg<TFrom, TTo>(TemplateContext context, Func<TFrom, TTo> apply)
+        {
+            try
+            {
+                return Transform(context, apply);
+            }
+            catch (ScriptRuntimeException ex)
+            {
+                throw new ScriptArgumentException(0, ex.OriginalMessage);
+            }
+            catch (Exception ex)
+            {
+                throw new ScriptArgumentException(0, ex.Message);
+            }
+        }
+
+        public object Transform<TFrom, TTo>(TemplateContext context, Func<TFrom, TTo> apply)
         {
             if (Transformable != null)
             {
-                return Transformable.Transform(context, span, value =>
+                return Transformable.Transform(context, context.CurrentSpan, value =>
                 {
-                    var nestedValue = (KalkCompositeValue)context.ToObject(span, value, this.GetType());
+                    var nestedValue = (KalkCompositeValue)context.ToObject(context.CurrentSpan, value, this.GetType());
                     // Recursively apply the transformation with the same value
-                    return nestedValue.Transform(context, span, apply);
+                    return nestedValue.Transform(context, apply);
                 });
             }
 
-            return apply(context.ToObject<TFrom>(span, Value));
+            return apply(context.ToObject<TFrom>(context.CurrentSpan, Value));
         }
 
 

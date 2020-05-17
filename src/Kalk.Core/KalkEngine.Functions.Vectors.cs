@@ -195,7 +195,7 @@ namespace Kalk.Core
         public KalkColorRgba CreateRgba(params object[] arguments) => (KalkColorRgba)RgbaConstructor.Invoke(this, arguments);
 
 
-        protected T ToObject<T>(int arg, object value)
+        protected T ToObject<T>(int argIndex, object value)
         {
             try
             {
@@ -203,11 +203,11 @@ namespace Kalk.Core
             }
             catch (ScriptRuntimeException ex)
             {
-                throw new ScriptArgumentException(arg, ex.OriginalMessage);
+                throw new ScriptArgumentException(argIndex, ex.OriginalMessage);
             }
             catch (Exception ex)
             {
-                throw new ScriptArgumentException(arg, ex.Message);
+                throw new ScriptArgumentException(argIndex, ex.Message);
             }
         }
     }
