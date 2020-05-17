@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Collections;
 using Scriban;
-using Scriban.Helpers;
-using Scriban.Parsing;
 using Scriban.Syntax;
 
 namespace Kalk.Core
@@ -12,19 +11,9 @@ namespace Kalk.Core
         {
         }
 
-        protected override int GetLength(object arg)
-        {
-            if (arg is string)
-            {
-                return Dimension;
-            }
-            return base.GetLength(arg);
-        }
-
         protected abstract override KalkVector<int> NewVector(int dimension);
 
-
-        protected override int GetArgumentValue(TemplateContext context, SourceSpan span, object arg)
+        protected override int GetArgumentValue(TemplateContext context, object arg)
         {
             switch (arg)
             {
@@ -35,11 +24,11 @@ namespace Kalk.Core
                 case decimal dec:
                     return (int)(255 * Math.Clamp(dec, 0.0m, 1.0m));
                 default:
-                    return base.GetArgumentValue(context, span, arg);
+                    return Math.Clamp(base.GetArgumentValue(context, arg), 0, 255);
             }
         }
 
-        protected override void ProcessSingleArgument(TemplateContext context, SourceSpan span, ref int index, object arg, KalkVector<int> vector)
+        protected override void ProcessSingleArgument(TemplateContext context, ref int index, object arg, KalkVector<int> vector)
         {
             int value;
             switch (arg)
@@ -55,7 +44,12 @@ namespace Kalk.Core
                     }
                     break;
                 default:
-                    value = GetArgumentValue(context, span, arg);
+                    if (arg is IList)
+                    {
+                        base.ProcessSingleArgument(context, ref index, arg, vector);
+                        return;
+                    }
+                    value = GetArgumentValue(context, arg);
                     break;
             }
 

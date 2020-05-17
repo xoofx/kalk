@@ -13,7 +13,6 @@ namespace Kalk.Core
     {
         public const string CategoryMathConstants = "Math Constants";
         public const string CategoryMathFunctions = "Math Functions";
-        public const string CategoryTypeConstructors = "Type Constructors";
 
         private Func<int, BigInteger> FibFunc;
         private Func<object, object> AbsFunc;
@@ -127,41 +126,8 @@ namespace Kalk.Core
 
             RegisterFunction("asdouble", (Func<object, double>)AsDouble, CategoryMathFunctions);
             RegisterFunction("aslong", (Func<object, long>)AsLong, CategoryMathFunctions);
-
-            RegisterFunction("int", new KalkVectorConstructor<int>(1), CategoryTypeConstructors);
-            RegisterFunction("int2", new KalkVectorConstructor<int>(2), CategoryTypeConstructors);
-            RegisterFunction("int3", new KalkVectorConstructor<int>(3), CategoryTypeConstructors);
-            RegisterFunction("int4", new KalkVectorConstructor<int>(4), CategoryTypeConstructors);
-            RegisterFunction("int8", new KalkVectorConstructor<int>(8), CategoryTypeConstructors);
-            RegisterFunction("int16", new KalkVectorConstructor<int>(16), CategoryTypeConstructors);
-
-            RegisterFunction("bool", new KalkVectorConstructor<bool>(1), CategoryTypeConstructors);
-            RegisterFunction("bool2", new KalkVectorConstructor<bool>(2), CategoryTypeConstructors);
-            RegisterFunction("bool3", new KalkVectorConstructor<bool>(3), CategoryTypeConstructors);
-            RegisterFunction("bool4", new KalkVectorConstructor<bool>(4), CategoryTypeConstructors);
-            RegisterFunction("bool8", new KalkVectorConstructor<bool>(8), CategoryTypeConstructors);
-            RegisterFunction("bool16", new KalkVectorConstructor<bool>(16), CategoryTypeConstructors);
-
-            RegisterFunction("float", new KalkVectorConstructor<float>(1), CategoryTypeConstructors);
-            RegisterFunction("float2", new KalkVectorConstructor<float>(2), CategoryTypeConstructors);
-            RegisterFunction("float3", new KalkVectorConstructor<float>(3), CategoryTypeConstructors);
-            RegisterFunction("float4", new KalkVectorConstructor<float>(4), CategoryTypeConstructors);
-            RegisterFunction("float8", new KalkVectorConstructor<float>(8), CategoryTypeConstructors);
-            RegisterFunction("float16", new KalkVectorConstructor<float>(16), CategoryTypeConstructors);
-
-            RegisterFunction("double", new KalkVectorConstructor<double>(1), CategoryTypeConstructors);
-            RegisterFunction("double2", new KalkVectorConstructor<double>(2), CategoryTypeConstructors);
-            RegisterFunction("double3", new KalkVectorConstructor<double>(3), CategoryTypeConstructors);
-            RegisterFunction("double4", new KalkVectorConstructor<double>(4), CategoryTypeConstructors);
-            RegisterFunction("double8", new KalkVectorConstructor<double>(8), CategoryTypeConstructors);
-
-            RegisterFunction("rgb", new KalkColorRgbConstructor(), CategoryTypeConstructors);
-            RegisterFunction("rgba", new KalkColorRgbaConstructor(), CategoryTypeConstructors);
-
-            RegisterFunction("float4x4", new KalkMatrixConstructor<float>(4, 4), CategoryTypeConstructors);
-
+        
             RegisterFunction("sum", new SumDelegate(Sum), CategoryMathFunctions);
-
             RegisterFunction("all", DelegateCustomFunction.CreateFunc<object, bool>(All), CategoryMathFunctions);
             RegisterFunction("any", DelegateCustomFunction.CreateFunc<object, bool>(Any), CategoryMathFunctions);
         }
@@ -171,7 +137,6 @@ namespace Kalk.Core
 
         protected delegate KalkColorRgb RgbDelegate(object rgb, params int[] others);
         protected delegate KalkColorRgba RgbaDelegate(int rgb, params int[] others);
-
 
         [KalkDoc("i")]
         public static object ComplexNumber(object value = null)

@@ -55,10 +55,58 @@ namespace Kalk.Core
             return _values[index];
         }
 
-        public override string Kind => $"{ElementTypeName}{Length.ToString(CultureInfo.InvariantCulture)}";
-        
-        private string ElementTypeName => typeof(T).ScriptPrettyName();
-        
+        public override string Kind
+        {
+            get
+            {
+                if (typeof(T) == typeof(bool))
+                {
+                    switch (Length)
+                    {
+                        case 2: return "bool2";
+                        case 3: return "bool3";
+                        case 4: return "bool4";
+                        case 8: return "bool8";
+                        case 16: return "bool16";
+                    }
+                }
+                else if (typeof(T) == typeof(int))
+                {
+                    switch (Length)
+                    {
+                        case 2: return "int2";
+                        case 3: return "int3";
+                        case 4: return "int4";
+                        case 8: return "int8";
+                        case 16: return "int16";
+                    }
+                }
+                else if (typeof(T) == typeof(float))
+                {
+                    switch (Length)
+                    {
+                        case 2: return "float2";
+                        case 3: return "float3";
+                        case 4: return "float4";
+                        case 8: return "float8";
+                        case 16: return"float16";
+                    }
+                }
+                else if (typeof(T) == typeof(float))
+                {
+                    switch (Length)
+                    {
+                        case 2: return "double2";
+                        case 3: return "double3";
+                        case 4: return "double4";
+                        case 8: return "double8";
+                    }
+                }
+
+                return "vector";
+            }
+        }
+
         public Type ElementType => typeof(T);
 
         public T this[int index]
@@ -129,8 +177,16 @@ namespace Kalk.Core
         {
             var context = formatProvider as TemplateContext;
             var builder = new StringBuilder();
-            builder.Append(Kind);
+            var kind = Kind;
+            builder.Append(kind);
             builder.Append('(');
+            if (kind == "vector")
+            {
+                builder.Append(typeof(T).ScriptPrettyName());
+                builder.Append(", ");
+                builder.Append(Length.ToString(CultureInfo.InvariantCulture));
+                builder.Append(", ");
+            }
             for(int i = 0; i < Length; i++)
             {
                 if (i > 0) builder.Append(", ");

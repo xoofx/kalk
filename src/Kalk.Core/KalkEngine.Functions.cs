@@ -30,7 +30,8 @@ namespace Kalk.Core
             RegisterIntrinsics();
             RegisterGeneralFunctions();
             RegisterMathFunctions();
-            RegisterDeveloperFunctions();
+            RegisterVectors();
+            RegisterMiscFunctions();
             RegisterUnitFunctions();
             RegisterDocumentation();
 
@@ -113,6 +114,46 @@ namespace Kalk.Core
         public void RegisterFunction(string name, Func<KalkCompositeValue, object> func, string category)
         {
             RegisterFunction(name, Wrap(func), category);
+        }
+
+
+        public void RegisterFunction(string name, Func<object, int> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
+        public void RegisterFunction(string name, Func<object[], KalkVector<int>> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+        public void RegisterFunction(string name, Func<object[], KalkVector<bool>> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+        public void RegisterFunction(string name, Func<object[], KalkVector<float>> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+        public void RegisterFunction(string name, Func<object[], KalkVector<double>> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+        public void RegisterFunction(string name, Func<object[], KalkColorRgb> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+        public void RegisterFunction(string name, Func<object[], KalkColorRgba> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+        public void RegisterFunction(string name, Func<ScriptVariable, int, object[], object> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
+        public void RegisterFunction(string name, Func<object, float> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
         public void RegisterFunction(string name, Func<object, object> func, string category)

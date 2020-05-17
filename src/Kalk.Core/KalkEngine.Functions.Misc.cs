@@ -22,7 +22,7 @@ namespace Kalk.Core
     {
         private const string CategoryDevelopers = "Misc Functions";
 
-        private void RegisterDeveloperFunctions()
+        private void RegisterMiscFunctions()
         {
             RegisterVariable("ascii", AsciiTable, CategoryDevelopers);
         }
