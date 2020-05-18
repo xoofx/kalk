@@ -11,7 +11,7 @@ namespace Kalk.Core
     public class KalkUnit : KalkExpressionWithMembers, IScriptCustomFunction, IScriptCustomImplicitMultiplyPrecedence
     {
         private static readonly (string, Func<KalkExpressionWithMembers, object> getter)[] MemberDefs = {
-            ("kind", unit => unit.Kind),
+            ("kind", unit => unit.TypeName),
             ("name", unit => ((KalkUnit)unit).Name),
             ("symbol", unit => ((KalkUnit)unit).Symbol),
             ("description", unit => ((KalkUnit)unit).Description),
@@ -28,7 +28,7 @@ namespace Kalk.Core
             Derived = new List<KalkUnit>();
         }
 
-        public override string Kind => "symbol definition";
+        public override string TypeName => "symbol definition";
 
         public string Name { get; }
 

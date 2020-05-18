@@ -44,21 +44,19 @@ namespace Kalk.Core
         private void RegisterGeneralFunctions()
         {
             RegisterFunction("help", new Action<ScriptExpression>(Help), CategoryGeneral);
-            RegisterFunction("version", new Action(Version), CategoryGeneral);
-            RegisterFunction("reset", new Action(Reset), CategoryGeneral);
-            RegisterFunction("exit", new Action(Exit), CategoryGeneral);
+            RegisterFunction("version", DelegateCustomFunction.Create(Version), CategoryGeneral);
+            RegisterFunction("reset", DelegateCustomFunction.Create(Reset), CategoryGeneral);
+            RegisterFunction("exit", DelegateCustomFunction.Create(Exit), CategoryGeneral);
             RegisterFunction("history", new Action<object>(History), CategoryGeneral);
 
-            RegisterFunction("list", new Action(List), CategoryGeneral);
-            RegisterFunction("del", new Action<ScriptVariable>(DeleteVariable), CategoryGeneral);
+            RegisterFunction("list", DelegateCustomFunction.Create(List), CategoryGeneral);
+            RegisterFunction("del", DelegateCustomFunction.Create(new Action<ScriptVariable>(DeleteVariable)), CategoryGeneral);
 
-            //Builtins.SetValue("empty", EmptyScriptObject.Default, true);
-            var clear = new Action<ScriptExpression>(Clear);
-            RegisterFunction("cls,clear", clear, CategoryGeneral);
-            RegisterFunction("out", new Func<object>(Last), CategoryGeneral);
+            RegisterFunction("clear", DelegateCustomFunction.Create<ScriptVariable>(Clear), CategoryGeneral);
+            RegisterFunction("cls", DelegateCustomFunction.Create(Cls), CategoryGeneral);
+            RegisterFunction("out", DelegateCustomFunction.CreateFunc(Last), CategoryGeneral);
 
             // general/dev
-            RegisterFunction("keys", DelegateCustomFunction.CreateFunc<object, IEnumerable>(Keys), CategoryGeneral);
             RegisterVariable("eval", DelegateCustomFunction.CreateFunc<string, bool, object>(EvaluateText), CategoryGeneral);
             RegisterVariable("load", DelegateCustomFunction.CreateFunc<string, bool, object>(LoadFile), CategoryGeneral);
 
@@ -380,13 +378,6 @@ namespace Kalk.Core
             }
         }
 
-        [KalkDoc("keys")]
-        public IEnumerable Keys(object obj)
-        {
-            return ObjectFunctions.Keys(this, obj);
-        }
-
-
         [KalkDoc("eval")]
         public object EvaluateText(string text, bool output = false)
         {
@@ -460,7 +451,7 @@ namespace Kalk.Core
         /// * screen: to clear the screen (default if not passed)
         /// * history: to clear the history
         /// </param>
-        [KalkDoc("cls")]
+        [KalkDoc("clear")]
         public void Clear(ScriptExpression what = null)
         {
             if (what != null)
@@ -481,6 +472,15 @@ namespace Kalk.Core
             clearScreen:
 
             OnClear?.Invoke();
+        }
+
+        /// <summary>
+        /// Clears the screen.
+        /// </summary>
+        [KalkDoc("cls")]
+        public void Cls()
+        {
+            Clear(null);
         }
 
         /// <summary>

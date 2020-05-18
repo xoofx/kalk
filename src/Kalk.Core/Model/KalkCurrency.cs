@@ -24,7 +24,7 @@ namespace Kalk.Core
             Plural = name;
         }
 
-        public override string Kind => "currency";
+        public override string TypeName => "currency";
 
         public override object GetValue() => 1.0m;
         

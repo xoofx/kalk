@@ -213,6 +213,7 @@ namespace Kalk.Core
 
         private void UpdateSyntaxHighlighting()
         {
+            Repl.EditLine.ClearStyles();
             Highlight(Repl.EditLine, Repl.CursorIndex);
         }
 

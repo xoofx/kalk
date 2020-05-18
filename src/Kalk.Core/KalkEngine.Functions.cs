@@ -30,6 +30,7 @@ namespace Kalk.Core
             RegisterIntrinsics();
             RegisterGeneralFunctions();
             RegisterMathFunctions();
+            RegisterMatrices();
             RegisterVectors();
             RegisterMiscFunctions();
             RegisterUnitFunctions();
@@ -69,6 +70,26 @@ namespace Kalk.Core
         public void RegisterFunction(string name, Delegate del, string category)
         {
             RegisterFunction(name, new DelegateCustomFunction(del), category);
+        }
+
+        public void RegisterFunction(string name, Func<KalkMatrix, object> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
+        public void RegisterFunction(string name, Func<KalkMatrix, KalkMatrix> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
+        public void RegisterFunction(string name, Func<KalkVector, KalkVector, object> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
+        public void RegisterFunction(string name, Func<object, object, object> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
         public void RegisterFunction(string name, Func<object, bool> func, string category)
@@ -138,6 +159,27 @@ namespace Kalk.Core
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
+
+        public void RegisterFunction(string name, Func<object[], KalkMatrix<bool>> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
+        public void RegisterFunction(string name, Func<object[], KalkMatrix<int>> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
+        public void RegisterFunction(string name, Func<object[], KalkMatrix<double>> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
+        public void RegisterFunction(string name, Func<object[], KalkMatrix<float>> func, string category)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
         public void RegisterFunction(string name, Func<object[], KalkColorRgb> func, string category)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);

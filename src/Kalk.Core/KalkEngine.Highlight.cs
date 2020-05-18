@@ -75,7 +75,7 @@ namespace Kalk.Core
             }
             else
             {
-                WriteHighlightLine($"{name} = {ObjectToString(value, true)}", value as IKalkConsolable);
+                WriteHighlightLine($"{name} = {ObjectToString(value, true)}");
                 WriteValueWithDisplayMode(value);
             }
         }
@@ -367,9 +367,9 @@ namespace Kalk.Core
             }
         }
 
-        internal void WriteHighlightLine(string scriptText, IKalkConsolable consolable = null, bool highlight = true)
+        internal void WriteHighlightLine(string scriptText, bool highlight = true)
         {
-            WriteHighlight(scriptText, consolable, highlight);
+            WriteHighlight(scriptText, highlight);
             WriteHighlightLine();
         }
 
@@ -388,7 +388,7 @@ namespace Kalk.Core
             Repl.Reset();
         }
 
-        internal void WriteHighlight(string scriptText, IKalkConsolable consolable = null, bool highlight = true)
+        internal void WriteHighlight(string scriptText, bool highlight = true)
         {
             var output = _isInitializing ? _initializingText : _tempConsoleText;
 
@@ -399,6 +399,7 @@ namespace Kalk.Core
                     Writer.Write(output);
                 }
                 output.Clear();
+                output.ClearStyles();
             }
 
             output.Append(scriptText);
@@ -407,11 +408,6 @@ namespace Kalk.Core
             {
                 // Highlight line per line
                 Highlight(output);
-            }
-
-            if (consolable != null)
-            {
-                consolable.ToConsole(this, output);
             }
 
             if (Writer != null)
@@ -451,8 +447,6 @@ namespace Kalk.Core
 
         private void UpdateSyntaxHighlighting(ConsoleText text, string textStr, List<Token> tokens)
         {
-            text.ClearStyles();
-
             if (textStr == null) return;
 
             bool isPreviousNotDot = true;

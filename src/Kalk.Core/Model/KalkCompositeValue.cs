@@ -13,7 +13,20 @@ namespace Kalk.Core
 
         public object Value;
 
+        public KalkCompositeValue()
+        {
+        }
 
+        public KalkCompositeValue(object value)
+        {
+            Value = value;
+        }
+
+        public KalkCompositeValue(IScriptTransformable transformable)
+        {
+            Transformable = transformable;
+        }
+        
         public object TransformArg<TFrom, TTo>(TemplateContext context, Func<TFrom, TTo> apply)
         {
             try
@@ -87,6 +100,19 @@ namespace Kalk.Core
 
     public class KalkDoubleValue : KalkCompositeValue
     {
+        public KalkDoubleValue()
+        {
+        }
+
+        public KalkDoubleValue(IScriptTransformable transformable) : base(transformable)
+        {
+        }
+
+        public KalkDoubleValue(object value) : base(value)
+        {
+        }
+
+
         public override Type ElementType => typeof(double);
 
         public override bool CanTransform(Type transformType)

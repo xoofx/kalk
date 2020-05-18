@@ -5,7 +5,7 @@ using Scriban.Runtime;
 
 namespace Kalk.Core
 {
-    public abstract class KalkObject : IScriptObject, IKalkKindable
+    public abstract class KalkObject : IScriptObject
     {
         public abstract int Count { get; }
         public abstract IEnumerable<string> GetMembers();
@@ -17,6 +17,6 @@ namespace Kalk.Core
         public abstract bool Remove(string member);
         public abstract void SetReadOnly(string member, bool readOnly);
         public abstract IScriptObject Clone(bool deep);
-        public abstract string Kind { get; }
+        public abstract string TypeName { get; }
     }
 }

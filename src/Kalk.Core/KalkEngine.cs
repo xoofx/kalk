@@ -553,5 +553,21 @@ namespace Kalk.Core
             //    text.ReplaceBy(newText.ToString());
             //}
         }
+        public T ToObject<T>(int argIndex, object value)
+        {
+            try
+            {
+                return ToObject<T>(CurrentSpan, value);
+            }
+            catch (ScriptRuntimeException ex)
+            {
+                throw new ScriptArgumentException(argIndex, ex.OriginalMessage);
+            }
+            catch (Exception ex)
+            {
+                throw new ScriptArgumentException(argIndex, ex.Message);
+            }
+        }
+
     }
 }

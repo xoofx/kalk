@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using MathNet.Numerics.LinearAlgebra;
 using Scriban;
 using Scriban.Helpers;
 using Scriban.Parsing;
@@ -18,28 +20,152 @@ namespace Kalk.Core
         {
             if (row <= 0) throw new ArgumentOutOfRangeException(nameof(row));
             if (column <= 0) throw new ArgumentOutOfRangeException(nameof(column));
-            RowLength = row;
-            ColumnLength = column;
+            RowCount = row;
+            ColumnCount = column;
         }
 
-        public int RowLength { get; }
+        public int RowCount { get; }
 
-        public int ColumnLength { get; }
+        public int ColumnCount { get; }
+
+        protected abstract KalkMatrix Transpose();
+
+        protected abstract KalkMatrix Identity();
+
+        protected abstract KalkVector Diagonal();
+
+        protected abstract object GenericDeterminant();
+
+        protected abstract KalkMatrix GenericInverse();
+
+        public abstract Array Values { get; }
+
+        public bool IsSquare => RowCount == ColumnCount;
+
+        protected abstract KalkVector GenericMultiplyLeft(KalkVector x);
+
+        protected abstract KalkVector GenericMultiplyRight(KalkVector y);
+
+        protected abstract KalkMatrix GenericMultiply(KalkMatrix y);
+        
+
+        protected static void AssertSquareMatrix(KalkMatrix m)
+        {
+            if (m == null) throw new ArgumentNullException(nameof(m));
+            if (!m.IsSquare) throw new ArgumentException($"Matrix must be square nxn instead of {m.TypeName}", nameof(m));
+        }
+
+        [KalkDoc("transpose")]
+        public static KalkMatrix Transpose(KalkMatrix m)
+        {
+            if (m == null) throw new ArgumentNullException(nameof(m));
+            return m.Transpose();
+        }
+
+        [KalkDoc("identity")]
+        public static KalkMatrix Identity(KalkMatrix m)
+        {
+            AssertSquareMatrix(m);
+            return m.Identity();
+        }
+
+        public static KalkVector Diagonal(KalkMatrix x)
+        {
+            AssertSquareMatrix(x);
+            return x.Diagonal();
+        }
+
+        [KalkDoc("determinant")]
+        public static object Determinant(KalkMatrix m)
+        {
+            AssertSquareMatrix(m);
+            return m.GenericDeterminant();
+        }
+
+        [KalkDoc("inverse")]
+        public static KalkMatrix Inverse(KalkMatrix m)
+        {
+            AssertSquareMatrix(m);
+            return m.GenericInverse();
+        }
+
+        public static object Multiply(KalkVector x, KalkMatrix y)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
+            CheckElementType(x, y);
+            if (x.Length != y.RowCount)
+                throw new ArgumentException($"Invalid size between the vector type length {x.Length} and the matrix row count {y.RowCount}. They Must be equal.", nameof(x));
+            return y.GenericMultiplyLeft(x);
+        }
+
+        public static object Multiply(KalkMatrix x, KalkVector y)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
+            CheckElementType(x, y);
+            if (x.ColumnCount != y.Length)
+                throw new ArgumentException($"Invalid size between the vector type length {y.Length} and the matrix column count {x.ColumnCount}. They Must be equal.", nameof(x));
+            return x.GenericMultiplyRight(y);
+        }
+
+        public static object Multiply(KalkMatrix x, KalkMatrix y)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
+            CheckElementType(x, y);
+            if (x.ColumnCount != y.RowCount)
+                throw new ArgumentException($"Invalid size not between the matrix x {x.TypeName} with a column count {x.ColumnCount} and the matrix y {y.TypeName} with a row count of {y.RowCount}. They Must be equal.", nameof(x));
+            return x.GenericMultiply(y);
+        }
+
+        private static void CheckElementType(KalkValue x, KalkValue y)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
+            if (x.ElementType != y.ElementType)
+            {
+                throw new ArgumentException($"Unsupported type for matrix multiplication. The combination of {x.GetType().ScriptPrettyName()} * {y.GetType().ScriptPrettyName()} is not supported.", nameof(x));
+            }
+        }
     }
 
-    public class KalkMatrix<T> : KalkMatrix, IScriptTransformable, IFormattable, IList, IKalkMatrixObject<T>, IScriptCustomType
+    public class KalkMatrix<T> : KalkMatrix, IFormattable, IList, IScriptCustomType
     {
         private readonly T[] _values;
 
         public KalkMatrix(int row, int column) : base(row, column)
         {
             _values = new T[row * column];
+            VerifyElementType();
         }
 
-        public KalkMatrix(KalkMatrix<T> values) : base(values.RowLength, values.ColumnLength)
+        private KalkMatrix(int row, int column, T[] values) : base(row, column)
+        {
+            if (values == null) throw new ArgumentNullException(nameof(values));
+            if (values.Length != row * column) throw new ArgumentException($"Matrix values must have {row*column} elements instead of {values.Length}");
+            _values = values;
+            VerifyElementType();
+        }
+
+        public KalkMatrix(KalkMatrix<T> values) : base(values.RowCount, values.ColumnCount)
         {
             _values = (T[])values._values.Clone();
+            VerifyElementType();
         }
+
+        private static void VerifyElementType()
+        {
+            if (typeof(T) == typeof(bool) || typeof(T) == typeof(int) || typeof(T) == typeof(float) || typeof(T) == typeof(double))
+            {
+                return;
+            }
+            throw new InvalidOperationException($"The type {typeof(T)} is not supported for matrices. Only bool, int, float and double are supported.");
+        }
+
+        public override Type ElementType => typeof(T);
+
+        public override Array Values => _values;
 
         public T this[int index]
         {
@@ -47,14 +173,15 @@ namespace Kalk.Core
             set => _values[index] = value;
         }
 
+
         public KalkVector<T> GetRow(int index)
         {
-            if ((uint)index >= (uint)RowLength) throw new ArgumentOutOfRangeException(nameof(index));
+            if ((uint)index >= (uint)RowCount) throw new ArgumentOutOfRangeException(nameof(index));
 
-            var row = new KalkVector<T>(ColumnLength);
-            for (int i = 0; i < ColumnLength; i++)
+            var row = new KalkVector<T>(ColumnCount);
+            for (int i = 0; i < ColumnCount; i++)
             {
-                row[i] = _values[ColumnLength * index + i];
+                row[i] = _values[ColumnCount * index + i];
             }
 
             return row;
@@ -62,24 +189,24 @@ namespace Kalk.Core
 
         public void SetRow(int index, KalkVector<T> value)
         {
-            if ((uint)index >= (uint)RowLength) throw new ArgumentOutOfRangeException(nameof(index));
+            if ((uint)index >= (uint)RowCount) throw new ArgumentOutOfRangeException(nameof(index));
             if (value == null) throw new ArgumentNullException(nameof(value));
-            if (value.Length != ColumnLength) throw new ArgumentOutOfRangeException(nameof(value), $"Invalid vector size. The vector has a length of {value.Length} while the row of this matrix is expecting {ColumnLength} elements.");
+            if (value.Length != ColumnCount) throw new ArgumentOutOfRangeException(nameof(value), $"Invalid vector size. The vector has a length of {value.Length} while the row of this matrix is expecting {ColumnCount} elements.");
 
-            for (int i = 0; i < ColumnLength; i++)
+            for (int i = 0; i < ColumnCount; i++)
             {
-                _values[ColumnLength * index + i] = value[i];
+                _values[ColumnCount * index + i] = value[i];
             }
         }
 
         public KalkVector<T> GetColumn(int index)
         {
-            if ((uint)index >= (uint)RowLength) throw new ArgumentOutOfRangeException(nameof(index));
+            if ((uint)index >= (uint)RowCount) throw new ArgumentOutOfRangeException(nameof(index));
 
-            var column = new KalkVector<T>(RowLength);
-            for (int i = 0; i < RowLength; i++)
+            var column = new KalkVector<T>(RowCount);
+            for (int i = 0; i < RowCount; i++)
             {
-                column[i] = _values[ColumnLength * i + index];
+                column[i] = _values[ColumnCount * i + index];
             }
 
             return column;
@@ -87,13 +214,13 @@ namespace Kalk.Core
 
         public void SetColumn(int index, KalkVector<T> value)
         {
-            if ((uint)index >= (uint)RowLength) throw new ArgumentOutOfRangeException(nameof(index));
+            if ((uint)index >= (uint)RowCount) throw new ArgumentOutOfRangeException(nameof(index));
             if (value == null) throw new ArgumentNullException(nameof(value));
-            if (value.Length != RowLength) throw new ArgumentOutOfRangeException(nameof(value), $"Invalid vector size. The vector has a length of {value.Length} while the column of this matrix is expecting {RowLength} elements.");
+            if (value.Length != RowCount) throw new ArgumentOutOfRangeException(nameof(value), $"Invalid vector size. The vector has a length of {value.Length} while the column of this matrix is expecting {RowCount} elements.");
 
-            for (int i = 0; i < RowLength; i++)
+            for (int i = 0; i < RowCount; i++)
             {
-                _values[ColumnLength * i + index] = value[i];
+                _values[ColumnCount * i + index] = value[i];
             }
         }
 
@@ -107,7 +234,7 @@ namespace Kalk.Core
             return Clone();
         }
 
-        public override string Kind => $"{ElementTypeName}{RowLength.ToString(CultureInfo.InvariantCulture)}x{ColumnLength.ToString(CultureInfo.InvariantCulture)}";
+        public override string TypeName => $"{ElementTypeName}{RowCount.ToString(CultureInfo.InvariantCulture)}x{ColumnCount.ToString(CultureInfo.InvariantCulture)}";
 
         private string ElementTypeName => typeof(T).ScriptPrettyName();
 
@@ -123,16 +250,14 @@ namespace Kalk.Core
             return newValue;
         }
 
-        public Type ElementType => typeof(T);
-
-        public bool CanTransform(Type transformType)
+        public override bool CanTransform(Type transformType)
         {
             return typeof(T) == typeof(int) && (typeof(long) == transformType || typeof(int) == transformType) ||
                    (typeof(T) == typeof(float) && (typeof(double) == transformType || typeof(float) == transformType) ||
                     typeof(T) == typeof(double) && typeof(double) == transformType);
         }
 
-        public object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
+        public override object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
         {
             return this.Transform(value =>
             {
@@ -145,8 +270,8 @@ namespace Kalk.Core
         {
             var context = formatProvider as TemplateContext;
             var builder = new StringBuilder();
-            builder.Append(typeof(T).ScriptPrettyName()).Append(RowLength.ToString(CultureInfo.InvariantCulture))
-                .Append('x').Append(ColumnLength.ToString(CultureInfo.InvariantCulture));
+            builder.Append(typeof(T).ScriptPrettyName()).Append(RowCount.ToString(CultureInfo.InvariantCulture))
+                .Append('x').Append(ColumnCount.ToString(CultureInfo.InvariantCulture));
             builder.Append('(');
             for(int i = 0; i < _values.Length; i++)
             {
@@ -163,7 +288,7 @@ namespace Kalk.Core
             ((ICollection) _values).CopyTo(array, index);
         }
 
-        public override int Count => RowLength;
+        public override int Count => RowCount;
 
         public bool IsSynchronized => ((ICollection) _values).IsSynchronized;
 
@@ -270,7 +395,6 @@ namespace Kalk.Core
             return true;
         }
 
-
         private IEnumerable<int> ForEachMemberPart(SourceSpan span, string member, bool throwIfInvalid)
         {
             for (int i = 0; i < member.Length; i++)
@@ -317,7 +441,7 @@ namespace Kalk.Core
                 {
                     if (throwIfInvalid)
                     {
-                        throw new ScriptRuntimeException(span, $"Swizzle swizzle {c} is out of range ({index}) for this vector length ({RowLength})");
+                        throw new ScriptRuntimeException(span, $"Swizzle swizzle {c} is out of range ({index}) for this vector length ({RowCount})");
                     }
                     else
                     {
@@ -331,6 +455,234 @@ namespace Kalk.Core
         public override bool CanWrite(string member)
         {
             return true;
+        }
+
+
+
+        protected override KalkVector GenericMultiplyLeft(KalkVector x)
+        {
+            return MultiplyLeft((KalkVector<T>)x);
+        }
+
+        protected override KalkVector GenericMultiplyRight(KalkVector y)
+        {
+            return MultiplyRight((KalkVector<T>)y);
+        }
+
+        protected override KalkMatrix GenericMultiply(KalkMatrix y)
+        {
+            return Multiply((KalkMatrix<T>)y);
+        }
+
+        protected override object GenericDeterminant()
+        {
+            return Determinant();
+        }
+
+        protected override KalkMatrix GenericInverse()
+        {
+            return Inverse();
+        }
+
+        protected KalkVector<T> MultiplyLeft(KalkVector<T> x)
+        {
+            if (typeof(T) == typeof(float))
+            {
+                var matrix = Matrix<float>.Build.Dense(RowCount, ColumnCount, (float[])(object)_values);
+                var vector = (Vector<float>)x.AsMathNetVector();
+                var result = new KalkVector<float>(matrix.LeftMultiply(vector));
+                return Unsafe.As<KalkVector<float>, KalkVector<T>>(ref result);
+            }
+
+            if (typeof(T) == typeof(double))
+            {
+                var matrix = Matrix<double>.Build.Dense(RowCount, ColumnCount, (double[])(object)_values);
+                var vector = (Vector<double>)x.AsMathNetVector();
+                var result = new KalkVector<double>(matrix.LeftMultiply(vector));
+                return Unsafe.As<KalkVector<double>, KalkVector<T>>(ref result);
+            }
+
+            throw new ArgumentException($"The type {ElementType.ScriptPrettyName()} is not supported for this mul operation", nameof(x));
+        }
+
+        protected KalkVector<T> MultiplyRight(KalkVector<T> y)
+        {
+            if (typeof(T) == typeof(float))
+            {
+                var matrix = Matrix<float>.Build.Dense(RowCount, ColumnCount, (float[])(object)_values);
+                var vector = (Vector<float>)y.AsMathNetVector();
+                var result = new KalkVector<float>(matrix.Multiply(vector));
+                return Unsafe.As<KalkVector<float>, KalkVector<T>>(ref result);
+            }
+
+            if (typeof(T) == typeof(double))
+            {
+                var matrix = Matrix<double>.Build.Dense(RowCount, ColumnCount, (double[])(object)_values);
+                var vector = (Vector<double>)y.AsMathNetVector();
+                var result = new KalkVector<double>(matrix.Multiply(vector));
+                return Unsafe.As<KalkVector<double>, KalkVector<T>>(ref result);
+            }
+
+            throw new ArgumentException($"The type {ElementType.ScriptPrettyName()} is not supported for this mul operation", nameof(y));
+        }
+
+        protected KalkMatrix Multiply(KalkMatrix<T> y)
+        {
+            if (typeof(T) == typeof(float))
+            {
+                var mx = Matrix<float>.Build.Dense(RowCount, ColumnCount, (float[])(object)_values);
+                var my = Matrix<float>.Build.Dense(RowCount, ColumnCount, (float[])(object)y._values);
+                var result = mx.Multiply(my);
+                var kalkResult = new KalkMatrix<float>(result.RowCount, result.ColumnCount, result.Storage.AsColumnMajorArray());
+                return kalkResult;
+            }
+
+            if (typeof(T) == typeof(double))
+            {
+                var mx = Matrix<double>.Build.Dense(RowCount, ColumnCount, (double[])(object)_values);
+                var my = Matrix<double>.Build.Dense(RowCount, ColumnCount, (double[])(object)y._values);
+                var result = mx.Multiply(my);
+                var kalkResult = new KalkMatrix<double>(result.RowCount, result.ColumnCount, result.Storage.AsColumnMajorArray());
+                return kalkResult;
+            }
+
+            throw new ArgumentException($"The type {ElementType.ScriptPrettyName()} is not supported for this mul operation", nameof(y));
+        }
+
+        protected T Determinant()
+        {
+            if (typeof(T) == typeof(float))
+            {
+                var matrix = Matrix<float>.Build.Dense(RowCount, ColumnCount, (float[])(object)_values);
+                var value = matrix.Determinant();
+                return Unsafe.As<float, T>(ref value);
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                var matrix = Matrix<double>.Build.Dense(RowCount, ColumnCount, (double[])(object)_values);
+                var value = matrix.Determinant();
+                return Unsafe.As<double, T>(ref value);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Determinant can only be calculated for float or double matrices but not for {TypeName}.");
+            }
+        }
+
+        protected KalkMatrix<T> Inverse()
+        {
+            if (typeof(T) == typeof(float))
+            {
+                var matrix = Matrix<float>.Build.Dense(RowCount, ColumnCount, (float[])(object)_values);
+                matrix = matrix.Inverse();
+                var result = new KalkMatrix<float>(matrix.RowCount, matrix.ColumnCount, matrix.Storage.AsColumnMajorArray());
+                return Unsafe.As<KalkMatrix<float>, KalkMatrix<T>>(ref result);
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                var matrix = Matrix<double>.Build.Dense(RowCount, ColumnCount, (double[])(object)_values);
+                matrix = matrix.Inverse();
+                var result = new KalkMatrix<double>(matrix.RowCount, matrix.ColumnCount, matrix.Storage.AsColumnMajorArray());
+                return Unsafe.As<KalkMatrix<double>, KalkMatrix<T>>(ref result);
+            }
+            else
+            {
+                throw new InvalidOperationException("Determinant can only be calculated for float or double matrices.");
+            }
+        }
+
+        protected override KalkMatrix Transpose()
+        {
+            var transpose = new KalkMatrix<T>(ColumnCount, RowCount);
+            for(int y =0; y < RowCount; y++)
+            {
+                for(int x = 0; x < ColumnCount; x++)
+                {
+                    transpose[RowCount * x + y] = this[ColumnCount * y + x];
+                }
+            }
+            return transpose;
+        }
+        
+        protected override KalkMatrix Identity()
+        {
+            if (RowCount != ColumnCount) throw new InvalidOperationException($"Matrix must be square nxn instead of {TypeName}");
+
+            var transpose = new KalkMatrix<T>(ColumnCount, RowCount);
+            if (typeof(T) == typeof(bool))
+            {
+                var m = (KalkMatrix<bool>) (KalkMatrix) transpose;
+                int count = RowCount;
+                for (int i = 0; i < count; i++)
+                    m[ColumnCount * i + i] = true;
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                var m = (KalkMatrix<int>)(KalkMatrix)transpose;
+                int count = RowCount;
+                for (int i = 0; i < count; i++)
+                    m[ColumnCount * i + i] = 1;
+            }
+            else if (typeof(T) == typeof(float))
+            {
+                var m = (KalkMatrix<float>)(KalkMatrix)transpose;
+                int count = RowCount;
+                for (int i = 0; i < count; i++)
+                    m[ColumnCount * i + i] = 1.0f;
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                var m = (KalkMatrix<double>)(KalkMatrix)transpose;
+                int count = RowCount;
+                for (int i = 0; i < count; i++)
+                    m[ColumnCount * i + i] = 1.0;
+            }
+            return transpose;
+        }
+
+        protected override KalkVector Diagonal()
+        {
+            if (RowCount != ColumnCount) throw new InvalidOperationException($"Matrix must be square nxn instead of {TypeName}");
+
+            if (typeof(T) == typeof(bool))
+            {
+                var m = (KalkMatrix<bool>)(KalkMatrix)this;
+                int count = RowCount;
+                var result = new KalkVector<bool>(RowCount);
+                for (int i = 0; i < count; i++)
+                    result[i] = m[ColumnCount * i + i];
+                return result;
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                var m = (KalkMatrix<int>)(KalkMatrix)this;
+                int count = RowCount;
+                var result = new KalkVector<int>(RowCount);
+                for (int i = 0; i < count; i++)
+                    result[i] = m[ColumnCount * i + i];
+                return result;
+            }
+            else if (typeof(T) == typeof(float))
+            {
+                var m = (KalkMatrix<float>)(KalkMatrix)this;
+                int count = RowCount;
+                var result = new KalkVector<float>(RowCount);
+                for (int i = 0; i < count; i++)
+                    result[i] = m[ColumnCount * i + i];
+                return result;
+
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                var m = (KalkMatrix<double>)(KalkMatrix)this;
+                int count = RowCount;
+                var result = new KalkVector<double>(RowCount);
+                for (int i = 0; i < count; i++)
+                    result[i] = m[ColumnCount * i + i];
+                return result;
+            }
+
+            throw new InvalidOperationException($"Type {ElementType} is not supported for this operation");
         }
 
         public override bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
@@ -371,14 +723,14 @@ namespace Kalk.Core
             var leftMatrix = leftValue as KalkMatrix<T>;
             var rightMatrix = rightValue as KalkMatrix<T>;
             if (leftMatrix == null && rightMatrix == null) return false;
-            if (leftMatrix != null && rightMatrix != null && (leftMatrix.RowLength != rightMatrix.RowLength || leftMatrix.ColumnLength != rightMatrix.ColumnLength))
+            if (leftMatrix != null && rightMatrix != null && (leftMatrix.RowCount != rightMatrix.RowCount || leftMatrix.ColumnCount != rightMatrix.ColumnCount))
             {
                 return false;
             }
 
             if (leftMatrix == null)
             {
-                leftMatrix = new KalkMatrix<T>(rightMatrix.RowLength, rightMatrix.ColumnLength);
+                leftMatrix = new KalkMatrix<T>(rightMatrix.RowCount, rightMatrix.ColumnCount);
                 var leftComponentValue = context.ToObject<T>(span, leftValue);
                 for (int i = 0; i < leftMatrix._values.Length; i++)
                 {
@@ -388,7 +740,7 @@ namespace Kalk.Core
 
             if (rightMatrix == null)
             {
-                rightMatrix = new KalkMatrix<T>(leftMatrix.RowLength, leftMatrix.ColumnLength);
+                rightMatrix = new KalkMatrix<T>(leftMatrix.RowCount, leftMatrix.ColumnCount);
                 var rightComponentValue = context.ToObject<T>(span, rightValue);
                 for (int i = 0; i < rightMatrix._values.Length; i++)
                 {
@@ -404,7 +756,7 @@ namespace Kalk.Core
                 case ScriptBinaryOperator.CompareGreaterOrEqual:
                 case ScriptBinaryOperator.CompareLess:
                 case ScriptBinaryOperator.CompareGreater:
-                    var vbool = new KalkMatrix<bool>(leftMatrix.RowLength, leftMatrix.ColumnLength);
+                    var vbool = new KalkMatrix<bool>(leftMatrix.RowCount, leftMatrix.ColumnCount);
                     for (int i = 0; i < vbool._values.Length; i++)
                     {
                         vbool[i] = (bool)ScriptBinaryExpression.Evaluate(context, span, op, leftMatrix._values[i], rightMatrix._values[i]);
@@ -422,7 +774,7 @@ namespace Kalk.Core
                 case ScriptBinaryOperator.ShiftRight:
                 case ScriptBinaryOperator.Power:
                 {
-                    var opResult = new KalkMatrix<T>(leftMatrix.RowLength, leftMatrix.ColumnLength);
+                    var opResult = new KalkMatrix<T>(leftMatrix.RowCount, leftMatrix.ColumnCount);
                     for (int i = 0; i < opResult._values.Length; i++)
                     {
                         opResult[i] = context.ToObject<T>(span, ScriptBinaryExpression.Evaluate(context, span, op, leftMatrix._values[i], rightMatrix._values[i]));
@@ -445,7 +797,7 @@ namespace Kalk.Core
         public bool Equals(KalkMatrix<T> other)
         {
             if (other == null) return false;
-            if (RowLength != other.RowLength || ColumnLength != other.ColumnLength) return false;
+            if (RowCount != other.RowCount || ColumnCount != other.ColumnCount) return false;
             var values = _values;
             var otherValues = other._values;
             for (int i = 0; i < values.Length; i++)
@@ -467,7 +819,7 @@ namespace Kalk.Core
         public override int GetHashCode()
         {
             var values = _values;
-            int hashCode = (RowLength * 397) ^ ColumnLength;
+            int hashCode = (RowCount * 397) ^ ColumnCount;
             for (int i = 0; i < values.Length; i++)
             {
                 hashCode = (hashCode * 397) ^ values[i].GetHashCode();
@@ -477,7 +829,7 @@ namespace Kalk.Core
 
         public IEnumerator GetEnumerator()
         {
-            for (int i = 0; i < RowLength; i++)
+            for (int i = 0; i < RowCount; i++)
             {
                 yield return GetRow(i);
             }

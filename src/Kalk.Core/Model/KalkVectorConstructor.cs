@@ -38,7 +38,7 @@ namespace Kalk.Core
                     var length = index + argLength;
                     if (length > Dimension)
                     {
-                        throw new ScriptArgumentException(i, $"Invalid number of arguments. Expecting {Dimension} arguments instead of {length} for {vector.Kind}.");
+                        throw new ScriptArgumentException(i, $"Invalid number of arguments. Expecting {Dimension} arguments instead of {length} for {vector.TypeName}.");
                     }
 
                     ProcessArgument(context, ref index, arg, vector);
@@ -47,7 +47,7 @@ namespace Kalk.Core
 
             if (index != Dimension)
             {
-                throw new ScriptArgumentException(arguments.Length - 1, $"Invalid number of arguments. Expecting {Dimension} arguments instead of {index} for {vector.Kind}.");
+                throw new ScriptArgumentException(arguments.Length - 1, $"Invalid number of arguments. Expecting {Dimension} arguments instead of {index} for {vector.TypeName}.");
             }
 
             return vector;

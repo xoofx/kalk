@@ -26,9 +26,9 @@ namespace Kalk.Core
             this[2] = rgb & 0xFF;
         }
 
-        public override string Kind => "rgb";
+        public override string TypeName => "rgb";
 
-        public override KalkVector<int> Clone()
+        public override KalkVector Clone()
         {
             return new KalkColorRgb(this);
         }

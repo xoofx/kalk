@@ -1,11 +1,20 @@
 ﻿using System;
 using MathNet.Numerics;
+using Scriban;
 using Scriban.Helpers;
+using Scriban.Parsing;
+using Scriban.Runtime;
 
 namespace Kalk.Core
 {
-    public abstract class KalkValue : KalkObject
+    public abstract class KalkValue : KalkObject, IScriptTransformable
     {
+        public abstract Type ElementType { get; }
+        
+        public abstract bool CanTransform(Type transformType);
+
+        public abstract object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply);
+
         public static bool IsNumber(object value)
         {
             return value is KalkValue || (value != null && value.GetType().IsNumber());

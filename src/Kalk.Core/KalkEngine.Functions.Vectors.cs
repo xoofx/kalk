@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Scriban.Helpers;
 using Scriban.Syntax;
 
 namespace Kalk.Core
@@ -6,6 +8,8 @@ namespace Kalk.Core
     public partial class KalkEngine
     {
         public const string CategoryTypeConstructors = "Type Constructors";
+        public const string CategoryVectorTypeConstructors = "Type Vector Constructors";
+        public const string CategoryMathVectorMatrixFunctions = "Math Vector/Matrix Functions";
         private static readonly KalkVectorConstructor<int> Int2Constructor = new KalkVectorConstructor<int>(2);
         private static readonly KalkVectorConstructor<int> Int3Constructor = new KalkVectorConstructor<int>(3);
         private static readonly KalkVectorConstructor<int> Int4Constructor = new KalkVectorConstructor<int>(4);
@@ -31,40 +35,53 @@ namespace Kalk.Core
         private void RegisterVectors()
         {
             RegisterFunction("int", CreateInt, CategoryTypeConstructors);
-            RegisterFunction("int2", CreateInt2, CategoryTypeConstructors);
-            RegisterFunction("int3", CreateInt3, CategoryTypeConstructors);
-            RegisterFunction("int4", CreateInt4, CategoryTypeConstructors);
-            RegisterFunction("int8", CreateInt8, CategoryTypeConstructors);
-            RegisterFunction("int16", CreateInt16, CategoryTypeConstructors);
+            RegisterFunction("int2", CreateInt2, CategoryVectorTypeConstructors);
+            RegisterFunction("int3", CreateInt3, CategoryVectorTypeConstructors);
+            RegisterFunction("int4", CreateInt4, CategoryVectorTypeConstructors);
+            RegisterFunction("int8", CreateInt8, CategoryVectorTypeConstructors);
+            RegisterFunction("int16", CreateInt16, CategoryVectorTypeConstructors);
 
             RegisterFunction("bool",   CreateBool, CategoryTypeConstructors);
-            RegisterFunction("bool2",  CreateBool2, CategoryTypeConstructors);
-            RegisterFunction("bool3",  CreateBool3, CategoryTypeConstructors);
-            RegisterFunction("bool4",  CreateBool4, CategoryTypeConstructors);
-            RegisterFunction("bool8",  CreateBool8, CategoryTypeConstructors);
-            RegisterFunction("bool16", CreateBool16, CategoryTypeConstructors);
+            RegisterFunction("bool2",  CreateBool2, CategoryVectorTypeConstructors);
+            RegisterFunction("bool3",  CreateBool3, CategoryVectorTypeConstructors);
+            RegisterFunction("bool4",  CreateBool4, CategoryVectorTypeConstructors);
+            RegisterFunction("bool8",  CreateBool8, CategoryVectorTypeConstructors);
+            RegisterFunction("bool16", CreateBool16, CategoryVectorTypeConstructors);
 
             RegisterFunction("float",   CreateFloat, CategoryTypeConstructors);
-            RegisterFunction("float2",  CreateFloat2, CategoryTypeConstructors);
-            RegisterFunction("float3",  CreateFloat3, CategoryTypeConstructors);
-            RegisterFunction("float4",  CreateFloat4, CategoryTypeConstructors);
-            RegisterFunction("float8",  CreateFloat8, CategoryTypeConstructors);
-            RegisterFunction("float16", CreateFloat16, CategoryTypeConstructors);
+            RegisterFunction("float2",  CreateFloat2, CategoryVectorTypeConstructors);
+            RegisterFunction("float3",  CreateFloat3, CategoryVectorTypeConstructors);
+            RegisterFunction("float4",  CreateFloat4, CategoryVectorTypeConstructors);
+            RegisterFunction("float8",  CreateFloat8, CategoryVectorTypeConstructors);
+            RegisterFunction("float16", CreateFloat16, CategoryVectorTypeConstructors);
 
             RegisterFunction("double",  (Func<object, double>)CreateDouble, CategoryTypeConstructors);
-            RegisterFunction("double2", CreateDouble2, CategoryTypeConstructors);
-            RegisterFunction("double3", CreateDouble3, CategoryTypeConstructors);
-            RegisterFunction("double4", CreateDouble4, CategoryTypeConstructors);
-            RegisterFunction("double8", CreateDouble8, CategoryTypeConstructors);
+            RegisterFunction("double2", CreateDouble2, CategoryVectorTypeConstructors);
+            RegisterFunction("double3", CreateDouble3, CategoryVectorTypeConstructors);
+            RegisterFunction("double4", CreateDouble4, CategoryVectorTypeConstructors);
+            RegisterFunction("double8", CreateDouble8, CategoryVectorTypeConstructors);
 
-            RegisterFunction("rgb", CreateRgb, CategoryTypeConstructors);
-            RegisterFunction("rgba", CreateRgba, CategoryTypeConstructors);
+            RegisterFunction("rgb", CreateRgb, CategoryVectorTypeConstructors);
+            RegisterFunction("rgba", CreateRgba, CategoryVectorTypeConstructors);
 
-            RegisterFunction("vector", CreateVector, CategoryTypeConstructors);
+            RegisterFunction("vector", CreateVector, CategoryVectorTypeConstructors);
 
-            RegisterFunction("float4x4", new KalkMatrixConstructor<float>(4, 4), CategoryTypeConstructors);
+            RegisterFunction("dot", KalkVector.Dot, CategoryMathVectorMatrixFunctions);
+            RegisterFunction("cross", KalkVector.Cross, CategoryMathVectorMatrixFunctions);
+            RegisterFunction("length", Length, CategoryMathVectorMatrixFunctions);
         }
-        
+
+        [KalkDoc("length")]
+        public object Length(object x)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (x is KalkVector v)
+            {
+                return Sqrt(new KalkDoubleValue(KalkVector.Dot(v, v)));
+            }
+            return Abs(new KalkCompositeValue(x));
+        }
+
         [KalkDoc("int")]
         public int CreateInt(object value = null) => value == null ? 0 : ToObject<int>(0, value);
 
@@ -193,22 +210,5 @@ namespace Kalk.Core
 
         [KalkDoc("rgba")]
         public KalkColorRgba CreateRgba(params object[] arguments) => (KalkColorRgba)RgbaConstructor.Invoke(this, arguments);
-
-
-        protected T ToObject<T>(int argIndex, object value)
-        {
-            try
-            {
-                return ToObject<T>(CurrentSpan, value);
-            }
-            catch (ScriptRuntimeException ex)
-            {
-                throw new ScriptArgumentException(argIndex, ex.OriginalMessage);
-            }
-            catch (Exception ex)
-            {
-                throw new ScriptArgumentException(argIndex, ex.Message);
-            }
-        }
     }
 }

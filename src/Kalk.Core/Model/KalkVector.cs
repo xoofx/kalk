@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using MathNet.Numerics.LinearAlgebra.Storage;
 using Scriban;
@@ -20,10 +21,47 @@ namespace Kalk.Core
         public abstract int Length { get; }
 
         public abstract object GetComponent(int index);
+
+        public abstract KalkVector Clone();
+
+        protected abstract KalkVector GenericCross(KalkVector y);
+
+        protected abstract KalkMatrix GenericDiagonal();
+
+        protected abstract object GenericDot(KalkVector y);
+
+
+        public static KalkMatrix Diagonal(KalkVector x)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            return x.GenericDiagonal();
+        }
         
+        [KalkDoc("dot")]
+        public static object Dot(KalkVector x, KalkVector y)
+        {
+            AssertValidVectors(x, y);
+            return x.GenericDot(y);
+        }
+
+        [KalkDoc("cross")]
+        public static object Cross(KalkVector x, KalkVector y)
+        {
+            AssertValidVectors(x, y);
+            if (x.Length != 3) throw new ArgumentException($"Expecting a vector with 3 elements instead of {x.Length} for cross function.");
+            return x.GenericCross(y);
+        }
+
+        private static void AssertValidVectors(KalkVector x, KalkVector y)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
+            if (x.Length != y.Length) throw new ArgumentException($"Vectors must have the same length instead of {x.Length} vs {y.Length}", nameof(x));
+            if (x.ElementType != y.ElementType) throw new ArgumentException($"Vectors must have the same element type instead of {x.ElementType.ScriptPrettyName()} vs {y.ElementType.ScriptPrettyName()}", nameof(x));
+        }
     }
 
-    public class KalkVector<T> : KalkVector, IScriptTransformable, IFormattable, IList, IScriptObject, IKalkVectorObject<T>, IScriptCustomType
+    public class KalkVector<T> : KalkVector, IFormattable, IList, IScriptObject, IKalkVectorObject<T>, IScriptCustomType
     {
         private const int x_IndexOffset = 2;
         private readonly T[] _values;
@@ -43,6 +81,8 @@ namespace Kalk.Core
         public KalkVector(T v1, T v2, T v3) => _values = new T[3] { v1, v2, v3 };
         public KalkVector(T v1, T v2, T v3, T v4) => _values = new T[4] { v1, v2, v3, v4 };
 
+        public override Type ElementType => typeof(T);
+
         public KalkVector(KalkVector<T> values)
         {
             _values = (T[])values._values.Clone();
@@ -55,7 +95,103 @@ namespace Kalk.Core
             return _values[index];
         }
 
-        public override string Kind
+        protected override object GenericDot(KalkVector y)
+        {
+            return Dot(y);
+        }
+
+        internal object AsMathNetVector()
+        {
+            if (typeof(T) == typeof(float))
+            {
+                return MathNet.Numerics.LinearAlgebra.Vector<float>.Build.Dense((float[]) (object) _values);
+            }
+
+            if (typeof(T) == typeof(double))
+            {
+                return MathNet.Numerics.LinearAlgebra.Vector<double>.Build.Dense((double[])(object)_values);
+            }
+
+            return null;
+        }
+
+        protected override KalkMatrix GenericDiagonal()
+        {
+            var matrix = new KalkMatrix<T>(Length, Length);
+            for (int i = 0; i < Length; i++)
+            {
+                matrix[Length * i + i] = this[i];
+            }
+
+            return matrix;
+        }
+
+        protected override KalkVector GenericCross(KalkVector y)
+        {
+            AssertSameVectors(y);
+
+            var left = (KalkVector<T>) this;
+            var right = (KalkVector<T>)y;
+
+            var result = (KalkVector<T>)((KalkVector<T>) left.Multiply(new KalkVector<T>(right[1], right[2], right[0]))).Subtract(
+                new KalkVector<T>(left[1], left[2], left[0]).Multiply(right));
+            return new KalkVector<T>(result[1], result[2], result[0]);
+        }
+
+        private void AssertSameVectors(KalkVector y)
+        {
+            if (y == null) throw new ArgumentNullException(nameof(y));
+            if (Length != y.Length) throw new ArgumentException($"Invalid length for vectors. Lengths {Length} vs {y.Length} must be equal.", nameof(y));
+            if (y.GetType() != this.GetType()) throw new ArgumentException($"Invalid type for vectors. Types must match when multiplying. The types {this.TypeName} and {y.TypeName} must be equal.", nameof(y));
+        }
+
+
+
+        public virtual T Dot(KalkVector y)
+        {
+            AssertSameVectors(y);
+            
+            if (typeof(T) == typeof(float))
+            {
+                var left = (KalkVector<float>)(KalkVector)this;
+                var right = (KalkVector<float>)y;
+                float result = 0;
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result += left[i] * right[i];
+                }
+                return Unsafe.As<float, T>(ref result);
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                var left = (KalkVector<double>)(KalkVector)this;
+                var right = (KalkVector<double>)y;
+                double result = 0;
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result += left[i] * right[i];
+                }
+                return Unsafe.As<double, T>(ref result);
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                var left = (KalkVector<int>)(KalkVector)this;
+                var right = (KalkVector<int>)y;
+                int result = 0;
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result += left[i] * right[i];
+                }
+                return Unsafe.As<int, T>(ref result);
+            }
+
+            throw new InvalidOperationException("This operation is only supported with int, float and double vectors.");
+        }
+
+        public override string TypeName
         {
             get
             {
@@ -107,8 +243,6 @@ namespace Kalk.Core
             }
         }
 
-        public Type ElementType => typeof(T);
-
         public T this[int index]
         {
             get => _values[index];
@@ -136,7 +270,7 @@ namespace Kalk.Core
             _values[index] = value;
         }
 
-        public virtual KalkVector<T> Clone()
+        public override KalkVector Clone()
         {
             return new KalkVector<T>(this);
         }
@@ -146,7 +280,7 @@ namespace Kalk.Core
             return Clone();
         }
 
-        public bool CanTransform(Type transformType)
+        public override bool CanTransform(Type transformType)
         {
             return typeof(T) == typeof(int) && (typeof(long) == transformType || typeof(int) == transformType) ||
                    (typeof(T) == typeof(float) && (typeof(double) == transformType || typeof(float) == transformType) ||
@@ -155,7 +289,7 @@ namespace Kalk.Core
 
         public object Transform(Func<T, T> apply)
         {
-            var newValue = Clone();
+            var newValue = (KalkVector<T>)Clone();
             for (int i = 0; i < Length; i++)
             {
                 var result = apply(_values[i]);
@@ -164,7 +298,7 @@ namespace Kalk.Core
             return newValue;
         }
 
-        public object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
+        public override object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
         {
             return this.Transform(value =>
             {
@@ -177,7 +311,7 @@ namespace Kalk.Core
         {
             var context = formatProvider as TemplateContext;
             var builder = new StringBuilder();
-            var kind = Kind;
+            var kind = TypeName;
             builder.Append(kind);
             builder.Append('(');
             if (kind == "vector")
@@ -275,6 +409,186 @@ namespace Kalk.Core
             set => throw new InvalidOperationException("Cannot set this instance readonly");
         }
 
+        public KalkVector Multiply(KalkVector y)
+        {
+            if (ElementType != y.ElementType) throw new ArgumentException($"Vectors must have the same element type instead of {TypeName} vs {y.TypeName}", nameof(y));
+            if (Length != y.Length) throw new ArgumentException($"Vectors must have the same length instead of {Length} vs {y.Length}", nameof(y));
+
+            if (typeof(T) == typeof(float))
+            {
+                var left = (KalkVector<float>)(KalkVector)this;
+                var right = (KalkVector<float>)y;
+                var result = new KalkVector<float>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = left[i] * right[i];
+                }
+                return result;
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                var left = (KalkVector<double>)(KalkVector)this;
+                var right = (KalkVector<double>)y;
+                var result = new KalkVector<double>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = left[i] * right[i];
+                }
+                return result;
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                var left = (KalkVector<int>)(KalkVector)this;
+                var right = (KalkVector<int>)y;
+                var result = new KalkVector<int>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = left[i] * right[i];
+                }
+                return result;
+
+            }
+            throw new InvalidOperationException("This operation is only supported with int, float and double vectors.");
+        }
+
+        public KalkVector Add(KalkVector y)
+        {
+            if (ElementType != y.ElementType) throw new ArgumentException($"Vectors must have the same element type instead of {TypeName} vs {y.TypeName}", nameof(y));
+            if (Length != y.Length) throw new ArgumentException($"Vectors must have the same length instead of {Length} vs {y.Length}", nameof(y));
+
+            if (typeof(T) == typeof(float))
+            {
+                var left = (KalkVector<float>)(KalkVector)this;
+                var right = (KalkVector<float>)y;
+                var result = new KalkVector<float>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = left[i] + right[i];
+                }
+                return result;
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                var left = (KalkVector<double>)(KalkVector)this;
+                var right = (KalkVector<double>)y;
+                var result = new KalkVector<double>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = left[i] + right[i];
+                }
+                return result;
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                var left = (KalkVector<int>)(KalkVector)this;
+                var right = (KalkVector<int>)y;
+                var result = new KalkVector<int>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = left[i] + right[i];
+                }
+                return result;
+
+            }
+            throw new InvalidOperationException("This operation is only supported with int, float and double vectors.");
+        }
+
+        public KalkVector Subtract(KalkVector y)
+        {
+            if (ElementType != y.ElementType) throw new ArgumentException($"Vectors must have the same element type instead of {TypeName} vs {y.TypeName}", nameof(y));
+            if (Length != y.Length) throw new ArgumentException($"Vectors must have the same length instead of {Length} vs {y.Length}", nameof(y));
+
+            if (typeof(T) == typeof(float))
+            {
+                var left = (KalkVector<float>)(KalkVector)this;
+                var right = (KalkVector<float>)y;
+                var result = new KalkVector<float>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = left[i] - right[i];
+                }
+                return result;
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                var left = (KalkVector<double>)(KalkVector)this;
+                var right = (KalkVector<double>)y;
+                var result = new KalkVector<double>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = left[i] - right[i];
+                }
+                return result;
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                var left = (KalkVector<int>)(KalkVector)this;
+                var right = (KalkVector<int>)y;
+                var result = new KalkVector<int>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = left[i] - right[i];
+                }
+                return result;
+
+            }
+            throw new InvalidOperationException("This operation is only supported with int, float and double vectors.");
+        }
+
+        public KalkVector Divide(KalkVector y)
+        {
+            if (ElementType != y.ElementType) throw new ArgumentException($"Vectors must have the same element type instead of {TypeName} vs {y.TypeName}", nameof(y));
+            if (Length != y.Length) throw new ArgumentException($"Vectors must have the same length instead of {Length} vs {y.Length}", nameof(y));
+
+            if (typeof(T) == typeof(float))
+            {
+                var left = (KalkVector<float>)(KalkVector)this;
+                var right = (KalkVector<float>)y;
+                var result = new KalkVector<float>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = left[i] / right[i];
+                }
+                return result;
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                var left = (KalkVector<double>)(KalkVector)this;
+                var right = (KalkVector<double>)y;
+                var result = new KalkVector<double>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = left[i] / right[i];
+                }
+                return result;
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                var left = (KalkVector<int>)(KalkVector)this;
+                var right = (KalkVector<int>)y;
+                var result = new KalkVector<int>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = left[i] / right[i];
+                }
+                return result;
+
+            }
+            throw new InvalidOperationException("This operation is only supported with int, float and double vectors.");
+        }
+
         public override bool TryGetValue(TemplateContext context, SourceSpan span, string member, out object result)
         {
             result = null;
@@ -336,7 +650,7 @@ namespace Kalk.Core
 
         private ScriptRuntimeException InvalidUsageOfXYZW(SourceSpan span, char c)
         {
-            return new ScriptRuntimeException(span, $"The swizzle `{c}` is not supported by this {Kind} type.");
+            return new ScriptRuntimeException(span, $"The swizzle `{c}` is not supported by this {TypeName} type.");
         }
 
 
@@ -521,9 +835,21 @@ namespace Kalk.Core
                     return true;
 
                 case ScriptBinaryOperator.Add:
-                case ScriptBinaryOperator.Substract:
+                    result = leftVector.Add(rightVector);
+                    return true;
+
                 case ScriptBinaryOperator.Multiply:
+                    result = leftVector.Multiply(rightVector);
+                    return true;
+
+                case ScriptBinaryOperator.Substract:
+                    result = leftVector.Subtract(rightVector);
+                    return true;
+
                 case ScriptBinaryOperator.Divide:
+                    result = leftVector.Divide(rightVector);
+                    return true;
+
                 case ScriptBinaryOperator.DivideRound:
                 case ScriptBinaryOperator.Modulus:
                 case ScriptBinaryOperator.ShiftLeft:
@@ -547,7 +873,7 @@ namespace Kalk.Core
         public bool TryEvaluate(TemplateContext context, SourceSpan span, ScriptUnaryOperator op, object rightValue, out object result)
         {
             var previousVector = (KalkVector<T>) rightValue;
-            var newVector = previousVector.Clone();
+            var newVector = (KalkVector<T>)previousVector.Clone();
             for (int i = 0; i < newVector.Length; i++)
             {
                 newVector[i] = (T) ScriptUnaryExpression.Evaluate(context, span, op, newVector[i]);

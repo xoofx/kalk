@@ -20,11 +20,13 @@ namespace Kalk.Core
 {
     public partial class KalkEngine
     {
-        private const string CategoryDevelopers = "Misc Functions";
+        private const string CategoryMisc = "Misc Functions";
 
         private void RegisterMiscFunctions()
         {
-            RegisterVariable("ascii", AsciiTable, CategoryDevelopers);
+            RegisterVariable("ascii", AsciiTable, CategoryMisc);
+            RegisterFunction("keys", DelegateCustomFunction.CreateFunc<object, IEnumerable>(Keys), CategoryMisc);
+            RegisterFunction("values", DelegateCustomFunction.CreateFunc<object, IEnumerable>(Values), CategoryMisc);
         }
 
         /// <summary>
@@ -32,5 +34,25 @@ namespace Kalk.Core
         /// </summary>
         [KalkDoc("ascii")]
         public KalkAsciiTable AsciiTable { get; }
-   }
+        
+        [KalkDoc("keys")]
+        public IEnumerable Keys(object obj)
+        {
+            return ObjectFunctions.Keys(this, obj);
+        }
+
+        [KalkDoc("values")]
+        public IEnumerable Values(object obj)
+        {
+            switch (obj)
+            {
+                case IDictionary<string, object> dict:
+                    return ObjectFunctions.Values(dict);
+                case IEnumerable list:
+                    return new ScriptArray(list);
+                default:
+                    return new ScriptArray() {obj};
+            }
+        }
+    }
 }

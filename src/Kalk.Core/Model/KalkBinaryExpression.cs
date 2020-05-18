@@ -9,7 +9,7 @@ namespace Kalk.Core
     public class KalkBinaryExpression : KalkExpressionWithMembers
     {
         private static readonly (string, Func<KalkExpressionWithMembers, object> getter)[] MemberDefs = {
-            ("kind", unit => unit.Kind),
+            ("kind", unit => unit.TypeName),
             ("value", unit => ((KalkBinaryExpression)unit).Value),
             ("operator", unit => ((KalkBinaryExpression)unit).OperatorText),
             ("unit", unit => ((KalkBinaryExpression)unit).Unit),
@@ -26,7 +26,7 @@ namespace Kalk.Core
             Unit = unit;
         }
 
-        public override string Kind => "binary expression";
+        public override string TypeName => "binary expression";
 
         public object Value { get; set; }
 

@@ -29,9 +29,9 @@ namespace Kalk.Core
         {
         }
 
-        public override string Kind => "rgba";
+        public override string TypeName => "rgba";
 
-        public override KalkVector<int> Clone()
+        public override KalkVector Clone()
         {
             return new KalkColorRgba(this);
         }

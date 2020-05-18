@@ -49,7 +49,7 @@ namespace Kalk.Core
                         base.ProcessSingleArgument(context, ref index, arg, vector);
                         return;
                     }
-                    value = GetArgumentValue(context, arg);
+                    value = context.ToObject<int>(context.CurrentSpan, arg);
                     break;
             }
 

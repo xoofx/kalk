@@ -9,7 +9,7 @@ namespace Kalk.Core
 
     // https://github.com/google/palette.js/tree/master
 
-    public abstract class KalkColor : KalkVector<int>, IKalkConsolable
+    public abstract class KalkColor : KalkVector<int>
     {
         protected KalkColor(int dimension) : base(dimension)
         {
@@ -44,8 +44,6 @@ namespace Kalk.Core
                 }
             }
         }
-
-        public abstract override KalkVector<int> Clone();
 
         private static float Clamp01(float value) => Math.Clamp(value, 0.0f, 1.0f);
 
@@ -84,38 +82,35 @@ namespace Kalk.Core
             base.SetComponent(index, value);
         }
 
-        public abstract override string Kind { get; }
+        public abstract override string TypeName { get; }
 
         public override string ToString(string format, IFormatProvider formatProvider)
         {
-            var context = formatProvider as TemplateContext;
+            var engine = formatProvider as KalkEngine;
             var builder = new StringBuilder();
-            builder.Append(Kind);
+            builder.Append(TypeName);
             builder.Append('(');
             for (int i = 0; i < Length; i++)
             {
                 if (i > 0) builder.Append(", ");
-                builder.Append(context != null ? context.ObjectToString(this[i]) : this[i].ToString(null, formatProvider));
+                builder.Append(engine != null ? engine.ObjectToString(this[i]) : this[i].ToString(null, formatProvider));
             }
             builder.Append(')');
 
-            return builder.ToString();
-        }
-
-        public void ToConsole(KalkEngine engine, ConsoleText text)
-        {
-            text.Append(ConsoleStyle.Green, true);
-            text.Append(" #");
+            builder.Append(" ## ");
             for (int i = 0; i < Length; i++)
             {
-                text.Append($"{this[i]:X2}");
+                builder.Append($"{this[i]:X2}");
             }
-            text.Append(ConsoleStyle.Green, false);
-            text.Append(" ");
-            var style = ConsoleStyle.BackgroundRgb(this[0], this[1], this[2]);
-            text.Append(style, true);
-            text.Append("    ");
-            text.Append(style, false);
+            if (engine != null && engine.AllowEscapeSequences)
+            {
+                builder.Append(" ");
+                builder.Append(ConsoleStyle.BackgroundRgb(this[0], this[1], this[2]));
+                builder.Append("    ");
+                builder.Append(ConsoleStyle.Reset);
+            }
+            builder.Append(" ##");
+            return builder.ToString();
         }
     }
 }

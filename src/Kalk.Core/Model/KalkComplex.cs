@@ -25,6 +25,8 @@ namespace Kalk.Core
             _value = value;
         }
 
+        public string TypeName => "complex";
+
         public double Re => _value.Real;
         
         public double Im => _value.Imaginary;
