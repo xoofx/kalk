@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -24,26 +26,37 @@ namespace Kalk.CodeGen
 
             var workspace = MSBuildWorkspace.Create(new Dictionary<string, string>()
             {
-               {"TargetFramework", "netstandard2.0"},
+//               {"TargetFramework", "netcoreapp3.1"},
             });
-
-            
-
 
             var srcFolder = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"../../../.."));
             
             var pathToSolution = Path.Combine(srcFolder, @"kalk.sln");
             var solution = await workspace.OpenSolutionAsync(pathToSolution);
 
-            var project = solution.Projects.First(x => x.Name == "Kalk.Core");
-            var scriban = solution.Projects.First(x => x.Name == "Scriban");
-            project = project.AddMetadataReferences(scriban.MetadataReferences);
+            // force to reference unsafe
+            int value = 0;
+            var bvalue = Unsafe.As<int, bool>(ref value);
+            bvalue = true;
 
+            var z = BigInteger.Zero;
+            Console.WriteLine($"Use bigint {z}");
+
+            var project = solution.Projects.First(x => x.Name == "Kalk.Core");
+            //var scriban = solution.Projects.First(x => x.Name == "Scriban");
+            //project = project.AddMetadataReferences(scriban.MetadataReferences);
 
             string homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
                                Environment.OSVersion.Platform == PlatformID.MacOSX)
                 ? Environment.GetEnvironmentVariable("HOME")
                 : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                if (assembly.IsDynamic) continue;
+                if (assembly.GetName().Name == "Scriban") continue;
+                project = project.AddMetadataReference(MetadataReference.CreateFromFile(assembly.Location));
+            }
 
             {
                 var refPackage = Path.Combine(homePath, ".nuget", "packages", "mathnet.numerics", "4.9.1", "lib", "netstandard2.0", "MathNet.Numerics.dll");
