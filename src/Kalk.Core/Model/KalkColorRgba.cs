@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using MathNet.Numerics.Financial;
+﻿using Scriban.Syntax;
 
 namespace Kalk.Core
 {
+    [ScriptTypeName("rgba")]
     public class KalkColorRgba : KalkColor
     {
         public KalkColorRgba() : base(4)

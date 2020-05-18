@@ -14,6 +14,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
+    [ScriptTypeName("matrix")]
     public abstract class KalkMatrix : KalkValue
     {
         protected KalkMatrix(int row, int column)

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using Consolus;
 using Scriban;
+using Scriban.Syntax;
 
 namespace Kalk.Core
 {
 
     // https://github.com/google/palette.js/tree/master
 
+    [ScriptTypeName("color")]
     public abstract class KalkColor : KalkVector<int>
     {
         protected KalkColor(int dimension) : base(dimension)

@@ -16,6 +16,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
+    [ScriptTypeName("vector")]
     public abstract class KalkVector : KalkValue
     {
         public abstract int Length { get; }

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using Scriban.Syntax;
 
 namespace Kalk.Core
 {
+    [ScriptTypeName("rgb")]
     public class KalkColorRgb : KalkColor
     {
         public KalkColorRgb() : base(3)
