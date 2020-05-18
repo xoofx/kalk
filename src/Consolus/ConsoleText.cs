@@ -17,6 +17,7 @@ namespace Consolus
             Enabled = enabled;
         }
 
+
         public readonly ConsoleStyle Style;
 
         public readonly bool Enabled;
@@ -34,6 +35,8 @@ namespace Consolus
         private readonly List<ConsoleStyleMarker> _leadingStyles;
         private readonly List<ConsoleStyleMarker> _trailingStyles;
         private bool _changedCalled;
+        private readonly StringBuilder _currentEscape;
+        private EscapeState _escapeState;
 
         public ConsoleText()
         {
@@ -41,6 +44,7 @@ namespace Consolus
             _leadingStyles = new List<ConsoleStyleMarker>();
             _trailingStyles = new List<ConsoleStyleMarker>();
             SelectionEnd = -1;
+            _currentEscape = new StringBuilder();
         }
 
         public ConsoleText(string text) : this()
@@ -188,8 +192,102 @@ namespace Consolus
             NotifyChanged();
         }
 
+        private enum EscapeState
+        {
+            None,
+            Escape,
+            EscapeCsiParameterBytes,
+            EscapeCsiIntermediateBytes,
+            EscapeCsiFinalByte,
+        }
+
         private void InsertInternal(int index, ConsoleChar item)
         {
+            if (item.Value == '\x1b')
+            {
+                _currentEscape.Append(item.Value);
+                _escapeState = EscapeState.Escape;
+                return;
+            }
+
+            if (_escapeState != EscapeState.None)
+            {
+                bool isCharInvalidValid = false;
+
+                // All sequences start with followed by a char in the range 0x40–0x5F: (ASCII @A–Z[\]^_)
+                var c = item.Value;
+
+                if (_escapeState >= EscapeState.EscapeCsiParameterBytes)
+                {
+                    // CSI: ESC [ followed by
+                    // - by any number (including none) of "parameter bytes", char in the 0x30–0x3F: (ASCII 0–9:;<=>?)
+                    // - then by any number of "intermediate bytes" in the range 0x20–0x2F (ASCII space and !"#$%&'()*+,-./),
+                    // - then finally by a single "final byte" in the range 0x40–0x7E (ASCII @A–Z[\]^_`a–z{|}~)
+                    switch (_escapeState)
+                    {
+                        case EscapeState.EscapeCsiParameterBytes:
+                            if (c >= 0x30 && c <= 0x3F)
+                            {
+                                _currentEscape.Append(c);
+                            }
+                            else
+                            {
+                                goto case EscapeState.EscapeCsiIntermediateBytes;
+                            }
+                            break;
+                        case EscapeState.EscapeCsiIntermediateBytes:
+                            if (c >= 0x20 && c <= 0x2F)
+                            {
+                                _escapeState = EscapeState.EscapeCsiIntermediateBytes;
+                                _currentEscape.Append(c);
+                            }
+                            else
+                            {
+                                goto case EscapeState.EscapeCsiFinalByte;
+                            }
+                            break;
+                        case EscapeState.EscapeCsiFinalByte:
+                            if (c >= 0x40 && c <= 0x7E)
+                            {
+                                _currentEscape.Append(c);
+                            }
+                            else
+                            {
+                                isCharInvalidValid = true;
+                            }
+                            var styleAsText = _currentEscape.ToString();
+                            _currentEscape.Length = 0;
+                            _escapeState = EscapeState.None;
+                            InsertInternal(index, new ConsoleStyleMarker(Inline(styleAsText), true));
+                            break;
+                    }
+                }
+                else
+                {
+                    if (_currentEscape.Length == 1)
+                    {
+                        _currentEscape.Append(c);
+                        if (c == '[')
+                        {
+                            _escapeState = EscapeState.EscapeCsiParameterBytes;
+                        }
+                        else
+                        {
+                            var styleAsText = _currentEscape.ToString();
+                            _currentEscape.Length = 0;
+                            _escapeState = EscapeState.None;
+                            InsertInternal(index, new ConsoleStyleMarker(Inline(styleAsText), true));
+                        }
+                    }
+                }
+
+                if (!isCharInvalidValid)
+                {
+                    return;
+                }
+                // otherwise the character hasn't been consumed, so we propagate it as a real char.
+            }
+
             // Copy any leading/trailing escapes
             bool isFirstInsert = index == 0 && Count == 0;
             bool isLastInsert = Count > 0 && index == Count;
@@ -588,7 +686,27 @@ namespace Consolus
                         }
                         break;
                     case ConsoleStyleKind.Reset:
-                        Clear();
+                        // An inline reset applies only to inline styles
+                        if (style.IsInline)
+                        {
+                            // Clear only inline styles (and not regular)
+                            foreach(var keyPair in this)
+                            {
+                                var styleList = keyPair.Value;
+                                for(int i = styleList.Count - 1; i >= 0; i--)
+                                {
+                                    var styleIn  = styleList[i];
+                                    if (styleIn.IsInline)
+                                    {
+                                        styleList.RemoveAt(i);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Clear();
+                        }
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

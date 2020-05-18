@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Consolus
@@ -52,6 +53,48 @@ namespace Consolus
         public static readonly ConsoleStyle Reversed = new ConsoleStyle("\u001b[7m", ConsoleStyleKind.Format);
         public static readonly ConsoleStyle Reset = new ConsoleStyle("\u001b[0m", ConsoleStyleKind.Reset);
 
+        private static readonly Dictionary<string, ConsoleStyle> MapKnownEscapeToConsoleStyle = new Dictionary<string, ConsoleStyle>(StringComparer.OrdinalIgnoreCase);
+
+        static ConsoleStyle()
+        {
+            MapKnownEscapeToConsoleStyle.Add(Black.EscapeSequence, Black);
+            MapKnownEscapeToConsoleStyle.Add(Red.EscapeSequence, Red);
+            MapKnownEscapeToConsoleStyle.Add(Green.EscapeSequence, Green);
+            MapKnownEscapeToConsoleStyle.Add(Yellow.EscapeSequence, Yellow);
+            MapKnownEscapeToConsoleStyle.Add(Blue.EscapeSequence, Blue);
+            MapKnownEscapeToConsoleStyle.Add(Magenta.EscapeSequence, Magenta);
+            MapKnownEscapeToConsoleStyle.Add(Cyan.EscapeSequence, Cyan);
+            MapKnownEscapeToConsoleStyle.Add(White.EscapeSequence, White);
+            MapKnownEscapeToConsoleStyle.Add(BrightBlack.EscapeSequence, BrightBlack);
+            MapKnownEscapeToConsoleStyle.Add(BrightRed.EscapeSequence, BrightRed);
+            MapKnownEscapeToConsoleStyle.Add(BrightGreen.EscapeSequence, BrightGreen);
+            MapKnownEscapeToConsoleStyle.Add(BrightYellow.EscapeSequence, BrightYellow);
+            MapKnownEscapeToConsoleStyle.Add(BrightBlue.EscapeSequence, BrightBlue);
+            MapKnownEscapeToConsoleStyle.Add(BrightMagenta.EscapeSequence, BrightMagenta);
+            MapKnownEscapeToConsoleStyle.Add(BrightCyan.EscapeSequence, BrightCyan);
+            MapKnownEscapeToConsoleStyle.Add(BrightWhite.EscapeSequence, BrightWhite);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundBlack.EscapeSequence, BackgroundBlack);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundRed.EscapeSequence, BackgroundRed);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundGreen.EscapeSequence, BackgroundGreen);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundYellow.EscapeSequence, BackgroundYellow);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundBlue.EscapeSequence, BackgroundBlue);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundMagenta.EscapeSequence, BackgroundMagenta);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundCyan.EscapeSequence, BackgroundCyan);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundWhite.EscapeSequence, BackgroundWhite);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundBrightBlack.EscapeSequence, BackgroundBrightBlack);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundBrightRed.EscapeSequence, BackgroundBrightRed);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundBrightGreen.EscapeSequence, BackgroundBrightGreen);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundBrightYellow.EscapeSequence, BackgroundBrightYellow);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundBrightBlue.EscapeSequence, BackgroundBrightBlue);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundBrightMagenta.EscapeSequence, BackgroundBrightMagenta);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundBrightCyan.EscapeSequence, BackgroundBrightCyan);
+            MapKnownEscapeToConsoleStyle.Add(BackgroundBrightWhite.EscapeSequence, BackgroundBrightWhite);
+            MapKnownEscapeToConsoleStyle.Add(Bold.EscapeSequence, Bold);
+            MapKnownEscapeToConsoleStyle.Add(Underline.EscapeSequence, Underline);
+            MapKnownEscapeToConsoleStyle.Add(Reversed.EscapeSequence, Reversed);
+            MapKnownEscapeToConsoleStyle.Add(Reset.EscapeSequence, Reset);
+        }
+
         public ConsoleStyle(string escapeSequence) : this()
         {
             EscapeSequence = escapeSequence;
@@ -62,6 +105,26 @@ namespace Consolus
         {
             EscapeSequence = escapeSequence;
             Kind = kind;
+        }
+
+        private ConsoleStyle(string escapeSequence, ConsoleStyleKind kind, bool isInline)
+        {
+            EscapeSequence = escapeSequence;
+            Kind = kind;
+            IsInline = isInline;
+        }
+
+        public static ConsoleStyle Inline(string escape, ConsoleStyleKind kind = ConsoleStyleKind.Color)
+        {
+            if (escape == null) throw new ArgumentNullException(nameof(escape));
+            if (kind == ConsoleStyleKind.Color)
+            {
+                if (MapKnownEscapeToConsoleStyle.TryGetValue(escape, out var style))
+                {
+                    kind = style.Kind;
+                }
+            }
+            return new ConsoleStyle(escape, kind, true);
         }
 
         public static ConsoleStyle Rgb(int r, int g, int b)
@@ -77,6 +140,8 @@ namespace Consolus
         public readonly string EscapeSequence;
 
         public readonly ConsoleStyleKind Kind;
+
+        public readonly bool IsInline;
 
 
         public void Render(TextWriter writer)
@@ -129,7 +194,7 @@ namespace Consolus
 
         public bool Equals(ConsoleStyle other)
         {
-            return EscapeSequence == other.EscapeSequence && Kind == other.Kind;
+            return EscapeSequence == other.EscapeSequence && Kind == other.Kind && IsInline == other.IsInline;
         }
 
         public override bool Equals(object obj)
@@ -141,7 +206,7 @@ namespace Consolus
         {
             unchecked
             {
-                return ((EscapeSequence?.GetHashCode() ?? 0) * 397) ^ (int) Kind;
+                return ((((EscapeSequence?.GetHashCode() ?? 0) * 397) ^ (int) Kind) * 397) & IsInline.GetHashCode();
             }
         }
 
