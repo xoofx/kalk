@@ -2,6 +2,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Numerics;
+using MathNet.Numerics.Random;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
@@ -16,6 +17,7 @@ namespace Kalk.Core
 
         private Func<int, BigInteger> FibFunc;
         private Func<object, object> AbsFunc;
+        private Func<object, object> RndFunc;
         private static readonly Func<double, double> CosFunc = Math.Cos;
         private static readonly Func<double, double> AcosFunc = Math.Acos;
         private static readonly Func<double, double> CoshFunc = Math.Cosh;
@@ -48,6 +50,7 @@ namespace Kalk.Core
         private static readonly Func<object, bool> IsFiniteFunc = IsFiniteFuncImpl;
         private static readonly Func<object, bool> IsInfFunc = IsInfFuncImpl;
         private static readonly Func<object, bool> IsNanFunc = IsNanFuncImpl;
+        private Random _random;
 
         /// <summary>
         /// Defines the "Not a Number" constant for a double.
@@ -74,6 +77,8 @@ namespace Kalk.Core
             FibFunc = Fibonacci;
             AbsFunc = AbsImpl;
             SignFunc = SignFuncImpl;
+            _random = new Random();
+            RndFunc = RndImpl;
 
             Builtins.Import("i", new Func<object, object>(ComplexNumber));
 
@@ -125,7 +130,9 @@ namespace Kalk.Core
 
             RegisterFunction("asdouble", (Func<object, double>)AsDouble, CategoryMathFunctions);
             RegisterFunction("aslong", (Func<object, long>)AsLong, CategoryMathFunctions);
-        
+
+            RegisterFunction("rnd", Rnd, CategoryMathFunctions);
+
             RegisterFunction("sum", new SumDelegate(Sum), CategoryMathFunctions);
             RegisterFunction("all", DelegateCustomFunction.CreateFunc<object, bool>(All), CategoryMathFunctions);
             RegisterFunction("any", DelegateCustomFunction.CreateFunc<object, bool>(Any), CategoryMathFunctions);
@@ -194,6 +201,25 @@ namespace Kalk.Core
         /// <returns>The absolute value of the <paramref name="x"/> parameter.</returns>
         [KalkDoc("abs")]
         public object Abs(KalkCompositeValue x) => x.TransformArg(this, AbsFunc);
+
+        /// <summary>
+        /// Returns a random value.
+        /// </summary>
+        /// <param name="x">A value to create random values for.</param>
+        /// <returns>A random value or a random value of the <paramref name="x"/> parameter.</returns>
+        [KalkDoc("rnd")]
+        public object Rnd(KalkCompositeValue x = null)
+        {
+            if (x != null)
+            {
+                return x.TransformArg(this, RndFunc);
+            }
+            else
+            {
+                return RndFunc(null);
+            }
+
+        }
 
         /// <summary>
         /// Returns an integer that indicates the sign of a number.
@@ -465,6 +491,39 @@ namespace Kalk.Core
                 }
             }
             return fn;
+        }
+
+        private object RndImpl(object value = null)
+        {
+            if (value == null) return _random.NextDouble();
+
+            var type = value.GetType();
+            if (type == typeof(int))
+            {
+                return _random.NextFullRangeInt32();
+            }
+            if (type == typeof(float))
+            {
+                return (float)_random.NextDouble();
+            }
+            if (type == typeof(double))
+            {
+                return _random.NextDouble();
+            }
+            if (type == typeof(long))
+            {
+                return _random.NextFullRangeInt64();
+            }
+            if (type == typeof(decimal))
+            {
+                return _random.NextDecimal();
+            }
+            if (type == typeof(BigInteger))
+            {
+                return (BigInteger)_random.NextFullRangeInt64();
+            }
+
+            return _random.NextDouble();
         }
 
         private object AbsImpl(object value)
