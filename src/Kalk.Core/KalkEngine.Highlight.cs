@@ -473,6 +473,7 @@ namespace Kalk.Core
         {
             // Collect all braces open/close
             List<(int, int)> matchingBraces = null;
+            List<int> pendingUnpairedBraces = null;
             List<int> unpairedBraces = null;
             for (var i = 0; i < tokens.Count; i++)
             {
@@ -482,21 +483,22 @@ namespace Kalk.Core
                     var match = MatchPairs[j];
                     if (match == token.Type)
                     {
-                        if (unpairedBraces == null)
+                        if (pendingUnpairedBraces == null)
                         {
                             matchingBraces = new List<(int, int)>();
+                            pendingUnpairedBraces = new List<int>();
                             unpairedBraces = new List<int>();
                         }
 
                         bool processed = false;
                         bool isOpening = (j & 1) == 0;
-                        if (unpairedBraces.Count > 0)
+                        if (pendingUnpairedBraces.Count > 0)
                         {
                             var toMatch = isOpening ? MatchPairs[j + 1] : MatchPairs[j - 1];
-                            var leftIndex = unpairedBraces[unpairedBraces.Count - 1];
+                            var leftIndex = pendingUnpairedBraces[pendingUnpairedBraces.Count - 1];
                             if (tokens[leftIndex].Type == toMatch)
                             {
-                                unpairedBraces.RemoveAt(unpairedBraces.Count - 1);
+                                pendingUnpairedBraces.RemoveAt(pendingUnpairedBraces.Count - 1);
                                 matchingBraces.Add((leftIndex, i));
                                 processed = true;
                             }
@@ -506,12 +508,12 @@ namespace Kalk.Core
                         {
                             if (isOpening)
                             {
-                                unpairedBraces.Add(i);
+                                pendingUnpairedBraces.Add(i);
                             }
                             else
                             {
                                 // Closing that are not matching will never match, put them at the front of the braces that will never match
-                                unpairedBraces.Insert(0, i);
+                                unpairedBraces.Add(i);
                             }
                         }
                         break;
@@ -519,8 +521,12 @@ namespace Kalk.Core
                 }
             }
 
+
+
             if (matchingBraces == null) return;
 
+            unpairedBraces.AddRange(pendingUnpairedBraces);
+            
             var tokenIndex = FindTokenIndexFromColumnIndex(cursorIndex, text.Count, tokens);
             var matchingCurrent = matchingBraces.Where(x => x.Item1 == tokenIndex || x.Item2 == tokenIndex).Select(x => ((int, int)?) x).FirstOrDefault();
 
