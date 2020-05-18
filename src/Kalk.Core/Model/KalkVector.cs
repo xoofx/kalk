@@ -146,9 +146,7 @@ namespace Kalk.Core
             if (y.GetType() != this.GetType()) throw new ArgumentException($"Invalid type for vectors. Types must match when multiplying. The types {this.TypeName} and {y.TypeName} must be equal.", nameof(y));
         }
 
-
-
-        public virtual T Dot(KalkVector y)
+        protected virtual T Dot(KalkVector y)
         {
             AssertSameVectors(y);
             
