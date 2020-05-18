@@ -521,8 +521,6 @@ namespace Kalk.Core
                 }
             }
 
-
-
             if (matchingBraces == null) return;
 
             unpairedBraces.AddRange(pendingUnpairedBraces);
