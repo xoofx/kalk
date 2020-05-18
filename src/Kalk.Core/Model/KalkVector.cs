@@ -713,7 +713,7 @@ namespace Kalk.Core
                 int index;
                 
                 var newComponentUsed = GetComponentUsed(c, out index);
-                if (newComponentUsed == ComponentUsed.none && throwIfInvalid)
+                if (newComponentUsed == ComponentUsed.none && index >= x_IndexOffset && throwIfInvalid)
                 {
                     throw new ScriptRuntimeException(span, $"Invalid swizzle {c}. Expecting only x,y,z,w.");
                 }
