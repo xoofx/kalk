@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Runtime.CompilerServices;
+using Kalk.Core.Helpers;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
@@ -6,7 +8,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public class KalkMatrixConstructor<T>
+    public class KalkMatrixConstructor<T> : KalkConstructor where T : unmanaged
     {
         public KalkMatrixConstructor(int row, int column)
         {

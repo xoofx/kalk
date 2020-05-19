@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using MathNet.Numerics.LinearAlgebra.Storage;
 using Scriban;
@@ -62,7 +63,7 @@ namespace Kalk.Core
         }
     }
 
-    public class KalkVector<T> : KalkVector, IFormattable, IList, IScriptObject, IKalkVectorObject<T>, IScriptCustomType
+    public class KalkVector<T> : KalkVector, IFormattable, IList, IScriptObject, IKalkVectorObject<T>, IScriptCustomType where T : unmanaged
     {
         private const int x_IndexOffset = 2;
         private readonly T[] _values;
@@ -115,6 +116,8 @@ namespace Kalk.Core
 
             return null;
         }
+
+        public override Span<byte> AsSpan() => MemoryMarshal.AsBytes(new Span<T>(_values));
 
         protected override KalkMatrix GenericDiagonal()
         {
@@ -295,6 +298,18 @@ namespace Kalk.Core
                 newValue[i] = (T)result;
             }
             return newValue;
+        }
+
+        public override bool Visit(TemplateContext context, SourceSpan span, Func<object, bool> visit)
+        {
+            for (int i = 0; i < Length; i++)
+            {
+                if (!visit(_values[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public override object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)

@@ -209,8 +209,12 @@ namespace Kalk.Core
         {
             return transformType == typeof(double) || transformType == typeof(float);
         }
-
-
+        
+        public bool Visit(TemplateContext context, SourceSpan span, Func<object, bool> visit)
+        {
+            return visit(GetValue());
+        }
+        
         public object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
         {
             return apply(GetValue());

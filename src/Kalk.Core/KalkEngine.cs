@@ -47,6 +47,7 @@ namespace Kalk.Core
             Console.OutputEncoding = Encoding.UTF8;
             EnableEngineOutput = true;
             Repl = new ConsoleRepl();
+            HasInteractiveConsole = Repl.HasInteractiveConsole;
             
             Builtins = BuiltinObject;
             ((KalkObjectWithAlias)Builtins).Engine = this;
@@ -113,6 +114,8 @@ namespace Kalk.Core
         public KalkAliases Aliases { get; }
 
         public bool EnableEngineOutput { get; set; }
+
+        public bool HasInteractiveConsole { get; }
 
         /// <summary>
         /// If used in an expression, returns an object containing all units defined.

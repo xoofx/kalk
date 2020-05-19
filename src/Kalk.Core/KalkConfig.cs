@@ -9,9 +9,11 @@ namespace Kalk.Core
     {
         public const int DefaultHelpMinColumn = 30;
         public const int DefaultHelpMaxColumn = 100;
+        public const string DefaultLimitToString = "auto";
         public const string DefaultBaseCurrency = "EUR";
         public const string DefaultDisplay = "std";
 
+        public const string LimitToStringProp = "limit_to_string";
         public const string BaseCurrencyProp = "base_currency";
         public const string DisplayProp = "display";
 
@@ -19,6 +21,7 @@ namespace Kalk.Core
         {
             HelpMaxColumn = DefaultHelpMaxColumn;
             Display = DefaultDisplay;
+            LimitToString = DefaultLimitToString;
         }
         
         public int HelpMaxColumn
@@ -31,15 +34,21 @@ namespace Kalk.Core
             }
         }
 
+        public string LimitToString
+        {
+            get => GetSafeValue(LimitToStringProp, DefaultLimitToString);
+            set => SetValue(LimitToStringProp, value, false);
+        }
+
         public string Display
         {
             get
             {
                 var mode = GetSafeValue<string>(DisplayProp, DefaultDisplay);
                 // Normalize the display in case it was messed up in config
-                if (!KalkDisplayMode.TryNormalize(mode, out _))
+                if (!KalkDisplayModeHelper.TryParse(mode, out var fullMode))
                 {
-                    mode = KalkDisplayMode.Standard;
+                    mode = KalkDisplayMode.Standard.ToText();
                     this[DisplayProp] = mode;
                 }
                 return mode;
@@ -96,7 +105,7 @@ namespace Kalk.Core
         {
             if (value == null) throw new ScriptRuntimeException(span, "Display must be non null.");
             var mode = value.ToString();
-            if (!KalkDisplayMode.TryNormalize(mode, out _))
+            if (!KalkDisplayModeHelper.TryParse(mode, out _))
             {
                 throw new ScriptRuntimeException(span, $"Invalid display name `{mode}`. Expecting `std` or `dev`.");
             }

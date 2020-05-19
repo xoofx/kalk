@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using MathNet.Numerics;
 using Scriban;
 using Scriban.Helpers;
@@ -12,6 +14,17 @@ namespace Kalk.Core
         public abstract Type ElementType { get; }
         
         public abstract bool CanTransform(Type transformType);
+
+        public abstract Span<byte> AsSpan();
+
+        public void BitCastFrom(Span<byte> bytes)
+        {
+            var destByte = AsSpan();
+            var minLength = Math.Min(destByte.Length, bytes.Length);
+            Unsafe.CopyBlockUnaligned(ref destByte[0], ref bytes[0], (uint)minLength);
+        }
+
+        public abstract bool Visit(TemplateContext context, SourceSpan span, Func<object, bool> visit);
 
         public abstract object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply);
 

@@ -31,9 +31,10 @@ namespace Kalk.Core
             RegisterGeneralFunctions();
             RegisterMathFunctions();
             RegisterMatrices();
-            RegisterVectors();
             RegisterMiscFunctions();
+            RegisterStringFunctions();
             RegisterUnitFunctions();
+            RegisterVectors();
             RegisterDocumentation();
 
             // Register last the system file

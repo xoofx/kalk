@@ -13,27 +13,54 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public static class KalkDisplayMode
+    public enum KalkDisplayMode
+    {
+        Standard,
+
+        Developer
+    }
+
+    public static class KalkDisplayModeHelper
     {
         public const string Standard = "std";
 
         public const string Developer = "dev";
 
-        public static bool TryNormalize(string mode, out string fullMode)
+        public static string ToText(this KalkDisplayMode mode)
         {
-            fullMode = null;
+            switch (mode)
+            {
+                case KalkDisplayMode.Standard:
+                    return Standard;
+                case KalkDisplayMode.Developer:
+                    return Developer;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+            }
+        }
+
+        public static bool TryParse(string mode, out KalkDisplayMode fullMode)
+        {
+            fullMode = KalkDisplayMode.Standard;
             switch (mode)
             {
                 case Standard:
-                    fullMode = "Standard";
+                    fullMode = KalkDisplayMode.Standard;
                     return true;
-                case "dev":
-                    fullMode = "Developer";
+                case Developer:
+                    fullMode = KalkDisplayMode.Standard;
                     return true;
             }
             return false;
         }
+
+        public static KalkDisplayMode SafeParse(string text)
+        {
+            return TryParse(text, out var mode) ? mode : KalkDisplayMode.Standard;
+        }
     }
+
+
 
     public partial class KalkEngine
     {
@@ -81,7 +108,7 @@ namespace Kalk.Core
         {
             var mode = name?.Name ?? Config.Display;
 
-            if (!KalkDisplayMode.TryNormalize(mode, out var fullMode))
+            if (!KalkDisplayModeHelper.TryParse(mode, out var fullMode))
             {
                 throw new ArgumentException($"Invalid display name `{mode}`. Expecting `std` or `dev`.", nameof(name));
             }

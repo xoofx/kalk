@@ -12,6 +12,8 @@ namespace Kalk.Core
 {
     public partial class KalkEngine
     {
+        public const int DefaultLimitToStringNoAuto = 4096;
+
         private static readonly TokenType[] MatchPairs = new[]
         {
             TokenType.OpenParen,
@@ -75,16 +77,56 @@ namespace Kalk.Core
             }
             else
             {
-                WriteHighlightLine($"{name} = {ObjectToString(value, true)}");
+                int previousLimit = LimitToString;
+                try
+                {
+                    int limit = 0;
+                    var limitStr = Config.LimitToString;
+                    if (limitStr == "auto")
+                    {
+                        if (HasInteractiveConsole)
+                        {
+                            limit = Console.WindowWidth * Console.WindowHeight;
+                        }
+                        else
+                        {
+                            limit = DefaultLimitToStringNoAuto;
+                        }
+                    }
+                    else if (limitStr == null || !int.TryParse(limitStr, out limit))
+                    {
+                        limit = DefaultLimitToStringNoAuto;
+                    }
+
+                    if (limit < 0) limit = 0;
+                    LimitToString = limit;
+                    WriteHighlightLine($"{name} = {ObjectToString(value, true)}");
+                }
+                finally
+                {
+                    LimitToString = previousLimit;
+                }
+
                 WriteValueWithDisplayMode(value);
             }
         }
 
         private void WriteValueWithDisplayMode(object value)
         {
-            switch (Config.Display)
+            var display = KalkDisplayModeHelper.SafeParse(Config.Display);
+
+            // If the type is displayable
+            if (value is IKalkDisplayable displayable)
             {
-                case KalkDisplayMode.Standard: return;
+                displayable.Display(this, display);
+                return;
+            }
+            
+            // Otherwise supports the default.
+            switch (display)
+            {
+                case KalkDisplayMode.Standard:
+                    return;
                 case KalkDisplayMode.Developer:
                     if (value is int i32)
                     {

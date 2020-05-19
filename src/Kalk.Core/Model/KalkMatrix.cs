@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using MathNet.Numerics.LinearAlgebra;
 using Scriban;
@@ -15,7 +16,7 @@ using Scriban.Syntax;
 namespace Kalk.Core
 {
     [ScriptTypeName("matrix")]
-    public abstract class KalkMatrix : KalkValue
+    public abstract class KalkMatrix : KalkValue, IKalkDisplayable
     {
         protected KalkMatrix(int row, int column)
         {
@@ -129,9 +130,11 @@ namespace Kalk.Core
                 throw new ArgumentException($"Unsupported type for matrix multiplication. The combination of {x.GetType().ScriptPrettyName()} * {y.GetType().ScriptPrettyName()} is not supported.", nameof(x));
             }
         }
+
+        public abstract void Display(KalkEngine engine, KalkDisplayMode mode);
     }
 
-    public class KalkMatrix<T> : KalkMatrix, IFormattable, IList, IScriptCustomType
+    public class KalkMatrix<T> : KalkMatrix, IFormattable, IList, IScriptCustomType where T: unmanaged
     {
         private readonly T[] _values;
 
@@ -235,7 +238,20 @@ namespace Kalk.Core
             return Clone();
         }
 
-        public override string TypeName => $"{ElementTypeName}{RowCount.ToString(CultureInfo.InvariantCulture)}x{ColumnCount.ToString(CultureInfo.InvariantCulture)}";
+        public override string TypeName
+        {
+            get
+            {
+                if (RowCount > 4 || ColumnCount > 4)
+                {
+                    return $"matrix({ElementTypeName}, {RowCount.ToString(CultureInfo.InvariantCulture)}, {ColumnCount.ToString(CultureInfo.InvariantCulture)})";
+                }
+                else
+                {
+                    return $"{ElementTypeName}{RowCount.ToString(CultureInfo.InvariantCulture)}x{ColumnCount.ToString(CultureInfo.InvariantCulture)}";
+                }
+            }
+        }
 
         private string ElementTypeName => typeof(T).ScriptPrettyName();
 
@@ -258,6 +274,21 @@ namespace Kalk.Core
                     typeof(T) == typeof(double) && typeof(double) == transformType);
         }
 
+        public override Span<byte> AsSpan() => MemoryMarshal.AsBytes(new Span<T>(_values));
+
+        public override bool Visit(TemplateContext context, SourceSpan span, Func<object, bool> visit)
+        {
+            for (int i = 0; i < _values.Length; i++)
+            {
+                if (!visit(_values[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public override object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
         {
             return this.Transform(value =>
@@ -265,23 +296,6 @@ namespace Kalk.Core
                 var result = apply(value);
                 return context.ToObject<T>(span, result);
             });
-        }
-
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            var context = formatProvider as TemplateContext;
-            var builder = new StringBuilder();
-            builder.Append(typeof(T).ScriptPrettyName()).Append(RowCount.ToString(CultureInfo.InvariantCulture))
-                .Append('x').Append(ColumnCount.ToString(CultureInfo.InvariantCulture));
-            builder.Append('(');
-            for(int i = 0; i < _values.Length; i++)
-            {
-                if (i > 0) builder.Append(", ");
-                var valueToFormat = _values[i];
-                builder.Append(context != null ? context.ObjectToString(valueToFormat) : valueToFormat is IFormattable formattable ? formattable.ToString(null, formatProvider) : valueToFormat.ToString());
-            }
-            builder.Append(')');
-            return builder.ToString();
         }
 
         public void CopyTo(Array array, int index)
@@ -532,7 +546,7 @@ namespace Kalk.Core
             if (typeof(T) == typeof(float))
             {
                 var mx = Matrix<float>.Build.Dense(RowCount, ColumnCount, (float[])(object)_values);
-                var my = Matrix<float>.Build.Dense(RowCount, ColumnCount, (float[])(object)y._values);
+                var my = Matrix<float>.Build.Dense(y.RowCount, y.ColumnCount, (float[])(object)y._values);
                 var result = mx.Multiply(my);
                 var kalkResult = new KalkMatrix<float>(result.RowCount, result.ColumnCount, result.Storage.AsColumnMajorArray());
                 return kalkResult;
@@ -541,7 +555,7 @@ namespace Kalk.Core
             if (typeof(T) == typeof(double))
             {
                 var mx = Matrix<double>.Build.Dense(RowCount, ColumnCount, (double[])(object)_values);
-                var my = Matrix<double>.Build.Dense(RowCount, ColumnCount, (double[])(object)y._values);
+                var my = Matrix<double>.Build.Dense(y.RowCount, y.ColumnCount, (double[])(object)y._values);
                 var result = mx.Multiply(my);
                 var kalkResult = new KalkMatrix<double>(result.RowCount, result.ColumnCount, result.Storage.AsColumnMajorArray());
                 return kalkResult;
@@ -849,6 +863,149 @@ namespace Kalk.Core
         public static bool operator !=(KalkMatrix<T> left, KalkMatrix<T> right)
         {
             return !Equals(left, right);
+        }
+
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            var engine = formatProvider as KalkEngine;
+            var builder = new StringBuilder();
+
+            if (RowCount > 4 || ColumnCount > 4)
+            {
+                builder.Append("matrix");
+                builder.Append("(");
+                builder.Append(engine != null ? engine.GetTypeName(typeof(T)) : typeof(T).ScriptPrettyName());
+                builder.Append(", ");
+                builder.Append(RowCount.ToString(CultureInfo.InvariantCulture));
+                builder.Append(", ");
+                builder.Append(ColumnCount.ToString(CultureInfo.InvariantCulture));
+                builder.Append(", ");
+            }
+            else
+            {
+                builder.Append(engine != null ? engine.GetTypeName(typeof(T)) : typeof(T).ScriptPrettyName());
+                builder.Append(RowCount.ToString(CultureInfo.InvariantCulture)).Append('x').Append(ColumnCount.ToString(CultureInfo.InvariantCulture));
+                builder.Append('(');
+            }
+
+            for (int i = 0; i < _values.Length; i++)
+            {
+                if (i > 0) builder.Append(", ");
+                var valueToFormat = _values[i];
+                builder.Append(engine != null ? engine.ObjectToString(valueToFormat) : valueToFormat is IFormattable formattable ? formattable.ToString(null, formatProvider) : valueToFormat.ToString());
+            }
+
+            builder.Append(')');
+            return builder.ToString();
+        }
+
+
+        private static bool StartsWithNegative(ref T value)
+        { 
+            if (typeof(T) == typeof(float))
+            {
+                return Unsafe.As<T, float>(ref value) < 0.0f;
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                return Unsafe.As<T, double>(ref value) < 0.0;
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                return Unsafe.As<T, int>(ref value) < 0;
+            }
+
+            return false;
+        }
+
+
+        public override void Display(KalkEngine engine, KalkDisplayMode mode)
+        {
+            // Don't display anything beyond 4x4
+            if (RowCount > 4 || ColumnCount > 4) return;
+            var columnCountDisplay = ColumnCount + 2;
+            var rowCountDisplay = RowCount + 1;
+            var cells = new string[rowCountDisplay * columnCountDisplay];
+            var cellWidth = new int[columnCountDisplay];
+            var columnHasNeg = new bool[ColumnCount];
+
+            // Setup a minimum width
+            for (int i = 1; i < cellWidth.Length - 1; i++)
+            {
+                cellWidth[i] = 10;
+            }
+
+            for (int x = 0; x < ColumnCount; x++)
+            {
+                for (int y = 0; y < RowCount; y++)
+                {
+                    var cellValue = _values[y * ColumnCount + x];
+                    if (StartsWithNegative(ref cellValue))
+                    {
+                        columnHasNeg[x] = true;
+                        break;
+                    }
+                }
+            }
+
+            var rowTypeName = $"{engine.GetTypeName(typeof(T))}{ColumnCount.ToString(CultureInfo.InvariantCulture)}";
+            for (int y = 0; y < RowCount; y++)
+            {
+                cells[(y + 1) * columnCountDisplay + ColumnCount + 1] = $") # {y}";
+                var col0 = $"{rowTypeName}(";
+                cells[(y + 1) * columnCountDisplay + 0] = col0;
+
+                for (int x = 0; x < ColumnCount; x++)
+                {
+                    var cellValue = _values[y * ColumnCount + x];
+                    var text = engine.ObjectToString(cellValue);
+
+                    // Put a space in place of the -, for positive number
+                    if (columnHasNeg[x] && !StartsWithNegative(ref cellValue))
+                    {
+                        text = $" {text}";
+                    }
+
+                    cells[(y + 1) * columnCountDisplay + x + 1] = text;
+                    if (text.Length > cellWidth[x + 1])
+                    {
+                        cellWidth[x + 1] = text.Length;
+                    }
+                }
+            }
+
+            cells[0] = "# col";
+            cellWidth[0] = rowTypeName.Length + 1; // typeName(
+            cells[ColumnCount + 1] = "  / row";
+            for (int x = 0; x < ColumnCount; x++)
+            {
+                cells[1 + x] = columnHasNeg[x] ? $" {x}" : $"{x}";
+            }
+
+            var builder = new StringBuilder();
+            
+            for (int y = 0; y < RowCount + 1; y++)
+            {
+                builder.Append("      ");
+                WriteRow(y * columnCountDisplay, columnCountDisplay, y == 0 ? "  " : ", ");
+                engine.WriteHighlightLine(builder.ToString());
+                builder.Clear();
+            }
+
+            void WriteRow(int index, int column, string sep)
+            {
+                for (int i = 0; i < column; i++)
+                {
+                    var width = cellWidth[i];
+                    var text = cells[index + i].PadRight(width);
+                    builder.Append(text);
+                    if (i >= 1 && i + 2 < column)
+                    {
+                        builder.Append(sep);
+                    }
+                }
+            }
         }
     }
 }

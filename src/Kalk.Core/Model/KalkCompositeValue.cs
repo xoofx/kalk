@@ -19,7 +19,8 @@ namespace Kalk.Core
 
         public KalkCompositeValue(object value)
         {
-            Value = value;
+            Transformable = value as IScriptTransformable;
+            Value = Transformable == null ? value : null;
         }
 
         public KalkCompositeValue(IScriptTransformable transformable)
@@ -64,6 +65,15 @@ namespace Kalk.Core
         public virtual bool CanTransform(Type transformType)
         {
             return true;
+        }
+
+        public bool Visit(TemplateContext context, SourceSpan span, Func<object, bool> visit)
+        {
+            if (Transformable != null)
+            {
+                return Transformable.Visit(context, span, visit);
+            }
+            return visit(Value);
         }
 
         public object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
