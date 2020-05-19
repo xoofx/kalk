@@ -35,7 +35,7 @@ namespace Kalk.Core
 
             RegisterModule(new IntrinsicsModule());
             RegisterModule(new FileModule());
-            RegisterModule(new TextModule());
+            RegisterModule(new StringModule());
             RegisterModule(new CurrencyModule());
             RegisterModule(new VectorModule());
             RegisterModule(new StandardUnitsModule());

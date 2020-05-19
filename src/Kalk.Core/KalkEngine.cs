@@ -493,7 +493,7 @@ namespace Kalk.Core
             }
         }
 
-        public override void Import(ScriptObject obj)
+        public override void Import(IScriptObject obj)
         {
             if (obj is KalkModule module)
             {

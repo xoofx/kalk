@@ -667,6 +667,11 @@ namespace Kalk.Core
 
                     if (isPreviousNotDot)
                     {
+                        if ((index + 1 < tokens.Count && tokens[index + 1].Type == TokenType.Colon))
+                        {
+                            return ConsoleStyle.BrightWhite;
+                        }
+
                         if (ScriptKeywords.Contains(key))
                         {
                             // Handle the case where for ... in, the in should be marked as a keyword

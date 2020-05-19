@@ -30,7 +30,7 @@ namespace Kalk.Core.Modules
         private static readonly KalkColorRgbConstructor RgbConstructor = new KalkColorRgbConstructor();
         private static readonly KalkColorRgbaConstructor RgbaConstructor = new KalkColorRgbaConstructor();
 
-        public VectorModule()
+        public VectorModule() : base("Vectors")
         {
             RegisterFunction("int", (Func<object, int>)CreateInt, CategoryTypeConstructors);
             RegisterFunction("int2", (Func<object[], object>)CreateInt2, CategoryVectorTypeConstructors);

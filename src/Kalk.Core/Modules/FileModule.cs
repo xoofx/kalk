@@ -11,7 +11,7 @@ namespace Kalk.Core.Modules
     {
         private const string CategoryMiscFile = "Misc File Functions";
 
-        public FileModule()
+        public FileModule() : base("Files")
         {
             RegisterCustomFunction("file_exists", DelegateCustomFunction.CreateFunc<string, bool>(FileExists), CategoryMiscFile);
             RegisterCustomFunction("dir_exists", DelegateCustomFunction.CreateFunc<string, bool>(DirectoryExists), CategoryMiscFile);

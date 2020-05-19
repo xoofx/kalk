@@ -65,7 +65,7 @@ namespace Kalk.Core
                 Descriptors.Add(module.Name, new KalkDescriptor()
                 {
                     Names = { module.Name },
-                    Category = "Modules (e.g `import FileModule`)",
+                    Category = "Modules (e.g `import Files`)",
                 });
             }
 

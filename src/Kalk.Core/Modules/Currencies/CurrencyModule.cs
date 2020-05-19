@@ -19,7 +19,7 @@ namespace Kalk.Core.Modules
 
         private const string CategoryUnitsAndCurrencies = "Unit Functions";
 
-        public CurrencyModule()
+        public CurrencyModule() : base("Currencies")
         {
             Currencies = new KalkCurrencies(this);
             RegisterVariable("currencies", Currencies, CategoryUnitsAndCurrencies);
@@ -41,6 +41,7 @@ namespace Kalk.Core.Modules
 
         protected override void Import()
         {
+            base.Import();
             UpdateCurrencies();
         }
 

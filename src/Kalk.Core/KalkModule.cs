@@ -6,13 +6,22 @@ namespace Kalk.Core
 {
     public class KalkModule : ScriptObject
     {
+
         public KalkModule() : this(null)
         {
         }
 
         public KalkModule(string name)
         {
-            Name = name ?? this.GetType().Name;
+            Name = name;
+            if (Name == null)
+            {
+                Name = this.GetType().Name;
+                if (Name.EndsWith("Module"))
+                {
+                    Name = Name.Substring(0, Name.Length - "Module".Length);
+                }
+            }
             Descriptors = new Dictionary<string, KalkDescriptor>();
         }
 
@@ -56,75 +65,79 @@ namespace Kalk.Core
 
         protected virtual void Import()
         {
+            if (!IsBuiltin)
+            {
+                Engine.WriteHighlightLine($"# {Count} functions successfully imported.");
+            }
         }
-        
+
         public Dictionary<string, KalkDescriptor> Descriptors { get; }
 
-        public void RegisterConstant(string name, object value, string category)
+        protected void RegisterConstant(string name, object value, string category)
         {
             RegisterVariable(name, value, category);
         }
-        public void RegisterAction(string name, Action action, string category)
+        protected void RegisterAction(string name, Action action, string category)
         {
             RegisterCustomFunction(name, DelegateCustomFunction.Create(action), category);
         }
 
-        public void RegisterAction<T1>(string name, Action<T1> action, string category)
+        protected void RegisterAction<T1>(string name, Action<T1> action, string category)
         {
             RegisterCustomFunction(name, DelegateCustomFunction.Create(action), category);
         }
 
-        public void RegisterAction<T1, T2>(string name, Action<T1, T2> action, string category)
+        protected void RegisterAction<T1, T2>(string name, Action<T1, T2> action, string category)
         {
             RegisterCustomFunction(name, DelegateCustomFunction.Create(action), category);
         }
 
-        public void RegisterAction<T1, T2, T3>(string name, Action<T1, T2, T3> action, string category)
+        protected void RegisterAction<T1, T2, T3>(string name, Action<T1, T2, T3> action, string category)
         {
             RegisterCustomFunction(name, DelegateCustomFunction.Create(action), category);
         }
 
-        public void RegisterAction<T1, T2, T3, T4>(string name, Action<T1, T2, T3, T4> action, string category)
+        protected void RegisterAction<T1, T2, T3, T4>(string name, Action<T1, T2, T3, T4> action, string category)
         {
             RegisterCustomFunction(name, DelegateCustomFunction.Create(action), category);
         }
 
-        public void RegisterFunction<T1>(string name, Func<T1> func, string category)
+        protected void RegisterFunction<T1>(string name, Func<T1> func, string category)
         {
             RegisterCustomFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction<T1, T2>(string name, Func<T1, T2> func, string category)
+        protected void RegisterFunction<T1, T2>(string name, Func<T1, T2> func, string category)
         {
             RegisterCustomFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction<T1, T2, T3>(string name, Func<T1, T2, T3> func, string category)
+        protected void RegisterFunction<T1, T2, T3>(string name, Func<T1, T2, T3> func, string category)
         {
             RegisterCustomFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction<T1, T2, T3, T4>(string name, Func<T1, T2, T3, T4> func, string category)
+        protected void RegisterFunction<T1, T2, T3, T4>(string name, Func<T1, T2, T3, T4> func, string category)
         {
             RegisterCustomFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction<T1, T2, T3, T4, T5>(string name, Func<T1, T2, T3, T4, T5> func, string category)
+        protected void RegisterFunction<T1, T2, T3, T4, T5>(string name, Func<T1, T2, T3, T4, T5> func, string category)
         {
             RegisterCustomFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction<T1, T2, T3, T4, T5, T6>(string name, Func<T1, T2, T3, T4, T5, T6> func, string category)
+        protected void RegisterFunction<T1, T2, T3, T4, T5, T6>(string name, Func<T1, T2, T3, T4, T5, T6> func, string category)
         {
             RegisterCustomFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterCustomFunction(string name, IScriptCustomFunction func, string category)
+        protected void RegisterCustomFunction(string name, IScriptCustomFunction func, string category)
         {
             RegisterVariable(name, func, category);
         }
 
-        public void RegisterVariable(string name, object value, string category)
+        protected void RegisterVariable(string name, object value, string category)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (value == null) throw new ArgumentNullException(nameof(value));

@@ -30,7 +30,7 @@ namespace Kalk.Core
                     fullMode = KalkDisplayMode.Standard;
                     return true;
                 case Developer:
-                    fullMode = KalkDisplayMode.Standard;
+                    fullMode = KalkDisplayMode.Developer;
                     return true;
             }
             return false;

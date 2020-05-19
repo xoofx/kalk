@@ -4,11 +4,11 @@ using Scriban.Functions;
 
 namespace Kalk.Core.Modules
 {
-    public partial class TextModule : KalkModule
+    public partial class StringModule : KalkModule
     {
         private const string CategoryString = "Text Functions";
 
-        public TextModule()
+        public StringModule() : base("Strings")
         {
             RegisterFunction("escape", new Func<string, string>(StringEscape), CategoryString);
             RegisterFunction("capitalize", new Func<string, string>(StringCapitalize), CategoryString);
