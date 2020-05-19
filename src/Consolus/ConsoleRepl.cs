@@ -27,15 +27,22 @@ namespace Consolus
 
         public ConsoleRepl()
         {
-            Console.TreatControlCAsInput = true;
+            HasInteractiveConsole = ConsoleHelper.HasInteractiveConsole;
             Prompt.Append(">>> ");
             _stackIndex = -1;
             History = new List<string>();
-            Console.CursorVisible = true;
             ExitOnNextEval = false;
             PendingTextToEnter = new Queue<string>();
             _keys = new BlockingCollection<ConsoleKeyInfo>();
+
+            if (HasInteractiveConsole)
+            {
+                Console.TreatControlCAsInput = true;
+                Console.CursorVisible = true;
+            }
         }
+
+        public bool HasInteractiveConsole { get; }
 
         public bool ExitOnNextEval { get; set; }
 

@@ -34,5 +34,7 @@ namespace Consolus
             }
             return support;
         }
+        
+        public static bool HasInteractiveConsole => IsWindows ? WindowsHelper.HasConsoleWindows() : Environment.UserInteractive;
     }
 }

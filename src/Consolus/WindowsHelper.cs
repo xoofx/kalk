@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -36,6 +37,20 @@ namespace Consolus
         [DllImport("user32")]
         private static extern int GetWindowThreadProcessId(IntPtr hWnd, ref IntPtr ProcessId);
 
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static bool HasConsoleWindows()
+        {
+            try
+            {
+                return GetConsoleWindow() != IntPtr.Zero;
+            }
+            catch
+            {
+                return Environment.UserInteractive;
+            }
+        }
+        
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static bool IsSelfConsoleWindows()
         {
