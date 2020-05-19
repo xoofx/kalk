@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
@@ -18,9 +17,9 @@ using Scriban.Parsing;
 using Scriban.Runtime;
 using Scriban.Syntax;
 
-namespace Kalk.Core
+namespace Kalk.Core.Modules
 {
-    public partial class KalkEngine
+    public partial class IntrinsicsModule : KalkModule
     {
         private const string CategoryIntrinsics = "Vector HW Intrinsics Functions";
 

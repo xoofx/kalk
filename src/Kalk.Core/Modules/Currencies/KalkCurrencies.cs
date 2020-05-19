@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Kalk.Core.Modules;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
@@ -10,11 +12,18 @@ namespace Kalk.Core
 {
     public class KalkCurrencies : IScriptObject, IScriptCustomFunction
     {
-        private readonly KalkUnits _units;
+        private KalkUnits _units;
+        private readonly CurrencyModule _currencyModule;
 
-        public KalkCurrencies(KalkUnits units)
+        public KalkCurrencies(CurrencyModule currencyModule)
         {
-            _units = units;
+            _currencyModule = currencyModule;
+        }
+
+        public void Initialize(KalkEngine engine)
+        {
+            if (engine == null) throw new ArgumentNullException(nameof(engine));
+            _units = engine.Units;
         }
 
         public int Count
@@ -27,6 +36,18 @@ namespace Kalk.Core
                     if (unitPair.Value is KalkCurrency) count++;
                 }
                 return count;
+            }
+        }
+
+        public void Clear()
+        {
+            var keys = _units.Keys.ToList();
+            foreach (var unitKey in keys)
+            {
+                if (_units.TryGetValue(unitKey, out var unitObject) && unitObject is KalkCurrency)
+                {
+                    _units.Remove(unitKey);
+                }
             }
         }
 
@@ -95,8 +116,16 @@ namespace Kalk.Core
                 return this;
             }
 
-            _units.Display((KalkEngine)context, "Builtin Currencies", symbol => symbol is KalkCurrency && !symbol.IsUser, false);
-            _units.Display((KalkEngine)context, "User Defined Currencies", symbol => symbol is KalkCurrency && symbol.IsUser, false);
+            var engine = (KalkEngine) context;
+            if (_units.All(x => x.Value.GetType() != typeof(KalkCurrency)))
+            {
+                engine.WriteHighlightLine($"# No Currencies defined (e.g try `import {nameof(CurrencyModule)}`)");
+            }
+            else
+            {
+                _units.Display(engine, $"Builtin Currencies (Last Update: {_currencyModule.LastUpdate})", symbol => symbol is KalkCurrency && !symbol.IsUser, false);
+                _units.Display(engine, "User Defined Currencies", symbol => symbol is KalkCurrency && symbol.IsUser, false);
+            }
 
             return null;
         }

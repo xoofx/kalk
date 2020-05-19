@@ -1,21 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.IO;
-using System.Linq;
 using System.Numerics;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using Consolus;
 using Kalk.Core.Helpers;
-using Scriban;
 using Scriban.Functions;
 using Scriban.Helpers;
-using Scriban.Parsing;
 using Scriban.Runtime;
 using Scriban.Syntax;
 
@@ -42,6 +34,8 @@ namespace Kalk.Core
             RegisterFunction("contains", DelegateCustomFunction.CreateFunc<object, object, bool>(Contains), CategoryMisc);
             RegisterFunction("insert_at", DelegateCustomFunction.CreateFunc<object, int, object, object>(InsertAt), CategoryMisc);
             RegisterFunction("remove_at", DelegateCustomFunction.CreateFunc<object, int, object>(RemoveAt), CategoryMisc);
+            RegisterFunction("parse_csv", DelegateCustomFunction.CreateFunc<string, bool, ScriptRange>(ParseCsv), CategoryMisc);
+            RegisterFunction("lines", DelegateCustomFunction.CreateFunc<string, ScriptRange>(Lines), CategoryMisc);
         }
 
         /// <summary>
@@ -379,6 +373,20 @@ namespace Kalk.Core
             return composite.Transform(this, CurrentSpan, input => ReplaceImpl(input, match, @by));
         }
 
+        [KalkDoc("lines")]
+        public ScriptRange Lines(string text)
+        {
+            if (text == null) return new ScriptRange();
+            return new ScriptRange(new LineReader(() => new StringReader(text)));
+        }
+        
+        [KalkDoc("parse_csv")]
+        public ScriptRange ParseCsv(string text, bool headers = true)
+        {
+            if (text == null) throw new ArgumentNullException(nameof(text));
+            return new ScriptRange(new KalkCsvReader(() => new StringReader(text), headers));
+        }
+        
         private object ReplaceImpl(object value, object match, object by)
         {
             var result = (bool) ScriptBinaryExpression.Evaluate(this, CurrentSpan, ScriptBinaryOperator.CompareEqual, value, match);
@@ -419,7 +427,7 @@ namespace Kalk.Core
                         }
                         else
                         {
-                            throw new ArgumentException($"Invalid character found `{StringEscape(c.ToString())}`. Expecting only hexadecimal.", nameof(value));
+                            throw new ArgumentException($"Invalid character found `{StringFunctions.Escape(c.ToString())}`. Expecting only hexadecimal.", nameof(value));
                         }
                     }
 

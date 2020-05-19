@@ -22,7 +22,7 @@ namespace Kalk.Core
 
         public KalkUnit(string name)
         {
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
             Symbol = name;
             Plural = name + "s";
             Derived = new List<KalkUnit>();

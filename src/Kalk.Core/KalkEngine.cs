@@ -53,7 +53,6 @@ namespace Kalk.Core
             ((KalkObjectWithAlias)Builtins).Engine = this;
 
             Units = new KalkUnits(this);
-            Currencies = new KalkCurrencies(Units);
             AsciiTable = new KalkAsciiTable();
             Shortcuts = new KalkShortcuts();
             Aliases = new KalkAliases();
@@ -97,7 +96,6 @@ namespace Kalk.Core
 
             _isInitializing = true;
             RegisterFunctions();
-            InitializeFromConfig();
             _isInitializing = false;
         }
 
@@ -123,9 +121,6 @@ namespace Kalk.Core
         /// </summary>
         [KalkDoc("units")]
         public KalkUnits Units { get; }
-        
-        [KalkDoc("currencies")]
-        public KalkCurrencies Currencies { get; }
 
         [KalkDoc("shortcuts")]
         public KalkShortcuts Shortcuts { get; }
@@ -272,12 +267,6 @@ namespace Kalk.Core
         {
             public static readonly EmptyObject Instance = new EmptyObject();
             public override string ToString() => string.Empty;
-        }
-
-
-        private void InitializeFromConfig()
-        {
-            KalkCurrency.ConfigureCurrencies(this);
         }
 
         internal bool OnKey(ConsoleKeyInfo arg, ConsoleText line, ref int cursorIndex)
@@ -456,6 +445,7 @@ namespace Kalk.Core
 
             var startTextToFind = text.Substring(_startIndexForCompletion, cursorIndex - _startIndexForCompletion);
 
+            Collect(startTextToFind, ScriptKeywords, _completionMatchingList);
             Collect(startTextToFind, Variables.Keys, _completionMatchingList);
             Collect(startTextToFind, Builtins.Keys, _completionMatchingList);
 
@@ -502,7 +492,18 @@ namespace Kalk.Core
                 }
             }
         }
-        
+
+        public override void Import(ScriptObject obj)
+        {
+            if (obj is KalkModule module)
+            {
+                module.InternalImport();
+                return;
+            }
+
+            base.Import(obj);
+        }
+
         internal void UpdateEdit(ConsoleText text, int cursorIndex)
         {
             //if (_nextLetterIsSymbolShortcut)

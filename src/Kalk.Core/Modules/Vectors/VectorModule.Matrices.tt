@@ -31,9 +31,9 @@ using System;
 using Scriban.Helpers;
 using Scriban.Syntax;
 
-namespace Kalk.Core
+namespace Kalk.Core.Modules
 {
-    public partial class KalkEngine
+    public partial class VectorModule
     {
         private const string CategoryMatrixConstructors = "Type Matrix Constructors";
 
@@ -44,14 +44,14 @@ namespace Kalk.Core
         private void RegisterMatrixTypes()
         {
 <# foreach(var type in types) { #>
-            RegisterFunction("<#= type.Item2.ToLowerInvariant() #>", Create<#= type.Item2 #>, CategoryMatrixConstructors);
+            RegisterFunction("<#= type.Item2.ToLowerInvariant() #>", (Func<object[], KalkMatrix<<#= type.Item1 #>>>)Create<#= type.Item2 #>, CategoryMatrixConstructors);
 <# } #>
         }
 
 <# foreach(var type in types) { #>
         /// <summary>Creates a <#= type.Item3 #> (rows) x <#= type.Item4 #> (columns) matrix of <#= type.Item1 #>.</summary>
         [KalkDoc("<#= type.Item2.ToLowerInvariant() #>")]
-        public KalkMatrix<<#= type.Item1 #>> Create<#= type.Item2 #>(params object[] arguments) => <#= type.Item2 #>Constructor.Invoke(this, arguments);
+        public KalkMatrix<<#= type.Item1 #>> Create<#= type.Item2 #>(params object[] arguments) => <#= type.Item2 #>Constructor.Invoke(Engine, arguments);
 <# } #>
     }
 }

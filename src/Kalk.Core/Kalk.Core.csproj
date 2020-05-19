@@ -6,16 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="system.kalk" />
+    <None Remove="core.kalk" />
+    <None Remove="Modules\standard_units.kalk" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="system.kalk">
+    <Content Include="Modules\standard_units.kalk">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="core.kalk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="15.0.5" />
     <PackageReference Include="MathNet.Numerics" Version="4.9.1" />
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
@@ -27,9 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="KalkEngine.Functions.Matrices.tt">
+    <None Update="Modules\Vectors\VectorModule.Matrices.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>KalkEngine.Functions.Matrices.generated.cs</LastGenOutput>
+      <LastGenOutput>VectorModule.Matrices.generated.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -38,10 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="KalkEngine.Functions.Matrices.generated.cs">
+    <Compile Update="Modules\Vectors\VectorModule.Matrices.generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>KalkEngine.Functions.Matrices.tt</DependentUpon>
+      <DependentUpon>VectorModule.Matrices.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

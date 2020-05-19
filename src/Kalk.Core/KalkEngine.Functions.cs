@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Consolus;
+using Kalk.Core.Modules;
 using Scriban;
 using Scriban.Functions;
 using Scriban.Parsing;
@@ -23,36 +24,44 @@ namespace Kalk.Core
     {
         private bool _registerAsSystem;
 
-        private const string SystemFileName = "system.kalk";
+        private const string CoreFileName = "core.kalk";
 
         private void RegisterFunctions()
         {
-            RegisterIntrinsics();
             RegisterGeneralFunctions();
-            RegisterMathFunctions();
-            RegisterMatrices();
+            RegisterModule(new MathModule());
             RegisterMiscFunctions();
-            RegisterStringFunctions();
             RegisterUnitFunctions();
-            RegisterVectors();
-            RegisterDocumentation();
+
+            RegisterModule(new IntrinsicsModule());
+            RegisterModule(new FileModule());
+            RegisterModule(new TextModule());
+            RegisterModule(new CurrencyModule());
+            RegisterModule(new VectorModule());
+            RegisterModule(new StandardUnitsModule());
+            //RegisterDocumentation();
 
             // Register last the system file
-            RegisterSystemFile();
+            LoadCoreFile();
         }
 
-        private void RegisterSystemFile()
+        private void LoadCoreFile()
+        {
+            LoadSystemFile(CoreFileName);
+        }
+
+        internal void LoadSystemFile(string filename)
         {
             // Register all units
-            var unitsFilePath = Path.Combine(KalkEngineFolder, SystemFileName);
+            var packageFilePath = Path.Combine(KalkEngineFolder, filename);
             try
             {
                 _registerAsSystem = true;
-                LoadFile(unitsFilePath);
+                LoadFile(packageFilePath);
             }
             catch (Exception ex)
             {
-                WriteError($"Unable to load units from `{unitsFilePath}`. Reason:\n{ex.Message}");
+                WriteError($"Unable to load units from `{packageFilePath}`. Reason:\n{ex.Message}");
             }
             finally
             {

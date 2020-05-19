@@ -10,12 +10,12 @@ namespace Kalk.Core
         public const int DefaultHelpMinColumn = 30;
         public const int DefaultHelpMaxColumn = 100;
         public const string DefaultLimitToString = "auto";
-        public const string DefaultBaseCurrency = "EUR";
         public const string DefaultDisplay = "std";
+        public const string DefaultEncoding = "utf-8";
 
         public const string LimitToStringProp = "limit_to_string";
-        public const string BaseCurrencyProp = "base_currency";
         public const string DisplayProp = "display";
+        public const string EncodingProp = "encoding";
 
         public KalkConfig()
         {
@@ -40,6 +40,12 @@ namespace Kalk.Core
             set => SetValue(LimitToStringProp, value, false);
         }
 
+        public string Encoding
+        {
+            get => GetSafeValue(EncodingProp, DefaultEncoding);
+            set => SetValue(EncodingProp, value, false);
+        }
+
         public string Display
         {
             get
@@ -60,45 +66,14 @@ namespace Kalk.Core
             }
         }
 
-        public string BaseCurrency
-        {
-            get => GetSafeValue<string>(BaseCurrencyProp, DefaultBaseCurrency);
-            set
-            {
-                if (value == null) value = DefaultBaseCurrency;
-                SetValue(BaseCurrencyProp, value, false);
-            }
-        }
-
-        internal bool RegisteringBaseCurrency { get; set; }
-
         public override bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
         {
-            if (member == BaseCurrencyProp)
-            {
-                var engine = (KalkEngine) context;
-                if (engine != null && !RegisteringBaseCurrency)
-                {
-                    engine.RegisterBaseCurrency(value?.ToString());
-                }
-                else
-                {
-                    ValidateCurrency(context, span, member, value);
-                }
-            }
-            else if (member == DisplayProp)
+            if (member == DisplayProp)
             {
                 ValidateDisplay(context, span, member, value);
             }
 
             return base.TrySetValue(context, span, member, value, readOnly);
-        }
-
-        private static void ValidateCurrency(TemplateContext context, SourceSpan span, string member, object value)
-        {
-            if (value == null) throw new ScriptRuntimeException(span, "Base currency must be non null.");
-            var valueStr = value.ToString();
-            KalkCurrency.CheckValid(span, valueStr);
         }
         
         private static void ValidateDisplay(TemplateContext context, SourceSpan span, string member, object value)

@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using Scriban.Helpers;
 using Scriban.Syntax;
 
-namespace Kalk.Core
+namespace Kalk.Core.Modules
 {
-    public partial class KalkEngine
+    public partial class VectorModule : KalkModule
     {
         private void RegisterMatrices()
         {
             RegisterMatrixTypes();
 
-            RegisterFunction("determinant", KalkMatrix.Determinant, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("inverse", KalkMatrix.Inverse, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("transpose", KalkMatrix.Transpose, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("mul", Multiply, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("identity", KalkMatrix.Identity, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("diag", Diagonal, CategoryMathVectorMatrixFunctions);
+            RegisterFunction("determinant", (Func<KalkMatrix, object>) KalkMatrix.Determinant, CategoryMathVectorMatrixFunctions);
+            RegisterFunction("inverse", (Func<KalkMatrix, KalkMatrix>)KalkMatrix.Inverse, CategoryMathVectorMatrixFunctions);
+            RegisterFunction("transpose", (Func<KalkMatrix, KalkMatrix>)KalkMatrix.Transpose, CategoryMathVectorMatrixFunctions);
+            RegisterFunction("mul", (Func<object, object, object>)Multiply, CategoryMathVectorMatrixFunctions);
+            RegisterFunction("identity", (Func<KalkMatrix, KalkMatrix>)KalkMatrix.Identity, CategoryMathVectorMatrixFunctions);
+            RegisterFunction("diag", (Func<object, object>)Diagonal, CategoryMathVectorMatrixFunctions);
         }
 
         [KalkDoc("diag")]
@@ -28,13 +27,13 @@ namespace Kalk.Core
             {
                 return KalkMatrix.Diagonal(m);
             }
-            
+
             if (x is KalkVector v)
             {
                 return KalkVector.Diagonal(v);
             }
 
-            throw new ArgumentException($"Invalid argument type {x.GetType().ScriptPrettyName()}. Expecting a matrix or a vector type.", nameof(x));
+            throw new ArgumentException($"Invalid argument type {Engine.GetTypeName(x)}. Expecting a matrix or a vector type.", nameof(x));
         }
 
         [KalkDoc("mul")]
@@ -62,7 +61,8 @@ namespace Kalk.Core
                 return KalkMatrix.Multiply(mx1, my2);
             }
 
-            throw new ArgumentException($"Unsupported type for matrix multiplication. The combination of {x.GetType().ScriptPrettyName()} * {y.GetType().ScriptPrettyName()} is not supported.", nameof(x));
+            throw new ArgumentException($"Unsupported type for matrix multiplication. The combination of {Engine.GetTypeName(x)} * {Engine.GetTypeName(y)} is not supported.", nameof(x));
         }
+
     }
 }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Consolus;
+using Kalk.Core.Modules;
 using Scriban;
 using Scriban.Functions;
 using Scriban.Parsing;
@@ -13,55 +14,6 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public enum KalkDisplayMode
-    {
-        Standard,
-
-        Developer
-    }
-
-    public static class KalkDisplayModeHelper
-    {
-        public const string Standard = "std";
-
-        public const string Developer = "dev";
-
-        public static string ToText(this KalkDisplayMode mode)
-        {
-            switch (mode)
-            {
-                case KalkDisplayMode.Standard:
-                    return Standard;
-                case KalkDisplayMode.Developer:
-                    return Developer;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
-            }
-        }
-
-        public static bool TryParse(string mode, out KalkDisplayMode fullMode)
-        {
-            fullMode = KalkDisplayMode.Standard;
-            switch (mode)
-            {
-                case Standard:
-                    fullMode = KalkDisplayMode.Standard;
-                    return true;
-                case Developer:
-                    fullMode = KalkDisplayMode.Standard;
-                    return true;
-            }
-            return false;
-        }
-
-        public static KalkDisplayMode SafeParse(string text)
-        {
-            return TryParse(text, out var mode) ? mode : KalkDisplayMode.Standard;
-        }
-    }
-
-
-
     public partial class KalkEngine
     {
         private const string CategoryGeneral = "General";
@@ -102,6 +54,28 @@ namespace Kalk.Core
 
         private delegate object EvaluateDelegate(string text, bool output = false);
 
+        public void RegisterModule(KalkModule module)
+        {
+            if (module == null) throw new ArgumentNullException(nameof(module));
+            if (module.Engine != null) throw new ArgumentException($"Module {module.Name} is already registered.");
+            if (!module.IsBuiltin)
+            {
+                Builtins.SetValue(module.Name, module, true);
+
+                Descriptors.Add(module.Name, new KalkDescriptor()
+                {
+                    Names = { module.Name },
+                    Category = "Modules (e.g `import FileModule`)",
+                });
+            }
+
+            module.Initialize(this);
+
+            if (module.IsBuiltin)
+            {
+                module.InternalImport();
+            }
+        }
 
         [KalkDoc("display")]
         public void Display(ScriptVariable name = null)
@@ -412,16 +386,11 @@ namespace Kalk.Core
         }
 
         [KalkDoc("load")]
-        public object LoadFile(string filePath, bool output = false)
+        public object LoadFile(string path, bool output = false)
         {
-            if (filePath == null) throw new ArgumentNullException(nameof(filePath));
-
-            var currentFilePath = Path.Combine(Environment.CurrentDirectory, filePath);
-
-            if (!File.Exists(currentFilePath)) throw new ArgumentException($"The file `{currentFilePath}` does no exist", nameof(filePath));
-
-            var text = File.ReadAllText(currentFilePath);
-            return EvaluateTextImpl(text, filePath, output);
+            var fullPath = FileModule.AssertReadFile(path);
+            var text = File.ReadAllText(fullPath);
+            return EvaluateTextImpl(text, path, output);
         }
 
         private object EvaluateTextImpl(string text, string filePath, bool output = false)

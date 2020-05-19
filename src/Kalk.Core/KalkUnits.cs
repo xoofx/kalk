@@ -56,8 +56,16 @@ namespace Kalk.Core
                 return this;
             }
 
-            Display((KalkEngine) context, "Builtin Units", symbol => symbol.GetType() == typeof(KalkUnit) && !symbol.IsUser);
-            Display((KalkEngine)context, "User Defined Units", symbol => symbol.GetType() == typeof(KalkUnit) && symbol.IsUser);
+            var engine = (KalkEngine) context;
+            if (this.All(x => x.Value.GetType() != typeof(KalkUnit)))
+            {
+                engine.WriteHighlightLine($"# No Units defined (e.g try `import StandardUnitsModule`)");
+            }
+            else
+            {
+                Display((KalkEngine) context, "Builtin Units", symbol => symbol.GetType() == typeof(KalkUnit) && !symbol.IsUser);
+                Display((KalkEngine) context, "User Defined Units", symbol => symbol.GetType() == typeof(KalkUnit) && symbol.IsUser);
+            }
 
             return null;
         }

@@ -24,6 +24,29 @@ namespace Kalk.Core
             TokenType.CloseBrace,
         };
 
+
+        private readonly HashSet<string> ScriptKeywords = new HashSet<string>()
+        {
+            "if",
+            "else",
+            "end",
+            "for",
+            "in",
+            "case",
+            "when",
+            "while",
+            "break",
+            "continue",
+            "func",
+            "import",
+            "readonly",
+            "with",
+            "capture",
+            "ret",
+            "wrap",
+            "do",
+        };
+        
         private static List<string> SplitStringBySpaceAndKeepSpace(string text)
         {
             // normalize line endings with \n
@@ -383,6 +406,12 @@ namespace Kalk.Core
             }
         }
 
+        internal void WriteErrorLine(string scriptText)
+        {
+            WriteError(scriptText);
+            WriteHighlightLine();
+        }
+
         internal void WriteError(string scriptText)
         {
             if (scriptText == null) throw new ArgumentNullException(nameof(scriptText));
@@ -492,9 +521,10 @@ namespace Kalk.Core
             if (textStr == null) return;
 
             bool isPreviousNotDot = true;
-            foreach (var token in tokens)
+            for (var i = 0; i < tokens.Count; i++)
             {
-                var styleOpt = GetStyle(token, textStr, isPreviousNotDot);
+                var token = tokens[i];
+                var styleOpt = GetStyle(i, token, textStr, isPreviousNotDot, tokens);
                 isPreviousNotDot = token.Type != TokenType.Dot;
 
                 if (styleOpt.HasValue)
@@ -617,7 +647,7 @@ namespace Kalk.Core
             return -1;
         }
 
-        private ConsoleStyle? GetStyle(Token token, string text, bool isPreviousNotDot)
+        private ConsoleStyle? GetStyle(int index, Token token, string text, bool isPreviousNotDot, List<Token> tokens)
         {
             switch (token.Type)
             {
@@ -637,6 +667,14 @@ namespace Kalk.Core
 
                     if (isPreviousNotDot)
                     {
+                        if (ScriptKeywords.Contains(key))
+                        {
+                            // Handle the case where for ... in, the in should be marked as a keyword
+                            if (key != "in" || !(index > 1 && tokens[index - 2].GetText(text) == "for"))
+                            {
+                                return ConsoleStyle.BrightYellow;
+                            }
+                        }
                         if (Builtins.ContainsKey(key))
                         {
                             return ConsoleStyle.Cyan;
@@ -647,7 +685,7 @@ namespace Kalk.Core
                         }
                     }
 
-                    return ConsoleStyle.BrightYellow;
+                    return ConsoleStyle.White;
                 default:
                     return null;
             }
