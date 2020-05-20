@@ -25,21 +25,16 @@ namespace Kalk.Core
     {
         private Stopwatch _clockReplInput;
 
-        public ConsoleRepl Repl { get; }
+        public ConsoleRepl Repl { get; private set; }
 
         public int OnErrorToNextLineMaxDelayInMilliseconds { get; set; }
 
-        public ConsoleText NextOutput { get; protected set; }
-
-
         private void InitializeRepl()
         {
-            Writer = new ReplWriter(this);
             _clockReplInput = Stopwatch.StartNew();
             OnErrorToNextLineMaxDelayInMilliseconds = 300;
 
             OnClear = Clear;
-            NextOutput = new ConsoleText();
 
             Repl.BeforeRender = OnBeforeRendering;
             Repl.GetCancellationTokenSource = () => _cancellationTokenSource;
@@ -213,13 +208,16 @@ namespace Kalk.Core
 
         private void UpdateSyntaxHighlighting()
         {
-            Repl.EditLine.ClearStyles();
-            Highlight(Repl.EditLine, Repl.CursorIndex);
+            if (Repl != null)
+            {
+                Repl.EditLine.ClearStyles();
+                Highlight(Repl.EditLine, Repl.CursorIndex);
+            }
         }
 
         public void Clear()
         {
-            Repl.Clear();
+            Repl?.Clear();
             NextOutput.Clear();
         }
 
@@ -231,49 +229,50 @@ namespace Kalk.Core
 
         public void Run()
         {
-            InitializeRepl();
+            if (!Console.IsInputRedirected && ConsoleHelper.HasInteractiveConsole)
+            {
+                Repl = new ConsoleRepl();
+                HasInteractiveConsole = true;
+                
+                InitializeRepl();
 
-            try
-            {
-                if (ConsoleRepl.IsSelf())
+                try
                 {
-                    Console.Title = "kalk 1.0.0";
+                    if (ConsoleRepl.IsSelf())
+                    {
+                        Console.Title = "kalk 1.0.0";
+                    }
                 }
-            }
-            catch
-            {
-                // ignore
+                catch
+                {
+                    // ignore
+                }
             }
 
             Version();
             WriteHighlightLine();
             WriteHighlightLine("# Type `help` for more information and at https://github.com/xoofx/kalk");
 
-            try
+            if (Repl != null)
             {
-                _clockReplInput.Restart();
-                Repl.Run();
+                try
+                {
+                    _clockReplInput.Restart();
+                    Repl.Run();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Unexpected exception {ex}");
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Unexpected exception {ex}");
-                Console.ReadLine();
-            }
-        }
-
-        private class ReplWriter : IKalkEngineWriter
-        {
-            private readonly KalkEngine _engine;
-
-            public ReplWriter(KalkEngine engine)
-            {
-                _engine = engine;
-            }
-
-            public void Write(ConsoleText text)
-            {
-                var nextOutput = _engine.NextOutput;
-                nextOutput.AddRange(text);
+                string line;
+                while ((line = InputReader.ReadLine()) != null)
+                {
+                    if (EchoEnabled) OutputWriter.WriteLine($">>> {line}");
+                    EvaluateText(line, true);
+                }
             }
         }
     }

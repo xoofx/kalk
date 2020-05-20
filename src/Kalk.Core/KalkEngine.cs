@@ -48,9 +48,10 @@ namespace Kalk.Core
             Console.OutputEncoding = Encoding.UTF8;
             EnableEngineOutput = true;
             EchoEnabled = true;
-            Repl = new ConsoleRepl();
-            HasInteractiveConsole = Repl.HasInteractiveConsole;
-            
+            NextOutput = new ConsoleText();
+            InputReader = Console.In;
+            OutputWriter = Console.Out;
+
             Builtins = BuiltinObject;
             ((KalkObjectWithAlias)Builtins).Engine = this;
 
@@ -68,7 +69,7 @@ namespace Kalk.Core
             ErrorForStatementFunctionAsExpression = true;
             StrictVariables = true;
             UseScientific = true;
-            LoopLimit = int.MaxValue; // no limites for loops
+            LoopLimit = int.MaxValue; // no limits for loops
             RecursiveLimit = int.MaxValue; // no limits (still guarded by Scriban)
 
             _cancellationTokenSource = new CancellationTokenSource();
@@ -100,9 +101,21 @@ namespace Kalk.Core
             _isInitializing = false;
         }
 
+        private ConsoleText NextOutput { get; }
+
         public string KalkEngineFolder { get; }
 
         public bool AllowEscapeSequences { get; set; }
+
+        internal ConsoleTextWriter BufferedOutputWriter { get; private set; }
+        
+        public TextReader InputReader { get; set; }
+
+        public TextWriter OutputWriter
+        {
+            get => BufferedOutputWriter?.Backend;
+            set => BufferedOutputWriter = value == null ? null : new ConsoleTextWriter(value);
+        }
 
         public bool EchoEnabled { get; set; }
 
@@ -117,7 +130,7 @@ namespace Kalk.Core
 
         private bool EnableEngineOutput { get; set; }
 
-        public bool HasInteractiveConsole { get; }
+        public bool HasInteractiveConsole { get; private set; }
 
         /// <summary>
         /// If used in an expression, returns an object containing all units defined.
@@ -130,8 +143,6 @@ namespace Kalk.Core
         public KalkShortcuts Shortcuts { get; }
 
         public Dictionary<string, KalkDescriptor> Descriptors { get; }
-
-        public IKalkEngineWriter Writer { get; set; }
 
         public Action OnClear { get; set; }
 

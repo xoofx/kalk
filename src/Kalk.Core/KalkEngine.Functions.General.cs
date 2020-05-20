@@ -114,8 +114,6 @@ namespace Kalk.Core
         [KalkDoc("help", CategoryGeneral)]
         public void Help(ScriptExpression expression = null)
         {
-            if (Writer == null) return;
-
             var name = expression?.ToString();
             if (name != null && name != "help")
             {
@@ -217,8 +215,6 @@ namespace Kalk.Core
         [KalkDoc("version", CategoryGeneral)]
         public void Version()
         {
-            if (Writer == null) return;
-
             var text = new ConsoleText();
             text.Begin(ConsoleStyle.BrightRed).Append('k').End(ConsoleStyle.BrightRed);
             text.Begin(ConsoleStyle.BrightYellow).Append('a').End(ConsoleStyle.BrightYellow);
@@ -226,7 +222,7 @@ namespace Kalk.Core
             text.Begin(ConsoleStyle.BrightCyan).Append('k').End(ConsoleStyle.BrightCyan);
             text.Append($" 1.0.0 - Copyright (c) 2020 Alexandre Mutel");
 
-            Writer.Write(text);
+            NextOutput.AddRange(text);
         }
 
         /// <summary>
@@ -235,8 +231,6 @@ namespace Kalk.Core
         [KalkDoc("list", CategoryGeneral)]
         public void List()
         {
-            if (Writer == null) return;
-
             // Highlight line per line
             if (Variables.Count == 0)
             {
@@ -425,7 +419,7 @@ namespace Kalk.Core
             try
             {
                 EnableEngineOutput = shouldOutput;
-                EnableOutput = false;
+                EnableOutput = Repl == null;
                 var evaluate = Parse(text, filePath, false);
                 if (evaluate.HasErrors)
                     throw new ArgumentException("This script has errors. Messages:\n" + string.Join("\n", evaluate.Messages), filePath != null ? nameof(filePath) : nameof(text));

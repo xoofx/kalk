@@ -412,24 +412,18 @@ namespace Kalk.Core
 
             var output = _isInitializing ? _initializingText : _tempConsoleText;
 
-            if (Writer != null)
+            if (output.Count > 0)
             {
-                if (output.Count > 0)
-                {
-                    Writer.Write(output);
-                }
-                output.Clear();
+                NextOutput.AddRange(output);
             }
+            output.Clear();
 
             output.Append(ConsoleStyle.Red, true);
             output.Append(scriptText);
             output.Append(ConsoleStyle.Red, false);
 
-            if (Writer != null)
-            {
-                Writer.Write(output);
-                output.Clear();
-            }
+            NextOutput.AddRange(output);
+            output.Clear();
 
             if (!_isInitializing)
             {
@@ -458,32 +452,28 @@ namespace Kalk.Core
 
             if (_isFirstWriteForEval)
             {
-                Repl.ConsoleWriter.WriteLine();
+                BufferedOutputWriter.WriteLine();
                 _isFirstWriteForEval = false;
             }
 
             NextOutput.AppendLine();
-            NextOutput.Render(Repl.ConsoleWriter);
-            Repl.ConsoleWriter.Commit();
+            NextOutput.Render(BufferedOutputWriter, Repl != null);
+            BufferedOutputWriter.Commit();
             NextOutput.Clear();
-            Repl.Reset();
+            Repl?.Reset();
         }
-
         internal void WriteHighlight(string scriptText, bool highlight = true)
         {
             if (!EchoEnabled) return;
 
             var output = _isInitializing ? _initializingText : _tempConsoleText;
 
-            if (Writer != null)
+            if (output.Count > 0)
             {
-                if (output.Count > 0)
-                {
-                    Writer.Write(output);
-                }
-                output.Clear();
-                output.ClearStyles();
+                NextOutput.AddRange(output);
             }
+            output.Clear();
+            output.ClearStyles();
 
             output.Append(scriptText);
 
@@ -493,15 +483,12 @@ namespace Kalk.Core
                 Highlight(output);
             }
 
-            if (Writer != null)
-            {
-                Writer.Write(output);
+            NextOutput.AddRange(output);
 
-                // Output any errors that happened during initialization
-                if (!_isInitializing && _initializingText.Count > 0)
-                {
-                    Writer.Write(_initializingText);
-                }
+            // Output any errors that happened during initialization
+            if (!_isInitializing && _initializingText.Count > 0)
+            {
+                NextOutput.AddRange(_initializingText);
             }
 
             if (!_isInitializing && _initializingText.Count > 0)

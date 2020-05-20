@@ -522,7 +522,6 @@ namespace Consolus
 
             VisibleCharacterEnd = writer.VisibleCharacterCount - 1;
         }
-
         private void RenderWithSelection(ConsoleTextWriter writer, bool renderEscape = true)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
