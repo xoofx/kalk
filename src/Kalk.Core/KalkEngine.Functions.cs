@@ -30,13 +30,14 @@ namespace Kalk.Core
         {
             RegisterFunctionsAuto();
 
-            RegisterModule(new MathModule());
-            RegisterModule(new IntrinsicsModule());
-            RegisterModule(new FileModule());
-            RegisterModule(new StringModule());
-            RegisterModule(new CurrencyModule());
-            RegisterModule(new VectorModule());
-            RegisterModule(new StandardUnitsModule());
+            var allModule = GetOrCreateModule<AllModule>();
+            allModule.Modules.Add(GetOrCreateModule<MathModule>());
+            allModule.Modules.Add(GetOrCreateModule<IntrinsicsModule>());
+            allModule.Modules.Add(GetOrCreateModule<FileModule>());
+            allModule.Modules.Add(GetOrCreateModule<StringModule>());
+            allModule.Modules.Add(GetOrCreateModule<CurrencyModule>());
+            allModule.Modules.Add(GetOrCreateModule<VectorModule>());
+            allModule.Modules.Add(GetOrCreateModule<StandardUnitsModule>());
 
             // Register last the system file
             LoadCoreFile();
@@ -58,7 +59,7 @@ namespace Kalk.Core
             }
             catch (Exception ex)
             {
-                WriteError($"Unable to load units from `{packageFilePath}`. Reason:\n{ex.Message}");
+                WriteErrorLine($"Unable to load units from `{packageFilePath}`. Reason:\n{ex.Message}");
             }
             finally
             {

@@ -22,10 +22,17 @@ namespace Kalk.Core
 
         private delegate object EvaluateDelegate(string text, bool output = false);
 
-        public void RegisterModule(KalkModule module)
+        public T GetOrCreateModule<T>() where T : KalkModule, new()
         {
-            if (module == null) throw new ArgumentNullException(nameof(module));
-            if (module.Engine != null) throw new ArgumentException($"Module {module.Name} is already registered.");
+            var typeOfT = typeof(T);
+            if (_modules.TryGetValue(typeOfT, out var module))
+            {
+                return (T) module;
+            }
+            var moduleT = new T();
+            module = moduleT;
+            _modules.Add(typeOfT, module);
+
             if (!module.IsBuiltin)
             {
                 Builtins.SetValue(module.Name, module, true);
@@ -43,6 +50,8 @@ namespace Kalk.Core
             {
                 module.InternalImport();
             }
+
+            return moduleT;
         }
 
         [KalkDoc("display", CategoryGeneral)]
@@ -59,10 +68,43 @@ namespace Kalk.Core
             WriteHighlightLine($"# Display mode: {mode} ({fullMode})");
         }
 
+        [KalkDoc("echo", CategoryGeneral)]
+        public void Echo(ScriptVariable value = null)
+        {
+            if (value == null)
+            {
+                WriteHighlightLine($"# Echo is {(EchoEnabled ? "on":"off")}.");
+                return;
+            }
+            var mode = value.Name;
+            switch (mode)
+            {
+                case "true":
+                case "on":
+                    EchoEnabled = true;
+                    break;
+                case "false":
+                case "off":
+                    EchoEnabled = false;
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid parameter. Only on/true or off/false are valid for echo.", nameof(value));
+            }
+        }
+
         [KalkDoc("print", CategoryGeneral)]
         public void Print(object value)
         {
-            WriteHighlightLine(ObjectToString(value), highlight: false);
+            var previousEcho = EchoEnabled;
+            try
+            {
+                EchoEnabled = true;
+                WriteHighlightLine(ObjectToString(value), highlight: false);
+            }
+            finally
+            {
+                EchoEnabled = previousEcho;
+            }
         }
         
         /// <summary>
@@ -104,13 +146,19 @@ namespace Kalk.Core
                 foreach (var categoryPair in categoryToDescriptors.OrderBy(x => x.Key))
                 {
                     var list = categoryPair.Value;
-                    WriteHighlightLine($"# {categoryPair.Key}");
 
-                    var builder = new StringBuilder();
-                    var names = list.SelectMany(x => x.Names).OrderBy(x => x).ToList();
+                    // Exclude from the list modules that have been already imported
+                    var names = list.SelectMany(x => x.Names).Where(funcName =>
+                        Builtins.TryGetValue(funcName, out var funcObj) && (!(funcObj is KalkModuleWithFunctions module) || !module.IsImported)
+                    ).OrderBy(x => x).ToList();
 
-                    WriteHighlightAligned("    - ", string.Join(", ", names));
-                    WriteHighlightLine("");
+                    if (names.Count > 0)
+                    {
+                        WriteHighlightLine($"# {categoryPair.Key}");
+
+                        WriteHighlightAligned("    - ", string.Join(", ", names));
+                        WriteHighlightLine("");
+                    }
                 }
             }
         }

@@ -763,7 +763,6 @@ namespace Kalk.Core
 
         public override bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
         {
-            var tValue = context.ToObject<T>(span, value);
 
             // Verify access (TODO: could be more optimized for single element .x access)
             var bitArray = new BitArray(Count);
@@ -777,9 +776,39 @@ namespace Kalk.Core
                 bitArray[finalIndex] = true;
             }
 
-            foreach (var index in list)
+            // Handle the case where the value to set is a vector or an array
+            if (value is IList inputList)
             {
-                this[index - x_IndexOffset] = tValue;
+                if (inputList.Count != list.Count) throw new ScriptRuntimeException(span, $"Invalid number of components. Expecting {list.Count} but the value {value} has {inputList.Count} components.");
+
+                if (value is KalkVector<T> vector)
+                {
+                    int i = 0;
+                    foreach (var index in list)
+                    {
+                        this[index - x_IndexOffset] = vector[i];
+                        i++;
+                    }
+
+                }
+                else
+                {
+                    int i = 0;
+                    foreach (var index in list)
+                    {
+                        this[index - x_IndexOffset] = context.ToObject<T>(span, inputList[i]); ;
+                        i++;
+                    }
+                }
+            }
+            else
+            {
+                // otherwise it is a single value that we dispatch
+                var tValue = context.ToObject<T>(span, value);
+                foreach (var index in list)
+                {
+                    this[index - x_IndexOffset] = tValue;
+                }
             }
 
             return true;

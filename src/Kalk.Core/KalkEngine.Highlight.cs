@@ -408,12 +408,6 @@ namespace Kalk.Core
 
         internal void WriteErrorLine(string scriptText)
         {
-            WriteError(scriptText);
-            WriteHighlightLine();
-        }
-
-        internal void WriteError(string scriptText)
-        {
             if (scriptText == null) throw new ArgumentNullException(nameof(scriptText));
 
             var output = _isInitializing ? _initializingText : _tempConsoleText;
@@ -436,6 +430,20 @@ namespace Kalk.Core
                 Writer.Write(output);
                 output.Clear();
             }
+
+            if (!_isInitializing)
+            {
+                var previousEcho = EchoEnabled;
+                try
+                {
+                    EchoEnabled = true;
+                    WriteHighlightLine();
+                }
+                finally
+                {
+                    EchoEnabled = previousEcho;
+                }
+            }
         }
 
         internal void WriteHighlightLine(string scriptText, bool highlight = true)
@@ -446,6 +454,8 @@ namespace Kalk.Core
 
         internal void WriteHighlightLine()
         {
+            if (!EchoEnabled) return;
+
             if (_isFirstWriteForEval)
             {
                 Repl.ConsoleWriter.WriteLine();
@@ -461,6 +471,8 @@ namespace Kalk.Core
 
         internal void WriteHighlight(string scriptText, bool highlight = true)
         {
+            if (!EchoEnabled) return;
+
             var output = _isInitializing ? _initializingText : _tempConsoleText;
 
             if (Writer != null)

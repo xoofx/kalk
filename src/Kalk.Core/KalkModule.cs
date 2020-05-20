@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Scriban;
+using Scriban.Parsing;
 using Scriban.Runtime;
+using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public class KalkModule : ScriptObject
+    public abstract class KalkModule : IScriptCustomFunction, IScriptObject
     {
-
-        public KalkModule() : this(null)
+        protected KalkModule() : this(null)
         {
         }
 
-        public KalkModule(string name)
+        protected KalkModule(string name)
         {
             Name = name;
             if (Name == null)
@@ -26,7 +30,7 @@ namespace Kalk.Core
         }
 
         public string Name { get; private set; }
-        
+
         public KalkEngine Engine { get; private set; }
 
         public bool IsImported { get; private set; }
@@ -46,13 +50,6 @@ namespace Kalk.Core
         internal void InternalImport()
         {
             if (IsImported) return;
-            
-            // Feed the engine with our new builtins
-            Engine.Builtins.Import(this);
-            foreach (var descriptor in Descriptors)
-            {
-                Engine.Descriptors[descriptor.Key] = descriptor.Value;
-            }
 
             Import();
 
@@ -65,97 +62,75 @@ namespace Kalk.Core
 
         protected virtual void Import()
         {
-            if (!IsBuiltin)
+            foreach (var descriptor in Descriptors)
             {
-                Engine.WriteHighlightLine($"# {Count} functions successfully imported.");
+                Engine.Descriptors[descriptor.Key] = descriptor.Value;
             }
         }
 
         public Dictionary<string, KalkDescriptor> Descriptors { get; }
 
-        protected void RegisterConstant(string name, object value, string category = null)
-        {
-            RegisterVariable(name, value, category);
-        }
-        protected void RegisterAction(string name, Action action, string category = null)
-        {
-            RegisterCustomFunction(name, DelegateCustomFunction.Create(action), category);
-        }
+        int IScriptFunctionInfo.RequiredParameterCount => 0;
 
-        protected void RegisterAction<T1>(string name, Action<T1> action, string category = null)
+        int IScriptFunctionInfo.ParameterCount => 0;
+
+        bool IScriptFunctionInfo.HasVariableParams => false;
+
+        Type IScriptFunctionInfo.ReturnType => typeof(object);
+
+        ScriptParameterInfo IScriptFunctionInfo.GetParameterInfo(int index) => throw new NotSupportedException("A module doesn't have any parameters.");
+
+        object IScriptCustomFunction.Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
         {
-            RegisterCustomFunction(name, DelegateCustomFunction.Create(action), category);
-        }
-
-        protected void RegisterAction<T1, T2>(string name, Action<T1, T2> action, string category = null)
-        {
-            RegisterCustomFunction(name, DelegateCustomFunction.Create(action), category);
-        }
-
-        protected void RegisterAction<T1, T2, T3>(string name, Action<T1, T2, T3> action, string category = null)
-        {
-            RegisterCustomFunction(name, DelegateCustomFunction.Create(action), category);
-        }
-
-        protected void RegisterAction<T1, T2, T3, T4>(string name, Action<T1, T2, T3, T4> action, string category = null)
-        {
-            RegisterCustomFunction(name, DelegateCustomFunction.Create(action), category);
-        }
-
-        protected void RegisterFunction<T1>(string name, Func<T1> func, string category = null)
-        {
-            RegisterCustomFunction(name, DelegateCustomFunction.CreateFunc(func), category);
-        }
-
-        protected void RegisterFunction<T1, T2>(string name, Func<T1, T2> func, string category = null)
-        {
-            RegisterCustomFunction(name, DelegateCustomFunction.CreateFunc(func), category);
-        }
-
-        protected void RegisterFunction<T1, T2, T3>(string name, Func<T1, T2, T3> func, string category = null)
-        {
-            RegisterCustomFunction(name, DelegateCustomFunction.CreateFunc(func), category);
-        }
-
-        protected void RegisterFunction<T1, T2, T3, T4>(string name, Func<T1, T2, T3, T4> func, string category = null)
-        {
-            RegisterCustomFunction(name, DelegateCustomFunction.CreateFunc(func), category);
-        }
-
-        protected void RegisterFunction<T1, T2, T3, T4, T5>(string name, Func<T1, T2, T3, T4, T5> func, string category = null)
-        {
-            RegisterCustomFunction(name, DelegateCustomFunction.CreateFunc(func), category);
-        }
-
-        protected void RegisterFunction<T1, T2, T3, T4, T5, T6>(string name, Func<T1, T2, T3, T4, T5, T6> func, string category = null)
-        {
-            RegisterCustomFunction(name, DelegateCustomFunction.CreateFunc(func), category);
-        }
-
-        protected void RegisterCustomFunction(string name, IScriptCustomFunction func, string category = null)
-        {
-            RegisterVariable(name, func, category);
-        }
-
-        protected void RegisterVariable(string name, object value, string category = null)
-        {
-            if (name == null) throw new ArgumentNullException(nameof(name));
-            if (value == null) throw new ArgumentNullException(nameof(value));
-            var names = name.Split(',');
-
-            KalkDescriptor descriptor = null;
-
-            foreach (var subName in names)
+            if (!(callerContext.Parent is ScriptExpressionStatement))
             {
-                SetValue(subName, value, true);
-
-                if (descriptor == null || !Descriptors.TryGetValue(names[0], out descriptor))
-                {
-                    descriptor = new KalkDescriptor();
-                }
-                Descriptors.Add(subName, descriptor);
-                descriptor.Names.Add(subName);
+                return this;
             }
+
+            var engine = (KalkEngine) context;
+            engine.WriteHighlightLine($"# Module {Name}");
+            return null;
+        }
+
+        ValueTask<object> IScriptCustomFunction.InvokeAsync(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
+        {
+            return new ValueTask<object>(((IScriptCustomFunction)this).Invoke(context, callerContext, arguments, blockStatement));
+        }
+
+        int IScriptObject.Count => 0;
+
+        IEnumerable<string> IScriptObject.GetMembers() => Enumerable.Empty<string>();
+
+        bool IScriptObject.Contains(string member) => false;
+
+        bool IScriptObject.IsReadOnly
+        {
+            get => true;
+            set
+            {
+            }
+        }
+
+        bool IScriptObject.TryGetValue(TemplateContext context, SourceSpan span, string member, out object value)
+        {
+            value = null;
+            return false;
+        }
+
+        bool IScriptObject.CanWrite(string member) => false;
+
+        bool IScriptObject.TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly) => false;
+
+
+        bool IScriptObject.Remove(string member) => false;
+
+        void IScriptObject.SetReadOnly(string member, bool readOnly)
+        {
+        }
+
+        IScriptObject IScriptObject.Clone(bool deep)
+        {
+            throw new NotSupportedException("A module does not support the clone operation.");
         }
     }
 }

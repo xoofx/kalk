@@ -9,7 +9,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core.Modules
 {
-    public partial class CurrencyModule : KalkModule
+    public partial class CurrencyModule : KalkModuleWithFunctions
     {
         private const string ExchangeRatesApi = "https://api.exchangeratesapi.io/latest";
         private const string ConfigBaseCurrencyProp = "base_currency";
@@ -213,8 +213,7 @@ namespace Kalk.Core.Modules
             }
             catch (Exception ex)
             {
-                engine.WriteError($"Unable to download rates. Reason: {ex.Message}");
-                engine.WriteHighlightLine();
+                engine.WriteErrorLine($"Unable to download rates. Reason: {ex.Message}");
                 // ignore
             }
 

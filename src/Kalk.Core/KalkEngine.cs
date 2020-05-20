@@ -35,6 +35,7 @@ namespace Kalk.Core
         private readonly List<string> _completionMatchingList;
         private int _currentIndexInCompletionMatchingList;
         private bool _isFirstWriteForEval;
+        private readonly Dictionary<Type, KalkModule> _modules;
         
         private KalkShortcutKeyMap _currentShortcutKeyMap;
 
@@ -46,6 +47,7 @@ namespace Kalk.Core
             // Enforce UTF8 encoding
             Console.OutputEncoding = Encoding.UTF8;
             EnableEngineOutput = true;
+            EchoEnabled = true;
             Repl = new ConsoleRepl();
             HasInteractiveConsole = Repl.HasInteractiveConsole;
             
@@ -62,6 +64,7 @@ namespace Kalk.Core
             Variables = new ScriptVariables(this);
             Descriptors = new Dictionary<string, KalkDescriptor>();
             EnableRelaxedMemberAccess = false;
+            _modules = new Dictionary<Type, KalkModule>();
             ErrorForStatementFunctionAsExpression = true;
             StrictVariables = true;
             UseScientific = true;
@@ -101,6 +104,8 @@ namespace Kalk.Core
 
         public bool AllowEscapeSequences { get; set; }
 
+        public bool EchoEnabled { get; set; }
+
         public ScriptObject Builtins { get; }
 
         [KalkDoc("config", CategoryGeneral)]
@@ -110,7 +115,7 @@ namespace Kalk.Core
 
         public KalkAliases Aliases { get; }
 
-        public bool EnableEngineOutput { get; set; }
+        private bool EnableEngineOutput { get; set; }
 
         public bool HasInteractiveConsole { get; }
 
@@ -206,7 +211,7 @@ namespace Kalk.Core
         
         public override TemplateContext Write(SourceSpan span, object textAsObject)
         {
-            if (EnableEngineOutput)
+            if (EnableEngineOutput && EchoEnabled)
             {
                 SetLastResult(textAsObject);
                 WriteHighlightVariableAndValueToConsole("out", textAsObject);
@@ -492,15 +497,20 @@ namespace Kalk.Core
             }
         }
 
-        public override void Import(IScriptObject obj)
+        public override void Import(SourceSpan span, object objectToImport)
         {
-            if (obj is KalkModule module)
+            if (objectToImport is KalkModule module)
             {
-                module.InternalImport();
+                ImportModule(module);
                 return;
             }
 
-            base.Import(obj);
+            base.Import(span, objectToImport);
+        }
+
+        protected void ImportModule(KalkModule module)
+        {
+            module.InternalImport();
         }
 
         internal void UpdateEdit(ConsoleText text, int cursorIndex)

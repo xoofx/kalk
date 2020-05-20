@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using MathNet.Numerics.LinearAlgebra;
 using Scriban;
+using Scriban.Functions;
 using Scriban.Helpers;
 using Scriban.Parsing;
 using Scriban.Runtime;
@@ -308,35 +309,27 @@ namespace Kalk.Core
         public override IEnumerable<string> GetMembers()
         {
             if (_values == null) yield break;
+            if (RowCount > 8 || ColumnCount > 8) yield break;
 
-            for(int i = 0; i < _values.Length; i++)
+            for(int y = 0; y < RowCount; y++)
             {
-                switch (i)
+                for (int x = 0; x < ColumnCount; x++)
                 {
-                    case 0: yield return "x";
-                        break;
-                    case 1: yield return "y";
-                        break;
-                    case 2: yield return "z";
-                        break;
-                    case 3: yield return "w";
-                        break;
-                    default:
-                        yield return $"{"xyzw"[i % 4]}{(i / 4 + 1).ToString(CultureInfo.InvariantCulture)}";
-                        break;
+                    yield return string.Format(CultureInfo.InvariantCulture, "_m{0}{1}", y, x);
                 }
             }
         }
 
         public override bool Contains(string member)
         {
-            if (member.Length < 1) return false;
+            // At least _m00 or _00 so 3 characters
+            if (member.Length < 3) return false;
 
             var emptySpan = new SourceSpan();
-            foreach (var index in ForEachMemberPart(emptySpan, member, false))
+            foreach (var cell in ForEachMemberPart(emptySpan, member, false))
             {
                 // We say that 0 or 1 are members as well
-                if (index < 0) return false;
+                if (cell.Item1 < 0 || cell.Item2 < 0) return false;
             }
 
             return true;
@@ -380,9 +373,9 @@ namespace Kalk.Core
 
             if (member.Length < 1) return false;
             List<T> list = null;
-            foreach (var index in ForEachMemberPart(span, member, true))
+            foreach (var cell in ForEachMemberPart(span, member, true))
             {
-                var value = index < 0 ? context.ToObject<T>(span, index): _values[index];
+                var value = _values[cell.Item1 * ColumnCount + cell.Item2];
 
                 if (result == null)
                 {
@@ -400,66 +393,122 @@ namespace Kalk.Core
 
             if (list != null)
             {
-                //result = new KalkMatrix<T>(list);
+                result = new KalkVector<T>(list);
             }
 
             return true;
         }
 
-        private IEnumerable<int> ForEachMemberPart(SourceSpan span, string member, bool throwIfInvalid)
+        private struct CharIterator
         {
-            for (int i = 0; i < member.Length; i++)
+            public CharIterator(string text)
             {
-                var c = member[i];
-                int index;
-                switch (c)
-                {
-                    case 'x':
-                        index = 0;
-                        break;
-                    case 'y':
-                        index = 1;
-                        break;
-                    case 'z':
-                        index = 2;
-                        break;
-                    case 'w':
-                        index = 3;
-                        break;
-                    default:
-                        if (throwIfInvalid)
-                        {
-                            throw new ScriptRuntimeException(span, $"Invalid swizzle {c}. Expecting only x,y,z,w.");
-                        }
-                        else
-                        {
-                            index = -1;
-                        }
-                        break;
-                }
+                Text = text;
+                Index = 0;
+            }
 
-                if (index < 0)
-                {
-                    yield return index;
-                    break;
-                }
+            public readonly string Text;
 
-                if (index < _values.Length)
+            public int Index;
+
+            public bool HasNext => Index < Text.Length;
+
+            public char NextChar()
+            {
+                if (Index >= Text.Length) return (char)0;
+                return Text[Index++];
+            }
+        }
+
+        private IEnumerable<(int, int)> ForEachMemberPart(SourceSpan span, string member, bool throwIfInvalid)
+        {
+            var it = new CharIterator(member);
+
+            // -1 None
+            // 0 Zero based
+            // 1 One based
+            int kindOfMember = -1;
+
+            string error = null;
+            while (it.HasNext)
+            {
+                var c = it.NextChar();
+                if (c == '_')
                 {
-                    yield return index;
-                }
-                else
-                {
-                    if (throwIfInvalid)
+                    c = it.NextChar();
+                    bool oneBased = true;
+                    if (c == 'm')
                     {
-                        throw new ScriptRuntimeException(span, $"Swizzle swizzle {c} is out of range ({index}) for this vector length ({RowCount})");
+                        oneBased = false;
+                        c = it.NextChar();
+                    }
+
+                    if (kindOfMember < 0)
+                    {
+                        kindOfMember = oneBased ? 1 : 0;
                     }
                     else
                     {
-                        yield return -1;
-                        break;
+                        var newKindOfMember = oneBased ? 1 : 0;
+                        if (newKindOfMember != kindOfMember)
+                        {
+                            if (throwIfInvalid)
+                            {
+                                throw new ScriptRuntimeException(span, $"Invalid mix of 1 based _m11 and zero based _00");
+                            }
+                            else
+                            {
+                                yield return (-1, -1);
+                                yield break;
+                            }
+                        }
+                    }
+
+                    // parse _00
+                    if (CharHelper.TryParseDigit(c, out var rowIndex))
+                    {
+                        if (oneBased) rowIndex--;
+
+                        c = it.NextChar();
+                        if (CharHelper.TryParseDigit(c, out var columnIndex))
+                        {
+                            if (oneBased) columnIndex--;
+
+                            if (rowIndex >= RowCount)
+                            {
+                                if (throwIfInvalid)
+                                {
+                                    error = $"Invalid row index {rowIndex} >= {RowCount} for member {member}.";
+                                }
+                            }
+                            else if (columnIndex >= ColumnCount)
+                            {
+                                if (throwIfInvalid)
+                                {
+                                    error = $"Invalid column index {columnIndex} >= {ColumnCount} for member {member}.";
+                                }
+                            }
+                            else
+                            {
+                                yield return (rowIndex, columnIndex);
+                                continue;
+                            }
+                        }
                     }
                 }
+
+                if (error == null && throwIfInvalid)
+                {
+                    error = c == 0 ? $"Invalid end of member text found when parsing `{member}`." : $"Invalid matrix character `{StringFunctions.Escape(c.ToString())}` found.";
+                }
+
+                if (throwIfInvalid)
+                {
+                    throw new ScriptRuntimeException(span, error);
+                }
+
+                yield return (-1, -1);
+                yield break;
             }
         }
 
@@ -467,8 +516,6 @@ namespace Kalk.Core
         {
             return true;
         }
-
-
 
         protected override KalkVector GenericMultiplyLeft(KalkVector x)
         {
@@ -698,11 +745,52 @@ namespace Kalk.Core
 
         public override bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
         {
-            var tValue = context.ToObject<T>(span, value);
-            foreach (var index in ForEachMemberPart(span, member, true))
+            // TODO: could cache this list
+            var list = new List<int>();
+            foreach (var cell in ForEachMemberPart(span, member, true))
             {
-                if (index < 0) throw new ScriptRuntimeException(span, $"Swizzle with 0 or 1 are not supporting when setting values");
-                _values[index] = tValue;
+                int nextIndex = cell.Item1 * ColumnCount + cell.Item2;
+                // Otherwise check that we are not trying to override an existing element.
+                if (list.Contains(nextIndex))
+                {
+                    throw new ScriptRuntimeException(span, $"The cell({cell.Item1}, {cell.Item2}) was already set and cannot be set more than once by a same set.");
+                }
+                list.Add(nextIndex);
+            }
+
+            // Handle the case where the value to set is a vector or an array
+            if (value is IList inputList)
+            {
+                if (inputList.Count != list.Count) throw new ScriptRuntimeException(span, $"Invalid number of components. Expecting {list.Count} but the value {value} has {inputList.Count} components.");
+
+                if (value is KalkVector<T> vector)
+                {
+                    int i = 0;
+                    foreach (var index in list)
+                    {
+                        this[index] = vector[i];
+                        i++;
+                    }
+
+                }
+                else
+                {
+                    int i = 0;
+                    foreach (var index in list)
+                    {
+                        this[index] = context.ToObject<T>(span, inputList[i]); ;
+                        i++;
+                    }
+                }
+            }
+            else
+            {
+                // otherwise it is a single value that we dispatch
+                var tValue = context.ToObject<T>(span, value);
+                foreach (var index in list)
+                {
+                    this[index] = tValue;
+                }
             }
 
             return true;

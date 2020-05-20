@@ -19,7 +19,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core.Modules
 {
-    public partial class IntrinsicsModule : KalkModule
+    public partial class IntrinsicsModule : KalkModuleWithFunctions
     {
         private const string CategoryIntrinsics = "Vector HW Intrinsics Functions";
 

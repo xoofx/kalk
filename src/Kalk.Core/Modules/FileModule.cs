@@ -7,7 +7,7 @@ using Scriban.Runtime;
 
 namespace Kalk.Core.Modules
 {
-    public partial class FileModule : KalkModule
+    public partial class FileModule : KalkModuleWithFunctions
     {
         private const string CategoryMiscFile = "Misc File Functions";
 

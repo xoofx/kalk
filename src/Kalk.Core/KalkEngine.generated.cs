@@ -133,6 +133,7 @@ namespace Kalk.Core
             RegisterConstant("units", Units);
             RegisterConstant("shortcuts", Shortcuts);
             RegisterAction("display", (Action<Scriban.Syntax.ScriptVariable>)Display);
+            RegisterAction("echo", (Action<Scriban.Syntax.ScriptVariable>)Echo);
             RegisterAction("print", (Action<object>)Print);
             RegisterAction("help", (Action<Scriban.Syntax.ScriptExpression>)Help);
             RegisterAction("reset", (Action)Reset);
@@ -193,6 +194,12 @@ namespace Kalk.Core
             }
             {
                 var descriptor = Descriptors["display"];
+                descriptor.Category = "General";
+                descriptor.Description = @"";
+                descriptor.IsCommand = true;
+            }
+            {
+                var descriptor = Descriptors["echo"];
                 descriptor.Category = "General";
                 descriptor.Description = @"";
                 descriptor.IsCommand = true;

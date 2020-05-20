@@ -4,7 +4,7 @@ using Scriban.Functions;
 
 namespace Kalk.Core.Modules
 {
-    public partial class StringModule : KalkModule
+    public partial class StringModule : KalkModuleWithFunctions
     {
         private const string CategoryString = "Text Functions";
 

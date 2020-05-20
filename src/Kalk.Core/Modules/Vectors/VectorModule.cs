@@ -3,7 +3,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core.Modules
 {
-    public partial class VectorModule : KalkModule
+    public partial class VectorModule : KalkModuleWithFunctions
     {
         public const string CategoryTypeConstructors = "Type Constructors";
         public const string CategoryVectorTypeConstructors = "Type Vector Constructors";
@@ -29,22 +29,28 @@ namespace Kalk.Core.Modules
         private static readonly KalkVectorConstructor<double> Double8Constructor = new KalkVectorConstructor<double>(8);
         private static readonly KalkColorRgbConstructor RgbConstructor = new KalkColorRgbConstructor();
         private static readonly KalkColorRgbaConstructor RgbaConstructor = new KalkColorRgbaConstructor();
+        private MathModule _mathModule;
 
         public VectorModule() : base("Vectors")
         {
             RegisterFunctionsAuto();
         }
 
+        protected override void Initialize()
+        {
+            _mathModule = Engine.GetOrCreateModule<MathModule>();
+        }
+        
         [KalkDoc("length", CategoryTypeConstructors)]
         public object Length(object x)
         {
-            throw new InvalidOperationException("Restore MathModule");
-            //if (x == null) throw new ArgumentNullException(nameof(x));
-            //if (x is KalkVector v)
-            //{
-            //    return Engine.Sqrt(new KalkDoubleValue(KalkVector.Dot(v, v)));
-            //}
-            //return Engine.Abs(new KalkCompositeValue(x));
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (_mathModule == null) throw new InvalidOperationException($"The module {Name} is not initialized.");
+            if (x is KalkVector v)
+            {
+                return _mathModule.Sqrt(new KalkDoubleValue(KalkVector.Dot(v, v)));
+            }
+            return _mathModule.Abs(new KalkCompositeValue(x));
         }
 
         [KalkDoc("dot", CategoryTypeConstructors)]

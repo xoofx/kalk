@@ -6,7 +6,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public partial class MathModule : KalkModule
+    public partial class MathModule : KalkModuleWithFunctions
     {
         public const string CategoryMathConstants = "Math Constants";
         public const string CategoryMathFunctions = "Math Functions";
