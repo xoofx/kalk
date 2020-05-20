@@ -58,62 +58,7 @@ namespace Kalk.Core
             _random = new Random();
             RndFunc = RndImpl;
 
-            RegisterConstant("nan", Nan, CategoryMathConstants);
-            RegisterConstant("inf", Inf, CategoryMathConstants);
-            RegisterConstant("pi", Pi, CategoryMathConstants);
-            RegisterConstant("e", E, CategoryMathConstants);
-
-            RegisterFunction("i", new Func<object>(ComplexNumber), CategoryMathFunctions);
-
-            RegisterFunction("abs", (Func<KalkCompositeValue, object>)Abs, CategoryMathFunctions);
-            RegisterFunction("sign", (Func<KalkCompositeValue, object>)Sign, CategoryMathFunctions);
-            RegisterFunction("fib", (Func<KalkIntValue, object>)Fib, CategoryMathFunctions);
-
-            RegisterFunction("cos", (Func<KalkDoubleValue, object>)Cos, CategoryMathFunctions);
-            RegisterFunction("acos", (Func<KalkDoubleValue, object>)Acos, CategoryMathFunctions);
-            RegisterFunction("cosh", (Func<KalkDoubleValue, object>)Cosh, CategoryMathFunctions);
-            RegisterFunction("acosh", (Func<KalkDoubleValue, object>)Acosh, CategoryMathFunctions);
-
-            RegisterFunction("sin", (Func<KalkDoubleValue, object>)Sin, CategoryMathFunctions);
-            RegisterFunction("asin", (Func<KalkDoubleValue, object>)Asin, CategoryMathFunctions);
-            RegisterFunction("sinh", (Func<KalkDoubleValue, object>)Sinh, CategoryMathFunctions);
-            RegisterFunction("asinh", (Func<KalkDoubleValue, object>)Asinh, CategoryMathFunctions);
-
-            RegisterFunction("tan", (Func<KalkDoubleValue, object>)Tan, CategoryMathFunctions);
-            RegisterFunction("atan", (Func<KalkDoubleValue, object>)Atan, CategoryMathFunctions);
-            RegisterFunction("tanh", (Func<KalkDoubleValue, object>)Tanh, CategoryMathFunctions);
-            RegisterFunction("atanh", (Func<KalkDoubleValue, object>)Atanh, CategoryMathFunctions);
-
-            RegisterFunction("atan2", (Func<double, double, double>)Atan2, CategoryMathFunctions);
-
-            RegisterFunction("rsqrt", (Func<KalkDoubleValue, object>)Rsqrt, CategoryMathFunctions);
-            RegisterFunction("sqrt", (Func<KalkDoubleValue, object>)Sqrt, CategoryMathFunctions);
-            RegisterFunction("log", (Func<KalkDoubleValue, object>)Log, CategoryMathFunctions);
-            RegisterFunction("log2", (Func<KalkDoubleValue, object>)Log2, CategoryMathFunctions);
-            RegisterFunction("log10", (Func<KalkDoubleValue, object>)Log10, CategoryMathFunctions);
-            RegisterFunction("exp", (Func<KalkDoubleValue, object>)Exp, CategoryMathFunctions);
-            RegisterFunction("exp2", (Func<KalkDoubleValue, object>)Exp2, CategoryMathFunctions);
-            RegisterFunction("pow", (Func<double, double, double>)Pow, CategoryMathFunctions);
-
-            RegisterFunction("fmod", (Func<double, double, double>)Fmod, CategoryMathFunctions);
-            RegisterFunction("frac", (Func<KalkDoubleValue, object>)Frac, CategoryMathFunctions);
-            RegisterFunction("round", (Func<KalkDoubleValue, object>)Round, CategoryMathFunctions);
-            RegisterFunction("floor", (Func<KalkDoubleValue, object>)Floor, CategoryMathFunctions);
-            RegisterFunction("ceil", (Func<KalkDoubleValue, object>)Ceiling, CategoryMathFunctions);
-            RegisterFunction("trunc", (Func<KalkDoubleValue, object>)Trunc, CategoryMathFunctions);
-
-            RegisterFunction("isfinite", (Func<KalkDoubleValue, object>)IsFinite, CategoryMathFunctions);
-            RegisterFunction("isinf", (Func<KalkDoubleValue, object>)IsInf, CategoryMathFunctions);
-            RegisterFunction("isnan", (Func<KalkDoubleValue, object>)IsNan, CategoryMathFunctions);
-
-            RegisterFunction("asdouble", (Func<object, double>)AsDouble, CategoryMathFunctions);
-            RegisterFunction("aslong", (Func<object, long>)AsLong, CategoryMathFunctions);
-
-            RegisterFunction("rnd", (Func<KalkCompositeValue, object>)Rnd, CategoryMathFunctions);
-
-            RegisterFunction("sum", (Func<object, object[], object>)(Sum), CategoryMathFunctions);
-            RegisterFunction("all", (Func<object, bool>)All, CategoryMathFunctions);
-            RegisterFunction("any", (Func<object, bool>)Any, CategoryMathFunctions);
+            RegisterFunctionsAuto();
         }
         
         /// <summary>

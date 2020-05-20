@@ -17,27 +17,6 @@ namespace Kalk.Core
     {
         private const string CategoryMisc = "Misc Functions";
 
-        private void RegisterMiscFunctions()
-        {
-            RegisterVariable("ascii", AsciiTable, CategoryMisc);
-            RegisterFunction("keys", DelegateCustomFunction.CreateFunc<object, IEnumerable>(Keys), CategoryMisc);
-            RegisterFunction("values", DelegateCustomFunction.CreateFunc<object, IEnumerable>(Values), CategoryMisc);
-            RegisterFunction("guid", DelegateCustomFunction.CreateFunc(Guid), CategoryMisc);
-            RegisterFunction("size", DelegateCustomFunction.CreateFunc<object, int>(Size), CategoryMisc);
-            RegisterFunction("hex", DelegateCustomFunction.CreateFunc<object, string, bool, object>(Hexadecimal), CategoryMisc);
-            RegisterFunction("asbytes", DelegateCustomFunction.CreateFunc<object, object>(AsBytes), CategoryMisc);
-            RegisterFunction("utf8", DelegateCustomFunction.CreateFunc<object, object>(GetUtf8), CategoryMisc);
-            RegisterFunction("utf16", DelegateCustomFunction.CreateFunc<object, object>(GetUtf16), CategoryMisc);
-            RegisterFunction("utf32", DelegateCustomFunction.CreateFunc<object, object>(GetUtf32), CategoryMisc);
-            RegisterFunction("bitcast", DelegateCustomFunction.CreateFunc<object , object, object>(Bitcast), CategoryMisc);
-            RegisterFunction("replace", DelegateCustomFunction.CreateFunc<object, object, object, object>(Replace), CategoryMisc);
-            RegisterFunction("contains", DelegateCustomFunction.CreateFunc<object, object, bool>(Contains), CategoryMisc);
-            RegisterFunction("insert_at", DelegateCustomFunction.CreateFunc<object, int, object, object>(InsertAt), CategoryMisc);
-            RegisterFunction("remove_at", DelegateCustomFunction.CreateFunc<object, int, object>(RemoveAt), CategoryMisc);
-            RegisterFunction("parse_csv", DelegateCustomFunction.CreateFunc<string, bool, ScriptRange>(ParseCsv), CategoryMisc);
-            RegisterFunction("lines", DelegateCustomFunction.CreateFunc<string, ScriptRange>(Lines), CategoryMisc);
-        }
-
         /// <summary>
         /// Returns the ascii table or print
         /// </summary>

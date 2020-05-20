@@ -7,22 +7,13 @@ using Scriban.Runtime;
 
 namespace Kalk.Core.Modules
 {
-    public class FileModule : KalkModule
+    public partial class FileModule : KalkModule
     {
         private const string CategoryMiscFile = "Misc File Functions";
 
         public FileModule() : base("Files")
         {
-            RegisterCustomFunction("file_exists", DelegateCustomFunction.CreateFunc<string, bool>(FileExists), CategoryMiscFile);
-            RegisterCustomFunction("dir_exists", DelegateCustomFunction.CreateFunc<string, bool>(DirectoryExists), CategoryMiscFile);
-            RegisterCustomFunction("dir", DelegateCustomFunction.CreateFunc<string, bool, IEnumerable>(DirectoryListing), CategoryMiscFile);
-            RegisterCustomFunction("load_text", DelegateCustomFunction.CreateFunc<string, string, string>(LoadText), CategoryMiscFile);
-            RegisterCustomFunction("load_bytes", DelegateCustomFunction.CreateFunc<string, ScriptArray<byte>>(LoadBytes), CategoryMiscFile);
-            RegisterCustomFunction("load_lines", DelegateCustomFunction.CreateFunc<string, string, ScriptRange>(LoadLines), CategoryMiscFile);
-            RegisterCustomFunction("load_csv", DelegateCustomFunction.CreateFunc<string, bool, ScriptRange>(LoadCsv), CategoryMiscFile);
-            RegisterCustomFunction("save_text", DelegateCustomFunction.CreateFunc<string, string, string, object>(SaveText), CategoryMiscFile);
-            RegisterCustomFunction("save_bytes", DelegateCustomFunction.CreateFunc<IEnumerable, string, object>(SaveBytes), CategoryMiscFile);
-            RegisterCustomFunction("save_lines", DelegateCustomFunction.CreateFunc<IEnumerable, string, string, object>(SaveLines), CategoryMiscFile);
+            RegisterFunctionsAuto();
         }
 
         [KalkDoc("file_exists", CategoryMiscFile)]

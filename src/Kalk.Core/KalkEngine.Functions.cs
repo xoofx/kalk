@@ -28,18 +28,15 @@ namespace Kalk.Core
 
         private void RegisterFunctions()
         {
-            RegisterGeneralFunctions();
-            RegisterModule(new MathModule());
-            RegisterMiscFunctions();
-            RegisterUnitFunctions();
+            RegisterFunctionsAuto();
 
+            RegisterModule(new MathModule());
             RegisterModule(new IntrinsicsModule());
             RegisterModule(new FileModule());
             RegisterModule(new StringModule());
             RegisterModule(new CurrencyModule());
             RegisterModule(new VectorModule());
             RegisterModule(new StandardUnitsModule());
-            //RegisterDocumentation();
 
             // Register last the system file
             LoadCoreFile();
@@ -69,160 +66,181 @@ namespace Kalk.Core
             }
         }
 
-        partial void RegisterDocumentation();
+        protected void RegisterAction(string name, Action action, string category = null)
+        {
+            RegisterFunction(name, DelegateCustomFunction.Create(action), category);
+        }
 
+        protected void RegisterAction<T1>(string name, Action<T1> action, string category = null)
+        {
+            RegisterFunction(name, DelegateCustomFunction.Create(action), category);
+        }
 
-        public void RegisterConstant(string name, object value, string category)
+        protected void RegisterAction<T1, T2>(string name, Action<T1, T2> action, string category = null)
+        {
+            RegisterFunction(name, DelegateCustomFunction.Create(action), category);
+        }
+
+        protected void RegisterAction<T1, T2, T3>(string name, Action<T1, T2, T3> action, string category = null)
+        {
+            RegisterFunction(name, DelegateCustomFunction.Create(action), category);
+        }
+
+        protected void RegisterAction<T1, T2, T3, T4>(string name, Action<T1, T2, T3, T4> action, string category = null)
+        {
+            RegisterFunction(name, DelegateCustomFunction.Create(action), category);
+        }
+
+        public void RegisterConstant(string name, object value, string category = null)
         {
             RegisterVariable(name, value, category);
         }
 
-        public void RegisterFunction(string name, Delegate del, string category)
+        public void RegisterFunction(string name, Delegate del, string category = null)
         {
             RegisterFunction(name, new DelegateCustomFunction(del), category);
         }
 
-        public void RegisterFunction(string name, Func<KalkMatrix, object> func, string category)
+        public void RegisterFunction(string name, Func<KalkMatrix, object> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<KalkMatrix, KalkMatrix> func, string category)
+        public void RegisterFunction(string name, Func<KalkMatrix, KalkMatrix> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<KalkVector, KalkVector, object> func, string category)
+        public void RegisterFunction(string name, Func<KalkVector, KalkVector, object> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<object, object, object> func, string category)
+        public void RegisterFunction(string name, Func<object, object, object> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<object, bool> func, string category)
+        public void RegisterFunction(string name, Func<object, bool> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
         
-        public void RegisterFunction(string name, Func<double, double> func, string category)
+        public void RegisterFunction(string name, Func<double, double> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<object, double> func, string category)
+        public void RegisterFunction(string name, Func<object, double> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<object, long> func, string category)
+        public void RegisterFunction(string name, Func<object, long> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<double, double, double> func, string category)
+        public void RegisterFunction(string name, Func<double, double, double> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<KalkDoubleValue, object> func, string category)
+        public void RegisterFunction(string name, Func<KalkDoubleValue, object> func, string category = null)
         {
             RegisterFunction(name, Wrap(func), category);
         }
 
-        public void RegisterFunction(string name, Func<KalkLongValue, object> func, string category)
+        public void RegisterFunction(string name, Func<KalkLongValue, object> func, string category = null)
         {
             RegisterFunction(name, Wrap(func), category);
         }
 
-        public void RegisterFunction(string name, Func<KalkIntValue, object> func, string category)
+        public void RegisterFunction(string name, Func<KalkIntValue, object> func, string category = null)
         {
             RegisterFunction(name, Wrap(func), category);
         }
 
-        public void RegisterFunction(string name, Func<KalkCompositeValue, object> func, string category)
+        public void RegisterFunction(string name, Func<KalkCompositeValue, object> func, string category = null)
         {
             RegisterFunction(name, Wrap(func), category);
         }
 
 
-        public void RegisterFunction(string name, Func<object, int> func, string category)
+        public void RegisterFunction(string name, Func<object, int> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<object[], KalkVector<int>> func, string category)
+        public void RegisterFunction(string name, Func<object[], KalkVector<int>> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
-        public void RegisterFunction(string name, Func<object[], KalkVector<bool>> func, string category)
+        public void RegisterFunction(string name, Func<object[], KalkVector<bool>> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
-        public void RegisterFunction(string name, Func<object[], KalkVector<float>> func, string category)
+        public void RegisterFunction(string name, Func<object[], KalkVector<float>> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
-        public void RegisterFunction(string name, Func<object[], KalkVector<double>> func, string category)
-        {
-            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
-        }
-
-        public void RegisterFunction(string name, Func<object[], KalkMatrix<bool>> func, string category)
+        public void RegisterFunction(string name, Func<object[], KalkVector<double>> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<object[], KalkMatrix<int>> func, string category)
+        public void RegisterFunction(string name, Func<object[], KalkMatrix<bool>> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<object[], KalkMatrix<double>> func, string category)
+        public void RegisterFunction(string name, Func<object[], KalkMatrix<int>> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<object[], KalkMatrix<float>> func, string category)
+        public void RegisterFunction(string name, Func<object[], KalkMatrix<double>> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<object[], KalkColorRgb> func, string category)
-        {
-            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
-        }
-        public void RegisterFunction(string name, Func<object[], KalkColorRgba> func, string category)
-        {
-            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
-        }
-        public void RegisterFunction(string name, Func<ScriptVariable, int, object[], object> func, string category)
+        public void RegisterFunction(string name, Func<object[], KalkMatrix<float>> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<object, float> func, string category)
+        public void RegisterFunction(string name, Func<object[], KalkColorRgb> func, string category = null)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+        public void RegisterFunction(string name, Func<object[], KalkColorRgba> func, string category = null)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+        public void RegisterFunction(string name, Func<ScriptVariable, int, object[], object> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<object, object> func, string category)
+        public void RegisterFunction(string name, Func<object, float> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, IScriptCustomFunction func, string category)
+        public void RegisterFunction(string name, Func<object, object> func, string category = null)
+        {
+            RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
+        }
+
+        public void RegisterFunction(string name, IScriptCustomFunction func, string category = null)
         {
             RegisterVariable(name, func, category);
         }
 
-        private void RegisterVariable(string name, object value, string category)
+        private void RegisterVariable(string name, object value, string category = null)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (value == null) throw new ArgumentNullException(nameof(value));
-            if (category == null) throw new ArgumentNullException(nameof(category));
             var names = name.Split(',');
 
             KalkDescriptor descriptor = null;
@@ -233,7 +251,7 @@ namespace Kalk.Core
 
                 if (descriptor == null || !Descriptors.TryGetValue(names[0], out descriptor))
                 {
-                    descriptor = new KalkDescriptor { Category = category };
+                    descriptor = new KalkDescriptor();
                 }
                 Descriptors.Add(subName, descriptor);
                 descriptor.Names.Add(subName);

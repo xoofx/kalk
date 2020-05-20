@@ -22,9 +22,8 @@ namespace Kalk.Core.Modules
         public CurrencyModule() : base("Currencies")
         {
             Currencies = new KalkCurrencies(this);
-            RegisterVariable("currencies", Currencies, CategoryUnitsAndCurrencies);
-            RegisterFunction("currency", new Func<ScriptVariable, decimal?, KalkCurrency>(Currency), CategoryUnitsAndCurrencies);
             BaseCurrency = DefaultBaseCurrency;
+            RegisterFunctionsAuto();
         }
         
         [KalkDoc("currencies", CategoryUnitsAndCurrencies)]

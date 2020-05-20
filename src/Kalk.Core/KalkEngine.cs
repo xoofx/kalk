@@ -70,8 +70,6 @@ namespace Kalk.Core
 
             _cancellationTokenSource = new CancellationTokenSource();
 
-            RegisterVariable("config", Config, CategoryGeneral);
-
             PushGlobal(Units);
             PushGlobal(Variables);
 
@@ -105,6 +103,7 @@ namespace Kalk.Core
 
         public ScriptObject Builtins { get; }
 
+        [KalkDoc("config", CategoryGeneral)]
         public KalkConfig Config { get; }
 
         public ScriptObject Variables { get; }

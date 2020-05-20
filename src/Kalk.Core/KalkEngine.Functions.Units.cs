@@ -9,14 +9,6 @@ namespace Kalk.Core
     {
         public const string CategoryUnits = "Unit Functions";
 
-        private void RegisterUnitFunctions()
-        {
-            RegisterVariable("units", Units, CategoryUnits);
-            RegisterFunction("unit", new Func<ScriptVariable, string, ScriptVariable, KalkExpression, string, string, KalkExpression>(DefineUserUnit), CategoryUnits);
-            
-            RegisterFunction("to", new Func<KalkExpression, KalkExpression, KalkExpression>(ConvertTo), CategoryUnits);
-        }
-        
         [KalkDoc("to", CategoryUnits)]
         public KalkExpression ConvertTo(KalkExpression src, KalkExpression dst)
         {

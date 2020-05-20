@@ -20,38 +20,6 @@ namespace Kalk.Core
 
         private int _evalDepth;
 
-        private void RegisterGeneralFunctions()
-        {
-            RegisterFunction("help", new Action<ScriptExpression>(Help), CategoryGeneral);
-            RegisterFunction("version", DelegateCustomFunction.Create(Version), CategoryGeneral);
-            RegisterFunction("reset", DelegateCustomFunction.Create(Reset), CategoryGeneral);
-            RegisterFunction("exit", DelegateCustomFunction.Create(Exit), CategoryGeneral);
-            RegisterFunction("history", new Action<object>(History), CategoryGeneral);
-
-            RegisterFunction("list", DelegateCustomFunction.Create(List), CategoryGeneral);
-            RegisterFunction("del", DelegateCustomFunction.Create(new Action<ScriptVariable>(DeleteVariable)), CategoryGeneral);
-
-            RegisterFunction("clear", DelegateCustomFunction.Create<ScriptVariable>(Clear), CategoryGeneral);
-            RegisterFunction("cls", DelegateCustomFunction.Create(Cls), CategoryGeneral);
-            RegisterFunction("out", DelegateCustomFunction.CreateFunc(Last), CategoryGeneral);
-
-            // general/dev
-            RegisterVariable("eval", DelegateCustomFunction.CreateFunc<string, bool, object>(EvaluateText), CategoryGeneral);
-            RegisterVariable("load", DelegateCustomFunction.CreateFunc<string, bool, object>(LoadFile), CategoryGeneral);
-
-            // shortcut keys
-            RegisterVariable("shortcuts", Shortcuts, CategoryGeneral);
-            RegisterFunction("shortcut", new DefineShortcutDelegate(Shortcut), CategoryGeneral);
-
-            // alias
-            RegisterVariable("aliases", Aliases, CategoryGeneral);
-            RegisterFunction("alias", new DefineAliasDelegate(Alias), CategoryGeneral);
-
-            // misc display/print...
-            RegisterVariable("display", DelegateCustomFunction.Create<ScriptVariable>(Display), CategoryGeneral);
-            RegisterVariable("print", DelegateCustomFunction.Create<object>(Print), CategoryGeneral);
-        }
-
         private delegate object EvaluateDelegate(string text, bool output = false);
 
         public void RegisterModule(KalkModule module)

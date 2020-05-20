@@ -32,43 +32,7 @@ namespace Kalk.Core.Modules
 
         public VectorModule() : base("Vectors")
         {
-            RegisterFunction("int", (Func<object, int>)CreateInt, CategoryTypeConstructors);
-            RegisterFunction("int2", (Func<object[], object>)CreateInt2, CategoryVectorTypeConstructors);
-            RegisterFunction("int3", (Func<object[], object>)CreateInt3, CategoryVectorTypeConstructors);
-            RegisterFunction("int4", (Func<object[], object>)CreateInt4, CategoryVectorTypeConstructors);
-            RegisterFunction("int8", (Func<object[], object>)CreateInt8, CategoryVectorTypeConstructors);
-            RegisterFunction("int16", (Func<object[], object>)CreateInt16, CategoryVectorTypeConstructors);
-
-            RegisterFunction("bool", (Func<object, bool>)CreateBool, CategoryTypeConstructors);
-            RegisterFunction("bool2", (Func<object[], object>)CreateBool2, CategoryVectorTypeConstructors);
-            RegisterFunction("bool3", (Func<object[], object>)CreateBool3, CategoryVectorTypeConstructors);
-            RegisterFunction("bool4", (Func<object[], object>)CreateBool4, CategoryVectorTypeConstructors);
-            RegisterFunction("bool8", (Func<object[], object>)CreateBool8, CategoryVectorTypeConstructors);
-            RegisterFunction("bool16", (Func<object[], object>)CreateBool16, CategoryVectorTypeConstructors);
-
-            RegisterFunction("float", (Func<object, float>)CreateFloat, CategoryTypeConstructors);
-            RegisterFunction("float2", (Func<object[], object>)CreateFloat2, CategoryVectorTypeConstructors);
-            RegisterFunction("float3", (Func<object[], object>)CreateFloat3, CategoryVectorTypeConstructors);
-            RegisterFunction("float4", (Func<object[], object>)CreateFloat4, CategoryVectorTypeConstructors);
-            RegisterFunction("float8", (Func<object[], object>)CreateFloat8, CategoryVectorTypeConstructors);
-            RegisterFunction("float16", (Func<object[], object>)CreateFloat16, CategoryVectorTypeConstructors);
-
-            RegisterFunction("double", (Func<object, double>)CreateDouble, CategoryTypeConstructors);
-            RegisterFunction("double2", (Func<object[], object>)CreateDouble2, CategoryVectorTypeConstructors);
-            RegisterFunction("double3", (Func<object[], object>)CreateDouble3, CategoryVectorTypeConstructors);
-            RegisterFunction("double4", (Func<object[], object>)CreateDouble4, CategoryVectorTypeConstructors);
-            RegisterFunction("double8", (Func<object[], object>)CreateDouble8, CategoryVectorTypeConstructors);
-
-            RegisterFunction("rgb", (Func<object[], object>)CreateRgb, CategoryVectorTypeConstructors);
-            RegisterFunction("rgba", (Func<object[], object>)CreateRgba, CategoryVectorTypeConstructors);
-
-            RegisterFunction("vector", (Func<ScriptVariable, int, object[], object>)CreateVector, CategoryVectorTypeConstructors);
-
-            RegisterFunction("dot", (Func<KalkVector, KalkVector, object>)KalkVector.Dot, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("cross", (Func<KalkVector, KalkVector, object>)KalkVector.Cross, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("length", (Func<object, object>)Length, CategoryMathVectorMatrixFunctions);
-
-            RegisterMatrices();
+            RegisterFunctionsAuto();
         }
 
         [KalkDoc("length", CategoryTypeConstructors)]

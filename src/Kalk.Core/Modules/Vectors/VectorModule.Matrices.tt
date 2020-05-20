@@ -41,13 +41,6 @@ namespace Kalk.Core.Modules
         private static readonly KalkMatrixConstructor<<#= type.Item1 #>> <#= type.Item2 #>Constructor = new KalkMatrixConstructor<<#= type.Item1 #>>(<#= type.Item3 #>, <#= type.Item4 #>);
 <# } #>
 
-        private void RegisterMatrixTypes()
-        {
-<# foreach(var type in types) { #>
-            RegisterFunction("<#= type.Item2.ToLowerInvariant() #>", (Func<object[], KalkMatrix<<#= type.Item1 #>>>)Create<#= type.Item2 #>, CategoryMatrixConstructors);
-<# } #>
-        }
-
 <# foreach(var type in types) { #>
         /// <summary>Creates a <#= type.Item3 #> (rows) x <#= type.Item4 #> (columns) matrix of <#= type.Item1 #>.</summary>
         [KalkDoc("<#= type.Item2.ToLowerInvariant() #>", CategoryMatrixConstructors)]

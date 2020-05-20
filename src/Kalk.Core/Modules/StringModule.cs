@@ -10,22 +10,7 @@ namespace Kalk.Core.Modules
 
         public StringModule() : base("Strings")
         {
-            RegisterFunction("escape", new Func<string, string>(StringEscape), CategoryString);
-            RegisterFunction("capitalize", new Func<string, string>(StringCapitalize), CategoryString);
-            RegisterFunction("capitalize_words", new Func<string, string>(StringCapitalizeWords), CategoryString);
-            RegisterFunction("downcase", new Func<string, string>(StringDowncase), CategoryString);
-            RegisterFunction("upcase", new Func<string, string>(StringUpcase), CategoryString);
-            RegisterFunction("endswith", new Func<string, string, bool>(StringEndsWith), CategoryString);
-            RegisterFunction("handleize", new Func<string, string>(StringHandleize), CategoryString);
-            RegisterFunction("lstrip", new Func<string, string>(StringLeftStrip), CategoryString);
-            RegisterFunction("pluralize", new Func<int, string, string, string>(StringPluralize), CategoryString);
-            RegisterFunction("rstrip", new Func<string, string>(StringRightStrip), CategoryString);
-            RegisterFunction("split", new Func<string, string, IEnumerable>(StringSplit), CategoryString);
-            RegisterFunction("startswith", new Func<string, string, bool>(StringStartsWith), CategoryString);
-            RegisterFunction("strip", new Func<string, string>(StringStrip), CategoryString);
-            RegisterFunction("strip_newlines", new Func<string, string>(StringStripNewlines), CategoryString);
-            RegisterFunction("pad_left", new Func<string, int, string>(StringPadLeft), CategoryString);
-            RegisterFunction("pad_right", new Func<string, int, string>(StringPadRight), CategoryString);
+            RegisterFunctionsAuto();
         }
 
         [KalkDoc("escape", CategoryString)]

@@ -6,18 +6,6 @@ namespace Kalk.Core.Modules
 {
     public partial class VectorModule
     {
-        private void RegisterMatrices()
-        {
-            RegisterMatrixTypes();
-
-            RegisterFunction("determinant", (Func<KalkMatrix, object>) Determinant, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("inverse", (Func<KalkMatrix, KalkMatrix>)Inverse, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("transpose", (Func<KalkMatrix, KalkMatrix>)Transpose, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("mul", (Func<object, object, object>)Multiply, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("identity", (Func<KalkMatrix, KalkMatrix>)Identity, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("diag", (Func<object, object>)Diagonal, CategoryMathVectorMatrixFunctions);
-        }
-
         [KalkDoc("transpose", CategoryMathVectorMatrixFunctions)]
         public static KalkMatrix Transpose(KalkMatrix m) => KalkMatrix.Transpose(m);
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -18,6 +19,38 @@ namespace Kalk.CodeGen
 {
     class Program
     {
+        internal class ModuleToGenerate
+        {
+            public ModuleToGenerate()
+            {
+                Members = new List<FuncMember>();
+                Descriptors = new List<KalkDescriptor>();
+            }
+
+            public string Namespace { get; set; }
+
+            public string ClassName { get; set; }
+
+            public List<FuncMember> Members { get; }
+
+            public List<KalkDescriptor> Descriptors { get; }
+        }
+
+        internal class FuncMember
+        {
+            public string Name { get; set; }
+
+            public string CSharpName { get; set; }
+
+            public bool IsFunc { get; set; }
+            
+            public bool IsAction { get; set; }
+
+            public bool IsConst { get; set; }
+
+            public string Cast { get; set; }
+        }
+        
         static async Task Main(string[] args)
         {
             Microsoft.Build.Locator.MSBuildLocator.RegisterDefaults();
@@ -34,13 +67,12 @@ namespace Kalk.CodeGen
             var pathToSolution = Path.Combine(srcFolder, @"kalk.sln");
             var solution = await workspace.OpenSolutionAsync(pathToSolution);
 
-            // force to reference unsafe
-            int value = 0;
-            var bvalue = Unsafe.As<int, bool>(ref value);
-            bvalue = true;
-
-            var z = BigInteger.Zero;
-            Console.WriteLine($"Use bigint {z}");
+            // Force this assembly to reference the following types in order to compile Kalk.Core correctly
+            // (this is awful but Roslyn doesn't help us here)
+            Console.WriteLine($"Using {typeof(Unsafe)}");
+            Console.WriteLine($"Using {typeof(CsvHelper.CsvParser)}");
+            Console.WriteLine($"Using {typeof(HttpClient)}");
+            Console.WriteLine($"Using {typeof(BigInteger)}");
 
             var project = solution.Projects.First(x => x.Name == "Kalk.Core");
             //var scriban = solution.Projects.First(x => x.Name == "Scriban");
@@ -84,75 +116,146 @@ namespace Kalk.CodeGen
                 return;
             }
             
-            var kalkEngine = compilation.GetTypeByMetadataName("Kalk.Core.KalkEngine");
+            //var kalkEngine = compilation.GetTypeByMetadataName("Kalk.Core.KalkEngine");
 
-            var descriptors = new List<KalkDescriptor>();
-            
-            foreach (var member in kalkEngine.GetMembers())
+            var mapNameToModule = new Dictionary<string, ModuleToGenerate>();
+
+            foreach (var type in compilation.GetSymbolsWithName(x => true, SymbolFilter.Type))
             {
-                var attr = member.GetAttributes().FirstOrDefault(x => x.AttributeClass.Name == "KalkDocAttribute");
-                if (attr == null) continue;
-                
-                var name = attr.ConstructorArguments[0].Value.ToString();
+                var typeSymbol = type as ITypeSymbol;
+                if (typeSymbol == null) continue;
 
-                
-                var xmlStr  = member.GetDocumentationCommentXml();
-
-                if (string.IsNullOrEmpty(xmlStr)) continue;
-                
-                var xmlDoc = XElement.Parse(xmlStr);
-
-                var elements=  xmlDoc.Elements().ToList();
-
-                var method = member as IMethodSymbol;
-
-                var descriptor = new KalkDescriptor
+                foreach (var member in typeSymbol.GetMembers())
                 {
-                    IsCommand = method != null && method.ReturnsVoid
-                };
+                    var attr = member.GetAttributes().FirstOrDefault(x => x.AttributeClass.Name == "KalkDocAttribute");
+                    if (attr == null) continue;
 
-                descriptor.Names.Add(name);
-                descriptors.Add(descriptor);
+                    var name = attr.ConstructorArguments[0].Value.ToString();
+                    var category = attr.ConstructorArguments[1].Value.ToString();
 
-                foreach (var element in elements)
-                {
-                    var text = Escape(GetCleanedString(element).Trim());
-                    if (element.Name == "summary")
+                    var className = member is ITypeSymbol ? member.Name : member.ContainingSymbol.Name;
+
+                    if (!mapNameToModule.TryGetValue(className, out var moduleToGenerate))
                     {
-                        descriptor.Description = text;
-                    }
-                    else if (element.Name == "param")
-                    {
-                        var argName = element.Attribute("name").Value;
-                        if (method != null)
+                        moduleToGenerate = new ModuleToGenerate()
                         {
-                            var parameterSymbol =  method.Parameters.FirstOrDefault(x => x.Name == argName);
-                            bool isOptional = false;
-                            if (parameterSymbol == null)
-                            {
-                                Console.WriteLine($"Invalid XML doc parameter name {argName} not found on method {method}");
-                            }
-                            else
-                            {
-                                isOptional = parameterSymbol.IsOptional;
-                            }
-                            descriptor.Params.Add(new KalkParamDescriptor(element.Attribute("name").Value, text) { IsOptional = isOptional });
+                            Namespace = member.ContainingNamespace.ToDisplayString(),
+                            ClassName = className
+                        };
+                        mapNameToModule.Add(className, moduleToGenerate);
+                    }
+
+                    FuncMember funcMember = null;
+                    if (member is IMethodSymbol methodSymbol)
+                    {
+                        funcMember = new FuncMember()
+                        {
+                            CSharpName = methodSymbol.Name
+                        };
+                        var builder = new StringBuilder();
+                        funcMember.IsAction = methodSymbol.ReturnsVoid;
+                        funcMember.IsFunc = !funcMember.IsAction;
+                        builder.Append(funcMember.IsAction ? "Action" : "Func");
+
+                        if (methodSymbol.Parameters.Length > 0 || funcMember.IsFunc)
+                        {
+                            builder.Append("<");
                         }
+
+                        for (var i = 0; i < methodSymbol.Parameters.Length; i++)
+                        {
+                            var parameter = methodSymbol.Parameters[i];
+                            if (i > 0) builder.Append(", ");
+                            builder.Append(GetTypeName(parameter.Type));
+                        }
+
+                        if (funcMember.IsFunc)
+                        {
+                            if (methodSymbol.Parameters.Length > 0)
+                            {
+                                builder.Append(", ");
+                            }
+                            builder.Append(GetTypeName(methodSymbol.ReturnType));
+                        }
+
+                        if (methodSymbol.Parameters.Length > 0 || funcMember.IsFunc)
+                        {
+                            builder.Append(">");
+                        }
+
+                        funcMember.Cast = $"({builder.ToString()})";
                     }
-                    else if (element.Name == "returns")
+                    else if (member is IPropertySymbol || member is IFieldSymbol)
                     {
-                        descriptor.Returns = text;
+                        funcMember = new FuncMember { CSharpName = member.Name, IsConst = true };
                     }
-                    else if (element.Name == "remarks")
+
+                    if (funcMember != null)
                     {
-                        descriptor.Remarks = text;
+                        funcMember.Name = name;
+                        moduleToGenerate.Members.Add(funcMember);
+                    }
+
+                    var xmlStr = member.GetDocumentationCommentXml();
+
+                    var method = member as IMethodSymbol;
+
+                    var descriptor = new KalkDescriptor
+                    {
+                        Category = category,
+                        IsCommand = method != null && method.ReturnsVoid
+                    };
+                    moduleToGenerate.Descriptors.Add(descriptor);
+                    descriptor.Names.Add(name);
+
+                    if (!string.IsNullOrEmpty(xmlStr))
+                    {
+                        var xmlDoc = XElement.Parse(xmlStr);
+                        var elements = xmlDoc.Elements().ToList();
+
+                        foreach (var element in elements)
+                        {
+                            var text = Escape(GetCleanedString(element).Trim());
+                            if (element.Name == "summary")
+                            {
+                                descriptor.Description = text;
+                            }
+                            else if (element.Name == "param")
+                            {
+                                var argName = element.Attribute("name").Value;
+                                if (method != null)
+                                {
+                                    var parameterSymbol = method.Parameters.FirstOrDefault(x => x.Name == argName);
+                                    bool isOptional = false;
+                                    if (parameterSymbol == null)
+                                    {
+                                        Console.WriteLine($"Invalid XML doc parameter name {argName} not found on method {method}");
+                                    }
+                                    else
+                                    {
+                                        isOptional = parameterSymbol.IsOptional;
+                                    }
+
+                                    descriptor.Params.Add(new KalkParamDescriptor(element.Attribute("name").Value, text) {IsOptional = isOptional});
+                                }
+                            }
+                            else if (element.Name == "returns")
+                            {
+                                descriptor.Returns = text;
+                            }
+                            else if (element.Name == "remarks")
+                            {
+                                descriptor.Remarks = text;
+                            }
+                        }
                     }
                 }
             }
 
+
             string Escape(string text) => text.Replace("\"", "\"\"");
 
-            descriptors = descriptors.OrderBy(x => x.Names[0]).ToList();
+            var modules = mapNameToModule.Values.OrderBy(x => x.ClassName).ToList();
             
             var templateStr = @"//------------------------------------------------------------------------------
 // <auto-generated>
@@ -163,16 +266,33 @@ namespace Kalk.CodeGen
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using System;
+{{~ for module in modules ~}}
 
-namespace Kalk.Core
+namespace {{ module.Namespace }}
 {
-    public partial class KalkEngine
+    public partial class {{ module.ClassName }}
     {
-        partial void RegisterDocumentation()
+        protected void RegisterFunctionsAuto()
         {
-            {{~ for item in descriptors ~}}
+            {{~ for member in module.Members ~}}
+                {{~ if member.IsConst ~}}
+            RegisterConstant(""{{ member.Name }}"", {{ member.CSharpName }});
+                {{~ else if member.IsFunc ~}}
+            RegisterFunction(""{{ member.Name }}"", {{member.Cast}}{{ member.CSharpName }});
+                {{~ else if member.IsAction ~}}
+            RegisterAction(""{{ member.Name }}"", {{member.Cast}}{{ member.CSharpName }});
+                {{~ end ~}}
+            {{~ end ~}}
+            RegisterDocumentationAuto();
+        }
+
+        private void RegisterDocumentationAuto()
+        {
+            {{~ for item in module.Descriptors ~}}
             {
                 var descriptor = Descriptors[""{{ item.Names[0] }}""];
+                descriptor.Category = ""{{ item.Category }}"";
                 descriptor.Description = @""{{ item.Description }}"";
                 descriptor.IsCommand = {{ item.IsCommand }};
             {{~ for param in item.Params ~}}
@@ -186,12 +306,36 @@ namespace Kalk.Core
         }        
     }
 }
+{{~ end ~}}
 ";
             var template = Template.Parse(templateStr);
-            var result = template.Render(new {descriptors = descriptors}, x => x.Name);
+
+            var result = template.Render(new {modules = modules}, x => x.Name);
             
             File.WriteAllText(Path.Combine(srcFolder, "Kalk.Core/KalkEngine.generated.cs"), result);
             //Console.WriteLine(result);
+        }
+
+        static string GetTypeName(ITypeSymbol typeSymbol)
+        {
+            //if (typeSymbol is IArrayTypeSymbol arrayTypeSymbol)
+            //{
+            //    return GetTypeName(arrayTypeSymbol.ElementType) + "[]";
+            //}
+
+            //if (typeSymbol.Name == typeof(Nullable).Name)
+            //{
+            //    return typeSymbol.ToDisplayString();
+            //}
+           
+            //if (typeSymbol.Name == "String") return "string";
+            //if (typeSymbol.Name == "Object") return "object";
+            //if (typeSymbol.Name == "Boolean") return "bool";
+            //if (typeSymbol.Name == "Single") return "float";
+            //if (typeSymbol.Name == "Double") return "double";
+            //if (typeSymbol.Name == "Int32") return "int";
+            //if (typeSymbol.Name == "Int64") return "long";
+            return typeSymbol.ToDisplayString();
         }
 
         private static string GetCleanedString(XNode node)
