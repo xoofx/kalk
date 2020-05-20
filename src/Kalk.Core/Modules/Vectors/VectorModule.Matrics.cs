@@ -4,21 +4,34 @@ using Scriban.Syntax;
 
 namespace Kalk.Core.Modules
 {
-    public partial class VectorModule : KalkModule
+    public partial class VectorModule
     {
         private void RegisterMatrices()
         {
             RegisterMatrixTypes();
 
-            RegisterFunction("determinant", (Func<KalkMatrix, object>) KalkMatrix.Determinant, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("inverse", (Func<KalkMatrix, KalkMatrix>)KalkMatrix.Inverse, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("transpose", (Func<KalkMatrix, KalkMatrix>)KalkMatrix.Transpose, CategoryMathVectorMatrixFunctions);
+            RegisterFunction("determinant", (Func<KalkMatrix, object>) Determinant, CategoryMathVectorMatrixFunctions);
+            RegisterFunction("inverse", (Func<KalkMatrix, KalkMatrix>)Inverse, CategoryMathVectorMatrixFunctions);
+            RegisterFunction("transpose", (Func<KalkMatrix, KalkMatrix>)Transpose, CategoryMathVectorMatrixFunctions);
             RegisterFunction("mul", (Func<object, object, object>)Multiply, CategoryMathVectorMatrixFunctions);
-            RegisterFunction("identity", (Func<KalkMatrix, KalkMatrix>)KalkMatrix.Identity, CategoryMathVectorMatrixFunctions);
+            RegisterFunction("identity", (Func<KalkMatrix, KalkMatrix>)Identity, CategoryMathVectorMatrixFunctions);
             RegisterFunction("diag", (Func<object, object>)Diagonal, CategoryMathVectorMatrixFunctions);
         }
 
-        [KalkDoc("diag")]
+        [KalkDoc("transpose", CategoryMathVectorMatrixFunctions)]
+        public static KalkMatrix Transpose(KalkMatrix m) => KalkMatrix.Transpose(m);
+
+        [KalkDoc("identity", CategoryMathVectorMatrixFunctions)]
+        public static KalkMatrix Identity(KalkMatrix m) => KalkMatrix.Identity(m);
+
+
+        [KalkDoc("determinant", CategoryMathVectorMatrixFunctions)]
+        public static object Determinant(KalkMatrix m) => KalkMatrix.Determinant(m);
+
+        [KalkDoc("inverse", CategoryMathVectorMatrixFunctions)]
+        public static KalkMatrix Inverse(KalkMatrix m) => KalkMatrix.Inverse(m);
+        
+        [KalkDoc("diag", CategoryMathVectorMatrixFunctions)]
         public object Diagonal(object x)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
@@ -36,7 +49,7 @@ namespace Kalk.Core.Modules
             throw new ArgumentException($"Invalid argument type {Engine.GetTypeName(x)}. Expecting a matrix or a vector type.", nameof(x));
         }
 
-        [KalkDoc("mul")]
+        [KalkDoc("mul", CategoryMathVectorMatrixFunctions)]
         public object Multiply(object x, object y)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));

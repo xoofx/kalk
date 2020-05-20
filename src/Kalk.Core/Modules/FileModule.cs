@@ -25,21 +25,21 @@ namespace Kalk.Core.Modules
             RegisterCustomFunction("save_lines", DelegateCustomFunction.CreateFunc<IEnumerable, string, string, object>(SaveLines), CategoryMiscFile);
         }
 
-        [KalkDoc("file_exists")]
+        [KalkDoc("file_exists", CategoryMiscFile)]
         public bool FileExists(string path)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             return File.Exists(Path.Combine(Environment.CurrentDirectory, path));
         }
 
-        [KalkDoc("directory_exists")]
+        [KalkDoc("directory_exists", CategoryMiscFile)]
         public bool DirectoryExists(string path)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             return Directory.Exists(Path.Combine(Environment.CurrentDirectory, path));
         }
 
-        [KalkDoc("dir")]
+        [KalkDoc("dir", CategoryMiscFile)]
         public IEnumerable DirectoryListing(string path = null, bool recursive = false)
         {
             string search = "*";
@@ -63,7 +63,7 @@ namespace Kalk.Core.Modules
             return new ScriptRange(Directory.EnumerateFileSystemEntries(path, search, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly));
         }
 
-        [KalkDoc("load_text")]
+        [KalkDoc("load_text", CategoryMiscFile)]
         public string LoadText(string path, string encoding = KalkConfig.DefaultEncoding)
         {
             var fullPath = AssertReadFile(path);
@@ -72,7 +72,7 @@ namespace Kalk.Core.Modules
             return new StreamReader(stream, encoder).ReadToEnd();
         }
 
-        [KalkDoc("load_bytes")]
+        [KalkDoc("load_bytes", CategoryMiscFile)]
         public ScriptArray<byte> LoadBytes(string path)
         {
             var fullPath = AssertReadFile(path);
@@ -82,7 +82,7 @@ namespace Kalk.Core.Modules
             return new ScriptArray<byte>(buffer);
         }
 
-        [KalkDoc("load_lines")]
+        [KalkDoc("load_lines", CategoryMiscFile)]
         public ScriptRange LoadLines(string path, string encoding = KalkConfig.DefaultEncoding)
         {
             var fullPath = AssertReadFile(path);
@@ -94,7 +94,7 @@ namespace Kalk.Core.Modules
             }));
         }
 
-        [KalkDoc("save_lines")]
+        [KalkDoc("save_lines", CategoryMiscFile)]
         public object SaveLines(IEnumerable lines, string path, string encoding = KalkConfig.DefaultEncoding)
         {
             if (lines == null) throw new ArgumentNullException(nameof(lines));
@@ -111,7 +111,7 @@ namespace Kalk.Core.Modules
             return null;
         }
 
-        [KalkDoc("save_text")]
+        [KalkDoc("save_text", CategoryMiscFile)]
         public object SaveText(string text, string path, string encoding = KalkConfig.DefaultEncoding)
         {
             var fullPath = AssertWriteFile(path);
@@ -124,7 +124,7 @@ namespace Kalk.Core.Modules
             return null;
         }
 
-        [KalkDoc("save_bytes")]
+        [KalkDoc("save_bytes", CategoryMiscFile)]
         public object SaveBytes(IEnumerable data, string path)
         {
             var fullPath = AssertWriteFile(path);
@@ -161,7 +161,7 @@ namespace Kalk.Core.Modules
             return null;
         }
 
-        [KalkDoc("load_csv")]
+        [KalkDoc("load_csv", CategoryMiscFile)]
         public ScriptRange LoadCsv(string path, bool headers = true)
         {
             var fullPath = AssertReadFile(path);

@@ -38,15 +38,13 @@ namespace Kalk.Core
             if (x == null) throw new ArgumentNullException(nameof(x));
             return x.GenericDiagonal();
         }
-        
-        [KalkDoc("dot")]
+
         public static object Dot(KalkVector x, KalkVector y)
         {
             AssertValidVectors(x, y);
             return x.GenericDot(y);
         }
 
-        [KalkDoc("cross")]
         public static object Cross(KalkVector x, KalkVector y)
         {
             AssertValidVectors(x, y);

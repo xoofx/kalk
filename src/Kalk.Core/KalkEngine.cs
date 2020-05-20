@@ -119,10 +119,10 @@ namespace Kalk.Core
         /// If used in an expression, returns an object containing all units defined.
         /// Otherwise it will display units in a friendly format.
         /// </summary>
-        [KalkDoc("units")]
+        [KalkDoc("units", CategoryUnits)]
         public KalkUnits Units { get; }
 
-        [KalkDoc("shortcuts")]
+        [KalkDoc("shortcuts", CategoryGeneral)]
         public KalkShortcuts Shortcuts { get; }
 
         public Dictionary<string, KalkDescriptor> Descriptors { get; }

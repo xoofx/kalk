@@ -28,52 +28,52 @@ namespace Kalk.Core.Modules
             RegisterFunction("pad_right", new Func<string, int, string>(StringPadRight), CategoryString);
         }
 
-        [KalkDoc("escape")]
+        [KalkDoc("escape", CategoryString)]
         public string StringEscape(string text) => StringFunctions.Escape(text);
 
-        [KalkDoc("capitalize")]
+        [KalkDoc("capitalize", CategoryString)]
         public string StringCapitalize(string text) => StringFunctions.Capitalize(text);
         
-        [KalkDoc("capitalize_words")]
+        [KalkDoc("capitalize_words", CategoryString)]
         public string StringCapitalizeWords(string text) => StringFunctions.Capitalizewords(text);
 
-        [KalkDoc("downcase")]
+        [KalkDoc("downcase", CategoryString)]
         public string StringDowncase(string text) => StringFunctions.Downcase(text);
 
-        [KalkDoc("upcase")]
+        [KalkDoc("upcase", CategoryString)]
         public string StringUpcase(string text) => StringFunctions.Upcase(text);
 
-        [KalkDoc("endswith")]
+        [KalkDoc("endswith", CategoryString)]
         public bool StringEndsWith(string text, string end) => StringFunctions.EndsWith(text, end);
 
-        [KalkDoc("handleize")]
+        [KalkDoc("handleize", CategoryString)]
         public string StringHandleize(string text) => StringFunctions.Handleize(text);
 
-        [KalkDoc("lstrip")]
+        [KalkDoc("lstrip", CategoryString)]
         public string StringLeftStrip(string text) => StringFunctions.LStrip(text);
 
-        [KalkDoc("pluralize")]
+        [KalkDoc("pluralize", CategoryString)]
         public string StringPluralize(int number, string singular, string plural) => StringFunctions.Pluralize(number, singular, plural);
 
-        [KalkDoc("rstrip")]
+        [KalkDoc("rstrip", CategoryString)]
         public string StringRightStrip(string text) => StringFunctions.RStrip(text);
 
-        [KalkDoc("split")]
+        [KalkDoc("split", CategoryString)]
         public IEnumerable StringSplit(string text, string match) => StringFunctions.Split(text, match);
 
-        [KalkDoc("startswith")]
+        [KalkDoc("startswith", CategoryString)]
         public bool StringStartsWith(string text, string start) => StringFunctions.StartsWith(text, start);
 
-        [KalkDoc("strip")]
+        [KalkDoc("strip", CategoryString)]
         public string StringStrip(string text) => StringFunctions.Strip(text);
 
-        [KalkDoc("strip_newlines")]
+        [KalkDoc("strip_newlines", CategoryString)]
         public string StringStripNewlines(string text) => StringFunctions.StripNewlines(text);
 
-        [KalkDoc("pad_left")]
+        [KalkDoc("pad_left", CategoryString)]
         public string StringPadLeft(string text, int width) => StringFunctions.PadLeft(text, width);
 
-        [KalkDoc("pad_right")]
+        [KalkDoc("pad_right", CategoryString)]
         public string StringPadRight(string text, int width) => StringFunctions.PadRight(text, width);
     }
 }

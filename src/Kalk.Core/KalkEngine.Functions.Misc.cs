@@ -41,28 +41,28 @@ namespace Kalk.Core
         /// <summary>
         /// Returns the ascii table or print
         /// </summary>
-        [KalkDoc("ascii")]
+        [KalkDoc("ascii", CategoryMisc)]
         public KalkAsciiTable AsciiTable { get; }
         
-        [KalkDoc("keys")]
+        [KalkDoc("keys", CategoryMisc)]
         public IEnumerable Keys(object obj)
         {
             return ObjectFunctions.Keys(this, obj);
         }
 
-        [KalkDoc("guid")]
+        [KalkDoc("guid", CategoryMisc)]
         public string Guid()
         {
             return System.Guid.NewGuid().ToString();
         }
 
-        [KalkDoc("size")]
+        [KalkDoc("size", CategoryMisc)]
         public int Size(object value)
         {
             return ObjectFunctions.Size(value);
         }
 
-        [KalkDoc("values")]
+        [KalkDoc("values", CategoryMisc)]
         public IEnumerable Values(object obj)
         {
             switch (obj)
@@ -76,13 +76,13 @@ namespace Kalk.Core
             }
         }
         
-        [KalkDoc("hex")]
+        [KalkDoc("hex", CategoryMisc)]
         public object Hexadecimal(object value, string separator = " ", bool prefix = false)
         {
             return Hexadecimal(value, separator, prefix, false);
         }
 
-        [KalkDoc("utf8")]
+        [KalkDoc("utf8", CategoryMisc)]
         public object GetUtf8(object value)
         {
             switch (value)
@@ -107,7 +107,7 @@ namespace Kalk.Core
         }
 
 
-        [KalkDoc("utf16")]
+        [KalkDoc("utf16", CategoryMisc)]
         public object GetUtf16(object value)
         {
             switch (value)
@@ -141,7 +141,7 @@ namespace Kalk.Core
             }
         }
 
-        [KalkDoc("utf32")]
+        [KalkDoc("utf32", CategoryMisc)]
         public object GetUtf32(object value)
         {
             switch (value)
@@ -165,7 +165,7 @@ namespace Kalk.Core
             }
         }
 
-        [KalkDoc("bitcast")]
+        [KalkDoc("bitcast", CategoryMisc)]
         public object Bitcast(object type, object value)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -209,7 +209,7 @@ namespace Kalk.Core
             }
         }
 
-        [KalkDoc("asbytes")]
+        [KalkDoc("asbytes", CategoryMisc)]
         public object AsBytes(object value)
         {
             if (value == null) return null;
@@ -262,7 +262,7 @@ namespace Kalk.Core
             }
         }
         
-        [KalkDoc("insert_at")]
+        [KalkDoc("insert_at", CategoryMisc)]
         public object InsertAt(object value, int index, object item)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
@@ -296,7 +296,7 @@ namespace Kalk.Core
             }
         }
 
-        [KalkDoc("remove_at")]
+        [KalkDoc("remove_at", CategoryMisc)]
         public object RemoveAt(object value, int index)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
@@ -326,7 +326,7 @@ namespace Kalk.Core
             }
         }
         
-        [KalkDoc("contains")]
+        [KalkDoc("contains", CategoryMisc)]
         public bool Contains(object value, object match)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
@@ -356,7 +356,7 @@ namespace Kalk.Core
             return contains;
         }
 
-        [KalkDoc("replace")]
+        [KalkDoc("replace", CategoryMisc)]
         public object Replace(object value, object match, object by)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
@@ -373,14 +373,14 @@ namespace Kalk.Core
             return composite.Transform(this, CurrentSpan, input => ReplaceImpl(input, match, @by));
         }
 
-        [KalkDoc("lines")]
+        [KalkDoc("lines", CategoryMisc)]
         public ScriptRange Lines(string text)
         {
             if (text == null) return new ScriptRange();
             return new ScriptRange(new LineReader(() => new StringReader(text)));
         }
         
-        [KalkDoc("parse_csv")]
+        [KalkDoc("parse_csv", CategoryMisc)]
         public ScriptRange ParseCsv(string text, bool headers = true)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));

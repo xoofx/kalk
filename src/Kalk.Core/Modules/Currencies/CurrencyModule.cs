@@ -27,7 +27,7 @@ namespace Kalk.Core.Modules
             BaseCurrency = DefaultBaseCurrency;
         }
         
-        [KalkDoc("currencies")]
+        [KalkDoc("currencies", CategoryUnitsAndCurrencies)]
         public KalkCurrencies Currencies { get; }
 
         public DateTime LastUpdate { get; private set; }
@@ -45,7 +45,7 @@ namespace Kalk.Core.Modules
             UpdateCurrencies();
         }
 
-        [KalkDoc("currency")]
+        [KalkDoc("currency", CategoryUnitsAndCurrencies)]
         public KalkCurrency Currency(ScriptVariable name = null, decimal? value = null)
         {
             return GetOrSetCurrency(name?.Name, value);

@@ -57,14 +57,12 @@ namespace Kalk.Core
             if (!m.IsSquare) throw new ArgumentException($"Matrix must be square nxn instead of {m.TypeName}", nameof(m));
         }
 
-        [KalkDoc("transpose")]
         public static KalkMatrix Transpose(KalkMatrix m)
         {
             if (m == null) throw new ArgumentNullException(nameof(m));
             return m.Transpose();
         }
 
-        [KalkDoc("identity")]
         public static KalkMatrix Identity(KalkMatrix m)
         {
             AssertSquareMatrix(m);
@@ -77,14 +75,12 @@ namespace Kalk.Core
             return x.Diagonal();
         }
 
-        [KalkDoc("determinant")]
         public static object Determinant(KalkMatrix m)
         {
             AssertSquareMatrix(m);
             return m.GenericDeterminant();
         }
 
-        [KalkDoc("inverse")]
         public static KalkMatrix Inverse(KalkMatrix m)
         {
             AssertSquareMatrix(m);

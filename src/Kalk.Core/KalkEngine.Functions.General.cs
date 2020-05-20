@@ -77,7 +77,7 @@ namespace Kalk.Core
             }
         }
 
-        [KalkDoc("display")]
+        [KalkDoc("display", CategoryGeneral)]
         public void Display(ScriptVariable name = null)
         {
             var mode = name?.Name ?? Config.Display;
@@ -91,7 +91,7 @@ namespace Kalk.Core
             WriteHighlightLine($"# Display mode: {mode} ({fullMode})");
         }
 
-        [KalkDoc("print")]
+        [KalkDoc("print", CategoryGeneral)]
         public void Print(object value)
         {
             WriteHighlightLine(ObjectToString(value), highlight: false);
@@ -101,7 +101,7 @@ namespace Kalk.Core
         /// 
         /// </summary>
         /// <param name="expression"></param>
-        [KalkDoc("help")]
+        [KalkDoc("help", CategoryGeneral)]
         public void Help(ScriptExpression expression = null)
         {
             if (Writer == null) return;
@@ -189,7 +189,7 @@ namespace Kalk.Core
         /// <summary>
         /// Clear all defined variables.
         /// </summary>
-        [KalkDoc("reset")]
+        [KalkDoc("reset", CategoryGeneral)]
         public void Reset()
         {
             Variables.Clear();
@@ -198,7 +198,7 @@ namespace Kalk.Core
         /// <summary>
         /// Prints the version of kalk.
         /// </summary>
-        [KalkDoc("version")]
+        [KalkDoc("version", CategoryGeneral)]
         public void Version()
         {
             if (Writer == null) return;
@@ -216,7 +216,7 @@ namespace Kalk.Core
         /// <summary>
         /// Lists all user defined variables and functions.
         /// </summary>
-        [KalkDoc("list")]
+        [KalkDoc("list", CategoryGeneral)]
         public void List()
         {
             if (Writer == null) return;
@@ -265,7 +265,7 @@ namespace Kalk.Core
         /// Deletes a user defined variable.
         /// </summary>
         /// <param name="variable">Name of the variable to delete.</param>
-        [KalkDoc("del")]
+        [KalkDoc("del", CategoryGeneral)]
         public void DeleteVariable(ScriptVariable variable)
         {
             if (variable == null) throw new ArgumentNullException(nameof(variable));
@@ -291,7 +291,7 @@ namespace Kalk.Core
         /// <summary>
         /// Exit kalk.
         /// </summary>
-        [KalkDoc("exit")]
+        [KalkDoc("exit", CategoryGeneral)]
         public void Exit()
         {
             HasExit = true;
@@ -328,7 +328,7 @@ namespace Kalk.Core
         /// - if it is &gt;= 0, the index of the history command to re-run. (e.g `history 1` to re-run the command 1 in the history)
         /// - if it is &lt; 0, how many recent lines to display. (e.g `history -3` would display the last 3 lines in the history)
         /// </param>
-        [KalkDoc("history")]
+        [KalkDoc("history", CategoryGeneral)]
         public void History(object line = null)
         {
             // Always remove the history command (which is the command being executed
@@ -379,13 +379,13 @@ namespace Kalk.Core
             }
         }
 
-        [KalkDoc("eval")]
+        [KalkDoc("eval", CategoryGeneral)]
         public object EvaluateText(string text, bool output = false)
         {
             return EvaluateTextImpl(text, null, output);
         }
 
-        [KalkDoc("load")]
+        [KalkDoc("load", CategoryGeneral)]
         public object LoadFile(string path, bool output = false)
         {
             var fullPath = FileModule.AssertReadFile(path);
@@ -447,7 +447,7 @@ namespace Kalk.Core
         /// * screen: to clear the screen (default if not passed)
         /// * history: to clear the history
         /// </param>
-        [KalkDoc("clear")]
+        [KalkDoc("clear", CategoryGeneral)]
         public void Clear(ScriptExpression what = null)
         {
             if (what != null)
@@ -473,7 +473,7 @@ namespace Kalk.Core
         /// <summary>
         /// Clears the screen.
         /// </summary>
-        [KalkDoc("cls")]
+        [KalkDoc("cls", CategoryGeneral)]
         public void Cls()
         {
             Clear(null);
@@ -483,7 +483,7 @@ namespace Kalk.Core
         /// Returns the last evaluated result.
         /// </summary>
         /// <returns>The last evaluated result as an object.</returns>
-        [KalkDoc("out")]
+        [KalkDoc("out", CategoryGeneral)]
         public object Last()
         {
             return _lastResult;
@@ -491,7 +491,7 @@ namespace Kalk.Core
 
         private delegate void DefineShortcutDelegate(ScriptVariable name, params ScriptExpression[] shortcuts);
 
-        [KalkDoc("shortcut")]
+        [KalkDoc("shortcut", CategoryGeneral)]
         public void Shortcut(ScriptVariable name, params ScriptExpression[] shortcuts)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
@@ -518,7 +518,7 @@ namespace Kalk.Core
 
         private delegate void DefineAliasDelegate(ScriptVariable name, params ScriptVariable[] aliases);
 
-        [KalkDoc("alias")]
+        [KalkDoc("alias", CategoryGeneral)]
         public void Alias(ScriptVariable name, params ScriptVariable[] aliases)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));

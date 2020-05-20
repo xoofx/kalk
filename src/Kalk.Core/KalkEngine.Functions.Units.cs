@@ -17,13 +17,13 @@ namespace Kalk.Core
             RegisterFunction("to", new Func<KalkExpression, KalkExpression, KalkExpression>(ConvertTo), CategoryUnits);
         }
         
-        [KalkDoc("to")]
+        [KalkDoc("to", CategoryUnits)]
         public KalkExpression ConvertTo(KalkExpression src, KalkExpression dst)
         {
             return src.ConvertTo(this, dst);
         }
 
-        [KalkDoc("unit")]
+        [KalkDoc("unit", CategoryUnits)]
         public KalkExpression DefineUserUnit(ScriptVariable name, string description = null, ScriptVariable symbol = null, KalkExpression value = null, string plural = null, string prefix = null)
         {
             if (name == null || string.IsNullOrEmpty(name.Name)) throw new ArgumentNullException(nameof(name));

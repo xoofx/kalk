@@ -71,7 +71,7 @@ namespace Kalk.Core.Modules
             RegisterMatrices();
         }
 
-        [KalkDoc("length")]
+        [KalkDoc("length", CategoryTypeConstructors)]
         public object Length(object x)
         {
             throw new InvalidOperationException("Restore MathModule");
@@ -83,76 +83,83 @@ namespace Kalk.Core.Modules
             //return Engine.Abs(new KalkCompositeValue(x));
         }
 
-        [KalkDoc("int")]
+        [KalkDoc("dot", CategoryTypeConstructors)]
+        public static object Dot(KalkVector x, KalkVector y) => KalkVector.Dot(x, y);
+
+        [KalkDoc("cross", CategoryTypeConstructors)]
+        public static object Cross(KalkVector x, KalkVector y) => KalkVector.Cross(x, y);
+
+
+        [KalkDoc("int", CategoryTypeConstructors)]
         public int CreateInt(object value = null) => value == null ? 0 : Engine.ToObject<int>(0, value);
 
-        [KalkDoc("bool")]
+        [KalkDoc("bool", CategoryTypeConstructors)]
         public bool CreateBool(object value = null) => value != null && Engine.ToObject<bool>(0, value);
 
-        [KalkDoc("float")]
+        [KalkDoc("float", CategoryTypeConstructors)]
         public float CreateFloat(object value = null) => value == null ? 0.0f : Engine.ToObject<float>(0, value);
 
-        [KalkDoc("double")]
+        [KalkDoc("double", CategoryTypeConstructors)]
         public double CreateDouble(object value = null) => value == null ? 0.0 : Engine.ToObject<double>(0, value);
 
-        [KalkDoc("int2")]
+        [KalkDoc("int2", CategoryTypeConstructors)]
         public KalkVector<int> CreateInt2(params object[] arguments) => Int2Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("int3")]
+        [KalkDoc("int3", CategoryTypeConstructors)]
         public KalkVector<int> CreateInt3(params object[] arguments) => Int3Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("int4")]
+        [KalkDoc("int4", CategoryTypeConstructors)]
         public KalkVector<int> CreateInt4(params object[] arguments) => Int4Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("int8")]
+        [KalkDoc("int8", CategoryTypeConstructors)]
         public KalkVector<int> CreateInt8(params object[] arguments) => Int8Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("int16")]
+        [KalkDoc("int16", CategoryTypeConstructors)]
         public KalkVector<int> CreateInt16(params object[] arguments) => Int16Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("bool2")]
+        [KalkDoc("bool2", CategoryTypeConstructors)]
         public KalkVector<bool> CreateBool2(params object[] arguments) => Bool2Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("bool3")]
+        [KalkDoc("bool3", CategoryTypeConstructors)]
         public KalkVector<bool> CreateBool3(params object[] arguments) => Bool3Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("bool4")]
+        [KalkDoc("bool4", CategoryTypeConstructors)]
         public KalkVector<bool> CreateBool4(params object[] arguments) => Bool4Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("bool8")]
+        [KalkDoc("bool8", CategoryTypeConstructors)]
         public KalkVector<bool> CreateBool8(params object[] arguments) => Bool8Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("bool16")]
+        [KalkDoc("bool16", CategoryTypeConstructors)]
         public KalkVector<bool> CreateBool16(params object[] arguments) => Bool16Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("float2")]
+        [KalkDoc("float2", CategoryTypeConstructors)]
         public KalkVector<float> CreateFloat2(params object[] arguments) => Float2Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("float3")]
+        [KalkDoc("float3", CategoryTypeConstructors)]
         public KalkVector<float> CreateFloat3(params object[] arguments) => Float3Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("float4")]
+        [KalkDoc("float4", CategoryTypeConstructors)]
         public KalkVector<float> CreateFloat4(params object[] arguments) => Float4Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("float8")]
+        [KalkDoc("float8", CategoryTypeConstructors)]
         public KalkVector<float> CreateFloat8(params object[] arguments) => Float8Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("float16")]
+        [KalkDoc("float16", CategoryTypeConstructors)]
         public KalkVector<float> CreateFloat16(params object[] arguments) => Float16Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("double2")]
+        [KalkDoc("double2", CategoryTypeConstructors)]
         public KalkVector<double> CreateDouble2(params object[] arguments) => Double2Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("double3")]
+        [KalkDoc("double3", CategoryTypeConstructors)]
         public KalkVector<double> CreateDouble3(params object[] arguments) => Double3Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("double4")]
+        [KalkDoc("double4", CategoryTypeConstructors)]
         public KalkVector<double> CreateDouble4(params object[] arguments) => Double4Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("double8")]
+        [KalkDoc("double8", CategoryTypeConstructors)]
         public KalkVector<double> CreateDouble8(params object[] arguments) => Double8Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("vector")]
+        [KalkDoc("vector", CategoryTypeConstructors)]
         public object CreateVector(ScriptVariable name, int dimension, params object[] arguments)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
@@ -206,10 +213,10 @@ namespace Kalk.Core.Modules
         }
 
 
-        [KalkDoc("rgb")]
+        [KalkDoc("rgb", CategoryTypeConstructors)]
         public KalkColorRgb CreateRgb(params object[] arguments) => (KalkColorRgb)RgbConstructor.Invoke(Engine, arguments);
 
-        [KalkDoc("rgba")]
+        [KalkDoc("rgba", CategoryTypeConstructors)]
         public KalkColorRgba CreateRgba(params object[] arguments) => (KalkColorRgba)RgbaConstructor.Invoke(Engine, arguments);
     }
 }

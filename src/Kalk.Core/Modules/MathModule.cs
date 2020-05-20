@@ -119,33 +119,33 @@ namespace Kalk.Core
         /// <summary>
         /// Defines the "Not a Number" constant for a double.
         /// </summary>
-        [KalkDoc("nan")] public const double Nan = double.NaN;
+        [KalkDoc("nan", CategoryMathFunctions)] public const double Nan = double.NaN;
 
         /// <summary>
         /// Defines the infinity constant for a double.
         /// </summary>
-        [KalkDoc("inf")] public const double Inf = double.PositiveInfinity;
+        [KalkDoc("inf", CategoryMathFunctions)] public const double Inf = double.PositiveInfinity;
 
         /// <summary>
         /// Defines the PI constant. pi = 3.14159265358979
         /// </summary>
-        [KalkDoc("pi")] public const double Pi = Math.PI;
+        [KalkDoc("pi", CategoryMathFunctions)] public const double Pi = Math.PI;
 
         /// <summary>
         /// Defines the natural logarithmic base. e = 2.71828182845905
         /// </summary>
-        [KalkDoc("e")] public const double E = Math.E;
+        [KalkDoc("e", CategoryMathFunctions)] public const double E = Math.E;
 
-        [KalkDoc("fib")]
+        [KalkDoc("fib", CategoryMathFunctions)]
         public object Fib(KalkIntValue x) => x.TransformArg(Engine, FibFunc);
 
-        [KalkDoc("i")]
+        [KalkDoc("i", CategoryMathFunctions)]
         public static object ComplexNumber()
         {
             return new KalkComplex(0, 1);
         }
         
-        [KalkDoc("all")]
+        [KalkDoc("all", CategoryMathFunctions)]
         public bool All(object x)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
@@ -163,7 +163,7 @@ namespace Kalk.Core
             return Engine.ToBool(Engine.CurrentSpan, x);
         }
 
-        [KalkDoc("any")]
+        [KalkDoc("any", CategoryMathFunctions)]
         public bool Any(object x)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
@@ -186,7 +186,7 @@ namespace Kalk.Core
         /// </summary>
         /// <param name="x">The specified value.</param>
         /// <returns>The absolute value of the <paramref name="x"/> parameter.</returns>
-        [KalkDoc("abs")]
+        [KalkDoc("abs", CategoryMathFunctions)]
         public object Abs(KalkCompositeValue x) => x.TransformArg(Engine, AbsFunc);
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Kalk.Core
         /// </summary>
         /// <param name="x">A value to create random values for.</param>
         /// <returns>A random value or a random value of the <paramref name="x"/> parameter.</returns>
-        [KalkDoc("rnd")]
+        [KalkDoc("rnd", CategoryMathFunctions)]
         public object Rnd(KalkCompositeValue x = null)
         {
             if (x != null)
@@ -218,89 +218,89 @@ namespace Kalk.Core
         ///  - 0 if x is equal to zero
         ///  - 1 if x is greater than zero.
         /// </returns>
-        [KalkDoc("sign")]
+        [KalkDoc("sign", CategoryMathFunctions)]
         public object Sign(KalkCompositeValue x) => x.TransformArg(Engine, SignFunc);
 
-        [KalkDoc("cos")]
+        [KalkDoc("cos", CategoryMathFunctions)]
         public object Cos(KalkDoubleValue x) => x.TransformArg(Engine, CosFunc);
 
-        [KalkDoc("acos")]
+        [KalkDoc("acos", CategoryMathFunctions)]
         public object Acos(KalkDoubleValue x) => x.TransformArg(Engine, AcosFunc);
 
-        [KalkDoc("cosh")]
+        [KalkDoc("cosh", CategoryMathFunctions)]
         public object Cosh(KalkDoubleValue x) => x.TransformArg(Engine, CoshFunc);
 
-        [KalkDoc("acosh")]
+        [KalkDoc("acosh", CategoryMathFunctions)]
         public object Acosh(KalkDoubleValue x) => x.TransformArg(Engine, AcoshFunc);
 
-        [KalkDoc("sin")]
+        [KalkDoc("sin", CategoryMathFunctions)]
         public object Sin(KalkDoubleValue x) => x.TransformArg(Engine, SinFunc);
 
-        [KalkDoc("asin")]
+        [KalkDoc("asin", CategoryMathFunctions)]
         public object Asin(KalkDoubleValue x) => x.TransformArg(Engine, AsinFunc);
 
-        [KalkDoc("sinh")]
+        [KalkDoc("sinh", CategoryMathFunctions)]
         public object Sinh(KalkDoubleValue x) => x.TransformArg(Engine, SinhFunc);
 
-        [KalkDoc("asinh")]
+        [KalkDoc("asinh", CategoryMathFunctions)]
         public object Asinh(KalkDoubleValue x) => x.TransformArg(Engine, AsinhFunc);
 
-        [KalkDoc("fmod")]
+        [KalkDoc("fmod", CategoryMathFunctions)]
         public double Fmod(double x, double y) => x % y;
 
-        [KalkDoc("frac")]
+        [KalkDoc("frac", CategoryMathFunctions)]
         public object Frac(KalkDoubleValue x) => x.TransformArg(Engine, FracFunc);
 
-        [KalkDoc("tan")]
+        [KalkDoc("tan", CategoryMathFunctions)]
         public object Tan(KalkDoubleValue x) => x.TransformArg(Engine, TanFunc);
-        [KalkDoc("atan")]
+        [KalkDoc("atan", CategoryMathFunctions)]
         public object Atan(KalkDoubleValue x) => x.TransformArg(Engine, AtanFunc);
-        [KalkDoc("tanh")]
+        [KalkDoc("tanh", CategoryMathFunctions)]
         public object Tanh(KalkDoubleValue x) => x.TransformArg(Engine, TanhFunc);
-        [KalkDoc("atanh")]
+        [KalkDoc("atanh", CategoryMathFunctions)]
         public object Atanh(KalkDoubleValue x) => x.TransformArg(Engine, AtanhFunc);
         
-        [KalkDoc("atan2")]
+        [KalkDoc("atan2", CategoryMathFunctions)]
         public double Atan2(double y, double x) => Math.Atan2(y, x);
 
-        [KalkDoc("rsqrt")]
+        [KalkDoc("rsqrt", CategoryMathFunctions)]
         public object Rsqrt(KalkDoubleValue x) => x.TransformArg(Engine, RsqrtFunc);
-        [KalkDoc("sqrt")]
+        [KalkDoc("sqrt", CategoryMathFunctions)]
         public object Sqrt(KalkDoubleValue x) => x.TransformArg(Engine, SqrtFunc);
-        [KalkDoc("log")]
+        [KalkDoc("log", CategoryMathFunctions)]
         public object Log(KalkDoubleValue x) => x.TransformArg(Engine, LogFunc);
-        [KalkDoc("log2")]
+        [KalkDoc("log2", CategoryMathFunctions)]
         public object Log2(KalkDoubleValue x) => x.TransformArg(Engine, Log2Func);
-        [KalkDoc("log10")]
+        [KalkDoc("log10", CategoryMathFunctions)]
         public object Log10(KalkDoubleValue x) => x.TransformArg(Engine, Log10Func);
-        [KalkDoc("exp")]
+        [KalkDoc("exp", CategoryMathFunctions)]
         public object Exp(KalkDoubleValue x) => x.TransformArg(Engine, ExpFunc);
-        [KalkDoc("exp2")]
+        [KalkDoc("exp2", CategoryMathFunctions)]
         public object Exp2(KalkDoubleValue x) => x.TransformArg(Engine, Exp2Func);
 
-        [KalkDoc("pow")]
+        [KalkDoc("pow", CategoryMathFunctions)]
         public double Pow(double x, double y) => Math.Pow(x, y);
 
 
-        [KalkDoc("round")]
+        [KalkDoc("round", CategoryMathFunctions)]
         public object Round(KalkDoubleValue x) => x.TransformArg(Engine, RoundFunc);
-        [KalkDoc("floor")]
+        [KalkDoc("floor", CategoryMathFunctions)]
         public object Floor(KalkDoubleValue x) => x.TransformArg(Engine, FloorFunc);
-        [KalkDoc("ceil")]
+        [KalkDoc("ceil", CategoryMathFunctions)]
         public object Ceiling(KalkDoubleValue x) => x.TransformArg(Engine, CeilFunc);
-        [KalkDoc("trunc")]
+        [KalkDoc("trunc", CategoryMathFunctions)]
         public object Trunc(KalkDoubleValue x) => x.TransformArg(Engine, TruncFunc);
         
-        [KalkDoc("isfinite")]
+        [KalkDoc("isfinite", CategoryMathFunctions)]
         public object IsFinite(KalkCompositeValue x) => x.TransformArg(Engine, IsFiniteFunc);
-        [KalkDoc("isinf")]
+        [KalkDoc("isinf", CategoryMathFunctions)]
         public object IsInf(KalkCompositeValue x) => x.TransformArg(Engine, IsInfFunc);
-        [KalkDoc("isnan")]
+        [KalkDoc("isnan", CategoryMathFunctions)]
         public object IsNan(KalkCompositeValue x) => x.TransformArg(Engine, IsNanFunc);
         
         private delegate object SumDelegate(object value, params object[] values);
 
-        [KalkDoc("sum")]
+        [KalkDoc("sum", CategoryMathFunctions)]
         public object Sum(object value, params object[] values)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
@@ -332,7 +332,7 @@ namespace Kalk.Core
         }
 
 
-        [KalkDoc("asdouble")]
+        [KalkDoc("asdouble", CategoryMathFunctions)]
         public double AsDouble(object x)
         {
             if (x is double d) return d;
@@ -363,7 +363,7 @@ namespace Kalk.Core
             }
         }
 
-        [KalkDoc("aslong")]
+        [KalkDoc("aslong", CategoryMathFunctions)]
         public long AsLong(object x)
         {
             if (x is long longValue) return longValue;
