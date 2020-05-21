@@ -6,15 +6,24 @@ namespace Consolus
 {
     public class ConsoleHelper
     {
-        private static readonly Lazy<bool> _isConsoleSupportingEscapeSequences = new Lazy<bool>(IsConsoleSupportingEscapeSequencesInternal);
-
         public static readonly bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
+        private static readonly Lazy<bool> _isConsoleSupportingEscapeSequences = new Lazy<bool>(IsConsoleSupportingEscapeSequencesInternal);
+        private static readonly Lazy<bool> _hasInteractiveConsole = new Lazy<bool>(HasInteractiveConsoleInternal);
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static bool SupportEscapeSequences => _isConsoleSupportingEscapeSequences.Value;
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public static bool HasInteractiveConsole => _hasInteractiveConsole.Value;
+
         private static bool IsConsoleSupportingEscapeSequencesInternal()
         {
+            if (Console.IsOutputRedirected || Console.IsErrorRedirected || !HasInteractiveConsole)
+            {
+                return false;
+            }
+
             if (IsWindows)
             {
                 WindowsHelper.EnableAnsiEscapeOnWindows();
@@ -34,7 +43,7 @@ namespace Consolus
             }
             return support;
         }
-        
-        public static bool HasInteractiveConsole => IsWindows ? WindowsHelper.HasConsoleWindows() : Environment.UserInteractive;
+
+        private static bool HasInteractiveConsoleInternal() => IsWindows ? WindowsHelper.HasConsoleWindows() : Environment.UserInteractive;
     }
 }

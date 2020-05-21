@@ -410,33 +410,31 @@ namespace Kalk.Core
         {
             if (scriptText == null) throw new ArgumentNullException(nameof(scriptText));
 
-            var output = _isInitializing ? _initializingText : _tempConsoleText;
-
-            if (output.Count > 0)
+            if (_isInitializing)
             {
-                NextOutput.AddRange(output);
+                throw new InvalidOperationException($"Unexpected error while initializing: {scriptText}");
             }
-            output.Clear();
 
-            output.Append(ConsoleStyle.Red, true);
-            output.Append(scriptText);
-            output.Append(ConsoleStyle.Red, false);
-
-            NextOutput.AddRange(output);
-            output.Clear();
-
-            if (!_isInitializing)
+            if (IsOutputSupportHighlighting)
             {
-                var previousEcho = EchoEnabled;
-                try
-                {
-                    EchoEnabled = true;
-                    WriteHighlightLine();
-                }
-                finally
-                {
-                    EchoEnabled = previousEcho;
-                }
+                HighlightOutput.Append(ConsoleStyle.Red, true);
+                HighlightOutput.Append(scriptText);
+                HighlightOutput.Append(ConsoleStyle.Red, false);
+            }
+            else
+            {
+                BufferedErrorWriter.Write(scriptText);
+            }
+
+            var previousEcho = EchoEnabled;
+            try
+            {
+                EchoEnabled = true;
+                WriteHighlightLine(true);
+            }
+            finally
+            {
+                EchoEnabled = previousEcho;
             }
         }
 
@@ -446,57 +444,55 @@ namespace Kalk.Core
             WriteHighlightLine();
         }
 
-        internal void WriteHighlightLine()
+        internal void WriteHighlightLine(bool error = false)
         {
             if (!EchoEnabled) return;
 
+            var writer = error ? BufferedErrorWriter : BufferedOutputWriter;
+
             if (_isFirstWriteForEval)
             {
-                BufferedOutputWriter.WriteLine();
+                writer.WriteLine();
                 _isFirstWriteForEval = false;
             }
 
-            NextOutput.AppendLine();
-            NextOutput.Render(BufferedOutputWriter, Repl != null);
-            BufferedOutputWriter.Commit();
-            NextOutput.Clear();
+            if (IsOutputSupportHighlighting)
+            {
+                HighlightOutput.AppendLine();
+                HighlightOutput.Render(writer, true);
+                HighlightOutput.Clear();
+            }
+            else
+            {
+                writer.WriteLine();
+            }
+
+            writer.Commit();
             Repl?.Reset();
         }
         internal void WriteHighlight(string scriptText, bool highlight = true)
         {
             if (!EchoEnabled) return;
 
-            var output = _isInitializing ? _initializingText : _tempConsoleText;
-
-            if (output.Count > 0)
+            if (IsOutputSupportHighlighting)
             {
-                NextOutput.AddRange(output);
+                _tempOutputHighlight.Clear();
+                _tempOutputHighlight.ClearStyles();
+
+                _tempOutputHighlight.Append(scriptText);
+
+                if (highlight)
+                {
+                    // Highlight line per line
+                    Highlight(_tempOutputHighlight);
+                }
+
+                HighlightOutput.AddRange(_tempOutputHighlight);
             }
-            output.Clear();
-            output.ClearStyles();
-
-            output.Append(scriptText);
-
-            if (highlight)
+            else
             {
-                // Highlight line per line
-                Highlight(output);
+                BufferedOutputWriter.Write(scriptText);
             }
-
-            NextOutput.AddRange(output);
-
-            // Output any errors that happened during initialization
-            if (!_isInitializing && _initializingText.Count > 0)
-            {
-                NextOutput.AddRange(_initializingText);
-            }
-
-            if (!_isInitializing && _initializingText.Count > 0)
-            {
-                _initializingText.Clear();
-            }
-
-            output.Clear();
         }
 
         public void Highlight(ConsoleText text, int cursorIndex = -1)

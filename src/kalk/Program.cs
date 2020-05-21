@@ -55,7 +55,11 @@ namespace kalk
                 app.Repl.GetClipboardTextImpl = TextCopy.Clipboard.GetText;
                 app.Repl.SetClipboardTextImpl = TextCopy.Clipboard.SetText;
             }
-            app.Run();
+
+            if (!app.Run(args))
+            {
+                Environment.ExitCode = 1;
+            }
         }
     }
 }

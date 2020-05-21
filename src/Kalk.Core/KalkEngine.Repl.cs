@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -39,13 +40,10 @@ namespace Kalk.Core
             Repl.BeforeRender = OnBeforeRendering;
             Repl.GetCancellationTokenSource = () => _cancellationTokenSource;
             Repl.TryPreProcessKey = TryPreProcessKey;
-            Repl.EditLine.Changed = OnTextChanged;
             Repl.OnTextValidatingEnter = OnTextValidatingEnter;
 
             Repl.Prompt.Clear();
             Repl.Prompt.Begin(ConsoleStyle.BrightBlack).Append(">>> ").Append(ConsoleStyle.BrightBlack, false);
-
-            AllowEscapeSequences = Repl.SupportEscapeSequences;
         }
 
         private bool OnTextValidatingEnter(string text, bool hasControl)
@@ -94,7 +92,7 @@ namespace Kalk.Core
                 else
                 {
                     Repl.AfterEditLine.Clear();
-                    NextOutput.Clear();
+                    HighlightOutput.Clear();
 
                     result = EvaluatePage(script.Page);
 
@@ -153,16 +151,16 @@ namespace Kalk.Core
                 }
 
                 Repl.AfterEditLine.Clear();
-                bool hasOutput = resultStr != string.Empty || NextOutput.Count > 0;
+                bool hasOutput = resultStr != string.Empty || HighlightOutput.Count > 0;
                 if (!Repl.IsClean || hasOutput)
                 {
                     Repl.AfterEditLine.Append('\n');
 
-                    bool hasNextOutput = NextOutput.Count > 0;
+                    bool hasNextOutput = HighlightOutput.Count > 0;
                     if (hasNextOutput)
                     {
-                        Repl.AfterEditLine.AddRange(NextOutput);
-                        NextOutput.Clear();
+                        Repl.AfterEditLine.AddRange(HighlightOutput);
+                        HighlightOutput.Clear();
                     }
 
                     if (resultStr != string.Empty)
@@ -196,11 +194,6 @@ namespace Kalk.Core
             return OnKey(arg, Repl.EditLine, ref cursorIndex);
         }
 
-        private void OnTextChanged()
-        {
-            UpdateEdit(Repl.EditLine, Repl.CursorIndex);
-        }
-
         private void OnBeforeRendering()
         {
             UpdateSyntaxHighlighting();
@@ -218,7 +211,7 @@ namespace Kalk.Core
         public void Clear()
         {
             Repl?.Clear();
-            NextOutput.Clear();
+            HighlightOutput.Clear();
         }
 
         public void ReplExit()
@@ -227,53 +220,225 @@ namespace Kalk.Core
             Repl.ExitOnNextEval = true;
         }
 
-        public void Run()
+        internal bool OnKey(ConsoleKeyInfo arg, ConsoleText line, ref int cursorIndex)
         {
-            if (!Console.IsInputRedirected && ConsoleHelper.HasInteractiveConsole)
+            try
             {
-                Repl = new ConsoleRepl();
-                HasInteractiveConsole = true;
-                
-                InitializeRepl();
-
-                try
+                if (arg.Key == ConsoleKey.Tab)
                 {
-                    if (ConsoleRepl.IsSelf())
+                    if (OnCompletionRequested(arg, line, ref cursorIndex))
                     {
-                        Console.Title = "kalk 1.0.0";
+                        return true;
                     }
                 }
-                catch
+
+                // Reset any completion if we are getting here
+                ResetCompletion();
+
+                KalkConsoleKey kalkKey = arg;
+                //Console.Title = $"Key {StringFunctions.Escape(arg.KeyChar.ToString())} {arg.Key} {arg.Modifiers} - parsed {kalkKey}";
+
+                if (cursorIndex >= 0 && cursorIndex <= line.Count)
                 {
-                    // ignore
+                    if (_currentShortcutKeyMap.TryGetValue(kalkKey, out var value))
+                    {
+                        if (value is KalkShortcutKeyMap map)
+                        {
+                            _currentShortcutKeyMap = map;
+                        }
+                        else
+                        {
+                            var expression = (ScriptExpression)value;
+                            var result = EvaluateExpression(expression);
+                            if (result != null)
+                            {
+                                var resultStr = result.ToString();
+                                line.Insert(cursorIndex, resultStr);
+                                cursorIndex += resultStr.Length;
+                            }
+                        }
+                        return true;
+                    }
+                }
+
+
+                _currentShortcutKeyMap = Shortcuts.ShortcutKeyMap;
+            }
+            catch
+            {
+                // Restore the root key map in case of an error.
+                _currentShortcutKeyMap = Shortcuts.ShortcutKeyMap;
+                throw;
+            }
+
+            return false;
+        }
+
+        private bool OnCompletionRequested(ConsoleKeyInfo arg, ConsoleText line, ref int cursorIndex)
+        {
+            // Nothing to complete
+            if (cursorIndex == 0) return false;
+
+            // We expect to have at least:
+            // - one letter identifier before the before the cursor
+            // - no letter identifier on the cursor (e.g middle of an existing identifier)
+            if (cursorIndex < line.Count && IsIdentifierLetter(line[cursorIndex].Value) || !IsIdentifierLetter(line[cursorIndex - 1].Value))
+            {
+                return false;
+            }
+
+            if (!HasPendingCompletion)
+            {
+                if (!CollectCompletionList(line, cursorIndex))
+                {
+                    return false;
                 }
             }
 
-            Version();
-            WriteHighlightLine();
-            WriteHighlightLine("# Type `help` for more information and at https://github.com/xoofx/kalk");
+            return OnCompletionRequested(arg.Modifiers == ConsoleModifiers.Shift, line, ref cursorIndex);
+        }
 
-            if (Repl != null)
+        private void ResetCompletion()
+        {
+            _currentIndexInCompletionMatchingList = 0;
+            _completionMatchingList.Clear();
+        }
+
+        private bool CollectCompletionList(ConsoleText line, int cursorIndex)
+        {
+            var text = line.ToString();
+            var lexer = new Lexer(text, options: _lexerOptions);
+            var tokens = lexer.ToList();
+
+            // Find that we are in a correct place
+            var index = FindTokenIndexFromColumnIndex(cursorIndex, text.Length, tokens);
+            if (index >= 0)
             {
-                try
+                // If we are in the middle of a comment/integer/float/string
+                // we don't expect to make any completion
+                var token = tokens[index];
+                switch (token.Type)
                 {
-                    _clockReplInput.Restart();
-                    Repl.Run();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Unexpected exception {ex}");
+                    case TokenType.Comment:
+                    case TokenType.CommentMulti:
+                    case TokenType.Identifier:
+                    case TokenType.IdentifierSpecial:
+                    case TokenType.Integer:
+                    case TokenType.HexaInteger:
+                    case TokenType.BinaryInteger:
+                    case TokenType.Float:
+                    case TokenType.String:
+                    case TokenType.ImplicitString:
+                    case TokenType.VerbatimString:
+                        return false;
                 }
             }
-            else
+
+            // Look for the start of the work to complete
+            _startIndexForCompletion = cursorIndex - 1;
+            while (_startIndexForCompletion >= 0)
             {
-                string line;
-                while ((line = InputReader.ReadLine()) != null)
+                var c = text[_startIndexForCompletion];
+                if (!IsIdentifierLetter(c))
                 {
-                    if (EchoEnabled) OutputWriter.WriteLine($">>> {line}");
-                    EvaluateText(line, true);
+                    break;
+                }
+
+                _startIndexForCompletion--;
+            }
+            _startIndexForCompletion++;
+
+            if (!IsFirstIdentifierLetter(text[_startIndexForCompletion]))
+            {
+                return false;
+            }
+
+            var startTextToFind = text.Substring(_startIndexForCompletion, cursorIndex - _startIndexForCompletion);
+
+            Collect(startTextToFind, ScriptKeywords, _completionMatchingList);
+            Collect(startTextToFind, Variables.Keys, _completionMatchingList);
+            Collect(startTextToFind, Builtins.Keys, _completionMatchingList);
+
+            // If we are not able to match anything from builtin and user variables/functions
+            // continue on units
+            if (_completionMatchingList.Count == 0)
+            {
+                Collect(startTextToFind, Units.Keys, _completionMatchingList);
+            }
+            return true;
+        }
+
+        private bool HasPendingCompletion => _currentIndexInCompletionMatchingList < _completionMatchingList.Count;
+
+        private bool OnCompletionRequested(bool backward, ConsoleText line, ref int cursorIndex)
+        {
+            if (_currentIndexInCompletionMatchingList >= _completionMatchingList.Count) return false;
+
+            var index = _startIndexForCompletion;
+            var newText = _completionMatchingList[_currentIndexInCompletionMatchingList];
+
+            line.RemoveRangeAt(index, cursorIndex - index);
+            line.Insert(index, newText);
+            cursorIndex = index + newText.Length;
+
+            // Go to next word
+            _currentIndexInCompletionMatchingList = (_currentIndexInCompletionMatchingList + (backward ? -1 : 1));
+
+            // Wrap the result
+            if (_currentIndexInCompletionMatchingList >= _completionMatchingList.Count) _currentIndexInCompletionMatchingList = 0;
+            if (_currentIndexInCompletionMatchingList < 0) _currentIndexInCompletionMatchingList = _completionMatchingList.Count - 1;
+
+            return true;
+        }
+
+        private static void Collect(string startText, IEnumerable<string> keys, List<string> matchingList)
+        {
+            foreach (var key in keys.OrderBy(x => x))
+            {
+                if (key.StartsWith(startText))
+                {
+                    matchingList.Add(key);
                 }
             }
+        }
+        private static bool IsIdentifierCharacter(char c)
+        {
+            var newCategory = GetCharCategory(c);
+
+            switch (newCategory)
+            {
+                case UnicodeCategory.UppercaseLetter:
+                case UnicodeCategory.LowercaseLetter:
+                case UnicodeCategory.TitlecaseLetter:
+                case UnicodeCategory.ModifierLetter:
+                case UnicodeCategory.OtherLetter:
+                case UnicodeCategory.NonSpacingMark:
+                case UnicodeCategory.DecimalDigitNumber:
+                case UnicodeCategory.ModifierSymbol:
+                case UnicodeCategory.ConnectorPunctuation:
+                    return true;
+            }
+
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsFirstIdentifierLetter(char c)
+        {
+            return c == '_' || char.IsLetter(c);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsIdentifierLetter(char c)
+        {
+            return IsFirstIdentifierLetter(c) || char.IsDigit(c);
+        }
+
+        private static UnicodeCategory GetCharCategory(char c)
+        {
+            if (c == '_' || (c >= '0' && c <= '9')) return UnicodeCategory.LowercaseLetter;
+            c = char.ToLowerInvariant(c);
+            return char.GetUnicodeCategory(c);
         }
     }
 }

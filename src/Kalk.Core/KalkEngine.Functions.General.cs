@@ -215,14 +215,8 @@ namespace Kalk.Core
         [KalkDoc("version", CategoryGeneral)]
         public void Version()
         {
-            var text = new ConsoleText();
-            text.Begin(ConsoleStyle.BrightRed).Append('k').End(ConsoleStyle.BrightRed);
-            text.Begin(ConsoleStyle.BrightYellow).Append('a').End(ConsoleStyle.BrightYellow);
-            text.Begin(ConsoleStyle.BrightGreen).Append('l').End(ConsoleStyle.BrightGreen);
-            text.Begin(ConsoleStyle.BrightCyan).Append('k').End(ConsoleStyle.BrightCyan);
-            text.Append($" 1.0.0 - Copyright (c) 2020 Alexandre Mutel");
-
-            NextOutput.AddRange(text);
+            var text = $"{ConsoleStyle.BrightRed}k{ConsoleStyle.BrightYellow}a{ConsoleStyle.BrightGreen}l{ConsoleStyle.BrightCyan}k{ConsoleStyle.Reset}  1.0.0 - Copyright (c) 2020 Alexandre Mutel";
+            WriteHighlightLine(text, false);
         }
 
         /// <summary>

@@ -24,11 +24,10 @@ namespace Kalk.Core
         private readonly LexerOptions _lexerOptions;
         private readonly ParserOptions _parserOptions;
         private object _lastResult = null;
-        private readonly ConsoleText _tempConsoleText;
+        private readonly ConsoleText _tempOutputHighlight;
         private bool _hasResultOrVariableSet = false;
         private Action _showInputAction = null;
         private CancellationTokenSource _cancellationTokenSource;
-        private readonly ConsoleText _initializingText;
         private readonly bool _isInitializing;
         private bool _nextLetterIsSymbolShortcut;
         private int _startIndexForCompletion;
@@ -48,9 +47,12 @@ namespace Kalk.Core
             Console.OutputEncoding = Encoding.UTF8;
             EnableEngineOutput = true;
             EchoEnabled = true;
-            NextOutput = new ConsoleText();
+
+            HighlightOutput = new ConsoleText();
             InputReader = Console.In;
             OutputWriter = Console.Out;
+            ErrorWriter = Console.Error;
+            IsOutputSupportHighlighting = ConsoleHelper.SupportEscapeSequences;
 
             Builtins = BuiltinObject;
             ((KalkObjectWithAlias)Builtins).Engine = this;
@@ -88,8 +90,7 @@ namespace Kalk.Core
                 Mode = ScriptMode.ScriptOnly, 
                 Lang = ScriptLang.Scientific
             };
-            _tempConsoleText = new ConsoleText();
-            _initializingText = new ConsoleText();
+            _tempOutputHighlight = new ConsoleText();
 
             // Init last result with 0
             _lastResult = 0;
@@ -101,20 +102,26 @@ namespace Kalk.Core
             _isInitializing = false;
         }
 
-        private ConsoleText NextOutput { get; }
+        private ConsoleText HighlightOutput { get; }
 
         public string KalkEngineFolder { get; }
 
-        public bool AllowEscapeSequences { get; set; }
-
         internal ConsoleTextWriter BufferedOutputWriter { get; private set; }
-        
+
+        internal ConsoleTextWriter BufferedErrorWriter { get; private set; }
+
         public TextReader InputReader { get; set; }
 
         public TextWriter OutputWriter
         {
             get => BufferedOutputWriter?.Backend;
             set => BufferedOutputWriter = value == null ? null : new ConsoleTextWriter(value);
+        }
+
+        public TextWriter ErrorWriter
+        {
+            get => BufferedErrorWriter?.Backend;
+            set => BufferedErrorWriter = value == null ? null : new ConsoleTextWriter(value);
         }
 
         public bool EchoEnabled { get; set; }
@@ -129,6 +136,8 @@ namespace Kalk.Core
         public KalkAliases Aliases { get; }
 
         private bool EnableEngineOutput { get; set; }
+
+        public bool IsOutputSupportHighlighting { get; set; }
 
         public bool HasInteractiveConsole { get; private set; }
 
@@ -284,230 +293,6 @@ namespace Kalk.Core
             public override string ToString() => string.Empty;
         }
 
-        internal bool OnKey(ConsoleKeyInfo arg, ConsoleText line, ref int cursorIndex)
-        {
-            try
-            {
-                if (arg.Key == ConsoleKey.Tab)
-                {
-                    if (OnCompletionRequested(arg, line, ref cursorIndex))
-                    {
-                        return true;
-                    }
-                }
-
-                // Reset any completion if we are getting here
-                ResetCompletion();
-
-                KalkConsoleKey kalkKey = arg;
-                //Console.Title = $"Key {StringFunctions.Escape(arg.KeyChar.ToString())} {arg.Key} {arg.Modifiers} - parsed {kalkKey}";
-
-                if (cursorIndex >= 0 && cursorIndex <= line.Count)
-                {
-                    if (_currentShortcutKeyMap.TryGetValue(kalkKey, out var value))
-                    {
-                        if (value is KalkShortcutKeyMap map)
-                        {
-                            _currentShortcutKeyMap = map;
-                        }
-                        else
-                        {
-                            var expression = (ScriptExpression) value;
-                            var result = EvaluateExpression(expression);
-                            if (result != null)
-                            {
-                                var resultStr = result.ToString();
-                                line.Insert(cursorIndex, resultStr);
-                                cursorIndex += resultStr.Length;
-                            }
-                        }
-                        return true;
-                    }
-                }
-
-
-                _currentShortcutKeyMap = Shortcuts.ShortcutKeyMap;
-            }
-            catch
-            {
-                // Restore the root key map in case of an error.
-                _currentShortcutKeyMap = Shortcuts.ShortcutKeyMap;
-                throw;
-            }
-
-            return false;
-        }
-
-
-        private static bool IsIdentifierCharacter(char c)
-        {
-            var newCategory = GetCharCategory(c);
-
-            switch (newCategory)
-            {
-                case UnicodeCategory.UppercaseLetter:
-                case UnicodeCategory.LowercaseLetter:
-                case UnicodeCategory.TitlecaseLetter:
-                case UnicodeCategory.ModifierLetter:
-                case UnicodeCategory.OtherLetter:
-                case UnicodeCategory.NonSpacingMark:
-                case UnicodeCategory.DecimalDigitNumber:
-                case UnicodeCategory.ModifierSymbol:
-                case UnicodeCategory.ConnectorPunctuation:
-                    return true;
-            }
-
-            return false;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsFirstIdentifierLetter(char c)
-        {
-            return c == '_' || char.IsLetter(c);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsIdentifierLetter(char c)
-        {
-            return IsFirstIdentifierLetter(c) || char.IsDigit(c);
-        }
-
-        private static UnicodeCategory GetCharCategory(char c)
-        {
-            if (c == '_' || (c >= '0' && c <= '9')) return UnicodeCategory.LowercaseLetter;
-            c = char.ToLowerInvariant(c);
-            return char.GetUnicodeCategory(c);
-        }
-
-        private bool OnCompletionRequested(ConsoleKeyInfo arg, ConsoleText line, ref int cursorIndex)
-        {
-            // Nothing to complete
-            if (cursorIndex == 0) return false;
-
-            // We expect to have at least:
-            // - one letter identifier before the before the cursor
-            // - no letter identifier on the cursor (e.g middle of an existing identifier)
-            if (cursorIndex < line.Count && IsIdentifierLetter(line[cursorIndex].Value) || !IsIdentifierLetter(line[cursorIndex - 1].Value))
-            {
-                return false;
-            }
-
-            if (!HasPendingCompletion)
-            {
-                if (!CollectCompletionList(line, cursorIndex))
-                {
-                    return false;
-                }
-            }
-
-            return OnCompletionRequested(arg.Modifiers == ConsoleModifiers.Shift, line, ref cursorIndex);
-        }
-
-        private void ResetCompletion()
-        {
-            _currentIndexInCompletionMatchingList = 0;
-            _completionMatchingList.Clear();
-        }
-
-        private bool CollectCompletionList(ConsoleText line, int cursorIndex)
-        {
-            var text = line.ToString();
-            var lexer = new Lexer(text, options: _lexerOptions);
-            var tokens = lexer.ToList();
-
-            // Find that we are in a correct place
-            var index = FindTokenIndexFromColumnIndex(cursorIndex, text.Length, tokens);
-            if (index >= 0)
-            {
-                // If we are in the middle of a comment/integer/float/string
-                // we don't expect to make any completion
-                var token = tokens[index];
-                switch (token.Type)
-                {
-                    case TokenType.Comment:
-                    case TokenType.CommentMulti:
-                    case TokenType.Identifier:
-                    case TokenType.IdentifierSpecial:
-                    case TokenType.Integer:
-                    case TokenType.HexaInteger:
-                    case TokenType.BinaryInteger:
-                    case TokenType.Float:
-                    case TokenType.String:
-                    case TokenType.ImplicitString:
-                    case TokenType.VerbatimString:
-                        return false;
-                }
-            }
-
-            // Look for the start of the work to complete
-            _startIndexForCompletion = cursorIndex - 1;
-            while (_startIndexForCompletion >= 0)
-            {
-                var c = text[_startIndexForCompletion];
-                if (!IsIdentifierLetter(c))
-                {
-                    break;
-                }
-
-                _startIndexForCompletion--;
-            }
-            _startIndexForCompletion++;
-
-            if (!IsFirstIdentifierLetter(text[_startIndexForCompletion]))
-            {
-                return false;
-            }
-
-            var startTextToFind = text.Substring(_startIndexForCompletion, cursorIndex - _startIndexForCompletion);
-
-            Collect(startTextToFind, ScriptKeywords, _completionMatchingList);
-            Collect(startTextToFind, Variables.Keys, _completionMatchingList);
-            Collect(startTextToFind, Builtins.Keys, _completionMatchingList);
-
-            // If we are not able to match anything from builtin and user variables/functions
-            // continue on units
-            if (_completionMatchingList.Count == 0)
-            {
-                Collect(startTextToFind, Units.Keys, _completionMatchingList);
-            }
-            return true;
-        }
-
-        private bool HasPendingCompletion => _currentIndexInCompletionMatchingList < _completionMatchingList.Count;
-        
-        private bool OnCompletionRequested(bool backward, ConsoleText line, ref int cursorIndex)
-        {
-            if (_currentIndexInCompletionMatchingList >= _completionMatchingList.Count) return false;
-
-            var index = _startIndexForCompletion;
-            var newText = _completionMatchingList[_currentIndexInCompletionMatchingList];
-
-            line.RemoveRangeAt(index, cursorIndex - index);
-            line.Insert(index, newText);
-            cursorIndex = index + newText.Length;
-            
-            // Go to next word
-            _currentIndexInCompletionMatchingList = (_currentIndexInCompletionMatchingList + (backward ? -1 : 1));
-
-            // Wrap the result
-            if (_currentIndexInCompletionMatchingList >= _completionMatchingList.Count) _currentIndexInCompletionMatchingList = 0;
-            if (_currentIndexInCompletionMatchingList < 0) _currentIndexInCompletionMatchingList = _completionMatchingList.Count - 1;
-
-            return true;
-        }
-
-
-        private void Collect(string startText, IEnumerable<string> keys, List<string> matchingList)
-        {
-            foreach (var key in keys.OrderBy(x => x))
-            {
-                if (key.StartsWith(startText))
-                {
-                    matchingList.Add(key);
-                }
-            }
-        }
-
         public override void Import(SourceSpan span, object objectToImport)
         {
             if (objectToImport is KalkModule module)
@@ -524,59 +309,6 @@ namespace Kalk.Core
             module.InternalImport();
         }
 
-        internal void UpdateEdit(ConsoleText text, int cursorIndex)
-        {
-            //if (_nextLetterIsSymbolShortcut)
-            //{
-            //    if (cursorIndex >= 0 && cursorIndex < text.Count)
-            //    {
-                    
-
-            //    }
-
-            //    _nextLetterIsSymbolShortcut = false;
-            //}
-
-            //var textStr = text.ToString();
-            //var lexer = new Lexer(textStr, options: _lexerOptions);
-            //var tokens = lexer.ToList();
-
-            //StringBuilder newText = null;
-
-            //for (int i = tokens.Count - 1; i >= 1; i--)
-            //{
-            //    var previousToken = tokens[i - 1];
-            //    var token = tokens[i];
-            //    if (token.Type == TokenType.Integer && previousToken.Type == TokenType.Caret)
-            //    {
-            //        var value = token.GetText(textStr);
-            //        string replacement = null;
-            //        switch (value)
-            //        {
-            //            case "2":
-            //                replacement = "²";
-            //                break;
-            //            case "3":
-            //                replacement = "³";
-            //                break;
-            //        }
-
-            //        if (replacement == null)
-            //            continue;
-
-            //        if (newText == null)
-            //            newText = new StringBuilder(textStr);
-
-            //        newText.Remove(previousToken.Start.Offset, 2);
-            //        newText.Insert(previousToken.Start.Offset, replacement);
-            //    }
-            //}
-
-            //if (newText != null)
-            //{
-            //    text.ReplaceBy(newText.ToString());
-            //}
-        }
         public T ToObject<T>(int argIndex, object value)
         {
             try
@@ -592,6 +324,5 @@ namespace Kalk.Core
                 throw new ScriptArgumentException(argIndex, ex.Message);
             }
         }
-
     }
 }

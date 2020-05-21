@@ -104,7 +104,7 @@ namespace Kalk.Core
             {
                 builder.Append($"{this[i]:X2}");
             }
-            if (engine != null && engine.AllowEscapeSequences)
+            if (engine != null && engine.IsOutputSupportHighlighting)
             {
                 builder.Append(" ");
                 builder.Append(ConsoleStyle.BackgroundRgb(this[0], this[1], this[2]));
