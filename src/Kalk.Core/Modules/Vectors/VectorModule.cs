@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using Scriban.Runtime;
 using Scriban.Syntax;
 
 namespace Kalk.Core.Modules
@@ -189,5 +191,83 @@ namespace Kalk.Core.Modules
 
         [KalkDoc("rgba", CategoryTypeConstructors)]
         public KalkColorRgba CreateRgba(params object[] arguments) => (KalkColorRgba)RgbaConstructor.Invoke(Engine, arguments);
+        
+        [KalkDoc("colors", KalkEngine.CategoryMisc)]
+        public object Colors()
+        {
+            var colors = KalkColorRgb.GetKnownColors();
+            if (Engine.CurrentNode?.Parent?.GetType() != typeof(ScriptExpressionStatement))
+            {
+                return new ScriptArray(colors);
+            }
+
+            var builder = new StringBuilder();
+            int count = 0;
+            const int PerColumn = 2;
+            foreach (var knownColor in colors)
+            {
+                var colorName = knownColor.ToString("aligned", Engine);
+                builder.Append(colorName);
+                count++;
+
+                if (count == PerColumn)
+                {
+                    Engine.WriteHighlightLine(builder.ToString());
+                    builder.Clear();
+                    count = 0;
+                }
+                else
+                {
+                    builder.Append(" ");
+                }
+            }
+
+            if (builder.Length > 0)
+            {
+                Engine.WriteHighlightLine(builder.ToString());
+                builder.Clear();
+            }
+
+            return null;
+        }
+
+
+        // Credits to http://www.chilliant.com/rgb2hsv.html
+
+        [KalkDoc("hue_to_rgb", CategoryMathVectorMatrixFunctions)]
+        public KalkVector<float> HUEtoRGB(float hue)
+        {
+            float R = Math.Abs(hue * 6 - 3) - 1;
+            float G = 2 - Math.Abs(hue * 6 - 2);
+            float B = 2 - Math.Abs(hue * 6 - 4);
+            return new KalkVector<float>(Saturate(R), Saturate(G), Saturate(B));
+        }
+
+        [KalkDoc("rgb_to_hsv", CategoryMathVectorMatrixFunctions)]
+        public KalkVector<float> RGBtoHCV(KalkVector<float> rgb)
+        {
+            if (rgb.Length != 3) throw new ArgumentException("Supporting only float3");
+
+            // Based on work by Sam Hocevar and Emil Persson
+            var P = (rgb.g < rgb.b) ? float4(rgb.b, rgb.g, -1.0f, 2.0f / 3.0f) : float4(rgb.g, rgb.b, 0.0f, -1.0f / 3.0f);
+            var Q = (rgb.r < P.x) ? float4(P.x, P.y, P.w, rgb.r) : float4(rgb.r, P.y, P.z, P.x);
+            float C = Q.x - Math.Min(Q.w, Q.y);
+            float H = Math.Abs((Q.w - Q.y) / (6 * C + Epsilon) + Q.z);
+            return float3(H, C, Q.x);
+        }
+
+        const float Epsilon = 1e-10f;
+
+        private static KalkVector<float> float4(float x, float y, float z, float w)
+        {
+            return new KalkVector<float>(x, y, z, w);
+        }
+
+        private static KalkVector<float> float3(float x, float y, float z)
+        {
+            return new KalkVector<float>(x, y, z);
+        }
+        
+        private static float Saturate(float x) => x < 0.0f ? 0.0f : x > 1.0f ? 1.0f : x;
     }
 }

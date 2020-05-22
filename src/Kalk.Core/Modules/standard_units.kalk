@@ -32,8 +32,8 @@ unit(katal, 'catalytic activity', kat, mol/s, prefix: 'decimal')
 
 # Non-SI units accepted for use with the SI Units
 # https://en.wikipedia.org/wiki/Non-SI_units_mentioned_in_the_SI
-unit(minute, 'time in minutes', min, 60 * s)
-unit(hour, 'time in hours', h, 60 * min)
+unit(minute, 'time in minutes', minute, 60 * s)
+unit(hour, 'time in hours', h, 60 * minute)
 unit(day, 'time in days', day, 24 * h)
 unit(astronomical_unit, 'length', au, 149597870700 * m)
 unit(degree, 'plane angle', deg, pi/180 * rad)

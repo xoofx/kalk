@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Numerics;
 using MathNet.Numerics.Random;
 using Scriban.Syntax;
@@ -46,6 +47,8 @@ namespace Kalk.Core
         private static readonly Func<object, bool> IsFiniteFunc = IsFiniteFuncImpl;
         private static readonly Func<object, bool> IsInfFunc = IsInfFuncImpl;
         private static readonly Func<object, bool> IsNanFunc = IsNanFuncImpl;
+
+        private static readonly Func<double, double> SaturateFunc = SaturateImpl;
         private readonly Random _random;
 
         public MathModule()
@@ -235,6 +238,119 @@ namespace Kalk.Core
         [KalkDoc("trunc", CategoryMathFunctions)]
         public object Trunc(KalkDoubleValue x) => x.TransformArg(Engine, TruncFunc);
         
+        [KalkDoc("saturate", CategoryMathFunctions)]
+        public object Saturate(KalkDoubleValue x) => x.TransformArg(Engine, SaturateFunc);
+
+        [KalkDoc("min", CategoryMathFunctions)]
+        public object Min(KalkDoubleValue x, KalkDoubleValue y)
+        {
+            var (xValues,yValues) = GetPairValues(x,y);
+            int index = 0;
+            return x.TransformArg(Engine, (double v) =>
+            {
+                var result = Math.Min(xValues[index], yValues[index]);
+                index++;
+                return result;
+            });
+        }
+
+        [KalkDoc("max", CategoryMathFunctions)]
+        public object Max(KalkDoubleValue x, KalkDoubleValue y)
+        {
+            var (xValues, yValues) = GetPairValues(x, y);
+            int index = 0;
+            return x.TransformArg(Engine, (double v) =>
+            {
+                var result = Math.Max(xValues[index], yValues[index]);
+                index++;
+                return result;
+            });
+        }
+
+        [KalkDoc("step", CategoryMathFunctions)]
+        public object Step(KalkDoubleValue y, KalkDoubleValue x)
+        {
+            var (yValues, xValues) = GetPairValues(y, x, nameof(y), nameof(x));
+            int index = 0;
+            return x.TransformArg(Engine, (double v) =>
+            {
+                var yv = yValues[index];
+                var xv = xValues[index];
+                index++;
+                return xv >= yv ? 1.0 : 0.0;
+            });
+        }
+
+        [KalkDoc("smoothstep", CategoryMathFunctions)]
+        public object Smoothstep(KalkDoubleValue min, KalkDoubleValue max, KalkDoubleValue x)
+        {
+            var (minValues, maxValues, xValues) = GetTripleValues(min, max, x, nameof(min), nameof(max), nameof(x));
+            int index = 0;
+            return x.TransformArg(Engine, (double v) =>
+            {
+                var minValue = minValues[index];
+                var maxValue = maxValues[index];
+                index++;
+                if (v < minValue) v = 0.0;
+                if (v > maxValue) v = 1.0;
+                return v * v * (3.0f - (2.0f * v));
+            });
+        }
+
+        private (List<double>, List<double>) GetPairValues(KalkDoubleValue x, KalkDoubleValue y, string nameofx = "x", string nameofy = "y")
+        {
+            var xValues = new List<double>();
+            var yValues = new List<double>();
+            x.TransformArg(Engine, (double v) =>
+            {
+                xValues.Add(v);
+                return v;
+            });
+
+            y.TransformArg(Engine, (double v) =>
+            {
+                yValues.Add(v);
+                return v;
+            });
+            if (xValues.Count != yValues.Count)
+            {
+                throw new ArgumentException($"Invalid length between {nameofx} with {xValues.Count} elements and {nameofy} with {yValues.Count} elements.");
+            }
+
+            return (xValues, yValues);
+        }
+
+        private (List<double>, List<double>, List<double>) GetTripleValues(KalkDoubleValue x, KalkDoubleValue y, KalkDoubleValue z, string nameofx = "x", string nameofy = "y", string nameofz = "z")
+        {
+            var xValues = new List<double>();
+            var yValues = new List<double>();
+            var zValues = new List<double>();
+            x.TransformArg(Engine, (double v) =>
+            {
+                xValues.Add(v);
+                return v;
+            });
+
+            y.TransformArg(Engine, (double v) =>
+            {
+                yValues.Add(v);
+                return v;
+            });
+
+            z.TransformArg(Engine, (double v) =>
+            {
+                zValues.Add(v);
+                return v;
+            });
+
+            if (xValues.Count != yValues.Count || xValues.Count != zValues.Count)
+            {
+                throw new ArgumentException($"Invalid length between {nameofx} with {xValues.Count} elements, {nameofy} with {yValues.Count} elements and {nameofz} with {zValues.Count} elements.");
+            }
+
+            return (xValues, yValues, zValues);
+        }
+
         [KalkDoc("isfinite", CategoryMathFunctions)]
         public object IsFinite(KalkCompositeValue x) => x.TransformArg(Engine, IsFiniteFunc);
         [KalkDoc("isinf", CategoryMathFunctions)]
@@ -506,5 +622,7 @@ namespace Kalk.Core
 
             return Math.Abs(Engine.ToObject<double>(0, value));
         }
+
+        public static double SaturateImpl(double x) => x < 0.0 ? 0.0 : x > 1.0 ? 1.0 : x;
     }
 }

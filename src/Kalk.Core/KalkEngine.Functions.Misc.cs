@@ -15,7 +15,7 @@ namespace Kalk.Core
 {
     public partial class KalkEngine
     {
-        private const string CategoryMisc = "Misc Functions";
+        public const string CategoryMisc = "Misc Functions";
 
         /// <summary>
         /// Returns the ascii table or print

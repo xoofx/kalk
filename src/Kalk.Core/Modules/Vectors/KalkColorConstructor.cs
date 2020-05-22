@@ -36,11 +36,14 @@ namespace Kalk.Core
                 case string rgbStr:
                     try
                     {
-                        value = int.Parse(rgbStr.TrimStart('#'), System.Globalization.NumberStyles.HexNumber);
+                        if (!KalkColorRgb.TryGetKnownColor(rgbStr, out value))
+                        {
+                            value = int.Parse(rgbStr.TrimStart('#'), System.Globalization.NumberStyles.HexNumber);
+                        }
                     }
                     catch
                     {
-                        throw new ScriptArgumentException(0, $"Expecting an hexadecimal rgb string (e.g #FF80C2) instead of {rgbStr}");
+                        throw new ScriptArgumentException(0, $"Expecting a known css_colors (e.g `AliceBlue`) or an hexadecimal rgb string (e.g #FF80C2) instead of {rgbStr}");
                     }
                     break;
                 default:
@@ -61,5 +64,9 @@ namespace Kalk.Core
             vector[index++] = (value >> 8) & 0xFF;
             vector[index++] = value & 0xFF;
         }
+
+
+
+
     }
 }

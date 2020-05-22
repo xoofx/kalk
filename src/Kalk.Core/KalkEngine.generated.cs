@@ -466,6 +466,11 @@ namespace Kalk.Core
             RegisterFunction("floor", (Func<Kalk.Core.KalkDoubleValue, object>)Floor);
             RegisterFunction("ceil", (Func<Kalk.Core.KalkDoubleValue, object>)Ceiling);
             RegisterFunction("trunc", (Func<Kalk.Core.KalkDoubleValue, object>)Trunc);
+            RegisterFunction("saturate", (Func<Kalk.Core.KalkDoubleValue, object>)Saturate);
+            RegisterFunction("min", (Func<Kalk.Core.KalkDoubleValue, Kalk.Core.KalkDoubleValue, object>)Min);
+            RegisterFunction("max", (Func<Kalk.Core.KalkDoubleValue, Kalk.Core.KalkDoubleValue, object>)Max);
+            RegisterFunction("step", (Func<Kalk.Core.KalkDoubleValue, Kalk.Core.KalkDoubleValue, object>)Step);
+            RegisterFunction("smoothstep", (Func<Kalk.Core.KalkDoubleValue, Kalk.Core.KalkDoubleValue, Kalk.Core.KalkDoubleValue, object>)Smoothstep);
             RegisterFunction("isfinite", (Func<Kalk.Core.KalkCompositeValue, object>)IsFinite);
             RegisterFunction("isinf", (Func<Kalk.Core.KalkCompositeValue, object>)IsInf);
             RegisterFunction("isnan", (Func<Kalk.Core.KalkCompositeValue, object>)IsNan);
@@ -712,6 +717,36 @@ namespace Kalk.Core
             }
             {
                 var descriptor = Descriptors["trunc"];
+                descriptor.Category = "Math Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["saturate"];
+                descriptor.Category = "Math Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["min"];
+                descriptor.Category = "Math Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["max"];
+                descriptor.Category = "Math Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["step"];
+                descriptor.Category = "Math Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["smoothstep"];
                 descriptor.Category = "Math Functions";
                 descriptor.Description = @"";
                 descriptor.IsCommand = false;
@@ -972,6 +1007,9 @@ namespace Kalk.Core.Modules
             RegisterFunction("vector", (Func<Scriban.Syntax.ScriptVariable, int, object[], object>)CreateVector);
             RegisterFunction("rgb", (Func<object[], Kalk.Core.KalkColorRgb>)CreateRgb);
             RegisterFunction("rgba", (Func<object[], Kalk.Core.KalkColorRgba>)CreateRgba);
+            RegisterFunction("colors", (Func<object>)Colors);
+            RegisterFunction("hue_to_rgb", (Func<float, Kalk.Core.KalkVector<float>>)HUEtoRGB);
+            RegisterFunction("rgb_to_hsv", (Func<Kalk.Core.KalkVector<float>, Kalk.Core.KalkVector<float>>)RGBtoHCV);
             RegisterFunction("bool1x2", (Func<object[], Kalk.Core.KalkMatrix<bool>>)CreateBool1x2);
             RegisterFunction("bool1x3", (Func<object[], Kalk.Core.KalkMatrix<bool>>)CreateBool1x3);
             RegisterFunction("bool1x4", (Func<object[], Kalk.Core.KalkMatrix<bool>>)CreateBool1x4);
@@ -1214,6 +1252,24 @@ namespace Kalk.Core.Modules
             {
                 var descriptor = Descriptors["rgba"];
                 descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["colors"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["hue_to_rgb"];
+                descriptor.Category = "Math Vector/Matrix Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["rgb_to_hsv"];
+                descriptor.Category = "Math Vector/Matrix Functions";
                 descriptor.Description = @"";
                 descriptor.IsCommand = false;
             }

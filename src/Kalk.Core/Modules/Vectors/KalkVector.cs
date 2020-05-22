@@ -80,6 +80,16 @@ namespace Kalk.Core
         public KalkVector(T v1, T v2) => _values = new T[2] { v1, v2 };
         public KalkVector(T v1, T v2, T v3) => _values = new T[3] { v1, v2, v3 };
         public KalkVector(T v1, T v2, T v3, T v4) => _values = new T[4] { v1, v2, v3, v4 };
+        
+        public T x => _values[0];
+        public T y => _values.Length >= 2 ? _values[1] : default;
+        public T z => _values.Length >= 3 ? _values[2] : default;
+        public T w => _values.Length >= 4 ? _values[3] : default;
+
+        public T r => x;
+        public T g => y;
+        public T b => z;
+        public T a => w;
 
         public override Type ElementType => typeof(T);
 
@@ -287,7 +297,7 @@ namespace Kalk.Core
                     typeof(T) == typeof(double) && typeof(double) == transformType);
         }
 
-        public object Transform(Func<T, T> apply)
+        public virtual object Transform(Func<T, T> apply)
         {
             var newValue = (KalkVector<T>)Clone();
             for (int i = 0; i < Length; i++)

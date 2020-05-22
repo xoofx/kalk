@@ -24,7 +24,9 @@ namespace Kalk.Core
         protected KalkColor(KalkVector<int> values) : base(values)
         {
         }
-        
+
+        public int rgb => (int)((r << 16) | (g << 8) | b);
+
         public override IEnumerable<string> GetMembers()
         {
             for (int i = 0; i < Math.Min(4, Length); i++)
@@ -99,11 +101,28 @@ namespace Kalk.Core
             }
             builder.Append(')');
 
+            bool isAligned = format == "aligned";
+
+            // rgb(240, 248, 255)
+            // rgb(255, 255, 255, 255)
+            if (isAligned)
+            {
+                if (Length == 3)
+                {
+                    builder.Append(' ', "rgb(255, 255, 255)".Length - builder.Length);
+                }
+                else if (Length == 4)
+                {
+                    builder.Append(' ', "rgb(255, 255, 255, 255)".Length - builder.Length);
+                }
+            }
+
             builder.Append(" ## ");
             for (int i = 0; i < Length; i++)
             {
                 builder.Append($"{this[i]:X2}");
             }
+
             if (engine != null && engine.IsOutputSupportHighlighting)
             {
                 builder.Append(" ");
@@ -111,6 +130,13 @@ namespace Kalk.Core
                 builder.Append("    ");
                 builder.Append(ConsoleStyle.Reset);
             }
+
+            // Add known color name
+            if (KalkColorRgb.TryGetKnownColor(rgb, out var colorName))
+            {
+                builder.Append(isAligned ? $" {colorName,-20}" : $" {colorName}");
+            }
+
             builder.Append(" ##");
             return builder.ToString();
         }
