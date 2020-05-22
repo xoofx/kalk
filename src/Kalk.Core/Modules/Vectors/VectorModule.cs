@@ -33,6 +33,7 @@ namespace Kalk.Core.Modules
 
         public VectorModule() : base("Vectors")
         {
+            IsBuiltin = true;
             RegisterFunctionsAuto();
         }
 

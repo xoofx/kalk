@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -69,10 +70,11 @@ namespace Kalk.CodeGen
 
             // Force this assembly to reference the following types in order to compile Kalk.Core correctly
             // (this is awful but Roslyn doesn't help us here)
-            Console.WriteLine($"Using {typeof(Unsafe)}");
-            Console.WriteLine($"Using {typeof(CsvHelper.CsvParser)}");
-            Console.WriteLine($"Using {typeof(HttpClient)}");
-            Console.WriteLine($"Using {typeof(BigInteger)}");
+            Console.WriteLine($"Using {typeof(Unsafe).Assembly.FullName}");
+            Console.WriteLine($"Using {typeof(CsvHelper.CsvParser).Assembly.FullName}");
+            Console.WriteLine($"Using {typeof(HttpClient).Assembly.FullName}");
+            Console.WriteLine($"Using {typeof(BigInteger).Assembly.FullName}");
+            Console.WriteLine($"Using {typeof(HttpStatusCode).Assembly.FullName}");
 
             var project = solution.Projects.First(x => x.Name == "Kalk.Core");
             //var scriban = solution.Projects.First(x => x.Name == "Scriban");

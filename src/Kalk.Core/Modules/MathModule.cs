@@ -191,7 +191,7 @@ namespace Kalk.Core
         public object Asinh(KalkDoubleValue x) => x.TransformArg(Engine, AsinhFunc);
 
         [KalkDoc("fmod", CategoryMathFunctions)]
-        public double Fmod(double x, double y) => x % y;
+        public object Fmod(KalkDoubleValue x, double y) => x.TransformArg(Engine, (double v) => v % y);
 
         [KalkDoc("frac", CategoryMathFunctions)]
         public object Frac(KalkDoubleValue x) => x.TransformArg(Engine, FracFunc);
@@ -206,7 +206,7 @@ namespace Kalk.Core
         public object Atanh(KalkDoubleValue x) => x.TransformArg(Engine, AtanhFunc);
         
         [KalkDoc("atan2", CategoryMathFunctions)]
-        public double Atan2(double y, double x) => Math.Atan2(y, x);
+        public object Atan2(KalkDoubleValue y, double x) => y.TransformArg(Engine, (double v) => Math.Atan2(v, x));
 
         [KalkDoc("rsqrt", CategoryMathFunctions)]
         public object Rsqrt(KalkDoubleValue x) => x.TransformArg(Engine, RsqrtFunc);
@@ -224,9 +224,8 @@ namespace Kalk.Core
         public object Exp2(KalkDoubleValue x) => x.TransformArg(Engine, Exp2Func);
 
         [KalkDoc("pow", CategoryMathFunctions)]
-        public double Pow(double x, double y) => Math.Pow(x, y);
-
-
+        public object Pow(KalkDoubleValue x, double y) => x.TransformArg(Engine, (double v) => Math.Pow(v, y));
+        
         [KalkDoc("round", CategoryMathFunctions)]
         public object Round(KalkDoubleValue x) => x.TransformArg(Engine, RoundFunc);
         [KalkDoc("floor", CategoryMathFunctions)]
@@ -276,7 +275,6 @@ namespace Kalk.Core
             return result;
         }
 
-
         [KalkDoc("asdouble", CategoryMathFunctions)]
         public double AsDouble(object x)
         {
@@ -284,28 +282,37 @@ namespace Kalk.Core
             if (x is float f) return f;
             if (x is int intValue)
             {
-                unsafe
-                {
-                    var uVal = (ulong) ((long) intValue);
-                    return *(double*) &uVal;
-                }
+                return BitConverter.Int32BitsToSingle(intValue);
             }
 
             if (x is long longValue)
             {
-                unsafe
-                {
-                    var uVal = (ulong)longValue;
-                    return *(double*)&uVal;
-                }
+                return BitConverter.Int64BitsToDouble(longValue);
             }
 
             var bigInteger = Engine.ToObject<BigInteger>(0, x);
-            unsafe
+            var value = (long) bigInteger;
+            return BitConverter.Int64BitsToDouble(value);
+        }
+
+        [KalkDoc("asfloat", CategoryMathFunctions)]
+        public float AsFloat(object x)
+        {
+            if (x is double d) return (float)d;
+            if (x is float f) return f;
+            if (x is int intValue)
             {
-                var value = (ulong) bigInteger;
-                return *(double*) &value;
+                return BitConverter.Int32BitsToSingle(intValue);
             }
+
+            if (x is long longValue)
+            {
+                return (float)BitConverter.Int64BitsToDouble(longValue);
+            }
+
+            var bigInteger = Engine.ToObject<BigInteger>(0, x);
+            var value = (long)bigInteger;
+            return (float)BitConverter.Int64BitsToDouble(value);
         }
 
         [KalkDoc("aslong", CategoryMathFunctions)]
@@ -315,23 +322,32 @@ namespace Kalk.Core
             if (x is int intValue) return intValue;
             if (x is double f64)
             {
-                unsafe
-                {
-                    return *(long*)&f64;
-                }
+                return BitConverter.DoubleToInt64Bits(f64);
             }
             if (x is float f32)
             {
-                unsafe
-                {
-                    double v = f32;
-                    return *(long*)&v;
-                }
+                return BitConverter.SingleToInt32Bits(f32);
             }
 
             return (long)Engine.ToObject<BigInteger>(0, x);
         }
 
+        [KalkDoc("asint", CategoryMathFunctions)]
+        public int AsInt(object x)
+        {
+            if (x is long longValue) return (int)longValue;
+            if (x is int intValue) return intValue;
+            if (x is double f64)
+            {
+                return BitConverter.SingleToInt32Bits((float)f64);
+            }
+            if (x is float f32)
+            {
+                return BitConverter.SingleToInt32Bits(f32);
+            }
+
+            return (int)Engine.ToObject<BigInteger>(0, x);
+        }
 
         private static double FracImpl(double x)
         {

@@ -11,8 +11,7 @@ namespace Kalk.Core.Modules
 
         [KalkDoc("identity", CategoryMathVectorMatrixFunctions)]
         public static KalkMatrix Identity(KalkMatrix m) => KalkMatrix.Identity(m);
-
-
+        
         [KalkDoc("determinant", CategoryMathVectorMatrixFunctions)]
         public static object Determinant(KalkMatrix m) => KalkMatrix.Determinant(m);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Scriban.Functions;
+using Scriban.Runtime;
 
 namespace Kalk.Core.Modules
 {
@@ -60,5 +61,24 @@ namespace Kalk.Core.Modules
 
         [KalkDoc("pad_right", CategoryString)]
         public string StringPadRight(string text, int width) => StringFunctions.PadRight(text, width);
+
+        [KalkDoc("regex_escape", CategoryString)]
+        public string RegexEscape(string text) => RegexFunctions.Escape(text);
+
+        [KalkDoc("regex_match", CategoryString)]
+        public ScriptArray RegexMatch(string text, string pattern, string options = null) => RegexFunctions.Match(Engine, text, pattern, options);
+
+        [KalkDoc("regex_matches", CategoryString)]
+        public ScriptArray RegexMatches(string text, string pattern, string options = null) => RegexFunctions.Matches(Engine, text, pattern, options);
+        
+        [KalkDoc("regex_replace", CategoryString)]
+        public string RegexReplace(string text, string pattern, string replace, string options = null) => RegexFunctions.Replace(Engine, text, pattern, replace, options);
+
+        [KalkDoc("regex_split", CategoryString)]
+        public ScriptArray RegexSplit(string text, string pattern, string options = null) => RegexFunctions.Split(Engine, text, pattern, options);
+
+        [KalkDoc("regex_unescape", CategoryString)]
+        public string RegexUnescape(string text) => RegexFunctions.Unescape(text);
+
     }
 }

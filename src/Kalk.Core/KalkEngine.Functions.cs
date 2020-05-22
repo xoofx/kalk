@@ -30,14 +30,17 @@ namespace Kalk.Core
         {
             RegisterFunctionsAuto();
 
+            // builtins
+            GetOrCreateModule<MathModule>();
+            GetOrCreateModule<VectorModule>();
+
             var allModule = GetOrCreateModule<AllModule>();
-            allModule.Modules.Add(GetOrCreateModule<MathModule>());
             allModule.Modules.Add(GetOrCreateModule<IntrinsicsModule>());
             allModule.Modules.Add(GetOrCreateModule<FileModule>());
             allModule.Modules.Add(GetOrCreateModule<StringModule>());
             allModule.Modules.Add(GetOrCreateModule<CurrencyModule>());
-            allModule.Modules.Add(GetOrCreateModule<VectorModule>());
             allModule.Modules.Add(GetOrCreateModule<StandardUnitsModule>());
+            allModule.Modules.Add(GetOrCreateModule<WebModule>());
 
             // Register last the system file
             LoadCoreFile();
@@ -52,9 +55,11 @@ namespace Kalk.Core
         {
             // Register all units
             var packageFilePath = Path.Combine(KalkEngineFolder, filename);
+            bool previousEchoEnabled = EchoEnabled;
             try
             {
                 _registerAsSystem = true;
+                EchoEnabled = false;
                 LoadFile(packageFilePath);
             }
             catch (Exception ex)
@@ -63,6 +68,7 @@ namespace Kalk.Core
             }
             finally
             {
+                EchoEnabled = previousEchoEnabled;
                 _registerAsSystem = false;
             }
         }
