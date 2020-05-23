@@ -54,6 +54,20 @@ namespace Kalk.Core
             return moduleT;
         }
 
+        [KalkDoc("clipboard", CategoryGeneral)]
+        public object Clipboard(object value = null)
+        {
+            if (value == null)
+            {
+                return GetClipboardText?.Invoke();
+            }
+            else
+            {
+                SetClipboardText?.Invoke(ObjectToString(value));
+                return null;
+            }
+        }
+
         [KalkDoc("display", CategoryGeneral)]
         public void Display(ScriptVariable name = null)
         {
@@ -493,6 +507,17 @@ namespace Kalk.Core
             return _lastResult;
         }
 
+        /// <summary>
+        /// Copies the last evaluated content to the clipboard.
+        ///
+        /// This is equivalent to `out |> clipboard`.
+        /// </summary>
+        [KalkDoc("out2clipboard", CategoryGeneral)]
+        public void LastToClipboard()
+        {
+            Clipboard(Last());
+        }
+        
         private delegate void DefineShortcutDelegate(ScriptVariable name, params ScriptExpression[] shortcuts);
 
         [KalkDoc("shortcut", CategoryGeneral)]

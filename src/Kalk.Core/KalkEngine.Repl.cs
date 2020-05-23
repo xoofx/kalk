@@ -37,6 +37,9 @@ namespace Kalk.Core
 
             OnClear = Clear;
 
+            Repl.GetClipboardTextImpl = GetClipboardText;
+            Repl.SetClipboardTextImpl = SetClipboardText;
+
             Repl.BeforeRender = OnBeforeRendering;
             Repl.GetCancellationTokenSource = () => _cancellationTokenSource;
             Repl.TryPreProcessKey = TryPreProcessKey;

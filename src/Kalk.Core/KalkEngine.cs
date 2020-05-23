@@ -35,6 +35,7 @@ namespace Kalk.Core
         private int _currentIndexInCompletionMatchingList;
         private bool _isFirstWriteForEval;
         private readonly Dictionary<Type, KalkModule> _modules;
+        private string _localClipboard;
         
         private KalkShortcutKeyMap _currentShortcutKeyMap;
 
@@ -74,6 +75,11 @@ namespace Kalk.Core
             LoopLimit = int.MaxValue; // no limits for loops
             RecursiveLimit = int.MaxValue; // no limits (still guarded by Scriban)
 
+            // Setup default clipboard methods
+            _localClipboard = string.Empty;
+            GetClipboardText = GetClipboardTextImpl;
+            SetClipboardText = SetClipboardTextImpl;
+
             _cancellationTokenSource = new CancellationTokenSource();
 
             PushGlobal(Units);
@@ -97,6 +103,16 @@ namespace Kalk.Core
             _isInitializing = true;
             RegisterFunctions();
             _isInitializing = false;
+        }
+
+        private void SetClipboardTextImpl(string obj)
+        {
+            _localClipboard = obj ?? string.Empty;
+        }
+
+        private string GetClipboardTextImpl()
+        {
+            return _localClipboard;
         }
 
         private ConsoleText HighlightOutput { get; }
@@ -128,8 +144,13 @@ namespace Kalk.Core
         [KalkDoc("config", CategoryGeneral)]
         public KalkConfig Config { get; }
 
+        public Action<string> SetClipboardText { get; set; }
+
+        public Func<string> GetClipboardText { get; set; }
+        
         public ScriptObject Variables { get; }
 
+        [KalkDoc("aliases", CategoryGeneral)]
         public KalkAliases Aliases { get; }
 
         private bool EnableEngineOutput { get; set; }

@@ -49,12 +49,11 @@ namespace kalk
             //}
 
             //return;
-            var app = new KalkEngine();
-            if (app.Repl != null)
+            var app = new KalkEngine
             {
-                app.Repl.GetClipboardTextImpl = TextCopy.Clipboard.GetText;
-                app.Repl.SetClipboardTextImpl = TextCopy.Clipboard.SetText;
-            }
+                GetClipboardText = TextCopy.Clipboard.GetText, 
+                SetClipboardText = TextCopy.Clipboard.SetText
+            };
 
             if (!app.Run(args))
             {

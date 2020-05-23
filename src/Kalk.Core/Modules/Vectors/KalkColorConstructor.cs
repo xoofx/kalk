@@ -43,7 +43,7 @@ namespace Kalk.Core
                     }
                     catch
                     {
-                        throw new ScriptArgumentException(0, $"Expecting a known css_colors (e.g `AliceBlue`) or an hexadecimal rgb string (e.g #FF80C2) instead of {rgbStr}");
+                        throw new ScriptArgumentException(0, $"Expecting a known color (e.g `AliceBlue`) or an hexadecimal rgb string (e.g #FF80C2) instead of `{rgbStr}`. Type `colors` for listing known colors.");
                     }
                     break;
                 default:
