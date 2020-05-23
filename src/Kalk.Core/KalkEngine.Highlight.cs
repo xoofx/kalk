@@ -406,6 +406,7 @@ namespace Kalk.Core
             }
         }
 
+
         internal void WriteErrorLine(string scriptText)
         {
             if (scriptText == null) throw new ArgumentNullException(nameof(scriptText));

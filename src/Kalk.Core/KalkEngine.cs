@@ -79,9 +79,6 @@ namespace Kalk.Core
             PushGlobal(Units);
             PushGlobal(Variables);
 
-            // Put the special history $ object as local
-            SetValue(ScriptVariable.Create("", ScriptVariableScope.Local), Builtins["history"]);
-            
             _parserOptions = new ParserOptions();
 
             _lexerOptions = new LexerOptions()
