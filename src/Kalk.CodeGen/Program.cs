@@ -45,6 +45,8 @@ namespace Kalk.CodeGen
 
             public string Type { get; set; }
             
+            public string RealType { get; set; }
+            
             public string BaseNativeType { get; set; }
             
             public string NativeType { get; set; }
@@ -78,12 +80,16 @@ namespace Kalk.CodeGen
             
             public List<IntrinsicParameter> Parameters { get; } 
             
+            public bool HasPointerArguments { get; set; }
+            
             public MethodInfo Method { get; set; }
             
             public IMethodSymbol MethodSymbol { get; set; }
             
             public string MethodDeclaration { get; set; }
             
+            public string IndirectMethodDeclaration { get; set; }
+
             public string BaseNativeReturnType { get; set; }
 
             public string NativeReturnType { get; set; }
@@ -141,121 +147,181 @@ namespace Kalk.CodeGen
                         continue;
                     }
                     
-                    if (!method.ReturnType.IsPointer && method.GetParameters().All(x => !x.ParameterType.IsPointer))
+                    var x86Sse = compilation.GetTypeByMetadataName(type.FullName);
+                    var sseMember = x86Sse.GetMembers(method.Name).OfType<IMethodSymbol>().Where(x => x.Parameters.Length == method.GetParameters().Length).FirstOrDefault();
+
+                    var groupName = type.FullName.Substring(type.FullName.LastIndexOf('.') + 1).Replace("+", string.Empty);
+                    var docGroupName = type.Name == "X64" ? type.DeclaringType.Name : type.Name;
+                    
+                    var xmlDocStr = sseMember.GetDocumentationCommentXml();
+                    if (string.IsNullOrEmpty(xmlDocStr)) continue;
+                    
+                    var xmlDoc = XElement.Parse($"<root>{xmlDocStr.Trim()}</root>");
+                    var elements = xmlDoc.Elements().First();
+
+                    var summary = GetCleanedString(elements);
+
+                    var summaryTrimmed = summary.Replace("unsigned", string.Empty);
+                    var match = regexName.Match(summaryTrimmed);
+                    if (!match.Success) continue;
+                    
+                    var rawIntrinsicName = match.Groups[1].Value;
+
+                    var intrinsicName = rawIntrinsicName.TrimStart('_');
+
+                    generatedIntrinsics.TryGetValue(intrinsicName, out var existingDesc);
+                    
+                    var desc = new KalkIntrinsic
                     {
-                        var x86Sse = compilation.GetTypeByMetadataName(type.FullName);
-                        var sseMember = x86Sse.GetMembers(method.Name).OfType<IMethodSymbol>().Where(x => x.Parameters.Length == method.GetParameters().Length).FirstOrDefault();
+                        Name = rawIntrinsicName.TrimStart('_'),
+                        Method = method,
+                        Class = groupName,
+                        MethodSymbol = sseMember,
+                        IsFunc = true,
+                    };
+                    desc.CSharpName = desc.Name;
+                    desc.Names.Add(desc.Name);
+                    desc.Description = summary;
 
-                        var groupName = type.FullName.Substring(type.FullName.LastIndexOf('.') + 1).Replace("+", string.Empty);
-                        var docGroupName = type.Name == "X64" ? type.DeclaringType.Name : type.Name;
-                        
-                        var xmlDocStr = sseMember.GetDocumentationCommentXml();
-                        if (string.IsNullOrEmpty(xmlDocStr)) continue;
-                        
-                        var xmlDoc = XElement.Parse($"<root>{xmlDocStr.Trim()}</root>");
-                        var elements = xmlDoc.Elements().First();
+                    if (nameToDoc.TryGetValue(rawIntrinsicName, out var elementIntelDoc))
+                    {
+                        desc.Description = GetCleanedString(elementIntelDoc.Descendants("description").FirstOrDefault());
 
-                        var summary = GetCleanedString(elements);
-
-                        var summaryTrimmed = summary.Replace("unsigned", string.Empty);
-                        var match = regexName.Match(summaryTrimmed);
-                        if (!match.Success) continue;
-                        
-                        var rawIntrinsicName = match.Groups[1].Value;
-
-                        var intrinsicName = rawIntrinsicName.TrimStart('_');
-
-                        generatedIntrinsics.TryGetValue(intrinsicName, out var existingDesc);
-                        
-                        var desc = new KalkIntrinsic
+                        foreach (var parameter in elementIntelDoc.Descendants("parameter"))
                         {
-                            Name = rawIntrinsicName.TrimStart('_'),
-                            Method = method,
-                            Class = groupName,
-                            MethodSymbol = sseMember,
-                            IsFunc = true,
-                        };
-                        desc.CSharpName = desc.Name;
-                        desc.Names.Add(desc.Name);
-                        desc.Description = summary;
-
-                        if (nameToDoc.TryGetValue(rawIntrinsicName, out var elementIntelDoc))
-                        {
-                            desc.Description = GetCleanedString(elementIntelDoc.Descendants("description").FirstOrDefault());
-
-                            foreach (var parameter in elementIntelDoc.Descendants("parameter"))
-                            {
-                                desc.Params.Add(new KalkParamDescriptor(parameter.Attribute("varname").Value, parameter.Attribute("type").Value));
-                            }
+                            desc.Params.Add(new KalkParamDescriptor(parameter.Attribute("varname").Value, parameter.Attribute("type").Value));
                         }
-                        else
-                        {
-                            Console.WriteLine($"Unable to find intrinsic doc for: {rawIntrinsicName}");
-                        }
-
-                        desc.ReturnType = method.ReturnType.IsConstructedGenericType ? "object" : sseMember.ReturnType.ToDisplayString();
-                        
-                        (desc.BaseNativeReturnType, desc.NativeReturnType) = GetBaseTypeAndType(sseMember.ReturnType);
-
-                        for (int i = 0; i < sseMember.Parameters.Length; i++)
-                        {
-                            var intrinsicParameter = new IntrinsicParameter();
-                            var parameter = sseMember.Parameters[i];
-                            intrinsicParameter.Name = i < desc.Params.Count ? desc.Params[i].Name : parameter.Name;
-                            intrinsicParameter.Type = method.GetParameters()[i].ParameterType.IsConstructedGenericType ? "object" : parameter.Type.ToDisplayString();
-                            
-                            (intrinsicParameter.BaseNativeType, intrinsicParameter.NativeType) = GetBaseTypeAndType(parameter.Type);
-                            desc.Parameters.Add(intrinsicParameter);
-                        }
-                        
-                        // public object mm_add_ps(object left, object right) => ProcessArgs<float, Vector128<float>, float, Vector128<float>, float, Vector128<float>>(left, right, Sse.Add);
-                        var methodDeclaration = new StringBuilder();
-                        methodDeclaration.Append($"public {desc.ReturnType} {desc.Name}(");
-                        for (int i = 0; i < desc.Parameters.Count; i++)
-                        {
-                            var parameter = desc.Parameters[i];
-                            if (i > 0) methodDeclaration.Append(", ");
-                            methodDeclaration.Append($"{parameter.Type} {parameter.Name}");
-                        }
-
-                        methodDeclaration.Append($") => ({desc.ReturnType})ProcessArgs<");
-                        var castBuilder = new StringBuilder("Func<");
-                        for (int i = 0; i < desc.Parameters.Count; i++)
-                        {
-                            var parameter = desc.Parameters[i];
-                            methodDeclaration.Append($"{parameter.BaseNativeType}, {parameter.NativeType}, ");
-                            castBuilder.Append($"{parameter.Type}, ");
-                        }
-                        methodDeclaration.Append($"{desc.BaseNativeReturnType}, {desc.NativeReturnType}>(");
-                        castBuilder.Append($"{desc.ReturnType}>");
-                        
-                        for (int i = 0; i < desc.Parameters.Count; i++)
-                        {
-                            var parameter = desc.Parameters[i];
-                            methodDeclaration.Append($"{parameter.Name}, ");
-                        }
-
-                        methodDeclaration.Append($"{sseMember.ContainingType.ToDisplayString()}.{sseMember.Name}");
-                        methodDeclaration.Append(");");
-                        desc.Cast = $"({castBuilder})";
-                        desc.MethodDeclaration = methodDeclaration.ToString();
-
-                        desc.Category = $"Vector Hardware Intrinsics / {docGroupName.ToUpperInvariant()}";
-                        
-                        if (existingDesc == null || desc.Parameters[0].BaseNativeType == "float")
-                        {
-                            desc.Description = desc.Description.Replace("[round_note]", string.Empty).Trim().Replace("\r\n", "\n").Replace("\n", " ");
-                            generatedIntrinsics[intrinsicName] = desc;
-                        }
-                        
-                        desc.IsSupported = true;
-                        
-                        count++;
                     }
                     else
                     {
-                        Console.WriteLine($"Intrinsic Method skipped: {method}");
+                        Console.WriteLine($"Unable to find intrinsic doc for: {rawIntrinsicName}");
                     }
+
+                    desc.ReturnType = method.ReturnType.IsConstructedGenericType ? "object" : sseMember.ReturnType.ToDisplayString();
+                    
+                    (desc.BaseNativeReturnType, desc.NativeReturnType) = GetBaseTypeAndType(sseMember.ReturnType);
+
+                    desc.HasPointerArguments = false;
+
+                    for (int i = 0; i < sseMember.Parameters.Length; i++)
+                    {
+                        var intrinsicParameter = new IntrinsicParameter();
+                        var parameter = sseMember.Parameters[i];
+                        intrinsicParameter.Name = i < desc.Params.Count ? desc.Params[i].Name : parameter.Name;
+
+                        var parameterType = method.GetParameters()[i].ParameterType;
+                        intrinsicParameter.Type =  parameterType.IsConstructedGenericType || parameterType.IsPointer ? "object" : parameter.Type.ToDisplayString();
+                        intrinsicParameter.RealType = parameter.Type.ToDisplayString();
+                        if (parameterType.IsPointer)
+                        {
+                            desc.HasPointerArguments = true;
+                        }
+                        
+                        (intrinsicParameter.BaseNativeType, intrinsicParameter.NativeType) = GetBaseTypeAndType(parameter.Type);
+                        desc.Parameters.Add(intrinsicParameter);
+                    }
+                    
+                    // public object mm_add_ps(object left, object right) => ProcessArgs<float, Vector128<float>, float, Vector128<float>, float, Vector128<float>>(left, right, Sse.Add);
+                    var methodDeclaration = new StringBuilder();
+                    methodDeclaration.Append($"public {desc.ReturnType} {desc.Name}(");
+                    for (int i = 0; i < desc.Parameters.Count; i++)
+                    {
+                        var parameter = desc.Parameters[i];
+                        if (i > 0) methodDeclaration.Append(", ");
+                        methodDeclaration.Append($"{parameter.Type} {parameter.Name}");
+                    }
+
+                    bool isAction = method.ReturnType == typeof(void);
+                    methodDeclaration.Append(isAction ? $") => ProcessAction<" : $") => ({desc.ReturnType})ProcessFunc<");
+
+                    var castBuilder = new StringBuilder(isAction ? "Action<" : "Func<");
+                    for (int i = 0; i < desc.Parameters.Count; i++)
+                    {
+                        var parameter = desc.Parameters[i];
+                        if (i > 0)
+                        {
+                            methodDeclaration.Append(", ");
+                            castBuilder.Append(", ");
+                        }
+                        methodDeclaration.Append($"{parameter.BaseNativeType}, {parameter.NativeType}");
+                        castBuilder.Append($"{parameter.Type}");
+                    }
+
+                    if (!isAction)
+                    {
+                        if (desc.Parameters.Count > 0)
+                        {
+                            methodDeclaration.Append(", ");
+                            castBuilder.Append(", ");                        
+                        }
+                        
+                        methodDeclaration.Append($"{desc.BaseNativeReturnType}, {desc.NativeReturnType}>(");
+                        castBuilder.Append($"{desc.ReturnType}>");
+                    }
+                    
+                    for (int i = 0; i < desc.Parameters.Count; i++)
+                    {
+                        var parameter = desc.Parameters[i];
+                        methodDeclaration.Append($"{parameter.Name}, ");
+                    }
+
+                    var finalSSEMethod = $"{sseMember.ContainingType.ToDisplayString()}.{sseMember.Name}";
+                    var sseMethodName = desc.HasPointerArguments ? $"{groupName}_{sseMember.Name}" : finalSSEMethod;
+                    methodDeclaration.Append(sseMethodName);
+                    methodDeclaration.Append(");");
+                    desc.Cast = $"({castBuilder})";
+                    desc.MethodDeclaration = methodDeclaration.ToString();
+
+                    if (desc.HasPointerArguments)
+                    {
+                        methodDeclaration.Clear();
+
+                        castBuilder.Clear();
+                        castBuilder.Append(isAction ? "Action<" : "Func<");
+                        for (int i = 0; i < desc.Parameters.Count; i++)
+                        {
+                            var parameter = desc.Parameters[i];
+                            if (i > 0)
+                            {
+                                castBuilder.Append(", ");
+                            }
+                            castBuilder.Append($"{parameter.Type}");
+                        }
+
+                        if (!isAction)
+                        {
+                            castBuilder.Append(", ");
+                            castBuilder.Append($"{desc.ReturnType}>");
+                        }
+
+                        methodDeclaration.Append($"private unsafe readonly static {castBuilder} {sseMethodName} = new {castBuilder}((");
+                        for (int i = 0; i < desc.Parameters.Count; i++)
+                        {
+                            if (i > 0) methodDeclaration.Append(", ");
+                            methodDeclaration.Append($"arg{i}");
+                        }
+                        methodDeclaration.Append($") => {finalSSEMethod}(");
+                        for (int i = 0; i < desc.Parameters.Count; i++)
+                        {
+                            if (i > 0) methodDeclaration.Append(", ");
+                            var parameter = desc.Parameters[i];
+                            methodDeclaration.Append($"({parameter.RealType})arg{i}");
+                        }
+                        methodDeclaration.Append("));");
+                        desc.IndirectMethodDeclaration = methodDeclaration.ToString();
+                    }
+
+                    desc.Category = $"Vector Hardware Intrinsics / {docGroupName.ToUpperInvariant()}";
+                    
+                    if (existingDesc == null || desc.Parameters[0].BaseNativeType == "float")
+                    {
+                        desc.Description = desc.Description.Replace("[round_note]", string.Empty).Trim().Replace("\r\n", "\n").Replace("\n", " ");
+                        generatedIntrinsics[intrinsicName] = desc;
+                    }
+                    
+                    desc.IsSupported = true;
+                    
+                    count++;
                 }
             }
             
@@ -280,6 +346,11 @@ namespace Kalk.CodeGen
 
         private static (string, string) GetBaseTypeAndType(ITypeSymbol type)
         {
+            if (type is IPointerTypeSymbol)
+            {
+                return ("IntPtr", "IntPtr");
+            }
+            
             var typeStr = type.ToDisplayString();
             string baseType;
             var nativeType = type as INamedTypeSymbol;
@@ -525,7 +596,7 @@ namespace {{ module.Namespace }}
         /// {{ member.Description }}
         /// </summary>
         {{ member.MethodDeclaration }}
-
+        {{ member.IndirectMethodDeclaration }}
         {{~ end ~}}
     }
 }

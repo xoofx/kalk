@@ -16,8 +16,35 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
         protected IntrinsicsModuleBase(string name) : base(name)
         {
         }
+        
+        protected void ProcessAction<TArg1Base, TArg1>(object arg1, Action<TArg1> func) 
+            where TArg1Base : unmanaged where TArg1: unmanaged
+        {
+            var nativeArg1 = ToArg<TArg1Base, TArg1>(0, arg1);
+            func(nativeArg1);
+        }        
+        
+        protected void ProcessAction<TArg1Base, TArg1, TArg2Base, TArg2>(object arg1, object arg2, Action<TArg1, TArg2> func) 
+            where TArg1Base : unmanaged where TArg1: unmanaged
+            where TArg2Base : unmanaged where TArg2: unmanaged
+        {
+            var nativeArg1 = ToArg<TArg1Base, TArg1>(0, arg1);
+            var nativeArg2 = ToArg<TArg2Base, TArg2>(1, arg2);
+            func(nativeArg1, nativeArg2);
+        }
+        
+        protected void ProcessAction<TArg1Base, TArg1, TArg2Base, TArg2, TArg3Base, TArg3>(object arg1, object arg2, object arg3, Action<TArg1, TArg2, TArg3> func) 
+            where TArg1Base : unmanaged where TArg1: unmanaged
+            where TArg2Base : unmanaged where TArg2: unmanaged
+            where TArg3Base : unmanaged where TArg3: unmanaged
+        {
+            var nativeArg1 = ToArg<TArg1Base, TArg1>(0, arg1);
+            var nativeArg2 = ToArg<TArg2Base, TArg2>(1, arg2);
+            var nativeArg3 = ToArg<TArg3Base, TArg3>(2, arg3);
+            func(nativeArg1, nativeArg2, nativeArg3);
+        }        
 
-        protected object ProcessArgs<TArg1Base, TArg1, TResultBase, TResult>(object arg1, Func<TArg1, TResult> func) 
+        protected object ProcessFunc<TArg1Base, TArg1, TResultBase, TResult>(object arg1, Func<TArg1, TResult> func) 
             where TArg1Base : unmanaged where TArg1: unmanaged
             where TResultBase : unmanaged where TResult: unmanaged
         {
@@ -26,7 +53,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             return ToResult<TResultBase, TResult>(nativeResult);
         }        
         
-        protected object ProcessArgs<TArg1Base, TArg1, TArg2Base, TArg2, TResultBase, TResult>(object arg1, object arg2, Func<TArg1, TArg2, TResult> func) 
+        protected object ProcessFunc<TArg1Base, TArg1, TArg2Base, TArg2, TResultBase, TResult>(object arg1, object arg2, Func<TArg1, TArg2, TResult> func) 
             where TArg1Base : unmanaged where TArg1: unmanaged
             where TArg2Base : unmanaged where TArg2: unmanaged
             where TResultBase : unmanaged where TResult: unmanaged
@@ -37,7 +64,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             return ToResult<TResultBase, TResult>(nativeResult);
         }
         
-        protected object ProcessArgs<TArg1Base, TArg1, TArg2Base, TArg2, TArg3Base, TArg3, TResultBase, TResult>(object arg1, object arg2, object arg3, Func<TArg1, TArg2, TArg3, TResult> func) 
+        protected object ProcessFunc<TArg1Base, TArg1, TArg2Base, TArg2, TArg3Base, TArg3, TResultBase, TResult>(object arg1, object arg2, object arg3, Func<TArg1, TArg2, TArg3, TResult> func) 
             where TArg1Base : unmanaged where TArg1: unmanaged
             where TArg2Base : unmanaged where TArg2: unmanaged
             where TArg3Base : unmanaged where TArg3: unmanaged
