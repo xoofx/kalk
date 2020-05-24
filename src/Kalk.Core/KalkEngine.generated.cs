@@ -152,7 +152,7 @@ namespace Kalk.Core
             RegisterAction("shortcut", (Action<Scriban.Syntax.ScriptVariable, Scriban.Syntax.ScriptExpression[]>)Shortcut);
             RegisterAction("alias", (Action<Scriban.Syntax.ScriptVariable, Scriban.Syntax.ScriptVariable[]>)Alias);
             RegisterConstant("ascii", AsciiTable);
-            RegisterFunction("malloc", (Func<int, Kalk.Core.KalkByteBuffer>)Malloc);
+            RegisterFunction("malloc", (Func<int, Kalk.Core.KalkNativeBuffer>)Malloc);
             RegisterFunction("keys", (Func<object, System.Collections.IEnumerable>)Keys);
             RegisterFunction("guid", (Func<string>)Guid);
             RegisterFunction("size", (Func<object, int>)Size);
@@ -162,11 +162,13 @@ namespace Kalk.Core
             RegisterFunction("utf16", (Func<object, object>)GetUtf16);
             RegisterFunction("utf32", (Func<object, object>)GetUtf32);
             RegisterFunction("bitcast", (Func<object, object, object>)Bitcast);
-            RegisterFunction("asbytes", (Func<object, Kalk.Core.KalkByteBuffer>)AsBytes);
+            RegisterFunction("asbytes", (Func<object, Kalk.Core.KalkNativeBuffer>)AsBytes);
             RegisterFunction("insert_at", (Func<object, int, object, object>)InsertAt);
             RegisterFunction("remove_at", (Func<object, int, object>)RemoveAt);
             RegisterFunction("contains", (Func<object, object, bool>)Contains);
             RegisterFunction("replace", (Func<object, object, object, object>)Replace);
+            RegisterFunction("slice", (Func<object, int, int?, object>)Slice);
+            RegisterFunction("bytebuffer", (Func<object, Kalk.Core.KalkNativeBuffer>)ByteBuffer);
             RegisterFunction("lines", (Func<string, Scriban.Runtime.ScriptRange>)Lines);
             RegisterFunction("parse_csv", (Func<string, bool, Scriban.Runtime.ScriptRange>)ParseCsv);
             RegisterFunction("to", (Func<Kalk.Core.KalkExpression, Kalk.Core.KalkExpression, Kalk.Core.KalkExpression>)ConvertTo);
@@ -419,6 +421,18 @@ namespace Kalk.Core
             }
             {
                 var descriptor = Descriptors["replace"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["slice"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["bytebuffer"];
                 descriptor.Category = "Misc Functions";
                 descriptor.Description = @"";
                 descriptor.IsCommand = false;

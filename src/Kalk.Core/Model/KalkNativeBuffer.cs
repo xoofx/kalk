@@ -1,38 +1,36 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using Scriban;
 using Scriban.Helpers;
 using Scriban.Parsing;
+using Scriban.Runtime;
 using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public class KalkByteBuffer : IList<byte>, IList, IScriptCustomBinaryOperation, IScriptCustomTypeInfo, IKalkSpannable
+    [DebuggerDisplay("Count={Count}")]
+    public unsafe class KalkNativeBuffer : IList<byte>, IList, IScriptCustomBinaryOperation, IScriptCustomTypeInfo, IKalkSpannable, IFormattable
     {
-        private readonly byte[] _buffer;
+        private readonly SharedBuffer _buffer;
         private readonly int _offset;
         private readonly int _length;
-        private GCHandle _lock;
         
-        public KalkByteBuffer(int size)
+        public KalkNativeBuffer(int size)
         {
             if (size < 0) throw new ArgumentOutOfRangeException(nameof(size));
-            _buffer = new byte[size];
+            _buffer = new SharedBuffer(size);
             _offset = 0;
             _length = size;
         }
 
-        public KalkByteBuffer(byte[] buffer)
-        {
-            _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
-            _offset = 0;
-            _length = buffer.Length;
-        }
-
-        private  KalkByteBuffer(byte[] buffer, int offset, int length)
+        private  KalkNativeBuffer(SharedBuffer buffer, int offset, int length)
         {
             _buffer = buffer;
             _offset = offset;
@@ -41,45 +39,33 @@ namespace Kalk.Core
 
         public string TypeName => "buffer";
 
-        public IntPtr Lock()
+        public IntPtr GetPointer()
         {
-            if (!_lock.IsAllocated)
-            {
-                _lock = GCHandle.Alloc(_buffer, GCHandleType.Pinned);
-            }
-            
-            return IntPtr.Add(_lock.AddrOfPinnedObject(), _offset);
+            return new IntPtr(_buffer.Buffer + _offset);
         }
 
-        public void Unlock()
+        public KalkNativeBuffer(IEnumerable<byte> buffer)
         {
-            if (_lock.IsAllocated)
-            {
-                _lock.Free();
-                _lock = default;
-            }
-        }
-        
-        public KalkByteBuffer(IEnumerable<byte> buffer)
-        {
-            _buffer = new List<byte>(buffer).ToArray();
+            var array = new List<byte>(buffer).ToArray(); ;
+            _buffer = new SharedBuffer(array.Length);
+            array.CopyTo(_buffer.AsSpan());
             _offset = 0;
             _length = _buffer.Length;
         }
 
-        public KalkByteBuffer Slice(int index)
+        public KalkNativeBuffer Slice(int index)
         {
             AssertIndex(index);
             return Slice(index, _length - index);
         }
         
-        public KalkByteBuffer Slice(int index, int length)
+        public KalkNativeBuffer Slice(int index, int length)
         {
             AssertIndex(index);
             if (length < 0) throw new ArgumentOutOfRangeException(nameof(length));
             if ((uint)(length + index) > (uint)_length) throw new ArgumentOutOfRangeException($"End of slice {index + length - 1} is out of range ({_length}).");
 
-            return new KalkByteBuffer(_buffer, _offset + index, length);
+            return new KalkNativeBuffer(_buffer, _offset + index, length);
         }
         
         public IEnumerator<byte> GetEnumerator()
@@ -104,7 +90,7 @@ namespace Kalk.Core
 
         public void Clear()
         {
-            Array.Clear(_buffer, _offset, _length);
+            AsSpan().Clear();
         }
 
         bool IList.Contains(object? value)  => throw new NotImplementedException();
@@ -122,7 +108,7 @@ namespace Kalk.Core
 
         public void CopyTo(byte[] array, int arrayIndex)
         {
-            _buffer.AsSpan(_offset, _length).CopyTo(new Span<byte>(array, arrayIndex, array.Length - arrayIndex));
+            AsSpan().CopyTo(new Span<byte>(array, arrayIndex, array.Length - arrayIndex));
         }
 
         public bool Remove(byte item) => throw new NotSupportedException("Cannot remove from a fixed buffer");
@@ -137,11 +123,11 @@ namespace Kalk.Core
 
         public int Count => _length;
         
-        bool ICollection.IsSynchronized => _buffer.IsSynchronized;
+        bool ICollection.IsSynchronized => false;
 
-        object ICollection.SyncRoot => _buffer.SyncRoot;
+        object ICollection.SyncRoot => null;
 
-        public bool IsReadOnly => _buffer.IsReadOnly;
+        public bool IsReadOnly => false;
         
         object? IList.this[int index]
         {
@@ -166,7 +152,7 @@ namespace Kalk.Core
 
         public int IndexOf(byte item)
         {
-            return Array.IndexOf(_buffer, item, _offset, _length) - _offset;
+            return AsSpan().IndexOf(item);
         }
 
         public void Insert(int index, byte item) => throw new NotSupportedException("Cannot add to a fixed buffer");
@@ -264,11 +250,11 @@ namespace Kalk.Core
             switch (op)
             {
                 case ScriptBinaryOperator.BinaryOr:
-                    result = new KalkByteBuffer(leftArray.Union(rightArray));
+                    result = new KalkNativeBuffer(leftArray.Union(rightArray));
                     return true;
 
                 case ScriptBinaryOperator.BinaryAnd:
-                    result = new KalkByteBuffer(leftArray.Intersect(rightArray));
+                    result = new KalkNativeBuffer(leftArray.Intersect(rightArray));
                     return true;
 
                 case ScriptBinaryOperator.Add:
@@ -297,7 +283,7 @@ namespace Kalk.Core
                     var array = leftArray ?? rightArray;
                     if (intModifier == 0)
                     {
-                        result = new KalkByteBuffer(0);
+                        result = new KalkNativeBuffer(0);
                         return true;
                     }
 
@@ -307,7 +293,7 @@ namespace Kalk.Core
                         newArray.AddRange(array);
                     }
 
-                    result = new KalkByteBuffer(newArray);
+                    result = new KalkNativeBuffer(newArray);
                     return true;
                 }
 
@@ -325,7 +311,7 @@ namespace Kalk.Core
                         newArray.Add(array[i]);
                     }
 
-                    result = new KalkByteBuffer(newArray);
+                    result = new KalkNativeBuffer(newArray);
                     return true;
                 }
 
@@ -344,7 +330,7 @@ namespace Kalk.Core
                         }
                     }
 
-                    result = new KalkByteBuffer(newArray);
+                    result = new KalkNativeBuffer(newArray);
                     return true;
                 }
             }
@@ -402,7 +388,70 @@ namespace Kalk.Core
 
         public Span<byte> AsSpan()
         {
-            return new Span<byte>(_buffer, _offset, _length);
+            return new Span<byte>(_buffer.Buffer + _offset, _length);
+        }
+
+        public override string ToString()
+        {
+            return ToString(null, null);
+        }
+
+        public string ToString(string? format, IFormatProvider? formatProvider)
+        {
+            var engine = formatProvider as KalkEngine;
+            if (engine != null)
+            {
+                var builder = new StringBuilder();
+                bool isSlice = _offset > 0 || _length != this._buffer.Length;
+                if (isSlice)
+                {
+                    builder.Append("slice(");
+                }
+                builder.Append("bytebuffer(");
+                builder.Append(engine.ObjectToString(new ScriptRange(this)));
+                builder.Append(")");
+                if (isSlice)
+                {
+                    builder.Append($", {_offset.ToString(CultureInfo.InvariantCulture)}");
+                    if (_offset + _length < _buffer.Length)
+                    {
+                        builder.Append($", {_length}");
+                    }
+                    builder.Append(")");
+                }
+                return builder.ToString();
+            }
+            return base.ToString();
+        }
+
+        private sealed class SharedBuffer
+        {
+            private const int AlignmentInBytes = 64; // 512-bits
+            private readonly byte* _bufferUnaligned;
+            
+            public SharedBuffer(int length)
+            {
+                // We allocate enough space before and after the buffer to manage overflow
+                var allocatedSize = length + AlignmentInBytes * 2;
+                _bufferUnaligned = (byte*)Marshal.AllocHGlobal(allocatedSize);
+                Unsafe.InitBlockUnaligned(_bufferUnaligned, 0, (uint)allocatedSize);
+                if (_bufferUnaligned == null) throw new OutOfMemoryException($"Cannot allocate a buffer of {length} bytes.");
+                Buffer = (byte*) ((long) (_bufferUnaligned + AlignmentInBytes - 1) & ~(long) (AlignmentInBytes - 1)); 
+                Length = length;
+            }
+
+            ~SharedBuffer()
+            {
+                Marshal.FreeHGlobal((IntPtr)_bufferUnaligned);
+            }
+
+            public readonly byte* Buffer;
+            
+            public readonly int Length;
+
+            public ref byte this[int index] => ref Buffer[index];
+            
+            public Span<byte> AsSpan() => new Span<byte>(Buffer, Length);
         }
     }
 }

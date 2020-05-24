@@ -47,6 +47,8 @@ namespace Kalk.CodeGen
             
             public string RealType { get; set; }
             
+            public string GenericCompatibleRealType { get; set; }
+
             public string BaseNativeType { get; set; }
             
             public string NativeType { get; set; }
@@ -78,6 +80,10 @@ namespace Kalk.CodeGen
             
             public string ReturnType { get; set; }
             
+            public string RealReturnType { get; set; }
+
+            public string GenericCompatibleRealReturnType { get; set; }
+            
             public List<IntrinsicParameter> Parameters { get; } 
             
             public bool HasPointerArguments { get; set; }
@@ -107,6 +113,41 @@ namespace Kalk.CodeGen
             "SSE4.2",
             "AVX",
             "AVX2",
+        };
+
+        /// <summary>
+        /// Instructions requiring alignment (via parameter mem_addr)
+        /// </summary>
+        private static readonly Dictionary<string, int> RequiredAlignments = new Dictionary<string, int>()
+        {
+            {"mm_load_ps", 16},
+            {"mm_loadr_ps", 16},
+            {"mm_stream_ps", 16},
+            {"mm_store1_ps", 16},
+            {"mm_store_ps1", 16},
+            {"mm_store_ps", 16},
+            {"mm_storer_ps", 16},
+            {"mm_load_si128", 16},
+            {"mm_store_si128", 16},
+            {"mm_stream_si128", 16},
+            {"mm_load_pd", 16},
+            {"mm_loadr_pd", 16},
+            {"mm_stream_pd", 16},
+            {"mm_store1_pd", 16},
+            {"mm_store_pd1", 16},
+            {"mm_store_pd", 16},
+            {"mm_storer_pd", 16},
+            {"mm_stream_load_si128", 16},
+            {"mm256_load_pd", 32},
+            {"mm256_store_pd", 32},
+            {"mm256_load_ps", 32},
+            {"mm256_store_ps", 32},
+            {"mm256_load_si256", 32},
+            {"mm256_store_si256", 32},
+            {"mm256_stream_si256", 32},
+            {"mm256_stream_pd", 32},
+            {"mm256_stream_ps", 32},
+            {"mm256_stream_load_si256", 32},
         };
        
         private static List<ModuleToGenerate> FindIntrinsics(Compilation compilation)
@@ -140,16 +181,43 @@ namespace Kalk.CodeGen
                 typeof(System.Runtime.Intrinsics.X86.Bmi2.X64),
             })
             {
+                var x86Sse = compilation.GetTypeByMetadataName(type.FullName);
                 foreach(var method in type.GetMethods(BindingFlags.Static | BindingFlags.Public))
                 {
                     if (method.GetParameters().Length == 0)
                     {
                         continue;
                     }
-                    
-                    var x86Sse = compilation.GetTypeByMetadataName(type.FullName);
-                    var sseMember = x86Sse.GetMembers(method.Name).OfType<IMethodSymbol>().Where(x => x.Parameters.Length == method.GetParameters().Length).FirstOrDefault();
 
+                    var reflectionParameters = method.GetParameters();
+                    IMethodSymbol sseMember = null;
+                    foreach (var matchingMember in x86Sse.GetMembers(method.Name).OfType<IMethodSymbol>().Where(x => x.Parameters.Length == method.GetParameters().Length))
+                    {
+                        sseMember = matchingMember;
+                        for (int i = 0; i < matchingMember.Parameters.Length; i++)
+                        {
+                            var reflectionParameter = reflectionParameters[i];
+                            var isReflectionPointer = reflectionParameter.ParameterType.IsPointer;
+                            var isRoslynPointer = matchingMember.Parameters[i].Type is IPointerTypeSymbol;
+                            if (isReflectionPointer != isRoslynPointer)
+                            {
+                                sseMember = null;
+                                break;
+                            }
+                        }
+
+                        if (sseMember != null)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (sseMember == null)
+                    {
+                        Console.WriteLine($"Unable to match {method}");
+                        continue;
+                    }
+                    
                     var groupName = type.FullName.Substring(type.FullName.LastIndexOf('.') + 1).Replace("+", string.Empty);
                     var docGroupName = type.Name == "X64" ? type.DeclaringType.Name : type.Name;
                     
@@ -197,7 +265,9 @@ namespace Kalk.CodeGen
                         Console.WriteLine($"Unable to find intrinsic doc for: {rawIntrinsicName}");
                     }
 
-                    desc.ReturnType = method.ReturnType.IsConstructedGenericType ? "object" : sseMember.ReturnType.ToDisplayString();
+                    desc.RealReturnType = sseMember.ReturnType.ToDisplayString();
+                    desc.ReturnType = method.ReturnType.IsConstructedGenericType ? "object" : desc.RealReturnType;
+                    desc.GenericCompatibleRealReturnType = method.ReturnType.IsPointer ? "IntPtr" : desc.RealReturnType;
                     
                     (desc.BaseNativeReturnType, desc.NativeReturnType) = GetBaseTypeAndType(sseMember.ReturnType);
 
@@ -212,6 +282,7 @@ namespace Kalk.CodeGen
                         var parameterType = method.GetParameters()[i].ParameterType;
                         intrinsicParameter.Type =  parameterType.IsConstructedGenericType || parameterType.IsPointer ? "object" : parameter.Type.ToDisplayString();
                         intrinsicParameter.RealType = parameter.Type.ToDisplayString();
+                        intrinsicParameter.GenericCompatibleRealType = parameterType.IsPointer ? "IntPtr" : intrinsicParameter.RealType;
                         if (parameterType.IsPointer)
                         {
                             desc.HasPointerArguments = true;
@@ -232,6 +303,9 @@ namespace Kalk.CodeGen
                     }
 
                     bool isAction = method.ReturnType == typeof(void);
+                    desc.IsAction = isAction;
+                    desc.IsFunc = !desc.IsAction;
+                    
                     methodDeclaration.Append(isAction ? $") => ProcessAction<" : $") => ({desc.ReturnType})ProcessFunc<");
 
                     var castBuilder = new StringBuilder(isAction ? "Action<" : "Func<");
@@ -255,14 +329,22 @@ namespace Kalk.CodeGen
                             castBuilder.Append(", ");                        
                         }
                         
-                        methodDeclaration.Append($"{desc.BaseNativeReturnType}, {desc.NativeReturnType}>(");
-                        castBuilder.Append($"{desc.ReturnType}>");
+                        methodDeclaration.Append($"{desc.BaseNativeReturnType}, {desc.NativeReturnType}");
+                        castBuilder.Append($"{desc.ReturnType}");
                     }
+                    methodDeclaration.Append($">(");
+                    castBuilder.Append($">");
+                    
+                    RequiredAlignments.TryGetValue(desc.Name, out int memAlign);
                     
                     for (int i = 0; i < desc.Parameters.Count; i++)
                     {
                         var parameter = desc.Parameters[i];
                         methodDeclaration.Append($"{parameter.Name}, ");
+                        if (memAlign > 0 && parameter.Name == "mem_addr")
+                        {
+                            methodDeclaration.Append($"{memAlign}, ");
+                        }
                     }
 
                     var finalSSEMethod = $"{sseMember.ContainingType.ToDisplayString()}.{sseMember.Name}";
@@ -285,14 +367,14 @@ namespace Kalk.CodeGen
                             {
                                 castBuilder.Append(", ");
                             }
-                            castBuilder.Append($"{parameter.Type}");
+                            castBuilder.Append($"{parameter.GenericCompatibleRealType}");
                         }
 
                         if (!isAction)
                         {
-                            castBuilder.Append(", ");
-                            castBuilder.Append($"{desc.ReturnType}>");
+                            castBuilder.Append($", {desc.GenericCompatibleRealReturnType}");
                         }
+                        castBuilder.Append(">");
 
                         methodDeclaration.Append($"private unsafe readonly static {castBuilder} {sseMethodName} = new {castBuilder}((");
                         for (int i = 0; i < desc.Parameters.Count; i++)

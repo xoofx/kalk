@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -24,10 +25,10 @@ namespace Kalk.Core
         public KalkAsciiTable AsciiTable { get; }
 
         [KalkDoc("malloc", CategoryMisc)]
-        public KalkByteBuffer Malloc(int size)
+        public KalkNativeBuffer Malloc(int size)
         {
             if (size < 0) throw new ArgumentOutOfRangeException(nameof(size), "Size must be >= 0");
-            return new KalkByteBuffer(size);
+            return new KalkNativeBuffer(size);
         }
         
         [KalkDoc("keys", CategoryMisc)]
@@ -196,7 +197,7 @@ namespace Kalk.Core
         }
 
         [KalkDoc("asbytes", CategoryMisc)]
-        public KalkByteBuffer AsBytes(object value)
+        public KalkNativeBuffer AsBytes(object value)
         {
             if (value == null) return null;
 
@@ -359,6 +360,88 @@ namespace Kalk.Core
             return composite.Transform(this, CurrentSpan, input => ReplaceImpl(input, match, @by));
         }
 
+        [KalkDoc("slice", CategoryMisc)]
+        public object Slice(object value, int index, int? length = null)
+        {
+            if (value is string str)
+            {
+                return StringFunctions.Slice(str, index, length);
+            }
+
+            var list = value as IList;
+            if (list == null)
+            {
+                if (value is IEnumerable it)
+                {
+                    list = new ScriptRange(it);
+                }
+                else
+                {
+                    throw new ArgumentException("The argument is not a string, bytebuffer or array.");
+                }
+            }
+            
+            if (index < 0)
+            {
+                index = index + list.Count;
+            }
+
+            length ??= list.Count;
+
+            if (index < 0)
+            {
+                if (index + length <= 0)
+                {
+                    return new KalkNativeBuffer(0);
+                }
+                length = length + index;
+                index = 0;
+            }
+
+            if (index + length > list.Count)
+            {
+                length = list.Count - index;
+            }
+            
+            if (value is KalkNativeBuffer nativeBuffer)
+            {
+                return nativeBuffer.Slice(index, length.Value);
+            }
+
+            return new ScriptRange(list.Cast<object>().Skip(index).Take(length.Value));
+        }
+
+        [KalkDoc("bytebuffer", CategoryMisc)]
+        public KalkNativeBuffer ByteBuffer(object array)
+        {
+            if (array == null) new KalkNativeBuffer(0);
+
+            if (array is KalkNativeBuffer nativeBuffer)
+            {
+                return nativeBuffer;
+            }
+            
+            if (array is IEnumerable it)
+            {
+                var buffer = new List<byte>();
+                foreach (var item in it)
+                {
+                    var b = ToObject<byte>(0, item);
+                    buffer.Add(b);
+                }
+                var result = new KalkNativeBuffer(buffer.Count);
+                var span = result.AsSpan();
+                for (int i = 0; i < buffer.Count; i++)
+                {
+                    span[i] = buffer[i];
+                }
+
+                return result;
+            }
+            
+            throw new ArgumentException($"Invalid argument type {GetTypeName(array)}. Must be an array of byte or an existing bytebuffer.", nameof(array));
+        }
+
         [KalkDoc("lines", CategoryMisc)]
         public ScriptRange Lines(string text)
         {
@@ -495,11 +578,11 @@ namespace Kalk.Core
             return builder.ToString();
         }
 
-        private static KalkByteBuffer AsBytes<T>(int byteCount, in T element)
+        private static KalkNativeBuffer AsBytes<T>(int byteCount, in T element)
         {
-            var bytes = new byte[byteCount];
-            Unsafe.CopyBlockUnaligned(ref bytes[0], ref Unsafe.As<T, byte>(ref Unsafe.AsRef(element)), (uint)byteCount);
-            return new KalkByteBuffer(bytes);
+            var buffer = new KalkNativeBuffer(byteCount);
+            Unsafe.CopyBlockUnaligned(ref buffer.AsSpan()[0], ref Unsafe.As<T, byte>(ref Unsafe.AsRef(element)), (uint)byteCount);
+            return buffer;
         }
     }
 }
