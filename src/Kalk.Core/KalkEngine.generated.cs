@@ -152,6 +152,7 @@ namespace Kalk.Core
             RegisterAction("shortcut", (Action<Scriban.Syntax.ScriptVariable, Scriban.Syntax.ScriptExpression[]>)Shortcut);
             RegisterAction("alias", (Action<Scriban.Syntax.ScriptVariable, Scriban.Syntax.ScriptVariable[]>)Alias);
             RegisterConstant("ascii", AsciiTable);
+            RegisterFunction("malloc", (Func<int, Kalk.Core.KalkByteBuffer>)Malloc);
             RegisterFunction("keys", (Func<object, System.Collections.IEnumerable>)Keys);
             RegisterFunction("guid", (Func<string>)Guid);
             RegisterFunction("size", (Func<object, int>)Size);
@@ -161,7 +162,7 @@ namespace Kalk.Core
             RegisterFunction("utf16", (Func<object, object>)GetUtf16);
             RegisterFunction("utf32", (Func<object, object>)GetUtf32);
             RegisterFunction("bitcast", (Func<object, object, object>)Bitcast);
-            RegisterFunction("asbytes", (Func<object, object>)AsBytes);
+            RegisterFunction("asbytes", (Func<object, Kalk.Core.KalkByteBuffer>)AsBytes);
             RegisterFunction("insert_at", (Func<object, int, object, object>)InsertAt);
             RegisterFunction("remove_at", (Func<object, int, object>)RemoveAt);
             RegisterFunction("contains", (Func<object, object, bool>)Contains);
@@ -330,6 +331,12 @@ namespace Kalk.Core
                 var descriptor = Descriptors["ascii"];
                 descriptor.Category = "Misc Functions";
                 descriptor.Description = @"Returns the ascii table or print";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["malloc"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
                 descriptor.IsCommand = false;
             }
             {

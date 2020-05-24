@@ -22,6 +22,13 @@ namespace Kalk.Core
         /// </summary>
         [KalkDoc("ascii", CategoryMisc)]
         public KalkAsciiTable AsciiTable { get; }
+
+        [KalkDoc("malloc", CategoryMisc)]
+        public KalkByteBuffer Malloc(int size)
+        {
+            if (size < 0) throw new ArgumentOutOfRangeException(nameof(size), "Size must be >= 0");
+            return new KalkByteBuffer(size);
+        }
         
         [KalkDoc("keys", CategoryMisc)]
         public IEnumerable Keys(object obj)
@@ -149,7 +156,7 @@ namespace Kalk.Core
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
 
-            var bytes = (byte[])((ScriptRange)AsBytes(value))?.Values;
+            var bytes = AsBytes(value);
             if (bytes == null) return null;
 
             switch (type)
@@ -180,7 +187,7 @@ namespace Kalk.Core
 
                 case KalkValue kalkValue:
                     var dest = (KalkValue)kalkValue.Clone(true);
-                    dest.BitCastFrom(bytes);
+                    dest.BitCastFrom(bytes.AsSpan());
                     return dest;
 
                 default:
@@ -189,7 +196,7 @@ namespace Kalk.Core
         }
 
         [KalkDoc("asbytes", CategoryMisc)]
-        public object AsBytes(object value)
+        public KalkByteBuffer AsBytes(object value)
         {
             if (value == null) return null;
 
@@ -231,9 +238,9 @@ namespace Kalk.Core
                     var array = bigInt.ToByteArray();
                     return AsBytes(array.Length, in array[0]);
                 }
-                case KalkValue kalkValue:
+                case IKalkSpannable spannable:
                 {
-                    var span = kalkValue.AsSpan();
+                    var span = spannable.AsSpan();
                     return AsBytes(span.Length, in span[0]);
                 }
                 default:
@@ -488,11 +495,11 @@ namespace Kalk.Core
             return builder.ToString();
         }
 
-        private static ScriptRange AsBytes<T>(int byteCount, in T element)
+        private static KalkByteBuffer AsBytes<T>(int byteCount, in T element)
         {
             var bytes = new byte[byteCount];
             Unsafe.CopyBlockUnaligned(ref bytes[0], ref Unsafe.As<T, byte>(ref Unsafe.AsRef(element)), (uint)byteCount);
-            return new ScriptRange(bytes);
+            return new KalkByteBuffer(bytes);
         }
     }
 }

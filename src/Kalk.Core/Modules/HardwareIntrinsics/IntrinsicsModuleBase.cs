@@ -4,57 +4,16 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
+using Scriban.Syntax;
 
 namespace Kalk.Core.Modules.HardwareIntrinsics
 {
-    public partial class SseIntrinsicsModule : IntrinsicsModuleBase
-    {
-        public SseIntrinsicsModule() => RegisterFunctionsAuto();
-    } 
-    
-    public partial class Sse2IntrinsicsModule : IntrinsicsModuleBase
-    {
-        public Sse2IntrinsicsModule() => RegisterFunctionsAuto();
-    }
-
-    public partial class Sse3IntrinsicsModule : IntrinsicsModuleBase
-    {
-        public Sse3IntrinsicsModule() => RegisterFunctionsAuto();
-    }
-
-    public partial class Sse41IntrinsicsModule : IntrinsicsModuleBase
-    {
-        public Sse41IntrinsicsModule() => RegisterFunctionsAuto();
-    }
-
-    public partial class Sse42IntrinsicsModule : IntrinsicsModuleBase
-    {
-        public Sse42IntrinsicsModule() => RegisterFunctionsAuto();
-    }
-
-    public partial class Ssse3IntrinsicsModule : IntrinsicsModuleBase
-    {
-        public Ssse3IntrinsicsModule() => RegisterFunctionsAuto();
-    }
-    public partial class AvxIntrinsicsModule : IntrinsicsModuleBase
-    {
-        public AvxIntrinsicsModule() => RegisterFunctionsAuto();
-    }
-    public partial class Avx2IntrinsicsModule : IntrinsicsModuleBase
-    {
-        public Avx2IntrinsicsModule() => RegisterFunctionsAuto();
-    }
-
-    public partial class AesIntrinsicsModule : IntrinsicsModuleBase
-    {
-        public AesIntrinsicsModule() => RegisterFunctionsAuto();
-    }
-    
-    public partial class IntrinsicsModuleBase : KalkModuleWithFunctions
+   
+    public abstract class IntrinsicsModuleBase : KalkModuleWithFunctions
     {
         public const string CategoryIntrinsics = "Vector Hardware Intrinsics";
         
-        public IntrinsicsModuleBase()
+        protected IntrinsicsModuleBase(string name) : base(name)
         {
         }
 
@@ -93,6 +52,19 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
         
         private T ToArg<TBase, T>(int argIndex, object value) where T : unmanaged where TBase: unmanaged
         {
+            if (typeof(T) == typeof(IntPtr))
+            {
+                var buffer = value as KalkByteBuffer;
+                if (buffer == null)
+                {
+                    throw new ScriptArgumentException(argIndex, "Expecting a byte buffer. Use malloc(size) to pass data to this argument.");
+                }
+
+                var ptr = buffer.Lock();
+                var rawPtr = Unsafe.As<IntPtr, T>(ref ptr);
+                return rawPtr;
+            }
+            
             var targetSize = Unsafe.SizeOf<T>();
             var baseElementSize = Unsafe.SizeOf<TBase>();
             var dimension = targetSize / baseElementSize;

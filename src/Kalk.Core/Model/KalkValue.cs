@@ -9,7 +9,13 @@ using Scriban.Runtime;
 
 namespace Kalk.Core
 {
-    public abstract class KalkValue : KalkObject, IScriptTransformable
+    public interface IKalkSpannable
+    {
+        Span<byte> AsSpan();
+    }
+    
+    
+    public abstract class KalkValue : KalkObject, IScriptTransformable, IKalkSpannable
     {
         public abstract Type ElementType { get; }
         

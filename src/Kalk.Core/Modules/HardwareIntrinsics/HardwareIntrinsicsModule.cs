@@ -16,9 +16,17 @@ namespace Kalk.Core.Modules
             {
                 DynamicRegister<SseIntrinsicsModule>();
             }
+            if (System.Runtime.Intrinsics.X86.Sse.X64.IsSupported)
+            {
+                DynamicRegister<SseX64IntrinsicsModule>();
+            }
             if (System.Runtime.Intrinsics.X86.Sse2.IsSupported)
             {
                 DynamicRegister<Sse2IntrinsicsModule>();
+            }
+            if (System.Runtime.Intrinsics.X86.Sse2.X64.IsSupported)
+            {
+                DynamicRegister<Sse2X64IntrinsicsModule>();
             }
             if (System.Runtime.Intrinsics.X86.Sse3.IsSupported)
             {
@@ -28,9 +36,17 @@ namespace Kalk.Core.Modules
             {
                 DynamicRegister<Sse41IntrinsicsModule>();
             }
+            if (System.Runtime.Intrinsics.X86.Sse41.X64.IsSupported)
+            {
+                DynamicRegister<Sse41X64IntrinsicsModule>();
+            }
             if (System.Runtime.Intrinsics.X86.Sse42.IsSupported)
             {
                 DynamicRegister<Sse42IntrinsicsModule>();
+            }
+            if (System.Runtime.Intrinsics.X86.Sse42.X64.IsSupported)
+            {
+                DynamicRegister<Sse42X64IntrinsicsModule>();
             }
             if (System.Runtime.Intrinsics.X86.Avx.IsSupported)
             {
@@ -43,6 +59,22 @@ namespace Kalk.Core.Modules
             if (System.Runtime.Intrinsics.X86.Aes.IsSupported)
             {
                 DynamicRegister<AesIntrinsicsModule>();
+            }
+            if (System.Runtime.Intrinsics.X86.Bmi1.IsSupported)
+            {
+                DynamicRegister<Bmi1IntrinsicsModule>();
+            }
+            if (System.Runtime.Intrinsics.X86.Bmi1.X64.IsSupported)
+            {
+                DynamicRegister<Bmi1X64IntrinsicsModule>();
+            }
+            if (System.Runtime.Intrinsics.X86.Bmi2.IsSupported)
+            {
+                DynamicRegister<Bmi2IntrinsicsModule>();
+            }
+            if (System.Runtime.Intrinsics.X86.Bmi2.X64.IsSupported)
+            {
+                DynamicRegister<Bmi2X64IntrinsicsModule>();
             }
         }
 

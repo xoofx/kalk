@@ -5,10 +5,10 @@ namespace Kalk.Core.Helpers
 {
     internal static class UnsafeHelpers
     {
-        public static void BitCast<T>(ref T dest, int size, byte[] src)
+        public static void BitCast<T>(ref T dest, int size, KalkByteBuffer src)
         {
-            var maxSize = Math.Min(size, src.Length);
-            Unsafe.CopyBlockUnaligned(ref Unsafe.As<T, byte>(ref dest), ref src[0], (uint)maxSize);
+            var maxSize = Math.Min(size, src.Count);
+            Unsafe.CopyBlockUnaligned(ref Unsafe.As<T, byte>(ref dest), ref src.AsSpan()[0], (uint)maxSize);
         }
     }
 }

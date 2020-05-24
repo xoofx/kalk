@@ -105,7 +105,7 @@ namespace Kalk.CodeGen
        
         private static List<ModuleToGenerate> FindIntrinsics(Compilation compilation)
         {
-            var regexName = new Regex(@"^\w+\s+(_\w+)");
+            var regexName = new Regex(@"^\s*\w+\s+(_\w+)");
             int count = 0;
             
             var intelDoc = XDocument.Load("intel-intrinsics-data-latest.xml");
@@ -115,26 +115,40 @@ namespace Kalk.CodeGen
             
             foreach (var type in new Type[]
             {
+                typeof(System.Runtime.Intrinsics.X86.Sse.X64),
                 typeof(System.Runtime.Intrinsics.X86.Sse),
                 typeof(System.Runtime.Intrinsics.X86.Sse2),
+                typeof(System.Runtime.Intrinsics.X86.Sse2.X64),
                 typeof(System.Runtime.Intrinsics.X86.Sse3),
                 typeof(System.Runtime.Intrinsics.X86.Ssse3),
                 typeof(System.Runtime.Intrinsics.X86.Sse41),
+                typeof(System.Runtime.Intrinsics.X86.Sse41.X64),
                 typeof(System.Runtime.Intrinsics.X86.Sse42),
+                typeof(System.Runtime.Intrinsics.X86.Sse42.X64),
                 typeof(System.Runtime.Intrinsics.X86.Aes),
                 typeof(System.Runtime.Intrinsics.X86.Avx),
                 typeof(System.Runtime.Intrinsics.X86.Avx2),
                 typeof(System.Runtime.Intrinsics.X86.Bmi1),
+                typeof(System.Runtime.Intrinsics.X86.Bmi1.X64),
                 typeof(System.Runtime.Intrinsics.X86.Bmi2),
+                typeof(System.Runtime.Intrinsics.X86.Bmi2.X64),
             })
             {
                 foreach(var method in type.GetMethods(BindingFlags.Static | BindingFlags.Public))
                 {
-                    if (method.ReturnType.IsConstructedGenericType && method.GetParameters().All(x => x.ParameterType.IsConstructedGenericType))
+                    if (method.GetParameters().Length == 0)
                     {
-                        var x86Sse = compilation.GetTypeByMetadataName(type.Namespace + "." + type.Name);
-                        var sseMember = x86Sse.GetMembers(method.Name).OfType<IMethodSymbol>().FirstOrDefault();
+                        continue;
+                    }
+                    
+                    if (!method.ReturnType.IsPointer && method.GetParameters().All(x => !x.ParameterType.IsPointer))
+                    {
+                        var x86Sse = compilation.GetTypeByMetadataName(type.FullName);
+                        var sseMember = x86Sse.GetMembers(method.Name).OfType<IMethodSymbol>().Where(x => x.Parameters.Length == method.GetParameters().Length).FirstOrDefault();
 
+                        var groupName = type.FullName.Substring(type.FullName.LastIndexOf('.') + 1).Replace("+", string.Empty);
+                        var docGroupName = type.Name == "X64" ? type.DeclaringType.Name : type.Name;
+                        
                         var xmlDocStr = sseMember.GetDocumentationCommentXml();
                         if (string.IsNullOrEmpty(xmlDocStr)) continue;
                         
@@ -143,7 +157,8 @@ namespace Kalk.CodeGen
 
                         var summary = GetCleanedString(elements);
 
-                        var match = regexName.Match(summary);
+                        var summaryTrimmed = summary.Replace("unsigned", string.Empty);
+                        var match = regexName.Match(summaryTrimmed);
                         if (!match.Success) continue;
                         
                         var rawIntrinsicName = match.Groups[1].Value;
@@ -156,7 +171,7 @@ namespace Kalk.CodeGen
                         {
                             Name = rawIntrinsicName.TrimStart('_'),
                             Method = method,
-                            Class = type.Name,
+                            Class = groupName,
                             MethodSymbol = sseMember,
                             IsFunc = true,
                         };
@@ -173,9 +188,12 @@ namespace Kalk.CodeGen
                                 desc.Params.Add(new KalkParamDescriptor(parameter.Attribute("varname").Value, parameter.Attribute("type").Value));
                             }
                         }
+                        else
+                        {
+                            Console.WriteLine($"Unable to find intrinsic doc for: {rawIntrinsicName}");
+                        }
 
-                        bool isSupported = true;
-                        desc.ReturnType = "object";
+                        desc.ReturnType = method.ReturnType.IsConstructedGenericType ? "object" : sseMember.ReturnType.ToDisplayString();
                         
                         (desc.BaseNativeReturnType, desc.NativeReturnType) = GetBaseTypeAndType(sseMember.ReturnType);
 
@@ -184,12 +202,9 @@ namespace Kalk.CodeGen
                             var intrinsicParameter = new IntrinsicParameter();
                             var parameter = sseMember.Parameters[i];
                             intrinsicParameter.Name = i < desc.Params.Count ? desc.Params[i].Name : parameter.Name;
-                            intrinsicParameter.Type = "object";
+                            intrinsicParameter.Type = method.GetParameters()[i].ParameterType.IsConstructedGenericType ? "object" : parameter.Type.ToDisplayString();
+                            
                             (intrinsicParameter.BaseNativeType, intrinsicParameter.NativeType) = GetBaseTypeAndType(parameter.Type);
-                            if (!parameter.Type.Equals(sseMember.ReturnType))
-                            {
-                                isSupported = false;
-                            }
                             desc.Parameters.Add(intrinsicParameter);
                         }
                         
@@ -203,7 +218,7 @@ namespace Kalk.CodeGen
                             methodDeclaration.Append($"{parameter.Type} {parameter.Name}");
                         }
 
-                        methodDeclaration.Append(") => ProcessArgs<");
+                        methodDeclaration.Append($") => ({desc.ReturnType})ProcessArgs<");
                         var castBuilder = new StringBuilder("Func<");
                         for (int i = 0; i < desc.Parameters.Count; i++)
                         {
@@ -225,7 +240,7 @@ namespace Kalk.CodeGen
                         desc.Cast = $"({castBuilder})";
                         desc.MethodDeclaration = methodDeclaration.ToString();
 
-                        desc.Category = $"Vector Hardware Intrinsics / {type.Name.ToUpperInvariant()}";
+                        desc.Category = $"Vector Hardware Intrinsics / {docGroupName.ToUpperInvariant()}";
                         
                         if (existingDesc == null || desc.Parameters[0].BaseNativeType == "float")
                         {
@@ -233,12 +248,13 @@ namespace Kalk.CodeGen
                             generatedIntrinsics[intrinsicName] = desc;
                         }
                         
-                        if (isSupported)
-                        {
-                            desc.IsSupported = true;
-                        }
+                        desc.IsSupported = true;
                         
                         count++;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Intrinsic Method skipped: {method}");
                     }
                 }
             }
