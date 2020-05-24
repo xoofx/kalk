@@ -5,14 +5,17 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
 using System.Xml.Linq;
 using Kalk.Core;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.MSBuild;
 using Scriban;
 
@@ -24,20 +27,30 @@ namespace Kalk.CodeGen
         {
             public ModuleToGenerate()
             {
-                Members = new List<FuncMember>();
-                Descriptors = new List<KalkDescriptor>();
+                Members = new List<KalkGeneratedMember>();
             }
 
             public string Namespace { get; set; }
 
             public string ClassName { get; set; }
 
-            public List<FuncMember> Members { get; }
-
-            public List<KalkDescriptor> Descriptors { get; }
+            public List<KalkGeneratedMember> Members { get; }
         }
 
-        internal class FuncMember
+        public class IntrinsicParameter : KalkParamDescriptor
+        {
+            public IntrinsicParameter()
+            {
+            }
+
+            public string Type { get; set; }
+            
+            public string BaseNativeType { get; set; }
+            
+            public string NativeType { get; set; }
+        }
+
+        public class KalkGeneratedMember : KalkDescriptor
         {
             public string Name { get; set; }
 
@@ -51,6 +64,218 @@ namespace Kalk.CodeGen
 
             public string Cast { get; set; }
         }
+
+        public class KalkIntrinsic : KalkGeneratedMember
+        {
+            public KalkIntrinsic()
+            {
+                Parameters = new List<IntrinsicParameter>();
+            }
+
+            public string Class { get; set; }
+            
+            public string ReturnType { get; set; }
+            
+            public List<IntrinsicParameter> Parameters { get; } 
+            
+            public MethodInfo Method { get; set; }
+            
+            public IMethodSymbol MethodSymbol { get; set; }
+            
+            public string MethodDeclaration { get; set; }
+            
+            public string BaseNativeReturnType { get; set; }
+
+            public string NativeReturnType { get; set; }
+            
+            public bool IsSupported { get; set; }
+        }
+
+        private static readonly HashSet<string> IntrinsicsSupports = new HashSet<string>()
+        {
+            "SSE",
+            "SSE2",
+            "SSE3",
+            "SSSE3",
+            "SSE4.1",
+            "SSE4.2",
+            "AVX",
+            "AVX2",
+        };
+       
+        private static List<ModuleToGenerate> FindIntrinsics(Compilation compilation)
+        {
+            var regexName = new Regex(@"^\w+\s+(_\w+)");
+            int count = 0;
+            
+            var intelDoc = XDocument.Load("intel-intrinsics-data-latest.xml");
+            var nameToDoc = intelDoc.Descendants("intrinsic").Where(x => IntrinsicsSupports.Contains(x.Attribute("tech").Value ?? string.Empty)).ToDictionary(x => x.Attribute("name").Value, x => x);
+            
+            var generatedIntrinsics = new Dictionary<string, KalkIntrinsic>();
+            
+            foreach (var type in new Type[]
+            {
+                typeof(System.Runtime.Intrinsics.X86.Sse),
+                typeof(System.Runtime.Intrinsics.X86.Sse2),
+                typeof(System.Runtime.Intrinsics.X86.Sse3),
+                typeof(System.Runtime.Intrinsics.X86.Ssse3),
+                typeof(System.Runtime.Intrinsics.X86.Sse41),
+                typeof(System.Runtime.Intrinsics.X86.Sse42),
+                typeof(System.Runtime.Intrinsics.X86.Aes),
+                typeof(System.Runtime.Intrinsics.X86.Avx),
+                typeof(System.Runtime.Intrinsics.X86.Avx2),
+                typeof(System.Runtime.Intrinsics.X86.Bmi1),
+                typeof(System.Runtime.Intrinsics.X86.Bmi2),
+            })
+            {
+                foreach(var method in type.GetMethods(BindingFlags.Static | BindingFlags.Public))
+                {
+                    if (method.ReturnType.IsConstructedGenericType && method.GetParameters().All(x => x.ParameterType.IsConstructedGenericType))
+                    {
+                        var x86Sse = compilation.GetTypeByMetadataName(type.Namespace + "." + type.Name);
+                        var sseMember = x86Sse.GetMembers(method.Name).OfType<IMethodSymbol>().FirstOrDefault();
+
+                        var xmlDocStr = sseMember.GetDocumentationCommentXml();
+                        if (string.IsNullOrEmpty(xmlDocStr)) continue;
+                        
+                        var xmlDoc = XElement.Parse($"<root>{xmlDocStr.Trim()}</root>");
+                        var elements = xmlDoc.Elements().First();
+
+                        var summary = GetCleanedString(elements);
+
+                        var match = regexName.Match(summary);
+                        if (!match.Success) continue;
+                        
+                        var rawIntrinsicName = match.Groups[1].Value;
+
+                        var intrinsicName = rawIntrinsicName.TrimStart('_');
+
+                        generatedIntrinsics.TryGetValue(intrinsicName, out var existingDesc);
+                        
+                        var desc = new KalkIntrinsic
+                        {
+                            Name = rawIntrinsicName.TrimStart('_'),
+                            Method = method,
+                            Class = type.Name,
+                            MethodSymbol = sseMember,
+                            IsFunc = true,
+                        };
+                        desc.CSharpName = desc.Name;
+                        desc.Names.Add(desc.Name);
+                        desc.Description = summary;
+
+                        if (nameToDoc.TryGetValue(rawIntrinsicName, out var elementIntelDoc))
+                        {
+                            desc.Description = GetCleanedString(elementIntelDoc.Descendants("description").FirstOrDefault());
+
+                            foreach (var parameter in elementIntelDoc.Descendants("parameter"))
+                            {
+                                desc.Params.Add(new KalkParamDescriptor(parameter.Attribute("varname").Value, parameter.Attribute("type").Value));
+                            }
+                        }
+
+                        bool isSupported = true;
+                        desc.ReturnType = "object";
+                        
+                        (desc.BaseNativeReturnType, desc.NativeReturnType) = GetBaseTypeAndType(sseMember.ReturnType);
+
+                        for (int i = 0; i < sseMember.Parameters.Length; i++)
+                        {
+                            var intrinsicParameter = new IntrinsicParameter();
+                            var parameter = sseMember.Parameters[i];
+                            intrinsicParameter.Name = i < desc.Params.Count ? desc.Params[i].Name : parameter.Name;
+                            intrinsicParameter.Type = "object";
+                            (intrinsicParameter.BaseNativeType, intrinsicParameter.NativeType) = GetBaseTypeAndType(parameter.Type);
+                            if (!parameter.Type.Equals(sseMember.ReturnType))
+                            {
+                                isSupported = false;
+                            }
+                            desc.Parameters.Add(intrinsicParameter);
+                        }
+                        
+                        // public object mm_add_ps(object left, object right) => ProcessArgs<float, Vector128<float>, float, Vector128<float>, float, Vector128<float>>(left, right, Sse.Add);
+                        var methodDeclaration = new StringBuilder();
+                        methodDeclaration.Append($"public {desc.ReturnType} {desc.Name}(");
+                        for (int i = 0; i < desc.Parameters.Count; i++)
+                        {
+                            var parameter = desc.Parameters[i];
+                            if (i > 0) methodDeclaration.Append(", ");
+                            methodDeclaration.Append($"{parameter.Type} {parameter.Name}");
+                        }
+
+                        methodDeclaration.Append(") => ProcessArgs<");
+                        var castBuilder = new StringBuilder("Func<");
+                        for (int i = 0; i < desc.Parameters.Count; i++)
+                        {
+                            var parameter = desc.Parameters[i];
+                            methodDeclaration.Append($"{parameter.BaseNativeType}, {parameter.NativeType}, ");
+                            castBuilder.Append($"{parameter.Type}, ");
+                        }
+                        methodDeclaration.Append($"{desc.BaseNativeReturnType}, {desc.NativeReturnType}>(");
+                        castBuilder.Append($"{desc.ReturnType}>");
+                        
+                        for (int i = 0; i < desc.Parameters.Count; i++)
+                        {
+                            var parameter = desc.Parameters[i];
+                            methodDeclaration.Append($"{parameter.Name}, ");
+                        }
+
+                        methodDeclaration.Append($"{sseMember.ContainingType.ToDisplayString()}.{sseMember.Name}");
+                        methodDeclaration.Append(");");
+                        desc.Cast = $"({castBuilder})";
+                        desc.MethodDeclaration = methodDeclaration.ToString();
+
+                        if (existingDesc == null || desc.Parameters[0].BaseNativeType == "float")
+                        {
+                            desc.Description = desc.Description.Replace("[round_note]", string.Empty).Trim().Replace("\r\n", "\n").Replace("\n", " ");
+                            generatedIntrinsics[intrinsicName] = desc;
+                        }
+                        
+                        if (isSupported)
+                        {
+                            desc.IsSupported = true;
+                        }
+                        
+                        count++;
+                    }
+                }
+            }
+            
+            Console.WriteLine($"{generatedIntrinsics.Count} intrinsics");
+
+            var intrinsics = generatedIntrinsics.Values.Where(x => x.IsSupported).ToList();
+
+            var intrinsicsPerClass = intrinsics.GroupBy(x => x.Class).ToDictionary(x => x.Key, y => y.OrderBy(x => x.Name).ToList());
+
+            var modules = new List<ModuleToGenerate>();
+            foreach (var keyPair in intrinsicsPerClass.OrderBy(x => x.Key))
+            {
+                var module = new ModuleToGenerate();
+                module.Namespace = "Kalk.Core.Modules.HardwareIntrinsics";
+                module.ClassName = $"{keyPair.Key}IntrinsicsModule";
+                module.Members.AddRange(keyPair.Value);
+                modules.Add(module);
+            }
+            
+            return modules;
+        }
+
+        private static (string, string) GetBaseTypeAndType(ITypeSymbol type)
+        {
+            var typeStr = type.ToDisplayString();
+            string baseType;
+            var nativeType = type as INamedTypeSymbol;
+            if (nativeType != null && nativeType.TypeArguments.Length > 0)
+            {
+                baseType = nativeType.TypeArguments[0].ToDisplayString();
+            }
+            else
+            {
+                baseType = typeStr;
+            }
+            return (baseType, typeStr);
+        }
+        
         
         static async Task Main(string[] args)
         {
@@ -75,7 +300,9 @@ namespace Kalk.CodeGen
             Console.WriteLine($"Using {typeof(HttpClient).Assembly.FullName}");
             Console.WriteLine($"Using {typeof(BigInteger).Assembly.FullName}");
             Console.WriteLine($"Using {typeof(HttpStatusCode).Assembly.FullName}");
+            Console.WriteLine($"Using {typeof(System.Runtime.Intrinsics.Vector128).Assembly.Location}");
 
+            
             var project = solution.Projects.First(x => x.Name == "Kalk.Core");
             //var scriban = solution.Projects.First(x => x.Name == "Scriban");
             //project = project.AddMetadataReferences(scriban.MetadataReferences);
@@ -101,6 +328,14 @@ namespace Kalk.CodeGen
                 project = project.AddMetadataReference(MetadataReference.CreateFromFile(refPackage));
             }
 
+            // Hack re-add System.Runtime.Intrinsics with doc
+            var docProvider = XmlDocumentationProvider.CreateFromFile("System.Runtime.Intrinsics.xml");
+            var intrinsicsAssembly = MetadataReference.CreateFromFile(typeof(System.Runtime.Intrinsics.X86.Sse).Assembly.Location, documentation: docProvider);
+            var toRemove = project.MetadataReferences.FirstOrDefault(x => x.Display.Contains("System.Runtime.Intrinsics"));
+            project = project.RemoveMetadataReference(toRemove);
+            project = project.AddMetadataReference(intrinsicsAssembly);
+            
+            // Compile the project
             var compilation = await project.GetCompilationAsync();
 
             var errors = compilation.GetDiagnostics().Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error).ToList();
@@ -117,7 +352,9 @@ namespace Kalk.CodeGen
                 Environment.Exit(1);
                 return;
             }
-            
+
+            var intrinsicModules = FindIntrinsics(compilation);
+
             //var kalkEngine = compilation.GetTypeByMetadataName("Kalk.Core.KalkEngine");
 
             var mapNameToModule = new Dictionary<string, ModuleToGenerate>();
@@ -147,68 +384,61 @@ namespace Kalk.CodeGen
                         mapNameToModule.Add(className, moduleToGenerate);
                     }
 
-                    FuncMember funcMember = null;
-                    if (member is IMethodSymbol methodSymbol)
-                    {
-                        funcMember = new FuncMember()
-                        {
-                            CSharpName = methodSymbol.Name
-                        };
-                        var builder = new StringBuilder();
-                        funcMember.IsAction = methodSymbol.ReturnsVoid;
-                        funcMember.IsFunc = !funcMember.IsAction;
-                        builder.Append(funcMember.IsAction ? "Action" : "Func");
-
-                        if (methodSymbol.Parameters.Length > 0 || funcMember.IsFunc)
-                        {
-                            builder.Append("<");
-                        }
-
-                        for (var i = 0; i < methodSymbol.Parameters.Length; i++)
-                        {
-                            var parameter = methodSymbol.Parameters[i];
-                            if (i > 0) builder.Append(", ");
-                            builder.Append(GetTypeName(parameter.Type));
-                        }
-
-                        if (funcMember.IsFunc)
-                        {
-                            if (methodSymbol.Parameters.Length > 0)
-                            {
-                                builder.Append(", ");
-                            }
-                            builder.Append(GetTypeName(methodSymbol.ReturnType));
-                        }
-
-                        if (methodSymbol.Parameters.Length > 0 || funcMember.IsFunc)
-                        {
-                            builder.Append(">");
-                        }
-
-                        funcMember.Cast = $"({builder.ToString()})";
-                    }
-                    else if (member is IPropertySymbol || member is IFieldSymbol)
-                    {
-                        funcMember = new FuncMember { CSharpName = member.Name, IsConst = true };
-                    }
-
-                    if (funcMember != null)
-                    {
-                        funcMember.Name = name;
-                        moduleToGenerate.Members.Add(funcMember);
-                    }
-
-                    var xmlStr = member.GetDocumentationCommentXml();
-
                     var method = member as IMethodSymbol;
-
-                    var descriptor = new KalkDescriptor
+                    var desc = new KalkGeneratedMember()
                     {
                         Category = category,
                         IsCommand = method != null && method.ReturnsVoid
                     };
-                    moduleToGenerate.Descriptors.Add(descriptor);
-                    descriptor.Names.Add(name);
+                    desc.Name = name;
+                    desc.Names.Add(name);
+                    
+                    if (method != null)
+                    {
+                        desc.CSharpName = method.Name;
+                        
+                        var builder = new StringBuilder();
+                        desc.IsAction = method.ReturnsVoid;
+                        desc.IsFunc = !desc.IsAction;
+                        builder.Append(desc.IsAction ? "Action" : "Func");
+
+                        if (method.Parameters.Length > 0 || desc.IsFunc)
+                        {
+                            builder.Append("<");
+                        }
+
+                        for (var i = 0; i < method.Parameters.Length; i++)
+                        {
+                            var parameter = method.Parameters[i];
+                            if (i > 0) builder.Append(", ");
+                            builder.Append(GetTypeName(parameter.Type));
+                        }
+
+                        if (desc.IsFunc)
+                        {
+                            if (method.Parameters.Length > 0)
+                            {
+                                builder.Append(", ");
+                            }
+                            builder.Append(GetTypeName(method.ReturnType));
+                        }
+
+                        if (method.Parameters.Length > 0 || desc.IsFunc)
+                        {
+                            builder.Append(">");
+                        }
+
+                        desc.Cast = $"({builder.ToString()})";
+                    }
+                    else if (member is IPropertySymbol || member is IFieldSymbol)
+                    {
+                        desc.CSharpName = member.Name;
+                        desc.IsConst = true;
+                    }
+
+                    moduleToGenerate.Members.Add(desc);
+                    
+                    var xmlStr = member.GetDocumentationCommentXml();
 
                     if (!string.IsNullOrEmpty(xmlStr))
                     {
@@ -217,10 +447,10 @@ namespace Kalk.CodeGen
 
                         foreach (var element in elements)
                         {
-                            var text = Escape(GetCleanedString(element).Trim());
+                            var text = GetCleanedString(element).Trim();
                             if (element.Name == "summary")
                             {
-                                descriptor.Description = text;
+                                desc.Description = text;
                             }
                             else if (element.Name == "param")
                             {
@@ -238,24 +468,21 @@ namespace Kalk.CodeGen
                                         isOptional = parameterSymbol.IsOptional;
                                     }
 
-                                    descriptor.Params.Add(new KalkParamDescriptor(element.Attribute("name").Value, text) {IsOptional = isOptional});
+                                    desc.Params.Add(new KalkParamDescriptor(element.Attribute("name").Value, text) {IsOptional = isOptional});
                                 }
                             }
                             else if (element.Name == "returns")
                             {
-                                descriptor.Returns = text;
+                                desc.Returns = text;
                             }
                             else if (element.Name == "remarks")
                             {
-                                descriptor.Remarks = text;
+                                desc.Remarks = text;
                             }
                         }
                     }
                 }
             }
-
-
-            string Escape(string text) => text.Replace("\"", "\"\"");
 
             var modules = mapNameToModule.Values.OrderBy(x => x.ClassName).ToList();
             
@@ -269,13 +496,33 @@ namespace Kalk.CodeGen
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
-{{~ for module in modules ~}}
 
+{{~ for module in intrinsics ~}}
 namespace {{ module.Namespace }}
 {
     public partial class {{ module.ClassName }}
     {
+        {{~ for member in module.Members ~}}
+        /// <summary>
+        /// {{ member.Description }}
+        /// </summary>
+        {{ member.MethodDeclaration }}
+
+        {{~ end ~}}
+    }
+}
+{{~ end ~}}
+
+{{~ for module in modules ~}}
+namespace {{ module.Namespace }}
+{
+    public partial class {{ module.ClassName }}
+    {
+        {{~ if module.ClassName == 'KalkEngine' ~}}
         protected void RegisterFunctionsAuto()
+        {{~ else ~}}
+        protected override void RegisterFunctionsAuto()
+        {{~ end ~}}
         {
             {{~ for member in module.Members ~}}
                 {{~ if member.IsConst ~}}
@@ -291,14 +538,14 @@ namespace {{ module.Namespace }}
 
         private void RegisterDocumentationAuto()
         {
-            {{~ for item in module.Descriptors ~}}
+            {{~ for item in module.Members ~}}
             {
                 var descriptor = Descriptors[""{{ item.Names[0] }}""];
                 descriptor.Category = ""{{ item.Category }}"";
-                descriptor.Description = @""{{ item.Description }}"";
+                descriptor.Description = @""{{ item.Description | string.replace '""' '""""' }}"";
                 descriptor.IsCommand = {{ item.IsCommand }};
             {{~ for param in item.Params ~}}
-                descriptor.Params.Add(new KalkParamDescriptor(""{{ param.Name }}"", @""{{ param.Description }}"")  { IsOptional = {{ param.IsOptional }} });
+                descriptor.Params.Add(new KalkParamDescriptor(""{{ param.Name }}"", @""{{ param.Description | string.replace '""' '""""' }}"")  { IsOptional = {{ param.IsOptional }} });
             {{~ end ~}}
                 {{~ if item.Returns ~}}
                 descriptor.Returns = @""{{ item.Returns }}"";
@@ -311,10 +558,13 @@ namespace {{ module.Namespace }}
 {{~ end ~}}
 ";
             var template = Template.Parse(templateStr);
-
-            var result = template.Render(new {modules = modules}, x => x.Name);
             
+            var result = template.Render(new {modules = modules, intrinsics = new List<ModuleToGenerate>()}, x => x.Name);
             File.WriteAllText(Path.Combine(srcFolder, "Kalk.Core/KalkEngine.generated.cs"), result);
+            
+            result = template.Render(new {modules = intrinsicModules, intrinsics = intrinsicModules}, x => x.Name);
+            File.WriteAllText(Path.Combine(srcFolder, "Kalk.Core/Modules/HardwareIntrinsics/Intrinsics.generated.cs"), result);
+            
             //Console.WriteLine(result);
         }
 

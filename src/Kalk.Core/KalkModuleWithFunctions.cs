@@ -23,12 +23,21 @@ namespace Kalk.Core
             // Feed the engine with our new builtins
             Engine.Builtins.Import(Content);
 
+            DisplayImport();
+        }
+
+        protected virtual void DisplayImport()
+        {
             if (!IsBuiltin && Content.Count > 0)
             {
                 Engine.WriteHighlightLine($"# {Content.Count} functions successfully imported from module `{Name}`.");
             }
         }
 
+        protected virtual void RegisterFunctionsAuto()
+        {
+        }
+        
         protected void RegisterConstant(string name, object value, string category = null)
         {
             RegisterVariable(name, value, category);

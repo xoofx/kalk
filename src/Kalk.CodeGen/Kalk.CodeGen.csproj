@@ -27,4 +27,15 @@
     <ProjectReference Include="..\..\..\lunet\scriban\src\Scriban\Scriban.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="System.Runtime.Intrinsics.xml" />
+    <Content Include="System.Runtime.Intrinsics.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Remove="intel-intrinsics-data-latest.xml" />
+    <Content Include="intel-intrinsics-data-latest.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

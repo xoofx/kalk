@@ -8,6 +8,7 @@
   <ItemGroup>
     <None Remove="core.kalk" />
     <None Remove="Modules\standard_units.kalk" />
+    <None Remove="Modules\Vectors\colorspaces.kalk" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,6 +16,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="core.kalk">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Vectors\colorspaces.kalk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

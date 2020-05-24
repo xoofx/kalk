@@ -69,6 +69,7 @@ namespace Kalk.Core
             Descriptors = new Dictionary<string, KalkDescriptor>();
             EnableRelaxedMemberAccess = false;
             _modules = new Dictionary<Type, KalkModule>();
+            TryConverters = new List<TryToObjectDelegate>();
             ErrorForStatementFunctionAsExpression = true;
             StrictVariables = true;
             UseScientific = true;
@@ -176,6 +177,9 @@ namespace Kalk.Core
         public bool HasExit { get; private set; }
 
         public List<string> HistoryList { get; }
+
+        public List<TryToObjectDelegate> TryConverters { get; }
+
 
         private static readonly Regex MatchHistoryRegex = new Regex(@"^\s*!(\d+)\s*");
 
@@ -342,5 +346,24 @@ namespace Kalk.Core
                 throw new ScriptArgumentException(argIndex, ex.Message);
             }
         }
+
+        public override object ToObject(SourceSpan span, object value, Type destinationType)
+        {
+            var converters = TryConverters;
+            if (converters.Count > 0)
+            {
+                foreach (var converter in converters)
+                {
+                    if (converter(span, value, destinationType, out var newValue))
+                    {
+                        return newValue;
+                    }
+                }
+            }
+
+            return base.ToObject(span, value, destinationType);
+        }
     }
+
+    public delegate bool TryToObjectDelegate(SourceSpan span, object value, Type destinationType, out object newValue);
 }

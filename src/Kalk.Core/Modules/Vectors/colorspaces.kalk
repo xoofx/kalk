@@ -1,0 +1,153 @@
+# From http://www.chilliant.com/rgb2hsv.html
+
+# Based on work by Sam Hocevar and Emil Persson
+func HUEtoRGB(x)
+  $r = abs(x * 6 - 3) - 1;
+  $g = 2 - abs(x * 6 - 2);
+  $b = 2 - abs(x * 6 - 4);
+  ret saturate(float3($r, $g, $b));
+end
+
+func RGBtoHCV(x)
+    x = x.xyz;
+    Epsilon = 1e-10f
+    if x.g < x.b; $p =float4(x.bg, -1.0f, 2.0f/3.0f); else; $p = float4(x.gb, 0.0f, -1.0f/3.0f); end;
+    if x.r < $p.x; $q = float4($p.xyw, x.r); else; $q = float4(x.r, $p.yzx); end;
+    $c = $q.x - min($q.w, $q.y);
+    $h = abs(($q.w - $q.y) / (6.0f * $c +  Epsilon) + $q.z);
+    ret float3($h, $c, $q.x);
+end
+
+func HSVtoRGB(x)
+  x = x.xyz;
+  $rgb = HUEtoRGB(x.x);
+  ret (($rgb - 1) * x.y + 1) * x.z;
+end
+
+func HSLtoRGB(x)
+    x = x.xyz;
+    $rgb = HUEtoRGB(x.x);
+    $c = (1 - abs(2 * x.z - 1)) * x.y;
+    ret ($rgb - 0.5) * $c + x.z;
+end
+
+func HCYtoRGB(x)
+  x = x.xyz;
+  # The weights of RGB contributions to luminance.
+  # Should sum to unity.
+  $HCYwts = float3(0.299f, 0.587f, 0.114f);
+  $rgb = HUEtoRGB(x.x);
+  $z = dot($rgb, $HCYwts);
+  if x.z < $z
+      x.y = x.y * x.z / $z;
+  else if $z < 1
+      x.y = x.y * (1 - x.z) / (1 - $z);
+  end 
+  ret ($rgb - $z) * x.y + x.z;
+end
+
+func HCLtoRGB(x)
+  x = x.xyz;
+  HCLgamma = 3;
+  HCLy0 = 100;
+  HCLmaxL = 0.530454533953517; # == exp(HCLgamma / HCLy0) - 0.5
+  $rgb = float3;
+  if x.z != 0
+    H = x.x;
+    C = x.y;
+    L = x.z * HCLmaxL;
+    Q = exp((1 - C / (2 * L)) * (HCLgamma / HCLy0));
+    U = (2 * L - C) / (2 * Q - 1);
+    V = C / Q;
+    A = (H + min(frac(2 * H) / 4, frac(-2 * H) / 8)) * pi * 2;
+    H = H * 6;
+    if (H <= 0.999)
+      T = tan(A);
+      $rgb.r = 1;
+      $rgb.g = T / (1 + T);
+    else if (H <= 1.001)
+      $rgb.r = 1;
+      $rgb.g = 1;
+    else if (H <= 2)
+      T = tan(A);
+      $rgb.r = (1 + T) / T;
+      $rgb.g = 1;
+    else if (H <= 3)
+      T = tan(A);
+      $rgb.g = 1;
+      $rgb.b = 1 + T;
+    else if (H <= 3.999)
+      T = tan(A);
+      $rgb.g = 1 / (1 + T);
+      $rgb.b = 1;
+    else if (H <= 4.001)
+      $rgb.g = 0;
+      $rgb.b = 1;
+    else if (H <= 5)
+      T = tan(A);
+      $rgb.r = -1 / T;
+      $rgb.b = 1;
+    else
+      T = tan(A);
+      $rgb.r = 1;
+      $rgb.b = -T;
+    end
+    $rgb = $rgb * V + U;
+  end
+  ret $rgb;
+end
+
+func RGBtoHSV(x)
+  x = x.xyz;
+  Epsilon = 1e-10f
+  $Hcv = RGBtoHCV(x);
+  $s = $Hcv.y / ($Hcv.z + Epsilon);
+  ret float3($Hcv.x, $s, $Hcv.z);
+end
+
+func RGBtoHSL(x)
+  x = x.xyz;
+  Epsilon = 1e-10f
+  $hcv = RGBtoHCV(x);
+  $l = $hcv.z - $hcv.y * 0.5;
+  $s = $hcv.y / (1 - abs($l * 2 - 1) + Epsilon);
+  ret float3($hcv.x, $s, $l);
+end
+
+func RGBtoHCY(x)
+  x = x.xyz;
+  # Corrected by David Schaeffer
+  $HCYwts = float3(0.299f, 0.587f, 0.114f);
+  Epsilon = 1e-10f
+  $hcv = RGBtoHCV(x);
+  $y = dot(x, $HCYwts);
+  $z = dot(HUEtoRGB($hcv.x), $HCYwts);
+  if ($y < $z)
+    $hcv.y = $hcv.y * $z / (Epsilon + $y);
+  else
+    $hcv.y = $hcv.y * (1 - $z) / (Epsilon + 1 - $y);
+  end
+  ret float3($hcv.x, $hcv.y, $y);
+end
+
+func RGBtoHCL(x)
+  x = x.xyz;
+  HCLgamma = 3;
+  HCLy0 = 100;
+  HCLmaxL = 0.530454533953517; # == exp(HCLgamma / HCLy0) - 0.5
+  $hcl = float3
+  H = 0;
+  U = min(x.r, min(x.g, x.b));
+  V = max(x.r, max(x.g, x.b));
+  Q = HCLgamma / HCLy0;
+  $hcl.y = V - U;
+  if ($hcl.y != 0)
+    H = atan2(x.g - x.b, x.r - x.g) / pi;
+    Q = Q * U / V;
+  end
+  Q = exp(Q);
+  $hcl.x = frac(H / 2 - min(frac(H), frac(-H)) / 6);
+  $hcl.y = $hcl.y * Q;
+  $hcl.z = lerp(-U, V, Q) / (HCLmaxL * 2);
+  ret $hcl;
+end

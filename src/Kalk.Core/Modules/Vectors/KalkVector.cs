@@ -76,7 +76,6 @@ namespace Kalk.Core
         {
             _values = list.ToArray();
         }
-
         public KalkVector(T v1, T v2) => _values = new T[2] { v1, v2 };
         public KalkVector(T v1, T v2, T v3) => _values = new T[3] { v1, v2, v3 };
         public KalkVector(T v1, T v2, T v3, T v4) => _values = new T[4] { v1, v2, v3, v4 };
