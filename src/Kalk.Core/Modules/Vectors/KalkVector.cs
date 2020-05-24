@@ -213,6 +213,44 @@ namespace Kalk.Core
                         case 4: return "bool4";
                         case 8: return "bool8";
                         case 16: return "bool16";
+                        case 32: return "bool32";
+                        case 64: return "bool64";
+                    }
+                }
+                else if (typeof(T) == typeof(byte))
+                {
+                    switch (Length)
+                    {
+                        case 16: return "byte16";
+                        case 32: return "byte32";
+                        case 64: return "byte64";
+                    }
+                }
+                else if (typeof(T) == typeof(sbyte))
+                {
+                    switch (Length)
+                    {
+                        case 16: return "sbyte16";
+                        case 32: return "sbyte32";
+                        case 64: return "sbyte64";
+                    }
+                }
+                else if (typeof(T) == typeof(ushort))
+                {
+                    switch (Length)
+                    {
+                        case 8: return "ushort8";
+                        case 16: return "ushort16";
+                        case 32: return "ushort32";
+                    }
+                }
+                else if (typeof(T) == typeof(short))
+                {
+                    switch (Length)
+                    {
+                        case 8: return "short8";
+                        case 16: return "short16";
+                        case 32: return "short32";
                     }
                 }
                 else if (typeof(T) == typeof(int))
@@ -224,6 +262,17 @@ namespace Kalk.Core
                         case 4: return "int4";
                         case 8: return "int8";
                         case 16: return "int16";
+                    }
+                }
+                else if (typeof(T) == typeof(uint))
+                {
+                    switch (Length)
+                    {
+                        case 2: return "uint2";
+                        case 3: return "uint3";
+                        case 4: return "uint4";
+                        case 8: return "uint8";
+                        case 16: return "uint16";
                     }
                 }
                 else if (typeof(T) == typeof(float))
@@ -247,6 +296,26 @@ namespace Kalk.Core
                         case 8: return "double8";
                     }
                 }
+                else if (typeof(T) == typeof(long))
+                {
+                    switch (Length)
+                    {
+                        case 2: return "long2";
+                        case 3: return "long3";
+                        case 4: return "long4";
+                        case 8: return "long8";
+                    }
+                }
+                else if (typeof(T) == typeof(ulong))
+                {
+                    switch (Length)
+                    {
+                        case 2: return "ulong2";
+                        case 3: return "ulong3";
+                        case 4: return "ulong4";
+                        case 8: return "ulong8";
+                    }
+                }                
 
                 return "vector";
             }
@@ -291,7 +360,14 @@ namespace Kalk.Core
 
         public override bool CanTransform(Type transformType)
         {
-            return typeof(T) == typeof(int) && (typeof(long) == transformType || typeof(int) == transformType) ||
+            return (typeof(T) == typeof(int) || 
+                    typeof(T) == typeof(byte) ||
+                    typeof(T) == typeof(sbyte) ||
+                    typeof(T) == typeof(short) ||
+                    typeof(T) == typeof(ushort) ||
+                    typeof(T) == typeof(uint) ||
+                    typeof(T) == typeof(long) ||
+                    typeof(T) == typeof(ulong)) && (typeof(long) == transformType || typeof(int) == transformType) ||
                    (typeof(T) == typeof(float) && (typeof(double) == transformType || typeof(float) == transformType) ||
                     typeof(T) == typeof(double) && typeof(double) == transformType);
         }

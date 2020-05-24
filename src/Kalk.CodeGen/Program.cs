@@ -225,6 +225,8 @@ namespace Kalk.CodeGen
                         desc.Cast = $"({castBuilder})";
                         desc.MethodDeclaration = methodDeclaration.ToString();
 
+                        desc.Category = $"Vector Hardware Intrinsics / {type.Name.ToUpperInvariant()}";
+                        
                         if (existingDesc == null || desc.Parameters[0].BaseNativeType == "float")
                         {
                             desc.Description = desc.Description.Replace("[round_note]", string.Empty).Trim().Replace("\r\n", "\n").Replace("\n", " ");

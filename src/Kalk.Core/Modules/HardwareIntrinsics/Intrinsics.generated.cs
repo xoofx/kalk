@@ -1007,31 +1007,31 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
         {
             {
                 var descriptor = Descriptors["mm_aesdec_si128"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AES";
                 descriptor.Description = @"__m128i _mm_aesdec_si128 (__m128i a, __m128i RoundKey) AESDEC xmm, xmm/m128";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mm_aesdeclast_si128"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AES";
                 descriptor.Description = @"__m128i _mm_aesdeclast_si128 (__m128i a, __m128i RoundKey) AESDECLAST xmm, xmm/m128";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mm_aesenc_si128"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AES";
                 descriptor.Description = @"__m128i _mm_aesenc_si128 (__m128i a, __m128i RoundKey) AESENC xmm, xmm/m128";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mm_aesenclast_si128"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AES";
                 descriptor.Description = @"__m128i _mm_aesenclast_si128 (__m128i a, __m128i RoundKey) AESENCLAST xmm, xmm/m128";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mm_aesimc_si128"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AES";
                 descriptor.Description = @"__m128i _mm_aesimc_si128 (__m128i a) AESIMC xmm, xmm/m128";
                 descriptor.IsCommand = false;
             }
@@ -1075,7 +1075,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
         {
             {
                 var descriptor = Descriptors["mm256_add_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Add packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1083,7 +1083,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_addsub_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Alternatively add and subtract packed single-precision (32-bit) floating-point elements in ""a"" to/from packed elements in ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1091,7 +1091,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_and_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Compute the bitwise AND of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1099,7 +1099,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_andnot_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Compute the bitwise NOT of packed single-precision (32-bit) floating-point elements in ""a"" and then AND with ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1107,7 +1107,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_blendv_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Blend packed single-precision (32-bit) floating-point elements from ""a"" and ""b"" using ""mask"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1116,14 +1116,14 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_ceil_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" up to an integer value, and store the results as packed single-precision floating-point elements in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_div_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Divide packed single-precision (32-bit) floating-point elements in ""a"" by packed elements in ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1131,14 +1131,14 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_floor_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" down to an integer value, and store the results as packed single-precision floating-point elements in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_hadd_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in ""a"" and ""b"", and pack the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1146,7 +1146,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_hsub_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in ""a"" and ""b"", and pack the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1154,7 +1154,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_max_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store packed maximum values in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1162,7 +1162,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_min_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store packed minimum values in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1170,21 +1170,21 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_movehdup_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Duplicate odd-indexed single-precision (32-bit) floating-point elements from ""a"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_moveldup_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Duplicate even-indexed single-precision (32-bit) floating-point elements from ""a"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_mul_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Multiply packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1192,7 +1192,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_or_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Compute the bitwise OR of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1200,14 +1200,14 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_rcp_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Compute the approximate reciprocal of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_round_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1215,21 +1215,21 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_rsqrt_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Compute the approximate reciprocal square root of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_sqrt_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Compute the square root of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_sub_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Subtract packed single-precision (32-bit) floating-point elements in ""b"" from packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1237,7 +1237,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_unpackhi_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Unpack and interleave single-precision (32-bit) floating-point elements from the high half of each 128-bit lane in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1245,7 +1245,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_unpacklo_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Unpack and interleave single-precision (32-bit) floating-point elements from the low half of each 128-bit lane in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1253,7 +1253,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_xor_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX";
                 descriptor.Description = @"Compute the bitwise XOR of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
@@ -1302,14 +1302,14 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
         {
             {
                 var descriptor = Descriptors["mm_broadcastb_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Broadcast the low packed 8-bit integer from ""a"" to all elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_add_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Add packed 8-bit integers in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1317,7 +1317,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_adds_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Add packed 8-bit integers in ""a"" and ""b"" using saturation, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1325,7 +1325,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_and_si256"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Compute the bitwise AND of 256 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1333,7 +1333,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_andnot_si256"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Compute the bitwise NOT of 256 bits (representing integer data) in ""a"" and then AND with ""b"", and store the result in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1341,7 +1341,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_avg_epu8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Average packed unsigned 8-bit integers in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1349,7 +1349,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_blendv_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Blend packed 8-bit integers from ""a"" and ""b"" using ""mask"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1358,7 +1358,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_cmpeq_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for equality, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1366,7 +1366,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_cmpgt_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for greater-than, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1374,7 +1374,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_hadd_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Horizontally add adjacent pairs of 16-bit integers in ""a"" and ""b"", and pack the signed 16-bit results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1382,7 +1382,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_hadds_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Horizontally add adjacent pairs of 16-bit integers in ""a"" and ""b"" using saturation, and pack the signed 16-bit results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1390,7 +1390,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_hsub_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Horizontally subtract adjacent pairs of 16-bit integers in ""a"" and ""b"", and pack the signed 16-bit results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1398,7 +1398,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_hsubs_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Horizontally subtract adjacent pairs of 16-bit integers in ""a"" and ""b"" using saturation, and pack the signed 16-bit results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1406,7 +1406,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_max_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"", and store packed maximum values in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1414,7 +1414,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_min_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"", and store packed minimum values in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1422,7 +1422,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_mulhi_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Multiply the packed 16-bit integers in ""a"" and ""b"", producing intermediate 32-bit integers, and store the high 16 bits of the intermediate integers in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1430,7 +1430,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_mulhrs_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Multiply packed 16-bit integers in ""a"" and ""b"", producing intermediate signed 32-bit integers. Truncate each intermediate integer to the 18 most significant bits, round by adding 1, and store bits [16:1] to ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1438,7 +1438,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_mullo_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Multiply the packed 16-bit integers in ""a"" and ""b"", producing intermediate 32-bit integers, and store the low 16 bits of the intermediate integers in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1446,7 +1446,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_or_si256"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Compute the bitwise OR of 256 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1454,7 +1454,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_permutevar8x32_epi32"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Shuffle 32-bit integers in ""a"" across lanes using the corresponding index in ""idx"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1462,7 +1462,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_shuffle_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Shuffle 8-bit integers in ""a"" within 128-bit lanes according to shuffle control mask in the corresponding 8-bit element of ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1470,7 +1470,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_sign_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Negate packed 8-bit integers in ""a"" when the corresponding signed 8-bit integer in ""b"" is negative, and store the results in ""dst"". Element in ""dst"" are zeroed out when the corresponding element in ""b"" is zero.";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1478,7 +1478,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_sub_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Subtract packed 8-bit integers in ""b"" from packed 8-bit integers in ""a"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1486,7 +1486,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_subs_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Subtract packed 8-bit integers in ""b"" from packed 8-bit integers in ""a"" using saturation, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1494,7 +1494,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_unpackhi_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Unpack and interleave 8-bit integers from the high half of each 128-bit lane in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1502,7 +1502,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_unpacklo_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Unpack and interleave 8-bit integers from the low half of each 128-bit lane in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1510,7 +1510,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm256_xor_si256"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / AVX2";
                 descriptor.Description = @"Compute the bitwise XOR of 256 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -1583,7 +1583,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
         {
             {
                 var descriptor = Descriptors["mm_add_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Add packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1591,7 +1591,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_add_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Add the lower single-precision (32-bit) floating-point element in ""a"" and ""b"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1599,7 +1599,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_and_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compute the bitwise AND of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1607,7 +1607,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_andnot_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compute the bitwise NOT of packed single-precision (32-bit) floating-point elements in ""a"" and then AND with ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1615,7 +1615,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpeq_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for equality, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1623,7 +1623,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpeq_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for equality, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1631,7 +1631,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpge_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for greater-than-or-equal, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1639,7 +1639,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpge_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for greater-than-or-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1647,7 +1647,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpgt_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for greater-than, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1655,7 +1655,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpgt_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for greater-than, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1663,7 +1663,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmple_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for less-than-or-equal, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1671,7 +1671,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmple_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for less-than-or-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1679,7 +1679,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmplt_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for less-than, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1687,7 +1687,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmplt_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for less-than, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1695,7 +1695,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpneq_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-equal, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1703,7 +1703,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpneq_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1711,7 +1711,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpnge_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-greater-than-or-equal, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1719,7 +1719,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpnge_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-greater-than-or-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1727,7 +1727,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpngt_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-greater-than, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1735,7 +1735,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpngt_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-greater-than, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1743,7 +1743,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpnle_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-less-than-or-equal, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1751,7 +1751,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpnle_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-less-than-or-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1759,7 +1759,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpnlt_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-less-than, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1767,7 +1767,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpnlt_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-less-than, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1775,7 +1775,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpord_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" to see if neither is NaN, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1783,7 +1783,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpord_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" to see if neither is NaN, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1791,7 +1791,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpunord_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" to see if either is NaN, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1799,7 +1799,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpunord_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" to see if either is NaN, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1807,7 +1807,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_div_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Divide packed single-precision (32-bit) floating-point elements in ""a"" by packed elements in ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1815,7 +1815,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_div_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Divide the lower single-precision (32-bit) floating-point element in ""a"" by the lower single-precision (32-bit) floating-point element in ""b"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1823,7 +1823,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_max_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store packed maximum values in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1831,7 +1831,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_max_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"", store the maximum value in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1839,7 +1839,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_min_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store packed minimum values in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1847,7 +1847,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_min_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"", store the minimum value in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1855,7 +1855,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_move_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Move the lower single-precision (32-bit) floating-point element from ""b"" to the lower element of ""dst"", and copy the upper 3 elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1863,7 +1863,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_movehl_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Move the upper 2 single-precision (32-bit) floating-point elements from ""b"" to the lower 2 elements of ""dst"", and copy the upper 2 elements from ""a"" to the upper 2 elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1871,7 +1871,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_movelh_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Move the lower 2 single-precision (32-bit) floating-point elements from ""b"" to the upper 2 elements of ""dst"", and copy the lower 2 elements from ""a"" to the lower 2 elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1879,7 +1879,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_mul_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Multiply packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1887,7 +1887,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_mul_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Multiply the lower single-precision (32-bit) floating-point element in ""a"" and ""b"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1895,7 +1895,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_or_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compute the bitwise OR of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1903,49 +1903,49 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_rcp_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compute the approximate reciprocal of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_rcp_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compute the approximate reciprocal of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_rsqrt_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compute the approximate reciprocal square root of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_rsqrt_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compute the approximate reciprocal square root of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_sqrt_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compute the square root of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_sqrt_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compute the square root of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_sub_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Subtract packed single-precision (32-bit) floating-point elements in ""b"" from packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1953,7 +1953,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_sub_ss"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Subtract the lower single-precision (32-bit) floating-point element in ""b"" from the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1961,7 +1961,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_unpackhi_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Unpack and interleave single-precision (32-bit) floating-point elements from the high half ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1969,7 +1969,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_unpacklo_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Unpack and interleave single-precision (32-bit) floating-point elements from the low half of ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -1977,7 +1977,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_xor_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE";
                 descriptor.Description = @"Compute the bitwise XOR of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -2051,7 +2051,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
         {
             {
                 var descriptor = Descriptors["mm_add_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Add packed 8-bit integers in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2059,7 +2059,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_add_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Add the lower double-precision (64-bit) floating-point element in ""a"" and ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2067,7 +2067,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_adds_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Add packed 8-bit integers in ""a"" and ""b"" using saturation, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2075,7 +2075,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_and_si128"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compute the bitwise AND of 128 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2083,7 +2083,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_andnot_si128"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compute the bitwise NOT of 128 bits (representing integer data) in ""a"" and then AND with ""b"", and store the result in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2091,7 +2091,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_avg_epu8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Average packed unsigned 8-bit integers in ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2099,7 +2099,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpeq_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for equality, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2107,7 +2107,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpeq_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for equality, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2115,7 +2115,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpge_pd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for greater-than-or-equal, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2123,7 +2123,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpge_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for greater-than-or-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2131,7 +2131,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpgt_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for greater-than, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2139,7 +2139,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpgt_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for greater-than, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2147,7 +2147,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmple_pd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for less-than-or-equal, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2155,7 +2155,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmple_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for less-than-or-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2163,7 +2163,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmplt_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for less-than, and store the results in ""dst"". Note: This intrinsic emits the pcmpgtb instruction with the order of the operands switched.";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2171,7 +2171,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmplt_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for less-than, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2179,7 +2179,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpneq_pd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-equal, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2187,7 +2187,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpneq_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2195,7 +2195,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpnge_pd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-greater-than-or-equal, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2203,7 +2203,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpnge_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-greater-than-or-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2211,7 +2211,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpngt_pd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-greater-than, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2219,7 +2219,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpngt_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-greater-than, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2227,7 +2227,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpnle_pd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-less-than-or-equal, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2235,7 +2235,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpnle_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-less-than-or-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2243,7 +2243,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpnlt_pd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-less-than, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2251,7 +2251,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpnlt_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-less-than, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2259,7 +2259,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpord_pd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" to see if neither is NaN, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2267,7 +2267,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpord_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" to see if neither is NaN, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2275,7 +2275,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpunord_pd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" to see if either is NaN, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2283,7 +2283,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpunord_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" to see if either is NaN, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2291,7 +2291,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_div_pd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Divide packed double-precision (64-bit) floating-point elements in ""a"" by packed elements in ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2299,7 +2299,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_div_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Divide the lower double-precision (64-bit) floating-point element in ""a"" by the lower double-precision (64-bit) floating-point element in ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2307,7 +2307,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_max_epu8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed unsigned 8-bit integers in ""a"" and ""b"", and store packed maximum values in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2315,7 +2315,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_max_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"", store the maximum value in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2323,7 +2323,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_min_epu8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare packed unsigned 8-bit integers in ""a"" and ""b"", and store packed minimum values in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2331,7 +2331,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_min_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"", store the minimum value in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2339,7 +2339,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_move_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Move the lower double-precision (64-bit) floating-point element from ""b"" to the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2347,7 +2347,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_mul_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Multiply the lower double-precision (64-bit) floating-point element in ""a"" and ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2355,7 +2355,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_mulhi_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Multiply the packed 16-bit integers in ""a"" and ""b"", producing intermediate 32-bit integers, and store the high 16 bits of the intermediate integers in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2363,7 +2363,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_mullo_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Multiply the packed 16-bit integers in ""a"" and ""b"", producing intermediate 32-bit integers, and store the low 16 bits of the intermediate integers in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2371,7 +2371,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_or_si128"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compute the bitwise OR of 128 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2379,7 +2379,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_sll_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Shift packed 16-bit integers in ""a"" left by ""count"" while shifting in zeros, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2387,14 +2387,14 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_sqrt_pd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compute the square root of packed double-precision (64-bit) floating-point elements in ""a"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_sqrt_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compute the square root of the lower double-precision (64-bit) floating-point element in ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2402,7 +2402,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_sra_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Shift packed 16-bit integers in ""a"" right by ""count"" while shifting in sign bits, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2410,7 +2410,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_srl_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Shift packed 16-bit integers in ""a"" right by ""count"" while shifting in zeros, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2418,7 +2418,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_sub_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Subtract packed 8-bit integers in ""b"" from packed 8-bit integers in ""a"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2426,7 +2426,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_sub_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Subtract the lower double-precision (64-bit) floating-point element in ""b"" from the lower double-precision (64-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2434,7 +2434,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_subs_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Subtract packed 8-bit integers in ""b"" from packed 8-bit integers in ""a"" using saturation, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2442,7 +2442,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_unpackhi_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Unpack and interleave 8-bit integers from the high half of ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2450,7 +2450,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_unpacklo_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Unpack and interleave 8-bit integers from the low half of ""a"" and ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2458,7 +2458,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_xor_si128"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE2";
                 descriptor.Description = @"Compute the bitwise XOR of 128 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2486,7 +2486,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
         {
             {
                 var descriptor = Descriptors["mm_addsub_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE3";
                 descriptor.Description = @"Alternatively add and subtract packed single-precision (32-bit) floating-point elements in ""a"" to/from packed elements in ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -2494,7 +2494,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_hadd_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE3";
                 descriptor.Description = @"Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in ""a"" and ""b"", and pack the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -2502,7 +2502,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_hsub_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE3";
                 descriptor.Description = @"Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in ""a"" and ""b"", and pack the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -2510,21 +2510,21 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_movedup_pd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE3";
                 descriptor.Description = @"Duplicate the low double-precision (64-bit) floating-point element from ""a"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_movehdup_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE3";
                 descriptor.Description = @"Duplicate odd-indexed single-precision (32-bit) floating-point elements from ""a"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_moveldup_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE3";
                 descriptor.Description = @"Duplicate even-indexed single-precision (32-bit) floating-point elements from ""a"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -2557,7 +2557,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
         {
             {
                 var descriptor = Descriptors["mm_blendv_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE41";
                 descriptor.Description = @"Blend packed 8-bit integers from ""a"" and ""b"" using ""mask"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2566,14 +2566,14 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_ceil_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE41";
                 descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" up to an integer value, and store the results as packed single-precision floating-point elements in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_ceil_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE41";
                 descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" up to an integer value, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2581,7 +2581,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_cmpeq_epi64"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE41";
                 descriptor.Description = @"Compare packed 64-bit integers in ""a"" and ""b"" for equality, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2589,14 +2589,14 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_floor_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE41";
                 descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" down to an integer value, and store the results as packed single-precision floating-point elements in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_floor_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE41";
                 descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" down to an integer value, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2604,7 +2604,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_max_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE41";
                 descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"", and store packed maximum values in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2612,7 +2612,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_min_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE41";
                 descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"", and store packed minimum values in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2620,14 +2620,14 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_minpos_epu16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE41";
                 descriptor.Description = @"Horizontally compute the minimum amongst the packed unsigned 16-bit integers in ""a"", store the minimum and index in ""dst"", and zero the remaining bits in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_mullo_epi32"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE41";
                 descriptor.Description = @"Multiply the packed 32-bit integers in ""a"" and ""b"", producing intermediate 64-bit integers, and store the low 32 bits of the intermediate integers in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2635,7 +2635,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_round_ps"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE41";
                 descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -2643,7 +2643,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_round_sd"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE41";
                 descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -2667,7 +2667,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
         {
             {
                 var descriptor = Descriptors["mm_cmpgt_epi64"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSE42";
                 descriptor.Description = @"Compare packed 64-bit integers in ""a"" and ""b"" for greater-than, and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2696,7 +2696,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
         {
             {
                 var descriptor = Descriptors["mm_hadd_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
                 descriptor.Description = @"Horizontally add adjacent pairs of 16-bit integers in ""a"" and ""b"", and pack the signed 16-bit results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2704,7 +2704,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_hadds_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
                 descriptor.Description = @"Horizontally add adjacent pairs of 16-bit integers in ""a"" and ""b"" using saturation, and pack the signed 16-bit results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2712,7 +2712,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_hsub_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
                 descriptor.Description = @"Horizontally subtract adjacent pairs of 16-bit integers in ""a"" and ""b"", and pack the signed 16-bit results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2720,7 +2720,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_hsubs_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
                 descriptor.Description = @"Horizontally subtract adjacent pairs of 16-bit integers in ""a"" and ""b"" using saturation, and pack the signed 16-bit results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2728,7 +2728,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_mulhrs_epi16"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
                 descriptor.Description = @"Multiply packed 16-bit integers in ""a"" and ""b"", producing intermediate signed 32-bit integers. Truncate each intermediate integer to the 18 most significant bits, round by adding 1, and store bits [16:1] to ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2736,7 +2736,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_shuffle_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
                 descriptor.Description = @"Shuffle packed 8-bit integers in ""a"" according to shuffle control mask in the corresponding 8-bit element of ""b"", and store the results in ""dst"".";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -2744,7 +2744,7 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             }
             {
                 var descriptor = Descriptors["mm_sign_epi8"];
-                descriptor.Category = "";
+                descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
                 descriptor.Description = @"Negate packed 8-bit integers in ""a"" when the corresponding signed 8-bit integer in ""b"" is negative, and store the results in ""dst"". Element in ""dst"" are zeroed out when the corresponding element in ""b"" is zero.";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });

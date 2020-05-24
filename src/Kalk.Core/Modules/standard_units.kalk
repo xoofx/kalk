@@ -44,8 +44,8 @@ unit(dalton, 'mass', Da, 1.66053906660e-27 * kg)
 unit(electronvolt, 'energy', eV, 1.602176634e-19 * J, prefix: 'decimal')
 
 # Binary units
-unit(bit, 'A digital information, data size', b, prefix: 'Y,Z,E,P,T,G,M,k,binary')
-unit(byte, 'An octet, composed of 8 bits', B, 8 * b, prefix: 'Y,Z,E,P,T,G,M,k,binary')
+unit(b, 'A digital information, data size', bits, prefix: 'Y,Z,E,P,T,G,M,k,binary')
+unit(B, 'An octet, composed of 8 bits', bytes, 8 * b, prefix: 'Y,Z,E,P,T,G,M,k,binary')
 
 # https://en.wikipedia.org/wiki/United_States_customary_units
 # US - Units of length

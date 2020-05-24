@@ -122,34 +122,6 @@ namespace Kalk.Core.Modules
         }        
     }
 }
-namespace Kalk.Core.Modules
-{
-    public partial class HardwareIntrinsicsModule
-    {
-        protected override void RegisterFunctionsAuto()
-        {
-            RegisterFunction("mm_add_ps", (Func<object, object, object>)mm_add_ps);
-            RegisterFunction("mm_xor_ps", (Func<object, object, object>)mm_xor_ps);
-            RegisterDocumentationAuto();
-        }
-
-        private void RegisterDocumentationAuto()
-        {
-            {
-                var descriptor = Descriptors["mm_add_ps"];
-                descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["mm_xor_ps"];
-                descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-        }        
-    }
-}
 namespace Kalk.Core
 {
     public partial class KalkEngine
@@ -1035,20 +1007,54 @@ namespace Kalk.Core.Modules
             RegisterFunction("length", (Func<object, object>)Length);
             RegisterFunction("dot", (Func<Kalk.Core.KalkVector, Kalk.Core.KalkVector, object>)Dot);
             RegisterFunction("cross", (Func<Kalk.Core.KalkVector, Kalk.Core.KalkVector, object>)Cross);
+            RegisterFunction("byte", (Func<object, byte>)CreateByte);
+            RegisterFunction("sbyte", (Func<object, sbyte>)CreateSByte);
+            RegisterFunction("short", (Func<object, short>)CreateShort);
+            RegisterFunction("ushort", (Func<object, ushort>)CreateUShort);
+            RegisterFunction("uint", (Func<object, uint>)CreateUInt);
             RegisterFunction("int", (Func<object, int>)CreateInt);
+            RegisterFunction("ulong", (Func<object, ulong>)CreateULong);
+            RegisterFunction("long", (Func<object, long>)CreateLong);
             RegisterFunction("bool", (Func<object, bool>)CreateBool);
             RegisterFunction("float", (Func<object, float>)CreateFloat);
             RegisterFunction("double", (Func<object, double>)CreateDouble);
+            RegisterFunction("byte16", (Func<object[], Kalk.Core.KalkVector<byte>>)CreateByte16);
+            RegisterFunction("byte32", (Func<object[], Kalk.Core.KalkVector<byte>>)CreateByte32);
+            RegisterFunction("byte64", (Func<object[], Kalk.Core.KalkVector<byte>>)CreateByte64);
+            RegisterFunction("sbyte16", (Func<object[], Kalk.Core.KalkVector<sbyte>>)CreateSByte16);
+            RegisterFunction("sbyte32", (Func<object[], Kalk.Core.KalkVector<sbyte>>)CreateSByte32);
+            RegisterFunction("sbyte64", (Func<object[], Kalk.Core.KalkVector<sbyte>>)CreateSByte64);
+            RegisterFunction("short8", (Func<object[], Kalk.Core.KalkVector<short>>)CreateShort8);
+            RegisterFunction("short16", (Func<object[], Kalk.Core.KalkVector<short>>)CreateShort16);
+            RegisterFunction("short32", (Func<object[], Kalk.Core.KalkVector<short>>)CreateShort32);
+            RegisterFunction("ushort8", (Func<object[], Kalk.Core.KalkVector<ushort>>)CreateUShort8);
+            RegisterFunction("ushort16", (Func<object[], Kalk.Core.KalkVector<ushort>>)CreateUShort16);
+            RegisterFunction("ushort32", (Func<object[], Kalk.Core.KalkVector<ushort>>)CreateUShort32);
             RegisterFunction("int2", (Func<object[], Kalk.Core.KalkVector<int>>)CreateInt2);
             RegisterFunction("int3", (Func<object[], Kalk.Core.KalkVector<int>>)CreateInt3);
             RegisterFunction("int4", (Func<object[], Kalk.Core.KalkVector<int>>)CreateInt4);
             RegisterFunction("int8", (Func<object[], Kalk.Core.KalkVector<int>>)CreateInt8);
             RegisterFunction("int16", (Func<object[], Kalk.Core.KalkVector<int>>)CreateInt16);
+            RegisterFunction("uint2", (Func<object[], Kalk.Core.KalkVector<uint>>)CreateUInt2);
+            RegisterFunction("uint3", (Func<object[], Kalk.Core.KalkVector<uint>>)CreateUInt3);
+            RegisterFunction("uint4", (Func<object[], Kalk.Core.KalkVector<uint>>)CreateUInt4);
+            RegisterFunction("uint8", (Func<object[], Kalk.Core.KalkVector<uint>>)CreateUInt8);
+            RegisterFunction("uint16", (Func<object[], Kalk.Core.KalkVector<uint>>)CreateUInt16);
+            RegisterFunction("long2", (Func<object[], Kalk.Core.KalkVector<long>>)CreateLong2);
+            RegisterFunction("long3", (Func<object[], Kalk.Core.KalkVector<long>>)CreateLong3);
+            RegisterFunction("long4", (Func<object[], Kalk.Core.KalkVector<long>>)CreateLong4);
+            RegisterFunction("long8", (Func<object[], Kalk.Core.KalkVector<long>>)CreateLong8);
+            RegisterFunction("ulong2", (Func<object[], Kalk.Core.KalkVector<ulong>>)CreateULong2);
+            RegisterFunction("ulong3", (Func<object[], Kalk.Core.KalkVector<ulong>>)CreateULong3);
+            RegisterFunction("ulong4", (Func<object[], Kalk.Core.KalkVector<ulong>>)CreateULong4);
+            RegisterFunction("ulong8", (Func<object[], Kalk.Core.KalkVector<ulong>>)CreateULong8);
             RegisterFunction("bool2", (Func<object[], Kalk.Core.KalkVector<bool>>)CreateBool2);
             RegisterFunction("bool3", (Func<object[], Kalk.Core.KalkVector<bool>>)CreateBool3);
             RegisterFunction("bool4", (Func<object[], Kalk.Core.KalkVector<bool>>)CreateBool4);
             RegisterFunction("bool8", (Func<object[], Kalk.Core.KalkVector<bool>>)CreateBool8);
             RegisterFunction("bool16", (Func<object[], Kalk.Core.KalkVector<bool>>)CreateBool16);
+            RegisterFunction("bool32", (Func<object[], Kalk.Core.KalkVector<bool>>)CreateBool32);
+            RegisterFunction("bool64", (Func<object[], Kalk.Core.KalkVector<bool>>)CreateBool64);
             RegisterFunction("float2", (Func<object[], Kalk.Core.KalkVector<float>>)CreateFloat2);
             RegisterFunction("float3", (Func<object[], Kalk.Core.KalkVector<float>>)CreateFloat3);
             RegisterFunction("float4", (Func<object[], Kalk.Core.KalkVector<float>>)CreateFloat4);
@@ -1152,7 +1158,49 @@ namespace Kalk.Core.Modules
                 descriptor.IsCommand = false;
             }
             {
+                var descriptor = Descriptors["byte"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["sbyte"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["short"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["ushort"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["uint"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
                 var descriptor = Descriptors["int"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["ulong"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["long"];
                 descriptor.Category = "Type Constructors";
                 descriptor.Description = @"";
                 descriptor.IsCommand = false;
@@ -1171,6 +1219,78 @@ namespace Kalk.Core.Modules
             }
             {
                 var descriptor = Descriptors["double"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["byte16"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["byte32"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["byte64"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["sbyte16"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["sbyte32"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["sbyte64"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["short8"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["short16"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["short32"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["ushort8"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["ushort16"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["ushort32"];
                 descriptor.Category = "Type Constructors";
                 descriptor.Description = @"";
                 descriptor.IsCommand = false;
@@ -1206,6 +1326,84 @@ namespace Kalk.Core.Modules
                 descriptor.IsCommand = false;
             }
             {
+                var descriptor = Descriptors["uint2"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["uint3"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["uint4"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["uint8"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["uint16"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["long2"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["long3"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["long4"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["long8"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["ulong2"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["ulong3"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["ulong4"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["ulong8"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
                 var descriptor = Descriptors["bool2"];
                 descriptor.Category = "Type Constructors";
                 descriptor.Description = @"";
@@ -1231,6 +1429,18 @@ namespace Kalk.Core.Modules
             }
             {
                 var descriptor = Descriptors["bool16"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["bool32"];
+                descriptor.Category = "Type Constructors";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["bool64"];
                 descriptor.Category = "Type Constructors";
                 descriptor.Description = @"";
                 descriptor.IsCommand = false;
