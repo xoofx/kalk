@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -15,9 +16,9 @@ using System.Xml;
 using System.Xml.Linq;
 using Kalk.Core;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.MSBuild;
 using Scriban;
+using Scriban.Runtime;
 
 namespace Kalk.CodeGen
 {
@@ -227,44 +228,127 @@ namespace Kalk.CodeGen
                     var xmlDoc = XElement.Parse($"<root>{xmlDocStr.Trim()}</root>");
                     var elements = xmlDoc.Elements().First();
 
-                    var summary = GetCleanedString(elements);
+                    var csharpSummary = GetCleanedString(elements);
 
-                    var summaryTrimmed = summary.Replace("unsigned", string.Empty);
+                    var summaryTrimmed = csharpSummary.Replace("unsigned", string.Empty);
                     var match = regexName.Match(summaryTrimmed);
                     if (!match.Success) continue;
                     
                     var rawIntrinsicName = match.Groups[1].Value;
-
                     var intrinsicName = rawIntrinsicName.TrimStart('_');
 
-                    generatedIntrinsics.TryGetValue(intrinsicName, out var existingDesc);
-                    
                     var desc = new KalkIntrinsic
                     {
-                        Name = rawIntrinsicName.TrimStart('_'),
+                        Name = intrinsicName,
                         Method = method,
                         Class = groupName,
                         MethodSymbol = sseMember,
                         IsFunc = true,
                     };
-                    desc.CSharpName = desc.Name;
-                    desc.Names.Add(desc.Name);
-                    desc.Description = summary;
-
+                    
+                    bool hasInteldoc = false;
                     if (nameToDoc.TryGetValue(rawIntrinsicName, out var elementIntelDoc))
                     {
+                        hasInteldoc = true;
                         desc.Description = GetCleanedString(elementIntelDoc.Descendants("description").FirstOrDefault());
 
                         foreach (var parameter in elementIntelDoc.Descendants("parameter"))
                         {
                             desc.Params.Add(new KalkParamDescriptor(parameter.Attribute("varname").Value, parameter.Attribute("type").Value));
                         }
+                        
+                        desc.Description = desc.Description.Replace("[round_note]", string.Empty);
+                        //desc.Description = desc.Description + "\n" + csharpSummary;
                     }
                     else
                     {
-                        Console.WriteLine($"Unable to find intrinsic doc for: {rawIntrinsicName}");
+                        desc.Description = csharpSummary;
                     }
 
+                    // Patching special methods
+                    switch (desc.Name)
+                    {
+                        case "mm_prefetch":
+                            if (method.Name.EndsWith("0"))
+                            {
+                                desc.Name += "0";
+                            }
+                            else if (method.Name.EndsWith("1"))
+                            {
+                                desc.Name += "1";
+                            }
+                            else if (method.Name.EndsWith("2"))
+                            {
+                                desc.Name += "2";
+                            }
+                            else if (method.Name.EndsWith("Temporal"))
+                            {
+                                desc.Name += "nta";
+                            }
+                            else
+                            {
+                                goto default;
+                            }
+                            break;
+                        
+                        case "mm_round_sd":
+                        case "mm_round_ss":
+                        case "mm_round_pd":
+                        case "mm_round_ps":
+                        case "mm256_round_pd":
+                        case "mm256_round_ps":
+                            Debug.Assert(method.Name.StartsWith("Round"));
+                            var postfix = method.Name.Substring("Round".Length);
+                            Debug.Assert(hasInteldoc);
+                            if (desc.Name != "mm_round_ps" && desc.Name != "mm256_round_ps" && (desc.Params.Count >= 2 && sseMember.Parameters.Length == 1))
+                            {
+                                desc.Name += "1";
+                            }
+                            
+                            if (!postfix.StartsWith("CurrentDirection"))
+                            {
+                                postfix = StandardMemberRenamer.Rename(postfix);
+                                desc.Name = $"{desc.Name}_{postfix}";
+                            }
+
+                            // Remove rounding from doc
+                            var index = desc.Params.FindIndex(x => x.Name == "rounding");
+                            if (index >= 0)
+                            {
+                                desc.Params.RemoveAt(index);
+                            }
+                            break;
+                        case "mm_rcp_ss":
+                        case "mm_rsqrt_ss":
+                        case "mm_sqrt_ss":
+                            if (sseMember.Parameters.Length == 1)
+                            {
+                                desc.Name += "1";
+                            }
+                            break;
+                        
+                        case "mm_sqrt_sd":
+                        case "mm_ceil_sd":
+                        case "mm_floor_sd":
+                            if (sseMember.Parameters.Length == 1)
+                            {
+                                desc.Name += "1";
+                            }
+                            break;
+                            
+                        default:
+                            if (hasInteldoc)
+                            {
+                                if (sseMember.Parameters.Length != desc.Params.Count)
+                                {
+                                    Console.WriteLine($"Parameters not matching for {sseMember.ToDisplayString()}. Expecting: {desc.Params.Count} but got {sseMember.Parameters.Length}  ");
+                                }
+                            }
+                            break;
+                    }
+
+                    desc.CSharpName = desc.Name;
+                    desc.Names.Add(desc.Name);                    
                     desc.RealReturnType = sseMember.ReturnType.ToDisplayString();
                     desc.ReturnType = method.ReturnType.IsConstructedGenericType ? "object" : desc.RealReturnType;
                     desc.GenericCompatibleRealReturnType = method.ReturnType.IsPointer ? "IntPtr" : desc.RealReturnType;
@@ -335,7 +419,8 @@ namespace Kalk.CodeGen
                     methodDeclaration.Append($">(");
                     castBuilder.Append($">");
                     
-                    RequiredAlignments.TryGetValue(desc.Name, out int memAlign);
+                    // Gets any memory alignment
+                    RequiredAlignments.TryGetValue(intrinsicName, out int memAlign);
                     
                     for (int i = 0; i < desc.Parameters.Count; i++)
                     {
@@ -394,11 +479,14 @@ namespace Kalk.CodeGen
                     }
 
                     desc.Category = $"Vector Hardware Intrinsics / {docGroupName.ToUpperInvariant()}";
-                    
+
+                    generatedIntrinsics.TryGetValue(desc.Name, out var existingDesc);
+
+                    // TODO: handle line for comments
+                    desc.Description = desc.Description.Trim().Replace("\r\n", "\n").Replace("\n", " ");
                     if (existingDesc == null || desc.Parameters[0].BaseNativeType == "float")
                     {
-                        desc.Description = desc.Description.Replace("[round_note]", string.Empty).Trim().Replace("\r\n", "\n").Replace("\n", " ");
-                        generatedIntrinsics[intrinsicName] = desc;
+                        generatedIntrinsics[desc.Name] = desc;
                     }
                     
                     desc.IsSupported = true;
