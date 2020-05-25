@@ -14,32 +14,38 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     public partial class AesIntrinsicsModule
     {
         /// <summary>
-        /// __m128i _mm_aesdec_si128 (__m128i a, __m128i RoundKey) AESDEC xmm, xmm/m128
+        /// __m128i _mm_aesdec_si128 (__m128i a, __m128i RoundKey)
+        ///AESDEC xmm, xmm/m128
         /// </summary>
         public object mm_aesdec_si128(object value, object roundKey) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(value, roundKey, System.Runtime.Intrinsics.X86.Aes.Decrypt);
         
         /// <summary>
-        /// __m128i _mm_aesdeclast_si128 (__m128i a, __m128i RoundKey) AESDECLAST xmm, xmm/m128
+        /// __m128i _mm_aesdeclast_si128 (__m128i a, __m128i RoundKey)
+        ///AESDECLAST xmm, xmm/m128
         /// </summary>
         public object mm_aesdeclast_si128(object value, object roundKey) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(value, roundKey, System.Runtime.Intrinsics.X86.Aes.DecryptLast);
         
         /// <summary>
-        /// __m128i _mm_aesenc_si128 (__m128i a, __m128i RoundKey) AESENC xmm, xmm/m128
+        /// __m128i _mm_aesenc_si128 (__m128i a, __m128i RoundKey)
+        ///AESENC xmm, xmm/m128
         /// </summary>
         public object mm_aesenc_si128(object value, object roundKey) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(value, roundKey, System.Runtime.Intrinsics.X86.Aes.Encrypt);
         
         /// <summary>
-        /// __m128i _mm_aesenclast_si128 (__m128i a, __m128i RoundKey) AESENCLAST xmm, xmm/m128
+        /// __m128i _mm_aesenclast_si128 (__m128i a, __m128i RoundKey)
+        ///AESENCLAST xmm, xmm/m128
         /// </summary>
         public object mm_aesenclast_si128(object value, object roundKey) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(value, roundKey, System.Runtime.Intrinsics.X86.Aes.EncryptLast);
         
         /// <summary>
-        /// __m128i _mm_aesimc_si128 (__m128i a) AESIMC xmm, xmm/m128
+        /// __m128i _mm_aesimc_si128 (__m128i a)
+        ///AESIMC xmm, xmm/m128
         /// </summary>
         public object mm_aesimc_si128(object value) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(value, System.Runtime.Intrinsics.X86.Aes.InverseMixColumns);
         
         /// <summary>
-        /// __m128i _mm_aeskeygenassist_si128 (__m128i a, const int imm8) AESKEYGENASSIST xmm, xmm/m128, imm8
+        /// __m128i _mm_aeskeygenassist_si128 (__m128i a, const int imm8)
+        ///AESKEYGENASSIST xmm, xmm/m128, imm8
         /// </summary>
         public object mm_aeskeygenassist_si128(object value, byte control) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, byte, byte, System.Runtime.Intrinsics.Vector128<byte>>(value, control, System.Runtime.Intrinsics.X86.Aes.KeygenAssist);
         
@@ -51,301 +57,486 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     {
         /// <summary>
         /// Broadcast a single-precision (32-bit) floating-point element from memory to all elements of "dst".
+        ///
+        ///__m128 _mm_broadcast_ss (float const * mem_addr)
+        ///VBROADCASTSS xmm, m32
         /// </summary>
         public object mm_broadcast_ss(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>>(mem_addr, Avx_BroadcastScalarToVector128);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<float>> Avx_BroadcastScalarToVector128 = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<float>>((arg0) => System.Runtime.Intrinsics.X86.Avx.BroadcastScalarToVector128((float*)arg0));
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" based on the comparison operand specified by "imm8", and store the results in "dst".
+        ///
+        ///__m128 _mm_cmp_ps (__m128 a, __m128 b, const int imm8)
+        ///VCMPPS xmm, xmm, xmm/m128, imm8
         /// </summary>
         public object mm_cmp_ps(object a, object b, System.Runtime.Intrinsics.X86.FloatComparisonMode imm8) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, System.Runtime.Intrinsics.X86.FloatComparisonMode, System.Runtime.Intrinsics.X86.FloatComparisonMode, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, imm8, System.Runtime.Intrinsics.X86.Avx.Compare);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" based on the comparison operand specified by "imm8", store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmp_sd (__m128d a, __m128d b, const int imm8)
+        ///VCMPSS xmm, xmm, xmm/m32, imm8
         /// </summary>
         public object mm_cmp_sd(object a, object b, System.Runtime.Intrinsics.X86.FloatComparisonMode imm8) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, System.Runtime.Intrinsics.X86.FloatComparisonMode, System.Runtime.Intrinsics.X86.FloatComparisonMode, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, imm8, System.Runtime.Intrinsics.X86.Avx.CompareScalar);
         
         /// <summary>
         /// Load packed single-precision (32-bit) floating-point elements from memory into "dst" using "mask" (elements are zeroed out when the high bit of the corresponding element is not set).
+        ///
+        ///__m128 _mm_maskload_ps (float const * mem_addr, __m128i mask)
+        ///VMASKMOVPS xmm, xmm, m128
         /// </summary>
         public object mm_maskload_ps(object mem_addr, object mask) => (object)ProcessFunc<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(mem_addr, mask, Avx_MaskLoad);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<float>, System.Runtime.Intrinsics.Vector128<float>> Avx_MaskLoad = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<float>, System.Runtime.Intrinsics.Vector128<float>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Avx.MaskLoad((float*)arg0, (System.Runtime.Intrinsics.Vector128<float>)arg1));
         /// <summary>
         /// Store packed single-precision (32-bit) floating-point elements from "a" into memory using "mask".
+        ///
+        ///void _mm_maskstore_ps (float * mem_addr, __m128i mask, __m128 a)
+        ///VMASKMOVPS m128, xmm, xmm
         /// </summary>
         public void mm_maskstore_ps(object mem_addr, object mask, object a) => ProcessAction<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(mem_addr, mask, a, Avx_MaskStore);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>, System.Runtime.Intrinsics.Vector128<float>> Avx_MaskStore = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>, System.Runtime.Intrinsics.Vector128<float>>((arg0, arg1, arg2) => System.Runtime.Intrinsics.X86.Avx.MaskStore((float*)arg0, (System.Runtime.Intrinsics.Vector128<float>)arg1, (System.Runtime.Intrinsics.Vector128<float>)arg2));
         /// <summary>
         /// Shuffle single-precision (32-bit) floating-point elements in "a" using the control in "imm8", and store the results in "dst".
+        ///
+        ///__m128 _mm_permute_ps (__m128 a, int imm8)
+        ///VPERMILPS xmm, xmm, imm8
         /// </summary>
         public object mm_permute_ps(object a, byte imm8) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, byte, byte, float, System.Runtime.Intrinsics.Vector128<float>>(a, imm8, System.Runtime.Intrinsics.X86.Avx.Permute);
         
         /// <summary>
         /// Shuffle single-precision (32-bit) floating-point elements in "a" using the control in "b", and store the results in "dst".
+        ///
+        ///__m128 _mm_permutevar_ps (__m128 a, __m128i b)
+        ///VPERMILPS xmm, xmm, xmm/m128
         /// </summary>
         public object mm_permutevar_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, int, System.Runtime.Intrinsics.Vector128<int>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.PermuteVar);
         
         /// <summary>
         /// Compute the bitwise AND of 128 bits (representing single-precision (32-bit) floating-point elements) in "a" and "b", producing an intermediate 128-bit value, and set "ZF" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set "ZF" to 0. Compute the bitwise NOT of "a" and then AND with "b", producing an intermediate value, and set "CF" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set "CF" to 0. Return the "CF" value.
+        ///
+        ///int _mm_testc_ps (__m128 a, __m128 b)
+        ///VTESTPS xmm, xmm/m128
         /// </summary>
         public bool mm_testc_ps(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Avx.TestC);
         
         /// <summary>
         /// Compute the bitwise AND of 128 bits (representing single-precision (32-bit) floating-point elements) in "a" and "b", producing an intermediate 128-bit value, and set "ZF" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set "ZF" to 0. Compute the bitwise NOT of "a" and then AND with "b", producing an intermediate value, and set "CF" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set "CF" to 0. Return 1 if both the "ZF" and "CF" values are zero, otherwise return 0.
+        ///
+        ///int _mm_testnzc_ps (__m128 a, __m128 b)
+        ///VTESTPS xmm, xmm/m128
         /// </summary>
         public bool mm_testnzc_ps(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Avx.TestNotZAndNotC);
         
         /// <summary>
         /// Compute the bitwise AND of 128 bits (representing single-precision (32-bit) floating-point elements) in "a" and "b", producing an intermediate 128-bit value, and set "ZF" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set "ZF" to 0. Compute the bitwise NOT of "a" and then AND with "b", producing an intermediate value, and set "CF" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set "CF" to 0. Return the "ZF" value.
+        ///
+        ///int _mm_testz_ps (__m128 a, __m128 b)
+        ///VTESTPS xmm, xmm/m128
         /// </summary>
         public bool mm_testz_ps(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Avx.TestZ);
         
         /// <summary>
         /// Add packed single-precision (32-bit) floating-point elements in "a" and "b", and store the results in "dst".
+        ///
+        ///__m256 _mm256_add_ps (__m256 a, __m256 b)
+        ///VADDPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_add_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.Add);
         
         /// <summary>
         /// Alternatively add and subtract packed single-precision (32-bit) floating-point elements in "a" to/from packed elements in "b", and store the results in "dst".
+        ///
+        ///__m256 _mm256_addsub_ps (__m256 a, __m256 b)
+        ///VADDSUBPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_addsub_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.AddSubtract);
         
         /// <summary>
         /// Compute the bitwise AND of packed single-precision (32-bit) floating-point elements in "a" and "b", and store the results in "dst".
+        ///
+        ///__m256 _mm256_and_ps (__m256 a, __m256 b)
+        ///VANDPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_and_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.And);
         
         /// <summary>
         /// Compute the bitwise NOT of packed single-precision (32-bit) floating-point elements in "a" and then AND with "b", and store the results in "dst".
+        ///
+        ///__m256 _mm256_andnot_ps (__m256 a, __m256 b)
+        ///VANDNPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_andnot_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.AndNot);
         
         /// <summary>
         /// Blend packed single-precision (32-bit) floating-point elements from "a" and "b" using control mask "imm8", and store the results in "dst".
+        ///
+        ///__m256 _mm256_blend_ps (__m256 a, __m256 b, const int imm8)
+        ///VBLENDPS ymm, ymm, ymm/m256, imm8
         /// </summary>
         public object mm256_blend_ps(object a, object b, byte imm8) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, byte, byte, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, imm8, System.Runtime.Intrinsics.X86.Avx.Blend);
         
         /// <summary>
         /// Blend packed single-precision (32-bit) floating-point elements from "a" and "b" using "mask", and store the results in "dst".
+        ///
+        ///__m256 _mm256_blendv_ps (__m256 a, __m256 b, __m256 mask)
+        ///VBLENDVPS ymm, ymm, ymm/m256, ymm
         /// </summary>
         public object mm256_blendv_ps(object a, object b, object mask) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, mask, System.Runtime.Intrinsics.X86.Avx.BlendVariable);
         
         /// <summary>
         /// Broadcast 128 bits from memory (composed of 4 packed single-precision (32-bit) floating-point elements) to all elements of "dst".
+        ///
+        ///__m256 _mm256_broadcast_ps (__m128 const * mem_addr)
+        ///VBROADCASTF128, ymm, m128
         /// </summary>
         public object mm256_broadcast_ps(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector256<float>>(mem_addr, Avx_BroadcastVector128ToVector256);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector256<float>> Avx_BroadcastVector128ToVector256 = new Func<IntPtr, System.Runtime.Intrinsics.Vector256<float>>((arg0) => System.Runtime.Intrinsics.X86.Avx.BroadcastVector128ToVector256((float*)arg0));
         /// <summary>
         /// Broadcast a single-precision (32-bit) floating-point element from memory to all elements of "dst".
+        ///
+        ///__m256 _mm256_broadcast_ss (float const * mem_addr)
+        ///VBROADCASTSS ymm, m32
         /// </summary>
         public object mm256_broadcast_ss(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector256<float>>(mem_addr, Avx_BroadcastScalarToVector256);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector256<float>> Avx_BroadcastScalarToVector256 = new Func<IntPtr, System.Runtime.Intrinsics.Vector256<float>>((arg0) => System.Runtime.Intrinsics.X86.Avx.BroadcastScalarToVector256((float*)arg0));
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" up to an integer value, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m256 _mm256_ceil_ps (__m256 a)
+        ///VROUNDPS ymm, ymm/m256, imm8(10)
         /// </summary>
         public object mm256_ceil_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.Ceiling);
         
         /// <summary>
         /// Convert packed 32-bit integers in "a" to packed single-precision (32-bit) floating-point elements, and store the results in "dst".
+        ///
+        ///__m256 _mm256_cvtepi32_ps (__m256i a)
+        ///VCVTDQ2PS ymm, ymm/m256
         /// </summary>
         public object mm256_cvtepi32_ps(object a) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector256<int>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.ConvertToVector256Single);
         
         /// <summary>
         /// Convert packed double-precision (64-bit) floating-point elements in "a" to packed 32-bit integers, and store the results in "dst".
+        ///
+        ///__m128i _mm256_cvtpd_epi32 (__m256d a)
+        ///VCVTPD2DQ xmm, ymm/m256
         /// </summary>
         public object mm256_cvtpd_epi32(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector256<double>, int, System.Runtime.Intrinsics.Vector128<int>>(a, System.Runtime.Intrinsics.X86.Avx.ConvertToVector128Int32);
         
         /// <summary>
         /// Convert packed double-precision (64-bit) floating-point elements in "a" to packed single-precision (32-bit) floating-point elements, and store the results in "dst".
+        ///
+        ///__m128 _mm256_cvtpd_ps (__m256d a)
+        ///VCVTPD2PS xmm, ymm/m256
         /// </summary>
         public object mm256_cvtpd_ps(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector256<double>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Avx.ConvertToVector128Single);
         
         /// <summary>
         /// Convert packed single-precision (32-bit) floating-point elements in "a" to packed 32-bit integers, and store the results in "dst".
+        ///
+        ///__m256i _mm256_cvtps_epi32 (__m256 a)
+        ///VCVTPS2DQ ymm, ymm/m256
         /// </summary>
         public object mm256_cvtps_epi32(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, int, System.Runtime.Intrinsics.Vector256<int>>(a, System.Runtime.Intrinsics.X86.Avx.ConvertToVector256Int32);
         
         /// <summary>
         /// Convert packed single-precision (32-bit) floating-point elements in "a" to packed double-precision (64-bit) floating-point elements, and store the results in "dst".
+        ///
+        ///__m256d _mm256_cvtps_pd (__m128 a)
+        ///VCVTPS2PD ymm, xmm/m128
         /// </summary>
         public object mm256_cvtps_pd(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, double, System.Runtime.Intrinsics.Vector256<double>>(a, System.Runtime.Intrinsics.X86.Avx.ConvertToVector256Double);
         
         /// <summary>
         /// Convert packed double-precision (64-bit) floating-point elements in "a" to packed 32-bit integers with truncation, and store the results in "dst".
+        ///
+        ///__m128i _mm256_cvttpd_epi32 (__m256d a)
+        ///VCVTTPD2DQ xmm, ymm/m256
         /// </summary>
         public object mm256_cvttpd_epi32(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector256<double>, int, System.Runtime.Intrinsics.Vector128<int>>(a, System.Runtime.Intrinsics.X86.Avx.ConvertToVector128Int32WithTruncation);
         
         /// <summary>
         /// Convert packed single-precision (32-bit) floating-point elements in "a" to packed 32-bit integers with truncation, and store the results in "dst".
+        ///
+        ///__m256i _mm256_cvttps_epi32 (__m256 a)
+        ///VCVTTPS2DQ ymm, ymm/m256
         /// </summary>
         public object mm256_cvttps_epi32(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, int, System.Runtime.Intrinsics.Vector256<int>>(a, System.Runtime.Intrinsics.X86.Avx.ConvertToVector256Int32WithTruncation);
         
         /// <summary>
         /// Divide packed single-precision (32-bit) floating-point elements in "a" by packed elements in "b", and store the results in "dst".
+        ///
+        ///__m256 _mm256_div_ps (__m256 a, __m256 b)
+        ///VDIVPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_div_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.Divide);
         
         /// <summary>
         /// Conditionally multiply the packed single-precision (32-bit) floating-point elements in "a" and "b" using the high 4 bits in "imm8", sum the four products, and conditionally store the sum in "dst" using the low 4 bits of "imm8".
+        ///
+        ///__m256 _mm256_dp_ps (__m256 a, __m256 b, const int imm8)
+        ///VDPPS ymm, ymm, ymm/m256, imm8
         /// </summary>
         public object mm256_dp_ps(object a, object b, byte imm8) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, byte, byte, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, imm8, System.Runtime.Intrinsics.X86.Avx.DotProduct);
         
         /// <summary>
         /// Extract 128 bits (composed of integer data) from "a", selected with "imm8", and store the result in "dst".
+        ///
+        ///__m128i _mm256_extractf128_si256 (__m256i a, const int imm8)
+        ///VEXTRACTF128 xmm/m128, ymm, imm8
         /// </summary>
         public object mm256_extractf128_si256(object a, byte imm8) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector256<byte>, byte, byte, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, imm8, System.Runtime.Intrinsics.X86.Avx.ExtractVector128);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" down to an integer value, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m256 _mm256_floor_ps (__m256 a)
+        ///VROUNDPS ymm, ymm/m256, imm8(9)
         /// </summary>
         public object mm256_floor_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.Floor);
         
         /// <summary>
         /// Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in "a" and "b", and pack the results in "dst".
+        ///
+        ///__m256 _mm256_hadd_ps (__m256 a, __m256 b)
+        ///VHADDPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_hadd_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.HorizontalAdd);
         
         /// <summary>
         /// Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in "a" and "b", and pack the results in "dst".
+        ///
+        ///__m256 _mm256_hsub_ps (__m256 a, __m256 b)
+        ///VHSUBPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_hsub_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.HorizontalSubtract);
         
         /// <summary>
         /// Copy "a" to "dst", then insert 128 bits from "b" into "dst" at the location specified by "imm8".
+        ///
+        ///__m256i _mm256_insertf128_si256 (__m256i a, __m128i b, int imm8)
+        ///VINSERTF128 ymm, ymm, xmm/m128, imm8
         /// </summary>
         public object mm256_insertf128_si256(object a, object b, byte imm8) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector256<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, byte, byte, System.Runtime.Intrinsics.Vector256<byte>>(a, b, imm8, System.Runtime.Intrinsics.X86.Avx.InsertVector128);
         
         /// <summary>
         /// Load 256-bits of integer data from unaligned memory into "dst". This intrinsic may perform better than "_mm256_loadu_si256" when the data crosses a cache line boundary.
+        ///
+        ///__m256i _mm256_lddqu_si256 (__m256i const * mem_addr)
+        ///VLDDQU ymm, m256
         /// </summary>
         public object mm256_lddqu_si256(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(mem_addr, Avx_LoadDquVector256);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>> Avx_LoadDquVector256 = new Func<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>>((arg0) => System.Runtime.Intrinsics.X86.Avx.LoadDquVector256((sbyte*)arg0));
         /// <summary>
-        /// Load 256-bits of integer data from memory into "dst". 	"mem_addr" must be aligned on a 32-byte boundary or a general-protection exception may be generated.
+        /// Load 256-bits of integer data from memory into "dst".
+        ///	"mem_addr" must be aligned on a 32-byte boundary or a general-protection exception may be generated.
+        ///
+        ///__m256i _mm256_load_si256 (__m256i const * mem_addr)
+        ///VMOVDQA ymm, m256
         /// </summary>
         public object mm256_load_si256(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(mem_addr, 32, Avx_LoadAlignedVector256);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>> Avx_LoadAlignedVector256 = new Func<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>>((arg0) => System.Runtime.Intrinsics.X86.Avx.LoadAlignedVector256((sbyte*)arg0));
         /// <summary>
-        /// Load 256-bits of integer data from memory into "dst". 	"mem_addr" does not need to be aligned on any particular boundary.
+        /// Load 256-bits of integer data from memory into "dst".
+        ///	"mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///__m256i _mm256_loadu_si256 (__m256i const * mem_addr)
+        ///VMOVDQU ymm, m256
         /// </summary>
         public object mm256_loadu_si256(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(mem_addr, Avx_LoadVector256);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>> Avx_LoadVector256 = new Func<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>>((arg0) => System.Runtime.Intrinsics.X86.Avx.LoadVector256((sbyte*)arg0));
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b", and store packed maximum values in "dst".
+        ///
+        ///__m256 _mm256_max_ps (__m256 a, __m256 b)
+        ///VMAXPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_max_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.Max);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b", and store packed minimum values in "dst".
+        ///
+        ///__m256 _mm256_min_ps (__m256 a, __m256 b)
+        ///VMINPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_min_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.Min);
         
         /// <summary>
         /// Duplicate odd-indexed single-precision (32-bit) floating-point elements from "a", and store the results in "dst".
+        ///
+        ///__m256 _mm256_movehdup_ps (__m256 a)
+        ///VMOVSHDUP ymm, ymm/m256
         /// </summary>
         public object mm256_movehdup_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.DuplicateOddIndexed);
         
         /// <summary>
         /// Duplicate even-indexed single-precision (32-bit) floating-point elements from "a", and store the results in "dst".
+        ///
+        ///__m256 _mm256_moveldup_ps (__m256 a)
+        ///VMOVSLDUP ymm, ymm/m256
         /// </summary>
         public object mm256_moveldup_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.DuplicateEvenIndexed);
         
         /// <summary>
         /// Set each bit of mask "dst" based on the most significant bit of the corresponding packed single-precision (32-bit) floating-point element in "a".
+        ///
+        ///int _mm256_movemask_ps (__m256 a)
+        ///VMOVMSKPS reg, ymm
         /// </summary>
         public int mm256_movemask_ps(object a) => (int)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, int, int>(a, System.Runtime.Intrinsics.X86.Avx.MoveMask);
         
         /// <summary>
         /// Multiply packed single-precision (32-bit) floating-point elements in "a" and "b", and store the results in "dst".
+        ///
+        ///__m256 _mm256_mul_ps (__m256 a, __m256 b)
+        ///VMULPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_mul_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.Multiply);
         
         /// <summary>
         /// Compute the bitwise OR of packed single-precision (32-bit) floating-point elements in "a" and "b", and store the results in "dst".
+        ///
+        ///__m256 _mm256_or_ps (__m256 a, __m256 b)
+        ///VORPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_or_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.Or);
         
         /// <summary>
         /// Shuffle 128-bits (composed of integer data) selected by "imm8" from "a" and "b", and store the results in "dst".
+        ///
+        ///__m256i _mm256_permute2f128_si256 (__m256i a, __m256i b, int imm8)
+        ///VPERM2F128 ymm, ymm, ymm/m256, imm8
         /// </summary>
         public object mm256_permute2f128_si256(object a, object b, byte imm8) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector256<byte>, byte, System.Runtime.Intrinsics.Vector256<byte>, byte, byte, byte, System.Runtime.Intrinsics.Vector256<byte>>(a, b, imm8, System.Runtime.Intrinsics.X86.Avx.Permute2x128);
         
         /// <summary>
         /// Compute the approximate reciprocal of packed single-precision (32-bit) floating-point elements in "a", and store the results in "dst". The maximum relative error for this approximation is less than 1.5*2^-12.
+        ///
+        ///__m256 _mm256_rcp_ps (__m256 a)
+        ///VRCPPS ymm, ymm/m256
         /// </summary>
         public object mm256_rcp_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.Reciprocal);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" using the "rounding" parameter, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m256 _mm256_round_ps (__m256 a, _MM_FROUND_CUR_DIRECTION)
+        ///VROUNDPS ymm, ymm/m256, imm8(4)
         /// </summary>
         public object mm256_round_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.RoundCurrentDirection);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" using the "rounding" parameter, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m256 _mm256_round_ps (__m256 a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC)
+        ///VROUNDPS ymm, ymm/m256, imm8(8)
         /// </summary>
         public object mm256_round_ps_to_nearest_integer(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.RoundToNearestInteger);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" using the "rounding" parameter, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m256 _mm256_round_ps (__m256 a, _MM_FROUND_TO_NEG_INF | _MM_FROUND_NO_EXC)
+        ///VROUNDPS ymm, ymm/m256, imm8(9)
         /// </summary>
         public object mm256_round_ps_to_negative_infinity(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.RoundToNegativeInfinity);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" using the "rounding" parameter, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m256 _mm256_round_ps (__m256 a, _MM_FROUND_TO_POS_INF | _MM_FROUND_NO_EXC)
+        ///VROUNDPS ymm, ymm/m256, imm8(10)
         /// </summary>
         public object mm256_round_ps_to_positive_infinity(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.RoundToPositiveInfinity);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" using the "rounding" parameter, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m256 _mm256_round_ps (__m256 a, _MM_FROUND_TO_ZERO | _MM_FROUND_NO_EXC)
+        ///VROUNDPS ymm, ymm/m256, imm8(11)
         /// </summary>
         public object mm256_round_ps_to_zero(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.RoundToZero);
         
         /// <summary>
         /// Compute the approximate reciprocal square root of packed single-precision (32-bit) floating-point elements in "a", and store the results in "dst". The maximum relative error for this approximation is less than 1.5*2^-12.
+        ///
+        ///__m256 _mm256_rsqrt_ps (__m256 a)
+        ///VRSQRTPS ymm, ymm/m256
         /// </summary>
         public object mm256_rsqrt_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.ReciprocalSqrt);
         
         /// <summary>
         /// Shuffle single-precision (32-bit) floating-point elements in "a" within 128-bit lanes using the control in "imm8", and store the results in "dst".
+        ///
+        ///__m256 _mm256_shuffle_ps (__m256 a, __m256 b, const int imm8)
+        ///VSHUFPS ymm, ymm, ymm/m256, imm8
         /// </summary>
         public object mm256_shuffle_ps(object a, object b, byte imm8) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, byte, byte, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, imm8, System.Runtime.Intrinsics.X86.Avx.Shuffle);
         
         /// <summary>
         /// Compute the square root of packed single-precision (32-bit) floating-point elements in "a", and store the results in "dst".
+        ///
+        ///__m256 _mm256_sqrt_ps (__m256 a)
+        ///VSQRTPS ymm, ymm/m256
         /// </summary>
         public object mm256_sqrt_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, System.Runtime.Intrinsics.X86.Avx.Sqrt);
         
         /// <summary>
-        /// Store 256-bits of integer data from "a" into memory. 	"mem_addr" must be aligned on a 32-byte boundary or a general-protection exception may be generated.
+        /// Store 256-bits of integer data from "a" into memory.
+        ///	"mem_addr" must be aligned on a 32-byte boundary or a general-protection exception may be generated.
+        ///
+        ///void _mm256_store_si256 (__m256i * mem_addr, __m256i a)
+        ///MOVDQA m256, ymm
         /// </summary>
         public void mm256_store_si256(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(mem_addr, 32, a, Avx_StoreAligned);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>> Avx_StoreAligned = new Action<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Avx.StoreAligned((sbyte*)arg0, (System.Runtime.Intrinsics.Vector256<sbyte>)arg1));
         /// <summary>
-        /// Store 256-bits of integer data from "a" into memory. 	"mem_addr" does not need to be aligned on any particular boundary.
+        /// Store 256-bits of integer data from "a" into memory.
+        ///	"mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///void _mm256_storeu_si256 (__m256i * mem_addr, __m256i a)
+        ///MOVDQU m256, ymm
         /// </summary>
         public void mm256_storeu_si256(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(mem_addr, a, Avx_Store);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>> Avx_Store = new Action<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Avx.Store((sbyte*)arg0, (System.Runtime.Intrinsics.Vector256<sbyte>)arg1));
         /// <summary>
-        /// Store 256-bits of integer data from "a" into memory using a non-temporal memory hint. 	"mem_addr" must be aligned on a 32-byte boundary or a general-protection exception may be generated.
+        /// Store 256-bits of integer data from "a" into memory using a non-temporal memory hint.
+        ///	"mem_addr" must be aligned on a 32-byte boundary or a general-protection exception may be generated.
+        ///
+        ///void _mm256_stream_si256 (__m256i * mem_addr, __m256i a)
+        ///VMOVNTDQ m256, ymm
         /// </summary>
         public void mm256_stream_si256(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(mem_addr, 32, a, Avx_StoreAlignedNonTemporal);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>> Avx_StoreAlignedNonTemporal = new Action<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Avx.StoreAlignedNonTemporal((sbyte*)arg0, (System.Runtime.Intrinsics.Vector256<sbyte>)arg1));
         /// <summary>
         /// Subtract packed single-precision (32-bit) floating-point elements in "b" from packed single-precision (32-bit) floating-point elements in "a", and store the results in "dst".
+        ///
+        ///__m256 _mm256_sub_ps (__m256 a, __m256 b)
+        ///VSUBPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_sub_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.Subtract);
         
         /// <summary>
         /// Unpack and interleave single-precision (32-bit) floating-point elements from the high half of each 128-bit lane in "a" and "b", and store the results in "dst".
+        ///
+        ///__m256 _mm256_unpackhi_ps (__m256 a, __m256 b)
+        ///VUNPCKHPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_unpackhi_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.UnpackHigh);
         
         /// <summary>
         /// Unpack and interleave single-precision (32-bit) floating-point elements from the low half of each 128-bit lane in "a" and "b", and store the results in "dst".
+        ///
+        ///__m256 _mm256_unpacklo_ps (__m256 a, __m256 b)
+        ///VUNPCKLPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_unpacklo_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.UnpackLow);
         
         /// <summary>
         /// Compute the bitwise XOR of packed single-precision (32-bit) floating-point elements in "a" and "b", and store the results in "dst".
+        ///
+        ///__m256 _mm256_xor_ps (__m256 a, __m256 b)
+        ///VXORPS ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_xor_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>, float, System.Runtime.Intrinsics.Vector256<float>>(a, b, System.Runtime.Intrinsics.X86.Avx.Xor);
         
@@ -357,316 +548,507 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     {
         /// <summary>
         /// Blend packed 32-bit integers from "a" and "b" using control mask "imm8", and store the results in "dst".
+        ///
+        ///__m128i _mm_blend_epi32 (__m128i a, __m128i b, const int imm8)
+        ///VPBLENDD xmm, xmm, xmm/m128, imm8
         /// </summary>
         public object mm_blend_epi32(object a, object b, byte imm8) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector128<int>, int, System.Runtime.Intrinsics.Vector128<int>, byte, byte, int, System.Runtime.Intrinsics.Vector128<int>>(a, b, imm8, System.Runtime.Intrinsics.X86.Avx2.Blend);
         
         /// <summary>
         /// Broadcast the low packed 8-bit integer from "a" to all elements of "dst".
+        ///
+        ///__m128i _mm_broadcastb_epi8 (__m128i a)
+        ///VPBROADCASTB xmm, xmm
         /// </summary>
         public object mm_broadcastb_epi8(object a) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, System.Runtime.Intrinsics.X86.Avx2.BroadcastScalarToVector128);
         
         /// <summary>
         /// Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at "base_addr" and offset by each 32-bit element in "vindex" (each index is scaled by the factor in "scale"). Gathered elements are merged into "dst". "scale" should be 1, 2, 4 or 8.
+        ///
+        ///__m128i _mm_i32gather_epi32 (int const* base_addr, __m128i vindex, const int scale)
+        ///VPGATHERDD xmm, vm32x, xmm
         /// </summary>
         public object mm_i32gather_epi32(object base_addr, object vindex, byte scale) => (object)ProcessFunc<IntPtr, IntPtr, int, System.Runtime.Intrinsics.Vector128<int>, byte, byte, int, System.Runtime.Intrinsics.Vector128<int>>(base_addr, vindex, scale, Avx2_GatherVector128);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<int>, byte, System.Runtime.Intrinsics.Vector128<int>> Avx2_GatherVector128 = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<int>, byte, System.Runtime.Intrinsics.Vector128<int>>((arg0, arg1, arg2) => System.Runtime.Intrinsics.X86.Avx2.GatherVector128((int*)arg0, (System.Runtime.Intrinsics.Vector128<int>)arg1, (byte)arg2));
         /// <summary>
         /// Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at "base_addr" and offset by each 32-bit element in "vindex" (each index is scaled by the factor in "scale"). Gathered elements are merged into "dst" using "mask" (elements are copied from "src" when the highest bit is not set in the corresponding element). "scale" should be 1, 2, 4 or 8.
+        ///
+        ///__m128i _mm_mask_i32gather_epi32 (__m128i src, int const* base_addr, __m128i vindex, __m128i mask, const int scale)
+        ///VPGATHERDD xmm, vm32x, xmm
         /// </summary>
         public object mm_mask_i32gather_epi32(object src, object base_addr, object vindex, object mask, byte scale) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector128<int>, IntPtr, IntPtr, int, System.Runtime.Intrinsics.Vector128<int>, int, System.Runtime.Intrinsics.Vector128<int>, byte, byte, int, System.Runtime.Intrinsics.Vector128<int>>(src, base_addr, vindex, mask, scale, Avx2_GatherMaskVector128);
         private unsafe readonly static Func<System.Runtime.Intrinsics.Vector128<int>, IntPtr, System.Runtime.Intrinsics.Vector128<int>, System.Runtime.Intrinsics.Vector128<int>, byte, System.Runtime.Intrinsics.Vector128<int>> Avx2_GatherMaskVector128 = new Func<System.Runtime.Intrinsics.Vector128<int>, IntPtr, System.Runtime.Intrinsics.Vector128<int>, System.Runtime.Intrinsics.Vector128<int>, byte, System.Runtime.Intrinsics.Vector128<int>>((arg0, arg1, arg2, arg3, arg4) => System.Runtime.Intrinsics.X86.Avx2.GatherMaskVector128((System.Runtime.Intrinsics.Vector128<int>)arg0, (int*)arg1, (System.Runtime.Intrinsics.Vector128<int>)arg2, (System.Runtime.Intrinsics.Vector128<int>)arg3, (byte)arg4));
         /// <summary>
         /// Load packed 32-bit integers from memory into "dst" using "mask" (elements are zeroed out when the highest bit is not set in the corresponding element).
+        ///
+        ///__m128i _mm_maskload_epi32 (int const* mem_addr, __m128i mask)
+        ///VPMASKMOVD xmm, xmm, m128
         /// </summary>
         public object mm_maskload_epi32(object mem_addr, object mask) => (object)ProcessFunc<IntPtr, IntPtr, int, System.Runtime.Intrinsics.Vector128<int>, int, System.Runtime.Intrinsics.Vector128<int>>(mem_addr, mask, Avx2_MaskLoad);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<int>, System.Runtime.Intrinsics.Vector128<int>> Avx2_MaskLoad = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<int>, System.Runtime.Intrinsics.Vector128<int>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Avx2.MaskLoad((int*)arg0, (System.Runtime.Intrinsics.Vector128<int>)arg1));
         /// <summary>
         /// Store packed 32-bit integers from "a" into memory using "mask" (elements are not stored when the highest bit is not set in the corresponding element).
+        ///
+        ///void _mm_maskstore_epi32 (int* mem_addr, __m128i mask, __m128i a)
+        ///VPMASKMOVD m128, xmm, xmm
         /// </summary>
         public void mm_maskstore_epi32(object mem_addr, object mask, object a) => ProcessAction<IntPtr, IntPtr, int, System.Runtime.Intrinsics.Vector128<int>, int, System.Runtime.Intrinsics.Vector128<int>>(mem_addr, mask, a, Avx2_MaskStore);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<int>, System.Runtime.Intrinsics.Vector128<int>> Avx2_MaskStore = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<int>, System.Runtime.Intrinsics.Vector128<int>>((arg0, arg1, arg2) => System.Runtime.Intrinsics.X86.Avx2.MaskStore((int*)arg0, (System.Runtime.Intrinsics.Vector128<int>)arg1, (System.Runtime.Intrinsics.Vector128<int>)arg2));
         /// <summary>
         /// Compute the absolute value of packed 8-bit integers in "a", and store the unsigned results in "dst".
+        ///
+        ///__m256i _mm256_abs_epi8 (__m256i a)
+        ///VPABSB ymm, ymm/m256
         /// </summary>
         public object mm256_abs_epi8(object a) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, byte, System.Runtime.Intrinsics.Vector256<byte>>(a, System.Runtime.Intrinsics.X86.Avx2.Abs);
         
         /// <summary>
         /// Add packed 8-bit integers in "a" and "b", and store the results in "dst".
+        ///
+        ///__m256i _mm256_add_epi8 (__m256i a, __m256i b)
+        ///VPADDB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_add_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.Add);
         
         /// <summary>
         /// Add packed 8-bit integers in "a" and "b" using saturation, and store the results in "dst".
+        ///
+        ///__m256i _mm256_adds_epi8 (__m256i a, __m256i b)
+        ///VPADDSB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_adds_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.AddSaturate);
         
         /// <summary>
         /// Concatenate pairs of 16-byte blocks in "a" and "b" into a 32-byte temporary result, shift the result right by "count" bytes, and store the low 16 bytes in "dst".
+        ///
+        ///__m256i _mm256_alignr_epi8 (__m256i a, __m256i b, const int count)
+        ///VPALIGNR ymm, ymm, ymm/m256, imm8
         /// </summary>
         public object mm256_alignr_epi8(object a, object b, byte count) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, byte, byte, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, count, System.Runtime.Intrinsics.X86.Avx2.AlignRight);
         
         /// <summary>
         /// Compute the bitwise AND of 256 bits (representing integer data) in "a" and "b", and store the result in "dst".
+        ///
+        ///__m256i _mm256_and_si256 (__m256i a, __m256i b)
+        ///VPAND ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_and_si256(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.And);
         
         /// <summary>
         /// Compute the bitwise NOT of 256 bits (representing integer data) in "a" and then AND with "b", and store the result in "dst".
+        ///
+        ///__m256i _mm256_andnot_si256 (__m256i a, __m256i b)
+        ///VPANDN ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_andnot_si256(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.AndNot);
         
         /// <summary>
         /// Average packed unsigned 8-bit integers in "a" and "b", and store the results in "dst".
+        ///
+        ///__m256i _mm256_avg_epu8 (__m256i a, __m256i b)
+        ///VPAVGB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_avg_epu8(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector256<byte>, byte, System.Runtime.Intrinsics.Vector256<byte>, byte, System.Runtime.Intrinsics.Vector256<byte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.Average);
         
         /// <summary>
         /// Blend packed 8-bit integers from "a" and "b" using "mask", and store the results in "dst".
+        ///
+        ///__m256i _mm256_blendv_epi8 (__m256i a, __m256i b, __m256i mask)
+        ///VPBLENDVB ymm, ymm, ymm/m256, ymm
         /// </summary>
         public object mm256_blendv_epi8(object a, object b, object mask) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, mask, System.Runtime.Intrinsics.X86.Avx2.BlendVariable);
         
         /// <summary>
         /// Broadcast the low packed 8-bit integer from "a" to all elements of "dst".
+        ///
+        ///__m256i _mm256_broadcastb_epi8 (__m128i a)
+        ///VPBROADCASTB ymm, m8
         /// </summary>
         public object mm256_broadcastb_epi8(object a) => (object)ProcessFunc<IntPtr, IntPtr, byte, System.Runtime.Intrinsics.Vector256<byte>>(a, Avx2_BroadcastScalarToVector256);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector256<byte>> Avx2_BroadcastScalarToVector256 = new Func<IntPtr, System.Runtime.Intrinsics.Vector256<byte>>((arg0) => System.Runtime.Intrinsics.X86.Avx2.BroadcastScalarToVector256((byte*)arg0));
         /// <summary>
         /// Broadcast 128 bits of integer data from "a" to all 128-bit lanes in "dst".
+        ///
+        ///__m256i _mm256_broadcastsi128_si256 (__m128i a)
+        ///VBROADCASTI128 ymm, m128
         /// </summary>
         public object mm256_broadcastsi128_si256(object a) => (object)ProcessFunc<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, Avx2_BroadcastVector128ToVector256);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>> Avx2_BroadcastVector128ToVector256 = new Func<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>>((arg0) => System.Runtime.Intrinsics.X86.Avx2.BroadcastVector128ToVector256((sbyte*)arg0));
         /// <summary>
         /// Shift 128-bit lanes in "a" left by "imm8" bytes while shifting in zeros, and store the results in "dst".
+        ///
+        ///__m256i _mm256_bslli_epi128 (__m256i a, const int imm8)
+        ///VPSLLDQ ymm, ymm, imm8
         /// </summary>
         public object mm256_bslli_epi128(object a, byte imm8) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, byte, byte, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, imm8, System.Runtime.Intrinsics.X86.Avx2.ShiftLeftLogical128BitLane);
         
         /// <summary>
         /// Shift 128-bit lanes in "a" right by "imm8" bytes while shifting in zeros, and store the results in "dst".
+        ///
+        ///__m256i _mm256_bsrli_epi128 (__m256i a, const int imm8)
+        ///VPSRLDQ ymm, ymm, imm8
         /// </summary>
         public object mm256_bsrli_epi128(object a, byte imm8) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, byte, byte, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, imm8, System.Runtime.Intrinsics.X86.Avx2.ShiftRightLogical128BitLane);
         
         /// <summary>
         /// Compare packed 8-bit integers in "a" and "b" for equality, and store the results in "dst".
+        ///
+        ///__m256i _mm256_cmpeq_epi8 (__m256i a, __m256i b)
+        ///VPCMPEQB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_cmpeq_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.CompareEqual);
         
         /// <summary>
         /// Compare packed 8-bit integers in "a" and "b" for greater-than, and store the results in "dst".
+        ///
+        ///__m256i _mm256_cmpgt_epi8 (__m256i a, __m256i b)
+        ///VPCMPGTB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_cmpgt_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.CompareGreaterThan);
         
         /// <summary>
         /// Sign extend packed 8-bit integers in "a" to packed 16-bit integers, and store the results in "dst".
+        ///
+        ///__m256i _mm256_cvtepi8_epi16 (__m128i a)
+        ///VPMOVSXBW ymm, xmm/m128
         /// </summary>
         public object mm256_cvtepi8_epi16(object a) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, short, System.Runtime.Intrinsics.Vector256<short>>(a, System.Runtime.Intrinsics.X86.Avx2.ConvertToVector256Int16);
         
         /// <summary>
         /// Sign extend packed 8-bit integers in "a" to packed 32-bit integers, and store the results in "dst".
+        ///
+        ///__m256i _mm256_cvtepi8_epi32 (__m128i a)
+        ///VPMOVSXBD ymm, xmm/m128
         /// </summary>
         public object mm256_cvtepi8_epi32(object a) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, int, System.Runtime.Intrinsics.Vector256<int>>(a, System.Runtime.Intrinsics.X86.Avx2.ConvertToVector256Int32);
         
         /// <summary>
         /// Sign extend packed 8-bit integers in the low 8 bytes of "a" to packed 64-bit integers, and store the results in "dst".
+        ///
+        ///__m256i _mm256_cvtepi8_epi64 (__m128i a)
+        ///VPMOVSXBQ ymm, xmm/m128
         /// </summary>
         public object mm256_cvtepi8_epi64(object a) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, long, System.Runtime.Intrinsics.Vector256<long>>(a, System.Runtime.Intrinsics.X86.Avx2.ConvertToVector256Int64);
         
         /// <summary>
         /// Copy the lower 32-bit integer in "a" to "dst".
+        ///
+        ///int _mm256_cvtsi256_si32 (__m256i a)
+        ///MOVD reg/m32, xmm
         /// </summary>
         public int mm256_cvtsi256_si32(object a) => (int)ProcessFunc<int, System.Runtime.Intrinsics.Vector256<int>, int, int>(a, System.Runtime.Intrinsics.X86.Avx2.ConvertToInt32);
         
         /// <summary>
         /// Extract 128 bits (composed of integer data) from "a", selected with "imm8", and store the result in "dst".
+        ///
+        ///__m128i _mm256_extracti128_si256 (__m256i a, const int imm8)
+        ///VEXTRACTI128 xmm, ymm, imm8
         /// </summary>
         public object mm256_extracti128_si256(object a, byte imm8) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, byte, byte, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, imm8, System.Runtime.Intrinsics.X86.Avx2.ExtractVector128);
         
         /// <summary>
         /// Horizontally add adjacent pairs of 16-bit integers in "a" and "b", and pack the signed 16-bit results in "dst".
+        ///
+        ///__m256i _mm256_hadd_epi16 (__m256i a, __m256i b)
+        ///VPHADDW ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_hadd_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>>(a, b, System.Runtime.Intrinsics.X86.Avx2.HorizontalAdd);
         
         /// <summary>
         /// Horizontally add adjacent pairs of 16-bit integers in "a" and "b" using saturation, and pack the signed 16-bit results in "dst".
+        ///
+        ///__m256i _mm256_hadds_epi16 (__m256i a, __m256i b)
+        ///VPHADDSW ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_hadds_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>>(a, b, System.Runtime.Intrinsics.X86.Avx2.HorizontalAddSaturate);
         
         /// <summary>
         /// Horizontally subtract adjacent pairs of 16-bit integers in "a" and "b", and pack the signed 16-bit results in "dst".
+        ///
+        ///__m256i _mm256_hsub_epi16 (__m256i a, __m256i b)
+        ///VPHSUBW ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_hsub_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>>(a, b, System.Runtime.Intrinsics.X86.Avx2.HorizontalSubtract);
         
         /// <summary>
         /// Horizontally subtract adjacent pairs of 16-bit integers in "a" and "b" using saturation, and pack the signed 16-bit results in "dst".
+        ///
+        ///__m256i _mm256_hsubs_epi16 (__m256i a, __m256i b)
+        ///VPHSUBSW ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_hsubs_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>>(a, b, System.Runtime.Intrinsics.X86.Avx2.HorizontalSubtractSaturate);
         
         /// <summary>
         /// Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at "base_addr" and offset by each 32-bit element in "vindex" (each index is scaled by the factor in "scale"). Gathered elements are merged into "dst". "scale" should be 1, 2, 4 or 8.
+        ///
+        ///__m256i _mm256_i32gather_epi32 (int const* base_addr, __m256i vindex, const int scale)
+        ///VPGATHERDD ymm, vm32y, ymm
         /// </summary>
         public object mm256_i32gather_epi32(object base_addr, object vindex, byte scale) => (object)ProcessFunc<IntPtr, IntPtr, int, System.Runtime.Intrinsics.Vector256<int>, byte, byte, int, System.Runtime.Intrinsics.Vector256<int>>(base_addr, vindex, scale, Avx2_GatherVector256);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector256<int>, byte, System.Runtime.Intrinsics.Vector256<int>> Avx2_GatherVector256 = new Func<IntPtr, System.Runtime.Intrinsics.Vector256<int>, byte, System.Runtime.Intrinsics.Vector256<int>>((arg0, arg1, arg2) => System.Runtime.Intrinsics.X86.Avx2.GatherVector256((int*)arg0, (System.Runtime.Intrinsics.Vector256<int>)arg1, (byte)arg2));
         /// <summary>
         /// Copy "a" to "dst", then insert 128 bits (composed of integer data) from "b" into "dst" at the location specified by "imm8".
+        ///
+        ///__m256i _mm256_inserti128_si256 (__m256i a, __m128i b, const int imm8)
+        ///VINSERTI128 ymm, ymm, xmm, imm8
         /// </summary>
         public object mm256_inserti128_si256(object a, object b, byte imm8) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, byte, byte, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, imm8, System.Runtime.Intrinsics.X86.Avx2.InsertVector128);
         
         /// <summary>
         /// Multiply packed signed 16-bit integers in "a" and "b", producing intermediate signed 32-bit integers. Horizontally add adjacent pairs of intermediate 32-bit integers, and pack the results in "dst".
+        ///
+        ///__m256i _mm256_madd_epi16 (__m256i a, __m256i b)
+        ///VPMADDWD ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_madd_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>, int, System.Runtime.Intrinsics.Vector256<int>>(a, b, System.Runtime.Intrinsics.X86.Avx2.MultiplyAddAdjacent);
         
         /// <summary>
         /// Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at "base_addr" and offset by each 32-bit element in "vindex" (each index is scaled by the factor in "scale"). Gathered elements are merged into "dst" using "mask" (elements are copied from "src" when the highest bit is not set in the corresponding element). "scale" should be 1, 2, 4 or 8.
+        ///
+        ///__m256i _mm256_mask_i32gather_epi32 (__m256i src, int const* base_addr, __m256i vindex, __m256i mask, const int scale)
+        ///VPGATHERDD ymm, vm32y, ymm
         /// </summary>
         public object mm256_mask_i32gather_epi32(object src, object base_addr, object vindex, object mask, byte scale) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector256<int>, IntPtr, IntPtr, int, System.Runtime.Intrinsics.Vector256<int>, int, System.Runtime.Intrinsics.Vector256<int>, byte, byte, int, System.Runtime.Intrinsics.Vector256<int>>(src, base_addr, vindex, mask, scale, Avx2_GatherMaskVector256);
         private unsafe readonly static Func<System.Runtime.Intrinsics.Vector256<int>, IntPtr, System.Runtime.Intrinsics.Vector256<int>, System.Runtime.Intrinsics.Vector256<int>, byte, System.Runtime.Intrinsics.Vector256<int>> Avx2_GatherMaskVector256 = new Func<System.Runtime.Intrinsics.Vector256<int>, IntPtr, System.Runtime.Intrinsics.Vector256<int>, System.Runtime.Intrinsics.Vector256<int>, byte, System.Runtime.Intrinsics.Vector256<int>>((arg0, arg1, arg2, arg3, arg4) => System.Runtime.Intrinsics.X86.Avx2.GatherMaskVector256((System.Runtime.Intrinsics.Vector256<int>)arg0, (int*)arg1, (System.Runtime.Intrinsics.Vector256<int>)arg2, (System.Runtime.Intrinsics.Vector256<int>)arg3, (byte)arg4));
         /// <summary>
         /// Compare packed 8-bit integers in "a" and "b", and store packed maximum values in "dst".
+        ///
+        ///__m256i _mm256_max_epi8 (__m256i a, __m256i b)
+        ///VPMAXSB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_max_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.Max);
         
         /// <summary>
         /// Compare packed 8-bit integers in "a" and "b", and store packed minimum values in "dst".
+        ///
+        ///__m256i _mm256_min_epi8 (__m256i a, __m256i b)
+        ///VPMINSB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_min_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.Min);
         
         /// <summary>
         /// Create mask from the most significant bit of each 8-bit element in "a", and store the result in "dst".
+        ///
+        ///int _mm256_movemask_epi8 (__m256i a)
+        ///VPMOVMSKB reg, ymm
         /// </summary>
         public int mm256_movemask_epi8(object a) => (int)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, int, int>(a, System.Runtime.Intrinsics.X86.Avx2.MoveMask);
         
         /// <summary>
-        /// Compute the sum of absolute differences (SADs) of quadruplets of unsigned 8-bit integers in "a" compared to those in "b", and store the 16-bit results in "dst". 	Eight SADs are performed for each 128-bit lane using one quadruplet from "b" and eight quadruplets from "a". One quadruplet is selected from "b" starting at on the offset specified in "imm8". Eight quadruplets are formed from sequential 8-bit integers selected from "a" starting at the offset specified in "imm8".
+        /// Compute the sum of absolute differences (SADs) of quadruplets of unsigned 8-bit integers in "a" compared to those in "b", and store the 16-bit results in "dst".
+        ///	Eight SADs are performed for each 128-bit lane using one quadruplet from "b" and eight quadruplets from "a". One quadruplet is selected from "b" starting at on the offset specified in "imm8". Eight quadruplets are formed from sequential 8-bit integers selected from "a" starting at the offset specified in "imm8".
+        ///
+        ///__m256i _mm256_mpsadbw_epu8 (__m256i a, __m256i b, const int imm8)
+        ///VMPSADBW ymm, ymm, ymm/m256, imm8
         /// </summary>
         public object mm256_mpsadbw_epu8(object a, object b, byte imm8) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector256<byte>, byte, System.Runtime.Intrinsics.Vector256<byte>, byte, byte, ushort, System.Runtime.Intrinsics.Vector256<ushort>>(a, b, imm8, System.Runtime.Intrinsics.X86.Avx2.MultipleSumAbsoluteDifferences);
         
         /// <summary>
         /// Multiply the low 32-bit integers from each packed 64-bit element in "a" and "b", and store the signed 64-bit results in "dst".
+        ///
+        ///__m256i _mm256_mul_epi32 (__m256i a, __m256i b)
+        ///VPMULDQ ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_mul_epi32(object a, object b) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector256<int>, int, System.Runtime.Intrinsics.Vector256<int>, long, System.Runtime.Intrinsics.Vector256<long>>(a, b, System.Runtime.Intrinsics.X86.Avx2.Multiply);
         
         /// <summary>
         /// Multiply the packed 16-bit integers in "a" and "b", producing intermediate 32-bit integers, and store the high 16 bits of the intermediate integers in "dst".
+        ///
+        ///__m256i _mm256_mulhi_epi16 (__m256i a, __m256i b)
+        ///VPMULHW ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_mulhi_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>>(a, b, System.Runtime.Intrinsics.X86.Avx2.MultiplyHigh);
         
         /// <summary>
         /// Multiply packed 16-bit integers in "a" and "b", producing intermediate signed 32-bit integers. Truncate each intermediate integer to the 18 most significant bits, round by adding 1, and store bits [16:1] to "dst".
+        ///
+        ///__m256i _mm256_mulhrs_epi16 (__m256i a, __m256i b)
+        ///VPMULHRSW ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_mulhrs_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>>(a, b, System.Runtime.Intrinsics.X86.Avx2.MultiplyHighRoundScale);
         
         /// <summary>
         /// Multiply the packed 16-bit integers in "a" and "b", producing intermediate 32-bit integers, and store the low 16 bits of the intermediate integers in "dst".
+        ///
+        ///__m256i _mm256_mullo_epi16 (__m256i a, __m256i b)
+        ///VPMULLW ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_mullo_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>>(a, b, System.Runtime.Intrinsics.X86.Avx2.MultiplyLow);
         
         /// <summary>
         /// Compute the bitwise OR of 256 bits (representing integer data) in "a" and "b", and store the result in "dst".
+        ///
+        ///__m256i _mm256_or_si256 (__m256i a, __m256i b)
+        ///VPOR ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_or_si256(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.Or);
         
         /// <summary>
         /// Convert packed 16-bit integers from "a" and "b" to packed 8-bit integers using signed saturation, and store the results in "dst".
+        ///
+        ///__m256i _mm256_packs_epi16 (__m256i a, __m256i b)
+        ///VPACKSSWB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_packs_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.PackSignedSaturate);
         
         /// <summary>
         /// Convert packed 16-bit integers from "a" and "b" to packed 8-bit integers using unsigned saturation, and store the results in "dst".
+        ///
+        ///__m256i _mm256_packus_epi16 (__m256i a, __m256i b)
+        ///VPACKUSWB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_packus_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector256<short>, byte, System.Runtime.Intrinsics.Vector256<byte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.PackUnsignedSaturate);
         
         /// <summary>
         /// Shuffle 128-bits (composed of integer data) selected by "imm8" from "a" and "b", and store the results in "dst".
+        ///
+        ///__m256i _mm256_permute2x128_si256 (__m256i a, __m256i b, const int imm8)
+        ///VPERM2I128 ymm, ymm, ymm/m256, imm8
         /// </summary>
         public object mm256_permute2x128_si256(object a, object b, byte imm8) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, byte, byte, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, imm8, System.Runtime.Intrinsics.X86.Avx2.Permute2x128);
         
         /// <summary>
         /// Shuffle 64-bit integers in "a" across lanes using the control in "imm8", and store the results in "dst".
+        ///
+        ///__m256i _mm256_permute4x64_epi64 (__m256i a, const int imm8)
+        ///VPERMQ ymm, ymm/m256, imm8
         /// </summary>
         public object mm256_permute4x64_epi64(object a, byte imm8) => (object)ProcessFunc<long, System.Runtime.Intrinsics.Vector256<long>, byte, byte, long, System.Runtime.Intrinsics.Vector256<long>>(a, imm8, System.Runtime.Intrinsics.X86.Avx2.Permute4x64);
         
         /// <summary>
         /// Shuffle 32-bit integers in "a" across lanes using the corresponding index in "idx", and store the results in "dst".
+        ///
+        ///__m256i _mm256_permutevar8x32_epi32 (__m256i a, __m256i idx)
+        ///VPERMD ymm, ymm/m256, ymm
         /// </summary>
         public object mm256_permutevar8x32_epi32(object a, object idx) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector256<int>, int, System.Runtime.Intrinsics.Vector256<int>, int, System.Runtime.Intrinsics.Vector256<int>>(a, idx, System.Runtime.Intrinsics.X86.Avx2.PermuteVar8x32);
         
         /// <summary>
         /// Compute the absolute differences of packed unsigned 8-bit integers in "a" and "b", then horizontally sum each consecutive 8 differences to produce four unsigned 16-bit integers, and pack these unsigned 16-bit integers in the low 16 bits of 64-bit elements in "dst".
+        ///
+        ///__m256i _mm256_sad_epu8 (__m256i a, __m256i b)
+        ///VPSADBW ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_sad_epu8(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector256<byte>, byte, System.Runtime.Intrinsics.Vector256<byte>, ushort, System.Runtime.Intrinsics.Vector256<ushort>>(a, b, System.Runtime.Intrinsics.X86.Avx2.SumAbsoluteDifferences);
         
         /// <summary>
         /// Shuffle 8-bit integers in "a" within 128-bit lanes according to shuffle control mask in the corresponding 8-bit element of "b", and store the results in "dst".
+        ///
+        ///__m256i _mm256_shuffle_epi8 (__m256i a, __m256i b)
+        ///VPSHUFB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_shuffle_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.Shuffle);
         
         /// <summary>
         /// Shuffle 16-bit integers in the high 64 bits of 128-bit lanes of "a" using the control in "imm8". Store the results in the high 64 bits of 128-bit lanes of "dst", with the low 64 bits of 128-bit lanes being copied from from "a" to "dst".
+        ///
+        ///__m256i _mm256_shufflehi_epi16 (__m256i a, const int imm8)
+        ///VPSHUFHW ymm, ymm/m256, imm8
         /// </summary>
         public object mm256_shufflehi_epi16(object a, byte imm8) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, byte, byte, short, System.Runtime.Intrinsics.Vector256<short>>(a, imm8, System.Runtime.Intrinsics.X86.Avx2.ShuffleHigh);
         
         /// <summary>
         /// Shuffle 16-bit integers in the low 64 bits of 128-bit lanes of "a" using the control in "imm8". Store the results in the low 64 bits of 128-bit lanes of "dst", with the high 64 bits of 128-bit lanes being copied from from "a" to "dst".
+        ///
+        ///__m256i _mm256_shufflelo_epi16 (__m256i a, const int imm8)
+        ///VPSHUFLW ymm, ymm/m256, imm8
         /// </summary>
         public object mm256_shufflelo_epi16(object a, byte imm8) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, byte, byte, short, System.Runtime.Intrinsics.Vector256<short>>(a, imm8, System.Runtime.Intrinsics.X86.Avx2.ShuffleLow);
         
         /// <summary>
         /// Negate packed 8-bit integers in "a" when the corresponding signed 8-bit integer in "b" is negative, and store the results in "dst". Element in "dst" are zeroed out when the corresponding element in "b" is zero.
+        ///
+        ///__m256i _mm256_sign_epi8 (__m256i a, __m256i b)
+        ///VPSIGNB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_sign_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.Sign);
         
         /// <summary>
         /// Shift packed 16-bit integers in "a" left by "count" while shifting in zeros, and store the results in "dst".
+        ///
+        ///__m256i _mm256_sll_epi16 (__m256i a, __m128i count)
+        ///VPSLLW ymm, ymm, xmm/m128
         /// </summary>
         public object mm256_sll_epi16(object a, object count) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector256<short>>(a, count, System.Runtime.Intrinsics.X86.Avx2.ShiftLeftLogical);
         
         /// <summary>
         /// Shift packed 32-bit integers in "a" left by the amount specified by the corresponding element in "count" while shifting in zeros, and store the results in "dst".
+        ///
+        ///__m256i _mm256_sllv_epi32 (__m256i a, __m256i count)
+        ///VPSLLVD ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_sllv_epi32(object a, object count) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector256<int>, uint, System.Runtime.Intrinsics.Vector256<uint>, int, System.Runtime.Intrinsics.Vector256<int>>(a, count, System.Runtime.Intrinsics.X86.Avx2.ShiftLeftLogicalVariable);
         
         /// <summary>
         /// Shift packed 32-bit integers in "a" right by the amount specified by the corresponding element in "count" while shifting in sign bits, and store the results in "dst".
+        ///
+        ///__m256i _mm256_srav_epi32 (__m256i a, __m256i count)
+        ///VPSRAVD ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_srav_epi32(object a, object count) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector256<int>, uint, System.Runtime.Intrinsics.Vector256<uint>, int, System.Runtime.Intrinsics.Vector256<int>>(a, count, System.Runtime.Intrinsics.X86.Avx2.ShiftRightArithmeticVariable);
         
         /// <summary>
         /// Shift packed 16-bit integers in "a" right by "count" while shifting in zeros, and store the results in "dst".
+        ///
+        ///__m256i _mm256_srl_epi16 (__m256i a, __m128i count)
+        ///VPSRLW ymm, ymm, xmm/m128
         /// </summary>
         public object mm256_srl_epi16(object a, object count) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector256<short>, short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector256<short>>(a, count, System.Runtime.Intrinsics.X86.Avx2.ShiftRightLogical);
         
         /// <summary>
         /// Shift packed 32-bit integers in "a" right by the amount specified by the corresponding element in "count" while shifting in zeros, and store the results in "dst".
+        ///
+        ///__m256i _mm256_srlv_epi32 (__m256i a, __m256i count)
+        ///VPSRLVD ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_srlv_epi32(object a, object count) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector256<int>, uint, System.Runtime.Intrinsics.Vector256<uint>, int, System.Runtime.Intrinsics.Vector256<int>>(a, count, System.Runtime.Intrinsics.X86.Avx2.ShiftRightLogicalVariable);
         
         /// <summary>
-        /// Load 256-bits of integer data from memory into "dst" using a non-temporal memory hint. 	"mem_addr" must be aligned on a 32-byte boundary or a general-protection exception may be generated.
+        /// Load 256-bits of integer data from memory into "dst" using a non-temporal memory hint.
+        ///	"mem_addr" must be aligned on a 32-byte boundary or a general-protection exception may be generated.
+        ///
+        ///__m256i _mm256_stream_load_si256 (__m256i const* mem_addr)
+        ///VMOVNTDQA ymm, m256
         /// </summary>
         public object mm256_stream_load_si256(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(mem_addr, 32, Avx2_LoadAlignedVector256NonTemporal);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>> Avx2_LoadAlignedVector256NonTemporal = new Func<IntPtr, System.Runtime.Intrinsics.Vector256<sbyte>>((arg0) => System.Runtime.Intrinsics.X86.Avx2.LoadAlignedVector256NonTemporal((sbyte*)arg0));
         /// <summary>
         /// Subtract packed 8-bit integers in "b" from packed 8-bit integers in "a", and store the results in "dst".
+        ///
+        ///__m256i _mm256_sub_epi8 (__m256i a, __m256i b)
+        ///VPSUBB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_sub_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.Subtract);
         
         /// <summary>
         /// Subtract packed 8-bit integers in "b" from packed 8-bit integers in "a" using saturation, and store the results in "dst".
+        ///
+        ///__m256i _mm256_subs_epi8 (__m256i a, __m256i b)
+        ///VPSUBSB ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_subs_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.SubtractSaturate);
         
         /// <summary>
         /// Unpack and interleave 8-bit integers from the high half of each 128-bit lane in "a" and "b", and store the results in "dst".
+        ///
+        ///__m256i _mm256_unpackhi_epi8 (__m256i a, __m256i b)
+        ///VPUNPCKHBW ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_unpackhi_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.UnpackHigh);
         
         /// <summary>
         /// Unpack and interleave 8-bit integers from the low half of each 128-bit lane in "a" and "b", and store the results in "dst".
+        ///
+        ///__m256i _mm256_unpacklo_epi8 (__m256i a, __m256i b)
+        ///VPUNPCKLBW ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_unpacklo_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.UnpackLow);
         
         /// <summary>
         /// Compute the bitwise XOR of 256 bits (representing integer data) in "a" and "b", and store the result in "dst".
+        ///
+        ///__m256i _mm256_xor_si256 (__m256i a, __m256i b)
+        ///VPXOR ymm, ymm, ymm/m256
         /// </summary>
         public object mm256_xor_si256(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>, sbyte, System.Runtime.Intrinsics.Vector256<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Avx2.Xor);
         
@@ -677,37 +1059,44 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     public partial class Bmi1IntrinsicsModule
     {
         /// <summary>
-        /// unsigned int _andn_u32 (unsigned int a, unsigned int b) ANDN r32a, r32b, reg/m32
+        /// unsigned int _andn_u32 (unsigned int a, unsigned int b)
+        ///ANDN r32a, r32b, reg/m32
         /// </summary>
         public uint andn_u32(uint left, uint right) => (uint)ProcessFunc<uint, uint, uint, uint, uint, uint>(left, right, System.Runtime.Intrinsics.X86.Bmi1.AndNot);
         
         /// <summary>
-        /// unsigned int _bextr_u32 (unsigned int a, unsigned int start, unsigned int len) BEXTR r32a, reg/m32, r32b
+        /// unsigned int _bextr_u32 (unsigned int a, unsigned int start, unsigned int len)
+        ///BEXTR r32a, reg/m32, r32b
         /// </summary>
         public uint bextr_u32(uint value, byte start, byte length) => (uint)ProcessFunc<uint, uint, byte, byte, byte, byte, uint, uint>(value, start, length, System.Runtime.Intrinsics.X86.Bmi1.BitFieldExtract);
         
         /// <summary>
-        /// unsigned int _bextr2_u32 (unsigned int a, unsigned int control) BEXTR r32a, reg/m32, r32b
+        /// unsigned int _bextr2_u32 (unsigned int a, unsigned int control)
+        ///BEXTR r32a, reg/m32, r32b
         /// </summary>
         public uint bextr2_u32(uint value, ushort control) => (uint)ProcessFunc<uint, uint, ushort, ushort, uint, uint>(value, control, System.Runtime.Intrinsics.X86.Bmi1.BitFieldExtract);
         
         /// <summary>
-        /// unsigned int _blsi_u32 (unsigned int a) BLSI reg, reg/m32
+        /// unsigned int _blsi_u32 (unsigned int a)
+        ///BLSI reg, reg/m32
         /// </summary>
         public uint blsi_u32(uint value) => (uint)ProcessFunc<uint, uint, uint, uint>(value, System.Runtime.Intrinsics.X86.Bmi1.ExtractLowestSetBit);
         
         /// <summary>
-        /// unsigned int _blsmsk_u32 (unsigned int a) BLSMSK reg, reg/m32
+        /// unsigned int _blsmsk_u32 (unsigned int a)
+        ///BLSMSK reg, reg/m32
         /// </summary>
         public uint blsmsk_u32(uint value) => (uint)ProcessFunc<uint, uint, uint, uint>(value, System.Runtime.Intrinsics.X86.Bmi1.GetMaskUpToLowestSetBit);
         
         /// <summary>
-        /// unsigned int _blsr_u32 (unsigned int a) BLSR reg, reg/m32
+        /// unsigned int _blsr_u32 (unsigned int a)
+        ///BLSR reg, reg/m32
         /// </summary>
         public uint blsr_u32(uint value) => (uint)ProcessFunc<uint, uint, uint, uint>(value, System.Runtime.Intrinsics.X86.Bmi1.ResetLowestSetBit);
         
         /// <summary>
-        /// int _mm_tzcnt_32 (unsigned int a) TZCNT reg, reg/m32
+        /// int _mm_tzcnt_32 (unsigned int a)
+        ///TZCNT reg, reg/m32
         /// </summary>
         public uint mm_tzcnt_32(uint value) => (uint)ProcessFunc<uint, uint, uint, uint>(value, System.Runtime.Intrinsics.X86.Bmi1.TrailingZeroCount);
         
@@ -718,37 +1107,44 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     public partial class Bmi1X64IntrinsicsModule
     {
         /// <summary>
-        /// unsigned __int64 _andn_u64 (unsigned __int64 a, unsigned __int64 b) ANDN r64a, r64b, reg/m64
+        /// unsigned __int64 _andn_u64 (unsigned __int64 a, unsigned __int64 b)
+        ///ANDN r64a, r64b, reg/m64
         /// </summary>
         public ulong andn_u64(ulong left, ulong right) => (ulong)ProcessFunc<ulong, ulong, ulong, ulong, ulong, ulong>(left, right, System.Runtime.Intrinsics.X86.Bmi1.X64.AndNot);
         
         /// <summary>
-        /// unsigned __int64 _bextr_u64 (unsigned __int64 a, unsigned int start, unsigned int len) BEXTR r64a, reg/m64, r64b
+        /// unsigned __int64 _bextr_u64 (unsigned __int64 a, unsigned int start, unsigned int len)
+        ///BEXTR r64a, reg/m64, r64b
         /// </summary>
         public ulong bextr_u64(ulong value, byte start, byte length) => (ulong)ProcessFunc<ulong, ulong, byte, byte, byte, byte, ulong, ulong>(value, start, length, System.Runtime.Intrinsics.X86.Bmi1.X64.BitFieldExtract);
         
         /// <summary>
-        /// unsigned __int64 _bextr2_u64 (unsigned __int64 a, unsigned __int64 control) BEXTR r64a, reg/m64, r64b
+        /// unsigned __int64 _bextr2_u64 (unsigned __int64 a, unsigned __int64 control)
+        ///BEXTR r64a, reg/m64, r64b
         /// </summary>
         public ulong bextr2_u64(ulong value, ushort control) => (ulong)ProcessFunc<ulong, ulong, ushort, ushort, ulong, ulong>(value, control, System.Runtime.Intrinsics.X86.Bmi1.X64.BitFieldExtract);
         
         /// <summary>
-        /// unsigned __int64 _blsi_u64 (unsigned __int64 a) BLSI reg, reg/m64
+        /// unsigned __int64 _blsi_u64 (unsigned __int64 a)
+        ///BLSI reg, reg/m64
         /// </summary>
         public ulong blsi_u64(ulong value) => (ulong)ProcessFunc<ulong, ulong, ulong, ulong>(value, System.Runtime.Intrinsics.X86.Bmi1.X64.ExtractLowestSetBit);
         
         /// <summary>
-        /// unsigned __int64 _blsmsk_u64 (unsigned __int64 a) BLSMSK reg, reg/m64
+        /// unsigned __int64 _blsmsk_u64 (unsigned __int64 a)
+        ///BLSMSK reg, reg/m64
         /// </summary>
         public ulong blsmsk_u64(ulong value) => (ulong)ProcessFunc<ulong, ulong, ulong, ulong>(value, System.Runtime.Intrinsics.X86.Bmi1.X64.GetMaskUpToLowestSetBit);
         
         /// <summary>
-        /// unsigned __int64 _blsr_u64 (unsigned __int64 a) BLSR reg, reg/m64
+        /// unsigned __int64 _blsr_u64 (unsigned __int64 a)
+        ///BLSR reg, reg/m64
         /// </summary>
         public ulong blsr_u64(ulong value) => (ulong)ProcessFunc<ulong, ulong, ulong, ulong>(value, System.Runtime.Intrinsics.X86.Bmi1.X64.ResetLowestSetBit);
         
         /// <summary>
-        /// __int64 _mm_tzcnt_64 (unsigned __int64 a) TZCNT reg, reg/m64
+        /// __int64 _mm_tzcnt_64 (unsigned __int64 a)
+        ///TZCNT reg, reg/m64
         /// </summary>
         public ulong mm_tzcnt_64(ulong value) => (ulong)ProcessFunc<ulong, ulong, ulong, ulong>(value, System.Runtime.Intrinsics.X86.Bmi1.X64.TrailingZeroCount);
         
@@ -759,22 +1155,26 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     public partial class Bmi2IntrinsicsModule
     {
         /// <summary>
-        /// unsigned int _bzhi_u32 (unsigned int a, unsigned int index) BZHI r32a, reg/m32, r32b
+        /// unsigned int _bzhi_u32 (unsigned int a, unsigned int index)
+        ///BZHI r32a, reg/m32, r32b
         /// </summary>
         public uint bzhi_u32(uint value, uint index) => (uint)ProcessFunc<uint, uint, uint, uint, uint, uint>(value, index, System.Runtime.Intrinsics.X86.Bmi2.ZeroHighBits);
         
         /// <summary>
-        /// unsigned int _mulx_u32 (unsigned int a, unsigned int b, unsigned int* hi) MULX r32a, r32b, reg/m32
+        /// unsigned int _mulx_u32 (unsigned int a, unsigned int b, unsigned int* hi)
+        ///MULX r32a, r32b, reg/m32
         /// </summary>
         public uint mulx_u32(uint left, uint right) => (uint)ProcessFunc<uint, uint, uint, uint, uint, uint>(left, right, System.Runtime.Intrinsics.X86.Bmi2.MultiplyNoFlags);
         
         /// <summary>
-        /// unsigned int _pdep_u32 (unsigned int a, unsigned int mask) PDEP r32a, r32b, reg/m32
+        /// unsigned int _pdep_u32 (unsigned int a, unsigned int mask)
+        ///PDEP r32a, r32b, reg/m32
         /// </summary>
         public uint pdep_u32(uint value, uint mask) => (uint)ProcessFunc<uint, uint, uint, uint, uint, uint>(value, mask, System.Runtime.Intrinsics.X86.Bmi2.ParallelBitDeposit);
         
         /// <summary>
-        /// unsigned int _pext_u32 (unsigned int a, unsigned int mask) PEXT r32a, r32b, reg/m32
+        /// unsigned int _pext_u32 (unsigned int a, unsigned int mask)
+        ///PEXT r32a, r32b, reg/m32
         /// </summary>
         public uint pext_u32(uint value, uint mask) => (uint)ProcessFunc<uint, uint, uint, uint, uint, uint>(value, mask, System.Runtime.Intrinsics.X86.Bmi2.ParallelBitExtract);
         
@@ -785,22 +1185,26 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     public partial class Bmi2X64IntrinsicsModule
     {
         /// <summary>
-        /// unsigned __int64 _bzhi_u64 (unsigned __int64 a, unsigned int index) BZHI r64a, reg/m32, r64b
+        /// unsigned __int64 _bzhi_u64 (unsigned __int64 a, unsigned int index)
+        ///BZHI r64a, reg/m32, r64b
         /// </summary>
         public ulong bzhi_u64(ulong value, ulong index) => (ulong)ProcessFunc<ulong, ulong, ulong, ulong, ulong, ulong>(value, index, System.Runtime.Intrinsics.X86.Bmi2.X64.ZeroHighBits);
         
         /// <summary>
-        /// unsigned __int64 _mulx_u64 (unsigned __int64 a, unsigned __int64 b, unsigned __int64* hi) MULX r64a, r64b, reg/m64
+        /// unsigned __int64 _mulx_u64 (unsigned __int64 a, unsigned __int64 b, unsigned __int64* hi)
+        ///MULX r64a, r64b, reg/m64
         /// </summary>
         public ulong mulx_u64(ulong left, ulong right) => (ulong)ProcessFunc<ulong, ulong, ulong, ulong, ulong, ulong>(left, right, System.Runtime.Intrinsics.X86.Bmi2.X64.MultiplyNoFlags);
         
         /// <summary>
-        /// unsigned __int64 _pdep_u64 (unsigned __int64 a, unsigned __int64 mask) PDEP r64a, r64b, reg/m64
+        /// unsigned __int64 _pdep_u64 (unsigned __int64 a, unsigned __int64 mask)
+        ///PDEP r64a, r64b, reg/m64
         /// </summary>
         public ulong pdep_u64(ulong value, ulong mask) => (ulong)ProcessFunc<ulong, ulong, ulong, ulong, ulong, ulong>(value, mask, System.Runtime.Intrinsics.X86.Bmi2.X64.ParallelBitDeposit);
         
         /// <summary>
-        /// unsigned __int64 _pext_u64 (unsigned __int64 a, unsigned __int64 mask) PEXT r64a, r64b, reg/m64
+        /// unsigned __int64 _pext_u64 (unsigned __int64 a, unsigned __int64 mask)
+        ///PEXT r64a, r64b, reg/m64
         /// </summary>
         public ulong pext_u64(ulong value, ulong mask) => (ulong)ProcessFunc<ulong, ulong, ulong, ulong, ulong, ulong>(value, mask, System.Runtime.Intrinsics.X86.Bmi2.X64.ParallelBitExtract);
         
@@ -812,431 +1216,694 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     {
         /// <summary>
         /// Add packed single-precision (32-bit) floating-point elements in "a" and "b", and store the results in "dst".
+        ///
+        ///__m128 _mm_add_ps (__m128 a,  __m128 b)
+        ///ADDPS xmm, xmm/m128
         /// </summary>
         public object mm_add_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.Add);
         
         /// <summary>
         /// Add the lower single-precision (32-bit) floating-point element in "a" and "b", store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_add_ss (__m128 a,  __m128 b)
+        ///ADDSS xmm, xmm/m32
         /// </summary>
         public object mm_add_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.AddScalar);
         
         /// <summary>
         /// Compute the bitwise AND of packed single-precision (32-bit) floating-point elements in "a" and "b", and store the results in "dst".
+        ///
+        ///__m128 _mm_and_ps (__m128 a, __m128 b)
+        ///ANDPS xmm, xmm/m128
         /// </summary>
         public object mm_and_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.And);
         
         /// <summary>
         /// Compute the bitwise NOT of packed single-precision (32-bit) floating-point elements in "a" and then AND with "b", and store the results in "dst".
+        ///
+        ///__m128 _mm_andnot_ps (__m128 a, __m128 b)
+        ///ANDNPS xmm, xmm/m128
         /// </summary>
         public object mm_andnot_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.AndNot);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" for equality, and store the results in "dst".
+        ///
+        ///__m128 _mm_cmpeq_ps (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m128, imm8(0)
         /// </summary>
         public object mm_cmpeq_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareEqual);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b" for equality, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cmpeq_ss (__m128 a,  __m128 b)
+        ///CMPSS xmm, xmm/m32, imm8(0)
         /// </summary>
         public object mm_cmpeq_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarEqual);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" for greater-than-or-equal, and store the results in "dst".
+        ///
+        ///__m128 _mm_cmpge_ps (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m128, imm8(5)
         /// </summary>
         public object mm_cmpge_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareGreaterThanOrEqual);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b" for greater-than-or-equal, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cmpge_ss (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m32, imm8(5)
         /// </summary>
         public object mm_cmpge_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarGreaterThanOrEqual);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" for greater-than, and store the results in "dst".
+        ///
+        ///__m128 _mm_cmpgt_ps (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m128, imm8(6)
         /// </summary>
         public object mm_cmpgt_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareGreaterThan);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b" for greater-than, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cmpgt_ss (__m128 a,  __m128 b)
+        ///CMPSS xmm, xmm/m32, imm8(6)
         /// </summary>
         public object mm_cmpgt_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarGreaterThan);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" for less-than-or-equal, and store the results in "dst".
+        ///
+        ///__m128 _mm_cmple_ps (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m128, imm8(2)
         /// </summary>
         public object mm_cmple_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareLessThanOrEqual);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b" for less-than-or-equal, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cmple_ss (__m128 a,  __m128 b)
+        ///CMPSS xmm, xmm/m32, imm8(2)
         /// </summary>
         public object mm_cmple_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarLessThanOrEqual);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" for less-than, and store the results in "dst".
+        ///
+        ///__m128 _mm_cmplt_ps (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m128, imm8(1)
         /// </summary>
         public object mm_cmplt_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareLessThan);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b" for less-than, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cmplt_ss (__m128 a,  __m128 b)
+        ///CMPSS xmm, xmm/m32, imm8(1)
         /// </summary>
         public object mm_cmplt_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarLessThan);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" for not-equal, and store the results in "dst".
+        ///
+        ///__m128 _mm_cmpneq_ps (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m128, imm8(4)
         /// </summary>
         public object mm_cmpneq_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareNotEqual);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b" for not-equal, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cmpneq_ss (__m128 a,  __m128 b)
+        ///CMPSS xmm, xmm/m32, imm8(4)
         /// </summary>
         public object mm_cmpneq_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarNotEqual);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" for not-greater-than-or-equal, and store the results in "dst".
+        ///
+        ///__m128 _mm_cmpnge_ps (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m128, imm8(1)
         /// </summary>
         public object mm_cmpnge_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareNotGreaterThanOrEqual);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b" for not-greater-than-or-equal, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cmpnge_ss (__m128 a,  __m128 b)
+        ///CMPSS xmm, xmm/m32, imm8(1)
         /// </summary>
         public object mm_cmpnge_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarNotGreaterThanOrEqual);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" for not-greater-than, and store the results in "dst".
+        ///
+        ///__m128 _mm_cmpngt_ps (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m128, imm8(2)
         /// </summary>
         public object mm_cmpngt_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareNotGreaterThan);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b" for not-greater-than, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cmpngt_ss (__m128 a,  __m128 b)
+        ///CMPSS xmm, xmm/m32, imm8(2)
         /// </summary>
         public object mm_cmpngt_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarNotGreaterThan);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" for not-less-than-or-equal, and store the results in "dst".
+        ///
+        ///__m128 _mm_cmpnle_ps (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m128, imm8(6)
         /// </summary>
         public object mm_cmpnle_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareNotLessThanOrEqual);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b" for not-less-than-or-equal, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cmpnle_ss (__m128 a,  __m128 b)
+        ///CMPSS xmm, xmm/m32, imm8(6)
         /// </summary>
         public object mm_cmpnle_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarNotLessThanOrEqual);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" for not-less-than, and store the results in "dst".
+        ///
+        ///__m128 _mm_cmpnlt_ps (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m128, imm8(5)
         /// </summary>
         public object mm_cmpnlt_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareNotLessThan);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b" for not-less-than, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cmpnlt_ss (__m128 a,  __m128 b)
+        ///CMPSS xmm, xmm/m32, imm8(5)
         /// </summary>
         public object mm_cmpnlt_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarNotLessThan);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" to see if neither is NaN, and store the results in "dst".
+        ///
+        ///__m128 _mm_cmpord_ps (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m128, imm8(7)
         /// </summary>
         public object mm_cmpord_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareOrdered);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b" to see if neither is NaN, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cmpord_ss (__m128 a,  __m128 b)
+        ///CMPSS xmm, xmm/m32, imm8(7)
         /// </summary>
         public object mm_cmpord_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarOrdered);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b" to see if either is NaN, and store the results in "dst".
+        ///
+        ///__m128 _mm_cmpunord_ps (__m128 a,  __m128 b)
+        ///CMPPS xmm, xmm/m128, imm8(3)
         /// </summary>
         public object mm_cmpunord_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareUnordered);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b" to see if either is NaN, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cmpunord_ss (__m128 a,  __m128 b)
+        ///CMPSS xmm, xmm/m32, imm8(3)
         /// </summary>
         public object mm_cmpunord_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarUnordered);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point element in "a" and "b" for equality, and return the boolean result (0 or 1).
+        ///
+        ///int _mm_comieq_ss (__m128 a, __m128 b)
+        ///COMISS xmm, xmm/m32
         /// </summary>
         public bool mm_comieq_ss(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarOrderedEqual);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point element in "a" and "b" for greater-than-or-equal, and return the boolean result (0 or 1).
+        ///
+        ///int _mm_comige_ss (__m128 a, __m128 b)
+        ///COMISS xmm, xmm/m32
         /// </summary>
         public bool mm_comige_ss(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarOrderedGreaterThanOrEqual);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point element in "a" and "b" for greater-than, and return the boolean result (0 or 1).
+        ///
+        ///int _mm_comigt_ss (__m128 a, __m128 b)
+        ///COMISS xmm, xmm/m32
         /// </summary>
         public bool mm_comigt_ss(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarOrderedGreaterThan);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point element in "a" and "b" for less-than-or-equal, and return the boolean result (0 or 1).
+        ///
+        ///int _mm_comile_ss (__m128 a, __m128 b)
+        ///COMISS xmm, xmm/m32
         /// </summary>
         public bool mm_comile_ss(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarOrderedLessThanOrEqual);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point element in "a" and "b" for less-than, and return the boolean result (0 or 1).
+        ///
+        ///int _mm_comilt_ss (__m128 a, __m128 b)
+        ///COMISS xmm, xmm/m32
         /// </summary>
         public bool mm_comilt_ss(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarOrderedLessThan);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point element in "a" and "b" for not-equal, and return the boolean result (0 or 1).
+        ///
+        ///int _mm_comineq_ss (__m128 a, __m128 b)
+        ///COMISS xmm, xmm/m32
         /// </summary>
         public bool mm_comineq_ss(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarOrderedNotEqual);
         
         /// <summary>
         /// Convert the 32-bit integer "b" to a single-precision (32-bit) floating-point element, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cvtsi32_ss (__m128 a, int b)
+        ///CVTSI2SS xmm, reg/m32
         /// </summary>
         public object mm_cvtsi32_ss(object a, int b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, int, int, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.ConvertScalarToVector128Single);
         
         /// <summary>
         /// Convert the lower single-precision (32-bit) floating-point element in "a" to a 32-bit integer, and store the result in "dst".
+        ///
+        ///int _mm_cvtss_si32 (__m128 a)
+        ///CVTSS2SI r32, xmm/m32
         /// </summary>
         public int mm_cvtss_si32(object a) => (int)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, int, int>(a, System.Runtime.Intrinsics.X86.Sse.ConvertToInt32);
         
         /// <summary>
         /// Convert the lower single-precision (32-bit) floating-point element in "a" to a 32-bit integer with truncation, and store the result in "dst".
+        ///
+        ///int _mm_cvttss_si32 (__m128 a)
+        ///CVTTSS2SI r32, xmm/m32
         /// </summary>
         public int mm_cvttss_si32(object a) => (int)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, int, int>(a, System.Runtime.Intrinsics.X86.Sse.ConvertToInt32WithTruncation);
         
         /// <summary>
         /// Divide packed single-precision (32-bit) floating-point elements in "a" by packed elements in "b", and store the results in "dst".
+        ///
+        ///__m128 _mm_div_ps (__m128 a,  __m128 b)
+        ///DIVPS xmm, xmm/m128
         /// </summary>
         public object mm_div_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.Divide);
         
         /// <summary>
         /// Divide the lower single-precision (32-bit) floating-point element in "a" by the lower single-precision (32-bit) floating-point element in "b", store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_div_ss (__m128 a,  __m128 b)
+        ///DIVSS xmm, xmm/m32
         /// </summary>
         public object mm_div_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.DivideScalar);
         
         /// <summary>
-        /// Load 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from memory into "dst". 	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        /// Load 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from memory into "dst".
+        ///	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        ///
+        ///__m128 _mm_load_ps (float const* mem_address)
+        ///MOVAPS xmm, m128
         /// </summary>
         public object mm_load_ps(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>>(mem_addr, 16, Sse_LoadAlignedVector128);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<float>> Sse_LoadAlignedVector128 = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<float>>((arg0) => System.Runtime.Intrinsics.X86.Sse.LoadAlignedVector128((float*)arg0));
         /// <summary>
         /// Load a single-precision (32-bit) floating-point element from memory into the lower of "dst", and zero the upper 3 elements. "mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///__m128 _mm_load_ss (float const* mem_address)
+        ///MOVSS xmm, m32
         /// </summary>
         public object mm_load_ss(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>>(mem_addr, Sse_LoadScalarVector128);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<float>> Sse_LoadScalarVector128 = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<float>>((arg0) => System.Runtime.Intrinsics.X86.Sse.LoadScalarVector128((float*)arg0));
         /// <summary>
         /// Load 2 single-precision (32-bit) floating-point elements from memory into the upper 2 elements of "dst", and copy the lower 2 elements from "a" to "dst". "mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///__m128 _mm_loadh_pi (__m128 a, __m64 const* mem_addr)
+        ///MOVHPS xmm, m64
         /// </summary>
         public object mm_loadh_pi(object a, object mem_addr) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>>(a, mem_addr, Sse_LoadHigh);
         private unsafe readonly static Func<System.Runtime.Intrinsics.Vector128<float>, IntPtr, System.Runtime.Intrinsics.Vector128<float>> Sse_LoadHigh = new Func<System.Runtime.Intrinsics.Vector128<float>, IntPtr, System.Runtime.Intrinsics.Vector128<float>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse.LoadHigh((System.Runtime.Intrinsics.Vector128<float>)arg0, (float*)arg1));
         /// <summary>
         /// Load 2 single-precision (32-bit) floating-point elements from memory into the lower 2 elements of "dst", and copy the upper 2 elements from "a" to "dst". "mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///__m128 _mm_loadl_pi (__m128 a, __m64 const* mem_addr)
+        ///MOVLPS xmm, m64
         /// </summary>
         public object mm_loadl_pi(object a, object mem_addr) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>>(a, mem_addr, Sse_LoadLow);
         private unsafe readonly static Func<System.Runtime.Intrinsics.Vector128<float>, IntPtr, System.Runtime.Intrinsics.Vector128<float>> Sse_LoadLow = new Func<System.Runtime.Intrinsics.Vector128<float>, IntPtr, System.Runtime.Intrinsics.Vector128<float>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse.LoadLow((System.Runtime.Intrinsics.Vector128<float>)arg0, (float*)arg1));
         /// <summary>
-        /// Load 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from memory into "dst". 	"mem_addr" does not need to be aligned on any particular boundary.
+        /// Load 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from memory into "dst".
+        ///	"mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///__m128 _mm_loadu_ps (float const* mem_address)
+        ///MOVUPS xmm, m128
         /// </summary>
         public object mm_loadu_ps(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>>(mem_addr, Sse_LoadVector128);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<float>> Sse_LoadVector128 = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<float>>((arg0) => System.Runtime.Intrinsics.X86.Sse.LoadVector128((float*)arg0));
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b", and store packed maximum values in "dst".
+        ///
+        ///__m128 _mm_max_ps (__m128 a,  __m128 b)
+        ///MAXPS xmm, xmm/m128
         /// </summary>
         public object mm_max_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.Max);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b", store the maximum value in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128 _mm_max_ss (__m128 a,  __m128 b)
+        ///MAXSS xmm, xmm/m32
         /// </summary>
         public object mm_max_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.MaxScalar);
         
         /// <summary>
         /// Compare packed single-precision (32-bit) floating-point elements in "a" and "b", and store packed minimum values in "dst".
+        ///
+        ///__m128 _mm_min_ps (__m128 a,  __m128 b)
+        ///MINPS xmm, xmm/m128
         /// </summary>
         public object mm_min_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.Min);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point elements in "a" and "b", store the minimum value in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128 _mm_min_ss (__m128 a,  __m128 b)
+        ///MINSS xmm, xmm/m32
         /// </summary>
         public object mm_min_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.MinScalar);
         
         /// <summary>
         /// Move the lower single-precision (32-bit) floating-point element from "b" to the lower element of "dst", and copy the upper 3 elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_move_ss (__m128 a, __m128 b)
+        ///MOVSS xmm, xmm
         /// </summary>
         public object mm_move_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.MoveScalar);
         
         /// <summary>
         /// Move the upper 2 single-precision (32-bit) floating-point elements from "b" to the lower 2 elements of "dst", and copy the upper 2 elements from "a" to the upper 2 elements of "dst".
+        ///
+        ///__m128 _mm_movehl_ps (__m128 a,  __m128 b)
+        ///MOVHLPS xmm, xmm
         /// </summary>
         public object mm_movehl_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.MoveHighToLow);
         
         /// <summary>
         /// Move the lower 2 single-precision (32-bit) floating-point elements from "b" to the upper 2 elements of "dst", and copy the lower 2 elements from "a" to the lower 2 elements of "dst".
+        ///
+        ///__m128 _mm_movelh_ps (__m128 a,  __m128 b)
+        ///MOVLHPS xmm, xmm
         /// </summary>
         public object mm_movelh_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.MoveLowToHigh);
         
         /// <summary>
         /// Set each bit of mask "dst" based on the most significant bit of the corresponding packed single-precision (32-bit) floating-point element in "a".
+        ///
+        ///int _mm_movemask_ps (__m128 a)
+        ///MOVMSKPS reg, xmm
         /// </summary>
         public int mm_movemask_ps(object a) => (int)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, int, int>(a, System.Runtime.Intrinsics.X86.Sse.MoveMask);
         
         /// <summary>
         /// Multiply packed single-precision (32-bit) floating-point elements in "a" and "b", and store the results in "dst".
+        ///
+        ///__m128 _mm_mul_ps (__m128 a, __m128 b)
+        ///MULPS xmm, xmm/m128
         /// </summary>
         public object mm_mul_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.Multiply);
         
         /// <summary>
         /// Multiply the lower single-precision (32-bit) floating-point element in "a" and "b", store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_mul_ss (__m128 a, __m128 b)
+        ///MULPS xmm, xmm/m32
         /// </summary>
         public object mm_mul_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.MultiplyScalar);
         
         /// <summary>
         /// Compute the bitwise OR of packed single-precision (32-bit) floating-point elements in "a" and "b", and store the results in "dst".
+        ///
+        ///__m128 _mm_or_ps (__m128 a,  __m128 b)
+        ///ORPS xmm, xmm/m128
         /// </summary>
         public object mm_or_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.Or);
         
         /// <summary>
         /// Fetch the line of data from memory that contains address "p" to a location in the cache heirarchy specified by the locality hint "i".
+        ///
+        ///void _mm_prefetch(char* p, int i)
+        ///PREFETCHT0 m8
         /// </summary>
         public void mm_prefetch0(object p) => ProcessAction<IntPtr, IntPtr>(p, Sse_Prefetch0);
         private unsafe readonly static Action<IntPtr> Sse_Prefetch0 = new Action<IntPtr>((arg0) => System.Runtime.Intrinsics.X86.Sse.Prefetch0((void*)arg0));
         /// <summary>
         /// Fetch the line of data from memory that contains address "p" to a location in the cache heirarchy specified by the locality hint "i".
+        ///
+        ///void _mm_prefetch(char* p, int i)
+        ///PREFETCHT1 m8
         /// </summary>
         public void mm_prefetch1(object p) => ProcessAction<IntPtr, IntPtr>(p, Sse_Prefetch1);
         private unsafe readonly static Action<IntPtr> Sse_Prefetch1 = new Action<IntPtr>((arg0) => System.Runtime.Intrinsics.X86.Sse.Prefetch1((void*)arg0));
         /// <summary>
         /// Fetch the line of data from memory that contains address "p" to a location in the cache heirarchy specified by the locality hint "i".
+        ///
+        ///void _mm_prefetch(char* p, int i)
+        ///PREFETCHT2 m8
         /// </summary>
         public void mm_prefetch2(object p) => ProcessAction<IntPtr, IntPtr>(p, Sse_Prefetch2);
         private unsafe readonly static Action<IntPtr> Sse_Prefetch2 = new Action<IntPtr>((arg0) => System.Runtime.Intrinsics.X86.Sse.Prefetch2((void*)arg0));
         /// <summary>
         /// Fetch the line of data from memory that contains address "p" to a location in the cache heirarchy specified by the locality hint "i".
+        ///
+        ///void _mm_prefetch(char* p, int i)
+        ///PREFETCHNTA m8
         /// </summary>
         public void mm_prefetchnta(object p) => ProcessAction<IntPtr, IntPtr>(p, Sse_PrefetchNonTemporal);
         private unsafe readonly static Action<IntPtr> Sse_PrefetchNonTemporal = new Action<IntPtr>((arg0) => System.Runtime.Intrinsics.X86.Sse.PrefetchNonTemporal((void*)arg0));
         /// <summary>
         /// Compute the approximate reciprocal of packed single-precision (32-bit) floating-point elements in "a", and store the results in "dst". The maximum relative error for this approximation is less than 1.5*2^-12.
+        ///
+        ///__m128 _mm_rcp_ps (__m128 a)
+        ///RCPPS xmm, xmm/m128
         /// </summary>
         public object mm_rcp_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse.Reciprocal);
         
         /// <summary>
         /// Compute the approximate reciprocal of the lower single-precision (32-bit) floating-point element in "a", store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst". The maximum relative error for this approximation is less than 1.5*2^-12.
+        ///
+        ///__m128 _mm_rcp_ss (__m128 a, __m128 b)
+        ///RCPSS xmm, xmm/m32
         /// </summary>
         public object mm_rcp_ss(object a, object value) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, value, System.Runtime.Intrinsics.X86.Sse.ReciprocalScalar);
         
         /// <summary>
         /// Compute the approximate reciprocal of the lower single-precision (32-bit) floating-point element in "a", store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst". The maximum relative error for this approximation is less than 1.5*2^-12.
+        ///
+        ///__m128 _mm_rcp_ss (__m128 a)
+        ///RCPSS xmm, xmm/m32
         /// </summary>
         public object mm_rcp_ss1(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse.ReciprocalScalar);
         
         /// <summary>
         /// Compute the approximate reciprocal square root of packed single-precision (32-bit) floating-point elements in "a", and store the results in "dst". The maximum relative error for this approximation is less than 1.5*2^-12.
+        ///
+        ///__m128 _mm_rsqrt_ps (__m128 a)
+        ///RSQRTPS xmm, xmm/m128
         /// </summary>
         public object mm_rsqrt_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse.ReciprocalSqrt);
         
         /// <summary>
         /// Compute the approximate reciprocal square root of the lower single-precision (32-bit) floating-point element in "a", store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst". The maximum relative error for this approximation is less than 1.5*2^-12.
+        ///
+        ///__m128 _mm_rsqrt_ss (__m128 a, __m128 b)
+        ///RSQRTSS xmm, xmm/m32
         /// </summary>
         public object mm_rsqrt_ss(object a, object value) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, value, System.Runtime.Intrinsics.X86.Sse.ReciprocalSqrtScalar);
         
         /// <summary>
         /// Compute the approximate reciprocal square root of the lower single-precision (32-bit) floating-point element in "a", store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst". The maximum relative error for this approximation is less than 1.5*2^-12.
+        ///
+        ///__m128 _mm_rsqrt_ss (__m128 a)
+        ///RSQRTSS xmm, xmm/m32
         /// </summary>
         public object mm_rsqrt_ss1(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse.ReciprocalSqrtScalar);
         
         /// <summary>
         /// Shuffle single-precision (32-bit) floating-point elements in "a" using the control in "imm8", and store the results in "dst".
+        ///
+        ///__m128 _mm_shuffle_ps (__m128 a,  __m128 b, unsigned int control)
+        ///SHUFPS xmm, xmm/m128, imm8
         /// </summary>
         public object mm_shuffle_ps(object a, object b, byte imm8) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, byte, byte, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, imm8, System.Runtime.Intrinsics.X86.Sse.Shuffle);
         
         /// <summary>
         /// Compute the square root of packed single-precision (32-bit) floating-point elements in "a", and store the results in "dst".
+        ///
+        ///__m128 _mm_sqrt_ps (__m128 a)
+        ///SQRTPS xmm, xmm/m128
         /// </summary>
         public object mm_sqrt_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse.Sqrt);
         
         /// <summary>
         /// Compute the square root of the lower single-precision (32-bit) floating-point element in "a", store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_sqrt_ss (__m128 a, __m128 b)
+        ///SQRTSS xmm, xmm/m32
         /// </summary>
         public object mm_sqrt_ss(object a, object value) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, value, System.Runtime.Intrinsics.X86.Sse.SqrtScalar);
         
         /// <summary>
         /// Compute the square root of the lower single-precision (32-bit) floating-point element in "a", store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_sqrt_ss (__m128 a)
+        ///SQRTSS xmm, xmm/m32
         /// </summary>
         public object mm_sqrt_ss1(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse.SqrtScalar);
         
         /// <summary>
-        /// Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from "a" into memory. 	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        /// Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from "a" into memory.
+        ///	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        ///
+        ///void _mm_store_ps (float* mem_addr, __m128 a)
+        ///MOVAPS m128, xmm
         /// </summary>
         public void mm_store_ps(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>>(mem_addr, 16, a, Sse_StoreAligned);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>> Sse_StoreAligned = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse.StoreAligned((float*)arg0, (System.Runtime.Intrinsics.Vector128<float>)arg1));
         /// <summary>
         /// Store the lower single-precision (32-bit) floating-point element from "a" into memory. "mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///void _mm_store_ss (float* mem_addr, __m128 a)
+        ///MOVSS m32, xmm
         /// </summary>
         public void mm_store_ss(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>>(mem_addr, a, Sse_StoreScalar);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>> Sse_StoreScalar = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse.StoreScalar((float*)arg0, (System.Runtime.Intrinsics.Vector128<float>)arg1));
         /// <summary>
         /// Store the upper 2 single-precision (32-bit) floating-point elements from "a" into memory.
+        ///
+        ///void _mm_storeh_pi (__m64* mem_addr, __m128 a)
+        ///MOVHPS m64, xmm
         /// </summary>
         public void mm_storeh_pi(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>>(mem_addr, a, Sse_StoreHigh);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>> Sse_StoreHigh = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse.StoreHigh((float*)arg0, (System.Runtime.Intrinsics.Vector128<float>)arg1));
         /// <summary>
         /// Store the lower 2 single-precision (32-bit) floating-point elements from "a" into memory.
+        ///
+        ///void _mm_storel_pi (__m64* mem_addr, __m128 a)
+        ///MOVLPS m64, xmm
         /// </summary>
         public void mm_storel_pi(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>>(mem_addr, a, Sse_StoreLow);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>> Sse_StoreLow = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse.StoreLow((float*)arg0, (System.Runtime.Intrinsics.Vector128<float>)arg1));
         /// <summary>
-        /// Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from "a" into memory. 	"mem_addr" does not need to be aligned on any particular boundary.
+        /// Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from "a" into memory.
+        ///	"mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///void _mm_storeu_ps (float* mem_addr, __m128 a)
+        ///MOVUPS m128, xmm
         /// </summary>
         public void mm_storeu_ps(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>>(mem_addr, a, Sse_Store);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>> Sse_Store = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse.Store((float*)arg0, (System.Runtime.Intrinsics.Vector128<float>)arg1));
         /// <summary>
-        /// Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from "a" into memory using a non-temporal memory hint. 	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        /// Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from "a" into memory using a non-temporal memory hint.
+        ///	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        ///
+        ///void _mm_stream_ps (float* mem_addr, __m128 a)
+        ///MOVNTPS m128, xmm
         /// </summary>
         public void mm_stream_ps(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, float, System.Runtime.Intrinsics.Vector128<float>>(mem_addr, 16, a, Sse_StoreAlignedNonTemporal);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>> Sse_StoreAlignedNonTemporal = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<float>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse.StoreAlignedNonTemporal((float*)arg0, (System.Runtime.Intrinsics.Vector128<float>)arg1));
         /// <summary>
         /// Subtract packed single-precision (32-bit) floating-point elements in "b" from packed single-precision (32-bit) floating-point elements in "a", and store the results in "dst".
+        ///
+        ///__m128d _mm_sub_ps (__m128d a, __m128d b)
+        ///SUBPS xmm, xmm/m128
         /// </summary>
         public object mm_sub_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.Subtract);
         
         /// <summary>
         /// Subtract the lower single-precision (32-bit) floating-point element in "b" from the lower single-precision (32-bit) floating-point element in "a", store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_sub_ss (__m128 a, __m128 b)
+        ///SUBSS xmm, xmm/m32
         /// </summary>
         public object mm_sub_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.SubtractScalar);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point element in "a" and "b" for equality, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+        ///
+        ///int _mm_ucomieq_ss (__m128 a, __m128 b)
+        ///UCOMISS xmm, xmm/m32
         /// </summary>
         public bool mm_ucomieq_ss(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarUnorderedEqual);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point element in "a" and "b" for greater-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+        ///
+        ///int _mm_ucomige_ss (__m128 a, __m128 b)
+        ///UCOMISS xmm, xmm/m32
         /// </summary>
         public bool mm_ucomige_ss(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarUnorderedGreaterThanOrEqual);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point element in "a" and "b" for greater-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+        ///
+        ///int _mm_ucomigt_ss (__m128 a, __m128 b)
+        ///UCOMISS xmm, xmm/m32
         /// </summary>
         public bool mm_ucomigt_ss(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarUnorderedGreaterThan);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point element in "a" and "b" for less-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+        ///
+        ///int _mm_ucomile_ss (__m128 a, __m128 b)
+        ///UCOMISS xmm, xmm/m32
         /// </summary>
         public bool mm_ucomile_ss(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarUnorderedLessThanOrEqual);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point element in "a" and "b" for less-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+        ///
+        ///int _mm_ucomilt_ss (__m128 a, __m128 b)
+        ///UCOMISS xmm, xmm/m32
         /// </summary>
         public bool mm_ucomilt_ss(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarUnorderedLessThan);
         
         /// <summary>
         /// Compare the lower single-precision (32-bit) floating-point element in "a" and "b" for not-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+        ///
+        ///int _mm_ucomineq_ss (__m128 a, __m128 b)
+        ///UCOMISS xmm, xmm/m32
         /// </summary>
         public bool mm_ucomineq_ss(object a, object b) => (bool)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse.CompareScalarUnorderedNotEqual);
         
         /// <summary>
         /// Unpack and interleave single-precision (32-bit) floating-point elements from the high half "a" and "b", and store the results in "dst".
+        ///
+        ///__m128 _mm_unpackhi_ps (__m128 a,  __m128 b)
+        ///UNPCKHPS xmm, xmm/m128
         /// </summary>
         public object mm_unpackhi_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.UnpackHigh);
         
         /// <summary>
         /// Unpack and interleave single-precision (32-bit) floating-point elements from the low half of "a" and "b", and store the results in "dst".
+        ///
+        ///__m128 _mm_unpacklo_ps (__m128 a,  __m128 b)
+        ///UNPCKLPS xmm, xmm/m128
         /// </summary>
         public object mm_unpacklo_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.UnpackLow);
         
         /// <summary>
         /// Compute the bitwise XOR of packed single-precision (32-bit) floating-point elements in "a" and "b", and store the results in "dst".
+        ///
+        ///__m128 _mm_xor_ps (__m128 a,  __m128 b)
+        ///XORPS xmm, xmm/m128
         /// </summary>
         public object mm_xor_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.Xor);
         
@@ -1248,516 +1915,830 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     {
         /// <summary>
         /// Add packed 8-bit integers in "a" and "b", and store the results in "dst".
+        ///
+        ///__m128i _mm_add_epi8 (__m128i a,  __m128i b)
+        ///PADDB xmm, xmm/m128
         /// </summary>
         public object mm_add_epi8(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.Add);
         
         /// <summary>
         /// Add the lower double-precision (64-bit) floating-point element in "a" and "b", store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_add_sd (__m128d a,  __m128d b)
+        ///ADDSD xmm, xmm/m64
         /// </summary>
         public object mm_add_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.AddScalar);
         
         /// <summary>
         /// Add packed 8-bit integers in "a" and "b" using saturation, and store the results in "dst".
+        ///
+        ///__m128i _mm_adds_epi8 (__m128i a,  __m128i b)
+        ///PADDSB xmm, xmm/m128
         /// </summary>
         public object mm_adds_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.AddSaturate);
         
         /// <summary>
         /// Compute the bitwise AND of 128 bits (representing integer data) in "a" and "b", and store the result in "dst".
+        ///
+        ///__m128i _mm_and_si128 (__m128i a,  __m128i b)
+        ///PAND xmm, xmm/m128
         /// </summary>
         public object mm_and_si128(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.And);
         
         /// <summary>
         /// Compute the bitwise NOT of 128 bits (representing integer data) in "a" and then AND with "b", and store the result in "dst".
+        ///
+        ///__m128i _mm_andnot_si128 (__m128i a,  __m128i b)
+        ///PANDN xmm, xmm/m128
         /// </summary>
         public object mm_andnot_si128(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.AndNot);
         
         /// <summary>
         /// Average packed unsigned 8-bit integers in "a" and "b", and store the results in "dst".
+        ///
+        ///__m128i _mm_avg_epu8 (__m128i a,  __m128i b)
+        ///PAVGB xmm, xmm/m128
         /// </summary>
         public object mm_avg_epu8(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.Average);
         
         /// <summary>
         /// Shift "a" left by "imm8" bytes while shifting in zeros, and store the results in "dst".
+        ///
+        ///__m128i _mm_bslli_si128 (__m128i a, int imm8)
+        ///PSLLDQ xmm, imm8
         /// </summary>
         public object mm_bslli_si128(object a, byte imm8) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, byte, byte, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, imm8, System.Runtime.Intrinsics.X86.Sse2.ShiftLeftLogical128BitLane);
         
         /// <summary>
         /// Shift "a" right by "imm8" bytes while shifting in zeros, and store the results in "dst".
+        ///
+        ///__m128i _mm_bsrli_si128 (__m128i a, int imm8)
+        ///PSRLDQ xmm, imm8
         /// </summary>
         public object mm_bsrli_si128(object a, byte imm8) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, byte, byte, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, imm8, System.Runtime.Intrinsics.X86.Sse2.ShiftRightLogical128BitLane);
         
         /// <summary>
         /// Compare packed 8-bit integers in "a" and "b" for equality, and store the results in "dst".
+        ///
+        ///__m128i _mm_cmpeq_epi8 (__m128i a,  __m128i b)
+        ///PCMPEQB xmm, xmm/m128
         /// </summary>
         public object mm_cmpeq_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareEqual);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b" for equality, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmpeq_sd (__m128d a,  __m128d b)
+        ///CMPSD xmm, xmm/m64, imm8(0)
         /// </summary>
         public object mm_cmpeq_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarEqual);
         
         /// <summary>
         /// Compare packed double-precision (64-bit) floating-point elements in "a" and "b" for greater-than-or-equal, and store the results in "dst".
+        ///
+        ///__m128d _mm_cmpge_pd (__m128d a,  __m128d b)
+        ///CMPPD xmm, xmm/m128, imm8(5)
         /// </summary>
         public object mm_cmpge_pd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareGreaterThanOrEqual);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b" for greater-than-or-equal, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmpge_sd (__m128d a,  __m128d b)
+        ///CMPSD xmm, xmm/m64, imm8(5)
         /// </summary>
         public object mm_cmpge_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarGreaterThanOrEqual);
         
         /// <summary>
         /// Compare packed 8-bit integers in "a" and "b" for greater-than, and store the results in "dst".
+        ///
+        ///__m128i _mm_cmpgt_epi8 (__m128i a,  __m128i b)
+        ///PCMPGTB xmm, xmm/m128
         /// </summary>
         public object mm_cmpgt_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareGreaterThan);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b" for greater-than, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmpgt_sd (__m128d a,  __m128d b)
+        ///CMPSD xmm, xmm/m64, imm8(6)
         /// </summary>
         public object mm_cmpgt_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarGreaterThan);
         
         /// <summary>
         /// Compare packed double-precision (64-bit) floating-point elements in "a" and "b" for less-than-or-equal, and store the results in "dst".
+        ///
+        ///__m128d _mm_cmple_pd (__m128d a,  __m128d b)
+        ///CMPPD xmm, xmm/m128, imm8(2)
         /// </summary>
         public object mm_cmple_pd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareLessThanOrEqual);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b" for less-than-or-equal, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmple_sd (__m128d a,  __m128d b)
+        ///CMPSD xmm, xmm/m64, imm8(2)
         /// </summary>
         public object mm_cmple_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarLessThanOrEqual);
         
         /// <summary>
         /// Compare packed 8-bit integers in "a" and "b" for less-than, and store the results in "dst". Note: This intrinsic emits the pcmpgtb instruction with the order of the operands switched.
+        ///
+        ///__m128i _mm_cmplt_epi8 (__m128i a,  __m128i b)
+        ///PCMPGTB xmm, xmm/m128
         /// </summary>
         public object mm_cmplt_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareLessThan);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b" for less-than, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmplt_sd (__m128d a,  __m128d b)
+        ///CMPSD xmm, xmm/m64, imm8(1)
         /// </summary>
         public object mm_cmplt_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarLessThan);
         
         /// <summary>
         /// Compare packed double-precision (64-bit) floating-point elements in "a" and "b" for not-equal, and store the results in "dst".
+        ///
+        ///__m128d _mm_cmpneq_pd (__m128d a,  __m128d b)
+        ///CMPPD xmm, xmm/m128, imm8(4)
         /// </summary>
         public object mm_cmpneq_pd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareNotEqual);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b" for not-equal, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmpneq_sd (__m128d a,  __m128d b)
+        ///CMPSD xmm, xmm/m64, imm8(4)
         /// </summary>
         public object mm_cmpneq_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarNotEqual);
         
         /// <summary>
         /// Compare packed double-precision (64-bit) floating-point elements in "a" and "b" for not-greater-than-or-equal, and store the results in "dst".
+        ///
+        ///__m128d _mm_cmpnge_pd (__m128d a,  __m128d b)
+        ///CMPPD xmm, xmm/m128, imm8(1)
         /// </summary>
         public object mm_cmpnge_pd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareNotGreaterThanOrEqual);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b" for not-greater-than-or-equal, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmpnge_sd (__m128d a,  __m128d b)
+        ///CMPSD xmm, xmm/m64, imm8(1)
         /// </summary>
         public object mm_cmpnge_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarNotGreaterThanOrEqual);
         
         /// <summary>
         /// Compare packed double-precision (64-bit) floating-point elements in "a" and "b" for not-greater-than, and store the results in "dst".
+        ///
+        ///__m128d _mm_cmpngt_pd (__m128d a,  __m128d b)
+        ///CMPPD xmm, xmm/m128, imm8(2)
         /// </summary>
         public object mm_cmpngt_pd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareNotGreaterThan);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b" for not-greater-than, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmpngt_sd (__m128d a,  __m128d b)
+        ///CMPSD xmm, xmm/m64, imm8(2)
         /// </summary>
         public object mm_cmpngt_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarNotGreaterThan);
         
         /// <summary>
         /// Compare packed double-precision (64-bit) floating-point elements in "a" and "b" for not-less-than-or-equal, and store the results in "dst".
+        ///
+        ///__m128d _mm_cmpnle_pd (__m128d a,  __m128d b)
+        ///CMPPD xmm, xmm/m128, imm8(6)
         /// </summary>
         public object mm_cmpnle_pd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareNotLessThanOrEqual);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b" for not-less-than-or-equal, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmpnle_sd (__m128d a,  __m128d b)
+        ///CMPSD xmm, xmm/m64, imm8(6)
         /// </summary>
         public object mm_cmpnle_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarNotLessThanOrEqual);
         
         /// <summary>
         /// Compare packed double-precision (64-bit) floating-point elements in "a" and "b" for not-less-than, and store the results in "dst".
+        ///
+        ///__m128d _mm_cmpnlt_pd (__m128d a,  __m128d b)
+        ///CMPPD xmm, xmm/m128, imm8(5)
         /// </summary>
         public object mm_cmpnlt_pd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareNotLessThan);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b" for not-less-than, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmpnlt_sd (__m128d a,  __m128d b)
+        ///CMPSD xmm, xmm/m64, imm8(5)
         /// </summary>
         public object mm_cmpnlt_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarNotLessThan);
         
         /// <summary>
         /// Compare packed double-precision (64-bit) floating-point elements in "a" and "b" to see if neither is NaN, and store the results in "dst".
+        ///
+        ///__m128d _mm_cmpord_pd (__m128d a,  __m128d b)
+        ///CMPPD xmm, xmm/m128, imm8(7)
         /// </summary>
         public object mm_cmpord_pd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareOrdered);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b" to see if neither is NaN, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmpord_sd (__m128d a,  __m128d b)
+        ///CMPSD xmm, xmm/m64, imm8(7)
         /// </summary>
         public object mm_cmpord_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarOrdered);
         
         /// <summary>
         /// Compare packed double-precision (64-bit) floating-point elements in "a" and "b" to see if either is NaN, and store the results in "dst".
+        ///
+        ///__m128d _mm_cmpunord_pd (__m128d a,  __m128d b)
+        ///CMPPD xmm, xmm/m128, imm8(3)
         /// </summary>
         public object mm_cmpunord_pd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareUnordered);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b" to see if either is NaN, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cmpunord_sd (__m128d a,  __m128d b)
+        ///CMPSD xmm, xmm/m64, imm8(3)
         /// </summary>
         public object mm_cmpunord_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarUnordered);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" for equality, and return the boolean result (0 or 1).
+        ///
+        ///int _mm_comieq_sd (__m128d a, __m128d b)
+        ///COMISD xmm, xmm/m64
         /// </summary>
         public bool mm_comieq_sd(object a, object b) => (bool)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarOrderedEqual);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" for greater-than-or-equal, and return the boolean result (0 or 1).
+        ///
+        ///int _mm_comige_sd (__m128d a, __m128d b)
+        ///COMISD xmm, xmm/m64
         /// </summary>
         public bool mm_comige_sd(object a, object b) => (bool)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarOrderedGreaterThanOrEqual);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" for greater-than, and return the boolean result (0 or 1).
+        ///
+        ///int _mm_comigt_sd (__m128d a, __m128d b)
+        ///COMISD xmm, xmm/m64
         /// </summary>
         public bool mm_comigt_sd(object a, object b) => (bool)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarOrderedGreaterThan);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" for less-than-or-equal, and return the boolean result (0 or 1).
+        ///
+        ///int _mm_comile_sd (__m128d a, __m128d b)
+        ///COMISD xmm, xmm/m64
         /// </summary>
         public bool mm_comile_sd(object a, object b) => (bool)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarOrderedLessThanOrEqual);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" for less-than, and return the boolean result (0 or 1).
+        ///
+        ///int _mm_comilt_sd (__m128d a, __m128d b)
+        ///COMISD xmm, xmm/m64
         /// </summary>
         public bool mm_comilt_sd(object a, object b) => (bool)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarOrderedLessThan);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" for not-equal, and return the boolean result (0 or 1).
+        ///
+        ///int _mm_comineq_sd (__m128d a, __m128d b)
+        ///COMISD xmm, xmm/m64
         /// </summary>
         public bool mm_comineq_sd(object a, object b) => (bool)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarOrderedNotEqual);
         
         /// <summary>
         /// Convert packed 32-bit integers in "a" to packed double-precision (64-bit) floating-point elements, and store the results in "dst".
+        ///
+        ///__m128d _mm_cvtepi32_pd (__m128i a)
+        ///CVTDQ2PD xmm, xmm/m128
         /// </summary>
         public object mm_cvtepi32_pd(object a) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector128<int>, double, System.Runtime.Intrinsics.Vector128<double>>(a, System.Runtime.Intrinsics.X86.Sse2.ConvertToVector128Double);
         
         /// <summary>
         /// Convert packed 32-bit integers in "a" to packed single-precision (32-bit) floating-point elements, and store the results in "dst".
+        ///
+        ///__m128 _mm_cvtepi32_ps (__m128i a)
+        ///CVTDQ2PS xmm, xmm/m128
         /// </summary>
         public object mm_cvtepi32_ps(object a) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector128<int>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse2.ConvertToVector128Single);
         
         /// <summary>
         /// Convert packed single-precision (32-bit) floating-point elements in "a" to packed 32-bit integers, and store the results in "dst".
+        ///
+        ///__m128i _mm_cvtps_epi32 (__m128 a)
+        ///CVTPS2DQ xmm, xmm/m128
         /// </summary>
         public object mm_cvtps_epi32(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, int, System.Runtime.Intrinsics.Vector128<int>>(a, System.Runtime.Intrinsics.X86.Sse2.ConvertToVector128Int32);
         
         /// <summary>
         /// Convert the lower double-precision (64-bit) floating-point element in "a" to a 32-bit integer, and store the result in "dst".
+        ///
+        ///int _mm_cvtsd_si32 (__m128d a)
+        ///CVTSD2SI r32, xmm/m64
         /// </summary>
         public int mm_cvtsd_si32(object a) => (int)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, int, int>(a, System.Runtime.Intrinsics.X86.Sse2.ConvertToInt32);
         
         /// <summary>
         /// Convert the lower double-precision (64-bit) floating-point element in "b" to a single-precision (32-bit) floating-point element, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128 _mm_cvtsd_ss (__m128 a, __m128d b)
+        ///CVTSD2SS xmm, xmm/m64
         /// </summary>
         public object mm_cvtsd_ss(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, double, System.Runtime.Intrinsics.Vector128<double>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse2.ConvertScalarToVector128Single);
         
         /// <summary>
         /// Copy the lower 32-bit integer in "a" to "dst".
+        ///
+        ///int _mm_cvtsi128_si32 (__m128i a)
+        ///MOVD reg/m32, xmm
         /// </summary>
         public uint mm_cvtsi128_si32(object a) => (uint)ProcessFunc<uint, System.Runtime.Intrinsics.Vector128<uint>, uint, uint>(a, System.Runtime.Intrinsics.X86.Sse2.ConvertToUInt32);
         
         /// <summary>
         /// Convert the 32-bit integer "b" to a double-precision (64-bit) floating-point element, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cvtsi32_sd (__m128d a, int b)
+        ///CVTSI2SD xmm, reg/m32
         /// </summary>
         public object mm_cvtsi32_sd(object a, int b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, int, int, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.ConvertScalarToVector128Double);
         
         /// <summary>
         /// Copy 32-bit integer "a" to the lower elements of "dst", and zero the upper elements of "dst".
+        ///
+        ///__m128i _mm_cvtsi32_si128 (int a)
+        ///MOVD xmm, reg/m32
         /// </summary>
         public object mm_cvtsi32_si128(int a) => (object)ProcessFunc<int, int, int, System.Runtime.Intrinsics.Vector128<int>>(a, System.Runtime.Intrinsics.X86.Sse2.ConvertScalarToVector128Int32);
         
         /// <summary>
         /// Convert packed single-precision (32-bit) floating-point elements in "a" to packed 32-bit integers with truncation, and store the results in "dst".
+        ///
+        ///__m128i _mm_cvttps_epi32 (__m128 a)
+        ///CVTTPS2DQ xmm, xmm/m128
         /// </summary>
         public object mm_cvttps_epi32(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, int, System.Runtime.Intrinsics.Vector128<int>>(a, System.Runtime.Intrinsics.X86.Sse2.ConvertToVector128Int32WithTruncation);
         
         /// <summary>
         /// Convert the lower double-precision (64-bit) floating-point element in "a" to a 32-bit integer with truncation, and store the result in "dst".
+        ///
+        ///int _mm_cvttsd_si32 (__m128d a)
+        ///CVTTSD2SI reg, xmm/m64
         /// </summary>
         public int mm_cvttsd_si32(object a) => (int)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, int, int>(a, System.Runtime.Intrinsics.X86.Sse2.ConvertToInt32WithTruncation);
         
         /// <summary>
         /// Divide packed double-precision (64-bit) floating-point elements in "a" by packed elements in "b", and store the results in "dst".
+        ///
+        ///__m128d _mm_div_pd (__m128d a,  __m128d b)
+        ///DIVPD xmm, xmm/m128
         /// </summary>
         public object mm_div_pd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.Divide);
         
         /// <summary>
         /// Divide the lower double-precision (64-bit) floating-point element in "a" by the lower double-precision (64-bit) floating-point element in "b", store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_div_sd (__m128d a,  __m128d b)
+        ///DIVSD xmm, xmm/m64
         /// </summary>
         public object mm_div_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.DivideScalar);
         
         /// <summary>
         /// Extract a 16-bit integer from "a", selected with "imm8", and store the result in the lower element of "dst".
+        ///
+        ///int _mm_extract_epi16 (__m128i a,  int immediate)
+        ///PEXTRW reg, xmm, imm8
         /// </summary>
         public ushort mm_extract_epi16(object a, byte imm8) => (ushort)ProcessFunc<ushort, System.Runtime.Intrinsics.Vector128<ushort>, byte, byte, ushort, ushort>(a, imm8, System.Runtime.Intrinsics.X86.Sse2.Extract);
         
         /// <summary>
         /// Copy "a" to "dst", and insert the 16-bit integer "i" into "dst" at the location specified by "imm8".
+        ///
+        ///__m128i _mm_insert_epi16 (__m128i a,  int i, int immediate)
+        ///PINSRW xmm, reg/m16, imm8
         /// </summary>
         public object mm_insert_epi16(object a, short i, byte imm8) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, short, byte, byte, short, System.Runtime.Intrinsics.Vector128<short>>(a, i, imm8, System.Runtime.Intrinsics.X86.Sse2.Insert);
         
         /// <summary>
         /// Load a double-precision (64-bit) floating-point element from memory into the lower of "dst", and zero the upper element. "mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///__m128d _mm_load_sd (double const* mem_address)
+        ///MOVSD xmm, m64
         /// </summary>
         public object mm_load_sd(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, double, System.Runtime.Intrinsics.Vector128<double>>(mem_addr, Sse2_LoadScalarVector128);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<double>> Sse2_LoadScalarVector128 = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<double>>((arg0) => System.Runtime.Intrinsics.X86.Sse2.LoadScalarVector128((double*)arg0));
         /// <summary>
-        /// Load 128-bits of integer data from memory into "dst".  	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        /// Load 128-bits of integer data from memory into "dst". 
+        ///	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        ///
+        ///__m128i _mm_load_si128 (__m128i const* mem_address)
+        ///MOVDQA xmm, m128
         /// </summary>
         public object mm_load_si128(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(mem_addr, 16, Sse2_LoadAlignedVector128);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>> Sse2_LoadAlignedVector128 = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>>((arg0) => System.Runtime.Intrinsics.X86.Sse2.LoadAlignedVector128((sbyte*)arg0));
         /// <summary>
         /// Load a double-precision (64-bit) floating-point element from memory into the upper element of "dst", and copy the lower element from "a" to "dst". "mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///__m128d _mm_loadh_pd (__m128d a, double const* mem_addr)
+        ///MOVHPD xmm, m64
         /// </summary>
         public object mm_loadh_pd(object a, object mem_addr) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, IntPtr, IntPtr, double, System.Runtime.Intrinsics.Vector128<double>>(a, mem_addr, Sse2_LoadHigh);
         private unsafe readonly static Func<System.Runtime.Intrinsics.Vector128<double>, IntPtr, System.Runtime.Intrinsics.Vector128<double>> Sse2_LoadHigh = new Func<System.Runtime.Intrinsics.Vector128<double>, IntPtr, System.Runtime.Intrinsics.Vector128<double>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse2.LoadHigh((System.Runtime.Intrinsics.Vector128<double>)arg0, (double*)arg1));
         /// <summary>
         /// Load a double-precision (64-bit) floating-point element from memory into the lower element of "dst", and copy the upper element from "a" to "dst". "mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///__m128d _mm_loadl_pd (__m128d a, double const* mem_addr)
+        ///MOVLPD xmm, m64
         /// </summary>
         public object mm_loadl_pd(object a, object mem_addr) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, IntPtr, IntPtr, double, System.Runtime.Intrinsics.Vector128<double>>(a, mem_addr, Sse2_LoadLow);
         private unsafe readonly static Func<System.Runtime.Intrinsics.Vector128<double>, IntPtr, System.Runtime.Intrinsics.Vector128<double>> Sse2_LoadLow = new Func<System.Runtime.Intrinsics.Vector128<double>, IntPtr, System.Runtime.Intrinsics.Vector128<double>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse2.LoadLow((System.Runtime.Intrinsics.Vector128<double>)arg0, (double*)arg1));
         /// <summary>
-        /// Load 128-bits of integer data from memory into "dst". 	"mem_addr" does not need to be aligned on any particular boundary.
+        /// Load 128-bits of integer data from memory into "dst".
+        ///	"mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///__m128i _mm_loadu_si128 (__m128i const* mem_address)
+        ///MOVDQU xmm, m128
         /// </summary>
         public object mm_loadu_si128(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(mem_addr, Sse2_LoadVector128);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>> Sse2_LoadVector128 = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>>((arg0) => System.Runtime.Intrinsics.X86.Sse2.LoadVector128((sbyte*)arg0));
         /// <summary>
         /// Multiply packed signed 16-bit integers in "a" and "b", producing intermediate signed 32-bit integers. Horizontally add adjacent pairs of intermediate 32-bit integers, and pack the results in "dst".
+        ///
+        ///__m128i _mm_madd_epi16 (__m128i a,  __m128i b)
+        ///PMADDWD xmm, xmm/m128
         /// </summary>
         public object mm_madd_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, int, System.Runtime.Intrinsics.Vector128<int>>(a, b, System.Runtime.Intrinsics.X86.Sse2.MultiplyAddAdjacent);
         
         /// <summary>
         /// Conditionally store 8-bit integer elements from "a" into memory using "mask" (elements are not stored when the highest bit is not set in the corresponding element) and a non-temporal memory hint. "mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///void _mm_maskmoveu_si128 (__m128i a,  __m128i mask, char* mem_address)
+        ///MASKMOVDQU xmm, xmm
         /// </summary>
         public void mm_maskmoveu_si128(object a, object mask, object mem_addr) => ProcessAction<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, IntPtr, IntPtr>(a, mask, mem_addr, Sse2_MaskMove);
         private unsafe readonly static Action<System.Runtime.Intrinsics.Vector128<sbyte>, System.Runtime.Intrinsics.Vector128<sbyte>, IntPtr> Sse2_MaskMove = new Action<System.Runtime.Intrinsics.Vector128<sbyte>, System.Runtime.Intrinsics.Vector128<sbyte>, IntPtr>((arg0, arg1, arg2) => System.Runtime.Intrinsics.X86.Sse2.MaskMove((System.Runtime.Intrinsics.Vector128<sbyte>)arg0, (System.Runtime.Intrinsics.Vector128<sbyte>)arg1, (sbyte*)arg2));
         /// <summary>
         /// Compare packed unsigned 8-bit integers in "a" and "b", and store packed maximum values in "dst".
+        ///
+        ///__m128i _mm_max_epu8 (__m128i a,  __m128i b)
+        ///PMAXUB xmm, xmm/m128
         /// </summary>
         public object mm_max_epu8(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.Max);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b", store the maximum value in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_max_sd (__m128d a,  __m128d b)
+        ///MAXSD xmm, xmm/m64
         /// </summary>
         public object mm_max_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.MaxScalar);
         
         /// <summary>
         /// Compare packed unsigned 8-bit integers in "a" and "b", and store packed minimum values in "dst".
+        ///
+        ///__m128i _mm_min_epu8 (__m128i a,  __m128i b)
+        ///PMINUB xmm, xmm/m128
         /// </summary>
         public object mm_min_epu8(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.Min);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point elements in "a" and "b", store the minimum value in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_min_sd (__m128d a,  __m128d b)
+        ///MINSD xmm, xmm/m64
         /// </summary>
         public object mm_min_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.MinScalar);
         
         /// <summary>
         /// Copy the lower 64-bit integer in "a" to the lower element of "dst", and zero the upper element.
+        ///
+        ///__m128i _mm_move_epi64 (__m128i a)
+        ///MOVQ xmm, xmm
         /// </summary>
         public object mm_move_epi64(object a) => (object)ProcessFunc<long, System.Runtime.Intrinsics.Vector128<long>, long, System.Runtime.Intrinsics.Vector128<long>>(a, System.Runtime.Intrinsics.X86.Sse2.MoveScalar);
         
         /// <summary>
         /// Move the lower double-precision (64-bit) floating-point element from "b" to the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_move_sd (__m128d a, __m128d b)
+        ///MOVSD xmm, xmm
         /// </summary>
         public object mm_move_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.MoveScalar);
         
         /// <summary>
         /// Create mask from the most significant bit of each 8-bit element in "a", and store the result in "dst".
+        ///
+        ///int _mm_movemask_epi8 (__m128i a)
+        ///PMOVMSKB reg, xmm
         /// </summary>
         public int mm_movemask_epi8(object a) => (int)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, int, int>(a, System.Runtime.Intrinsics.X86.Sse2.MoveMask);
         
         /// <summary>
         /// Multiply the low unsigned 32-bit integers from each packed 64-bit element in "a" and "b", and store the unsigned 64-bit results in "dst".
+        ///
+        ///__m128i _mm_mul_epu32 (__m128i a,  __m128i b)
+        ///PMULUDQ xmm, xmm/m128
         /// </summary>
         public object mm_mul_epu32(object a, object b) => (object)ProcessFunc<uint, System.Runtime.Intrinsics.Vector128<uint>, uint, System.Runtime.Intrinsics.Vector128<uint>, ulong, System.Runtime.Intrinsics.Vector128<ulong>>(a, b, System.Runtime.Intrinsics.X86.Sse2.Multiply);
         
         /// <summary>
         /// Multiply the lower double-precision (64-bit) floating-point element in "a" and "b", store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_mul_sd (__m128d a,  __m128d b)
+        ///MULSD xmm, xmm/m64
         /// </summary>
         public object mm_mul_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.MultiplyScalar);
         
         /// <summary>
         /// Multiply the packed 16-bit integers in "a" and "b", producing intermediate 32-bit integers, and store the high 16 bits of the intermediate integers in "dst".
+        ///
+        ///__m128i _mm_mulhi_epi16 (__m128i a,  __m128i b)
+        ///PMULHW xmm, xmm/m128
         /// </summary>
         public object mm_mulhi_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>>(a, b, System.Runtime.Intrinsics.X86.Sse2.MultiplyHigh);
         
         /// <summary>
         /// Multiply the packed 16-bit integers in "a" and "b", producing intermediate 32-bit integers, and store the low 16 bits of the intermediate integers in "dst".
+        ///
+        ///__m128i _mm_mullo_epi16 (__m128i a,  __m128i b)
+        ///PMULLW xmm, xmm/m128
         /// </summary>
         public object mm_mullo_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>>(a, b, System.Runtime.Intrinsics.X86.Sse2.MultiplyLow);
         
         /// <summary>
         /// Compute the bitwise OR of 128 bits (representing integer data) in "a" and "b", and store the result in "dst".
+        ///
+        ///__m128i _mm_or_si128 (__m128i a,  __m128i b)
+        ///POR xmm, xmm/m128
         /// </summary>
         public object mm_or_si128(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.Or);
         
         /// <summary>
         /// Convert packed 16-bit integers from "a" and "b" to packed 8-bit integers using signed saturation, and store the results in "dst".
+        ///
+        ///__m128i _mm_packs_epi16 (__m128i a,  __m128i b)
+        ///PACKSSWB xmm, xmm/m128
         /// </summary>
         public object mm_packs_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.PackSignedSaturate);
         
         /// <summary>
         /// Convert packed 16-bit integers from "a" and "b" to packed 8-bit integers using unsigned saturation, and store the results in "dst".
+        ///
+        ///__m128i _mm_packus_epi16 (__m128i a,  __m128i b)
+        ///PACKUSWB xmm, xmm/m128
         /// </summary>
         public object mm_packus_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.PackUnsignedSaturate);
         
         /// <summary>
         /// Compute the absolute differences of packed unsigned 8-bit integers in "a" and "b", then horizontally sum each consecutive 8 differences to produce two unsigned 16-bit integers, and pack these unsigned 16-bit integers in the low 16 bits of 64-bit elements in "dst".
+        ///
+        ///__m128i _mm_sad_epu8 (__m128i a,  __m128i b)
+        ///PSADBW xmm, xmm/m128
         /// </summary>
         public object mm_sad_epu8(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, ushort, System.Runtime.Intrinsics.Vector128<ushort>>(a, b, System.Runtime.Intrinsics.X86.Sse2.SumAbsoluteDifferences);
         
         /// <summary>
         /// Shuffle 32-bit integers in "a" using the control in "imm8", and store the results in "dst".
+        ///
+        ///__m128i _mm_shuffle_epi32 (__m128i a,  int immediate)
+        ///PSHUFD xmm, xmm/m128, imm8
         /// </summary>
         public object mm_shuffle_epi32(object a, byte imm8) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector128<int>, byte, byte, int, System.Runtime.Intrinsics.Vector128<int>>(a, imm8, System.Runtime.Intrinsics.X86.Sse2.Shuffle);
         
         /// <summary>
         /// Shuffle double-precision (64-bit) floating-point elements using the control in "imm8", and store the results in "dst".
+        ///
+        ///__m128d _mm_shuffle_pd (__m128d a,  __m128d b, int immediate)
+        ///SHUFPD xmm, xmm/m128, imm8
         /// </summary>
         public object mm_shuffle_pd(object a, object b, byte imm8) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, byte, byte, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, imm8, System.Runtime.Intrinsics.X86.Sse2.Shuffle);
         
         /// <summary>
         /// Shuffle 16-bit integers in the high 64 bits of "a" using the control in "imm8". Store the results in the high 64 bits of "dst", with the low 64 bits being copied from from "a" to "dst".
+        ///
+        ///__m128i _mm_shufflehi_epi16 (__m128i a,  int immediate)
+        ///PSHUFHW xmm, xmm/m128, imm8
         /// </summary>
         public object mm_shufflehi_epi16(object a, byte imm8) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, byte, byte, short, System.Runtime.Intrinsics.Vector128<short>>(a, imm8, System.Runtime.Intrinsics.X86.Sse2.ShuffleHigh);
         
         /// <summary>
         /// Shuffle 16-bit integers in the low 64 bits of "a" using the control in "imm8". Store the results in the low 64 bits of "dst", with the high 64 bits being copied from from "a" to "dst".
+        ///
+        ///__m128i _mm_shufflelo_epi16 (__m128i a,  int control)
+        ///PSHUFLW xmm, xmm/m128, imm8
         /// </summary>
         public object mm_shufflelo_epi16(object a, byte imm8) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, byte, byte, short, System.Runtime.Intrinsics.Vector128<short>>(a, imm8, System.Runtime.Intrinsics.X86.Sse2.ShuffleLow);
         
         /// <summary>
         /// Shift packed 16-bit integers in "a" left by "count" while shifting in zeros, and store the results in "dst".
+        ///
+        ///__m128i _mm_sll_epi16 (__m128i a, __m128i count)
+        ///PSLLW xmm, xmm/m128
         /// </summary>
         public object mm_sll_epi16(object a, object count) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>>(a, count, System.Runtime.Intrinsics.X86.Sse2.ShiftLeftLogical);
         
         /// <summary>
         /// Compute the square root of packed double-precision (64-bit) floating-point elements in "a", and store the results in "dst".
+        ///
+        ///__m128d _mm_sqrt_pd (__m128d a)
+        ///SQRTPD xmm, xmm/m128
         /// </summary>
         public object mm_sqrt_pd(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, System.Runtime.Intrinsics.X86.Sse2.Sqrt);
         
         /// <summary>
         /// Compute the square root of the lower double-precision (64-bit) floating-point element in "b", store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_sqrt_sd (__m128d a, __m128d b)
+        ///SQRTSD xmm, xmm/64
         /// </summary>
         public object mm_sqrt_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.SqrtScalar);
         
         /// <summary>
         /// Compute the square root of the lower double-precision (64-bit) floating-point element in "b", store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_sqrt_sd (__m128d a)
+        ///SQRTSD xmm, xmm/64
         /// </summary>
         public object mm_sqrt_sd1(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, System.Runtime.Intrinsics.X86.Sse2.SqrtScalar);
         
         /// <summary>
         /// Shift packed 16-bit integers in "a" right by "count" while shifting in sign bits, and store the results in "dst".
+        ///
+        ///__m128i _mm_sra_epi16 (__m128i a, __m128i count)
+        ///PSRAW xmm, xmm/m128
         /// </summary>
         public object mm_sra_epi16(object a, object count) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>>(a, count, System.Runtime.Intrinsics.X86.Sse2.ShiftRightArithmetic);
         
         /// <summary>
         /// Shift packed 16-bit integers in "a" right by "count" while shifting in zeros, and store the results in "dst".
+        ///
+        ///__m128i _mm_srl_epi16 (__m128i a, __m128i count)
+        ///PSRLW xmm, xmm/m128
         /// </summary>
         public object mm_srl_epi16(object a, object count) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>>(a, count, System.Runtime.Intrinsics.X86.Sse2.ShiftRightLogical);
         
         /// <summary>
         /// Store the lower double-precision (64-bit) floating-point element from "a" into memory. "mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///void _mm_store_sd (double* mem_addr, __m128d a)
+        ///MOVSD m64, xmm
         /// </summary>
         public void mm_store_sd(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, double, System.Runtime.Intrinsics.Vector128<double>>(mem_addr, a, Sse2_StoreScalar);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<double>> Sse2_StoreScalar = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<double>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse2.StoreScalar((double*)arg0, (System.Runtime.Intrinsics.Vector128<double>)arg1));
         /// <summary>
-        /// Store 128-bits of integer data from "a" into memory.  	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        /// Store 128-bits of integer data from "a" into memory. 
+        ///	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        ///
+        ///void _mm_store_si128 (__m128i* mem_addr, __m128i a)
+        ///MOVDQA m128, xmm
         /// </summary>
         public void mm_store_si128(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(mem_addr, 16, a, Sse2_StoreAligned);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>> Sse2_StoreAligned = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse2.StoreAligned((sbyte*)arg0, (System.Runtime.Intrinsics.Vector128<sbyte>)arg1));
         /// <summary>
         /// Store the upper double-precision (64-bit) floating-point element from "a" into memory.
+        ///
+        ///void _mm_storeh_pd (double* mem_addr, __m128d a)
+        ///MOVHPD m64, xmm
         /// </summary>
         public void mm_storeh_pd(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, double, System.Runtime.Intrinsics.Vector128<double>>(mem_addr, a, Sse2_StoreHigh);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<double>> Sse2_StoreHigh = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<double>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse2.StoreHigh((double*)arg0, (System.Runtime.Intrinsics.Vector128<double>)arg1));
         /// <summary>
         /// Store the lower double-precision (64-bit) floating-point element from "a" into memory.
+        ///
+        ///void _mm_storel_pd (double* mem_addr, __m128d a)
+        ///MOVLPD m64, xmm
         /// </summary>
         public void mm_storel_pd(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, double, System.Runtime.Intrinsics.Vector128<double>>(mem_addr, a, Sse2_StoreLow);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<double>> Sse2_StoreLow = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<double>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse2.StoreLow((double*)arg0, (System.Runtime.Intrinsics.Vector128<double>)arg1));
         /// <summary>
-        /// Store 128-bits of integer data from "a" into memory. 	"mem_addr" does not need to be aligned on any particular boundary.
+        /// Store 128-bits of integer data from "a" into memory.
+        ///	"mem_addr" does not need to be aligned on any particular boundary.
+        ///
+        ///void _mm_storeu_si128 (__m128i* mem_addr, __m128i a)
+        ///MOVDQU m128, xmm
         /// </summary>
         public void mm_storeu_si128(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(mem_addr, a, Sse2_Store);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>> Sse2_Store = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse2.Store((sbyte*)arg0, (System.Runtime.Intrinsics.Vector128<sbyte>)arg1));
         /// <summary>
-        /// Store 128-bits of integer data from "a" into memory using a non-temporal memory hint.  	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        /// Store 128-bits of integer data from "a" into memory using a non-temporal memory hint. 
+        ///	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        ///
+        ///void _mm_stream_si128 (__m128i* mem_addr, __m128i a)
+        ///MOVNTDQ m128, xmm
         /// </summary>
         public void mm_stream_si128(object mem_addr, object a) => ProcessAction<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(mem_addr, 16, a, Sse2_StoreAlignedNonTemporal);
         private unsafe readonly static Action<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>> Sse2_StoreAlignedNonTemporal = new Action<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse2.StoreAlignedNonTemporal((sbyte*)arg0, (System.Runtime.Intrinsics.Vector128<sbyte>)arg1));
         /// <summary>
         /// Store 32-bit integer "a" into memory using a non-temporal hint to minimize cache pollution. If the cache line containing address "mem_addr" is already in the cache, the cache will be updated.
+        ///
+        ///void _mm_stream_si32(int *p, int a)
+        ///MOVNTI m32, r32
         /// </summary>
         public void mm_stream_si32(object mem_addr, int a) => ProcessAction<IntPtr, IntPtr, int, int>(mem_addr, a, Sse2_StoreNonTemporal);
         private unsafe readonly static Action<IntPtr, int> Sse2_StoreNonTemporal = new Action<IntPtr, int>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse2.StoreNonTemporal((int*)arg0, (int)arg1));
         /// <summary>
         /// Subtract packed 8-bit integers in "b" from packed 8-bit integers in "a", and store the results in "dst".
+        ///
+        ///__m128i _mm_sub_epi8 (__m128i a,  __m128i b)
+        ///PSUBB xmm, xmm/m128
         /// </summary>
         public object mm_sub_epi8(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.Subtract);
         
         /// <summary>
         /// Subtract the lower double-precision (64-bit) floating-point element in "b" from the lower double-precision (64-bit) floating-point element in "a", store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_sub_sd (__m128d a, __m128d b)
+        ///SUBSD xmm, xmm/m64
         /// </summary>
         public object mm_sub_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.SubtractScalar);
         
         /// <summary>
         /// Subtract packed 8-bit integers in "b" from packed 8-bit integers in "a" using saturation, and store the results in "dst".
+        ///
+        ///__m128i _mm_subs_epi8 (__m128i a,  __m128i b)
+        ///PSUBSB xmm, xmm/m128
         /// </summary>
         public object mm_subs_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.SubtractSaturate);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" for equality, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+        ///
+        ///int _mm_ucomieq_sd (__m128d a, __m128d b)
+        ///UCOMISD xmm, xmm/m64
         /// </summary>
         public bool mm_ucomieq_sd(object a, object b) => (bool)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarUnorderedEqual);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" for greater-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+        ///
+        ///int _mm_ucomige_sd (__m128d a, __m128d b)
+        ///UCOMISD xmm, xmm/m64
         /// </summary>
         public bool mm_ucomige_sd(object a, object b) => (bool)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarUnorderedGreaterThanOrEqual);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" for greater-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+        ///
+        ///int _mm_ucomigt_sd (__m128d a, __m128d b)
+        ///UCOMISD xmm, xmm/m64
         /// </summary>
         public bool mm_ucomigt_sd(object a, object b) => (bool)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarUnorderedGreaterThan);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" for less-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+        ///
+        ///int _mm_ucomile_sd (__m128d a, __m128d b)
+        ///UCOMISD xmm, xmm/m64
         /// </summary>
         public bool mm_ucomile_sd(object a, object b) => (bool)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarUnorderedLessThanOrEqual);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" for less-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+        ///
+        ///int _mm_ucomilt_sd (__m128d a, __m128d b)
+        ///UCOMISD xmm, xmm/m64
         /// </summary>
         public bool mm_ucomilt_sd(object a, object b) => (bool)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarUnorderedLessThan);
         
         /// <summary>
         /// Compare the lower double-precision (64-bit) floating-point element in "a" and "b" for not-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+        ///
+        ///int _mm_ucomineq_sd (__m128d a, __m128d b)
+        ///UCOMISD xmm, xmm/m64
         /// </summary>
         public bool mm_ucomineq_sd(object a, object b) => (bool)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse2.CompareScalarUnorderedNotEqual);
         
         /// <summary>
         /// Unpack and interleave 8-bit integers from the high half of "a" and "b", and store the results in "dst".
+        ///
+        ///__m128i _mm_unpackhi_epi8 (__m128i a,  __m128i b)
+        ///PUNPCKHBW xmm, xmm/m128
         /// </summary>
         public object mm_unpackhi_epi8(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.UnpackHigh);
         
         /// <summary>
         /// Unpack and interleave 8-bit integers from the low half of "a" and "b", and store the results in "dst".
+        ///
+        ///__m128i _mm_unpacklo_epi8 (__m128i a,  __m128i b)
+        ///PUNPCKLBW xmm, xmm/m128
         /// </summary>
         public object mm_unpacklo_epi8(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.UnpackLow);
         
         /// <summary>
         /// Compute the bitwise XOR of 128 bits (representing integer data) in "a" and "b", and store the result in "dst".
+        ///
+        ///__m128i _mm_xor_si128 (__m128i a,  __m128i b)
+        ///PXOR xmm, xmm/m128
         /// </summary>
         public object mm_xor_si128(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, b, System.Runtime.Intrinsics.X86.Sse2.Xor);
         
@@ -1769,31 +2750,49 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     {
         /// <summary>
         /// Convert the lower double-precision (64-bit) floating-point element in "a" to a 64-bit integer, and store the result in "dst".
+        ///
+        ///__int64 _mm_cvtsd_si64 (__m128d a)
+        ///CVTSD2SI r64, xmm/m64
         /// </summary>
         public long mm_cvtsd_si64(object a) => (long)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, long, long>(a, System.Runtime.Intrinsics.X86.Sse2.X64.ConvertToInt64);
         
         /// <summary>
         /// Copy the lower 64-bit integer in "a" to "dst".
+        ///
+        ///__int64 _mm_cvtsi128_si64 (__m128i a)
+        ///MOVQ reg/m64, xmm
         /// </summary>
         public ulong mm_cvtsi128_si64(object a) => (ulong)ProcessFunc<ulong, System.Runtime.Intrinsics.Vector128<ulong>, ulong, ulong>(a, System.Runtime.Intrinsics.X86.Sse2.X64.ConvertToUInt64);
         
         /// <summary>
         /// Convert the 64-bit integer "b" to a double-precision (64-bit) floating-point element, store the result in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_cvtsi64_sd (__m128d a, __int64 b)
+        ///CVTSI2SD xmm, reg/m64
         /// </summary>
         public object mm_cvtsi64_sd(object a, long b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, long, long, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse2.X64.ConvertScalarToVector128Double);
         
         /// <summary>
         /// Copy 64-bit integer "a" to the lower element of "dst", and zero the upper element.
+        ///
+        ///__m128i _mm_cvtsi64_si128 (__int64 a)
+        ///MOVQ xmm, reg/m64
         /// </summary>
         public object mm_cvtsi64_si128(long a) => (object)ProcessFunc<long, long, long, System.Runtime.Intrinsics.Vector128<long>>(a, System.Runtime.Intrinsics.X86.Sse2.X64.ConvertScalarToVector128Int64);
         
         /// <summary>
         /// Convert the lower double-precision (64-bit) floating-point element in "a" to a 64-bit integer with truncation, and store the result in "dst".
+        ///
+        ///__int64 _mm_cvttsd_si64 (__m128d a)
+        ///CVTTSD2SI reg, xmm/m64
         /// </summary>
         public long mm_cvttsd_si64(object a) => (long)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, long, long>(a, System.Runtime.Intrinsics.X86.Sse2.X64.ConvertToInt64WithTruncation);
         
         /// <summary>
         /// Store 64-bit integer "a" into memory using a non-temporal hint to minimize cache pollution. If the cache line containing address "mem_addr" is already in the cache, the cache will be updated.
+        ///
+        ///void _mm_stream_si64(__int64 *p, __int64 a)
+        ///MOVNTI m64, r64
         /// </summary>
         public void mm_stream_si64(object mem_addr, long a) => ProcessAction<IntPtr, IntPtr, long, long>(mem_addr, a, Sse2X64_StoreNonTemporal);
         private unsafe readonly static Action<IntPtr, long> Sse2X64_StoreNonTemporal = new Action<IntPtr, long>((arg0, arg1) => System.Runtime.Intrinsics.X86.Sse2.X64.StoreNonTemporal((long*)arg0, (long)arg1));
@@ -1805,41 +2804,65 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     {
         /// <summary>
         /// Alternatively add and subtract packed single-precision (32-bit) floating-point elements in "a" to/from packed elements in "b", and store the results in "dst".
+        ///
+        ///__m128 _mm_addsub_ps (__m128 a, __m128 b)
+        ///ADDSUBPS xmm, xmm/m128
         /// </summary>
         public object mm_addsub_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse3.AddSubtract);
         
         /// <summary>
         /// Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in "a" and "b", and pack the results in "dst".
+        ///
+        ///__m128 _mm_hadd_ps (__m128 a, __m128 b)
+        ///HADDPS xmm, xmm/m128
         /// </summary>
         public object mm_hadd_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse3.HorizontalAdd);
         
         /// <summary>
         /// Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in "a" and "b", and pack the results in "dst".
+        ///
+        ///__m128 _mm_hsub_ps (__m128 a, __m128 b)
+        ///HSUBPS xmm, xmm/m128
         /// </summary>
         public object mm_hsub_ps(object a, object b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse3.HorizontalSubtract);
         
         /// <summary>
         /// Load 128-bits of integer data from unaligned memory into "dst". This intrinsic may perform better than "_mm_loadu_si128" when the data crosses a cache line boundary.
+        ///
+        ///__m128i _mm_lddqu_si128 (__m128i const* mem_addr)
+        ///LDDQU xmm, m128
         /// </summary>
         public object mm_lddqu_si128(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(mem_addr, Sse3_LoadDquVector128);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>> Sse3_LoadDquVector128 = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>>((arg0) => System.Runtime.Intrinsics.X86.Sse3.LoadDquVector128((sbyte*)arg0));
         /// <summary>
         /// Load a double-precision (64-bit) floating-point element from memory into both elements of "dst".
+        ///
+        ///__m128d _mm_loaddup_pd (double const* mem_addr)
+        ///MOVDDUP xmm, m64
         /// </summary>
         public object mm_loaddup_pd(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, double, System.Runtime.Intrinsics.Vector128<double>>(mem_addr, Sse3_LoadAndDuplicateToVector128);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<double>> Sse3_LoadAndDuplicateToVector128 = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<double>>((arg0) => System.Runtime.Intrinsics.X86.Sse3.LoadAndDuplicateToVector128((double*)arg0));
         /// <summary>
         /// Duplicate the low double-precision (64-bit) floating-point element from "a", and store the results in "dst".
+        ///
+        ///__m128d _mm_movedup_pd (__m128d a)
+        ///MOVDDUP xmm, xmm/m64
         /// </summary>
         public object mm_movedup_pd(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, System.Runtime.Intrinsics.X86.Sse3.MoveAndDuplicate);
         
         /// <summary>
         /// Duplicate odd-indexed single-precision (32-bit) floating-point elements from "a", and store the results in "dst".
+        ///
+        ///__m128 _mm_movehdup_ps (__m128 a)
+        ///MOVSHDUP xmm, xmm/m128
         /// </summary>
         public object mm_movehdup_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse3.MoveHighAndDuplicate);
         
         /// <summary>
         /// Duplicate even-indexed single-precision (32-bit) floating-point elements from "a", and store the results in "dst".
+        ///
+        ///__m128 _mm_moveldup_ps (__m128 a)
+        ///MOVSLDUP xmm, xmm/m128
         /// </summary>
         public object mm_moveldup_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse3.MoveLowAndDuplicate);
         
@@ -1851,206 +2874,332 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     {
         /// <summary>
         /// Blend packed 16-bit integers from "a" and "b" using control mask "imm8", and store the results in "dst".
+        ///
+        ///__m128i _mm_blend_epi16 (__m128i a, __m128i b, const int imm8)
+        ///PBLENDW xmm, xmm/m128 imm8
         /// </summary>
         public object mm_blend_epi16(object a, object b, byte imm8) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, byte, byte, short, System.Runtime.Intrinsics.Vector128<short>>(a, b, imm8, System.Runtime.Intrinsics.X86.Sse41.Blend);
         
         /// <summary>
         /// Blend packed 8-bit integers from "a" and "b" using "mask", and store the results in "dst".
+        ///
+        ///__m128i _mm_blendv_epi8 (__m128i a, __m128i b, __m128i mask)
+        ///PBLENDVB xmm, xmm/m128, xmm
         /// </summary>
         public object mm_blendv_epi8(object a, object b, object mask) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, b, mask, System.Runtime.Intrinsics.X86.Sse41.BlendVariable);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" up to an integer value, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m128 _mm_ceil_ps (__m128 a)
+        ///ROUNDPS xmm, xmm/m128, imm8(10)
         /// </summary>
         public object mm_ceil_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse41.Ceiling);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" up to an integer value, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_ceil_sd (__m128d a, __m128d b)
+        ///ROUNDSD xmm, xmm/m128, imm8(10)
         /// </summary>
         public object mm_ceil_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse41.CeilingScalar);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" up to an integer value, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_ceil_sd (__m128d a)
+        ///ROUNDSD xmm, xmm/m128, imm8(10)
         /// </summary>
         public object mm_ceil_sd1(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, System.Runtime.Intrinsics.X86.Sse41.CeilingScalar);
         
         /// <summary>
         /// Compare packed 64-bit integers in "a" and "b" for equality, and store the results in "dst".
+        ///
+        ///__m128i _mm_cmpeq_epi64 (__m128i a, __m128i b)
+        ///PCMPEQQ xmm, xmm/m128
         /// </summary>
         public object mm_cmpeq_epi64(object a, object b) => (object)ProcessFunc<long, System.Runtime.Intrinsics.Vector128<long>, long, System.Runtime.Intrinsics.Vector128<long>, long, System.Runtime.Intrinsics.Vector128<long>>(a, b, System.Runtime.Intrinsics.X86.Sse41.CompareEqual);
         
         /// <summary>
         /// Sign extend packed 8-bit integers in "a" to packed 16-bit integers, and store the results in "dst".
+        ///
+        ///__m128i _mm_cvtepi8_epi16 (__m128i a)
+        ///PMOVSXBW xmm, xmm/m64
         /// </summary>
         public object mm_cvtepi8_epi16(object a) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, short, System.Runtime.Intrinsics.Vector128<short>>(a, System.Runtime.Intrinsics.X86.Sse41.ConvertToVector128Int16);
         
         /// <summary>
         /// Sign extend packed 8-bit integers in "a" to packed 32-bit integers, and store the results in "dst".
+        ///
+        ///__m128i _mm_cvtepi8_epi32 (__m128i a)
+        ///PMOVSXBD xmm, xmm/m32
         /// </summary>
         public object mm_cvtepi8_epi32(object a) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, int, System.Runtime.Intrinsics.Vector128<int>>(a, System.Runtime.Intrinsics.X86.Sse41.ConvertToVector128Int32);
         
         /// <summary>
         /// Sign extend packed 8-bit integers in the low 8 bytes of "a" to packed 64-bit integers, and store the results in "dst".
+        ///
+        ///__m128i _mm_cvtepi8_epi64 (__m128i a)
+        ///PMOVSXBQ xmm, xmm/m16
         /// </summary>
         public object mm_cvtepi8_epi64(object a) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, long, System.Runtime.Intrinsics.Vector128<long>>(a, System.Runtime.Intrinsics.X86.Sse41.ConvertToVector128Int64);
         
         /// <summary>
         /// Conditionally multiply the packed single-precision (32-bit) floating-point elements in "a" and "b" using the high 4 bits in "imm8", sum the four products, and conditionally store the sum in "dst" using the low 4 bits of "imm8".
+        ///
+        ///__m128 _mm_dp_ps (__m128 a, __m128 b, const int imm8)
+        ///DPPS xmm, xmm/m128, imm8
         /// </summary>
         public object mm_dp_ps(object a, object b, byte imm8) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>, byte, byte, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, imm8, System.Runtime.Intrinsics.X86.Sse41.DotProduct);
         
         /// <summary>
         /// Extract an 8-bit integer from "a", selected with "imm8", and store the result in the lower element of "dst".
+        ///
+        ///int _mm_extract_epi8 (__m128i a, const int imm8)
+        ///PEXTRB reg/m8, xmm, imm8
         /// </summary>
         public byte mm_extract_epi8(object a, byte imm8) => (byte)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, byte, byte, byte>(a, imm8, System.Runtime.Intrinsics.X86.Sse41.Extract);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" down to an integer value, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m128 _mm_floor_ps (__m128 a)
+        ///ROUNDPS xmm, xmm/m128, imm8(9)
         /// </summary>
         public object mm_floor_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse41.Floor);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" down to an integer value, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_floor_sd (__m128d a, __m128d b)
+        ///ROUNDSD xmm, xmm/m128, imm8(9)
         /// </summary>
         public object mm_floor_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse41.FloorScalar);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" down to an integer value, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_floor_sd (__m128d a)
+        ///ROUNDSD xmm, xmm/m128, imm8(9)
         /// </summary>
         public object mm_floor_sd1(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, System.Runtime.Intrinsics.X86.Sse41.FloorScalar);
         
         /// <summary>
         /// Copy "a" to "dst", and insert the lower 8-bit integer from "i" into "dst" at the location specified by "imm8".
+        ///
+        ///__m128i _mm_insert_epi8 (__m128i a, int i, const int imm8)
+        ///PINSRB xmm, reg/m8, imm8
         /// </summary>
         public object mm_insert_epi8(object a, sbyte i, byte imm8) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, sbyte, byte, byte, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, i, imm8, System.Runtime.Intrinsics.X86.Sse41.Insert);
         
         /// <summary>
         /// Compare packed 8-bit integers in "a" and "b", and store packed maximum values in "dst".
+        ///
+        ///__m128i _mm_max_epi8 (__m128i a, __m128i b)
+        ///PMAXSB xmm, xmm/m128
         /// </summary>
         public object mm_max_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Sse41.Max);
         
         /// <summary>
         /// Compare packed 8-bit integers in "a" and "b", and store packed minimum values in "dst".
+        ///
+        ///__m128i _mm_min_epi8 (__m128i a, __m128i b)
+        ///PMINSB xmm, xmm/m128
         /// </summary>
         public object mm_min_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Sse41.Min);
         
         /// <summary>
         /// Horizontally compute the minimum amongst the packed unsigned 16-bit integers in "a", store the minimum and index in "dst", and zero the remaining bits in "dst".
+        ///
+        ///__m128i _mm_minpos_epu16 (__m128i a)
+        ///PHMINPOSUW xmm, xmm/m128
         /// </summary>
         public object mm_minpos_epu16(object a) => (object)ProcessFunc<ushort, System.Runtime.Intrinsics.Vector128<ushort>, ushort, System.Runtime.Intrinsics.Vector128<ushort>>(a, System.Runtime.Intrinsics.X86.Sse41.MinHorizontal);
         
         /// <summary>
-        /// Compute the sum of absolute differences (SADs) of quadruplets of unsigned 8-bit integers in "a" compared to those in "b", and store the 16-bit results in "dst". 	Eight SADs are performed using one quadruplet from "b" and eight quadruplets from "a". One quadruplet is selected from "b" starting at on the offset specified in "imm8". Eight quadruplets are formed from sequential 8-bit integers selected from "a" starting at the offset specified in "imm8".
+        /// Compute the sum of absolute differences (SADs) of quadruplets of unsigned 8-bit integers in "a" compared to those in "b", and store the 16-bit results in "dst".
+        ///	Eight SADs are performed using one quadruplet from "b" and eight quadruplets from "a". One quadruplet is selected from "b" starting at on the offset specified in "imm8". Eight quadruplets are formed from sequential 8-bit integers selected from "a" starting at the offset specified in "imm8".
+        ///
+        ///__m128i _mm_mpsadbw_epu8 (__m128i a, __m128i b, const int imm8)
+        ///MPSADBW xmm, xmm/m128, imm8
         /// </summary>
         public object mm_mpsadbw_epu8(object a, object b, byte imm8) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, byte, System.Runtime.Intrinsics.Vector128<byte>, byte, byte, ushort, System.Runtime.Intrinsics.Vector128<ushort>>(a, b, imm8, System.Runtime.Intrinsics.X86.Sse41.MultipleSumAbsoluteDifferences);
         
         /// <summary>
         /// Multiply the low 32-bit integers from each packed 64-bit element in "a" and "b", and store the signed 64-bit results in "dst".
+        ///
+        ///__m128i _mm_mul_epi32 (__m128i a, __m128i b)
+        ///PMULDQ xmm, xmm/m128
         /// </summary>
         public object mm_mul_epi32(object a, object b) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector128<int>, int, System.Runtime.Intrinsics.Vector128<int>, long, System.Runtime.Intrinsics.Vector128<long>>(a, b, System.Runtime.Intrinsics.X86.Sse41.Multiply);
         
         /// <summary>
         /// Multiply the packed 32-bit integers in "a" and "b", producing intermediate 64-bit integers, and store the low 32 bits of the intermediate integers in "dst".
+        ///
+        ///__m128i _mm_mullo_epi32 (__m128i a, __m128i b)
+        ///PMULLD xmm, xmm/m128
         /// </summary>
         public object mm_mullo_epi32(object a, object b) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector128<int>, int, System.Runtime.Intrinsics.Vector128<int>, int, System.Runtime.Intrinsics.Vector128<int>>(a, b, System.Runtime.Intrinsics.X86.Sse41.MultiplyLow);
         
         /// <summary>
         /// Convert packed 32-bit integers from "a" and "b" to packed 16-bit integers using unsigned saturation, and store the results in "dst".
+        ///
+        ///__m128i _mm_packus_epi32 (__m128i a, __m128i b)
+        ///PACKUSDW xmm, xmm/m128
         /// </summary>
         public object mm_packus_epi32(object a, object b) => (object)ProcessFunc<int, System.Runtime.Intrinsics.Vector128<int>, int, System.Runtime.Intrinsics.Vector128<int>, ushort, System.Runtime.Intrinsics.Vector128<ushort>>(a, b, System.Runtime.Intrinsics.X86.Sse41.PackUnsignedSaturate);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" using the "rounding" parameter, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m128 _mm_round_ps (__m128 a, _MM_FROUND_CUR_DIRECTION)
+        ///ROUNDPS xmm, xmm/m128, imm8(4)
         /// </summary>
         public object mm_round_ps(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse41.RoundCurrentDirection);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" using the "rounding" parameter, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m128 _mm_round_ps (__m128 a, int rounding)
+        ///ROUNDPS xmm, xmm/m128, imm8(8)
+        ///  _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC
         /// </summary>
         public object mm_round_ps_to_nearest_integer(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse41.RoundToNearestInteger);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" using the "rounding" parameter, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m128 _mm_round_ps (__m128 a, _MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC)
+        ///ROUNDPS xmm, xmm/m128, imm8(9)
         /// </summary>
         public object mm_round_ps_to_negative_infinity(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse41.RoundToNegativeInfinity);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" using the "rounding" parameter, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m128 _mm_round_ps (__m128 a, _MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC)
+        ///ROUNDPS xmm, xmm/m128, imm8(10)
         /// </summary>
         public object mm_round_ps_to_positive_infinity(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse41.RoundToPositiveInfinity);
         
         /// <summary>
         /// Round the packed single-precision (32-bit) floating-point elements in "a" using the "rounding" parameter, and store the results as packed single-precision floating-point elements in "dst".
+        ///
+        ///__m128 _mm_round_ps (__m128 a, _MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC)
+        ///ROUNDPS xmm, xmm/m128, imm8(11)
         /// </summary>
         public object mm_round_ps_to_zero(object a) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, float, System.Runtime.Intrinsics.Vector128<float>>(a, System.Runtime.Intrinsics.X86.Sse41.RoundToZero);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" using the "rounding" parameter, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_round_sd (__m128d a, __m128d b, _MM_FROUND_CUR_DIRECTION)
+        ///ROUNDSD xmm, xmm/m128, imm8(4)
         /// </summary>
         public object mm_round_sd(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse41.RoundCurrentDirectionScalar);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" using the "rounding" parameter, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_round_sd (__m128d a, __m128d b, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+        ///ROUNDSD xmm, xmm/m128, imm8(8)
         /// </summary>
         public object mm_round_sd_to_nearest_integer_scalar(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse41.RoundToNearestIntegerScalar);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" using the "rounding" parameter, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_round_sd (__m128d a, __m128d b, _MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC)
+        ///ROUNDSD xmm, xmm/m128, imm8(9)
         /// </summary>
         public object mm_round_sd_to_negative_infinity_scalar(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse41.RoundToNegativeInfinityScalar);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" using the "rounding" parameter, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_round_sd (__m128d a, __m128d b, _MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC)
+        ///ROUNDSD xmm, xmm/m128, imm8(10)
         /// </summary>
         public object mm_round_sd_to_positive_infinity_scalar(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse41.RoundToPositiveInfinityScalar);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" using the "rounding" parameter, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_round_sd (__m128d a, __m128d b, _MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC)
+        ///ROUNDSD xmm, xmm/m128, imm8(11)
         /// </summary>
         public object mm_round_sd_to_zero_scalar(object a, object b) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, b, System.Runtime.Intrinsics.X86.Sse41.RoundToZeroScalar);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" using the "rounding" parameter, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_round_sd (__m128d a, _MM_FROUND_CUR_DIRECTION)
+        ///ROUNDSD xmm, xmm/m128, imm8(4)
         /// </summary>
         public object mm_round_sd1(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, System.Runtime.Intrinsics.X86.Sse41.RoundCurrentDirectionScalar);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" using the "rounding" parameter, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_round_sd (__m128d a, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+        ///ROUNDSD xmm, xmm/m128, imm8(8)
         /// </summary>
         public object mm_round_sd1_to_nearest_integer_scalar(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, System.Runtime.Intrinsics.X86.Sse41.RoundToNearestIntegerScalar);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" using the "rounding" parameter, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_round_sd (__m128d a, _MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC)
+        ///ROUNDSD xmm, xmm/m128, imm8(9)
         /// </summary>
         public object mm_round_sd1_to_negative_infinity_scalar(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, System.Runtime.Intrinsics.X86.Sse41.RoundToNegativeInfinityScalar);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" using the "rounding" parameter, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_round_sd (__m128d a, _MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC)
+        ///ROUNDSD xmm, xmm/m128, imm8(10)
         /// </summary>
         public object mm_round_sd1_to_positive_infinity_scalar(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, System.Runtime.Intrinsics.X86.Sse41.RoundToPositiveInfinityScalar);
         
         /// <summary>
         /// Round the lower double-precision (64-bit) floating-point element in "b" using the "rounding" parameter, store the result as a double-precision floating-point element in the lower element of "dst", and copy the upper element from "a" to the upper element of "dst".
+        ///
+        ///__m128d _mm_round_sd (__m128d a, _MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC)
+        ///ROUNDSD xmm, xmm/m128, imm8(11)
         /// </summary>
         public object mm_round_sd1_to_zero_scalar(object a) => (object)ProcessFunc<double, System.Runtime.Intrinsics.Vector128<double>, double, System.Runtime.Intrinsics.Vector128<double>>(a, System.Runtime.Intrinsics.X86.Sse41.RoundToZeroScalar);
         
         /// <summary>
-        /// Load 128-bits of integer data from memory into "dst" using a non-temporal memory hint. 	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        /// Load 128-bits of integer data from memory into "dst" using a non-temporal memory hint.
+        ///	"mem_addr" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+        ///
+        ///__m128i _mm_stream_load_si128 (const __m128i* mem_addr)
+        ///MOVNTDQA xmm, m128
         /// </summary>
         public object mm_stream_load_si128(object mem_addr) => (object)ProcessFunc<IntPtr, IntPtr, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(mem_addr, 16, Sse41_LoadAlignedVector128NonTemporal);
         private unsafe readonly static Func<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>> Sse41_LoadAlignedVector128NonTemporal = new Func<IntPtr, System.Runtime.Intrinsics.Vector128<sbyte>>((arg0) => System.Runtime.Intrinsics.X86.Sse41.LoadAlignedVector128NonTemporal((sbyte*)arg0));
         /// <summary>
         /// Compute the bitwise AND of 128 bits (representing integer data) in "a" and "b", and set "ZF" to 1 if the result is zero, otherwise set "ZF" to 0. Compute the bitwise NOT of "a" and then AND with "b", and set "CF" to 1 if the result is zero, otherwise set "CF" to 0. Return the "CF" value.
+        ///
+        ///int _mm_testc_si128 (__m128i a, __m128i b)
+        ///PTEST xmm, xmm/m128
         /// </summary>
         public bool mm_testc_si128(object a, object b) => (bool)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse41.TestC);
         
         /// <summary>
         /// Compute the bitwise AND of 128 bits (representing integer data) in "a" and "b", and set "ZF" to 1 if the result is zero, otherwise set "ZF" to 0. Compute the bitwise NOT of "a" and then AND with "b", and set "CF" to 1 if the result is zero, otherwise set "CF" to 0. Return 1 if both the "ZF" and "CF" values are zero, otherwise return 0.
+        ///
+        ///int _mm_testnzc_si128 (__m128i a, __m128i b)
+        ///PTEST xmm, xmm/m128
         /// </summary>
         public bool mm_testnzc_si128(object a, object b) => (bool)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse41.TestNotZAndNotC);
         
         /// <summary>
         /// Compute the bitwise AND of 128 bits (representing integer data) in "a" and "b", and set "ZF" to 1 if the result is zero, otherwise set "ZF" to 0. Compute the bitwise NOT of "a" and then AND with "b", and set "CF" to 1 if the result is zero, otherwise set "CF" to 0. Return the "ZF" value.
+        ///
+        ///int _mm_testz_si128 (__m128i a, __m128i b)
+        ///PTEST xmm, xmm/m128
         /// </summary>
         public bool mm_testz_si128(object a, object b) => (bool)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, bool, bool>(a, b, System.Runtime.Intrinsics.X86.Sse41.TestZ);
         
@@ -2062,11 +3211,17 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     {
         /// <summary>
         /// Extract a 64-bit integer from "a", selected with "imm8", and store the result in "dst".
+        ///
+        ///__int64 _mm_extract_epi64 (__m128i a, const int imm8)
+        ///PEXTRQ reg/m64, xmm, imm8
         /// </summary>
         public long mm_extract_epi64(object a, byte imm8) => (long)ProcessFunc<long, System.Runtime.Intrinsics.Vector128<long>, byte, byte, long, long>(a, imm8, System.Runtime.Intrinsics.X86.Sse41.X64.Extract);
         
         /// <summary>
         /// Copy "a" to "dst", and insert the 64-bit integer "i" into "dst" at the location specified by "imm8".
+        ///
+        ///__m128i _mm_insert_epi64 (__m128i a, __int64 i, const int imm8)
+        ///PINSRQ xmm, reg/m64, imm8
         /// </summary>
         public object mm_insert_epi64(object a, long i, byte imm8) => (object)ProcessFunc<long, System.Runtime.Intrinsics.Vector128<long>, long, long, byte, byte, long, System.Runtime.Intrinsics.Vector128<long>>(a, i, imm8, System.Runtime.Intrinsics.X86.Sse41.X64.Insert);
         
@@ -2078,11 +3233,17 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     {
         /// <summary>
         /// Compare packed 64-bit integers in "a" and "b" for greater-than, and store the results in "dst".
+        ///
+        ///__m128i _mm_cmpgt_epi64 (__m128i a, __m128i b)
+        ///PCMPGTQ xmm, xmm/m128
         /// </summary>
         public object mm_cmpgt_epi64(object a, object b) => (object)ProcessFunc<long, System.Runtime.Intrinsics.Vector128<long>, long, System.Runtime.Intrinsics.Vector128<long>, long, System.Runtime.Intrinsics.Vector128<long>>(a, b, System.Runtime.Intrinsics.X86.Sse42.CompareGreaterThan);
         
         /// <summary>
         /// Starting with the initial value in "crc", accumulates a CRC32 value for unsigned 8-bit integer "v", and stores the result in "dst".
+        ///
+        ///unsigned int _mm_crc32_u8 (unsigned int crc, unsigned char v)
+        ///CRC32 reg, reg/m8
         /// </summary>
         public uint mm_crc32_u8(uint crc, byte v) => (uint)ProcessFunc<uint, uint, byte, byte, uint, uint>(crc, v, System.Runtime.Intrinsics.X86.Sse42.Crc32);
         
@@ -2094,6 +3255,9 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     {
         /// <summary>
         /// Starting with the initial value in "crc", accumulates a CRC32 value for unsigned 64-bit integer "v", and stores the result in "dst".
+        ///
+        ///unsigned __int64 _mm_crc32_u64 (unsigned __int64 crc, unsigned __int64 v)
+        ///CRC32 reg, reg/m64
         /// </summary>
         public ulong mm_crc32_u64(ulong crc, ulong v) => (ulong)ProcessFunc<ulong, ulong, ulong, ulong, ulong, ulong>(crc, v, System.Runtime.Intrinsics.X86.Sse42.X64.Crc32);
         
@@ -2105,16 +3269,25 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     {
         /// <summary>
         /// Convert the 64-bit integer "b" to a single-precision (32-bit) floating-point element, store the result in the lower element of "dst", and copy the upper 3 packed elements from "a" to the upper elements of "dst".
+        ///
+        ///__m128 _mm_cvtsi64_ss (__m128 a, __int64 b)
+        ///CVTSI2SS xmm, reg/m64
         /// </summary>
         public object mm_cvtsi64_ss(object a, long b) => (object)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, long, long, float, System.Runtime.Intrinsics.Vector128<float>>(a, b, System.Runtime.Intrinsics.X86.Sse.X64.ConvertScalarToVector128Single);
         
         /// <summary>
         /// Convert the lower single-precision (32-bit) floating-point element in "a" to a 64-bit integer, and store the result in "dst".
+        ///
+        ///__int64 _mm_cvtss_si64 (__m128 a)
+        ///CVTSS2SI r64, xmm/m32
         /// </summary>
         public long mm_cvtss_si64(object a) => (long)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, long, long>(a, System.Runtime.Intrinsics.X86.Sse.X64.ConvertToInt64);
         
         /// <summary>
         /// Convert the lower single-precision (32-bit) floating-point element in "a" to a 64-bit integer with truncation, and store the result in "dst".
+        ///
+        ///__int64 _mm_cvttss_si64 (__m128 a)
+        ///CVTTSS2SI r64, xmm/m32
         /// </summary>
         public long mm_cvttss_si64(object a) => (long)ProcessFunc<float, System.Runtime.Intrinsics.Vector128<float>, long, long>(a, System.Runtime.Intrinsics.X86.Sse.X64.ConvertToInt64WithTruncation);
         
@@ -2126,51 +3299,81 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
     {
         /// <summary>
         /// Compute the absolute value of packed 8-bit integers in "a", and store the unsigned results in "dst".
+        ///
+        ///__m128i _mm_abs_epi8 (__m128i a)
+        ///PABSB xmm, xmm/m128
         /// </summary>
         public object mm_abs_epi8(object a) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, byte, System.Runtime.Intrinsics.Vector128<byte>>(a, System.Runtime.Intrinsics.X86.Ssse3.Abs);
         
         /// <summary>
         /// Concatenate 16-byte blocks in "a" and "b" into a 32-byte temporary result, shift the result right by "count" bytes, and store the low 16 bytes in "dst".
+        ///
+        ///__m128i _mm_alignr_epi8 (__m128i a, __m128i b, int count)
+        ///PALIGNR xmm, xmm/m128, imm8
         /// </summary>
         public object mm_alignr_epi8(object a, object b, byte count) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, byte, byte, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, b, count, System.Runtime.Intrinsics.X86.Ssse3.AlignRight);
         
         /// <summary>
         /// Horizontally add adjacent pairs of 16-bit integers in "a" and "b", and pack the signed 16-bit results in "dst".
+        ///
+        ///__m128i _mm_hadd_epi16 (__m128i a, __m128i b)
+        ///PHADDW xmm, xmm/m128
         /// </summary>
         public object mm_hadd_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>>(a, b, System.Runtime.Intrinsics.X86.Ssse3.HorizontalAdd);
         
         /// <summary>
         /// Horizontally add adjacent pairs of 16-bit integers in "a" and "b" using saturation, and pack the signed 16-bit results in "dst".
+        ///
+        ///__m128i _mm_hadds_epi16 (__m128i a, __m128i b)
+        ///PHADDSW xmm, xmm/m128
         /// </summary>
         public object mm_hadds_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>>(a, b, System.Runtime.Intrinsics.X86.Ssse3.HorizontalAddSaturate);
         
         /// <summary>
         /// Horizontally subtract adjacent pairs of 16-bit integers in "a" and "b", and pack the signed 16-bit results in "dst".
+        ///
+        ///__m128i _mm_hsub_epi16 (__m128i a, __m128i b)
+        ///PHSUBW xmm, xmm/m128
         /// </summary>
         public object mm_hsub_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>>(a, b, System.Runtime.Intrinsics.X86.Ssse3.HorizontalSubtract);
         
         /// <summary>
         /// Horizontally subtract adjacent pairs of 16-bit integers in "a" and "b" using saturation, and pack the signed 16-bit results in "dst".
+        ///
+        ///__m128i _mm_hsubs_epi16 (__m128i a, __m128i b)
+        ///PHSUBSW xmm, xmm/m128
         /// </summary>
         public object mm_hsubs_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>>(a, b, System.Runtime.Intrinsics.X86.Ssse3.HorizontalSubtractSaturate);
         
         /// <summary>
         /// Vertically multiply each unsigned 8-bit integer from "a" with the corresponding signed 8-bit integer from "b", producing intermediate signed 16-bit integers. Horizontally add adjacent pairs of intermediate signed 16-bit integers, and pack the saturated results in "dst".
+        ///
+        ///__m128i _mm_maddubs_epi16 (__m128i a, __m128i b)
+        ///PMADDUBSW xmm, xmm/m128
         /// </summary>
         public object mm_maddubs_epi16(object a, object b) => (object)ProcessFunc<byte, System.Runtime.Intrinsics.Vector128<byte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, short, System.Runtime.Intrinsics.Vector128<short>>(a, b, System.Runtime.Intrinsics.X86.Ssse3.MultiplyAddAdjacent);
         
         /// <summary>
         /// Multiply packed 16-bit integers in "a" and "b", producing intermediate signed 32-bit integers. Truncate each intermediate integer to the 18 most significant bits, round by adding 1, and store bits [16:1] to "dst".
+        ///
+        ///__m128i _mm_mulhrs_epi16 (__m128i a, __m128i b)
+        ///PMULHRSW xmm, xmm/m128
         /// </summary>
         public object mm_mulhrs_epi16(object a, object b) => (object)ProcessFunc<short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>, short, System.Runtime.Intrinsics.Vector128<short>>(a, b, System.Runtime.Intrinsics.X86.Ssse3.MultiplyHighRoundScale);
         
         /// <summary>
         /// Shuffle packed 8-bit integers in "a" according to shuffle control mask in the corresponding 8-bit element of "b", and store the results in "dst".
+        ///
+        ///__m128i _mm_shuffle_epi8 (__m128i a, __m128i b)
+        ///PSHUFB xmm, xmm/m128
         /// </summary>
         public object mm_shuffle_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Ssse3.Shuffle);
         
         /// <summary>
         /// Negate packed 8-bit integers in "a" when the corresponding signed 8-bit integer in "b" is negative, and store the results in "dst". Element in "dst" are zeroed out when the corresponding element in "b" is zero.
+        ///
+        ///__m128i _mm_sign_epi8 (__m128i a, __m128i b)
+        ///PSIGNB xmm, xmm/m128
         /// </summary>
         public object mm_sign_epi8(object a, object b) => (object)ProcessFunc<sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>, sbyte, System.Runtime.Intrinsics.Vector128<sbyte>>(a, b, System.Runtime.Intrinsics.X86.Ssse3.Sign);
         
@@ -2197,37 +3400,43 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_aesdec_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / AES";
-                descriptor.Description = @"__m128i _mm_aesdec_si128 (__m128i a, __m128i RoundKey) AESDEC xmm, xmm/m128";
+                descriptor.Description = @"__m128i _mm_aesdec_si128 (__m128i a, __m128i RoundKey)
+AESDEC xmm, xmm/m128";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mm_aesdeclast_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / AES";
-                descriptor.Description = @"__m128i _mm_aesdeclast_si128 (__m128i a, __m128i RoundKey) AESDECLAST xmm, xmm/m128";
+                descriptor.Description = @"__m128i _mm_aesdeclast_si128 (__m128i a, __m128i RoundKey)
+AESDECLAST xmm, xmm/m128";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mm_aesenc_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / AES";
-                descriptor.Description = @"__m128i _mm_aesenc_si128 (__m128i a, __m128i RoundKey) AESENC xmm, xmm/m128";
+                descriptor.Description = @"__m128i _mm_aesenc_si128 (__m128i a, __m128i RoundKey)
+AESENC xmm, xmm/m128";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mm_aesenclast_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / AES";
-                descriptor.Description = @"__m128i _mm_aesenclast_si128 (__m128i a, __m128i RoundKey) AESENCLAST xmm, xmm/m128";
+                descriptor.Description = @"__m128i _mm_aesenclast_si128 (__m128i a, __m128i RoundKey)
+AESENCLAST xmm, xmm/m128";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mm_aesimc_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / AES";
-                descriptor.Description = @"__m128i _mm_aesimc_si128 (__m128i a) AESIMC xmm, xmm/m128";
+                descriptor.Description = @"__m128i _mm_aesimc_si128 (__m128i a)
+AESIMC xmm, xmm/m128";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mm_aeskeygenassist_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / AES";
-                descriptor.Description = @"__m128i _mm_aeskeygenassist_si128 (__m128i a, const int imm8) AESKEYGENASSIST xmm, xmm/m128, imm8";
+                descriptor.Description = @"__m128i _mm_aeskeygenassist_si128 (__m128i a, const int imm8)
+AESKEYGENASSIST xmm, xmm/m128, imm8";
                 descriptor.IsCommand = false;
             }
         }        
@@ -2307,14 +3516,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_broadcast_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Broadcast a single-precision (32-bit) floating-point element from memory to all elements of ""dst"".";
+                descriptor.Description = @"Broadcast a single-precision (32-bit) floating-point element from memory to all elements of ""dst"".
+
+__m128 _mm_broadcast_ss (float const * mem_addr)
+VBROADCASTSS xmm, m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"float const *")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cmp_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" based on the comparison operand specified by ""imm8"", and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" based on the comparison operand specified by ""imm8"", and store the results in ""dst"".
+
+__m128 _mm_cmp_ps (__m128 a, __m128 b, const int imm8)
+VCMPPS xmm, xmm, xmm/m128, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -2323,7 +3538,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmp_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" based on the comparison operand specified by ""imm8"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" based on the comparison operand specified by ""imm8"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmp_sd (__m128d a, __m128d b, const int imm8)
+VCMPSS xmm, xmm, xmm/m32, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -2332,7 +3550,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_maskload_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Load packed single-precision (32-bit) floating-point elements from memory into ""dst"" using ""mask"" (elements are zeroed out when the high bit of the corresponding element is not set).";
+                descriptor.Description = @"Load packed single-precision (32-bit) floating-point elements from memory into ""dst"" using ""mask"" (elements are zeroed out when the high bit of the corresponding element is not set).
+
+__m128 _mm_maskload_ps (float const * mem_addr, __m128i mask)
+VMASKMOVPS xmm, xmm, m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"float const *")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("mask", @"__m128i")  { IsOptional = false });
@@ -2340,7 +3561,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_maskstore_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Store packed single-precision (32-bit) floating-point elements from ""a"" into memory using ""mask"".";
+                descriptor.Description = @"Store packed single-precision (32-bit) floating-point elements from ""a"" into memory using ""mask"".
+
+void _mm_maskstore_ps (float * mem_addr, __m128i mask, __m128 a)
+VMASKMOVPS m128, xmm, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"float *")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("mask", @"__m128i")  { IsOptional = false });
@@ -2349,7 +3573,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_permute_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Shuffle single-precision (32-bit) floating-point elements in ""a"" using the control in ""imm8"", and store the results in ""dst"".";
+                descriptor.Description = @"Shuffle single-precision (32-bit) floating-point elements in ""a"" using the control in ""imm8"", and store the results in ""dst"".
+
+__m128 _mm_permute_ps (__m128 a, int imm8)
+VPERMILPS xmm, xmm, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"int")  { IsOptional = false });
@@ -2357,7 +3584,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_permutevar_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Shuffle single-precision (32-bit) floating-point elements in ""a"" using the control in ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Shuffle single-precision (32-bit) floating-point elements in ""a"" using the control in ""b"", and store the results in ""dst"".
+
+__m128 _mm_permutevar_ps (__m128 a, __m128i b)
+VPERMILPS xmm, xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -2365,7 +3595,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_testc_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing single-precision (32-bit) floating-point elements) in ""a"" and ""b"", producing an intermediate 128-bit value, and set ""ZF"" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set ""ZF"" to 0. Compute the bitwise NOT of ""a"" and then AND with ""b"", producing an intermediate value, and set ""CF"" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set ""CF"" to 0. Return the ""CF"" value.";
+                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing single-precision (32-bit) floating-point elements) in ""a"" and ""b"", producing an intermediate 128-bit value, and set ""ZF"" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set ""ZF"" to 0. Compute the bitwise NOT of ""a"" and then AND with ""b"", producing an intermediate value, and set ""CF"" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set ""CF"" to 0. Return the ""CF"" value.
+
+int _mm_testc_ps (__m128 a, __m128 b)
+VTESTPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -2373,7 +3606,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_testnzc_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing single-precision (32-bit) floating-point elements) in ""a"" and ""b"", producing an intermediate 128-bit value, and set ""ZF"" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set ""ZF"" to 0. Compute the bitwise NOT of ""a"" and then AND with ""b"", producing an intermediate value, and set ""CF"" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set ""CF"" to 0. Return 1 if both the ""ZF"" and ""CF"" values are zero, otherwise return 0.";
+                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing single-precision (32-bit) floating-point elements) in ""a"" and ""b"", producing an intermediate 128-bit value, and set ""ZF"" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set ""ZF"" to 0. Compute the bitwise NOT of ""a"" and then AND with ""b"", producing an intermediate value, and set ""CF"" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set ""CF"" to 0. Return 1 if both the ""ZF"" and ""CF"" values are zero, otherwise return 0.
+
+int _mm_testnzc_ps (__m128 a, __m128 b)
+VTESTPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -2381,7 +3617,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_testz_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing single-precision (32-bit) floating-point elements) in ""a"" and ""b"", producing an intermediate 128-bit value, and set ""ZF"" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set ""ZF"" to 0. Compute the bitwise NOT of ""a"" and then AND with ""b"", producing an intermediate value, and set ""CF"" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set ""CF"" to 0. Return the ""ZF"" value.";
+                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing single-precision (32-bit) floating-point elements) in ""a"" and ""b"", producing an intermediate 128-bit value, and set ""ZF"" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set ""ZF"" to 0. Compute the bitwise NOT of ""a"" and then AND with ""b"", producing an intermediate value, and set ""CF"" to 1 if the sign bit of each 32-bit element in the intermediate value is zero, otherwise set ""CF"" to 0. Return the ""ZF"" value.
+
+int _mm_testz_ps (__m128 a, __m128 b)
+VTESTPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -2389,7 +3628,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_add_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Add packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Add packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".
+
+__m256 _mm256_add_ps (__m256 a, __m256 b)
+VADDPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2397,7 +3639,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_addsub_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Alternatively add and subtract packed single-precision (32-bit) floating-point elements in ""a"" to/from packed elements in ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Alternatively add and subtract packed single-precision (32-bit) floating-point elements in ""a"" to/from packed elements in ""b"", and store the results in ""dst"".
+
+__m256 _mm256_addsub_ps (__m256 a, __m256 b)
+VADDSUBPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2405,7 +3650,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_and_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compute the bitwise AND of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Compute the bitwise AND of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".
+
+__m256 _mm256_and_ps (__m256 a, __m256 b)
+VANDPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2413,7 +3661,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_andnot_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compute the bitwise NOT of packed single-precision (32-bit) floating-point elements in ""a"" and then AND with ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Compute the bitwise NOT of packed single-precision (32-bit) floating-point elements in ""a"" and then AND with ""b"", and store the results in ""dst"".
+
+__m256 _mm256_andnot_ps (__m256 a, __m256 b)
+VANDNPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2421,7 +3672,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_blend_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Blend packed single-precision (32-bit) floating-point elements from ""a"" and ""b"" using control mask ""imm8"", and store the results in ""dst"".";
+                descriptor.Description = @"Blend packed single-precision (32-bit) floating-point elements from ""a"" and ""b"" using control mask ""imm8"", and store the results in ""dst"".
+
+__m256 _mm256_blend_ps (__m256 a, __m256 b, const int imm8)
+VBLENDPS ymm, ymm, ymm/m256, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2430,7 +3684,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_blendv_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Blend packed single-precision (32-bit) floating-point elements from ""a"" and ""b"" using ""mask"", and store the results in ""dst"".";
+                descriptor.Description = @"Blend packed single-precision (32-bit) floating-point elements from ""a"" and ""b"" using ""mask"", and store the results in ""dst"".
+
+__m256 _mm256_blendv_ps (__m256 a, __m256 b, __m256 mask)
+VBLENDVPS ymm, ymm, ymm/m256, ymm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2439,77 +3696,110 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_broadcast_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Broadcast 128 bits from memory (composed of 4 packed single-precision (32-bit) floating-point elements) to all elements of ""dst"".";
+                descriptor.Description = @"Broadcast 128 bits from memory (composed of 4 packed single-precision (32-bit) floating-point elements) to all elements of ""dst"".
+
+__m256 _mm256_broadcast_ps (__m128 const * mem_addr)
+VBROADCASTF128, ymm, m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m128 const *")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_broadcast_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Broadcast a single-precision (32-bit) floating-point element from memory to all elements of ""dst"".";
+                descriptor.Description = @"Broadcast a single-precision (32-bit) floating-point element from memory to all elements of ""dst"".
+
+__m256 _mm256_broadcast_ss (float const * mem_addr)
+VBROADCASTSS ymm, m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"float const *")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_ceil_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" up to an integer value, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" up to an integer value, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m256 _mm256_ceil_ps (__m256 a)
+VROUNDPS ymm, ymm/m256, imm8(10)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_cvtepi32_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Convert packed 32-bit integers in ""a"" to packed single-precision (32-bit) floating-point elements, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed 32-bit integers in ""a"" to packed single-precision (32-bit) floating-point elements, and store the results in ""dst"".
+
+__m256 _mm256_cvtepi32_ps (__m256i a)
+VCVTDQ2PS ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_cvtpd_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Convert packed double-precision (64-bit) floating-point elements in ""a"" to packed 32-bit integers, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed double-precision (64-bit) floating-point elements in ""a"" to packed 32-bit integers, and store the results in ""dst"".
+
+__m128i _mm256_cvtpd_epi32 (__m256d a)
+VCVTPD2DQ xmm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256d")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_cvtpd_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Convert packed double-precision (64-bit) floating-point elements in ""a"" to packed single-precision (32-bit) floating-point elements, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed double-precision (64-bit) floating-point elements in ""a"" to packed single-precision (32-bit) floating-point elements, and store the results in ""dst"".
+
+__m128 _mm256_cvtpd_ps (__m256d a)
+VCVTPD2PS xmm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256d")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_cvtps_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Convert packed single-precision (32-bit) floating-point elements in ""a"" to packed 32-bit integers, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed single-precision (32-bit) floating-point elements in ""a"" to packed 32-bit integers, and store the results in ""dst"".
+
+__m256i _mm256_cvtps_epi32 (__m256 a)
+VCVTPS2DQ ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_cvtps_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Convert packed single-precision (32-bit) floating-point elements in ""a"" to packed double-precision (64-bit) floating-point elements, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed single-precision (32-bit) floating-point elements in ""a"" to packed double-precision (64-bit) floating-point elements, and store the results in ""dst"".
+
+__m256d _mm256_cvtps_pd (__m128 a)
+VCVTPS2PD ymm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_cvttpd_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Convert packed double-precision (64-bit) floating-point elements in ""a"" to packed 32-bit integers with truncation, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed double-precision (64-bit) floating-point elements in ""a"" to packed 32-bit integers with truncation, and store the results in ""dst"".
+
+__m128i _mm256_cvttpd_epi32 (__m256d a)
+VCVTTPD2DQ xmm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256d")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_cvttps_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Convert packed single-precision (32-bit) floating-point elements in ""a"" to packed 32-bit integers with truncation, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed single-precision (32-bit) floating-point elements in ""a"" to packed 32-bit integers with truncation, and store the results in ""dst"".
+
+__m256i _mm256_cvttps_epi32 (__m256 a)
+VCVTTPS2DQ ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_div_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Divide packed single-precision (32-bit) floating-point elements in ""a"" by packed elements in ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Divide packed single-precision (32-bit) floating-point elements in ""a"" by packed elements in ""b"", and store the results in ""dst"".
+
+__m256 _mm256_div_ps (__m256 a, __m256 b)
+VDIVPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2517,7 +3807,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_dp_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Conditionally multiply the packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" using the high 4 bits in ""imm8"", sum the four products, and conditionally store the sum in ""dst"" using the low 4 bits of ""imm8"".";
+                descriptor.Description = @"Conditionally multiply the packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" using the high 4 bits in ""imm8"", sum the four products, and conditionally store the sum in ""dst"" using the low 4 bits of ""imm8"".
+
+__m256 _mm256_dp_ps (__m256 a, __m256 b, const int imm8)
+VDPPS ymm, ymm, ymm/m256, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2526,7 +3819,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_extractf128_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Extract 128 bits (composed of integer data) from ""a"", selected with ""imm8"", and store the result in ""dst"".";
+                descriptor.Description = @"Extract 128 bits (composed of integer data) from ""a"", selected with ""imm8"", and store the result in ""dst"".
+
+__m128i _mm256_extractf128_si256 (__m256i a, const int imm8)
+VEXTRACTF128 xmm/m128, ymm, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"const int")  { IsOptional = false });
@@ -2534,14 +3830,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_floor_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" down to an integer value, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" down to an integer value, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m256 _mm256_floor_ps (__m256 a)
+VROUNDPS ymm, ymm/m256, imm8(9)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_hadd_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in ""a"" and ""b"", and pack the results in ""dst"".";
+                descriptor.Description = @"Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in ""a"" and ""b"", and pack the results in ""dst"".
+
+__m256 _mm256_hadd_ps (__m256 a, __m256 b)
+VHADDPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2549,7 +3851,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_hsub_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in ""a"" and ""b"", and pack the results in ""dst"".";
+                descriptor.Description = @"Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in ""a"" and ""b"", and pack the results in ""dst"".
+
+__m256 _mm256_hsub_ps (__m256 a, __m256 b)
+VHSUBPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2557,7 +3862,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_insertf128_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Copy ""a"" to ""dst"", then insert 128 bits from ""b"" into ""dst"" at the location specified by ""imm8"".";
+                descriptor.Description = @"Copy ""a"" to ""dst"", then insert 128 bits from ""b"" into ""dst"" at the location specified by ""imm8"".
+
+__m256i _mm256_insertf128_si256 (__m256i a, __m128i b, int imm8)
+VINSERTF128 ymm, ymm, xmm/m128, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -2566,28 +3874,42 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_lddqu_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Load 256-bits of integer data from unaligned memory into ""dst"". This intrinsic may perform better than ""_mm256_loadu_si256"" when the data crosses a cache line boundary.";
+                descriptor.Description = @"Load 256-bits of integer data from unaligned memory into ""dst"". This intrinsic may perform better than ""_mm256_loadu_si256"" when the data crosses a cache line boundary.
+
+__m256i _mm256_lddqu_si256 (__m256i const * mem_addr)
+VLDDQU ymm, m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m256i const *")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_load_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Load 256-bits of integer data from memory into ""dst"". 	""mem_addr"" must be aligned on a 32-byte boundary or a general-protection exception may be generated.";
+                descriptor.Description = @"Load 256-bits of integer data from memory into ""dst"".
+	""mem_addr"" must be aligned on a 32-byte boundary or a general-protection exception may be generated.
+
+__m256i _mm256_load_si256 (__m256i const * mem_addr)
+VMOVDQA ymm, m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m256i const *")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_loadu_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Load 256-bits of integer data from memory into ""dst"". 	""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Load 256-bits of integer data from memory into ""dst"".
+	""mem_addr"" does not need to be aligned on any particular boundary.
+
+__m256i _mm256_loadu_si256 (__m256i const * mem_addr)
+VMOVDQU ymm, m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m256i const *")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_max_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store packed maximum values in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store packed maximum values in ""dst"".
+
+__m256 _mm256_max_ps (__m256 a, __m256 b)
+VMAXPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2595,7 +3917,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_min_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store packed minimum values in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store packed minimum values in ""dst"".
+
+__m256 _mm256_min_ps (__m256 a, __m256 b)
+VMINPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2603,28 +3928,40 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_movehdup_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Duplicate odd-indexed single-precision (32-bit) floating-point elements from ""a"", and store the results in ""dst"".";
+                descriptor.Description = @"Duplicate odd-indexed single-precision (32-bit) floating-point elements from ""a"", and store the results in ""dst"".
+
+__m256 _mm256_movehdup_ps (__m256 a)
+VMOVSHDUP ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_moveldup_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Duplicate even-indexed single-precision (32-bit) floating-point elements from ""a"", and store the results in ""dst"".";
+                descriptor.Description = @"Duplicate even-indexed single-precision (32-bit) floating-point elements from ""a"", and store the results in ""dst"".
+
+__m256 _mm256_moveldup_ps (__m256 a)
+VMOVSLDUP ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_movemask_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Set each bit of mask ""dst"" based on the most significant bit of the corresponding packed single-precision (32-bit) floating-point element in ""a"".";
+                descriptor.Description = @"Set each bit of mask ""dst"" based on the most significant bit of the corresponding packed single-precision (32-bit) floating-point element in ""a"".
+
+int _mm256_movemask_ps (__m256 a)
+VMOVMSKPS reg, ymm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_mul_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Multiply packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Multiply packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".
+
+__m256 _mm256_mul_ps (__m256 a, __m256 b)
+VMULPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2632,7 +3969,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_or_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compute the bitwise OR of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Compute the bitwise OR of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".
+
+__m256 _mm256_or_ps (__m256 a, __m256 b)
+VORPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2640,7 +3980,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_permute2f128_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Shuffle 128-bits (composed of integer data) selected by ""imm8"" from ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Shuffle 128-bits (composed of integer data) selected by ""imm8"" from ""a"" and ""b"", and store the results in ""dst"".
+
+__m256i _mm256_permute2f128_si256 (__m256i a, __m256i b, int imm8)
+VPERM2F128 ymm, ymm, ymm/m256, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -2649,56 +3992,80 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_rcp_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compute the approximate reciprocal of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
+                descriptor.Description = @"Compute the approximate reciprocal of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.
+
+__m256 _mm256_rcp_ps (__m256 a)
+VRCPPS ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_round_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m256 _mm256_round_ps (__m256 a, _MM_FROUND_CUR_DIRECTION)
+VROUNDPS ymm, ymm/m256, imm8(4)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_round_ps_to_nearest_integer"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m256 _mm256_round_ps (__m256 a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC)
+VROUNDPS ymm, ymm/m256, imm8(8)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_round_ps_to_negative_infinity"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m256 _mm256_round_ps (__m256 a, _MM_FROUND_TO_NEG_INF | _MM_FROUND_NO_EXC)
+VROUNDPS ymm, ymm/m256, imm8(9)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_round_ps_to_positive_infinity"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m256 _mm256_round_ps (__m256 a, _MM_FROUND_TO_POS_INF | _MM_FROUND_NO_EXC)
+VROUNDPS ymm, ymm/m256, imm8(10)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_round_ps_to_zero"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m256 _mm256_round_ps (__m256 a, _MM_FROUND_TO_ZERO | _MM_FROUND_NO_EXC)
+VROUNDPS ymm, ymm/m256, imm8(11)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_rsqrt_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compute the approximate reciprocal square root of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
+                descriptor.Description = @"Compute the approximate reciprocal square root of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.
+
+__m256 _mm256_rsqrt_ps (__m256 a)
+VRSQRTPS ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_shuffle_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Shuffle single-precision (32-bit) floating-point elements in ""a"" within 128-bit lanes using the control in ""imm8"", and store the results in ""dst"".";
+                descriptor.Description = @"Shuffle single-precision (32-bit) floating-point elements in ""a"" within 128-bit lanes using the control in ""imm8"", and store the results in ""dst"".
+
+__m256 _mm256_shuffle_ps (__m256 a, __m256 b, const int imm8)
+VSHUFPS ymm, ymm, ymm/m256, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2707,14 +4074,21 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_sqrt_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compute the square root of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"".";
+                descriptor.Description = @"Compute the square root of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"".
+
+__m256 _mm256_sqrt_ps (__m256 a)
+VSQRTPS ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_store_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Store 256-bits of integer data from ""a"" into memory. 	""mem_addr"" must be aligned on a 32-byte boundary or a general-protection exception may be generated.";
+                descriptor.Description = @"Store 256-bits of integer data from ""a"" into memory.
+	""mem_addr"" must be aligned on a 32-byte boundary or a general-protection exception may be generated.
+
+void _mm256_store_si256 (__m256i * mem_addr, __m256i a)
+MOVDQA m256, ymm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m256i *")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -2722,7 +4096,11 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_storeu_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Store 256-bits of integer data from ""a"" into memory. 	""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Store 256-bits of integer data from ""a"" into memory.
+	""mem_addr"" does not need to be aligned on any particular boundary.
+
+void _mm256_storeu_si256 (__m256i * mem_addr, __m256i a)
+MOVDQU m256, ymm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m256i *")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -2730,7 +4108,11 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_stream_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Store 256-bits of integer data from ""a"" into memory using a non-temporal memory hint. 	""mem_addr"" must be aligned on a 32-byte boundary or a general-protection exception may be generated.";
+                descriptor.Description = @"Store 256-bits of integer data from ""a"" into memory using a non-temporal memory hint.
+	""mem_addr"" must be aligned on a 32-byte boundary or a general-protection exception may be generated.
+
+void _mm256_stream_si256 (__m256i * mem_addr, __m256i a)
+VMOVNTDQ m256, ymm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m256i *")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
@@ -2738,7 +4120,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_sub_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Subtract packed single-precision (32-bit) floating-point elements in ""b"" from packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"".";
+                descriptor.Description = @"Subtract packed single-precision (32-bit) floating-point elements in ""b"" from packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"".
+
+__m256 _mm256_sub_ps (__m256 a, __m256 b)
+VSUBPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2746,7 +4131,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_unpackhi_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Unpack and interleave single-precision (32-bit) floating-point elements from the high half of each 128-bit lane in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Unpack and interleave single-precision (32-bit) floating-point elements from the high half of each 128-bit lane in ""a"" and ""b"", and store the results in ""dst"".
+
+__m256 _mm256_unpackhi_ps (__m256 a, __m256 b)
+VUNPCKHPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2754,7 +4142,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_unpacklo_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Unpack and interleave single-precision (32-bit) floating-point elements from the low half of each 128-bit lane in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Unpack and interleave single-precision (32-bit) floating-point elements from the low half of each 128-bit lane in ""a"" and ""b"", and store the results in ""dst"".
+
+__m256 _mm256_unpacklo_ps (__m256 a, __m256 b)
+VUNPCKLPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2762,7 +4153,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_xor_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX";
-                descriptor.Description = @"Compute the bitwise XOR of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Compute the bitwise XOR of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".
+
+__m256 _mm256_xor_ps (__m256 a, __m256 b)
+VXORPS ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256")  { IsOptional = false });
@@ -2847,7 +4241,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_blend_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Blend packed 32-bit integers from ""a"" and ""b"" using control mask ""imm8"", and store the results in ""dst"".";
+                descriptor.Description = @"Blend packed 32-bit integers from ""a"" and ""b"" using control mask ""imm8"", and store the results in ""dst"".
+
+__m128i _mm_blend_epi32 (__m128i a, __m128i b, const int imm8)
+VPBLENDD xmm, xmm, xmm/m128, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -2856,14 +4253,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_broadcastb_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Broadcast the low packed 8-bit integer from ""a"" to all elements of ""dst"".";
+                descriptor.Description = @"Broadcast the low packed 8-bit integer from ""a"" to all elements of ""dst"".
+
+__m128i _mm_broadcastb_epi8 (__m128i a)
+VPBROADCASTB xmm, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_i32gather_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at ""base_addr"" and offset by each 32-bit element in ""vindex"" (each index is scaled by the factor in ""scale""). Gathered elements are merged into ""dst"". ""scale"" should be 1, 2, 4 or 8.";
+                descriptor.Description = @"Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at ""base_addr"" and offset by each 32-bit element in ""vindex"" (each index is scaled by the factor in ""scale""). Gathered elements are merged into ""dst"". ""scale"" should be 1, 2, 4 or 8.
+
+__m128i _mm_i32gather_epi32 (int const* base_addr, __m128i vindex, const int scale)
+VPGATHERDD xmm, vm32x, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("base_addr", @"int const*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("vindex", @"__m128i")  { IsOptional = false });
@@ -2872,7 +4275,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_mask_i32gather_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at ""base_addr"" and offset by each 32-bit element in ""vindex"" (each index is scaled by the factor in ""scale""). Gathered elements are merged into ""dst"" using ""mask"" (elements are copied from ""src"" when the highest bit is not set in the corresponding element). ""scale"" should be 1, 2, 4 or 8.";
+                descriptor.Description = @"Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at ""base_addr"" and offset by each 32-bit element in ""vindex"" (each index is scaled by the factor in ""scale""). Gathered elements are merged into ""dst"" using ""mask"" (elements are copied from ""src"" when the highest bit is not set in the corresponding element). ""scale"" should be 1, 2, 4 or 8.
+
+__m128i _mm_mask_i32gather_epi32 (__m128i src, int const* base_addr, __m128i vindex, __m128i mask, const int scale)
+VPGATHERDD xmm, vm32x, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("src", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("base_addr", @"int const*")  { IsOptional = false });
@@ -2883,7 +4289,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_maskload_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Load packed 32-bit integers from memory into ""dst"" using ""mask"" (elements are zeroed out when the highest bit is not set in the corresponding element).";
+                descriptor.Description = @"Load packed 32-bit integers from memory into ""dst"" using ""mask"" (elements are zeroed out when the highest bit is not set in the corresponding element).
+
+__m128i _mm_maskload_epi32 (int const* mem_addr, __m128i mask)
+VPMASKMOVD xmm, xmm, m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"int const*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("mask", @"__m128i")  { IsOptional = false });
@@ -2891,7 +4300,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_maskstore_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Store packed 32-bit integers from ""a"" into memory using ""mask"" (elements are not stored when the highest bit is not set in the corresponding element).";
+                descriptor.Description = @"Store packed 32-bit integers from ""a"" into memory using ""mask"" (elements are not stored when the highest bit is not set in the corresponding element).
+
+void _mm_maskstore_epi32 (int* mem_addr, __m128i mask, __m128i a)
+VPMASKMOVD m128, xmm, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"int*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("mask", @"__m128i")  { IsOptional = false });
@@ -2900,14 +4312,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_abs_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Compute the absolute value of packed 8-bit integers in ""a"", and store the unsigned results in ""dst"".";
+                descriptor.Description = @"Compute the absolute value of packed 8-bit integers in ""a"", and store the unsigned results in ""dst"".
+
+__m256i _mm256_abs_epi8 (__m256i a)
+VPABSB ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_add_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Add packed 8-bit integers in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Add packed 8-bit integers in ""a"" and ""b"", and store the results in ""dst"".
+
+__m256i _mm256_add_epi8 (__m256i a, __m256i b)
+VPADDB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -2915,7 +4333,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_adds_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Add packed 8-bit integers in ""a"" and ""b"" using saturation, and store the results in ""dst"".";
+                descriptor.Description = @"Add packed 8-bit integers in ""a"" and ""b"" using saturation, and store the results in ""dst"".
+
+__m256i _mm256_adds_epi8 (__m256i a, __m256i b)
+VPADDSB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -2923,7 +4344,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_alignr_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Concatenate pairs of 16-byte blocks in ""a"" and ""b"" into a 32-byte temporary result, shift the result right by ""count"" bytes, and store the low 16 bytes in ""dst"".";
+                descriptor.Description = @"Concatenate pairs of 16-byte blocks in ""a"" and ""b"" into a 32-byte temporary result, shift the result right by ""count"" bytes, and store the low 16 bytes in ""dst"".
+
+__m256i _mm256_alignr_epi8 (__m256i a, __m256i b, const int count)
+VPALIGNR ymm, ymm, ymm/m256, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -2932,7 +4356,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_and_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Compute the bitwise AND of 256 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".";
+                descriptor.Description = @"Compute the bitwise AND of 256 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".
+
+__m256i _mm256_and_si256 (__m256i a, __m256i b)
+VPAND ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -2940,7 +4367,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_andnot_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Compute the bitwise NOT of 256 bits (representing integer data) in ""a"" and then AND with ""b"", and store the result in ""dst"".";
+                descriptor.Description = @"Compute the bitwise NOT of 256 bits (representing integer data) in ""a"" and then AND with ""b"", and store the result in ""dst"".
+
+__m256i _mm256_andnot_si256 (__m256i a, __m256i b)
+VPANDN ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -2948,7 +4378,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_avg_epu8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Average packed unsigned 8-bit integers in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Average packed unsigned 8-bit integers in ""a"" and ""b"", and store the results in ""dst"".
+
+__m256i _mm256_avg_epu8 (__m256i a, __m256i b)
+VPAVGB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -2956,7 +4389,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_blendv_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Blend packed 8-bit integers from ""a"" and ""b"" using ""mask"", and store the results in ""dst"".";
+                descriptor.Description = @"Blend packed 8-bit integers from ""a"" and ""b"" using ""mask"", and store the results in ""dst"".
+
+__m256i _mm256_blendv_epi8 (__m256i a, __m256i b, __m256i mask)
+VPBLENDVB ymm, ymm, ymm/m256, ymm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -2965,21 +4401,30 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_broadcastb_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Broadcast the low packed 8-bit integer from ""a"" to all elements of ""dst"".";
+                descriptor.Description = @"Broadcast the low packed 8-bit integer from ""a"" to all elements of ""dst"".
+
+__m256i _mm256_broadcastb_epi8 (__m128i a)
+VPBROADCASTB ymm, m8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_broadcastsi128_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Broadcast 128 bits of integer data from ""a"" to all 128-bit lanes in ""dst"".";
+                descriptor.Description = @"Broadcast 128 bits of integer data from ""a"" to all 128-bit lanes in ""dst"".
+
+__m256i _mm256_broadcastsi128_si256 (__m128i a)
+VBROADCASTI128 ymm, m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_bslli_epi128"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shift 128-bit lanes in ""a"" left by ""imm8"" bytes while shifting in zeros, and store the results in ""dst"".";
+                descriptor.Description = @"Shift 128-bit lanes in ""a"" left by ""imm8"" bytes while shifting in zeros, and store the results in ""dst"".
+
+__m256i _mm256_bslli_epi128 (__m256i a, const int imm8)
+VPSLLDQ ymm, ymm, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"const int")  { IsOptional = false });
@@ -2987,7 +4432,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_bsrli_epi128"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shift 128-bit lanes in ""a"" right by ""imm8"" bytes while shifting in zeros, and store the results in ""dst"".";
+                descriptor.Description = @"Shift 128-bit lanes in ""a"" right by ""imm8"" bytes while shifting in zeros, and store the results in ""dst"".
+
+__m256i _mm256_bsrli_epi128 (__m256i a, const int imm8)
+VPSRLDQ ymm, ymm, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"const int")  { IsOptional = false });
@@ -2995,7 +4443,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_cmpeq_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for equality, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for equality, and store the results in ""dst"".
+
+__m256i _mm256_cmpeq_epi8 (__m256i a, __m256i b)
+VPCMPEQB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3003,7 +4454,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_cmpgt_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for greater-than, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for greater-than, and store the results in ""dst"".
+
+__m256i _mm256_cmpgt_epi8 (__m256i a, __m256i b)
+VPCMPGTB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3011,35 +4465,50 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_cvtepi8_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Sign extend packed 8-bit integers in ""a"" to packed 16-bit integers, and store the results in ""dst"".";
+                descriptor.Description = @"Sign extend packed 8-bit integers in ""a"" to packed 16-bit integers, and store the results in ""dst"".
+
+__m256i _mm256_cvtepi8_epi16 (__m128i a)
+VPMOVSXBW ymm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_cvtepi8_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Sign extend packed 8-bit integers in ""a"" to packed 32-bit integers, and store the results in ""dst"".";
+                descriptor.Description = @"Sign extend packed 8-bit integers in ""a"" to packed 32-bit integers, and store the results in ""dst"".
+
+__m256i _mm256_cvtepi8_epi32 (__m128i a)
+VPMOVSXBD ymm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_cvtepi8_epi64"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Sign extend packed 8-bit integers in the low 8 bytes of ""a"" to packed 64-bit integers, and store the results in ""dst"".";
+                descriptor.Description = @"Sign extend packed 8-bit integers in the low 8 bytes of ""a"" to packed 64-bit integers, and store the results in ""dst"".
+
+__m256i _mm256_cvtepi8_epi64 (__m128i a)
+VPMOVSXBQ ymm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_cvtsi256_si32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Copy the lower 32-bit integer in ""a"" to ""dst"".";
+                descriptor.Description = @"Copy the lower 32-bit integer in ""a"" to ""dst"".
+
+int _mm256_cvtsi256_si32 (__m256i a)
+MOVD reg/m32, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_extracti128_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Extract 128 bits (composed of integer data) from ""a"", selected with ""imm8"", and store the result in ""dst"".";
+                descriptor.Description = @"Extract 128 bits (composed of integer data) from ""a"", selected with ""imm8"", and store the result in ""dst"".
+
+__m128i _mm256_extracti128_si256 (__m256i a, const int imm8)
+VEXTRACTI128 xmm, ymm, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"const int")  { IsOptional = false });
@@ -3047,7 +4516,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_hadd_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Horizontally add adjacent pairs of 16-bit integers in ""a"" and ""b"", and pack the signed 16-bit results in ""dst"".";
+                descriptor.Description = @"Horizontally add adjacent pairs of 16-bit integers in ""a"" and ""b"", and pack the signed 16-bit results in ""dst"".
+
+__m256i _mm256_hadd_epi16 (__m256i a, __m256i b)
+VPHADDW ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3055,7 +4527,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_hadds_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Horizontally add adjacent pairs of 16-bit integers in ""a"" and ""b"" using saturation, and pack the signed 16-bit results in ""dst"".";
+                descriptor.Description = @"Horizontally add adjacent pairs of 16-bit integers in ""a"" and ""b"" using saturation, and pack the signed 16-bit results in ""dst"".
+
+__m256i _mm256_hadds_epi16 (__m256i a, __m256i b)
+VPHADDSW ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3063,7 +4538,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_hsub_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Horizontally subtract adjacent pairs of 16-bit integers in ""a"" and ""b"", and pack the signed 16-bit results in ""dst"".";
+                descriptor.Description = @"Horizontally subtract adjacent pairs of 16-bit integers in ""a"" and ""b"", and pack the signed 16-bit results in ""dst"".
+
+__m256i _mm256_hsub_epi16 (__m256i a, __m256i b)
+VPHSUBW ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3071,7 +4549,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_hsubs_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Horizontally subtract adjacent pairs of 16-bit integers in ""a"" and ""b"" using saturation, and pack the signed 16-bit results in ""dst"".";
+                descriptor.Description = @"Horizontally subtract adjacent pairs of 16-bit integers in ""a"" and ""b"" using saturation, and pack the signed 16-bit results in ""dst"".
+
+__m256i _mm256_hsubs_epi16 (__m256i a, __m256i b)
+VPHSUBSW ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3079,7 +4560,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_i32gather_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at ""base_addr"" and offset by each 32-bit element in ""vindex"" (each index is scaled by the factor in ""scale""). Gathered elements are merged into ""dst"". ""scale"" should be 1, 2, 4 or 8.";
+                descriptor.Description = @"Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at ""base_addr"" and offset by each 32-bit element in ""vindex"" (each index is scaled by the factor in ""scale""). Gathered elements are merged into ""dst"". ""scale"" should be 1, 2, 4 or 8.
+
+__m256i _mm256_i32gather_epi32 (int const* base_addr, __m256i vindex, const int scale)
+VPGATHERDD ymm, vm32y, ymm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("base_addr", @"int const*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("vindex", @"__m256i")  { IsOptional = false });
@@ -3088,7 +4572,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_inserti128_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Copy ""a"" to ""dst"", then insert 128 bits (composed of integer data) from ""b"" into ""dst"" at the location specified by ""imm8"".";
+                descriptor.Description = @"Copy ""a"" to ""dst"", then insert 128 bits (composed of integer data) from ""b"" into ""dst"" at the location specified by ""imm8"".
+
+__m256i _mm256_inserti128_si256 (__m256i a, __m128i b, const int imm8)
+VINSERTI128 ymm, ymm, xmm, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -3097,7 +4584,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_madd_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Multiply packed signed 16-bit integers in ""a"" and ""b"", producing intermediate signed 32-bit integers. Horizontally add adjacent pairs of intermediate 32-bit integers, and pack the results in ""dst"".";
+                descriptor.Description = @"Multiply packed signed 16-bit integers in ""a"" and ""b"", producing intermediate signed 32-bit integers. Horizontally add adjacent pairs of intermediate 32-bit integers, and pack the results in ""dst"".
+
+__m256i _mm256_madd_epi16 (__m256i a, __m256i b)
+VPMADDWD ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3105,7 +4595,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_mask_i32gather_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at ""base_addr"" and offset by each 32-bit element in ""vindex"" (each index is scaled by the factor in ""scale""). Gathered elements are merged into ""dst"" using ""mask"" (elements are copied from ""src"" when the highest bit is not set in the corresponding element). ""scale"" should be 1, 2, 4 or 8.";
+                descriptor.Description = @"Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at ""base_addr"" and offset by each 32-bit element in ""vindex"" (each index is scaled by the factor in ""scale""). Gathered elements are merged into ""dst"" using ""mask"" (elements are copied from ""src"" when the highest bit is not set in the corresponding element). ""scale"" should be 1, 2, 4 or 8.
+
+__m256i _mm256_mask_i32gather_epi32 (__m256i src, int const* base_addr, __m256i vindex, __m256i mask, const int scale)
+VPGATHERDD ymm, vm32y, ymm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("src", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("base_addr", @"int const*")  { IsOptional = false });
@@ -3116,7 +4609,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_max_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"", and store packed maximum values in ""dst"".";
+                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"", and store packed maximum values in ""dst"".
+
+__m256i _mm256_max_epi8 (__m256i a, __m256i b)
+VPMAXSB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3124,7 +4620,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_min_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"", and store packed minimum values in ""dst"".";
+                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"", and store packed minimum values in ""dst"".
+
+__m256i _mm256_min_epi8 (__m256i a, __m256i b)
+VPMINSB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3132,14 +4631,21 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_movemask_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Create mask from the most significant bit of each 8-bit element in ""a"", and store the result in ""dst"".";
+                descriptor.Description = @"Create mask from the most significant bit of each 8-bit element in ""a"", and store the result in ""dst"".
+
+int _mm256_movemask_epi8 (__m256i a)
+VPMOVMSKB reg, ymm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_mpsadbw_epu8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Compute the sum of absolute differences (SADs) of quadruplets of unsigned 8-bit integers in ""a"" compared to those in ""b"", and store the 16-bit results in ""dst"". 	Eight SADs are performed for each 128-bit lane using one quadruplet from ""b"" and eight quadruplets from ""a"". One quadruplet is selected from ""b"" starting at on the offset specified in ""imm8"". Eight quadruplets are formed from sequential 8-bit integers selected from ""a"" starting at the offset specified in ""imm8"".";
+                descriptor.Description = @"Compute the sum of absolute differences (SADs) of quadruplets of unsigned 8-bit integers in ""a"" compared to those in ""b"", and store the 16-bit results in ""dst"".
+	Eight SADs are performed for each 128-bit lane using one quadruplet from ""b"" and eight quadruplets from ""a"". One quadruplet is selected from ""b"" starting at on the offset specified in ""imm8"". Eight quadruplets are formed from sequential 8-bit integers selected from ""a"" starting at the offset specified in ""imm8"".
+
+__m256i _mm256_mpsadbw_epu8 (__m256i a, __m256i b, const int imm8)
+VMPSADBW ymm, ymm, ymm/m256, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3148,7 +4654,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_mul_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Multiply the low 32-bit integers from each packed 64-bit element in ""a"" and ""b"", and store the signed 64-bit results in ""dst"".";
+                descriptor.Description = @"Multiply the low 32-bit integers from each packed 64-bit element in ""a"" and ""b"", and store the signed 64-bit results in ""dst"".
+
+__m256i _mm256_mul_epi32 (__m256i a, __m256i b)
+VPMULDQ ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3156,7 +4665,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_mulhi_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Multiply the packed 16-bit integers in ""a"" and ""b"", producing intermediate 32-bit integers, and store the high 16 bits of the intermediate integers in ""dst"".";
+                descriptor.Description = @"Multiply the packed 16-bit integers in ""a"" and ""b"", producing intermediate 32-bit integers, and store the high 16 bits of the intermediate integers in ""dst"".
+
+__m256i _mm256_mulhi_epi16 (__m256i a, __m256i b)
+VPMULHW ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3164,7 +4676,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_mulhrs_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Multiply packed 16-bit integers in ""a"" and ""b"", producing intermediate signed 32-bit integers. Truncate each intermediate integer to the 18 most significant bits, round by adding 1, and store bits [16:1] to ""dst"".";
+                descriptor.Description = @"Multiply packed 16-bit integers in ""a"" and ""b"", producing intermediate signed 32-bit integers. Truncate each intermediate integer to the 18 most significant bits, round by adding 1, and store bits [16:1] to ""dst"".
+
+__m256i _mm256_mulhrs_epi16 (__m256i a, __m256i b)
+VPMULHRSW ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3172,7 +4687,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_mullo_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Multiply the packed 16-bit integers in ""a"" and ""b"", producing intermediate 32-bit integers, and store the low 16 bits of the intermediate integers in ""dst"".";
+                descriptor.Description = @"Multiply the packed 16-bit integers in ""a"" and ""b"", producing intermediate 32-bit integers, and store the low 16 bits of the intermediate integers in ""dst"".
+
+__m256i _mm256_mullo_epi16 (__m256i a, __m256i b)
+VPMULLW ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3180,7 +4698,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_or_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Compute the bitwise OR of 256 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".";
+                descriptor.Description = @"Compute the bitwise OR of 256 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".
+
+__m256i _mm256_or_si256 (__m256i a, __m256i b)
+VPOR ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3188,7 +4709,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_packs_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Convert packed 16-bit integers from ""a"" and ""b"" to packed 8-bit integers using signed saturation, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed 16-bit integers from ""a"" and ""b"" to packed 8-bit integers using signed saturation, and store the results in ""dst"".
+
+__m256i _mm256_packs_epi16 (__m256i a, __m256i b)
+VPACKSSWB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3196,7 +4720,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_packus_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Convert packed 16-bit integers from ""a"" and ""b"" to packed 8-bit integers using unsigned saturation, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed 16-bit integers from ""a"" and ""b"" to packed 8-bit integers using unsigned saturation, and store the results in ""dst"".
+
+__m256i _mm256_packus_epi16 (__m256i a, __m256i b)
+VPACKUSWB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3204,7 +4731,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_permute2x128_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shuffle 128-bits (composed of integer data) selected by ""imm8"" from ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Shuffle 128-bits (composed of integer data) selected by ""imm8"" from ""a"" and ""b"", and store the results in ""dst"".
+
+__m256i _mm256_permute2x128_si256 (__m256i a, __m256i b, const int imm8)
+VPERM2I128 ymm, ymm, ymm/m256, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3213,7 +4743,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_permute4x64_epi64"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shuffle 64-bit integers in ""a"" across lanes using the control in ""imm8"", and store the results in ""dst"".";
+                descriptor.Description = @"Shuffle 64-bit integers in ""a"" across lanes using the control in ""imm8"", and store the results in ""dst"".
+
+__m256i _mm256_permute4x64_epi64 (__m256i a, const int imm8)
+VPERMQ ymm, ymm/m256, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"const int")  { IsOptional = false });
@@ -3221,7 +4754,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_permutevar8x32_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shuffle 32-bit integers in ""a"" across lanes using the corresponding index in ""idx"", and store the results in ""dst"".";
+                descriptor.Description = @"Shuffle 32-bit integers in ""a"" across lanes using the corresponding index in ""idx"", and store the results in ""dst"".
+
+__m256i _mm256_permutevar8x32_epi32 (__m256i a, __m256i idx)
+VPERMD ymm, ymm/m256, ymm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("idx", @"__m256i")  { IsOptional = false });
@@ -3229,7 +4765,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_sad_epu8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Compute the absolute differences of packed unsigned 8-bit integers in ""a"" and ""b"", then horizontally sum each consecutive 8 differences to produce four unsigned 16-bit integers, and pack these unsigned 16-bit integers in the low 16 bits of 64-bit elements in ""dst"".";
+                descriptor.Description = @"Compute the absolute differences of packed unsigned 8-bit integers in ""a"" and ""b"", then horizontally sum each consecutive 8 differences to produce four unsigned 16-bit integers, and pack these unsigned 16-bit integers in the low 16 bits of 64-bit elements in ""dst"".
+
+__m256i _mm256_sad_epu8 (__m256i a, __m256i b)
+VPSADBW ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3237,7 +4776,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_shuffle_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shuffle 8-bit integers in ""a"" within 128-bit lanes according to shuffle control mask in the corresponding 8-bit element of ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Shuffle 8-bit integers in ""a"" within 128-bit lanes according to shuffle control mask in the corresponding 8-bit element of ""b"", and store the results in ""dst"".
+
+__m256i _mm256_shuffle_epi8 (__m256i a, __m256i b)
+VPSHUFB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3245,7 +4787,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_shufflehi_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shuffle 16-bit integers in the high 64 bits of 128-bit lanes of ""a"" using the control in ""imm8"". Store the results in the high 64 bits of 128-bit lanes of ""dst"", with the low 64 bits of 128-bit lanes being copied from from ""a"" to ""dst"".";
+                descriptor.Description = @"Shuffle 16-bit integers in the high 64 bits of 128-bit lanes of ""a"" using the control in ""imm8"". Store the results in the high 64 bits of 128-bit lanes of ""dst"", with the low 64 bits of 128-bit lanes being copied from from ""a"" to ""dst"".
+
+__m256i _mm256_shufflehi_epi16 (__m256i a, const int imm8)
+VPSHUFHW ymm, ymm/m256, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"const int")  { IsOptional = false });
@@ -3253,7 +4798,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_shufflelo_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shuffle 16-bit integers in the low 64 bits of 128-bit lanes of ""a"" using the control in ""imm8"". Store the results in the low 64 bits of 128-bit lanes of ""dst"", with the high 64 bits of 128-bit lanes being copied from from ""a"" to ""dst"".";
+                descriptor.Description = @"Shuffle 16-bit integers in the low 64 bits of 128-bit lanes of ""a"" using the control in ""imm8"". Store the results in the low 64 bits of 128-bit lanes of ""dst"", with the high 64 bits of 128-bit lanes being copied from from ""a"" to ""dst"".
+
+__m256i _mm256_shufflelo_epi16 (__m256i a, const int imm8)
+VPSHUFLW ymm, ymm/m256, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"const int")  { IsOptional = false });
@@ -3261,7 +4809,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_sign_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Negate packed 8-bit integers in ""a"" when the corresponding signed 8-bit integer in ""b"" is negative, and store the results in ""dst"". Element in ""dst"" are zeroed out when the corresponding element in ""b"" is zero.";
+                descriptor.Description = @"Negate packed 8-bit integers in ""a"" when the corresponding signed 8-bit integer in ""b"" is negative, and store the results in ""dst"". Element in ""dst"" are zeroed out when the corresponding element in ""b"" is zero.
+
+__m256i _mm256_sign_epi8 (__m256i a, __m256i b)
+VPSIGNB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3269,7 +4820,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_sll_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shift packed 16-bit integers in ""a"" left by ""count"" while shifting in zeros, and store the results in ""dst"".";
+                descriptor.Description = @"Shift packed 16-bit integers in ""a"" left by ""count"" while shifting in zeros, and store the results in ""dst"".
+
+__m256i _mm256_sll_epi16 (__m256i a, __m128i count)
+VPSLLW ymm, ymm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("count", @"__m128i")  { IsOptional = false });
@@ -3277,7 +4831,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_sllv_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shift packed 32-bit integers in ""a"" left by the amount specified by the corresponding element in ""count"" while shifting in zeros, and store the results in ""dst"".";
+                descriptor.Description = @"Shift packed 32-bit integers in ""a"" left by the amount specified by the corresponding element in ""count"" while shifting in zeros, and store the results in ""dst"".
+
+__m256i _mm256_sllv_epi32 (__m256i a, __m256i count)
+VPSLLVD ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("count", @"__m256i")  { IsOptional = false });
@@ -3285,7 +4842,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_srav_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shift packed 32-bit integers in ""a"" right by the amount specified by the corresponding element in ""count"" while shifting in sign bits, and store the results in ""dst"".";
+                descriptor.Description = @"Shift packed 32-bit integers in ""a"" right by the amount specified by the corresponding element in ""count"" while shifting in sign bits, and store the results in ""dst"".
+
+__m256i _mm256_srav_epi32 (__m256i a, __m256i count)
+VPSRAVD ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("count", @"__m256i")  { IsOptional = false });
@@ -3293,7 +4853,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_srl_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shift packed 16-bit integers in ""a"" right by ""count"" while shifting in zeros, and store the results in ""dst"".";
+                descriptor.Description = @"Shift packed 16-bit integers in ""a"" right by ""count"" while shifting in zeros, and store the results in ""dst"".
+
+__m256i _mm256_srl_epi16 (__m256i a, __m128i count)
+VPSRLW ymm, ymm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("count", @"__m128i")  { IsOptional = false });
@@ -3301,7 +4864,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_srlv_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Shift packed 32-bit integers in ""a"" right by the amount specified by the corresponding element in ""count"" while shifting in zeros, and store the results in ""dst"".";
+                descriptor.Description = @"Shift packed 32-bit integers in ""a"" right by the amount specified by the corresponding element in ""count"" while shifting in zeros, and store the results in ""dst"".
+
+__m256i _mm256_srlv_epi32 (__m256i a, __m256i count)
+VPSRLVD ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("count", @"__m256i")  { IsOptional = false });
@@ -3309,14 +4875,21 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_stream_load_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Load 256-bits of integer data from memory into ""dst"" using a non-temporal memory hint. 	""mem_addr"" must be aligned on a 32-byte boundary or a general-protection exception may be generated.";
+                descriptor.Description = @"Load 256-bits of integer data from memory into ""dst"" using a non-temporal memory hint.
+	""mem_addr"" must be aligned on a 32-byte boundary or a general-protection exception may be generated.
+
+__m256i _mm256_stream_load_si256 (__m256i const* mem_addr)
+VMOVNTDQA ymm, m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m256i const*")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm256_sub_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Subtract packed 8-bit integers in ""b"" from packed 8-bit integers in ""a"", and store the results in ""dst"".";
+                descriptor.Description = @"Subtract packed 8-bit integers in ""b"" from packed 8-bit integers in ""a"", and store the results in ""dst"".
+
+__m256i _mm256_sub_epi8 (__m256i a, __m256i b)
+VPSUBB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3324,7 +4897,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_subs_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Subtract packed 8-bit integers in ""b"" from packed 8-bit integers in ""a"" using saturation, and store the results in ""dst"".";
+                descriptor.Description = @"Subtract packed 8-bit integers in ""b"" from packed 8-bit integers in ""a"" using saturation, and store the results in ""dst"".
+
+__m256i _mm256_subs_epi8 (__m256i a, __m256i b)
+VPSUBSB ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3332,7 +4908,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_unpackhi_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Unpack and interleave 8-bit integers from the high half of each 128-bit lane in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Unpack and interleave 8-bit integers from the high half of each 128-bit lane in ""a"" and ""b"", and store the results in ""dst"".
+
+__m256i _mm256_unpackhi_epi8 (__m256i a, __m256i b)
+VPUNPCKHBW ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3340,7 +4919,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_unpacklo_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Unpack and interleave 8-bit integers from the low half of each 128-bit lane in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Unpack and interleave 8-bit integers from the low half of each 128-bit lane in ""a"" and ""b"", and store the results in ""dst"".
+
+__m256i _mm256_unpacklo_epi8 (__m256i a, __m256i b)
+VPUNPCKLBW ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3348,7 +4930,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm256_xor_si256"];
                 descriptor.Category = "Vector Hardware Intrinsics / AVX2";
-                descriptor.Description = @"Compute the bitwise XOR of 256 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".";
+                descriptor.Description = @"Compute the bitwise XOR of 256 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".
+
+__m256i _mm256_xor_si256 (__m256i a, __m256i b)
+VPXOR ymm, ymm, ymm/m256";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m256i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m256i")  { IsOptional = false });
@@ -3377,43 +4962,50 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["andn_u32"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"unsigned int _andn_u32 (unsigned int a, unsigned int b) ANDN r32a, r32b, reg/m32";
+                descriptor.Description = @"unsigned int _andn_u32 (unsigned int a, unsigned int b)
+ANDN r32a, r32b, reg/m32";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["bextr_u32"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"unsigned int _bextr_u32 (unsigned int a, unsigned int start, unsigned int len) BEXTR r32a, reg/m32, r32b";
+                descriptor.Description = @"unsigned int _bextr_u32 (unsigned int a, unsigned int start, unsigned int len)
+BEXTR r32a, reg/m32, r32b";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["bextr2_u32"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"unsigned int _bextr2_u32 (unsigned int a, unsigned int control) BEXTR r32a, reg/m32, r32b";
+                descriptor.Description = @"unsigned int _bextr2_u32 (unsigned int a, unsigned int control)
+BEXTR r32a, reg/m32, r32b";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["blsi_u32"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"unsigned int _blsi_u32 (unsigned int a) BLSI reg, reg/m32";
+                descriptor.Description = @"unsigned int _blsi_u32 (unsigned int a)
+BLSI reg, reg/m32";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["blsmsk_u32"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"unsigned int _blsmsk_u32 (unsigned int a) BLSMSK reg, reg/m32";
+                descriptor.Description = @"unsigned int _blsmsk_u32 (unsigned int a)
+BLSMSK reg, reg/m32";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["blsr_u32"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"unsigned int _blsr_u32 (unsigned int a) BLSR reg, reg/m32";
+                descriptor.Description = @"unsigned int _blsr_u32 (unsigned int a)
+BLSR reg, reg/m32";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mm_tzcnt_32"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"int _mm_tzcnt_32 (unsigned int a) TZCNT reg, reg/m32";
+                descriptor.Description = @"int _mm_tzcnt_32 (unsigned int a)
+TZCNT reg, reg/m32";
                 descriptor.IsCommand = false;
             }
         }        
@@ -3440,43 +5032,50 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["andn_u64"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"unsigned __int64 _andn_u64 (unsigned __int64 a, unsigned __int64 b) ANDN r64a, r64b, reg/m64";
+                descriptor.Description = @"unsigned __int64 _andn_u64 (unsigned __int64 a, unsigned __int64 b)
+ANDN r64a, r64b, reg/m64";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["bextr_u64"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"unsigned __int64 _bextr_u64 (unsigned __int64 a, unsigned int start, unsigned int len) BEXTR r64a, reg/m64, r64b";
+                descriptor.Description = @"unsigned __int64 _bextr_u64 (unsigned __int64 a, unsigned int start, unsigned int len)
+BEXTR r64a, reg/m64, r64b";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["bextr2_u64"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"unsigned __int64 _bextr2_u64 (unsigned __int64 a, unsigned __int64 control) BEXTR r64a, reg/m64, r64b";
+                descriptor.Description = @"unsigned __int64 _bextr2_u64 (unsigned __int64 a, unsigned __int64 control)
+BEXTR r64a, reg/m64, r64b";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["blsi_u64"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"unsigned __int64 _blsi_u64 (unsigned __int64 a) BLSI reg, reg/m64";
+                descriptor.Description = @"unsigned __int64 _blsi_u64 (unsigned __int64 a)
+BLSI reg, reg/m64";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["blsmsk_u64"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"unsigned __int64 _blsmsk_u64 (unsigned __int64 a) BLSMSK reg, reg/m64";
+                descriptor.Description = @"unsigned __int64 _blsmsk_u64 (unsigned __int64 a)
+BLSMSK reg, reg/m64";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["blsr_u64"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"unsigned __int64 _blsr_u64 (unsigned __int64 a) BLSR reg, reg/m64";
+                descriptor.Description = @"unsigned __int64 _blsr_u64 (unsigned __int64 a)
+BLSR reg, reg/m64";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mm_tzcnt_64"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI1";
-                descriptor.Description = @"__int64 _mm_tzcnt_64 (unsigned __int64 a) TZCNT reg, reg/m64";
+                descriptor.Description = @"__int64 _mm_tzcnt_64 (unsigned __int64 a)
+TZCNT reg, reg/m64";
                 descriptor.IsCommand = false;
             }
         }        
@@ -3500,25 +5099,29 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["bzhi_u32"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI2";
-                descriptor.Description = @"unsigned int _bzhi_u32 (unsigned int a, unsigned int index) BZHI r32a, reg/m32, r32b";
+                descriptor.Description = @"unsigned int _bzhi_u32 (unsigned int a, unsigned int index)
+BZHI r32a, reg/m32, r32b";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mulx_u32"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI2";
-                descriptor.Description = @"unsigned int _mulx_u32 (unsigned int a, unsigned int b, unsigned int* hi) MULX r32a, r32b, reg/m32";
+                descriptor.Description = @"unsigned int _mulx_u32 (unsigned int a, unsigned int b, unsigned int* hi)
+MULX r32a, r32b, reg/m32";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["pdep_u32"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI2";
-                descriptor.Description = @"unsigned int _pdep_u32 (unsigned int a, unsigned int mask) PDEP r32a, r32b, reg/m32";
+                descriptor.Description = @"unsigned int _pdep_u32 (unsigned int a, unsigned int mask)
+PDEP r32a, r32b, reg/m32";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["pext_u32"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI2";
-                descriptor.Description = @"unsigned int _pext_u32 (unsigned int a, unsigned int mask) PEXT r32a, r32b, reg/m32";
+                descriptor.Description = @"unsigned int _pext_u32 (unsigned int a, unsigned int mask)
+PEXT r32a, r32b, reg/m32";
                 descriptor.IsCommand = false;
             }
         }        
@@ -3542,25 +5145,29 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["bzhi_u64"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI2";
-                descriptor.Description = @"unsigned __int64 _bzhi_u64 (unsigned __int64 a, unsigned int index) BZHI r64a, reg/m32, r64b";
+                descriptor.Description = @"unsigned __int64 _bzhi_u64 (unsigned __int64 a, unsigned int index)
+BZHI r64a, reg/m32, r64b";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["mulx_u64"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI2";
-                descriptor.Description = @"unsigned __int64 _mulx_u64 (unsigned __int64 a, unsigned __int64 b, unsigned __int64* hi) MULX r64a, r64b, reg/m64";
+                descriptor.Description = @"unsigned __int64 _mulx_u64 (unsigned __int64 a, unsigned __int64 b, unsigned __int64* hi)
+MULX r64a, r64b, reg/m64";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["pdep_u64"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI2";
-                descriptor.Description = @"unsigned __int64 _pdep_u64 (unsigned __int64 a, unsigned __int64 mask) PDEP r64a, r64b, reg/m64";
+                descriptor.Description = @"unsigned __int64 _pdep_u64 (unsigned __int64 a, unsigned __int64 mask)
+PDEP r64a, r64b, reg/m64";
                 descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["pext_u64"];
                 descriptor.Category = "Vector Hardware Intrinsics / BMI2";
-                descriptor.Description = @"unsigned __int64 _pext_u64 (unsigned __int64 a, unsigned __int64 mask) PEXT r64a, r64b, reg/m64";
+                descriptor.Description = @"unsigned __int64 _pext_u64 (unsigned __int64 a, unsigned __int64 mask)
+PEXT r64a, r64b, reg/m64";
                 descriptor.IsCommand = false;
             }
         }        
@@ -3666,7 +5273,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_add_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Add packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Add packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".
+
+__m128 _mm_add_ps (__m128 a,  __m128 b)
+ADDPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3674,7 +5284,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_add_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Add the lower single-precision (32-bit) floating-point element in ""a"" and ""b"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Add the lower single-precision (32-bit) floating-point element in ""a"" and ""b"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_add_ss (__m128 a,  __m128 b)
+ADDSS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3682,7 +5295,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_and_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the bitwise AND of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Compute the bitwise AND of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".
+
+__m128 _mm_and_ps (__m128 a, __m128 b)
+ANDPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3690,7 +5306,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_andnot_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the bitwise NOT of packed single-precision (32-bit) floating-point elements in ""a"" and then AND with ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Compute the bitwise NOT of packed single-precision (32-bit) floating-point elements in ""a"" and then AND with ""b"", and store the results in ""dst"".
+
+__m128 _mm_andnot_ps (__m128 a, __m128 b)
+ANDNPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3698,7 +5317,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpeq_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for equality, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for equality, and store the results in ""dst"".
+
+__m128 _mm_cmpeq_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(0)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3706,7 +5328,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpeq_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for equality, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for equality, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cmpeq_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(0)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3714,7 +5339,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpge_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for greater-than-or-equal, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for greater-than-or-equal, and store the results in ""dst"".
+
+__m128 _mm_cmpge_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(5)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3722,7 +5350,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpge_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for greater-than-or-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for greater-than-or-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cmpge_ss (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m32, imm8(5)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3730,7 +5361,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpgt_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for greater-than, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for greater-than, and store the results in ""dst"".
+
+__m128 _mm_cmpgt_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(6)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3738,7 +5372,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpgt_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for greater-than, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for greater-than, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cmpgt_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(6)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3746,7 +5383,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmple_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for less-than-or-equal, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for less-than-or-equal, and store the results in ""dst"".
+
+__m128 _mm_cmple_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(2)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3754,7 +5394,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmple_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for less-than-or-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for less-than-or-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cmple_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(2)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3762,7 +5405,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmplt_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for less-than, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for less-than, and store the results in ""dst"".
+
+__m128 _mm_cmplt_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(1)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3770,7 +5416,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmplt_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for less-than, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for less-than, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cmplt_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(1)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3778,7 +5427,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpneq_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-equal, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-equal, and store the results in ""dst"".
+
+__m128 _mm_cmpneq_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(4)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3786,7 +5438,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpneq_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cmpneq_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(4)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3794,7 +5449,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpnge_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-greater-than-or-equal, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-greater-than-or-equal, and store the results in ""dst"".
+
+__m128 _mm_cmpnge_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(1)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3802,7 +5460,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpnge_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-greater-than-or-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-greater-than-or-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cmpnge_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(1)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3810,7 +5471,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpngt_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-greater-than, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-greater-than, and store the results in ""dst"".
+
+__m128 _mm_cmpngt_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(2)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3818,7 +5482,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpngt_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-greater-than, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-greater-than, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cmpngt_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(2)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3826,7 +5493,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpnle_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-less-than-or-equal, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-less-than-or-equal, and store the results in ""dst"".
+
+__m128 _mm_cmpnle_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(6)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3834,7 +5504,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpnle_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-less-than-or-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-less-than-or-equal, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cmpnle_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(6)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3842,7 +5515,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpnlt_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-less-than, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-less-than, and store the results in ""dst"".
+
+__m128 _mm_cmpnlt_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(5)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3850,7 +5526,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpnlt_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-less-than, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" for not-less-than, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cmpnlt_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(5)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3858,7 +5537,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpord_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" to see if neither is NaN, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" to see if neither is NaN, and store the results in ""dst"".
+
+__m128 _mm_cmpord_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(7)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3866,7 +5548,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpord_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" to see if neither is NaN, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" to see if neither is NaN, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cmpord_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(7)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3874,7 +5559,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpunord_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" to see if either is NaN, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" to see if either is NaN, and store the results in ""dst"".
+
+__m128 _mm_cmpunord_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(3)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3882,7 +5570,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpunord_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" to see if either is NaN, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"" to see if either is NaN, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cmpunord_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(3)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3890,7 +5581,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_comieq_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for equality, and return the boolean result (0 or 1).";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for equality, and return the boolean result (0 or 1).
+
+int _mm_comieq_ss (__m128 a, __m128 b)
+COMISS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3898,7 +5592,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_comige_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for greater-than-or-equal, and return the boolean result (0 or 1).";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for greater-than-or-equal, and return the boolean result (0 or 1).
+
+int _mm_comige_ss (__m128 a, __m128 b)
+COMISS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3906,7 +5603,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_comigt_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for greater-than, and return the boolean result (0 or 1).";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for greater-than, and return the boolean result (0 or 1).
+
+int _mm_comigt_ss (__m128 a, __m128 b)
+COMISS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3914,7 +5614,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_comile_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for less-than-or-equal, and return the boolean result (0 or 1).";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for less-than-or-equal, and return the boolean result (0 or 1).
+
+int _mm_comile_ss (__m128 a, __m128 b)
+COMISS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3922,7 +5625,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_comilt_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for less-than, and return the boolean result (0 or 1).";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for less-than, and return the boolean result (0 or 1).
+
+int _mm_comilt_ss (__m128 a, __m128 b)
+COMISS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3930,7 +5636,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_comineq_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for not-equal, and return the boolean result (0 or 1).";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for not-equal, and return the boolean result (0 or 1).
+
+int _mm_comineq_ss (__m128 a, __m128 b)
+COMISS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3938,7 +5647,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cvtsi32_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Convert the 32-bit integer ""b"" to a single-precision (32-bit) floating-point element, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Convert the 32-bit integer ""b"" to a single-precision (32-bit) floating-point element, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cvtsi32_ss (__m128 a, int b)
+CVTSI2SS xmm, reg/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"int")  { IsOptional = false });
@@ -3946,21 +5658,30 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cvtss_si32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Convert the lower single-precision (32-bit) floating-point element in ""a"" to a 32-bit integer, and store the result in ""dst"".";
+                descriptor.Description = @"Convert the lower single-precision (32-bit) floating-point element in ""a"" to a 32-bit integer, and store the result in ""dst"".
+
+int _mm_cvtss_si32 (__m128 a)
+CVTSS2SI r32, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvttss_si32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Convert the lower single-precision (32-bit) floating-point element in ""a"" to a 32-bit integer with truncation, and store the result in ""dst"".";
+                descriptor.Description = @"Convert the lower single-precision (32-bit) floating-point element in ""a"" to a 32-bit integer with truncation, and store the result in ""dst"".
+
+int _mm_cvttss_si32 (__m128 a)
+CVTTSS2SI r32, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_div_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Divide packed single-precision (32-bit) floating-point elements in ""a"" by packed elements in ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Divide packed single-precision (32-bit) floating-point elements in ""a"" by packed elements in ""b"", and store the results in ""dst"".
+
+__m128 _mm_div_ps (__m128 a,  __m128 b)
+DIVPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3968,7 +5689,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_div_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Divide the lower single-precision (32-bit) floating-point element in ""a"" by the lower single-precision (32-bit) floating-point element in ""b"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Divide the lower single-precision (32-bit) floating-point element in ""a"" by the lower single-precision (32-bit) floating-point element in ""b"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_div_ss (__m128 a,  __m128 b)
+DIVSS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -3976,21 +5700,31 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_load_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Load 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from memory into ""dst"". 	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.";
+                descriptor.Description = @"Load 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from memory into ""dst"".
+	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+
+__m128 _mm_load_ps (float const* mem_address)
+MOVAPS xmm, m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"float const*")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_load_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Load a single-precision (32-bit) floating-point element from memory into the lower of ""dst"", and zero the upper 3 elements. ""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Load a single-precision (32-bit) floating-point element from memory into the lower of ""dst"", and zero the upper 3 elements. ""mem_addr"" does not need to be aligned on any particular boundary.
+
+__m128 _mm_load_ss (float const* mem_address)
+MOVSS xmm, m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"float const*")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_loadh_pi"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Load 2 single-precision (32-bit) floating-point elements from memory into the upper 2 elements of ""dst"", and copy the lower 2 elements from ""a"" to ""dst"". ""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Load 2 single-precision (32-bit) floating-point elements from memory into the upper 2 elements of ""dst"", and copy the lower 2 elements from ""a"" to ""dst"". ""mem_addr"" does not need to be aligned on any particular boundary.
+
+__m128 _mm_loadh_pi (__m128 a, __m64 const* mem_addr)
+MOVHPS xmm, m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m64 const*")  { IsOptional = false });
@@ -3998,7 +5732,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_loadl_pi"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Load 2 single-precision (32-bit) floating-point elements from memory into the lower 2 elements of ""dst"", and copy the upper 2 elements from ""a"" to ""dst"". ""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Load 2 single-precision (32-bit) floating-point elements from memory into the lower 2 elements of ""dst"", and copy the upper 2 elements from ""a"" to ""dst"". ""mem_addr"" does not need to be aligned on any particular boundary.
+
+__m128 _mm_loadl_pi (__m128 a, __m64 const* mem_addr)
+MOVLPS xmm, m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m64 const*")  { IsOptional = false });
@@ -4006,14 +5743,21 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_loadu_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Load 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from memory into ""dst"". 	""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Load 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from memory into ""dst"".
+	""mem_addr"" does not need to be aligned on any particular boundary.
+
+__m128 _mm_loadu_ps (float const* mem_address)
+MOVUPS xmm, m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"float const*")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_max_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store packed maximum values in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store packed maximum values in ""dst"".
+
+__m128 _mm_max_ps (__m128 a,  __m128 b)
+MAXPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4021,7 +5765,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_max_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"", store the maximum value in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"", store the maximum value in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128 _mm_max_ss (__m128 a,  __m128 b)
+MAXSS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4029,7 +5776,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_min_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store packed minimum values in ""dst"".";
+                descriptor.Description = @"Compare packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store packed minimum values in ""dst"".
+
+__m128 _mm_min_ps (__m128 a,  __m128 b)
+MINPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4037,7 +5787,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_min_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"", store the minimum value in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point elements in ""a"" and ""b"", store the minimum value in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128 _mm_min_ss (__m128 a,  __m128 b)
+MINSS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4045,7 +5798,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_move_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Move the lower single-precision (32-bit) floating-point element from ""b"" to the lower element of ""dst"", and copy the upper 3 elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Move the lower single-precision (32-bit) floating-point element from ""b"" to the lower element of ""dst"", and copy the upper 3 elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_move_ss (__m128 a, __m128 b)
+MOVSS xmm, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4053,7 +5809,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_movehl_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Move the upper 2 single-precision (32-bit) floating-point elements from ""b"" to the lower 2 elements of ""dst"", and copy the upper 2 elements from ""a"" to the upper 2 elements of ""dst"".";
+                descriptor.Description = @"Move the upper 2 single-precision (32-bit) floating-point elements from ""b"" to the lower 2 elements of ""dst"", and copy the upper 2 elements from ""a"" to the upper 2 elements of ""dst"".
+
+__m128 _mm_movehl_ps (__m128 a,  __m128 b)
+MOVHLPS xmm, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4061,7 +5820,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_movelh_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Move the lower 2 single-precision (32-bit) floating-point elements from ""b"" to the upper 2 elements of ""dst"", and copy the lower 2 elements from ""a"" to the lower 2 elements of ""dst"".";
+                descriptor.Description = @"Move the lower 2 single-precision (32-bit) floating-point elements from ""b"" to the upper 2 elements of ""dst"", and copy the lower 2 elements from ""a"" to the lower 2 elements of ""dst"".
+
+__m128 _mm_movelh_ps (__m128 a,  __m128 b)
+MOVLHPS xmm, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4069,14 +5831,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_movemask_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Set each bit of mask ""dst"" based on the most significant bit of the corresponding packed single-precision (32-bit) floating-point element in ""a"".";
+                descriptor.Description = @"Set each bit of mask ""dst"" based on the most significant bit of the corresponding packed single-precision (32-bit) floating-point element in ""a"".
+
+int _mm_movemask_ps (__m128 a)
+MOVMSKPS reg, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_mul_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Multiply packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Multiply packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".
+
+__m128 _mm_mul_ps (__m128 a, __m128 b)
+MULPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4084,7 +5852,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_mul_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Multiply the lower single-precision (32-bit) floating-point element in ""a"" and ""b"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Multiply the lower single-precision (32-bit) floating-point element in ""a"" and ""b"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_mul_ss (__m128 a, __m128 b)
+MULPS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4092,7 +5863,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_or_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the bitwise OR of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Compute the bitwise OR of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".
+
+__m128 _mm_or_ps (__m128 a,  __m128 b)
+ORPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4100,7 +5874,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_prefetch0"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Fetch the line of data from memory that contains address ""p"" to a location in the cache heirarchy specified by the locality hint ""i"".";
+                descriptor.Description = @"Fetch the line of data from memory that contains address ""p"" to a location in the cache heirarchy specified by the locality hint ""i"".
+
+void _mm_prefetch(char* p, int i)
+PREFETCHT0 m8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("p", @"char const*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("i", @"int")  { IsOptional = false });
@@ -4108,7 +5885,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_prefetch1"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Fetch the line of data from memory that contains address ""p"" to a location in the cache heirarchy specified by the locality hint ""i"".";
+                descriptor.Description = @"Fetch the line of data from memory that contains address ""p"" to a location in the cache heirarchy specified by the locality hint ""i"".
+
+void _mm_prefetch(char* p, int i)
+PREFETCHT1 m8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("p", @"char const*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("i", @"int")  { IsOptional = false });
@@ -4116,7 +5896,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_prefetch2"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Fetch the line of data from memory that contains address ""p"" to a location in the cache heirarchy specified by the locality hint ""i"".";
+                descriptor.Description = @"Fetch the line of data from memory that contains address ""p"" to a location in the cache heirarchy specified by the locality hint ""i"".
+
+void _mm_prefetch(char* p, int i)
+PREFETCHT2 m8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("p", @"char const*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("i", @"int")  { IsOptional = false });
@@ -4124,7 +5907,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_prefetchnta"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Fetch the line of data from memory that contains address ""p"" to a location in the cache heirarchy specified by the locality hint ""i"".";
+                descriptor.Description = @"Fetch the line of data from memory that contains address ""p"" to a location in the cache heirarchy specified by the locality hint ""i"".
+
+void _mm_prefetch(char* p, int i)
+PREFETCHNTA m8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("p", @"char const*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("i", @"int")  { IsOptional = false });
@@ -4132,49 +5918,70 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_rcp_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the approximate reciprocal of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
+                descriptor.Description = @"Compute the approximate reciprocal of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.
+
+__m128 _mm_rcp_ps (__m128 a)
+RCPPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_rcp_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the approximate reciprocal of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
+                descriptor.Description = @"Compute the approximate reciprocal of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.
+
+__m128 _mm_rcp_ss (__m128 a, __m128 b)
+RCPSS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_rcp_ss1"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the approximate reciprocal of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
+                descriptor.Description = @"Compute the approximate reciprocal of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.
+
+__m128 _mm_rcp_ss (__m128 a)
+RCPSS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_rsqrt_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the approximate reciprocal square root of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
+                descriptor.Description = @"Compute the approximate reciprocal square root of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.
+
+__m128 _mm_rsqrt_ps (__m128 a)
+RSQRTPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_rsqrt_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the approximate reciprocal square root of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
+                descriptor.Description = @"Compute the approximate reciprocal square root of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.
+
+__m128 _mm_rsqrt_ss (__m128 a, __m128 b)
+RSQRTSS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_rsqrt_ss1"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the approximate reciprocal square root of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.";
+                descriptor.Description = @"Compute the approximate reciprocal square root of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"". The maximum relative error for this approximation is less than 1.5*2^-12.
+
+__m128 _mm_rsqrt_ss (__m128 a)
+RSQRTSS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_shuffle_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Shuffle single-precision (32-bit) floating-point elements in ""a"" using the control in ""imm8"", and store the results in ""dst"".";
+                descriptor.Description = @"Shuffle single-precision (32-bit) floating-point elements in ""a"" using the control in ""imm8"", and store the results in ""dst"".
+
+__m128 _mm_shuffle_ps (__m128 a,  __m128 b, unsigned int control)
+SHUFPS xmm, xmm/m128, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4183,28 +5990,41 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_sqrt_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the square root of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"".";
+                descriptor.Description = @"Compute the square root of packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"".
+
+__m128 _mm_sqrt_ps (__m128 a)
+SQRTPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_sqrt_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the square root of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compute the square root of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_sqrt_ss (__m128 a, __m128 b)
+SQRTSS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_sqrt_ss1"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the square root of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Compute the square root of the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_sqrt_ss (__m128 a)
+SQRTSS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_store_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from ""a"" into memory. 	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.";
+                descriptor.Description = @"Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from ""a"" into memory.
+	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+
+void _mm_store_ps (float* mem_addr, __m128 a)
+MOVAPS m128, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"float*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -4212,7 +6032,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_store_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Store the lower single-precision (32-bit) floating-point element from ""a"" into memory. ""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Store the lower single-precision (32-bit) floating-point element from ""a"" into memory. ""mem_addr"" does not need to be aligned on any particular boundary.
+
+void _mm_store_ss (float* mem_addr, __m128 a)
+MOVSS m32, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"float*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -4220,7 +6043,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_storeh_pi"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Store the upper 2 single-precision (32-bit) floating-point elements from ""a"" into memory.";
+                descriptor.Description = @"Store the upper 2 single-precision (32-bit) floating-point elements from ""a"" into memory.
+
+void _mm_storeh_pi (__m64* mem_addr, __m128 a)
+MOVHPS m64, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m64*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -4228,7 +6054,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_storel_pi"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Store the lower 2 single-precision (32-bit) floating-point elements from ""a"" into memory.";
+                descriptor.Description = @"Store the lower 2 single-precision (32-bit) floating-point elements from ""a"" into memory.
+
+void _mm_storel_pi (__m64* mem_addr, __m128 a)
+MOVLPS m64, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m64*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -4236,7 +6065,11 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_storeu_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from ""a"" into memory. 	""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from ""a"" into memory.
+	""mem_addr"" does not need to be aligned on any particular boundary.
+
+void _mm_storeu_ps (float* mem_addr, __m128 a)
+MOVUPS m128, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"float*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -4244,7 +6077,11 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_stream_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from ""a"" into memory using a non-temporal memory hint. 	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.";
+                descriptor.Description = @"Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from ""a"" into memory using a non-temporal memory hint.
+	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+
+void _mm_stream_ps (float* mem_addr, __m128 a)
+MOVNTPS m128, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"float*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
@@ -4252,7 +6089,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_sub_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Subtract packed single-precision (32-bit) floating-point elements in ""b"" from packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"".";
+                descriptor.Description = @"Subtract packed single-precision (32-bit) floating-point elements in ""b"" from packed single-precision (32-bit) floating-point elements in ""a"", and store the results in ""dst"".
+
+__m128d _mm_sub_ps (__m128d a, __m128d b)
+SUBPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4260,7 +6100,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_sub_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Subtract the lower single-precision (32-bit) floating-point element in ""b"" from the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Subtract the lower single-precision (32-bit) floating-point element in ""b"" from the lower single-precision (32-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_sub_ss (__m128 a, __m128 b)
+SUBSS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4268,7 +6111,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ucomieq_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for equality, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for equality, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+
+int _mm_ucomieq_ss (__m128 a, __m128 b)
+UCOMISS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4276,7 +6122,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ucomige_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for greater-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for greater-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+
+int _mm_ucomige_ss (__m128 a, __m128 b)
+UCOMISS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4284,7 +6133,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ucomigt_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for greater-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for greater-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+
+int _mm_ucomigt_ss (__m128 a, __m128 b)
+UCOMISS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4292,7 +6144,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ucomile_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for less-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for less-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+
+int _mm_ucomile_ss (__m128 a, __m128 b)
+UCOMISS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4300,7 +6155,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ucomilt_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for less-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for less-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+
+int _mm_ucomilt_ss (__m128 a, __m128 b)
+UCOMISS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4308,7 +6166,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ucomineq_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for not-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.";
+                descriptor.Description = @"Compare the lower single-precision (32-bit) floating-point element in ""a"" and ""b"" for not-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+
+int _mm_ucomineq_ss (__m128 a, __m128 b)
+UCOMISS xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4316,7 +6177,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_unpackhi_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Unpack and interleave single-precision (32-bit) floating-point elements from the high half ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Unpack and interleave single-precision (32-bit) floating-point elements from the high half ""a"" and ""b"", and store the results in ""dst"".
+
+__m128 _mm_unpackhi_ps (__m128 a,  __m128 b)
+UNPCKHPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4324,7 +6188,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_unpacklo_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Unpack and interleave single-precision (32-bit) floating-point elements from the low half of ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Unpack and interleave single-precision (32-bit) floating-point elements from the low half of ""a"" and ""b"", and store the results in ""dst"".
+
+__m128 _mm_unpacklo_ps (__m128 a,  __m128 b)
+UNPCKLPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4332,7 +6199,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_xor_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Compute the bitwise XOR of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Compute the bitwise XOR of packed single-precision (32-bit) floating-point elements in ""a"" and ""b"", and store the results in ""dst"".
+
+__m128 _mm_xor_ps (__m128 a,  __m128 b)
+XORPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -4457,7 +6327,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_add_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Add packed 8-bit integers in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Add packed 8-bit integers in ""a"" and ""b"", and store the results in ""dst"".
+
+__m128i _mm_add_epi8 (__m128i a,  __m128i b)
+PADDB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4465,7 +6338,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_add_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Add the lower double-precision (64-bit) floating-point element in ""a"" and ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Add the lower double-precision (64-bit) floating-point element in ""a"" and ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_add_sd (__m128d a,  __m128d b)
+ADDSD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4473,7 +6349,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_adds_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Add packed 8-bit integers in ""a"" and ""b"" using saturation, and store the results in ""dst"".";
+                descriptor.Description = @"Add packed 8-bit integers in ""a"" and ""b"" using saturation, and store the results in ""dst"".
+
+__m128i _mm_adds_epi8 (__m128i a,  __m128i b)
+PADDSB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4481,7 +6360,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_and_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".";
+                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".
+
+__m128i _mm_and_si128 (__m128i a,  __m128i b)
+PAND xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4489,7 +6371,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_andnot_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compute the bitwise NOT of 128 bits (representing integer data) in ""a"" and then AND with ""b"", and store the result in ""dst"".";
+                descriptor.Description = @"Compute the bitwise NOT of 128 bits (representing integer data) in ""a"" and then AND with ""b"", and store the result in ""dst"".
+
+__m128i _mm_andnot_si128 (__m128i a,  __m128i b)
+PANDN xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4497,7 +6382,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_avg_epu8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Average packed unsigned 8-bit integers in ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Average packed unsigned 8-bit integers in ""a"" and ""b"", and store the results in ""dst"".
+
+__m128i _mm_avg_epu8 (__m128i a,  __m128i b)
+PAVGB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4505,7 +6393,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_bslli_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Shift ""a"" left by ""imm8"" bytes while shifting in zeros, and store the results in ""dst"".";
+                descriptor.Description = @"Shift ""a"" left by ""imm8"" bytes while shifting in zeros, and store the results in ""dst"".
+
+__m128i _mm_bslli_si128 (__m128i a, int imm8)
+PSLLDQ xmm, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"int")  { IsOptional = false });
@@ -4513,7 +6404,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_bsrli_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Shift ""a"" right by ""imm8"" bytes while shifting in zeros, and store the results in ""dst"".";
+                descriptor.Description = @"Shift ""a"" right by ""imm8"" bytes while shifting in zeros, and store the results in ""dst"".
+
+__m128i _mm_bsrli_si128 (__m128i a, int imm8)
+PSRLDQ xmm, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"int")  { IsOptional = false });
@@ -4521,7 +6415,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpeq_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for equality, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for equality, and store the results in ""dst"".
+
+__m128i _mm_cmpeq_epi8 (__m128i a,  __m128i b)
+PCMPEQB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4529,7 +6426,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpeq_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for equality, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for equality, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmpeq_sd (__m128d a,  __m128d b)
+CMPSD xmm, xmm/m64, imm8(0)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4537,7 +6437,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpge_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for greater-than-or-equal, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for greater-than-or-equal, and store the results in ""dst"".
+
+__m128d _mm_cmpge_pd (__m128d a,  __m128d b)
+CMPPD xmm, xmm/m128, imm8(5)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4545,7 +6448,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpge_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for greater-than-or-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for greater-than-or-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmpge_sd (__m128d a,  __m128d b)
+CMPSD xmm, xmm/m64, imm8(5)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4553,7 +6459,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpgt_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for greater-than, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for greater-than, and store the results in ""dst"".
+
+__m128i _mm_cmpgt_epi8 (__m128i a,  __m128i b)
+PCMPGTB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4561,7 +6470,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpgt_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for greater-than, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for greater-than, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmpgt_sd (__m128d a,  __m128d b)
+CMPSD xmm, xmm/m64, imm8(6)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4569,7 +6481,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmple_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for less-than-or-equal, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for less-than-or-equal, and store the results in ""dst"".
+
+__m128d _mm_cmple_pd (__m128d a,  __m128d b)
+CMPPD xmm, xmm/m128, imm8(2)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4577,7 +6492,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmple_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for less-than-or-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for less-than-or-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmple_sd (__m128d a,  __m128d b)
+CMPSD xmm, xmm/m64, imm8(2)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4585,7 +6503,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmplt_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for less-than, and store the results in ""dst"". Note: This intrinsic emits the pcmpgtb instruction with the order of the operands switched.";
+                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"" for less-than, and store the results in ""dst"". Note: This intrinsic emits the pcmpgtb instruction with the order of the operands switched.
+
+__m128i _mm_cmplt_epi8 (__m128i a,  __m128i b)
+PCMPGTB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4593,7 +6514,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmplt_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for less-than, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for less-than, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmplt_sd (__m128d a,  __m128d b)
+CMPSD xmm, xmm/m64, imm8(1)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4601,7 +6525,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpneq_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-equal, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-equal, and store the results in ""dst"".
+
+__m128d _mm_cmpneq_pd (__m128d a,  __m128d b)
+CMPPD xmm, xmm/m128, imm8(4)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4609,7 +6536,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpneq_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmpneq_sd (__m128d a,  __m128d b)
+CMPSD xmm, xmm/m64, imm8(4)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4617,7 +6547,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpnge_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-greater-than-or-equal, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-greater-than-or-equal, and store the results in ""dst"".
+
+__m128d _mm_cmpnge_pd (__m128d a,  __m128d b)
+CMPPD xmm, xmm/m128, imm8(1)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4625,7 +6558,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpnge_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-greater-than-or-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-greater-than-or-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmpnge_sd (__m128d a,  __m128d b)
+CMPSD xmm, xmm/m64, imm8(1)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4633,7 +6569,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpngt_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-greater-than, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-greater-than, and store the results in ""dst"".
+
+__m128d _mm_cmpngt_pd (__m128d a,  __m128d b)
+CMPPD xmm, xmm/m128, imm8(2)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4641,7 +6580,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpngt_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-greater-than, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-greater-than, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmpngt_sd (__m128d a,  __m128d b)
+CMPSD xmm, xmm/m64, imm8(2)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4649,7 +6591,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpnle_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-less-than-or-equal, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-less-than-or-equal, and store the results in ""dst"".
+
+__m128d _mm_cmpnle_pd (__m128d a,  __m128d b)
+CMPPD xmm, xmm/m128, imm8(6)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4657,7 +6602,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpnle_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-less-than-or-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-less-than-or-equal, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmpnle_sd (__m128d a,  __m128d b)
+CMPSD xmm, xmm/m64, imm8(6)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4665,7 +6613,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpnlt_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-less-than, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-less-than, and store the results in ""dst"".
+
+__m128d _mm_cmpnlt_pd (__m128d a,  __m128d b)
+CMPPD xmm, xmm/m128, imm8(5)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4673,7 +6624,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpnlt_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-less-than, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" for not-less-than, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmpnlt_sd (__m128d a,  __m128d b)
+CMPSD xmm, xmm/m64, imm8(5)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4681,7 +6635,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpord_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" to see if neither is NaN, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" to see if neither is NaN, and store the results in ""dst"".
+
+__m128d _mm_cmpord_pd (__m128d a,  __m128d b)
+CMPPD xmm, xmm/m128, imm8(7)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4689,7 +6646,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpord_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" to see if neither is NaN, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" to see if neither is NaN, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmpord_sd (__m128d a,  __m128d b)
+CMPSD xmm, xmm/m64, imm8(7)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4697,7 +6657,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpunord_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" to see if either is NaN, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed double-precision (64-bit) floating-point elements in ""a"" and ""b"" to see if either is NaN, and store the results in ""dst"".
+
+__m128d _mm_cmpunord_pd (__m128d a,  __m128d b)
+CMPPD xmm, xmm/m128, imm8(3)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4705,7 +6668,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpunord_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" to see if either is NaN, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"" to see if either is NaN, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cmpunord_sd (__m128d a,  __m128d b)
+CMPSD xmm, xmm/m64, imm8(3)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4713,7 +6679,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_comieq_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for equality, and return the boolean result (0 or 1).";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for equality, and return the boolean result (0 or 1).
+
+int _mm_comieq_sd (__m128d a, __m128d b)
+COMISD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4721,7 +6690,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_comige_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for greater-than-or-equal, and return the boolean result (0 or 1).";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for greater-than-or-equal, and return the boolean result (0 or 1).
+
+int _mm_comige_sd (__m128d a, __m128d b)
+COMISD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4729,7 +6701,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_comigt_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for greater-than, and return the boolean result (0 or 1).";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for greater-than, and return the boolean result (0 or 1).
+
+int _mm_comigt_sd (__m128d a, __m128d b)
+COMISD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4737,7 +6712,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_comile_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for less-than-or-equal, and return the boolean result (0 or 1).";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for less-than-or-equal, and return the boolean result (0 or 1).
+
+int _mm_comile_sd (__m128d a, __m128d b)
+COMISD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4745,7 +6723,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_comilt_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for less-than, and return the boolean result (0 or 1).";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for less-than, and return the boolean result (0 or 1).
+
+int _mm_comilt_sd (__m128d a, __m128d b)
+COMISD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4753,7 +6734,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_comineq_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for not-equal, and return the boolean result (0 or 1).";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for not-equal, and return the boolean result (0 or 1).
+
+int _mm_comineq_sd (__m128d a, __m128d b)
+COMISD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4761,35 +6745,50 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cvtepi32_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert packed 32-bit integers in ""a"" to packed double-precision (64-bit) floating-point elements, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed 32-bit integers in ""a"" to packed double-precision (64-bit) floating-point elements, and store the results in ""dst"".
+
+__m128d _mm_cvtepi32_pd (__m128i a)
+CVTDQ2PD xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvtepi32_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert packed 32-bit integers in ""a"" to packed single-precision (32-bit) floating-point elements, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed 32-bit integers in ""a"" to packed single-precision (32-bit) floating-point elements, and store the results in ""dst"".
+
+__m128 _mm_cvtepi32_ps (__m128i a)
+CVTDQ2PS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvtps_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert packed single-precision (32-bit) floating-point elements in ""a"" to packed 32-bit integers, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed single-precision (32-bit) floating-point elements in ""a"" to packed 32-bit integers, and store the results in ""dst"".
+
+__m128i _mm_cvtps_epi32 (__m128 a)
+CVTPS2DQ xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvtsd_si32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert the lower double-precision (64-bit) floating-point element in ""a"" to a 32-bit integer, and store the result in ""dst"".";
+                descriptor.Description = @"Convert the lower double-precision (64-bit) floating-point element in ""a"" to a 32-bit integer, and store the result in ""dst"".
+
+int _mm_cvtsd_si32 (__m128d a)
+CVTSD2SI r32, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvtsd_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert the lower double-precision (64-bit) floating-point element in ""b"" to a single-precision (32-bit) floating-point element, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Convert the lower double-precision (64-bit) floating-point element in ""b"" to a single-precision (32-bit) floating-point element, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128 _mm_cvtsd_ss (__m128 a, __m128d b)
+CVTSD2SS xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4797,14 +6796,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cvtsi128_si32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Copy the lower 32-bit integer in ""a"" to ""dst"".";
+                descriptor.Description = @"Copy the lower 32-bit integer in ""a"" to ""dst"".
+
+int _mm_cvtsi128_si32 (__m128i a)
+MOVD reg/m32, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvtsi32_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert the 32-bit integer ""b"" to a double-precision (64-bit) floating-point element, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Convert the 32-bit integer ""b"" to a double-precision (64-bit) floating-point element, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cvtsi32_sd (__m128d a, int b)
+CVTSI2SD xmm, reg/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"int")  { IsOptional = false });
@@ -4812,28 +6817,40 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cvtsi32_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Copy 32-bit integer ""a"" to the lower elements of ""dst"", and zero the upper elements of ""dst"".";
+                descriptor.Description = @"Copy 32-bit integer ""a"" to the lower elements of ""dst"", and zero the upper elements of ""dst"".
+
+__m128i _mm_cvtsi32_si128 (int a)
+MOVD xmm, reg/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"int")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvttps_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert packed single-precision (32-bit) floating-point elements in ""a"" to packed 32-bit integers with truncation, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed single-precision (32-bit) floating-point elements in ""a"" to packed 32-bit integers with truncation, and store the results in ""dst"".
+
+__m128i _mm_cvttps_epi32 (__m128 a)
+CVTTPS2DQ xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvttsd_si32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert the lower double-precision (64-bit) floating-point element in ""a"" to a 32-bit integer with truncation, and store the result in ""dst"".";
+                descriptor.Description = @"Convert the lower double-precision (64-bit) floating-point element in ""a"" to a 32-bit integer with truncation, and store the result in ""dst"".
+
+int _mm_cvttsd_si32 (__m128d a)
+CVTTSD2SI reg, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_div_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Divide packed double-precision (64-bit) floating-point elements in ""a"" by packed elements in ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Divide packed double-precision (64-bit) floating-point elements in ""a"" by packed elements in ""b"", and store the results in ""dst"".
+
+__m128d _mm_div_pd (__m128d a,  __m128d b)
+DIVPD xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4841,7 +6858,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_div_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Divide the lower double-precision (64-bit) floating-point element in ""a"" by the lower double-precision (64-bit) floating-point element in ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Divide the lower double-precision (64-bit) floating-point element in ""a"" by the lower double-precision (64-bit) floating-point element in ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_div_sd (__m128d a,  __m128d b)
+DIVSD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4849,7 +6869,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_extract_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Extract a 16-bit integer from ""a"", selected with ""imm8"", and store the result in the lower element of ""dst"".";
+                descriptor.Description = @"Extract a 16-bit integer from ""a"", selected with ""imm8"", and store the result in the lower element of ""dst"".
+
+int _mm_extract_epi16 (__m128i a,  int immediate)
+PEXTRW reg, xmm, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"int")  { IsOptional = false });
@@ -4857,7 +6880,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_insert_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Copy ""a"" to ""dst"", and insert the 16-bit integer ""i"" into ""dst"" at the location specified by ""imm8"".";
+                descriptor.Description = @"Copy ""a"" to ""dst"", and insert the 16-bit integer ""i"" into ""dst"" at the location specified by ""imm8"".
+
+__m128i _mm_insert_epi16 (__m128i a,  int i, int immediate)
+PINSRW xmm, reg/m16, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("i", @"int")  { IsOptional = false });
@@ -4866,21 +6892,31 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_load_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Load a double-precision (64-bit) floating-point element from memory into the lower of ""dst"", and zero the upper element. ""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Load a double-precision (64-bit) floating-point element from memory into the lower of ""dst"", and zero the upper element. ""mem_addr"" does not need to be aligned on any particular boundary.
+
+__m128d _mm_load_sd (double const* mem_address)
+MOVSD xmm, m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"double const*")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_load_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Load 128-bits of integer data from memory into ""dst"".  	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.";
+                descriptor.Description = @"Load 128-bits of integer data from memory into ""dst"". 
+	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+
+__m128i _mm_load_si128 (__m128i const* mem_address)
+MOVDQA xmm, m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m128i const*")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_loadh_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Load a double-precision (64-bit) floating-point element from memory into the upper element of ""dst"", and copy the lower element from ""a"" to ""dst"". ""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Load a double-precision (64-bit) floating-point element from memory into the upper element of ""dst"", and copy the lower element from ""a"" to ""dst"". ""mem_addr"" does not need to be aligned on any particular boundary.
+
+__m128d _mm_loadh_pd (__m128d a, double const* mem_addr)
+MOVHPD xmm, m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"double const*")  { IsOptional = false });
@@ -4888,7 +6924,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_loadl_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Load a double-precision (64-bit) floating-point element from memory into the lower element of ""dst"", and copy the upper element from ""a"" to ""dst"". ""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Load a double-precision (64-bit) floating-point element from memory into the lower element of ""dst"", and copy the upper element from ""a"" to ""dst"". ""mem_addr"" does not need to be aligned on any particular boundary.
+
+__m128d _mm_loadl_pd (__m128d a, double const* mem_addr)
+MOVLPD xmm, m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"double const*")  { IsOptional = false });
@@ -4896,14 +6935,21 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_loadu_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Load 128-bits of integer data from memory into ""dst"". 	""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Load 128-bits of integer data from memory into ""dst"".
+	""mem_addr"" does not need to be aligned on any particular boundary.
+
+__m128i _mm_loadu_si128 (__m128i const* mem_address)
+MOVDQU xmm, m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m128i const*")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_madd_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Multiply packed signed 16-bit integers in ""a"" and ""b"", producing intermediate signed 32-bit integers. Horizontally add adjacent pairs of intermediate 32-bit integers, and pack the results in ""dst"".";
+                descriptor.Description = @"Multiply packed signed 16-bit integers in ""a"" and ""b"", producing intermediate signed 32-bit integers. Horizontally add adjacent pairs of intermediate 32-bit integers, and pack the results in ""dst"".
+
+__m128i _mm_madd_epi16 (__m128i a,  __m128i b)
+PMADDWD xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4911,7 +6957,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_maskmoveu_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Conditionally store 8-bit integer elements from ""a"" into memory using ""mask"" (elements are not stored when the highest bit is not set in the corresponding element) and a non-temporal memory hint. ""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Conditionally store 8-bit integer elements from ""a"" into memory using ""mask"" (elements are not stored when the highest bit is not set in the corresponding element) and a non-temporal memory hint. ""mem_addr"" does not need to be aligned on any particular boundary.
+
+void _mm_maskmoveu_si128 (__m128i a,  __m128i mask, char* mem_address)
+MASKMOVDQU xmm, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("mask", @"__m128i")  { IsOptional = false });
@@ -4920,7 +6969,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_max_epu8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed unsigned 8-bit integers in ""a"" and ""b"", and store packed maximum values in ""dst"".";
+                descriptor.Description = @"Compare packed unsigned 8-bit integers in ""a"" and ""b"", and store packed maximum values in ""dst"".
+
+__m128i _mm_max_epu8 (__m128i a,  __m128i b)
+PMAXUB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4928,7 +6980,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_max_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"", store the maximum value in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"", store the maximum value in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_max_sd (__m128d a,  __m128d b)
+MAXSD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4936,7 +6991,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_min_epu8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare packed unsigned 8-bit integers in ""a"" and ""b"", and store packed minimum values in ""dst"".";
+                descriptor.Description = @"Compare packed unsigned 8-bit integers in ""a"" and ""b"", and store packed minimum values in ""dst"".
+
+__m128i _mm_min_epu8 (__m128i a,  __m128i b)
+PMINUB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4944,7 +7002,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_min_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"", store the minimum value in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point elements in ""a"" and ""b"", store the minimum value in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_min_sd (__m128d a,  __m128d b)
+MINSD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4952,14 +7013,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_move_epi64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Copy the lower 64-bit integer in ""a"" to the lower element of ""dst"", and zero the upper element.";
+                descriptor.Description = @"Copy the lower 64-bit integer in ""a"" to the lower element of ""dst"", and zero the upper element.
+
+__m128i _mm_move_epi64 (__m128i a)
+MOVQ xmm, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_move_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Move the lower double-precision (64-bit) floating-point element from ""b"" to the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Move the lower double-precision (64-bit) floating-point element from ""b"" to the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_move_sd (__m128d a, __m128d b)
+MOVSD xmm, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4967,14 +7034,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_movemask_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Create mask from the most significant bit of each 8-bit element in ""a"", and store the result in ""dst"".";
+                descriptor.Description = @"Create mask from the most significant bit of each 8-bit element in ""a"", and store the result in ""dst"".
+
+int _mm_movemask_epi8 (__m128i a)
+PMOVMSKB reg, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_mul_epu32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Multiply the low unsigned 32-bit integers from each packed 64-bit element in ""a"" and ""b"", and store the unsigned 64-bit results in ""dst"".";
+                descriptor.Description = @"Multiply the low unsigned 32-bit integers from each packed 64-bit element in ""a"" and ""b"", and store the unsigned 64-bit results in ""dst"".
+
+__m128i _mm_mul_epu32 (__m128i a,  __m128i b)
+PMULUDQ xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4982,7 +7055,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_mul_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Multiply the lower double-precision (64-bit) floating-point element in ""a"" and ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Multiply the lower double-precision (64-bit) floating-point element in ""a"" and ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_mul_sd (__m128d a,  __m128d b)
+MULSD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -4990,7 +7066,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_mulhi_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Multiply the packed 16-bit integers in ""a"" and ""b"", producing intermediate 32-bit integers, and store the high 16 bits of the intermediate integers in ""dst"".";
+                descriptor.Description = @"Multiply the packed 16-bit integers in ""a"" and ""b"", producing intermediate 32-bit integers, and store the high 16 bits of the intermediate integers in ""dst"".
+
+__m128i _mm_mulhi_epi16 (__m128i a,  __m128i b)
+PMULHW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -4998,7 +7077,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_mullo_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Multiply the packed 16-bit integers in ""a"" and ""b"", producing intermediate 32-bit integers, and store the low 16 bits of the intermediate integers in ""dst"".";
+                descriptor.Description = @"Multiply the packed 16-bit integers in ""a"" and ""b"", producing intermediate 32-bit integers, and store the low 16 bits of the intermediate integers in ""dst"".
+
+__m128i _mm_mullo_epi16 (__m128i a,  __m128i b)
+PMULLW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5006,7 +7088,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_or_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compute the bitwise OR of 128 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".";
+                descriptor.Description = @"Compute the bitwise OR of 128 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".
+
+__m128i _mm_or_si128 (__m128i a,  __m128i b)
+POR xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5014,7 +7099,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_packs_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert packed 16-bit integers from ""a"" and ""b"" to packed 8-bit integers using signed saturation, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed 16-bit integers from ""a"" and ""b"" to packed 8-bit integers using signed saturation, and store the results in ""dst"".
+
+__m128i _mm_packs_epi16 (__m128i a,  __m128i b)
+PACKSSWB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5022,7 +7110,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_packus_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert packed 16-bit integers from ""a"" and ""b"" to packed 8-bit integers using unsigned saturation, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed 16-bit integers from ""a"" and ""b"" to packed 8-bit integers using unsigned saturation, and store the results in ""dst"".
+
+__m128i _mm_packus_epi16 (__m128i a,  __m128i b)
+PACKUSWB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5030,7 +7121,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_sad_epu8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compute the absolute differences of packed unsigned 8-bit integers in ""a"" and ""b"", then horizontally sum each consecutive 8 differences to produce two unsigned 16-bit integers, and pack these unsigned 16-bit integers in the low 16 bits of 64-bit elements in ""dst"".";
+                descriptor.Description = @"Compute the absolute differences of packed unsigned 8-bit integers in ""a"" and ""b"", then horizontally sum each consecutive 8 differences to produce two unsigned 16-bit integers, and pack these unsigned 16-bit integers in the low 16 bits of 64-bit elements in ""dst"".
+
+__m128i _mm_sad_epu8 (__m128i a,  __m128i b)
+PSADBW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5038,7 +7132,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_shuffle_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Shuffle 32-bit integers in ""a"" using the control in ""imm8"", and store the results in ""dst"".";
+                descriptor.Description = @"Shuffle 32-bit integers in ""a"" using the control in ""imm8"", and store the results in ""dst"".
+
+__m128i _mm_shuffle_epi32 (__m128i a,  int immediate)
+PSHUFD xmm, xmm/m128, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"int")  { IsOptional = false });
@@ -5046,7 +7143,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_shuffle_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Shuffle double-precision (64-bit) floating-point elements using the control in ""imm8"", and store the results in ""dst"".";
+                descriptor.Description = @"Shuffle double-precision (64-bit) floating-point elements using the control in ""imm8"", and store the results in ""dst"".
+
+__m128d _mm_shuffle_pd (__m128d a,  __m128d b, int immediate)
+SHUFPD xmm, xmm/m128, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5055,7 +7155,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_shufflehi_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Shuffle 16-bit integers in the high 64 bits of ""a"" using the control in ""imm8"". Store the results in the high 64 bits of ""dst"", with the low 64 bits being copied from from ""a"" to ""dst"".";
+                descriptor.Description = @"Shuffle 16-bit integers in the high 64 bits of ""a"" using the control in ""imm8"". Store the results in the high 64 bits of ""dst"", with the low 64 bits being copied from from ""a"" to ""dst"".
+
+__m128i _mm_shufflehi_epi16 (__m128i a,  int immediate)
+PSHUFHW xmm, xmm/m128, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"int")  { IsOptional = false });
@@ -5063,7 +7166,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_shufflelo_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Shuffle 16-bit integers in the low 64 bits of ""a"" using the control in ""imm8"". Store the results in the low 64 bits of ""dst"", with the high 64 bits being copied from from ""a"" to ""dst"".";
+                descriptor.Description = @"Shuffle 16-bit integers in the low 64 bits of ""a"" using the control in ""imm8"". Store the results in the low 64 bits of ""dst"", with the high 64 bits being copied from from ""a"" to ""dst"".
+
+__m128i _mm_shufflelo_epi16 (__m128i a,  int control)
+PSHUFLW xmm, xmm/m128, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"int")  { IsOptional = false });
@@ -5071,7 +7177,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_sll_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Shift packed 16-bit integers in ""a"" left by ""count"" while shifting in zeros, and store the results in ""dst"".";
+                descriptor.Description = @"Shift packed 16-bit integers in ""a"" left by ""count"" while shifting in zeros, and store the results in ""dst"".
+
+__m128i _mm_sll_epi16 (__m128i a, __m128i count)
+PSLLW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("count", @"__m128i")  { IsOptional = false });
@@ -5079,14 +7188,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_sqrt_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compute the square root of packed double-precision (64-bit) floating-point elements in ""a"", and store the results in ""dst"".";
+                descriptor.Description = @"Compute the square root of packed double-precision (64-bit) floating-point elements in ""a"", and store the results in ""dst"".
+
+__m128d _mm_sqrt_pd (__m128d a)
+SQRTPD xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_sqrt_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compute the square root of the lower double-precision (64-bit) floating-point element in ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compute the square root of the lower double-precision (64-bit) floating-point element in ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_sqrt_sd (__m128d a, __m128d b)
+SQRTSD xmm, xmm/64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5094,7 +7209,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_sqrt_sd1"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compute the square root of the lower double-precision (64-bit) floating-point element in ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Compute the square root of the lower double-precision (64-bit) floating-point element in ""b"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_sqrt_sd (__m128d a)
+SQRTSD xmm, xmm/64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5102,7 +7220,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_sra_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Shift packed 16-bit integers in ""a"" right by ""count"" while shifting in sign bits, and store the results in ""dst"".";
+                descriptor.Description = @"Shift packed 16-bit integers in ""a"" right by ""count"" while shifting in sign bits, and store the results in ""dst"".
+
+__m128i _mm_sra_epi16 (__m128i a, __m128i count)
+PSRAW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("count", @"__m128i")  { IsOptional = false });
@@ -5110,7 +7231,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_srl_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Shift packed 16-bit integers in ""a"" right by ""count"" while shifting in zeros, and store the results in ""dst"".";
+                descriptor.Description = @"Shift packed 16-bit integers in ""a"" right by ""count"" while shifting in zeros, and store the results in ""dst"".
+
+__m128i _mm_srl_epi16 (__m128i a, __m128i count)
+PSRLW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("count", @"__m128i")  { IsOptional = false });
@@ -5118,7 +7242,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_store_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Store the lower double-precision (64-bit) floating-point element from ""a"" into memory. ""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Store the lower double-precision (64-bit) floating-point element from ""a"" into memory. ""mem_addr"" does not need to be aligned on any particular boundary.
+
+void _mm_store_sd (double* mem_addr, __m128d a)
+MOVSD m64, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"double*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -5126,7 +7253,11 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_store_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Store 128-bits of integer data from ""a"" into memory.  	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.";
+                descriptor.Description = @"Store 128-bits of integer data from ""a"" into memory. 
+	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+
+void _mm_store_si128 (__m128i* mem_addr, __m128i a)
+MOVDQA m128, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m128i*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -5134,7 +7265,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_storeh_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Store the upper double-precision (64-bit) floating-point element from ""a"" into memory.";
+                descriptor.Description = @"Store the upper double-precision (64-bit) floating-point element from ""a"" into memory.
+
+void _mm_storeh_pd (double* mem_addr, __m128d a)
+MOVHPD m64, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"double*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -5142,7 +7276,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_storel_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Store the lower double-precision (64-bit) floating-point element from ""a"" into memory.";
+                descriptor.Description = @"Store the lower double-precision (64-bit) floating-point element from ""a"" into memory.
+
+void _mm_storel_pd (double* mem_addr, __m128d a)
+MOVLPD m64, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"double*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
@@ -5150,7 +7287,11 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_storeu_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Store 128-bits of integer data from ""a"" into memory. 	""mem_addr"" does not need to be aligned on any particular boundary.";
+                descriptor.Description = @"Store 128-bits of integer data from ""a"" into memory.
+	""mem_addr"" does not need to be aligned on any particular boundary.
+
+void _mm_storeu_si128 (__m128i* mem_addr, __m128i a)
+MOVDQU m128, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m128i*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -5158,7 +7299,11 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_stream_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Store 128-bits of integer data from ""a"" into memory using a non-temporal memory hint.  	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.";
+                descriptor.Description = @"Store 128-bits of integer data from ""a"" into memory using a non-temporal memory hint. 
+	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+
+void _mm_stream_si128 (__m128i* mem_addr, __m128i a)
+MOVNTDQ m128, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m128i*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
@@ -5166,7 +7311,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_stream_si32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Store 32-bit integer ""a"" into memory using a non-temporal hint to minimize cache pollution. If the cache line containing address ""mem_addr"" is already in the cache, the cache will be updated.";
+                descriptor.Description = @"Store 32-bit integer ""a"" into memory using a non-temporal hint to minimize cache pollution. If the cache line containing address ""mem_addr"" is already in the cache, the cache will be updated.
+
+void _mm_stream_si32(int *p, int a)
+MOVNTI m32, r32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"int*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"int")  { IsOptional = false });
@@ -5174,7 +7322,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_sub_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Subtract packed 8-bit integers in ""b"" from packed 8-bit integers in ""a"", and store the results in ""dst"".";
+                descriptor.Description = @"Subtract packed 8-bit integers in ""b"" from packed 8-bit integers in ""a"", and store the results in ""dst"".
+
+__m128i _mm_sub_epi8 (__m128i a,  __m128i b)
+PSUBB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5182,7 +7333,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_sub_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Subtract the lower double-precision (64-bit) floating-point element in ""b"" from the lower double-precision (64-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Subtract the lower double-precision (64-bit) floating-point element in ""b"" from the lower double-precision (64-bit) floating-point element in ""a"", store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_sub_sd (__m128d a, __m128d b)
+SUBSD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5190,7 +7344,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_subs_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Subtract packed 8-bit integers in ""b"" from packed 8-bit integers in ""a"" using saturation, and store the results in ""dst"".";
+                descriptor.Description = @"Subtract packed 8-bit integers in ""b"" from packed 8-bit integers in ""a"" using saturation, and store the results in ""dst"".
+
+__m128i _mm_subs_epi8 (__m128i a,  __m128i b)
+PSUBSB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5198,7 +7355,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ucomieq_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for equality, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for equality, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+
+int _mm_ucomieq_sd (__m128d a, __m128d b)
+UCOMISD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5206,7 +7366,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ucomige_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for greater-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for greater-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+
+int _mm_ucomige_sd (__m128d a, __m128d b)
+UCOMISD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5214,7 +7377,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ucomigt_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for greater-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for greater-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+
+int _mm_ucomigt_sd (__m128d a, __m128d b)
+UCOMISD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5222,7 +7388,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ucomile_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for less-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for less-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+
+int _mm_ucomile_sd (__m128d a, __m128d b)
+UCOMISD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5230,7 +7399,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ucomilt_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for less-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for less-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+
+int _mm_ucomilt_sd (__m128d a, __m128d b)
+UCOMISD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5238,7 +7410,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ucomineq_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for not-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.";
+                descriptor.Description = @"Compare the lower double-precision (64-bit) floating-point element in ""a"" and ""b"" for not-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.
+
+int _mm_ucomineq_sd (__m128d a, __m128d b)
+UCOMISD xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5246,7 +7421,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_unpackhi_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Unpack and interleave 8-bit integers from the high half of ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Unpack and interleave 8-bit integers from the high half of ""a"" and ""b"", and store the results in ""dst"".
+
+__m128i _mm_unpackhi_epi8 (__m128i a,  __m128i b)
+PUNPCKHBW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5254,7 +7432,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_unpacklo_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Unpack and interleave 8-bit integers from the low half of ""a"" and ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Unpack and interleave 8-bit integers from the low half of ""a"" and ""b"", and store the results in ""dst"".
+
+__m128i _mm_unpacklo_epi8 (__m128i a,  __m128i b)
+PUNPCKLBW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5262,7 +7443,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_xor_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Compute the bitwise XOR of 128 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".";
+                descriptor.Description = @"Compute the bitwise XOR of 128 bits (representing integer data) in ""a"" and ""b"", and store the result in ""dst"".
+
+__m128i _mm_xor_si128 (__m128i a,  __m128i b)
+PXOR xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5290,21 +7474,30 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cvtsd_si64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert the lower double-precision (64-bit) floating-point element in ""a"" to a 64-bit integer, and store the result in ""dst"".";
+                descriptor.Description = @"Convert the lower double-precision (64-bit) floating-point element in ""a"" to a 64-bit integer, and store the result in ""dst"".
+
+__int64 _mm_cvtsd_si64 (__m128d a)
+CVTSD2SI r64, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvtsi128_si64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Copy the lower 64-bit integer in ""a"" to ""dst"".";
+                descriptor.Description = @"Copy the lower 64-bit integer in ""a"" to ""dst"".
+
+__int64 _mm_cvtsi128_si64 (__m128i a)
+MOVQ reg/m64, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvtsi64_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert the 64-bit integer ""b"" to a double-precision (64-bit) floating-point element, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Convert the 64-bit integer ""b"" to a double-precision (64-bit) floating-point element, store the result in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_cvtsi64_sd (__m128d a, __int64 b)
+CVTSI2SD xmm, reg/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__int64")  { IsOptional = false });
@@ -5312,21 +7505,30 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cvtsi64_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Copy 64-bit integer ""a"" to the lower element of ""dst"", and zero the upper element.";
+                descriptor.Description = @"Copy 64-bit integer ""a"" to the lower element of ""dst"", and zero the upper element.
+
+__m128i _mm_cvtsi64_si128 (__int64 a)
+MOVQ xmm, reg/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__int64")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvttsd_si64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Convert the lower double-precision (64-bit) floating-point element in ""a"" to a 64-bit integer with truncation, and store the result in ""dst"".";
+                descriptor.Description = @"Convert the lower double-precision (64-bit) floating-point element in ""a"" to a 64-bit integer with truncation, and store the result in ""dst"".
+
+__int64 _mm_cvttsd_si64 (__m128d a)
+CVTTSD2SI reg, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_stream_si64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE2";
-                descriptor.Description = @"Store 64-bit integer ""a"" into memory using a non-temporal hint to minimize cache pollution. If the cache line containing address ""mem_addr"" is already in the cache, the cache will be updated.";
+                descriptor.Description = @"Store 64-bit integer ""a"" into memory using a non-temporal hint to minimize cache pollution. If the cache line containing address ""mem_addr"" is already in the cache, the cache will be updated.
+
+void _mm_stream_si64(__int64 *p, __int64 a)
+MOVNTI m64, r64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__int64*")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__int64")  { IsOptional = false });
@@ -5356,7 +7558,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_addsub_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE3";
-                descriptor.Description = @"Alternatively add and subtract packed single-precision (32-bit) floating-point elements in ""a"" to/from packed elements in ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Alternatively add and subtract packed single-precision (32-bit) floating-point elements in ""a"" to/from packed elements in ""b"", and store the results in ""dst"".
+
+__m128 _mm_addsub_ps (__m128 a, __m128 b)
+ADDSUBPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -5364,7 +7569,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_hadd_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE3";
-                descriptor.Description = @"Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in ""a"" and ""b"", and pack the results in ""dst"".";
+                descriptor.Description = @"Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in ""a"" and ""b"", and pack the results in ""dst"".
+
+__m128 _mm_hadd_ps (__m128 a, __m128 b)
+HADDPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -5372,7 +7580,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_hsub_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE3";
-                descriptor.Description = @"Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in ""a"" and ""b"", and pack the results in ""dst"".";
+                descriptor.Description = @"Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in ""a"" and ""b"", and pack the results in ""dst"".
+
+__m128 _mm_hsub_ps (__m128 a, __m128 b)
+HSUBPS xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -5380,35 +7591,50 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_lddqu_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE3";
-                descriptor.Description = @"Load 128-bits of integer data from unaligned memory into ""dst"". This intrinsic may perform better than ""_mm_loadu_si128"" when the data crosses a cache line boundary.";
+                descriptor.Description = @"Load 128-bits of integer data from unaligned memory into ""dst"". This intrinsic may perform better than ""_mm_loadu_si128"" when the data crosses a cache line boundary.
+
+__m128i _mm_lddqu_si128 (__m128i const* mem_addr)
+LDDQU xmm, m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m128i const*")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_loaddup_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE3";
-                descriptor.Description = @"Load a double-precision (64-bit) floating-point element from memory into both elements of ""dst"".";
+                descriptor.Description = @"Load a double-precision (64-bit) floating-point element from memory into both elements of ""dst"".
+
+__m128d _mm_loaddup_pd (double const* mem_addr)
+MOVDDUP xmm, m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"double const*")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_movedup_pd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE3";
-                descriptor.Description = @"Duplicate the low double-precision (64-bit) floating-point element from ""a"", and store the results in ""dst"".";
+                descriptor.Description = @"Duplicate the low double-precision (64-bit) floating-point element from ""a"", and store the results in ""dst"".
+
+__m128d _mm_movedup_pd (__m128d a)
+MOVDDUP xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_movehdup_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE3";
-                descriptor.Description = @"Duplicate odd-indexed single-precision (32-bit) floating-point elements from ""a"", and store the results in ""dst"".";
+                descriptor.Description = @"Duplicate odd-indexed single-precision (32-bit) floating-point elements from ""a"", and store the results in ""dst"".
+
+__m128 _mm_movehdup_ps (__m128 a)
+MOVSHDUP xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_moveldup_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE3";
-                descriptor.Description = @"Duplicate even-indexed single-precision (32-bit) floating-point elements from ""a"", and store the results in ""dst"".";
+                descriptor.Description = @"Duplicate even-indexed single-precision (32-bit) floating-point elements from ""a"", and store the results in ""dst"".
+
+__m128 _mm_moveldup_ps (__m128 a)
+MOVSLDUP xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
@@ -5470,7 +7696,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_blend_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Blend packed 16-bit integers from ""a"" and ""b"" using control mask ""imm8"", and store the results in ""dst"".";
+                descriptor.Description = @"Blend packed 16-bit integers from ""a"" and ""b"" using control mask ""imm8"", and store the results in ""dst"".
+
+__m128i _mm_blend_epi16 (__m128i a, __m128i b, const int imm8)
+PBLENDW xmm, xmm/m128 imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5479,7 +7708,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_blendv_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Blend packed 8-bit integers from ""a"" and ""b"" using ""mask"", and store the results in ""dst"".";
+                descriptor.Description = @"Blend packed 8-bit integers from ""a"" and ""b"" using ""mask"", and store the results in ""dst"".
+
+__m128i _mm_blendv_epi8 (__m128i a, __m128i b, __m128i mask)
+PBLENDVB xmm, xmm/m128, xmm";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5488,14 +7720,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ceil_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" up to an integer value, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" up to an integer value, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m128 _mm_ceil_ps (__m128 a)
+ROUNDPS xmm, xmm/m128, imm8(10)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_ceil_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" up to an integer value, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" up to an integer value, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_ceil_sd (__m128d a, __m128d b)
+ROUNDSD xmm, xmm/m128, imm8(10)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5503,7 +7741,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_ceil_sd1"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" up to an integer value, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" up to an integer value, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_ceil_sd (__m128d a)
+ROUNDSD xmm, xmm/m128, imm8(10)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5511,7 +7752,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpeq_epi64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Compare packed 64-bit integers in ""a"" and ""b"" for equality, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed 64-bit integers in ""a"" and ""b"" for equality, and store the results in ""dst"".
+
+__m128i _mm_cmpeq_epi64 (__m128i a, __m128i b)
+PCMPEQQ xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5519,28 +7763,40 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cvtepi8_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Sign extend packed 8-bit integers in ""a"" to packed 16-bit integers, and store the results in ""dst"".";
+                descriptor.Description = @"Sign extend packed 8-bit integers in ""a"" to packed 16-bit integers, and store the results in ""dst"".
+
+__m128i _mm_cvtepi8_epi16 (__m128i a)
+PMOVSXBW xmm, xmm/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvtepi8_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Sign extend packed 8-bit integers in ""a"" to packed 32-bit integers, and store the results in ""dst"".";
+                descriptor.Description = @"Sign extend packed 8-bit integers in ""a"" to packed 32-bit integers, and store the results in ""dst"".
+
+__m128i _mm_cvtepi8_epi32 (__m128i a)
+PMOVSXBD xmm, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvtepi8_epi64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Sign extend packed 8-bit integers in the low 8 bytes of ""a"" to packed 64-bit integers, and store the results in ""dst"".";
+                descriptor.Description = @"Sign extend packed 8-bit integers in the low 8 bytes of ""a"" to packed 64-bit integers, and store the results in ""dst"".
+
+__m128i _mm_cvtepi8_epi64 (__m128i a)
+PMOVSXBQ xmm, xmm/m16";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_dp_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Conditionally multiply the packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" using the high 4 bits in ""imm8"", sum the four products, and conditionally store the sum in ""dst"" using the low 4 bits of ""imm8"".";
+                descriptor.Description = @"Conditionally multiply the packed single-precision (32-bit) floating-point elements in ""a"" and ""b"" using the high 4 bits in ""imm8"", sum the four products, and conditionally store the sum in ""dst"" using the low 4 bits of ""imm8"".
+
+__m128 _mm_dp_ps (__m128 a, __m128 b, const int imm8)
+DPPS xmm, xmm/m128, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128")  { IsOptional = false });
@@ -5549,7 +7805,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_extract_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Extract an 8-bit integer from ""a"", selected with ""imm8"", and store the result in the lower element of ""dst"".";
+                descriptor.Description = @"Extract an 8-bit integer from ""a"", selected with ""imm8"", and store the result in the lower element of ""dst"".
+
+int _mm_extract_epi8 (__m128i a, const int imm8)
+PEXTRB reg/m8, xmm, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"const int")  { IsOptional = false });
@@ -5557,14 +7816,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_floor_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" down to an integer value, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" down to an integer value, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m128 _mm_floor_ps (__m128 a)
+ROUNDPS xmm, xmm/m128, imm8(9)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_floor_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" down to an integer value, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" down to an integer value, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_floor_sd (__m128d a, __m128d b)
+ROUNDSD xmm, xmm/m128, imm8(9)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5572,7 +7837,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_floor_sd1"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" down to an integer value, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" down to an integer value, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_floor_sd (__m128d a)
+ROUNDSD xmm, xmm/m128, imm8(9)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5580,7 +7848,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_insert_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Copy ""a"" to ""dst"", and insert the lower 8-bit integer from ""i"" into ""dst"" at the location specified by ""imm8"".";
+                descriptor.Description = @"Copy ""a"" to ""dst"", and insert the lower 8-bit integer from ""i"" into ""dst"" at the location specified by ""imm8"".
+
+__m128i _mm_insert_epi8 (__m128i a, int i, const int imm8)
+PINSRB xmm, reg/m8, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("i", @"int")  { IsOptional = false });
@@ -5589,7 +7860,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_max_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"", and store packed maximum values in ""dst"".";
+                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"", and store packed maximum values in ""dst"".
+
+__m128i _mm_max_epi8 (__m128i a, __m128i b)
+PMAXSB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5597,7 +7871,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_min_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"", and store packed minimum values in ""dst"".";
+                descriptor.Description = @"Compare packed 8-bit integers in ""a"" and ""b"", and store packed minimum values in ""dst"".
+
+__m128i _mm_min_epi8 (__m128i a, __m128i b)
+PMINSB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5605,14 +7882,21 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_minpos_epu16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Horizontally compute the minimum amongst the packed unsigned 16-bit integers in ""a"", store the minimum and index in ""dst"", and zero the remaining bits in ""dst"".";
+                descriptor.Description = @"Horizontally compute the minimum amongst the packed unsigned 16-bit integers in ""a"", store the minimum and index in ""dst"", and zero the remaining bits in ""dst"".
+
+__m128i _mm_minpos_epu16 (__m128i a)
+PHMINPOSUW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_mpsadbw_epu8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Compute the sum of absolute differences (SADs) of quadruplets of unsigned 8-bit integers in ""a"" compared to those in ""b"", and store the 16-bit results in ""dst"". 	Eight SADs are performed using one quadruplet from ""b"" and eight quadruplets from ""a"". One quadruplet is selected from ""b"" starting at on the offset specified in ""imm8"". Eight quadruplets are formed from sequential 8-bit integers selected from ""a"" starting at the offset specified in ""imm8"".";
+                descriptor.Description = @"Compute the sum of absolute differences (SADs) of quadruplets of unsigned 8-bit integers in ""a"" compared to those in ""b"", and store the 16-bit results in ""dst"".
+	Eight SADs are performed using one quadruplet from ""b"" and eight quadruplets from ""a"". One quadruplet is selected from ""b"" starting at on the offset specified in ""imm8"". Eight quadruplets are formed from sequential 8-bit integers selected from ""a"" starting at the offset specified in ""imm8"".
+
+__m128i _mm_mpsadbw_epu8 (__m128i a, __m128i b, const int imm8)
+MPSADBW xmm, xmm/m128, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5621,7 +7905,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_mul_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Multiply the low 32-bit integers from each packed 64-bit element in ""a"" and ""b"", and store the signed 64-bit results in ""dst"".";
+                descriptor.Description = @"Multiply the low 32-bit integers from each packed 64-bit element in ""a"" and ""b"", and store the signed 64-bit results in ""dst"".
+
+__m128i _mm_mul_epi32 (__m128i a, __m128i b)
+PMULDQ xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5629,7 +7916,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_mullo_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Multiply the packed 32-bit integers in ""a"" and ""b"", producing intermediate 64-bit integers, and store the low 32 bits of the intermediate integers in ""dst"".";
+                descriptor.Description = @"Multiply the packed 32-bit integers in ""a"" and ""b"", producing intermediate 64-bit integers, and store the low 32 bits of the intermediate integers in ""dst"".
+
+__m128i _mm_mullo_epi32 (__m128i a, __m128i b)
+PMULLD xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5637,7 +7927,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_packus_epi32"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Convert packed 32-bit integers from ""a"" and ""b"" to packed 16-bit integers using unsigned saturation, and store the results in ""dst"".";
+                descriptor.Description = @"Convert packed 32-bit integers from ""a"" and ""b"" to packed 16-bit integers using unsigned saturation, and store the results in ""dst"".
+
+__m128i _mm_packus_epi32 (__m128i a, __m128i b)
+PACKUSDW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5645,42 +7938,61 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_round_ps"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m128 _mm_round_ps (__m128 a, _MM_FROUND_CUR_DIRECTION)
+ROUNDPS xmm, xmm/m128, imm8(4)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_round_ps_to_nearest_integer"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m128 _mm_round_ps (__m128 a, int rounding)
+ROUNDPS xmm, xmm/m128, imm8(8)
+  _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_round_ps_to_negative_infinity"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m128 _mm_round_ps (__m128 a, _MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC)
+ROUNDPS xmm, xmm/m128, imm8(9)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_round_ps_to_positive_infinity"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m128 _mm_round_ps (__m128 a, _MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC)
+ROUNDPS xmm, xmm/m128, imm8(10)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_round_ps_to_zero"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".";
+                descriptor.Description = @"Round the packed single-precision (32-bit) floating-point elements in ""a"" using the ""rounding"" parameter, and store the results as packed single-precision floating-point elements in ""dst"".
+
+__m128 _mm_round_ps (__m128 a, _MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC)
+ROUNDPS xmm, xmm/m128, imm8(11)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_round_sd"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_round_sd (__m128d a, __m128d b, _MM_FROUND_CUR_DIRECTION)
+ROUNDSD xmm, xmm/m128, imm8(4)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5688,7 +8000,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_round_sd_to_nearest_integer_scalar"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_round_sd (__m128d a, __m128d b, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+ROUNDSD xmm, xmm/m128, imm8(8)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5696,7 +8011,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_round_sd_to_negative_infinity_scalar"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_round_sd (__m128d a, __m128d b, _MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC)
+ROUNDSD xmm, xmm/m128, imm8(9)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5704,7 +8022,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_round_sd_to_positive_infinity_scalar"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_round_sd (__m128d a, __m128d b, _MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC)
+ROUNDSD xmm, xmm/m128, imm8(10)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5712,7 +8033,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_round_sd_to_zero_scalar"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_round_sd (__m128d a, __m128d b, _MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC)
+ROUNDSD xmm, xmm/m128, imm8(11)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5720,7 +8044,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_round_sd1"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_round_sd (__m128d a, _MM_FROUND_CUR_DIRECTION)
+ROUNDSD xmm, xmm/m128, imm8(4)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5728,7 +8055,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_round_sd1_to_nearest_integer_scalar"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_round_sd (__m128d a, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+ROUNDSD xmm, xmm/m128, imm8(8)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5736,7 +8066,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_round_sd1_to_negative_infinity_scalar"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_round_sd (__m128d a, _MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC)
+ROUNDSD xmm, xmm/m128, imm8(9)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5744,7 +8077,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_round_sd1_to_positive_infinity_scalar"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_round_sd (__m128d a, _MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC)
+ROUNDSD xmm, xmm/m128, imm8(10)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5752,7 +8088,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_round_sd1_to_zero_scalar"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".";
+                descriptor.Description = @"Round the lower double-precision (64-bit) floating-point element in ""b"" using the ""rounding"" parameter, store the result as a double-precision floating-point element in the lower element of ""dst"", and copy the upper element from ""a"" to the upper element of ""dst"".
+
+__m128d _mm_round_sd (__m128d a, _MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC)
+ROUNDSD xmm, xmm/m128, imm8(11)";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128d")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128d")  { IsOptional = false });
@@ -5760,14 +8099,21 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_stream_load_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Load 128-bits of integer data from memory into ""dst"" using a non-temporal memory hint. 	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.";
+                descriptor.Description = @"Load 128-bits of integer data from memory into ""dst"" using a non-temporal memory hint.
+	""mem_addr"" must be aligned on a 16-byte boundary or a general-protection exception may be generated.
+
+__m128i _mm_stream_load_si128 (const __m128i* mem_addr)
+MOVNTDQA xmm, m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("mem_addr", @"__m128i *")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_testc_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing integer data) in ""a"" and ""b"", and set ""ZF"" to 1 if the result is zero, otherwise set ""ZF"" to 0. Compute the bitwise NOT of ""a"" and then AND with ""b"", and set ""CF"" to 1 if the result is zero, otherwise set ""CF"" to 0. Return the ""CF"" value.";
+                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing integer data) in ""a"" and ""b"", and set ""ZF"" to 1 if the result is zero, otherwise set ""ZF"" to 0. Compute the bitwise NOT of ""a"" and then AND with ""b"", and set ""CF"" to 1 if the result is zero, otherwise set ""CF"" to 0. Return the ""CF"" value.
+
+int _mm_testc_si128 (__m128i a, __m128i b)
+PTEST xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5775,7 +8121,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_testnzc_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing integer data) in ""a"" and ""b"", and set ""ZF"" to 1 if the result is zero, otherwise set ""ZF"" to 0. Compute the bitwise NOT of ""a"" and then AND with ""b"", and set ""CF"" to 1 if the result is zero, otherwise set ""CF"" to 0. Return 1 if both the ""ZF"" and ""CF"" values are zero, otherwise return 0.";
+                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing integer data) in ""a"" and ""b"", and set ""ZF"" to 1 if the result is zero, otherwise set ""ZF"" to 0. Compute the bitwise NOT of ""a"" and then AND with ""b"", and set ""CF"" to 1 if the result is zero, otherwise set ""CF"" to 0. Return 1 if both the ""ZF"" and ""CF"" values are zero, otherwise return 0.
+
+int _mm_testnzc_si128 (__m128i a, __m128i b)
+PTEST xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5783,7 +8132,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_testz_si128"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing integer data) in ""a"" and ""b"", and set ""ZF"" to 1 if the result is zero, otherwise set ""ZF"" to 0. Compute the bitwise NOT of ""a"" and then AND with ""b"", and set ""CF"" to 1 if the result is zero, otherwise set ""CF"" to 0. Return the ""ZF"" value.";
+                descriptor.Description = @"Compute the bitwise AND of 128 bits (representing integer data) in ""a"" and ""b"", and set ""ZF"" to 1 if the result is zero, otherwise set ""ZF"" to 0. Compute the bitwise NOT of ""a"" and then AND with ""b"", and set ""CF"" to 1 if the result is zero, otherwise set ""CF"" to 0. Return the ""ZF"" value.
+
+int _mm_testz_si128 (__m128i a, __m128i b)
+PTEST xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5807,7 +8159,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_extract_epi64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Extract a 64-bit integer from ""a"", selected with ""imm8"", and store the result in ""dst"".";
+                descriptor.Description = @"Extract a 64-bit integer from ""a"", selected with ""imm8"", and store the result in ""dst"".
+
+__int64 _mm_extract_epi64 (__m128i a, const int imm8)
+PEXTRQ reg/m64, xmm, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("imm8", @"const int")  { IsOptional = false });
@@ -5815,7 +8170,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_insert_epi64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE41";
-                descriptor.Description = @"Copy ""a"" to ""dst"", and insert the 64-bit integer ""i"" into ""dst"" at the location specified by ""imm8"".";
+                descriptor.Description = @"Copy ""a"" to ""dst"", and insert the 64-bit integer ""i"" into ""dst"" at the location specified by ""imm8"".
+
+__m128i _mm_insert_epi64 (__m128i a, __int64 i, const int imm8)
+PINSRQ xmm, reg/m64, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("i", @"__int64")  { IsOptional = false });
@@ -5840,7 +8198,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cmpgt_epi64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE42";
-                descriptor.Description = @"Compare packed 64-bit integers in ""a"" and ""b"" for greater-than, and store the results in ""dst"".";
+                descriptor.Description = @"Compare packed 64-bit integers in ""a"" and ""b"" for greater-than, and store the results in ""dst"".
+
+__m128i _mm_cmpgt_epi64 (__m128i a, __m128i b)
+PCMPGTQ xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5848,7 +8209,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_crc32_u8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE42";
-                descriptor.Description = @"Starting with the initial value in ""crc"", accumulates a CRC32 value for unsigned 8-bit integer ""v"", and stores the result in ""dst"".";
+                descriptor.Description = @"Starting with the initial value in ""crc"", accumulates a CRC32 value for unsigned 8-bit integer ""v"", and stores the result in ""dst"".
+
+unsigned int _mm_crc32_u8 (unsigned int crc, unsigned char v)
+CRC32 reg, reg/m8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("crc", @"unsigned int")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("v", @"unsigned char")  { IsOptional = false });
@@ -5871,7 +8235,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_crc32_u64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE42";
-                descriptor.Description = @"Starting with the initial value in ""crc"", accumulates a CRC32 value for unsigned 64-bit integer ""v"", and stores the result in ""dst"".";
+                descriptor.Description = @"Starting with the initial value in ""crc"", accumulates a CRC32 value for unsigned 64-bit integer ""v"", and stores the result in ""dst"".
+
+unsigned __int64 _mm_crc32_u64 (unsigned __int64 crc, unsigned __int64 v)
+CRC32 reg, reg/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("crc", @"unsigned __int64")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("v", @"unsigned __int64")  { IsOptional = false });
@@ -5896,7 +8263,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cvtsi64_ss"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Convert the 64-bit integer ""b"" to a single-precision (32-bit) floating-point element, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".";
+                descriptor.Description = @"Convert the 64-bit integer ""b"" to a single-precision (32-bit) floating-point element, store the result in the lower element of ""dst"", and copy the upper 3 packed elements from ""a"" to the upper elements of ""dst"".
+
+__m128 _mm_cvtsi64_ss (__m128 a, __int64 b)
+CVTSI2SS xmm, reg/m64";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__int64")  { IsOptional = false });
@@ -5904,14 +8274,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_cvtss_si64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Convert the lower single-precision (32-bit) floating-point element in ""a"" to a 64-bit integer, and store the result in ""dst"".";
+                descriptor.Description = @"Convert the lower single-precision (32-bit) floating-point element in ""a"" to a 64-bit integer, and store the result in ""dst"".
+
+__int64 _mm_cvtss_si64 (__m128 a)
+CVTSS2SI r64, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_cvttss_si64"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSE";
-                descriptor.Description = @"Convert the lower single-precision (32-bit) floating-point element in ""a"" to a 64-bit integer with truncation, and store the result in ""dst"".";
+                descriptor.Description = @"Convert the lower single-precision (32-bit) floating-point element in ""a"" to a 64-bit integer with truncation, and store the result in ""dst"".
+
+__int64 _mm_cvttss_si64 (__m128 a)
+CVTTSS2SI r64, xmm/m32";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128")  { IsOptional = false });
             }
@@ -5942,14 +8318,20 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_abs_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
-                descriptor.Description = @"Compute the absolute value of packed 8-bit integers in ""a"", and store the unsigned results in ""dst"".";
+                descriptor.Description = @"Compute the absolute value of packed 8-bit integers in ""a"", and store the unsigned results in ""dst"".
+
+__m128i _mm_abs_epi8 (__m128i a)
+PABSB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
             }
             {
                 var descriptor = Descriptors["mm_alignr_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
-                descriptor.Description = @"Concatenate 16-byte blocks in ""a"" and ""b"" into a 32-byte temporary result, shift the result right by ""count"" bytes, and store the low 16 bytes in ""dst"".";
+                descriptor.Description = @"Concatenate 16-byte blocks in ""a"" and ""b"" into a 32-byte temporary result, shift the result right by ""count"" bytes, and store the low 16 bytes in ""dst"".
+
+__m128i _mm_alignr_epi8 (__m128i a, __m128i b, int count)
+PALIGNR xmm, xmm/m128, imm8";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5958,7 +8340,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_hadd_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
-                descriptor.Description = @"Horizontally add adjacent pairs of 16-bit integers in ""a"" and ""b"", and pack the signed 16-bit results in ""dst"".";
+                descriptor.Description = @"Horizontally add adjacent pairs of 16-bit integers in ""a"" and ""b"", and pack the signed 16-bit results in ""dst"".
+
+__m128i _mm_hadd_epi16 (__m128i a, __m128i b)
+PHADDW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5966,7 +8351,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_hadds_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
-                descriptor.Description = @"Horizontally add adjacent pairs of 16-bit integers in ""a"" and ""b"" using saturation, and pack the signed 16-bit results in ""dst"".";
+                descriptor.Description = @"Horizontally add adjacent pairs of 16-bit integers in ""a"" and ""b"" using saturation, and pack the signed 16-bit results in ""dst"".
+
+__m128i _mm_hadds_epi16 (__m128i a, __m128i b)
+PHADDSW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5974,7 +8362,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_hsub_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
-                descriptor.Description = @"Horizontally subtract adjacent pairs of 16-bit integers in ""a"" and ""b"", and pack the signed 16-bit results in ""dst"".";
+                descriptor.Description = @"Horizontally subtract adjacent pairs of 16-bit integers in ""a"" and ""b"", and pack the signed 16-bit results in ""dst"".
+
+__m128i _mm_hsub_epi16 (__m128i a, __m128i b)
+PHSUBW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5982,7 +8373,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_hsubs_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
-                descriptor.Description = @"Horizontally subtract adjacent pairs of 16-bit integers in ""a"" and ""b"" using saturation, and pack the signed 16-bit results in ""dst"".";
+                descriptor.Description = @"Horizontally subtract adjacent pairs of 16-bit integers in ""a"" and ""b"" using saturation, and pack the signed 16-bit results in ""dst"".
+
+__m128i _mm_hsubs_epi16 (__m128i a, __m128i b)
+PHSUBSW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5990,7 +8384,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_maddubs_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
-                descriptor.Description = @"Vertically multiply each unsigned 8-bit integer from ""a"" with the corresponding signed 8-bit integer from ""b"", producing intermediate signed 16-bit integers. Horizontally add adjacent pairs of intermediate signed 16-bit integers, and pack the saturated results in ""dst"".";
+                descriptor.Description = @"Vertically multiply each unsigned 8-bit integer from ""a"" with the corresponding signed 8-bit integer from ""b"", producing intermediate signed 16-bit integers. Horizontally add adjacent pairs of intermediate signed 16-bit integers, and pack the saturated results in ""dst"".
+
+__m128i _mm_maddubs_epi16 (__m128i a, __m128i b)
+PMADDUBSW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -5998,7 +8395,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_mulhrs_epi16"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
-                descriptor.Description = @"Multiply packed 16-bit integers in ""a"" and ""b"", producing intermediate signed 32-bit integers. Truncate each intermediate integer to the 18 most significant bits, round by adding 1, and store bits [16:1] to ""dst"".";
+                descriptor.Description = @"Multiply packed 16-bit integers in ""a"" and ""b"", producing intermediate signed 32-bit integers. Truncate each intermediate integer to the 18 most significant bits, round by adding 1, and store bits [16:1] to ""dst"".
+
+__m128i _mm_mulhrs_epi16 (__m128i a, __m128i b)
+PMULHRSW xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -6006,7 +8406,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_shuffle_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
-                descriptor.Description = @"Shuffle packed 8-bit integers in ""a"" according to shuffle control mask in the corresponding 8-bit element of ""b"", and store the results in ""dst"".";
+                descriptor.Description = @"Shuffle packed 8-bit integers in ""a"" according to shuffle control mask in the corresponding 8-bit element of ""b"", and store the results in ""dst"".
+
+__m128i _mm_shuffle_epi8 (__m128i a, __m128i b)
+PSHUFB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });
@@ -6014,7 +8417,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             {
                 var descriptor = Descriptors["mm_sign_epi8"];
                 descriptor.Category = "Vector Hardware Intrinsics / SSSE3";
-                descriptor.Description = @"Negate packed 8-bit integers in ""a"" when the corresponding signed 8-bit integer in ""b"" is negative, and store the results in ""dst"". Element in ""dst"" are zeroed out when the corresponding element in ""b"" is zero.";
+                descriptor.Description = @"Negate packed 8-bit integers in ""a"" when the corresponding signed 8-bit integer in ""b"" is negative, and store the results in ""dst"". Element in ""dst"" are zeroed out when the corresponding element in ""b"" is zero.
+
+__m128i _mm_sign_epi8 (__m128i a, __m128i b)
+PSIGNB xmm, xmm/m128";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("a", @"__m128i")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("b", @"__m128i")  { IsOptional = false });

@@ -257,8 +257,8 @@ namespace Kalk.CodeGen
                             desc.Params.Add(new KalkParamDescriptor(parameter.Attribute("varname").Value, parameter.Attribute("type").Value));
                         }
                         
-                        desc.Description = desc.Description.Replace("[round_note]", string.Empty);
-                        //desc.Description = desc.Description + "\n" + csharpSummary;
+                        desc.Description = desc.Description.Replace("[round_note]", string.Empty).Trim();
+                        desc.Description = desc.Description + "\n\n" + csharpSummary;
                     }
                     else
                     {
@@ -483,7 +483,7 @@ namespace Kalk.CodeGen
                     generatedIntrinsics.TryGetValue(desc.Name, out var existingDesc);
 
                     // TODO: handle line for comments
-                    desc.Description = desc.Description.Trim().Replace("\r\n", "\n").Replace("\n", " ");
+                    desc.Description = desc.Description.Trim().Replace("\r\n", "\n");
                     if (existingDesc == null || desc.Parameters[0].BaseNativeType == "float")
                     {
                         generatedIntrinsics[desc.Name] = desc;
@@ -763,7 +763,7 @@ namespace {{ module.Namespace }}
     {
         {{~ for member in module.Members ~}}
         /// <summary>
-        /// {{ member.Description }}
+        /// {{ member.Description | string.replace '\n' '\n        ///' }}
         /// </summary>
         {{ member.MethodDeclaration }}
         {{ member.IndirectMethodDeclaration }}
