@@ -5,30 +5,30 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public abstract class KalkColorConstructor : KalkVectorConstructor<int>
+    public abstract class KalkColorConstructor : KalkVectorConstructor<byte>
     {
         protected KalkColorConstructor(int dimension) : base(dimension)
         {
         }
 
-        protected abstract override KalkVector<int> NewVector(int dimension);
+        protected abstract override KalkVector<byte> NewVector(int dimension);
 
-        protected override int GetArgumentValue(TemplateContext context, object arg)
+        protected override byte GetArgumentValue(TemplateContext context, object arg)
         {
             switch (arg)
             {
                 case float f32:
-                    return (int)(255 * Math.Clamp(f32, 0.0f, 1.0f));
+                    return (byte)(255 * Math.Clamp(f32, 0.0f, 1.0f));
                 case double f64:
-                    return (int)(255 * Math.Clamp(f64, 0.0, 1.0));
+                    return (byte)(255 * Math.Clamp(f64, 0.0, 1.0));
                 case decimal dec:
-                    return (int)(255 * Math.Clamp(dec, 0.0m, 1.0m));
+                    return (byte)(255 * Math.Clamp(dec, 0.0m, 1.0m));
                 default:
-                    return Math.Clamp(base.GetArgumentValue(context, arg), 0, 255);
+                    return base.GetArgumentValue(context, arg);
             }
         }
 
-        protected override void ProcessSingleArgument(TemplateContext context, ref int index, object arg, KalkVector<int> vector)
+        protected override void ProcessSingleArgument(TemplateContext context, ref int index, object arg, KalkVector<byte> vector)
         {
             int value;
             switch (arg)
@@ -56,17 +56,14 @@ namespace Kalk.Core
                     break;
             }
 
+            vector[index++] = (byte)((value >> 16) & 0xFF);
+            vector[index++] = (byte)((value >> 8) & 0xFF);
+            vector[index++] = (byte)(value & 0xFF);
+
             if (Dimension == 4)
             {
-                vector[index++] = (value >> 24) & 0xFF;
+                vector[index++] = (byte)((value >> 24) & 0xFF);
             }
-            vector[index++] = (value >> 16) & 0xFF;
-            vector[index++] = (value >> 8) & 0xFF;
-            vector[index++] = value & 0xFF;
         }
-
-
-
-
     }
 }

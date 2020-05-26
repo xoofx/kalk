@@ -53,6 +53,13 @@ namespace Kalk.Core
             _length = _buffer.Length;
         }
 
+        public static KalkNativeBuffer AsBytes<T>(int byteCount, in T element)
+        {
+            var buffer = new KalkNativeBuffer(byteCount);
+            Unsafe.CopyBlockUnaligned(ref buffer.AsSpan()[0], ref Unsafe.As<T, byte>(ref Unsafe.AsRef(element)), (uint)byteCount);
+            return buffer;
+        }
+
         public KalkNativeBuffer Slice(int index)
         {
             AssertIndex(index);
@@ -232,7 +239,7 @@ namespace Kalk.Core
                     reason = " Cannot modify a fixed buffer.";
                     break;
                 default:
-                    reason = string.Empty;
+                    reason = String.Empty;
                     break;
             }
 

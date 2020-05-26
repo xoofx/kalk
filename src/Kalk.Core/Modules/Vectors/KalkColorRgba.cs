@@ -9,20 +9,20 @@ namespace Kalk.Core
         {
         }
 
-        public KalkColorRgba(int r, int g, int b, int a) : this()
+        public KalkColorRgba(byte  r, byte g, byte b, byte a) : this()
         {
-            this[0] = r & 0xFF;
-            this[1] = g & 0xFF;
-            this[2] = b & 0xFF;
-            this[3] = a & 0xFF;
+            this[0] = r;
+            this[1] = g;
+            this[2] = b;
+            this[3] = a;
         }
 
         public KalkColorRgba(int rgb) : this()
         {
-            this[0] = (rgb >> 24) & 0xFF;
-            this[1] = (rgb >> 16) & 0xFF;
-            this[2] = (rgb >> 8) & 0xFF;
-            this[3] = rgb & 0xFF;
+            this[0] = (byte)((rgb >> 16) & 0xFF);
+            this[1] = (byte)((rgb >> 8) & 0xFF);
+            this[2] = (byte)(rgb & 0xFF);
+            this[3] = (byte)((rgb >> 24) & 0xFF);
         }
         
         public KalkColorRgba(KalkColorRgba values) : base(values)
@@ -37,6 +37,6 @@ namespace Kalk.Core
         }
 
 
-        protected override KalkVector<int> NewVector(int length) => new KalkColorRgba();
+        protected override KalkVector<byte> NewVector(int length) => new KalkColorRgba();
     }
 }

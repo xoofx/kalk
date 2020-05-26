@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Consolus;
 using Scriban;
+using Scriban.Parsing;
 using Scriban.Syntax;
 
 namespace Kalk.Core
@@ -11,17 +12,17 @@ namespace Kalk.Core
     // https://github.com/google/palette.js/tree/master
 
     [ScriptTypeName("color")]
-    public abstract class KalkColor : KalkVector<int>
+    public abstract class KalkColor : KalkVector<byte>
     {
         protected KalkColor(int dimension) : base(dimension)
         {
         }
 
-        protected KalkColor(IList<int> list) : base(list)
+        protected KalkColor(IReadOnlyList<byte> list) : base(list)
         {
         }
 
-        protected KalkColor(KalkVector<int> values) : base(values)
+        protected KalkColor(KalkVector<byte> values) : base(values)
         {
         }
 
@@ -51,9 +52,28 @@ namespace Kalk.Core
 
         private static float Clamp01(float value) => Math.Clamp(value, 0.0f, 1.0f);
 
-        protected override KalkVector NewVector(ComponentUsed components, IList<int> list)
+        public KalkVector<float> GetFloatVector(int targetDimension)
         {
-            if (components == ComponentUsed.xyzw)
+            return this is KalkColorRgb
+                ? targetDimension == 4 ? 
+                    new KalkVector<float>(Clamp01(this[0] / 255.0f), Clamp01(this[1] / 255.0f), Clamp01(this[2] / 255.0f), 1.0f):
+                    new KalkVector<float>(Clamp01(this[0] / 255.0f), Clamp01(this[1] / 255.0f), Clamp01(this[2] / 255.0f))
+                : new KalkVector<float>(Clamp01(this[0] / 255.0f), Clamp01(this[1] / 255.0f), Clamp01(this[2] / 255.0f), Clamp01(this[3] / 255.0f));
+        }
+
+        protected override object GetSwizzleValue(ComponentKind kind, byte result)
+        {
+            return kind == ComponentKind.xyzw ? (object)Clamp01(result / 255.0f) : result;
+        }
+
+        protected override byte TransformComponentToSet(TemplateContext context, SourceSpan span, ComponentKind kind, object value)
+        {
+            return kind == ComponentKind.xyzw ? (byte)(Clamp01(context.ToObject<float>(span, value)) * 255) : base.TransformComponentToSet(context, span, kind, value);
+        }
+
+        protected override KalkVector NewVector(ComponentKind kind, IReadOnlyList<byte> list)
+        {
+            if (kind == ComponentKind.xyzw)
             {
                 if (list.Count == 4)
                 {
@@ -74,17 +94,11 @@ namespace Kalk.Core
             }
             else
             {
-                return list.Count == 4 ? new KalkColorRgba(list[0], list[1], list[2], list[3]) : list.Count == 3 ? new KalkColorRgb(list[0], list[1], list[2]) : base.NewVector(components, list);
+                return list.Count == 4 ? new KalkColorRgba(list[0], list[1], list[2], list[3]) : list.Count == 3 ? new KalkColorRgb(list[0], list[1], list[2]) : base.NewVector(kind, list);
             }
         }
 
-        protected abstract override KalkVector<int> NewVector(int length);
-
-        protected override void SetComponent(int index, int value)
-        {
-            value = value < 0 ? 0 : value > 255 ? 255 : value;
-            base.SetComponent(index, value);
-        }
+        protected abstract override KalkVector<byte> NewVector(int length);
 
         public abstract override string TypeName { get; }
 
@@ -94,7 +108,8 @@ namespace Kalk.Core
             var builder = new StringBuilder();
             builder.Append(TypeName);
             builder.Append('(');
-            for (int i = 0; i < Length; i++)
+            var length = this is KalkColorRgb ? 3 : 4;
+            for (int i = 0; i < length; i++)
             {
                 if (i > 0) builder.Append(", ");
                 builder.Append(engine != null ? engine.ObjectToString(this[i]) : this[i].ToString(null, formatProvider));
@@ -107,18 +122,18 @@ namespace Kalk.Core
             // rgb(255, 255, 255, 255)
             if (isAligned)
             {
-                if (Length == 3)
+                if (length == 3)
                 {
                     builder.Append(' ', "rgb(255, 255, 255)".Length - builder.Length);
                 }
-                else if (Length == 4)
+                else if (length == 4)
                 {
                     builder.Append(' ', "rgb(255, 255, 255, 255)".Length - builder.Length);
                 }
             }
 
             builder.Append(" ## ");
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < length; i++)
             {
                 builder.Append($"{this[i]:X2}");
             }

@@ -8,26 +8,29 @@ namespace Kalk.Core
     [ScriptTypeName("rgb")]
     public class KalkColorRgb : KalkColor
     {
-        public KalkColorRgb() : base(3)
+        public KalkColorRgb() : base(4)
         {
+            this[3] = 0xFF;
         }
 
         public KalkColorRgb(KalkColorRgb values) : base(values)
         {
+            this[3] = 0xFF;
         }
 
-        public KalkColorRgb(int r, int g, int b) : this()
+        public KalkColorRgb(byte r, byte g, byte b) : this()
         {
-            this[0] = r & 0xFF;
-            this[1] = g & 0xFF;
-            this[2] = b & 0xFF;
+            this[0] = r;
+            this[1] = g;
+            this[2] = b;
         }
 
         public KalkColorRgb(int rgb) : this()
         {
-            this[0] = (rgb >> 16) & 0xFF;
-            this[1] = (rgb >> 8) & 0xFF;
-            this[2] = rgb & 0xFF;
+            this[0] = (byte)((rgb >> 16) & 0xFF);
+            this[1] = (byte)((rgb >> 8) & 0xFF);
+            this[2] = (byte)(rgb & 0xFF);
+            this[3] = 0xFF;
         }
 
         public override string TypeName => "rgb";
@@ -37,7 +40,7 @@ namespace Kalk.Core
             return new KalkColorRgb(this);
         }
 
-        protected override KalkVector<int> NewVector(int length) => new KalkColorRgb();
+        protected override KalkVector<byte> NewVector(int length) => new KalkColorRgb();
 
         public static bool TryGetKnownColor(string color, out int rgb)
         {

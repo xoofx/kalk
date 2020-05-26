@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using Kalk.Core.Helpers;
@@ -29,6 +30,30 @@ namespace Kalk.Core
             if (arguments.Length == 1)
             {
                 var arg = arguments[0];
+                // Replace implicitly Rgb/Rgba to xyzw
+                if (arg is KalkColor color)
+                {
+                    if (this is KalkColorConstructor)
+                    {
+                        var colorLength = color is KalkColorRgb ? 3 : 4;
+                        if (Dimension != colorLength)
+                        {
+                            if (Dimension == 3) // 4 to 3
+                            {
+                                arg = new KalkVector<byte>(color.r, color.g, color.b);
+                            }
+                            else // 3 to 4
+                            {
+                                Debug.Assert(Dimension == 4);
+                                arg =  new KalkVector<byte>(color.r, color.g, color.b, 255);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        arg = color.GetFloatVector(Dimension);
+                    }
+                }
                 var argLength = GetArgLength(arg, true);
                 var length = index + argLength;
                 if (length != Dimension)

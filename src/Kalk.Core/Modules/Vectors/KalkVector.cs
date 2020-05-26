@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -61,7 +62,7 @@ namespace Kalk.Core
         }
     }
 
-    public class KalkVector<T> : KalkVector, IFormattable, IList, IScriptObject, IKalkVectorObject<T>, IScriptCustomType where T : unmanaged
+    public class KalkVector<T> : KalkVector, IFormattable, IList, IReadOnlyList<T>, IScriptObject, IKalkVectorObject<T>, IScriptCustomType, IKalkDisplayable where T : unmanaged
     {
         private const int x_IndexOffset = 2;
         private readonly T[] _values;
@@ -72,10 +73,16 @@ namespace Kalk.Core
             _values = new T[dimension];
         }
 
+        public KalkVector(IReadOnlyList<T> list)
+        {
+            _values = list.ToArray();
+        }
+        
         public KalkVector(IList<T> list)
         {
             _values = list.ToArray();
         }
+        
         public KalkVector(T v1, T v2) => _values = new T[2] { v1, v2 };
         public KalkVector(T v1, T v2, T v3) => _values = new T[3] { v1, v2, v3 };
         public KalkVector(T v1, T v2, T v3, T v4) => _values = new T[4] { v1, v2, v3, v4 };
@@ -694,16 +701,7 @@ namespace Kalk.Core
             if (member.Length < 1) return false;
             List<T> list = null;
 
-            bool isXyzw = false;
-            foreach (var c in member)
-            {
-                if ("xyzw".Contains(c))
-                {
-                    isXyzw = true;
-                    break;
-                }
-            }
-
+            var componentKind = GetComponentKind(member);
             foreach (var index in ForEachMemberPart(span, member, true))
             {
                 var value = index <= 1 ? context.ToObject<T>(span, index): _values[index - x_IndexOffset];
@@ -724,15 +722,39 @@ namespace Kalk.Core
 
             if (list != null)
             {
-                result = NewVector(isXyzw ? ComponentUsed.xyzw : ComponentUsed.rgba, list);
+                result = NewVector(componentKind, list);
+            }
+            else
+            {
+                result = GetSwizzleValue(componentKind, (T)result);
             }
 
             return true;
         }
 
-        protected virtual KalkVector NewVector(ComponentUsed components, IList<T> list) => new KalkVector<T>(list);
+        private static ComponentKind GetComponentKind(string member)
+        {
+            var kind = ComponentKind.rgba; 
+            foreach (var c in member)
+            {
+                if ("xyzw".Contains(c))
+                {
+                    kind = ComponentKind.xyzw;
+                    break;
+                }
+            }
+
+            return kind;
+        }
         
-        protected enum ComponentUsed
+        protected virtual object GetSwizzleValue(ComponentKind kind, T result)
+        {
+            return result;
+        }
+
+        protected virtual KalkVector NewVector(ComponentKind kind, IReadOnlyList<T> list) => new KalkVector<T>(list);
+        
+        protected enum ComponentKind
         {
             none,
             rgba,
@@ -740,9 +762,9 @@ namespace Kalk.Core
         }
 
 
-        private static ScriptRuntimeException InvalidMixOfSwizzles(SourceSpan span, ComponentUsed used, char c)
+        private static ScriptRuntimeException InvalidMixOfSwizzles(SourceSpan span, ComponentKind kind, char c)
         {
-            return new ScriptRuntimeException(span, $"Cannot mix the swizzle `{c}` with swizzles in the domain {used}.");
+            return new ScriptRuntimeException(span, $"Cannot mix the swizzle `{c}` with swizzles in the domain {kind}.");
         }
 
         private ScriptRuntimeException InvalidUsageOfXYZW(SourceSpan span, char c)
@@ -751,9 +773,9 @@ namespace Kalk.Core
         }
 
 
-        private static ComponentUsed GetComponentUsed(char c, out int index)
+        private static ComponentKind GetComponentUsed(char c, out int index)
         {
-            var componentUsed = ComponentUsed.none;
+            var componentUsed = ComponentKind.none;
             index = -1;
             switch (c)
             {
@@ -765,35 +787,35 @@ namespace Kalk.Core
                     break;
                 case 'x':
                     index = x_IndexOffset;
-                    componentUsed = ComponentUsed.xyzw;
+                    componentUsed = ComponentKind.xyzw;
                     break;
                 case 'r':
                     index = x_IndexOffset;
-                    componentUsed = ComponentUsed.rgba;
+                    componentUsed = ComponentKind.rgba;
                     break;
                 case 'y':
                     index = x_IndexOffset + 1;
-                    componentUsed = ComponentUsed.xyzw;
+                    componentUsed = ComponentKind.xyzw;
                     break;
                 case 'g':
                     index = x_IndexOffset + 1;
-                    componentUsed = ComponentUsed.rgba;
+                    componentUsed = ComponentKind.rgba;
                     break;
                 case 'z':
                     index = x_IndexOffset + 2;
-                    componentUsed = ComponentUsed.xyzw;
+                    componentUsed = ComponentKind.xyzw;
                     break;
                 case 'b':
                     index = x_IndexOffset + 2;
-                    componentUsed = ComponentUsed.rgba;
+                    componentUsed = ComponentKind.rgba;
                     break;
                 case 'w':
                     index = x_IndexOffset + 3;
-                    componentUsed = ComponentUsed.xyzw;
+                    componentUsed = ComponentKind.xyzw;
                     break;
                 case 'a':
                     index = x_IndexOffset + 3;
-                    componentUsed = ComponentUsed.rgba;
+                    componentUsed = ComponentKind.rgba;
                     break;
             }
 
@@ -802,19 +824,19 @@ namespace Kalk.Core
         
         private IEnumerable<int> ForEachMemberPart(SourceSpan span, string member, bool throwIfInvalid)
         {
-            var componentUsed = ComponentUsed.none;
+            var componentUsed = ComponentKind.none;
             for (int i = 0; i < member.Length; i++)
             {
                 var c = member[i];
                 int index;
                 
                 var newComponentUsed = GetComponentUsed(c, out index);
-                if (newComponentUsed == ComponentUsed.none && index >= x_IndexOffset && throwIfInvalid)
+                if (newComponentUsed == ComponentKind.none && index >= x_IndexOffset && throwIfInvalid)
                 {
                     throw new ScriptRuntimeException(span, $"Invalid swizzle {c}. Expecting only x,y,z,w.");
                 }
 
-                if (componentUsed != ComponentUsed.none && newComponentUsed != componentUsed) throw InvalidMixOfSwizzles(span, componentUsed, c);
+                if (componentUsed != ComponentKind.none && newComponentUsed != componentUsed) throw InvalidMixOfSwizzles(span, componentUsed, c);
 
                 if (index < 0)
                 {
@@ -848,7 +870,7 @@ namespace Kalk.Core
 
         public override bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
         {
-
+            
             // Verify access (TODO: could be more optimized for single element .x access)
             var bitArray = new BitArray(Count);
             var list = new List<int>(ForEachMemberPart(span, member, true));
@@ -861,35 +883,24 @@ namespace Kalk.Core
                 bitArray[finalIndex] = true;
             }
 
+            var componentKind = GetComponentKind(member);
+
             // Handle the case where the value to set is a vector or an array
             if (value is IList inputList)
             {
                 if (inputList.Count != list.Count) throw new ScriptRuntimeException(span, $"Invalid number of components. Expecting {list.Count} but the value {value} has {inputList.Count} components.");
 
-                if (value is KalkVector<T> vector)
+                int i = 0;
+                foreach (var index in list)
                 {
-                    int i = 0;
-                    foreach (var index in list)
-                    {
-                        this[index - x_IndexOffset] = vector[i];
-                        i++;
-                    }
-
-                }
-                else
-                {
-                    int i = 0;
-                    foreach (var index in list)
-                    {
-                        this[index - x_IndexOffset] = context.ToObject<T>(span, inputList[i]); ;
-                        i++;
-                    }
+                    this[index - x_IndexOffset] = TransformComponentToSet(context, span, componentKind, inputList[i]); ;
+                    i++;
                 }
             }
             else
             {
                 // otherwise it is a single value that we dispatch
-                var tValue = context.ToObject<T>(span, value);
+                var tValue = TransformComponentToSet(context, span, componentKind, value);
                 foreach (var index in list)
                 {
                     this[index - x_IndexOffset] = tValue;
@@ -899,6 +910,11 @@ namespace Kalk.Core
             return true;
         }
 
+        protected virtual T TransformComponentToSet(TemplateContext context, SourceSpan span, ComponentKind kind, object value)
+        {
+            return value is T tvalue? tvalue : context.ToObject<T>(span, value);
+        }
+        
         public override bool Remove(string member) => throw new NotSupportedException();
 
         public override void SetReadOnly(string member, bool readOnly) => throw new NotSupportedException();
@@ -1016,10 +1032,139 @@ namespace Kalk.Core
             value = null;
             return false;
         }
-      
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return ((IEnumerable<T>)_values).GetEnumerator();
+        }
+
         public IEnumerator GetEnumerator()
         {
             return ((IEnumerable) _values).GetEnumerator();
+        }
+
+
+        private static readonly Type[] SupportedOutput = new Type[] {typeof(long), typeof(ulong), typeof(int), typeof(uint), typeof(short), typeof(ushort), typeof(float), typeof(double), typeof(byte)};
+
+        public void Display(KalkEngine engine, KalkDisplayMode mode)
+        {
+            if (mode == KalkDisplayMode.Standard) return;
+
+            if (Length == 2 || Length == 3 || Length == 4 || Length == 8)
+            {
+                if (typeof(T) != typeof(long)) Display<long>(engine);
+                if (typeof(T) != typeof(ulong)) Display<ulong>(engine);
+                if (typeof(T) != typeof(int)) Display<int>(engine);
+                if (typeof(T) != typeof(uint)) Display<uint>(engine);
+                if (typeof(T) != typeof(short)) Display<short>(engine);
+                if (typeof(T) != typeof(ushort)) Display<ushort>(engine);
+                if (typeof(T) != typeof(float)) Display<float>(engine);
+                if (typeof(T) != typeof(double)) Display<double>(engine);
+                if (typeof(T) != typeof(byte)) Display<byte>(engine);
+            }
+        }
+
+        private void Display<TTarget>(KalkEngine engine) where TTarget: unmanaged
+        {
+            var spanBytes = AsSpan();
+            var span = MemoryMarshal.Cast<byte, TTarget>(spanBytes);
+            var sizeOfTTarget = Unsafe.SizeOf<TTarget>();
+            var dim = spanBytes.Length / sizeOfTTarget;
+            if ((spanBytes.Length % sizeOfTTarget) != 0) return;
+
+            if (dim == 6) return;
+
+            var dimStr = dim == 1 ? string.Empty : $"{dim.ToString(CultureInfo.InvariantCulture)}";
+            
+            var builder = new StringBuilder();
+            if (typeof(TTarget) == typeof(long))
+            {
+                builder.Append($"long{dimStr}(");
+                for (int i = 0; i < span.Length; i++)
+                {
+                    if (i > 0) builder.Append(", ");
+                    builder.Append(span[i]);
+                }
+            }
+            else if (typeof(TTarget) == typeof(ulong))
+            {
+                builder.Append($"ulong{dimStr}(");
+                for (int i = 0; i < span.Length; i++)
+                {
+                    if (i > 0) builder.Append(", ");
+                    var value = Unsafe.As<TTarget, ulong>(ref span[i]);
+                    builder.Append($"0x{(value >> 32):X8}_{(uint)value:X8}");
+                }
+            }
+            else if (typeof(TTarget) == typeof(int))
+            {
+                builder.Append($"int{dimStr}(");
+                for (int i = 0; i < span.Length; i++)
+                {
+                    if (i > 0) builder.Append(", ");
+                    builder.Append(span[i]);
+                }
+            }
+            else if (typeof(TTarget) == typeof(uint))
+            {
+                builder.Append($"uint{dimStr}(");
+                for (int i = 0; i < span.Length; i++)
+                {
+                    if (i > 0) builder.Append(", ");
+                    var value = Unsafe.As<TTarget, uint>(ref span[i]);
+                    builder.Append($"0x{(value >> 16):X4}_{(ushort)value:X4}");
+                }
+            }
+            else if (typeof(TTarget) == typeof(short))
+            {
+                builder.Append($"short{dimStr}(");
+                for (int i = 0; i < span.Length; i++)
+                {
+                    if (i > 0) builder.Append(", ");
+                    builder.Append(span[i]);
+                }
+            }
+            else if (typeof(TTarget) == typeof(ushort))
+            {
+                builder.Append($"ushort{dimStr}(");
+                for (int i = 0; i < span.Length; i++)
+                {
+                    if (i > 0) builder.Append(", ");
+                    builder.Append($"0x{Unsafe.As<TTarget, ushort>(ref span[i]):X4}");
+                }
+            }
+            else if (typeof(TTarget) == typeof(float))
+            {
+                builder.Append($"float{dimStr}(");
+                for (int i = 0; i < span.Length; i++)
+                {
+                    if (i > 0) builder.Append(", ");
+                    builder.Append(span[i]);
+                }
+            }
+            else if (typeof(TTarget) == typeof(double))
+            {
+                builder.Append($"double{dimStr}(");
+                for (int i = 0; i < span.Length; i++)
+                {
+                    if (i > 0) builder.Append(", ");
+                    builder.Append(span[i]);
+                }
+            }
+            else if (typeof(TTarget) == typeof(byte))
+            {
+                builder.Append($"bytebuffer([");
+                for (int i = 0; i < span.Length; i++)
+                {
+                    if (i > 0) builder.Append(", ");
+                    builder.Append($"0x{Unsafe.As<TTarget, byte>(ref span[i]):X2}");
+                }
+                builder.Append("]");
+            }
+            
+            builder.Append(")");
+            
+            engine.WriteHighlightLine($"##~## {builder}");
         }
     }
 }

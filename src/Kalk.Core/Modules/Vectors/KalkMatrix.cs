@@ -393,7 +393,7 @@ namespace Kalk.Core
 
             if (list != null)
             {
-                result = new KalkVector<T>(list);
+                result = new KalkVector<T>((IReadOnlyList<T>)list);
             }
 
             return true;

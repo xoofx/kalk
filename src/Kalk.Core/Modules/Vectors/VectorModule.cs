@@ -20,10 +20,14 @@ namespace Kalk.Core.Modules
         private static readonly KalkVectorConstructor<sbyte> SByte32Constructor = new KalkVectorConstructor<sbyte>(32);
         private static readonly KalkVectorConstructor<sbyte> SByte64Constructor = new KalkVectorConstructor<sbyte>(64);
 
+        private static readonly KalkVectorConstructor<short> Short2Constructor = new KalkVectorConstructor<short>(2);
+        private static readonly KalkVectorConstructor<short> Short4Constructor = new KalkVectorConstructor<short>(4);
         private static readonly KalkVectorConstructor<short> Short8Constructor = new KalkVectorConstructor<short>(8);
         private static readonly KalkVectorConstructor<short> Short16Constructor = new KalkVectorConstructor<short>(16);
         private static readonly KalkVectorConstructor<short> Short32Constructor = new KalkVectorConstructor<short>(32);
         
+        private static readonly KalkVectorConstructor<ushort> UShort2Constructor = new KalkVectorConstructor<ushort>(2);
+        private static readonly KalkVectorConstructor<ushort> UShort4Constructor = new KalkVectorConstructor<ushort>(4);
         private static readonly KalkVectorConstructor<ushort> UShort8Constructor = new KalkVectorConstructor<ushort>(8);
         private static readonly KalkVectorConstructor<ushort> UShort16Constructor = new KalkVectorConstructor<ushort>(16);
         private static readonly KalkVectorConstructor<ushort> UShort32Constructor = new KalkVectorConstructor<ushort>(32);
@@ -148,6 +152,12 @@ namespace Kalk.Core.Modules
         [KalkDoc("sbyte64", CategoryTypeConstructors)]
         public KalkVector<sbyte> CreateSByte64(params object[] arguments) => SByte64Constructor.Invoke(Engine, arguments);
 
+        [KalkDoc("short2", CategoryTypeConstructors)]
+        public KalkVector<short> CreateShort2(params object[] arguments) => Short2Constructor.Invoke(Engine, arguments);
+
+        [KalkDoc("short4", CategoryTypeConstructors)]
+        public KalkVector<short> CreateShort4(params object[] arguments) => Short4Constructor.Invoke(Engine, arguments);
+        
         [KalkDoc("short8", CategoryTypeConstructors)]
         public KalkVector<short> CreateShort8(params object[] arguments) => Short8Constructor.Invoke(Engine, arguments);
 
@@ -157,6 +167,11 @@ namespace Kalk.Core.Modules
         [KalkDoc("short32", CategoryTypeConstructors)]
         public KalkVector<short> CreateShort32(params object[] arguments) => Short32Constructor.Invoke(Engine, arguments);
 
+
+        [KalkDoc("ushort2", CategoryTypeConstructors)]
+        public KalkVector<ushort> CreateUShort2(params object[] arguments) => UShort2Constructor.Invoke(Engine, arguments);
+        [KalkDoc("ushort4", CategoryTypeConstructors)]
+        public KalkVector<ushort> CreateUShort4(params object[] arguments) => UShort4Constructor.Invoke(Engine, arguments);
         [KalkDoc("ushort8", CategoryTypeConstructors)]
         public KalkVector<ushort> CreateUShort8(params object[] arguments) => UShort8Constructor.Invoke(Engine, arguments);
 

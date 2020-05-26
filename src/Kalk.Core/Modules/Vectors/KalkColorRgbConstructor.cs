@@ -6,6 +6,6 @@
         {
         }
 
-        protected override KalkVector<int> NewVector(int dimension) => new KalkColorRgb();
+        protected override KalkVector<byte> NewVector(int dimension) => new KalkColorRgb();
     }
 }

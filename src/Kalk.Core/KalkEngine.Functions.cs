@@ -32,6 +32,7 @@ namespace Kalk.Core
 
             // builtins
             GetOrCreateModule<MathModule>();
+            GetOrCreateModule<MemoryModule>();
             GetOrCreateModule<VectorModule>();
 
             var allModule = GetOrCreateModule<AllModule>();

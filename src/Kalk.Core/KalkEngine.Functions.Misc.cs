@@ -24,13 +24,7 @@ namespace Kalk.Core
         [KalkDoc("ascii", CategoryMisc)]
         public KalkAsciiTable AsciiTable { get; }
 
-        [KalkDoc("malloc", CategoryMisc)]
-        public KalkNativeBuffer Malloc(int size)
-        {
-            if (size < 0) throw new ArgumentOutOfRangeException(nameof(size), "Size must be >= 0");
-            return new KalkNativeBuffer(size);
-        }
-        
+       
         [KalkDoc("keys", CategoryMisc)]
         public IEnumerable Keys(object obj)
         {
@@ -77,7 +71,7 @@ namespace Kalk.Core
                 case string str:
                 {
                     var buffer = Encoding.UTF8.GetBytes(str);
-                    return AsBytes(buffer.Length, in buffer[0]);
+                    return KalkNativeBuffer.AsBytes(buffer.Length, in buffer[0]);
                 }
                 case IEnumerable it:
                 {
@@ -105,7 +99,7 @@ namespace Kalk.Core
                     {
                         fixed (void* pBuffer = str)
                         {
-                            return AsBytes(str.Length * 2, in *(byte*)pBuffer);
+                            return KalkNativeBuffer.AsBytes(str.Length * 2, in *(byte*)pBuffer);
                         }
                     }
                 }
@@ -136,7 +130,7 @@ namespace Kalk.Core
                 case string str:
                 {
                     var buffer = Encoding.UTF32.GetBytes(str);
-                    return AsBytes(buffer.Length, in buffer[0]);
+                    return KalkNativeBuffer.AsBytes(buffer.Length, in buffer[0]);
                 }
                 case IEnumerable it:
                 {
@@ -146,103 +140,6 @@ namespace Kalk.Core
                         bytes.WriteByte(ToObject<byte>(0, b));
                     }
                     return Encoding.UTF32.GetString(bytes.GetBuffer(), 0, (int)bytes.Length);
-                }
-                default:
-                    throw new ArgumentException($"The type {GetTypeName(value)} is not supported ", nameof(value));
-            }
-        }
-
-        [KalkDoc("bitcast", CategoryMisc)]
-        public object Bitcast(object type, object value)
-        {
-            if (type == null) throw new ArgumentNullException(nameof(type));
-
-            var bytes = AsBytes(value);
-            if (bytes == null) return null;
-
-            switch (type)
-            {
-                case short vshort:
-                    UnsafeHelpers.BitCast(ref vshort, 2, bytes);
-                    return vshort;
-                case ushort vushort:
-                    UnsafeHelpers.BitCast(ref vushort, 2, bytes);
-                    return vushort;
-                case int vint:
-                    UnsafeHelpers.BitCast(ref vint, 4, bytes);
-                    return vint;
-                case uint vuint:
-                    UnsafeHelpers.BitCast(ref vuint, 4, bytes);
-                    return (long) vuint;
-                case float _:
-                    int vfloat = 0;
-                    UnsafeHelpers.BitCast(ref vfloat, 4, bytes);
-                    return BitConverter.Int32BitsToSingle(vfloat);
-                case double _:
-                    long vdouble = 0;
-                    UnsafeHelpers.BitCast(ref vdouble, 4, bytes);
-                    return BitConverter.Int64BitsToDouble(vdouble);
-                case long vlong:
-                    UnsafeHelpers.BitCast(ref vlong, 4, bytes);
-                    return vlong;
-
-                case KalkValue kalkValue:
-                    var dest = (KalkValue)kalkValue.Clone(true);
-                    dest.BitCastFrom(bytes.AsSpan());
-                    return dest;
-
-                default:
-                    throw new ArgumentException($"The destination type `{GetTypeName(type)}` is not supported.", nameof(value));
-            }
-        }
-
-        [KalkDoc("asbytes", CategoryMisc)]
-        public KalkNativeBuffer AsBytes(object value)
-        {
-            if (value == null) return null;
-
-            switch (value)
-            {
-                case string str:
-                {
-                    var buffer = Encoding.UTF8.GetBytes(str);
-                    return AsBytes(buffer.Length, in buffer[0]);
-                }
-                case byte vbyte:
-                    return AsBytes(1, vbyte);
-                case sbyte vsbyte:
-                    return AsBytes(1, vsbyte);
-                case short vshort:
-                    return AsBytes(2, vshort);
-                case ushort vushort:
-                    return AsBytes(2, vushort);
-                case int vint:
-                    return AsBytes(4, vint);
-                case uint vuint:
-                    return AsBytes(4, vuint);
-                case long vlong:
-                    return AsBytes(8, vlong);
-                case ulong vulong:
-                    return AsBytes(8, vulong);
-                case float vfloat:
-                {
-                    var floatAsInt = BitConverter.SingleToInt32Bits(vfloat);
-                    return AsBytes(4, floatAsInt);
-                }
-                case double vdouble:
-                {
-                    var doubleAsLong = BitConverter.DoubleToInt64Bits(vdouble);
-                    return AsBytes(8, doubleAsLong);
-                }
-                case BigInteger bigInt:
-                {
-                    var array = bigInt.ToByteArray();
-                    return AsBytes(array.Length, in array[0]);
-                }
-                case IKalkSpannable spannable:
-                {
-                    var span = spannable.AsSpan();
-                    return AsBytes(span.Length, in span[0]);
                 }
                 default:
                     throw new ArgumentException($"The type {GetTypeName(value)} is not supported ", nameof(value));
@@ -411,37 +308,6 @@ namespace Kalk.Core
             return new ScriptRange(list.Cast<object>().Skip(index).Take(length.Value));
         }
 
-        [KalkDoc("bytebuffer", CategoryMisc)]
-        public KalkNativeBuffer ByteBuffer(object array)
-        {
-            if (array == null) new KalkNativeBuffer(0);
-
-            if (array is KalkNativeBuffer nativeBuffer)
-            {
-                return nativeBuffer;
-            }
-            
-            if (array is IEnumerable it)
-            {
-                var buffer = new List<byte>();
-                foreach (var item in it)
-                {
-                    var b = ToObject<byte>(0, item);
-                    buffer.Add(b);
-                }
-                var result = new KalkNativeBuffer(buffer.Count);
-                var span = result.AsSpan();
-                for (int i = 0; i < buffer.Count; i++)
-                {
-                    span[i] = buffer[i];
-                }
-
-                return result;
-            }
-            
-            throw new ArgumentException($"Invalid argument type {GetTypeName(array)}. Must be an array of byte or an existing bytebuffer.", nameof(array));
-        }
-
         [KalkDoc("lines", CategoryMisc)]
         public ScriptRange Lines(string text)
         {
@@ -576,13 +442,6 @@ namespace Kalk.Core
                 builder.Append(b.ToString("X2"));
             }
             return builder.ToString();
-        }
-
-        private static KalkNativeBuffer AsBytes<T>(int byteCount, in T element)
-        {
-            var buffer = new KalkNativeBuffer(byteCount);
-            Unsafe.CopyBlockUnaligned(ref buffer.AsSpan()[0], ref Unsafe.As<T, byte>(ref Unsafe.AsRef(element)), (uint)byteCount);
-            return buffer;
         }
     }
 }

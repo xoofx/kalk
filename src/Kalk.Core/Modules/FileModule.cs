@@ -64,13 +64,13 @@ namespace Kalk.Core.Modules
         }
 
         [KalkDoc("load_bytes", CategoryMiscFile)]
-        public ScriptArray<byte> LoadBytes(string path)
+        public KalkNativeBuffer LoadBytes(string path)
         {
             var fullPath = AssertReadFile(path);
             using var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            var buffer = new byte[stream.Length];
-            stream.Read(buffer, 0, buffer.Length);
-            return new ScriptArray<byte>(buffer);
+            var buffer = new KalkNativeBuffer((int)stream.Length);
+            stream.Read(buffer.AsSpan());
+            return buffer;
         }
 
         [KalkDoc("load_lines", CategoryMiscFile)]
@@ -126,15 +126,17 @@ namespace Kalk.Core.Modules
                 case ScriptRange range when range.Values is byte[] byteBuffer:
                     stream.Write(byteBuffer, 0, byteBuffer.Length);
                     break;
-                case ScriptArray<byte> byteArray:
+                case KalkNativeBuffer byteBuffer:
                 {
-                    for (int i = 0; i < byteArray.Count; i++)
-                    {
-                        stream.WriteByte(byteArray[i]);
-                    }
-
+                    stream.Write(byteBuffer.AsSpan());
                     break;
                 }
+                case ScriptArray<byte> scriptByteArray:
+                    for (int i = 0; i < scriptByteArray.Count; i++)
+                    {
+                        stream.WriteByte(scriptByteArray[i]);
+                    }
+                    break;
                 default:
                 {
                     if (data != null)
