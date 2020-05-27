@@ -37,6 +37,9 @@ namespace Kalk.Core
 
         protected abstract KalkVector Diagonal();
 
+        public abstract KalkVector GetColumn(int index);
+        public abstract KalkVector GetRow(int index);
+
         protected abstract object GenericDeterminant();
 
         protected abstract KalkMatrix GenericInverse();
@@ -157,7 +160,7 @@ namespace Kalk.Core
 
         private static void VerifyElementType()
         {
-            if (typeof(T) == typeof(bool) || typeof(T) == typeof(int) || typeof(T) == typeof(float) || typeof(T) == typeof(double))
+            if (typeof(T) == typeof(KalkBool) || typeof(T) == typeof(int) || typeof(T) == typeof(float) || typeof(T) == typeof(double))
             {
                 return;
             }
@@ -175,10 +178,9 @@ namespace Kalk.Core
         }
 
 
-        public KalkVector<T> GetRow(int index)
+        public override KalkVector GetRow(int index)
         {
-            if ((uint)index >= (uint)RowCount) throw new ArgumentOutOfRangeException(nameof(index));
-
+            if ((uint)index >= (uint)RowCount) throw new ArgumentOutOfRangeException(nameof(index), $"The row index {index} is out of range [0, {RowCount-1}]");
             var row = new KalkVector<T>(ColumnCount);
             for (int i = 0; i < ColumnCount; i++)
             {
@@ -200,9 +202,9 @@ namespace Kalk.Core
             }
         }
 
-        public KalkVector<T> GetColumn(int index)
+        public override KalkVector GetColumn(int index)
         {
-            if ((uint)index >= (uint)RowCount) throw new ArgumentOutOfRangeException(nameof(index));
+            if ((uint)index >= (uint)ColumnCount) throw new ArgumentOutOfRangeException(nameof(index), $"The column index {index} is out of range [0, {ColumnCount-1}]");
 
             var column = new KalkVector<T>(RowCount);
             for (int i = 0; i < RowCount; i++)
@@ -250,7 +252,7 @@ namespace Kalk.Core
             }
         }
 
-        private string ElementTypeName => typeof(T).ScriptPrettyName();
+        private string ElementTypeName => typeof(T) == typeof(KalkBool) ? "bool" : typeof(T).ScriptPrettyName();
 
 
         public object Transform(Func<T, T> apply)
@@ -667,9 +669,9 @@ namespace Kalk.Core
             if (RowCount != ColumnCount) throw new InvalidOperationException($"Matrix must be square nxn instead of {TypeName}");
 
             var transpose = new KalkMatrix<T>(ColumnCount, RowCount);
-            if (typeof(T) == typeof(bool))
+            if (typeof(T) == typeof(KalkBool))
             {
-                var m = (KalkMatrix<bool>) (KalkMatrix) transpose;
+                var m = (KalkMatrix<KalkBool>) (KalkMatrix) transpose;
                 int count = RowCount;
                 for (int i = 0; i < count; i++)
                     m[ColumnCount * i + i] = true;
@@ -702,45 +704,12 @@ namespace Kalk.Core
         {
             if (RowCount != ColumnCount) throw new InvalidOperationException($"Matrix must be square nxn instead of {TypeName}");
 
-            if (typeof(T) == typeof(bool))
-            {
-                var m = (KalkMatrix<bool>)(KalkMatrix)this;
-                int count = RowCount;
-                var result = new KalkVector<bool>(RowCount);
-                for (int i = 0; i < count; i++)
-                    result[i] = m[ColumnCount * i + i];
-                return result;
-            }
-            else if (typeof(T) == typeof(int))
-            {
-                var m = (KalkMatrix<int>)(KalkMatrix)this;
-                int count = RowCount;
-                var result = new KalkVector<int>(RowCount);
-                for (int i = 0; i < count; i++)
-                    result[i] = m[ColumnCount * i + i];
-                return result;
-            }
-            else if (typeof(T) == typeof(float))
-            {
-                var m = (KalkMatrix<float>)(KalkMatrix)this;
-                int count = RowCount;
-                var result = new KalkVector<float>(RowCount);
-                for (int i = 0; i < count; i++)
-                    result[i] = m[ColumnCount * i + i];
-                return result;
-
-            }
-            else if (typeof(T) == typeof(double))
-            {
-                var m = (KalkMatrix<double>)(KalkMatrix)this;
-                int count = RowCount;
-                var result = new KalkVector<double>(RowCount);
-                for (int i = 0; i < count; i++)
-                    result[i] = m[ColumnCount * i + i];
-                return result;
-            }
-
-            throw new InvalidOperationException($"Type {ElementType} is not supported for this operation");
+            var m = this;
+            int count = RowCount;
+            var result = new KalkVector<T>(RowCount);
+            for (int i = 0; i < count; i++)
+                result[i] = m[ColumnCount * i + i];
+            return result;
         }
 
         public override bool TrySetValue(TemplateContext context, SourceSpan span, string member, object value, bool readOnly)
@@ -855,7 +824,7 @@ namespace Kalk.Core
                 case ScriptBinaryOperator.CompareGreaterOrEqual:
                 case ScriptBinaryOperator.CompareLess:
                 case ScriptBinaryOperator.CompareGreater:
-                    var vbool = new KalkMatrix<bool>(leftMatrix.RowCount, leftMatrix.ColumnCount);
+                    var vbool = new KalkMatrix<KalkBool>(leftMatrix.RowCount, leftMatrix.ColumnCount);
                     for (int i = 0; i < vbool._values.Length; i++)
                     {
                         vbool[i] = (bool)ScriptBinaryExpression.Evaluate(context, span, op, leftMatrix._values[i], rightMatrix._values[i]);
@@ -959,7 +928,7 @@ namespace Kalk.Core
             {
                 builder.Append("matrix");
                 builder.Append("(");
-                builder.Append(engine != null ? engine.GetTypeName(typeof(T)) : typeof(T).ScriptPrettyName());
+                builder.Append(engine != null ? engine.GetTypeName(_values[0]) : typeof(T).ScriptPrettyName());
                 builder.Append(", ");
                 builder.Append(RowCount.ToString(CultureInfo.InvariantCulture));
                 builder.Append(", ");
@@ -968,7 +937,7 @@ namespace Kalk.Core
             }
             else
             {
-                builder.Append(engine != null ? engine.GetTypeName(typeof(T)) : typeof(T).ScriptPrettyName());
+                builder.Append(engine != null ? engine.GetTypeName(_values[0]) : typeof(T).ScriptPrettyName());
                 builder.Append(RowCount.ToString(CultureInfo.InvariantCulture)).Append('x').Append(ColumnCount.ToString(CultureInfo.InvariantCulture));
                 builder.Append('(');
             }
@@ -1033,7 +1002,7 @@ namespace Kalk.Core
                 }
             }
 
-            var rowTypeName = $"{engine.GetTypeName(typeof(T))}{ColumnCount.ToString(CultureInfo.InvariantCulture)}";
+            var rowTypeName = $"{engine.GetTypeName(_values[0])}{ColumnCount.ToString(CultureInfo.InvariantCulture)}";
             for (int y = 0; y < RowCount; y++)
             {
                 cells[(y + 1) * columnCountDisplay + ColumnCount + 1] = $") # {y}";

@@ -36,6 +36,19 @@ namespace Kalk.Core.Modules
             throw new ArgumentException($"Invalid argument type {Engine.GetTypeName(x)}. Expecting a matrix or a vector type.", nameof(x));
         }
 
+        [KalkDoc("row", CategoryMathVectorMatrixFunctions)]
+        public KalkVector GetRow(KalkMatrix x, int index)
+        {
+            return x.GetRow(index);
+        }
+        
+        [KalkDoc("col", CategoryMathVectorMatrixFunctions)]
+        public KalkVector GetColumn(KalkMatrix x, int index)
+        {
+            return x.GetColumn(index);
+        }
+        
+
         [KalkDoc("mul", CategoryMathVectorMatrixFunctions)]
         public object Multiply(object x, object y)
         {

@@ -30,7 +30,7 @@ namespace Kalk.Core.Modules
         public string StringUpcase(string text) => StringFunctions.Upcase(text);
 
         [KalkDoc("endswith", CategoryString)]
-        public bool StringEndsWith(string text, string end) => StringFunctions.EndsWith(text, end);
+        public KalkBool StringEndsWith(string text, string end) => StringFunctions.EndsWith(text, end);
 
         [KalkDoc("handleize", CategoryString)]
         public string StringHandleize(string text) => StringFunctions.Handleize(text);
@@ -48,7 +48,7 @@ namespace Kalk.Core.Modules
         public IEnumerable StringSplit(string text, string match) => StringFunctions.Split(text, match);
 
         [KalkDoc("startswith", CategoryString)]
-        public bool StringStartsWith(string text, string start) => StringFunctions.StartsWith(text, start);
+        public KalkBool StringStartsWith(string text, string start) => StringFunctions.StartsWith(text, start);
 
         [KalkDoc("strip", CategoryString)]
         public string StringStrip(string text) => StringFunctions.Strip(text);

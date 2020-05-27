@@ -8,7 +8,6 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-
     // https://github.com/google/palette.js/tree/master
 
     [ScriptTypeName("color")]

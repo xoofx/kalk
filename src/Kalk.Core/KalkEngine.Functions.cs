@@ -184,7 +184,7 @@ namespace Kalk.Core
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
-        public void RegisterFunction(string name, Func<object[], KalkVector<bool>> func, string category = null)
+        public void RegisterFunction(string name, Func<object[], KalkVector<KalkBool>> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
@@ -197,7 +197,7 @@ namespace Kalk.Core
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }
 
-        public void RegisterFunction(string name, Func<object[], KalkMatrix<bool>> func, string category = null)
+        public void RegisterFunction(string name, Func<object[], KalkMatrix<KalkBool>> func, string category = null)
         {
             RegisterFunction(name, DelegateCustomFunction.CreateFunc(func), category);
         }

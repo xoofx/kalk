@@ -211,7 +211,7 @@ namespace Kalk.Core
         {
             get
             {
-                if (typeof(T) == typeof(bool))
+                if (typeof(T) == typeof(KalkBool))
                 {
                     switch (Length)
                     {
@@ -246,6 +246,8 @@ namespace Kalk.Core
                 {
                     switch (Length)
                     {
+                        case 2: return "ushort2";
+                        case 4: return "ushort4";
                         case 8: return "ushort8";
                         case 16: return "ushort16";
                         case 32: return "ushort32";
@@ -255,6 +257,8 @@ namespace Kalk.Core
                 {
                     switch (Length)
                     {
+                        case 2: return "short2";
+                        case 4: return "short4";
                         case 8: return "short8";
                         case 16: return "short16";
                         case 32: return "short32";
@@ -968,7 +972,7 @@ namespace Kalk.Core
                 case ScriptBinaryOperator.CompareGreaterOrEqual:
                 case ScriptBinaryOperator.CompareLess:
                 case ScriptBinaryOperator.CompareGreater:
-                    var vbool = new KalkVector<bool>(leftVector.Length);
+                    var vbool = new KalkVector<KalkBool>(leftVector.Length);
                     for (int i = 0; i < leftVector.Length; i++)
                     {
                         vbool[i] = (bool)ScriptBinaryExpression.Evaluate(context, span, op, leftVector[i], rightVector[i]);

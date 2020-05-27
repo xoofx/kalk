@@ -54,13 +54,11 @@ namespace Kalk.Core.Modules
         private static readonly KalkVectorConstructor<ulong> ULong4Constructor = new KalkVectorConstructor<ulong>(4);
         private static readonly KalkVectorConstructor<ulong> ULong8Constructor = new KalkVectorConstructor<ulong>(8);
         
-        private static readonly KalkVectorConstructor<bool> Bool2Constructor = new KalkVectorConstructor<bool>(2);
-        private static readonly KalkVectorConstructor<bool> Bool3Constructor = new KalkVectorConstructor<bool>(3);
-        private static readonly KalkVectorConstructor<bool> Bool4Constructor = new KalkVectorConstructor<bool>(4);
-        private static readonly KalkVectorConstructor<bool> Bool8Constructor = new KalkVectorConstructor<bool>(8);
-        private static readonly KalkVectorConstructor<bool> Bool16Constructor = new KalkVectorConstructor<bool>(16);
-        private static readonly KalkVectorConstructor<bool> Bool32Constructor = new KalkVectorConstructor<bool>(32);
-        private static readonly KalkVectorConstructor<bool> Bool64Constructor = new KalkVectorConstructor<bool>(64);
+        private static readonly KalkVectorConstructor<KalkBool> Bool2Constructor = new KalkVectorConstructor<KalkBool>(2);
+        private static readonly KalkVectorConstructor<KalkBool> Bool3Constructor = new KalkVectorConstructor<KalkBool>(3);
+        private static readonly KalkVectorConstructor<KalkBool> Bool4Constructor = new KalkVectorConstructor<KalkBool>(4);
+        private static readonly KalkVectorConstructor<KalkBool> Bool8Constructor = new KalkVectorConstructor<KalkBool>(8);
+        private static readonly KalkVectorConstructor<KalkBool> Bool16Constructor = new KalkVectorConstructor<KalkBool>(16);
         
         private static readonly KalkVectorConstructor<float> Float2Constructor = new KalkVectorConstructor<float>(2);
         private static readonly KalkVectorConstructor<float> Float3Constructor = new KalkVectorConstructor<float>(3);
@@ -130,7 +128,7 @@ namespace Kalk.Core.Modules
         public long CreateLong(object value = null) => value == null ? (long)0 : Engine.ToObject<long>(0, value);
 
         [KalkDoc("bool", CategoryTypeConstructors)]
-        public bool CreateBool(object value = null) => value != null && Engine.ToObject<bool>(0, value);
+        public KalkBool CreateBool(object value = null) => value != null && Engine.ToObject<KalkBool>(0, value);
 
         [KalkDoc("float", CategoryTypeConstructors)]
         public float CreateFloat(object value = null) => value == null ? 0.0f : Engine.ToObject<float>(0, value);
@@ -237,25 +235,19 @@ namespace Kalk.Core.Modules
         public KalkVector<ulong> CreateULong8(params object[] arguments) => ULong8Constructor.Invoke(Engine, arguments);        
         
         [KalkDoc("bool2", CategoryTypeConstructors)]
-        public KalkVector<bool> CreateBool2(params object[] arguments) => Bool2Constructor.Invoke(Engine, arguments);
+        public KalkVector<KalkBool> CreateBool2(params object[] arguments) => Bool2Constructor.Invoke(Engine, arguments);
 
         [KalkDoc("bool3", CategoryTypeConstructors)]
-        public KalkVector<bool> CreateBool3(params object[] arguments) => Bool3Constructor.Invoke(Engine, arguments);
+        public KalkVector<KalkBool> CreateBool3(params object[] arguments) => Bool3Constructor.Invoke(Engine, arguments);
 
         [KalkDoc("bool4", CategoryTypeConstructors)]
-        public KalkVector<bool> CreateBool4(params object[] arguments) => Bool4Constructor.Invoke(Engine, arguments);
+        public KalkVector<KalkBool> CreateBool4(params object[] arguments) => Bool4Constructor.Invoke(Engine, arguments);
 
         [KalkDoc("bool8", CategoryTypeConstructors)]
-        public KalkVector<bool> CreateBool8(params object[] arguments) => Bool8Constructor.Invoke(Engine, arguments);
+        public KalkVector<KalkBool> CreateBool8(params object[] arguments) => Bool8Constructor.Invoke(Engine, arguments);
 
         [KalkDoc("bool16", CategoryTypeConstructors)]
-        public KalkVector<bool> CreateBool16(params object[] arguments) => Bool16Constructor.Invoke(Engine, arguments);
-
-        [KalkDoc("bool32", CategoryTypeConstructors)]
-        public KalkVector<bool> CreateBool32(params object[] arguments) => Bool32Constructor.Invoke(Engine, arguments);
-
-        [KalkDoc("bool64", CategoryTypeConstructors)]
-        public KalkVector<bool> CreateBool64(params object[] arguments) => Bool64Constructor.Invoke(Engine, arguments);
+        public KalkVector<KalkBool> CreateBool16(params object[] arguments) => Bool16Constructor.Invoke(Engine, arguments);
 
         [KalkDoc("float2", CategoryTypeConstructors)]
         public KalkVector<float> CreateFloat2(params object[] arguments) => Float2Constructor.Invoke(Engine, arguments);
@@ -310,7 +302,7 @@ namespace Kalk.Core.Modules
                         case 8: return CreateBool8(arguments);
                         case 16: return CreateBool16(arguments);
                     }
-                    return new KalkVectorConstructor<bool>(dimension).Invoke(Engine, arguments);
+                    return new KalkVectorConstructor<KalkBool>(dimension).Invoke(Engine, arguments);
 
                 case "float":
                     switch (dimension)

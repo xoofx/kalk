@@ -5,15 +5,15 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".generated.cs" #>
 <# 
-    var types = new List<(string, string, int, int)>();
+    var types = new List<(string, string, int, int, string)>();
 
     foreach(var typeU in new string[] { "Bool", "Int", "Float", "Double" })
     {
         var type = typeU.ToLowerInvariant();
-        for(int y = 1; y <= 4; y++) {
-            for(int x = 1; x <= 4; x++) {
-                if (x == 1 && y == 1) continue;
-                types.Add((type, $"{typeU}{y}x{x}", y, x));
+        for(int y = 2; y <= 4; y++) {
+            for(int x = 2; x <= 4; x++) {
+                var genericType = typeU == "Bool" ? "KalkBool" : type;
+                types.Add((type, $"{typeU}{y}x{x}", y, x, genericType));
             }
         }
     }
@@ -38,13 +38,13 @@ namespace Kalk.Core.Modules
         private const string CategoryMatrixConstructors = "Type Matrix Constructors";
 
 <# foreach(var type in types) { #>
-        private static readonly KalkMatrixConstructor<<#= type.Item1 #>> <#= type.Item2 #>Constructor = new KalkMatrixConstructor<<#= type.Item1 #>>(<#= type.Item3 #>, <#= type.Item4 #>);
+        private static readonly KalkMatrixConstructor<<#= type.Item5 #>> <#= type.Item2 #>Constructor = new KalkMatrixConstructor<<#= type.Item5 #>>(<#= type.Item3 #>, <#= type.Item4 #>);
 <# } #>
 
 <# foreach(var type in types) { #>
         /// <summary>Creates a <#= type.Item3 #> (rows) x <#= type.Item4 #> (columns) matrix of <#= type.Item1 #>.</summary>
         [KalkDoc("<#= type.Item2.ToLowerInvariant() #>", CategoryMatrixConstructors)]
-        public KalkMatrix<<#= type.Item1 #>> Create<#= type.Item2 #>(params object[] arguments) => <#= type.Item2 #>Constructor.Invoke(Engine, arguments);
+        public KalkMatrix<<#= type.Item5 #>> Create<#= type.Item2 #>(params object[] arguments) => <#= type.Item2 #>Constructor.Invoke(Engine, arguments);
 <# } #>
     }
 }

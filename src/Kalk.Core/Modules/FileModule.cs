@@ -17,14 +17,14 @@ namespace Kalk.Core.Modules
         }
 
         [KalkDoc("file_exists", CategoryMiscFile)]
-        public bool FileExists(string path)
+        public KalkBool FileExists(string path)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             return File.Exists(Path.Combine(Environment.CurrentDirectory, path));
         }
 
         [KalkDoc("directory_exists", CategoryMiscFile)]
-        public bool DirectoryExists(string path)
+        public KalkBool DirectoryExists(string path)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             return Directory.Exists(Path.Combine(Environment.CurrentDirectory, path));

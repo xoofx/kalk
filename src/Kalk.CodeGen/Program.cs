@@ -350,6 +350,7 @@ namespace Kalk.CodeGen
                     desc.CSharpName = desc.Name;
                     desc.Names.Add(desc.Name);                    
                     desc.RealReturnType = sseMember.ReturnType.ToDisplayString();
+                    if (desc.RealReturnType == "bool") desc.RealReturnType = "KalkBool";
                     desc.ReturnType = method.ReturnType.IsConstructedGenericType ? "object" : desc.RealReturnType;
                     desc.GenericCompatibleRealReturnType = method.ReturnType.IsPointer ? "IntPtr" : desc.RealReturnType;
                     

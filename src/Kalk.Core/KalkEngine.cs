@@ -363,6 +363,12 @@ namespace Kalk.Core
 
             return base.ToObject(span, value, destinationType);
         }
+
+        public override bool ToBool(SourceSpan span, object value)
+        {
+            if (value is KalkBool kb) { return kb; }
+            return base.ToBool(span, value);
+        }
     }
 
     public delegate bool TryToObjectDelegate(SourceSpan span, object value, Type destinationType, out object newValue);

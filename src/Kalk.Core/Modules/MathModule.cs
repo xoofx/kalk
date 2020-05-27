@@ -45,9 +45,9 @@ namespace Kalk.Core
         private static readonly Func<double, double> CeilFunc = Math.Ceiling;
         private static readonly Func<double, double> TruncFunc= Math.Truncate;
         private readonly Func<object, object> SignFunc;
-        private static readonly Func<object, bool> IsFiniteFunc = IsFiniteFuncImpl;
-        private static readonly Func<object, bool> IsInfFunc = IsInfFuncImpl;
-        private static readonly Func<object, bool> IsNanFunc = IsNanFuncImpl;
+        private static readonly Func<object, KalkBool> IsFiniteFunc = IsFiniteFuncImpl;
+        private static readonly Func<object, KalkBool> IsInfFunc = IsInfFuncImpl;
+        private static readonly Func<object, KalkBool> IsNanFunc = IsNanFuncImpl;
 
         private static readonly Func<double, double> SaturateFunc = SaturateImpl;
         private readonly Random _random;
@@ -95,7 +95,7 @@ namespace Kalk.Core
         }
         
         [KalkDoc("all", CategoryMathFunctions)]
-        public bool All(object x)
+        public KalkBool All(object x)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
             if (x is IEnumerable it)
@@ -113,7 +113,7 @@ namespace Kalk.Core
         }
 
         [KalkDoc("any", CategoryMathFunctions)]
-        public bool Any(object x)
+        public KalkBool Any(object x)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
             if (x is IEnumerable it)
@@ -469,21 +469,21 @@ namespace Kalk.Core
             return x - Math.Truncate(x);
         }
 
-        private static bool IsFiniteFuncImpl(object arg)
+        private static KalkBool IsFiniteFuncImpl(object arg)
         {
             if (arg is float f32) return float.IsFinite(f32);
             if (arg is double f64) return double.IsFinite(f64);
             return true;
         }
 
-        private static bool IsInfFuncImpl(object arg)
+        private static KalkBool IsInfFuncImpl(object arg)
         {
             if (arg is float f32) return float.IsInfinity(f32);
             if (arg is double f64) return double.IsInfinity(f64);
             return false;
         }
 
-        private static bool IsNanFuncImpl(object arg)
+        private static KalkBool IsNanFuncImpl(object arg)
         {
             if (arg is float f32) return float.IsNaN(f32);
             if (arg is double f64) return double.IsNaN(f64);

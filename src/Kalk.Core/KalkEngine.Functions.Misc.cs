@@ -211,7 +211,7 @@ namespace Kalk.Core
         }
         
         [KalkDoc("contains", CategoryMisc)]
-        public bool Contains(object value, object match)
+        public KalkBool Contains(object value, object match)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
             if (match == null) throw new ArgumentNullException(nameof(match));
