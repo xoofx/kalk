@@ -315,13 +315,6 @@ namespace Kalk.Core
             return new ScriptRange(new LineReader(() => new StringReader(text)));
         }
         
-        [KalkDoc("parse_csv", CategoryMisc)]
-        public ScriptRange ParseCsv(string text, bool headers = true)
-        {
-            if (text == null) throw new ArgumentNullException(nameof(text));
-            return new ScriptRange(new KalkCsvReader(() => new StringReader(text), headers));
-        }
-        
         private object ReplaceImpl(object value, object match, object by)
         {
             var result = (bool) ScriptBinaryExpression.Evaluate(this, CurrentSpan, ScriptBinaryOperator.CompareEqual, value, match);
@@ -337,7 +330,7 @@ namespace Kalk.Core
                     throw new ArgumentException($"Cannot convert a string to hexadecimal inside a list", nameof(value));
                 case string str:
                 {
-                    var array = new ScriptArray<byte>();
+                    var array = new List<byte>();
                     int count = 0;
                     int hexa = 0;
                     for (int i = 0; i < str.Length; i++)
@@ -371,24 +364,67 @@ namespace Kalk.Core
                         throw new ArgumentException($"Invalid odd number of hexadecimal character found. Expecting an hexadecimal character.", nameof(value));
                     }
 
-                    return array;
+                    if (array.Count <= 8)
+                    {
+                        long ulongValue = 0;
+                        unsafe
+                        {
+                            for (int i = 0; i < array.Count; i++)
+                            {
+                                ((byte*)&ulongValue)[i] = array[i];
+                            }
+                        }
+                        return ulongValue;
+                    }
+
+                    return new KalkNativeBuffer(array);
                 }
                 case byte vbyte:
                     return HexaFromBytes(1, vbyte, prefix, separator);
                 case sbyte vsbyte:
                     return HexaFromBytes(1, vsbyte, prefix, separator);
                 case short vshort:
-                    return HexaFromBytes(2, vshort, prefix, separator);
+                {
+                    int size = 2;
+                    if (vshort >= sbyte.MinValue && vshort <= byte.MaxValue) size = 1; 
+                    return HexaFromBytes(size, vshort, prefix, separator);
+                }
                 case ushort vushort:
-                    return HexaFromBytes(2, vushort, prefix, separator);
+                {
+                    int size = 2;
+                    if (vushort <= byte.MaxValue) size = 1; 
+                    return HexaFromBytes(size, vushort, prefix, separator);
+                }
                 case int vint:
-                    return HexaFromBytes(4, vint, prefix, separator);
+                {
+                    int size = 4;
+                    if (vint >= sbyte.MinValue && vint <= byte.MaxValue) size = 1; 
+                    else if (vint >= short.MinValue && vint <= ushort.MaxValue) size = 2; 
+                    return HexaFromBytes(size, vint, prefix, separator);
+                }
                 case uint vuint:
-                    return HexaFromBytes(4, vuint, prefix, separator);
+                {
+                    int size = 4;
+                    if (vuint <= byte.MaxValue) size = 1; 
+                    else if (vuint <= ushort.MaxValue) size = 2; 
+                    return HexaFromBytes(size, vuint, prefix, separator);
+                }
                 case long vlong:
-                    return HexaFromBytes(8, vlong, prefix, separator);
+                {
+                    int size = 8;
+                    if (vlong >= sbyte.MinValue && vlong <= byte.MaxValue) size = 1; 
+                    else if (vlong >= short.MinValue && vlong <= ushort.MaxValue) size = 2; 
+                    else if (vlong >= int.MinValue && vlong <= uint.MaxValue) size = 4; 
+                    return HexaFromBytes(size, vlong, prefix, separator);
+                }
                 case ulong vulong:
-                    return HexaFromBytes(8, vulong, prefix, separator);
+                {
+                    int size = 8;
+                    if (vulong <= byte.MaxValue) size = 1; 
+                    else if (vulong <= ushort.MaxValue) size = 2; 
+                    else if (vulong <= uint.MaxValue) size = 4; 
+                    return HexaFromBytes(size, vulong, prefix, separator);
+                }
                 case float vfloat:
                 {
                     var floatAsInt = BitConverter.SingleToInt32Bits(vfloat);

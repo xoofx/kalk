@@ -365,7 +365,65 @@ namespace Kalk.Core
         object IList.this[int index]
         {
             get => GetRow(index);
-            set => SetRow(index, (KalkVector<T>)value);
+            set
+            {
+                var tValue = value as KalkVector<T>;
+                if (value == null)
+                {
+                    tValue = new KalkVector<T>(Count);
+                }
+                else
+                {
+                    if (tValue == null)
+                    {
+                        if (value is KalkColor color)
+                        {
+                            if (color is KalkColorRgb && (ColumnCount < 3 || ColumnCount > 4))
+                            {
+                                throw new ArgumentException($"Cannot set a rgb color for a column count {ColumnCount}. Expecting 3 or 4 columns.");
+                            }
+
+                            if (color is KalkColorRgba && (ColumnCount != 4))
+                            {
+                                throw new ArgumentException($"Cannot set a rgba color for a column count {ColumnCount}. Expecting 4 columns.");
+                            }
+
+                            var colorVector = color.GetFloatVector(ColumnCount);
+                            tValue = new KalkVector<T>(ColumnCount);
+                            for (int i = 0; i < ColumnCount; i++)
+                            {
+                                tValue[i] = (T) Convert.ChangeType(colorVector[i], typeof(T));
+                            }
+                        }
+                        else if (value is KalkVector vector)
+                        {
+                            if (vector.Length != ColumnCount)
+                            {
+                                throw new ArgumentException($"Invalid vector length  {vector.Length}. Expecting {ColumnCount} columns.");
+                            }
+                            
+                            tValue = new KalkVector<T>(ColumnCount);
+                            for (int i = 0; i < ColumnCount; i++)
+                            {
+                                tValue[i] = (T) Convert.ChangeType(vector.GetComponent(i), typeof(T));
+                            }
+                        }
+                        else if (value.GetType().IsNumber())
+                        {
+                            tValue = new KalkVector<T>(ColumnCount);
+                            for (int i = 0; i < ColumnCount; i++)
+                            {
+                                tValue[i] = (T) Convert.ChangeType(value, typeof(T));
+                            }
+                        }
+                        else
+                        {
+                            throw new ArgumentException($"Invalid type for setting a row {value.GetType().ScriptPrettyName()}.");
+                        }
+                    }
+                }
+                SetRow(index, tValue);
+            }
         }
 
         public override bool TryGetValue(TemplateContext context, SourceSpan span, string member, out object result)

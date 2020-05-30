@@ -38,6 +38,7 @@ namespace Kalk.Core
             var allModule = GetOrCreateModule<AllModule>();
             allModule.Modules.Add(GetOrCreateModule<HardwareIntrinsicsModule>());
             allModule.Modules.Add(GetOrCreateModule<FileModule>());
+            allModule.Modules.Add(GetOrCreateModule<CsvModule>());
             allModule.Modules.Add(GetOrCreateModule<StringModule>());
             allModule.Modules.Add(GetOrCreateModule<CurrencyModule>());
             allModule.Modules.Add(GetOrCreateModule<StandardUnitsModule>());

@@ -7,7 +7,7 @@ namespace Kalk.Core.Modules
 {
     public partial class StringModule : KalkModuleWithFunctions
     {
-        private const string CategoryString = "Text Functions";
+        public const string CategoryString = "Text Functions";
 
         public StringModule() : base("Strings")
         {

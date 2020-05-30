@@ -87,7 +87,7 @@ namespace Kalk.Core.Modules
             Engine.LoadSystemFile(Path.Combine("Modules", "Vectors", "colorspaces.kalk"));
         }
         
-        [KalkDoc("length", CategoryTypeConstructors)]
+        [KalkDoc("length", CategoryMathVectorMatrixFunctions)]
         public object Length(object x)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
@@ -99,10 +99,10 @@ namespace Kalk.Core.Modules
             return _mathModule.Abs(new KalkCompositeValue(x));
         }
 
-        [KalkDoc("dot", CategoryTypeConstructors)]
+        [KalkDoc("dot", CategoryMathVectorMatrixFunctions)]
         public static object Dot(KalkVector x, KalkVector y) => KalkVector.Dot(x, y);
 
-        [KalkDoc("cross", CategoryTypeConstructors)]
+        [KalkDoc("cross", CategoryMathVectorMatrixFunctions)]
         public static object Cross(KalkVector x, KalkVector y) => KalkVector.Cross(x, y);
 
         [KalkDoc("byte", CategoryTypeConstructors)]
@@ -136,147 +136,147 @@ namespace Kalk.Core.Modules
         [KalkDoc("double", CategoryTypeConstructors)]
         public double CreateDouble(object value = null) => value == null ? 0.0 : Engine.ToObject<double>(0, value);
 
-        [KalkDoc("byte16", CategoryTypeConstructors)]
+        [KalkDoc("byte16", CategoryVectorTypeConstructors)]
         public KalkVector<byte> CreateByte16(params object[] arguments) => Byte16Constructor.Invoke(Engine, arguments);
-        [KalkDoc("byte32", CategoryTypeConstructors)]
+        [KalkDoc("byte32", CategoryVectorTypeConstructors)]
         public KalkVector<byte> CreateByte32(params object[] arguments) => Byte32Constructor.Invoke(Engine, arguments);
-        [KalkDoc("byte64", CategoryTypeConstructors)]
+        [KalkDoc("byte64", CategoryVectorTypeConstructors)]
         public KalkVector<byte> CreateByte64(params object[] arguments) => Byte64Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("sbyte16", CategoryTypeConstructors)]
+        [KalkDoc("sbyte16", CategoryVectorTypeConstructors)]
         public KalkVector<sbyte> CreateSByte16(params object[] arguments) => SByte16Constructor.Invoke(Engine, arguments);
-        [KalkDoc("sbyte32", CategoryTypeConstructors)]
+        [KalkDoc("sbyte32", CategoryVectorTypeConstructors)]
         public KalkVector<sbyte> CreateSByte32(params object[] arguments) => SByte32Constructor.Invoke(Engine, arguments);
-        [KalkDoc("sbyte64", CategoryTypeConstructors)]
+        [KalkDoc("sbyte64", CategoryVectorTypeConstructors)]
         public KalkVector<sbyte> CreateSByte64(params object[] arguments) => SByte64Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("short2", CategoryTypeConstructors)]
+        [KalkDoc("short2", CategoryVectorTypeConstructors)]
         public KalkVector<short> CreateShort2(params object[] arguments) => Short2Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("short4", CategoryTypeConstructors)]
+        [KalkDoc("short4", CategoryVectorTypeConstructors)]
         public KalkVector<short> CreateShort4(params object[] arguments) => Short4Constructor.Invoke(Engine, arguments);
         
-        [KalkDoc("short8", CategoryTypeConstructors)]
+        [KalkDoc("short8", CategoryVectorTypeConstructors)]
         public KalkVector<short> CreateShort8(params object[] arguments) => Short8Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("short16", CategoryTypeConstructors)]
+        [KalkDoc("short16", CategoryVectorTypeConstructors)]
         public KalkVector<short> CreateShort16(params object[] arguments) => Short16Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("short32", CategoryTypeConstructors)]
+        [KalkDoc("short32", CategoryVectorTypeConstructors)]
         public KalkVector<short> CreateShort32(params object[] arguments) => Short32Constructor.Invoke(Engine, arguments);
 
 
-        [KalkDoc("ushort2", CategoryTypeConstructors)]
+        [KalkDoc("ushort2", CategoryVectorTypeConstructors)]
         public KalkVector<ushort> CreateUShort2(params object[] arguments) => UShort2Constructor.Invoke(Engine, arguments);
-        [KalkDoc("ushort4", CategoryTypeConstructors)]
+        [KalkDoc("ushort4", CategoryVectorTypeConstructors)]
         public KalkVector<ushort> CreateUShort4(params object[] arguments) => UShort4Constructor.Invoke(Engine, arguments);
-        [KalkDoc("ushort8", CategoryTypeConstructors)]
+        [KalkDoc("ushort8", CategoryVectorTypeConstructors)]
         public KalkVector<ushort> CreateUShort8(params object[] arguments) => UShort8Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("ushort16", CategoryTypeConstructors)]
+        [KalkDoc("ushort16", CategoryVectorTypeConstructors)]
         public KalkVector<ushort> CreateUShort16(params object[] arguments) => UShort16Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("ushort32", CategoryTypeConstructors)]
+        [KalkDoc("ushort32", CategoryVectorTypeConstructors)]
         public KalkVector<ushort> CreateUShort32(params object[] arguments) => UShort32Constructor.Invoke(Engine, arguments);
         
-        [KalkDoc("int2", CategoryTypeConstructors)]
+        [KalkDoc("int2", CategoryVectorTypeConstructors)]
         public KalkVector<int> CreateInt2(params object[] arguments) => Int2Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("int3", CategoryTypeConstructors)]
+        [KalkDoc("int3", CategoryVectorTypeConstructors)]
         public KalkVector<int> CreateInt3(params object[] arguments) => Int3Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("int4", CategoryTypeConstructors)]
+        [KalkDoc("int4", CategoryVectorTypeConstructors)]
         public KalkVector<int> CreateInt4(params object[] arguments) => Int4Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("int8", CategoryTypeConstructors)]
+        [KalkDoc("int8", CategoryVectorTypeConstructors)]
         public KalkVector<int> CreateInt8(params object[] arguments) => Int8Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("int16", CategoryTypeConstructors)]
+        [KalkDoc("int16", CategoryVectorTypeConstructors)]
         public KalkVector<int> CreateInt16(params object[] arguments) => Int16Constructor.Invoke(Engine, arguments);
 
         
-        [KalkDoc("uint2", CategoryTypeConstructors)]
+        [KalkDoc("uint2", CategoryVectorTypeConstructors)]
         public KalkVector<uint> CreateUInt2(params object[] arguments) => UInt2Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("uint3", CategoryTypeConstructors)]
+        [KalkDoc("uint3", CategoryVectorTypeConstructors)]
         public KalkVector<uint> CreateUInt3(params object[] arguments) => UInt3Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("uint4", CategoryTypeConstructors)]
+        [KalkDoc("uint4", CategoryVectorTypeConstructors)]
         public KalkVector<uint> CreateUInt4(params object[] arguments) => UInt4Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("uint8", CategoryTypeConstructors)]
+        [KalkDoc("uint8", CategoryVectorTypeConstructors)]
         public KalkVector<uint> CreateUInt8(params object[] arguments) => UInt8Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("uint16", CategoryTypeConstructors)]
+        [KalkDoc("uint16", CategoryVectorTypeConstructors)]
         public KalkVector<uint> CreateUInt16(params object[] arguments) => UInt16Constructor.Invoke(Engine, arguments);
         
-        [KalkDoc("long2", CategoryTypeConstructors)]
+        [KalkDoc("long2", CategoryVectorTypeConstructors)]
         public KalkVector<long> CreateLong2(params object[] arguments) => Long2Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("long3", CategoryTypeConstructors)]
+        [KalkDoc("long3", CategoryVectorTypeConstructors)]
         public KalkVector<long> CreateLong3(params object[] arguments) => Long3Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("long4", CategoryTypeConstructors)]
+        [KalkDoc("long4", CategoryVectorTypeConstructors)]
         public KalkVector<long> CreateLong4(params object[] arguments) => Long4Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("long8", CategoryTypeConstructors)]
+        [KalkDoc("long8", CategoryVectorTypeConstructors)]
         public KalkVector<long> CreateLong8(params object[] arguments) => Long8Constructor.Invoke(Engine, arguments);        
         
-        [KalkDoc("ulong2", CategoryTypeConstructors)]
+        [KalkDoc("ulong2", CategoryVectorTypeConstructors)]
         public KalkVector<ulong> CreateULong2(params object[] arguments) => ULong2Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("ulong3", CategoryTypeConstructors)]
+        [KalkDoc("ulong3", CategoryVectorTypeConstructors)]
         public KalkVector<ulong> CreateULong3(params object[] arguments) => ULong3Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("ulong4", CategoryTypeConstructors)]
+        [KalkDoc("ulong4", CategoryVectorTypeConstructors)]
         public KalkVector<ulong> CreateULong4(params object[] arguments) => ULong4Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("ulong8", CategoryTypeConstructors)]
+        [KalkDoc("ulong8", CategoryVectorTypeConstructors)]
         public KalkVector<ulong> CreateULong8(params object[] arguments) => ULong8Constructor.Invoke(Engine, arguments);        
         
-        [KalkDoc("bool2", CategoryTypeConstructors)]
+        [KalkDoc("bool2", CategoryVectorTypeConstructors)]
         public KalkVector<KalkBool> CreateBool2(params object[] arguments) => Bool2Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("bool3", CategoryTypeConstructors)]
+        [KalkDoc("bool3", CategoryVectorTypeConstructors)]
         public KalkVector<KalkBool> CreateBool3(params object[] arguments) => Bool3Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("bool4", CategoryTypeConstructors)]
+        [KalkDoc("bool4", CategoryVectorTypeConstructors)]
         public KalkVector<KalkBool> CreateBool4(params object[] arguments) => Bool4Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("bool8", CategoryTypeConstructors)]
+        [KalkDoc("bool8", CategoryVectorTypeConstructors)]
         public KalkVector<KalkBool> CreateBool8(params object[] arguments) => Bool8Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("bool16", CategoryTypeConstructors)]
+        [KalkDoc("bool16", CategoryVectorTypeConstructors)]
         public KalkVector<KalkBool> CreateBool16(params object[] arguments) => Bool16Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("float2", CategoryTypeConstructors)]
+        [KalkDoc("float2", CategoryVectorTypeConstructors)]
         public KalkVector<float> CreateFloat2(params object[] arguments) => Float2Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("float3", CategoryTypeConstructors)]
+        [KalkDoc("float3", CategoryVectorTypeConstructors)]
         public KalkVector<float> CreateFloat3(params object[] arguments) => Float3Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("float4", CategoryTypeConstructors)]
+        [KalkDoc("float4", CategoryVectorTypeConstructors)]
         public KalkVector<float> CreateFloat4(params object[] arguments) => Float4Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("float8", CategoryTypeConstructors)]
+        [KalkDoc("float8", CategoryVectorTypeConstructors)]
         public KalkVector<float> CreateFloat8(params object[] arguments) => Float8Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("float16", CategoryTypeConstructors)]
+        [KalkDoc("float16", CategoryVectorTypeConstructors)]
         public KalkVector<float> CreateFloat16(params object[] arguments) => Float16Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("double2", CategoryTypeConstructors)]
+        [KalkDoc("double2", CategoryVectorTypeConstructors)]
         public KalkVector<double> CreateDouble2(params object[] arguments) => Double2Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("double3", CategoryTypeConstructors)]
+        [KalkDoc("double3", CategoryVectorTypeConstructors)]
         public KalkVector<double> CreateDouble3(params object[] arguments) => Double3Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("double4", CategoryTypeConstructors)]
+        [KalkDoc("double4", CategoryVectorTypeConstructors)]
         public KalkVector<double> CreateDouble4(params object[] arguments) => Double4Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("double8", CategoryTypeConstructors)]
+        [KalkDoc("double8", CategoryVectorTypeConstructors)]
         public KalkVector<double> CreateDouble8(params object[] arguments) => Double8Constructor.Invoke(Engine, arguments);
 
-        [KalkDoc("vector", CategoryTypeConstructors)]
+        [KalkDoc("vector", CategoryVectorTypeConstructors)]
         public object CreateVector(ScriptVariable name, int dimension, params object[] arguments)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
@@ -330,10 +330,10 @@ namespace Kalk.Core.Modules
         }
 
 
-        [KalkDoc("rgb", CategoryTypeConstructors)]
+        [KalkDoc("rgb", CategoryVectorTypeConstructors)]
         public KalkColorRgb CreateRgb(params object[] arguments) => (KalkColorRgb)RgbConstructor.Invoke(Engine, arguments);
 
-        [KalkDoc("rgba", CategoryTypeConstructors)]
+        [KalkDoc("rgba", CategoryVectorTypeConstructors)]
         public KalkColorRgba CreateRgba(params object[] arguments) => (KalkColorRgba)RgbaConstructor.Invoke(Engine, arguments);
         
         [KalkDoc("colors", KalkEngine.CategoryMisc)]

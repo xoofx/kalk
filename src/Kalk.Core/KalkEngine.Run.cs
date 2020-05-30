@@ -47,6 +47,8 @@ namespace Kalk.Core
                 }
             }
 
+            Directory.CreateDirectory(KalkUserFolder);
+
             Version();
             WriteHighlightLine("# Type `help` for more information and at https://github.com/xoofx/kalk");
 

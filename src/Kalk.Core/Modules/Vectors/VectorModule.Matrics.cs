@@ -35,6 +35,27 @@ namespace Kalk.Core.Modules
 
             throw new ArgumentException($"Invalid argument type {Engine.GetTypeName(x)}. Expecting a matrix or a vector type.", nameof(x));
         }
+        
+        [KalkDoc("matrix", CategoryMatrixConstructors)]
+        public object CreateMatrix(ScriptVariable name, int row, int column, params object[] arguments)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (row <= 1) throw new ArgumentOutOfRangeException(nameof(row), $"Invalid row count {row}. Expecting a value > 1.");
+            if (column <= 1) throw new ArgumentOutOfRangeException(nameof(column), $"Invalid column count {column}. Expecting a value > 1.");
+            switch (name.Name)
+            {
+                case "int":
+                    return new KalkMatrixConstructor<int>(row, column).Invoke(Engine, arguments);
+                case "bool":
+                    return new KalkMatrixConstructor<KalkBool>(row, column).Invoke(Engine, arguments);
+                case "float":
+                    return new KalkMatrixConstructor<float>(row, column).Invoke(Engine, arguments);
+                case "double":
+                    return new KalkMatrixConstructor<double>(row, column).Invoke(Engine, arguments);
+            }
+
+            throw new ArgumentException($"Unsupported matrix type {name.Name}. Only bool, int, float and double are supported", nameof(name));
+        }
 
         [KalkDoc("row", CategoryMathVectorMatrixFunctions)]
         public KalkVector GetRow(KalkMatrix x, int index)

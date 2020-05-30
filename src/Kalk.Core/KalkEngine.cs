@@ -48,6 +48,7 @@ namespace Kalk.Core
             Console.OutputEncoding = Encoding.UTF8;
             EnableEngineOutput = true;
             EchoEnabled = true;
+            KalkUserFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile, Environment.SpecialFolderOption.DoNotVerify), ".kalk");
 
             HighlightOutput = new ConsoleText();
             InputReader = Console.In;
@@ -118,7 +119,11 @@ namespace Kalk.Core
 
         private ConsoleText HighlightOutput { get; }
 
+        public string KalkUserFolder { get; set; }
+
         public string KalkEngineFolder { get; }
+
+        public Func<string, Stream> GetAppContentStream;
 
         internal ConsoleTextWriter BufferedOutputWriter { get; private set; }
 

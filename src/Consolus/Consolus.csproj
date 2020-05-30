@@ -4,4 +4,6 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 
+  <Target Name="_CheckForGenerateAppxPackageOnBuild" />
+
 </Project>

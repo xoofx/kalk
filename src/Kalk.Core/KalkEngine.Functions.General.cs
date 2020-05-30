@@ -121,6 +121,21 @@ namespace Kalk.Core
             }
         }
         
+        [KalkDoc("printh", CategoryGeneral)]
+        public void Printh(object value)
+        {
+            var previousEcho = EchoEnabled;
+            try
+            {
+                EchoEnabled = true;
+                WriteHighlightLine(ObjectToString(value), highlight: true);
+            }
+            finally
+            {
+                EchoEnabled = previousEcho;
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>

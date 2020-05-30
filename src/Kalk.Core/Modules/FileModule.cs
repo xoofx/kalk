@@ -9,7 +9,7 @@ namespace Kalk.Core.Modules
 {
     public partial class FileModule : KalkModuleWithFunctions
     {
-        private const string CategoryMiscFile = "Misc File Functions";
+        public const string CategoryMiscFile = "Misc File Functions";
 
         public FileModule() : base("Files")
         {
@@ -154,16 +154,6 @@ namespace Kalk.Core.Modules
             return null;
         }
 
-        [KalkDoc("load_csv", CategoryMiscFile)]
-        public ScriptRange LoadCsv(string path, bool headers = true)
-        {
-            var fullPath = AssertReadFile(path);
-            return new ScriptRange(new KalkCsvReader(() =>
-            {
-                var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                return new StreamReader(stream);
-            }, headers));
-        }
 
         public static string AssertWriteFile(string path)
         {
