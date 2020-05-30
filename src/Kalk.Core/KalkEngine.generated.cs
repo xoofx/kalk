@@ -160,7 +160,7 @@ namespace Kalk.Core
             RegisterAction("printh", (Action<object>)Printh);
             RegisterAction("help", (Action<Scriban.Syntax.ScriptExpression>)Help);
             RegisterAction("reset", (Action)Reset);
-            RegisterAction("version", (Action)Version);
+            RegisterAction("version", (Action)ShowVersion);
             RegisterAction("list", (Action)List);
             RegisterAction("del", (Action<Scriban.Syntax.ScriptVariable>)DeleteVariable);
             RegisterAction("exit", (Action)Exit);

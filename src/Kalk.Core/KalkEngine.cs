@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -55,6 +56,10 @@ namespace Kalk.Core
             OutputWriter = Console.Out;
             ErrorWriter = Console.Error;
             IsOutputSupportHighlighting = ConsoleHelper.SupportEscapeSequences;
+
+            // Fetch version
+            var assemblyInfoVersion = (AssemblyInformationalVersionAttribute)typeof(KalkEngine).Assembly.GetCustomAttribute(typeof(AssemblyInformationalVersionAttribute));
+            Version = assemblyInfoVersion.InformationalVersion;
 
             Builtins = BuiltinObject;
             ((KalkObjectWithAlias)Builtins).Engine = this;
@@ -118,6 +123,8 @@ namespace Kalk.Core
         }
 
         private ConsoleText HighlightOutput { get; }
+
+        public string Version { get;  }
 
         public string KalkUserFolder { get; set; }
 

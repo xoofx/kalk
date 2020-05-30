@@ -38,7 +38,7 @@ namespace Kalk.Core
                 {
                     if (ConsoleRepl.IsSelf())
                     {
-                        Console.Title = "kalk 1.0.0";
+                        Console.Title = $"kalk {Version}";
                     }
                 }
                 catch
@@ -49,7 +49,7 @@ namespace Kalk.Core
 
             Directory.CreateDirectory(KalkUserFolder);
 
-            Version();
+            ShowVersion();
             WriteHighlightLine("# Type `help` for more information and at https://github.com/xoofx/kalk");
 
             if (Repl != null)

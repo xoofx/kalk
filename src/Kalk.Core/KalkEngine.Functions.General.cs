@@ -242,9 +242,9 @@ namespace Kalk.Core
         /// Prints the version of kalk.
         /// </summary>
         [KalkDoc("version", CategoryGeneral)]
-        public void Version()
+        public void ShowVersion()
         {
-            var text = $"{ConsoleStyle.BrightRed}k{ConsoleStyle.BrightYellow}a{ConsoleStyle.BrightGreen}l{ConsoleStyle.BrightCyan}k{ConsoleStyle.Reset}  1.0.0 - Copyright (c) 2020 Alexandre Mutel";
+            var text = $"{ConsoleStyle.BrightRed}k{ConsoleStyle.BrightYellow}a{ConsoleStyle.BrightGreen}l{ConsoleStyle.BrightCyan}k{ConsoleStyle.Reset} {Version} - Copyright (c) 2020 Alexandre Mutel";
             WriteHighlightLine(text, false);
         }
 
