@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Globalization;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Xml.XPath;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public readonly struct KalkComplex : IScriptCustomType
+    public struct KalkComplex : IScriptCustomType, IKalkSpannable
     {
-        private readonly Complex _value;
+        private Complex _value;
         private const double MaxRoundToZero = 1e-14;
 
         public KalkComplex(double real, double im)
@@ -31,8 +31,14 @@ namespace Kalk.Core
         
         public double Im => _value.Imaginary;
 
+        public double Phase => _value.Phase;
+
+        public double Magnitude => _value.Magnitude;
+        
         public bool HasIm => _value.Imaginary > MaxRoundToZero;
         
+        internal Complex Value => _value;
+
         public bool TryEvaluate(TemplateContext context, SourceSpan span, ScriptBinaryOperator op, SourceSpan leftSpan, object leftValue, SourceSpan rightSpan, object rightValue, out object result)
         {
             result = null;
@@ -159,8 +165,18 @@ namespace Kalk.Core
             return builder.ToString();
         }
 
+        public Span<byte> AsSpan()
+        {
+            return MemoryMarshal.CreateSpan(ref Unsafe.As<KalkComplex, byte>(ref Unsafe.AsRef(this)), Unsafe.SizeOf<KalkComplex>());
+        }
+
         public bool TryConvertTo(TemplateContext context, SourceSpan span, Type type, out object value)
         {
+            if (type == typeof(object))
+            {
+                value = this;
+                return true;
+            }
             if (type == typeof(int))
             {
                 if (HasIm) throw new ScriptRuntimeException(span, $"Cannot convert {this} to an integer as it has an imaginary part.");

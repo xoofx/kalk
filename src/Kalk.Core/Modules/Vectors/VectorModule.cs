@@ -6,7 +6,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core.Modules
 {
-    public partial class VectorModule : KalkModuleWithFunctions
+    public sealed partial class VectorModule : KalkModuleWithFunctions
     {
         public const string CategoryTypeConstructors = "Type Constructors";
         public const string CategoryVectorTypeConstructors = "Type Vector Constructors";
@@ -97,6 +97,12 @@ namespace Kalk.Core.Modules
                 return _mathModule.Sqrt(new KalkDoubleValue(KalkVector.Dot(v, v)));
             }
             return _mathModule.Abs(new KalkCompositeValue(x));
+        }
+
+        [KalkDoc("normalize", CategoryMathVectorMatrixFunctions)]
+        public object Normalize(object x)
+        {
+            return ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.Divide, x, Length(x));
         }
 
         [KalkDoc("dot", CategoryMathVectorMatrixFunctions)]

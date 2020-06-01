@@ -25,6 +25,8 @@ namespace Kalk.Core
 
         public abstract object GetComponent(int index);
 
+        public abstract void SetComponent(int index, object value);
+
         public abstract KalkVector Clone();
 
         protected abstract KalkVector GenericCross(KalkVector y);
@@ -109,6 +111,11 @@ namespace Kalk.Core
         public override object GetComponent(int index)
         {
             return _values[index];
+        }
+
+        public override void SetComponent(int index, object value)
+        {
+            _values[index] = value is T tValue ? tValue : (T)Convert.ChangeType(value, typeof(T));
         }
 
         protected override object GenericDot(KalkVector y)

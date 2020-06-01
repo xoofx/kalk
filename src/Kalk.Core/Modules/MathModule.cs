@@ -39,12 +39,17 @@ namespace Kalk.Core
         private static readonly Func<double, double> Exp2Func = x => Math.Pow(2, x);
 
         private static readonly Func<double, double> FracFunc = FracImpl;
+        private static readonly Func<double, double> FracSignedFunc = FracSignedImpl;
 
         private static readonly Func<double, double> RoundFunc = Math.Round;
         private static readonly Func<double, double> FloorFunc= Math.Floor;
         private static readonly Func<double, double> CeilFunc = Math.Ceiling;
         private static readonly Func<double, double> TruncFunc= Math.Truncate;
         private readonly Func<object, object> SignFunc;
+
+        private static readonly Func<double, double> RadiansFunc = x => x * Math.PI / 180.0;
+        private static readonly Func<double, double> DegreesFunc = x => x * 180.0 / Math.PI;
+
         private static readonly Func<object, KalkBool> IsFiniteFunc = IsFiniteFuncImpl;
         private static readonly Func<object, KalkBool> IsInfFunc = IsInfFuncImpl;
         private static readonly Func<object, KalkBool> IsNanFunc = IsNanFuncImpl;
@@ -156,7 +161,32 @@ namespace Kalk.Core
             }
 
         }
+        
+        /// <summary>
+        /// Splits the value x into fractional and integer parts, each of which has the same sign as x.
+        /// </summary>
+        [KalkDoc("modf", CategoryMathFunctions)]
+        public ScriptArray Modf(KalkCompositeValue x)
+        {
+            return new ScriptArray(2)
+            {
+                x.TransformArg(Engine, TruncFunc),
+                x.TransformArg(Engine, FracSignedFunc)
+            };
+        }
 
+        /// <summary>
+        /// Converts x from degrees to radians.
+        /// </summary>
+        [KalkDoc("radians", CategoryMathFunctions)]
+        public object Radians(KalkCompositeValue x) => x.TransformArg(Engine, RadiansFunc);
+
+        /// <summary>
+        /// Converts x from radians to degrees.
+        /// </summary>
+        [KalkDoc("degrees", CategoryMathFunctions)]
+        public object Degrees(KalkCompositeValue x) => x.TransformArg(Engine, DegreesFunc);
+        
         /// <summary>
         /// Returns an integer that indicates the sign of a number.
         /// </summary>
@@ -342,6 +372,29 @@ namespace Kalk.Core
             });
         }
 
+        [KalkDoc("clamp", CategoryMathFunctions)]
+        public object Clamp(KalkDoubleValue x, KalkDoubleValue min, KalkDoubleValue max)
+        {
+            var (xValues, minValues, maxValues) = GetTripleValues(x, min, max, nameof(x), nameof(min), nameof(max));
+            int index = 0;
+            return x.TransformArg(Engine, (double xv) =>
+            {
+                var minv = minValues[index];
+                var maxv = maxValues[index];
+                index++;
+                return ClampImpl(xv, minv, maxv);
+            });
+        }
+
+        [KalkDoc("real", CategoryMathFunctions)]
+        public double Real(KalkComplex x) => x.Re;
+
+        [KalkDoc("imag", CategoryMathFunctions)]
+        public double Imag(KalkComplex x) => x.Im;
+
+        [KalkDoc("phase", CategoryMathFunctions)]
+        public double Phase(KalkComplex x) => x.Phase;
+        
         private (List<double>, List<double>) GetPairValues(KalkDoubleValue x, KalkDoubleValue y, string nameofx = "x", string nameofy = "y")
         {
             var xValues = new List<double>();
@@ -466,6 +519,11 @@ namespace Kalk.Core
             {
                 return 1.0 + x + Math.Truncate(-x);
             }
+            return x - Math.Truncate(x);
+        }
+
+        private static double FracSignedImpl(double x)
+        {
             return x - Math.Truncate(x);
         }
 
@@ -619,5 +677,7 @@ namespace Kalk.Core
         }
 
         public static double SaturateImpl(double x) => x < 0.0 ? 0.0 : x > 1.0 ? 1.0 : x;
+
+        public static double ClampImpl(double x, double min, double max) => Math.Min(Math.Max(x, min), max);
     }
 }
