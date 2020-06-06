@@ -34,6 +34,52 @@ namespace Kalk.Tests
     public partial class MathModuleTests : KalkTestBase
     {
         /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Fib(Kalk.Core.KalkIntValue)"/> or `fib`.
+        /// </summary>
+        [TestCase(@"fib 50", @"# fib(50)
+out = 12586269025", Category = "Math Functions")]
+        public static void Test_fib(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.ComplexNumber"/> or `i`.
+        /// </summary>
+        [TestCase(@"1 + 2i", @"# 1 + 2 * i
+out = 1 + 2i", Category = "Math Functions")]
+        public static void Test_i(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.All(System.Object)"/> or `all`.
+        /// </summary>
+        [TestCase(@"all(bool4(true, false, true, false))
+all(bool4(true, true, true, true))
+all([0,1,0,2])
+all([1,1,1,1])", @"# all(bool4(true, false, true, false))
+out = false
+# all(bool4(true, true, true, true))
+out = true
+# all([0,1,0,2])
+out = false
+# all([1,1,1,1])
+out = true", Category = "Math Functions")]
+        public static void Test_all(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Any(System.Object)"/> or `any`.
+        /// </summary>
+        [TestCase(@"any(bool4(true, false, true, false))
+any(bool4(false, false, false, false))
+any([0,1,0,2])
+any([0,0,0,0])", @"# any(bool4(true, false, true, false))
+out = true
+# any(bool4(false, false, false, false))
+out = false
+# any([0,1,0,2])
+out = true
+# any([0,0,0,0])
+out = false", Category = "Math Functions")]
+        public static void Test_any(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
         /// Test for <see cref="M:Kalk.Core.MathModule.Abs(Kalk.Core.KalkCompositeValue)"/> or `abs`.
         /// </summary>
         [TestCase(@"abs(-1)

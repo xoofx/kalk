@@ -840,6 +840,9 @@ namespace {{ module.Namespace }}
                 {{~ if item.Returns ~}}
                 descriptor.Returns = @""{{ item.Returns | string.replace '""' '""""' }}"";
                 {{~ end ~}}
+                {{~ if item.Remarks ~}}
+                descriptor.Remarks = @""{{ item.Remarks | string.replace '""' '""""' }}"";
+                {{~ end ~}}
                 {{~ if item.Example ~}}
                 descriptor.Example = @""{{ item.Example | string.replace '""' '""""' }}"";
                 {{~ end ~}}

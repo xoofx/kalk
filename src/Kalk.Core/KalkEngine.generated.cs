@@ -551,26 +551,72 @@ namespace Kalk.Core
             {
                 var descriptor = Descriptors["fib"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Calculates the fibonacci number for the specified input.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The input number.")  { IsOptional = false });
+                descriptor.Returns = @"The fibonacci number.";
+                descriptor.Example = @">>> fib 50
+    # fib(50)
+    out = 12586269025
+";
             }
             {
                 var descriptor = Descriptors["i"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Defines the imaginary part of a complex number.";
                 descriptor.IsCommand = false;
+                descriptor.Returns = @"A complex number.";
+                descriptor.Example = @">>> 1 + 2i
+    # 1 + 2 * i
+    out = 1 + 2i
+";
             }
             {
                 var descriptor = Descriptors["all"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Determines if all components of the specified value are non-zero.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"true if all components of the x parameter are non-zero; otherwise, false.";
+                descriptor.Remarks = @"This function is similar to the `any` function.
+    The `any` function determines if any components of the specified value are non-zero, while the `all` function determines if all components of the specified value are non-zero.";
+                descriptor.Example = @">>> all(bool4(true, false, true, false))
+    # all(bool4(true, false, true, false))
+    out = false
+    >>> all(bool4(true, true, true, true))
+    # all(bool4(true, true, true, true))
+    out = true
+    >>> all([0,1,0,2])
+    # all([0,1,0,2])
+    out = false
+    >>> all([1,1,1,1])
+    # all([1,1,1,1])
+    out = true
+";
             }
             {
                 var descriptor = Descriptors["any"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Determines if any components of the specified value are non-zero.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"true if any components of the x parameter are non-zero; otherwise, false.";
+                descriptor.Remarks = @"This function is similar to the `all` intrinsic function.
+    The `any` function determines if any components of the specified value are non-zero,
+    while the `all` function determines if all components of the specified value are non-zero.";
+                descriptor.Example = @">>> any(bool4(true, false, true, false))
+    # any(bool4(true, false, true, false))
+    out = true
+    >>> any(bool4(false, false, false, false))
+    # any(bool4(false, false, false, false))
+    out = false
+    >>> any([0,1,0,2])
+    # any([0,1,0,2])
+    out = true
+    >>> any([0,0,0,0])
+    # any([0,0,0,0])
+    out = false
+";
             }
             {
                 var descriptor = Descriptors["abs"];

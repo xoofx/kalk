@@ -90,15 +90,62 @@ namespace Kalk.Core
         /// </summary>
         [KalkDoc("e", CategoryMathFunctions)] public const double E = Math.E;
 
+        /// <summary>
+        /// Calculates the fibonacci number for the specified input.
+        /// </summary>
+        /// <param name="x">The input number.</param>
+        /// <returns>The fibonacci number.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> fib 50
+        /// # fib(50)
+        /// out = 12586269025
+        /// ```
+        /// </example>
         [KalkDoc("fib", CategoryMathFunctions)]
         public object Fib(KalkIntValue x) => x.TransformArg(Engine, FibFunc);
 
+        /// <summary>
+        /// Defines the imaginary part of a complex number.
+        /// </summary>
+        /// <returns>A complex number.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> 1 + 2i
+        /// # 1 + 2 * i
+        /// out = 1 + 2i
+        /// ```
+        /// </example>
         [KalkDoc("i", CategoryMathFunctions)]
         public static object ComplexNumber()
         {
             return new KalkComplex(0, 1);
         }
-        
+
+        /// <summary>
+        /// Determines if all components of the specified value are non-zero.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>true if all components of the x parameter are non-zero; otherwise, false.</returns>
+        /// <remarks>This function is similar to the `any` function.
+        /// The `any` function determines if any components of the specified value are non-zero, while the `all` function determines if all components of the specified value are non-zero.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> all(bool4(true, false, true, false))
+        /// # all(bool4(true, false, true, false))
+        /// out = false
+        /// >>> all(bool4(true, true, true, true))
+        /// # all(bool4(true, true, true, true))
+        /// out = true
+        /// >>> all([0,1,0,2])
+        /// # all([0,1,0,2])
+        /// out = false
+        /// >>> all([1,1,1,1])
+        /// # all([1,1,1,1])
+        /// out = true
+        /// ```
+        /// </example>
         [KalkDoc("all", CategoryMathFunctions)]
         public KalkBool All(object x)
         {
@@ -117,6 +164,31 @@ namespace Kalk.Core
             return Engine.ToBool(Engine.CurrentSpan, x);
         }
 
+        /// <summary>
+        /// Determines if any components of the specified value are non-zero.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>true if any components of the x parameter are non-zero; otherwise, false.</returns>
+        /// <remarks>This function is similar to the `all` intrinsic function.
+        /// The `any` function determines if any components of the specified value are non-zero,
+        /// while the `all` function determines if all components of the specified value are non-zero.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> any(bool4(true, false, true, false))
+        /// # any(bool4(true, false, true, false))
+        /// out = true
+        /// >>> any(bool4(false, false, false, false))
+        /// # any(bool4(false, false, false, false))
+        /// out = false
+        /// >>> any([0,1,0,2])
+        /// # any([0,1,0,2])
+        /// out = true
+        /// >>> any([0,0,0,0])
+        /// # any([0,0,0,0])
+        /// out = false
+        /// ```
+        /// </example>
         [KalkDoc("any", CategoryMathFunctions)]
         public KalkBool Any(object x)
         {
