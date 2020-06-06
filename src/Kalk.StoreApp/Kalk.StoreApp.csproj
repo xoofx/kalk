@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\kalk\Program.cs" Link="Program.cs" />
+    <Compile Include="..\Kalk.ConsoleApp\Program.cs" Link="Program.cs" />
   </ItemGroup>
 
   <ItemGroup>

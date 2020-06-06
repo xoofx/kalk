@@ -451,7 +451,7 @@ namespace Kalk.Core
 
             var writer = error ? BufferedErrorWriter : BufferedOutputWriter;
 
-            if (_isFirstWriteForEval)
+            if (HasInteractiveConsole && _isFirstWriteForEval)
             {
                 writer.WriteLine();
                 _isFirstWriteForEval = false;

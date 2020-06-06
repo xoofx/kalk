@@ -49,8 +49,11 @@ namespace Kalk.Core
 
             Directory.CreateDirectory(KalkUserFolder);
 
-            ShowVersion();
-            WriteHighlightLine("# Type `help` for more information and at https://github.com/xoofx/kalk");
+            if (DisplayVersion)
+            {
+                ShowVersion();
+                WriteHighlightLine("# Type `help` for more information and at https://github.com/xoofx/kalk");
+            }
 
             if (Repl != null)
             {
@@ -84,7 +87,7 @@ namespace Kalk.Core
             string line;
             while ((line = InputReader.ReadLine()) != null)
             {
-                if (EchoEnabled) OutputWriter.Write($">>> {line}");
+                if (EchoEnabled && EchoInput) OutputWriter.Write($">>> {line}");
 
                 try
                 {

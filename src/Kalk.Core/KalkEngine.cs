@@ -49,6 +49,7 @@ namespace Kalk.Core
             Console.OutputEncoding = Encoding.UTF8;
             EnableEngineOutput = true;
             EchoEnabled = true;
+            DisplayVersion = true;
             KalkUserFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile, Environment.SpecialFolderOption.DoNotVerify), ".kalk");
 
             HighlightOutput = new ConsoleText();
@@ -124,6 +125,8 @@ namespace Kalk.Core
 
         private ConsoleText HighlightOutput { get; }
 
+        public bool DisplayVersion { get; set; }
+
         public string Version { get;  }
 
         public string KalkUserFolder { get; set; }
@@ -151,6 +154,8 @@ namespace Kalk.Core
         }
 
         public bool EchoEnabled { get; set; }
+
+        public bool EchoInput { get; set; }
 
         public ScriptObject Builtins { get; }
 

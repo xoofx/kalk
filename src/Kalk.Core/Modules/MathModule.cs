@@ -55,7 +55,7 @@ namespace Kalk.Core
         private static readonly Func<object, KalkBool> IsNanFunc = IsNanFuncImpl;
 
         private static readonly Func<double, double> SaturateFunc = SaturateImpl;
-        private readonly Random _random;
+        private Random _random;
 
         public MathModule()
         {
@@ -140,7 +140,17 @@ namespace Kalk.Core
         /// </summary>
         /// <param name="x">The specified value.</param>
         /// <returns>The absolute value of the <paramref name="x"/> parameter.</returns>
-        [KalkDoc("abs", CategoryMathFunctions)]
+        /// <example>
+        /// ```kalk
+        /// >>> abs(-1)
+        /// # abs(-1)
+        /// out = 1
+        /// >>> abs(float4(-1, 1, -2, -3))
+        /// # abs(float4(-1, 1, -2, -3))
+        /// out = float4(1, 1, 2, 3)
+        /// ```
+        /// </example>
+        [KalkDoc("abs", CategoryMathFunctions, Functor = true)]
         public object Abs(KalkCompositeValue x) => x.TransformArg(Engine, AbsFunc);
 
         /// <summary>
@@ -148,7 +158,20 @@ namespace Kalk.Core
         /// </summary>
         /// <param name="x">A value to create random values for.</param>
         /// <returns>A random value or a random value of the <paramref name="x"/> parameter.</returns>
-        [KalkDoc("rnd", CategoryMathFunctions)]
+        /// <example>
+        /// ```kalk
+        /// >>> seed(0); rnd
+        /// # seed(0); rnd
+        /// out = 0.7262432699679598
+        /// >>> rnd
+        /// # rnd
+        /// out = 0.8173253595909687
+        /// >>> rnd(float4)
+        /// # rnd(float4)
+        /// out = float4(0.7680227, 0.5581612, 0.20603316, 0.5588848)
+        /// ```
+        /// </example>
+        [KalkDoc("rnd", CategoryMathFunctions, Functor = true)]
         public object Rnd(KalkCompositeValue x = null)
         {
             if (x != null)
@@ -159,13 +182,44 @@ namespace Kalk.Core
             {
                 return RndFunc(null);
             }
-
         }
-        
+
+        /// <summary>
+        /// Setup the seed function for rnd. The default seed is random.
+        /// </summary>
+        /// <param name="x">An original seed value for the `rnd` function.</param>
+        /// <example>
+        /// ```kalk
+        /// >>> seed(0); rnd
+        /// # seed(0); rnd
+        /// out = 0.7262432699679598
+        /// >>> seed(1); rnd
+        /// # seed(1); rnd
+        /// out = 0.24866858415709278
+        /// ```
+        /// </example>
+        [KalkDoc("seed", CategoryMathFunctions)]
+        public void Seed(int x)
+        {
+            _random = new Random(x);
+        }
+
         /// <summary>
         /// Splits the value x into fractional and integer parts, each of which has the same sign as x.
         /// </summary>
-        [KalkDoc("modf", CategoryMathFunctions)]
+        /// <param name="x">The input value.</param>
+        /// <returns>The signed-fractional portion of x.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> modf(1.5)
+        /// # modf(1.5)
+        /// out = [1, 0.5]
+        /// >>> modf(float2(-1.2, 3.4))
+        /// # modf(float2(-1.2, 3.4))
+        /// out = [float2(-1, 3), float2(-0.20000005, 0.4000001)]
+        /// ```
+        /// </example>
+        [KalkDoc("modf", CategoryMathFunctions, Functor = true)]
         public ScriptArray Modf(KalkCompositeValue x)
         {
             return new ScriptArray(2)

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "kalk", "kalk\kalk.csproj", "{DF31DD47-F8B8-4923-9487-F03007E1F8AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalk.ConsoleApp", "Kalk.ConsoleApp\Kalk.ConsoleApp.csproj", "{DF31DD47-F8B8-4923-9487-F03007E1F8AF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consolus", "Consolus\Consolus.csproj", "{C9083B29-E06F-48E0-8901-D3181E08A1E4}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "Kalk.Package", "Kalk.Package\Kalk.Package.wapproj", "{DD5DFF3B-CA76-4829-8928-56C6AD3E393A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalk.StoreApp", "Kalk.StoreApp\Kalk.StoreApp.csproj", "{0548A1C3-2541-4B54-B5CE-3C5E74C6B469}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalk.Tests", "Kalk.Tests\Kalk.Tests.csproj", "{DBD063DC-1383-4952-A878-4B2AB1C17237}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -191,6 +193,26 @@ Global
 		{0548A1C3-2541-4B54-B5CE-3C5E74C6B469}.Release|x64.ActiveCfg = Release|x64
 		{0548A1C3-2541-4B54-B5CE-3C5E74C6B469}.Release|x64.Build.0 = Release|x64
 		{0548A1C3-2541-4B54-B5CE-3C5E74C6B469}.Release|x86.ActiveCfg = Release|x64
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Debug|ARM.Build.0 = Debug|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Debug|x64.Build.0 = Debug|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Debug|x86.Build.0 = Debug|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Release|ARM.ActiveCfg = Release|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Release|ARM.Build.0 = Release|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Release|ARM64.Build.0 = Release|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Release|x64.ActiveCfg = Release|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Release|x64.Build.0 = Release|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Release|x86.ActiveCfg = Release|Any CPU
+		{DBD063DC-1383-4952-A878-4B2AB1C17237}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

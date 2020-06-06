@@ -193,7 +193,7 @@ namespace Kalk.Core
         private void WriteHelpForDescriptor(KalkDescriptor descriptor)
         {
             var parentless = descriptor.IsCommand && descriptor.Params.Count <= 1;
-            var args = string.Join(", ", descriptor.Params.Select(x => x.IsOptional ? $"[{x.Name}]" : x.Name));
+            var args = string.Join(", ", descriptor.Params.Select(x => x.IsOptional ? $"{x.Name}?" : x.Name));
 
             var syntax = string.Join("/", descriptor.Names);
 
@@ -225,6 +225,18 @@ namespace Kalk.Core
                     WriteHighlightLine($"#");
                     WriteHighlightLine($"# Returns");
                     WriteHighlightAligned($"#   ", descriptor.Returns);
+                }
+                if (!string.IsNullOrEmpty(descriptor.Remarks))
+                {
+                    WriteHighlightLine($"#");
+                    WriteHighlightLine($"# Remarks");
+                    WriteHighlightAligned($"#   ", descriptor.Remarks);
+                }
+                if (!string.IsNullOrEmpty(descriptor.Example))
+                {
+                    WriteHighlightLine($"#");
+                    WriteHighlightLine($"# Example");
+                    WriteHighlightAligned($".   ", descriptor.Example, ".   ");
                 }
             }
         }

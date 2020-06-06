@@ -14,5 +14,7 @@ namespace Kalk.Core
         public string Alias { get; }
 
         public string Category { get; }
+
+        public bool Functor { get; set; }
     }
 }

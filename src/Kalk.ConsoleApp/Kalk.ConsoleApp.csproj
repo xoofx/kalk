@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <ApplicationIcon>..\..\img\kalk.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>kalk</AssemblyName>
     <!--<PublishTrimmed>true</PublishTrimmed>-->
     <!--<PublishReadyToRun>true</PublishReadyToRun>-->
     <!--<PublishTrimmed>true</PublishTrimmed>-->
