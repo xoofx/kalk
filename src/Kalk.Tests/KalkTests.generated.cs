@@ -739,6 +739,10 @@ out = ""abc""", Category = "Math Functions")]
     {
     }
 
+    public partial class MiscModuleTests : KalkTestBase
+    {
+    }
+
     public partial class StringModuleTests : KalkTestBase
     {
     }

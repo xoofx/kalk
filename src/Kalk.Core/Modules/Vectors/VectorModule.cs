@@ -341,44 +341,5 @@ namespace Kalk.Core.Modules
 
         [KalkDoc("rgba", CategoryVectorTypeConstructors)]
         public KalkColorRgba CreateRgba(params object[] arguments) => (KalkColorRgba)RgbaConstructor.Invoke(Engine, arguments);
-        
-        [KalkDoc("colors", KalkEngine.CategoryMisc)]
-        public object Colors()
-        {
-            var colors = KalkColorRgb.GetKnownColors();
-            if (Engine.CurrentNode?.Parent?.GetType() != typeof(ScriptExpressionStatement))
-            {
-                return new ScriptArray(colors);
-            }
-
-            var builder = new StringBuilder();
-            int count = 0;
-            const int PerColumn = 2;
-            foreach (var knownColor in colors)
-            {
-                var colorName = knownColor.ToString("aligned", Engine);
-                builder.Append(colorName);
-                count++;
-
-                if (count == PerColumn)
-                {
-                    Engine.WriteHighlightLine(builder.ToString());
-                    builder.Clear();
-                    count = 0;
-                }
-                else
-                {
-                    builder.Append(" ");
-                }
-            }
-
-            if (builder.Length > 0)
-            {
-                Engine.WriteHighlightLine(builder.ToString());
-                builder.Clear();
-            }
-
-            return null;
-        }
     }
 }

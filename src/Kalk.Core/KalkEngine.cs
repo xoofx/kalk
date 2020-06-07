@@ -66,7 +66,6 @@ namespace Kalk.Core
             ((KalkObjectWithAlias)Builtins).Engine = this;
 
             Units = new KalkUnits(this);
-            AsciiTable = new KalkAsciiTable();
             Shortcuts = new KalkShortcuts();
             Aliases = new KalkAliases();
             _currentShortcutKeyMap = Shortcuts.ShortcutKeyMap;

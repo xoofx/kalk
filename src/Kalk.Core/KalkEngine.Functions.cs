@@ -1,20 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using Consolus;
 using Kalk.Core.Modules;
-using Scriban;
-using Scriban.Functions;
-using Scriban.Parsing;
 using Scriban.Runtime;
 using Scriban.Syntax;
 
@@ -32,6 +18,7 @@ namespace Kalk.Core
 
             // builtins
             GetOrCreateModule<MathModule>();
+            GetOrCreateModule<MiscModule>();
             GetOrCreateModule<MemoryModule>();
             GetOrCreateModule<VectorModule>();
 

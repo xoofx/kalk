@@ -173,21 +173,6 @@ namespace Kalk.Core
             RegisterAction("out2clipboard", (Action)LastToClipboard);
             RegisterAction("shortcut", (Action<Scriban.Syntax.ScriptVariable, Scriban.Syntax.ScriptExpression[]>)Shortcut);
             RegisterAction("alias", (Action<Scriban.Syntax.ScriptVariable, Scriban.Syntax.ScriptVariable[]>)Alias);
-            RegisterConstant("ascii", AsciiTable);
-            RegisterFunction("keys", (Func<object, System.Collections.IEnumerable>)Keys);
-            RegisterFunction("guid", (Func<string>)Guid);
-            RegisterFunction("size", (Func<object, int>)Size);
-            RegisterFunction("values", (Func<object, System.Collections.IEnumerable>)Values);
-            RegisterFunction("hex", (Func<object, string, bool, object>)Hexadecimal);
-            RegisterFunction("utf8", (Func<object, object>)GetUtf8);
-            RegisterFunction("utf16", (Func<object, object>)GetUtf16);
-            RegisterFunction("utf32", (Func<object, object>)GetUtf32);
-            RegisterFunction("insert_at", (Func<object, int, object, object>)InsertAt);
-            RegisterFunction("remove_at", (Func<object, int, object>)RemoveAt);
-            RegisterFunction("contains", (Func<object, object, Kalk.Core.KalkBool>)Contains);
-            RegisterFunction("replace", (Func<object, object, object, object>)Replace);
-            RegisterFunction("slice", (Func<object, int, int?, object>)Slice);
-            RegisterFunction("lines", (Func<string, Scriban.Runtime.ScriptRange>)Lines);
             RegisterFunction("to", (Func<Kalk.Core.KalkExpression, Kalk.Core.KalkExpression, Kalk.Core.KalkExpression>)ConvertTo);
             RegisterFunction("unit", (Func<Scriban.Syntax.ScriptVariable, string, Scriban.Syntax.ScriptVariable, Kalk.Core.KalkExpression, string, string, Kalk.Core.KalkExpression>)DefineUserUnit);
             RegisterDocumentationAuto();
@@ -351,96 +336,6 @@ namespace Kalk.Core
                 descriptor.Category = "General";
                 descriptor.Description = @"";
                 descriptor.IsCommand = true;
-            }
-            {
-                var descriptor = Descriptors["ascii"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"Returns the ascii table or print";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["keys"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["guid"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["size"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["values"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["hex"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["utf8"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["utf16"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["utf32"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["insert_at"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["remove_at"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["contains"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["replace"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["slice"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["lines"];
-                descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
             }
             {
                 var descriptor = Descriptors["to"];
@@ -1649,6 +1544,132 @@ namespace Kalk.Core.Modules
         }        
     }
 }
+namespace Kalk.Core
+{
+    public partial class MiscModule
+    {
+        protected override void RegisterFunctionsAuto()
+        {
+            RegisterConstant("ascii", AsciiTable);
+            RegisterFunction("keys", (Func<object, System.Collections.IEnumerable>)Keys);
+            RegisterFunction("guid", (Func<string>)Guid);
+            RegisterFunction("size", (Func<object, int>)Size);
+            RegisterFunction("values", (Func<object, System.Collections.IEnumerable>)Values);
+            RegisterFunction("hex", (Func<object, string, bool, object>)Hexadecimal);
+            RegisterFunction("utf8", (Func<object, object>)GetUtf8);
+            RegisterFunction("utf16", (Func<object, object>)GetUtf16);
+            RegisterFunction("utf32", (Func<object, object>)GetUtf32);
+            RegisterFunction("insert_at", (Func<object, int, object, object>)InsertAt);
+            RegisterFunction("remove_at", (Func<object, int, object>)RemoveAt);
+            RegisterFunction("contains", (Func<object, object, Kalk.Core.KalkBool>)Contains);
+            RegisterFunction("replace", (Func<object, object, object, object>)Replace);
+            RegisterFunction("slice", (Func<object, int, int?, object>)Slice);
+            RegisterFunction("lines", (Func<string, Scriban.Runtime.ScriptRange>)Lines);
+            RegisterFunction("colors", (Func<object>)Colors);
+            RegisterDocumentationAuto();
+        }
+
+        private void RegisterDocumentationAuto()
+        {
+            {
+                var descriptor = Descriptors["ascii"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"Returns the ascii table or print";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["keys"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["guid"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["size"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["values"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["hex"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["utf8"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["utf16"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["utf32"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["insert_at"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["remove_at"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["contains"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["replace"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["slice"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["lines"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["colors"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+        }        
+    }
+}
 namespace Kalk.Core.Modules
 {
     public partial class StringModule
@@ -1889,7 +1910,6 @@ namespace Kalk.Core.Modules
             RegisterFunction("vector", (Func<Scriban.Syntax.ScriptVariable, int, object[], object>)CreateVector);
             RegisterFunction("rgb", (Func<object[], Kalk.Core.KalkColorRgb>)CreateRgb);
             RegisterFunction("rgba", (Func<object[], Kalk.Core.KalkColorRgba>)CreateRgba);
-            RegisterFunction("colors", (Func<object>)Colors);
             RegisterFunction("bool2x2", (Func<object[], Kalk.Core.KalkMatrix<Kalk.Core.KalkBool>>)CreateBool2x2);
             RegisterFunction("bool2x3", (Func<object[], Kalk.Core.KalkMatrix<Kalk.Core.KalkBool>>)CreateBool2x3);
             RegisterFunction("bool2x4", (Func<object[], Kalk.Core.KalkMatrix<Kalk.Core.KalkBool>>)CreateBool2x4);
@@ -2333,12 +2353,6 @@ namespace Kalk.Core.Modules
             {
                 var descriptor = Descriptors["rgba"];
                 descriptor.Category = "Type Vector Constructors";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["colors"];
-                descriptor.Category = "Misc Functions";
                 descriptor.Description = @"";
                 descriptor.IsCommand = false;
             }

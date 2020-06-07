@@ -14,9 +14,16 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
-    public partial class KalkEngine
+    public sealed partial class MiscModule : KalkModuleWithFunctions
     {
         public const string CategoryMisc = "Misc Functions";
+
+        public MiscModule()
+        {
+            IsBuiltin = true;
+            AsciiTable = new KalkAsciiTable();
+            RegisterFunctionsAuto();
+        }
 
         /// <summary>
         /// Returns the ascii table or print
@@ -28,7 +35,7 @@ namespace Kalk.Core
         [KalkDoc("keys", CategoryMisc)]
         public IEnumerable Keys(object obj)
         {
-            return ObjectFunctions.Keys(this, obj);
+            return ObjectFunctions.Keys(Engine, obj);
         }
 
         [KalkDoc("guid", CategoryMisc)]
@@ -78,12 +85,12 @@ namespace Kalk.Core
                     var bytes = new MemoryStream();
                     foreach (var b in it)
                     {
-                        bytes.WriteByte(ToObject<byte>(0, b));
+                        bytes.WriteByte(Engine.ToObject<byte>(0, b));
                     }
                     return Encoding.UTF8.GetString(bytes.GetBuffer(), 0, (int) bytes.Length);
                 }
                 default:
-                    throw new ArgumentException($"The type {GetTypeName(value)} is not supported ", nameof(value));
+                    throw new ArgumentException($"The type {Engine.GetTypeName(value)} is not supported ", nameof(value));
             }
         }
 
@@ -109,7 +116,7 @@ namespace Kalk.Core
                     foreach (var b in it)
                     {
 
-                        bytes.WriteByte(ToObject<byte>(0, b));
+                        bytes.WriteByte(Engine.ToObject<byte>(0, b));
                     }
                     unsafe
                     {
@@ -118,7 +125,7 @@ namespace Kalk.Core
                     }
                 }
                 default:
-                    throw new ArgumentException($"The type {GetTypeName(value)} is not supported ", nameof(value));
+                    throw new ArgumentException($"The type {Engine.GetTypeName(value)} is not supported ", nameof(value));
             }
         }
 
@@ -137,12 +144,12 @@ namespace Kalk.Core
                     var bytes = new MemoryStream();
                     foreach (var b in it)
                     {
-                        bytes.WriteByte(ToObject<byte>(0, b));
+                        bytes.WriteByte(Engine.ToObject<byte>(0, b));
                     }
                     return Encoding.UTF32.GetString(bytes.GetBuffer(), 0, (int)bytes.Length);
                 }
                 default:
-                    throw new ArgumentException($"The type {GetTypeName(value)} is not supported ", nameof(value));
+                    throw new ArgumentException($"The type {Engine.GetTypeName(value)} is not supported ", nameof(value));
             }
         }
         
@@ -153,7 +160,7 @@ namespace Kalk.Core
             if (item == null) throw new ArgumentNullException(nameof(item));
             if (value is string valueStr)
             {
-                var itemStr = ObjectToString(item);
+                var itemStr = Engine.ObjectToString(item);
 
                 index = index % valueStr.Length;
                 index = index < 0 ? valueStr.Length + 1 + index : index;
@@ -176,7 +183,7 @@ namespace Kalk.Core
             }
             else
             {
-                throw new ArgumentException($"The type {GetTypeName(value)} is not supported ", nameof(value));
+                throw new ArgumentException($"The type {Engine.GetTypeName(value)} is not supported ", nameof(value));
             }
         }
 
@@ -206,7 +213,7 @@ namespace Kalk.Core
             }
             else
             {
-                throw new ArgumentException($"The type {GetTypeName(value)} is not supported ", nameof(value));
+                throw new ArgumentException($"The type {Engine.GetTypeName(value)} is not supported ", nameof(value));
             }
         }
         
@@ -217,7 +224,7 @@ namespace Kalk.Core
             if (match == null) throw new ArgumentNullException(nameof(match));
             if (value is string valueStr)
             {
-                var matchStr = ObjectToString(match);
+                var matchStr = Engine.ObjectToString(match);
                 return valueStr.Contains(matchStr, StringComparison.Ordinal);
             }
 
@@ -225,9 +232,9 @@ namespace Kalk.Core
             bool contains = false;
 
             // Force the evaluation of the object
-            composite.Visit(this, CurrentSpan, input =>
+            composite.Visit(Engine, Engine.CurrentSpan, input =>
             {
-                var result = (bool) ScriptBinaryExpression.Evaluate(this, CurrentSpan, ScriptBinaryOperator.CompareEqual, input, match);
+                var result = (bool) ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.CompareEqual, input, match);
                 if (result)
                 {
                     contains = true;
@@ -248,13 +255,13 @@ namespace Kalk.Core
             if (@by == null) throw new ArgumentNullException(nameof(@by));
             if (value is string valueStr)
             {
-                var matchStr = ObjectToString(match);
-                var byStr = ObjectToString(by);
+                var matchStr = Engine.ObjectToString(match);
+                var byStr = Engine.ObjectToString(by);
                 return valueStr.Replace(matchStr, byStr);
             }
 
             var composite = new KalkCompositeValue(value);
-            return composite.Transform(this, CurrentSpan, input => ReplaceImpl(input, match, @by), typeof(object));
+            return composite.Transform(Engine, Engine.CurrentSpan, input => ReplaceImpl(input, match, @by), typeof(object));
         }
 
         [KalkDoc("slice", CategoryMisc)]
@@ -317,13 +324,13 @@ namespace Kalk.Core
         
         private object ReplaceImpl(object value, object match, object by)
         {
-            var result = (bool) ScriptBinaryExpression.Evaluate(this, CurrentSpan, ScriptBinaryOperator.CompareEqual, value, match);
+            var result = (bool) ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.CompareEqual, value, match);
             return result ? @by : value;
         }
 
         private object Hexadecimal(object value, string separator, bool prefix, bool returnString)
         {
-            CheckAbort();
+            Engine.CheckAbort();
             switch (value)
             {
                 case string str when returnString:
@@ -456,15 +463,54 @@ namespace Kalk.Core
                             builder.Append(separator);
                         }
                         isFirst = false;
-                        byte byteItem = ToObject<byte>(0, item);
+                        byte byteItem = Engine.ToObject<byte>(0, item);
                         if (prefix) builder.Append("0x");
                         builder.Append(byteItem.ToString("X2"));
                     }
                     return builder.ToString();
                 }
                 default:
-                    throw new ArgumentException($"The type {GetTypeName(value)} is not supported ", nameof(value));
+                    throw new ArgumentException($"The type {Engine.GetTypeName(value)} is not supported ", nameof(value));
             }
+        }
+
+        [KalkDoc("colors", CategoryMisc)]
+        public object Colors()
+        {
+            var colors = KalkColorRgb.GetKnownColors();
+            if (Engine.CurrentNode?.Parent?.GetType() != typeof(ScriptExpressionStatement))
+            {
+                return new ScriptArray(colors);
+            }
+
+            var builder = new StringBuilder();
+            int count = 0;
+            const int PerColumn = 2;
+            foreach (var knownColor in colors)
+            {
+                var colorName = knownColor.ToString("aligned", Engine);
+                builder.Append(colorName);
+                count++;
+
+                if (count == PerColumn)
+                {
+                    Engine.WriteHighlightLine(builder.ToString());
+                    builder.Clear();
+                    count = 0;
+                }
+                else
+                {
+                    builder.Append(" ");
+                }
+            }
+
+            if (builder.Length > 0)
+            {
+                Engine.WriteHighlightLine(builder.ToString());
+                builder.Clear();
+            }
+
+            return null;
         }
 
         private static string HexaFromBytes<T>(int byteCount, in T element, bool prefix, string separator)
