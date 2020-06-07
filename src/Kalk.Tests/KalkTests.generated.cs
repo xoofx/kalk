@@ -760,6 +760,30 @@ out = bytebuffer([107, 97, 108, 107])
 out = ""kalk""", Category = "Misc Functions")]
         public static void Test_ascii(string input, string output) => AssertScript(input, output);
 
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.Keys(System.Object)"/> or `keys`.
+        /// </summary>
+        [TestCase(@"obj = {m: 1, n: 2}; keys obj", @"# obj = {m: 1, n: 2}; keys(obj)
+obj = {m: 1, n: 2}
+out = [""m"", ""n""]", Category = "Misc Functions")]
+        public static void Test_keys(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.Size(System.Object)"/> or `size`.
+        /// </summary>
+        [TestCase(@"size 1
+size ""kalk""
+size float4(1,2,3,4)
+size [1, 2, 3]", @"# size(1)
+out = 0
+# size(""kalk"")
+out = 4
+# size(float4(1, 2, 3, 4))
+out = 4
+# size([1, 2, 3])
+out = 3", Category = "Misc Functions")]
+        public static void Test_size(string input, string output) => AssertScript(input, output);
+
     }
 
     public partial class StringModuleTests : KalkTestBase

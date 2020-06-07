@@ -84,7 +84,7 @@ namespace Kalk.Core.Modules
         protected override void Initialize()
         {
             _mathModule = Engine.GetOrCreateModule<MathModule>();
-            Engine.LoadSystemFile(Path.Combine("Modules", "Vectors", "colorspaces.kalk"));
+            //Engine.LoadSystemFile(Path.Combine("Modules", "Vectors", "colorspaces.kalk"));
         }
         
         [KalkDoc("length", CategoryMathVectorMatrixFunctions)]

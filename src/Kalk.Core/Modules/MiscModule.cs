@@ -107,58 +107,60 @@ namespace Kalk.Core
             return ConvertAscii(Engine, obj);
         }
 
-        private static readonly string[] AsciiSpecialCodes = new string[32]
-        {
-            "NUL / Null",
-            "SOH / Start of Heading",
-            "STX / Start of Text",
-            "ETX / End of Text",
-            "EOT / End of Transmission",
-            "ENQ / Enquiry",
-            "ACK / Acknowledgment",
-            "BEL / Bell",
-            "BS  / Backspace",
-            "HT  / Horizontal Tab",
-            "LF  / Line Feed",
-            "VT  / Vertical Tab",
-            "FF  / Form Feed",
-            "CR  / Carriage Return",
-            "SO  / Shift Out",
-            "SI  / Shift In",
-            "DLE / Data Link Escape",
-            "DC1 / Device Control 1",
-            "DC2 / Device Control 2",
-            "DC3 / Device Control 3",
-            "DC4 / Device Control 4",
-            "NAK / Negative Ack",
-            "SYN / Synchronous Idle",
-            "ETB / End of Trans Block",
-            "CAN / Cancel",
-            "EM  / End of Medium",
-            "SUB / Substitute",
-            "ESC / Escape",
-            "FS  / File Separator",
-            "GS  / Group Separator",
-            "RS  / Record Separator",
-            "US  / Unit Separator",
-        };
-
+        /// <summary>
+        /// Returns the keys of an object.
+        /// </summary>
+        /// <param name="obj">An object.</param>
+        /// <returns>The keys of the parameter obj.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> obj = {m: 1, n: 2}; keys obj
+        /// # obj = {m: 1, n: 2}; keys(obj)
+        /// obj = {m: 1, n: 2}
+        /// out = ["m", "n"]
+        /// ```
+        /// </example>
         [KalkDoc("keys", CategoryMisc)]
         public IEnumerable Keys(object obj)
         {
             return ObjectFunctions.Keys(Engine, obj);
         }
 
+        /// <summary>
+        /// Returns a new GUID as a string.
+        /// </summary>
+        /// <returns>A new GUID as a string.</returns>
         [KalkDoc("guid", CategoryMisc)]
         public string Guid()
         {
             return System.Guid.NewGuid().ToString();
         }
 
+        /// <summary>
+        /// Returns the size of the specified object.
+        /// </summary>
+        /// <param name="obj">The object value.</param>
+        /// <returns>The size of the object.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> size 1
+        /// # size(1)
+        /// out = 0
+        /// >>> size "kalk"
+        /// # size("kalk")
+        /// out = 4
+        /// >>> size float4(1,2,3,4)
+        /// # size(float4(1, 2, 3, 4))
+        /// out = 4
+        /// >>> size [1, 2, 3]
+        /// # size([1, 2, 3])
+        /// out = 3
+        /// ```
+        /// </example>
         [KalkDoc("size", CategoryMisc)]
-        public int Size(object value)
+        public int Size(object obj)
         {
-            return ObjectFunctions.Size(value);
+            return ObjectFunctions.Size(obj);
         }
 
         [KalkDoc("values", CategoryMisc)]
@@ -677,5 +679,41 @@ namespace Kalk.Core
             var value = (byte)c;
             return EncodingExtendedAscii.GetString(&value, 1);
         }
+
+        private static readonly string[] AsciiSpecialCodes = new string[32]
+        {
+            "NUL / Null",
+            "SOH / Start of Heading",
+            "STX / Start of Text",
+            "ETX / End of Text",
+            "EOT / End of Transmission",
+            "ENQ / Enquiry",
+            "ACK / Acknowledgment",
+            "BEL / Bell",
+            "BS  / Backspace",
+            "HT  / Horizontal Tab",
+            "LF  / Line Feed",
+            "VT  / Vertical Tab",
+            "FF  / Form Feed",
+            "CR  / Carriage Return",
+            "SO  / Shift Out",
+            "SI  / Shift In",
+            "DLE / Data Link Escape",
+            "DC1 / Device Control 1",
+            "DC2 / Device Control 2",
+            "DC3 / Device Control 3",
+            "DC4 / Device Control 4",
+            "NAK / Negative Ack",
+            "SYN / Synchronous Idle",
+            "ETB / End of Trans Block",
+            "CAN / Cancel",
+            "EM  / End of Medium",
+            "SUB / Substitute",
+            "ESC / Escape",
+            "FS  / File Separator",
+            "GS  / Group Separator",
+            "RS  / Record Separator",
+            "US  / Unit Separator",
+        };
     }
 }

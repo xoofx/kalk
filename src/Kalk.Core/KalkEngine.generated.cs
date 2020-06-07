@@ -1602,20 +1602,43 @@ namespace Kalk.Core
             {
                 var descriptor = Descriptors["keys"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the keys of an object.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("obj", @"An object.")  { IsOptional = false });
+                descriptor.Returns = @"The keys of the parameter obj.";
+                descriptor.Example = @">>> obj = {m: 1, n: 2}; keys obj
+    # obj = {m: 1, n: 2}; keys(obj)
+    obj = {m: 1, n: 2}
+    out = [""m"", ""n""]
+";
             }
             {
                 var descriptor = Descriptors["guid"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns a new GUID as a string.";
                 descriptor.IsCommand = false;
+                descriptor.Returns = @"A new GUID as a string.";
             }
             {
                 var descriptor = Descriptors["size"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the size of the specified object.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("obj", @"The object value.")  { IsOptional = false });
+                descriptor.Returns = @"The size of the object.";
+                descriptor.Example = @">>> size 1
+    # size(1)
+    out = 0
+    >>> size ""kalk""
+    # size(""kalk"")
+    out = 4
+    >>> size float4(1,2,3,4)
+    # size(float4(1, 2, 3, 4))
+    out = 4
+    >>> size [1, 2, 3]
+    # size([1, 2, 3])
+    out = 3
+";
             }
             {
                 var descriptor = Descriptors["values"];
