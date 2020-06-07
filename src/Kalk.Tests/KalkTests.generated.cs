@@ -262,6 +262,80 @@ out = float4(-1, 0, 1, 1.4436355)", Category = "Math Functions")]
         public static void Test_asinh(string input, string output) => AssertScript(input, output);
 
         /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Tan(Kalk.Core.KalkDoubleValue)"/> or `tan`.
+        /// </summary>
+        [TestCase(@"tan(0.5)
+tan(1)
+tan float4(1, 2, 3, 4)", @"# tan(0.5)
+out = 0.5463024898437905
+# tan(1)
+out = 1.5574077246549023
+# tan(float4(1, 2, 3, 4))
+out = float4(1.5574077, -2.1850398, -0.14254655, 1.1578213)", Category = "Math Functions")]
+        public static void Test_tan(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Atan(Kalk.Core.KalkDoubleValue)"/> or `atan`.
+        /// </summary>
+        [TestCase(@"atan(0.5)
+atan(1)
+atan(0)
+atan(float4(0,1,2,3))", @"# atan(0.5)
+out = 0.4636476090008061
+# atan(1)
+out = 0.7853981633974483
+# atan(0)
+out = 0
+# atan(float4(0, 1, 2, 3))
+out = float4(0, 0.7853982, 1.1071488, 1.2490457)", Category = "Math Functions")]
+        public static void Test_atan(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Tanh(Kalk.Core.KalkDoubleValue)"/> or `tanh`.
+        /// </summary>
+        [TestCase(@"tanh(0)
+tanh(1)
+tanh(2)
+tanh(float4(0, 1, 2, 3))", @"# tanh(0)
+out = 0
+# tanh(1)
+out = 0.7615941559557649
+# tanh(2)
+out = 0.9640275800758169
+# tanh(float4(0, 1, 2, 3))
+out = float4(0, 0.7615942, 0.9640276, 0.9950548)", Category = "Math Functions")]
+        public static void Test_tanh(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Atanh(Kalk.Core.KalkDoubleValue)"/> or `atanh`.
+        /// </summary>
+        [TestCase(@"atanh(0)
+atanh(0.5)
+atanh(float4(-0.5, 0, 0.5, 0.8))", @"# atanh(0)
+out = 0
+# atanh(0.5)
+out = 0.5493061443340549
+# atanh(float4(-0.5, 0, 0.5, 0.8))
+out = float4(-0.54930615, 0, 0.54930615, 1.0986123)", Category = "Math Functions")]
+        public static void Test_atanh(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Atan2(Kalk.Core.KalkDoubleValue,Kalk.Core.KalkDoubleValue)"/> or `atan2`.
+        /// </summary>
+        [TestCase(@"atan2(1,1)
+atan2(1,0)
+atan2(0,1)
+atan2(float4(1), float4(0,1,-1,2))", @"# atan2(1, 1)
+out = 0.7853981633974483
+# atan2(1, 0)
+out = 1.5707963267948966
+# atan2(0, 1)
+out = 0
+# atan2(float4(1), float4(0, 1, -1, 2))
+out = float4(1.5707964, 0.7853982, 2.3561945, 0.4636476)", Category = "Math Functions")]
+        public static void Test_atan2(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
         /// Test for <see cref="M:Kalk.Core.MathModule.Fmod(Kalk.Core.KalkDoubleValue,Kalk.Core.KalkDoubleValue)"/> or `fmod`.
         /// </summary>
         [TestCase(@"fmod(2.5, 2)
@@ -295,6 +369,128 @@ out = 0.75
 # frac(float4(1.25, 10.5, -1.75, -10.25))
 out = float4(0.25, 0.5, 0.25, 0.75)", Category = "Math Functions")]
         public static void Test_frac(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Rsqrt(Kalk.Core.KalkDoubleValue)"/> or `rsqrt`.
+        /// </summary>
+        [TestCase(@"rsqrt(1)
+rsqrt(2)
+rsqrt(float4(1,2,3,4))", @"# rsqrt(1)
+out = 1
+# rsqrt(2)
+out = 0.7071067811865475
+# rsqrt(float4(1, 2, 3, 4))
+out = float4(1, 0.70710677, 0.57735026, 0.5)", Category = "Math Functions")]
+        public static void Test_rsqrt(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Sqrt(Kalk.Core.KalkDoubleValue)"/> or `sqrt`.
+        /// </summary>
+        [TestCase(@"sqrt(1)
+sqrt(2)
+sqrt(float4(1,2,3,4))", @"# sqrt(1)
+out = 1
+# sqrt(2)
+out = 1.4142135623730951
+# sqrt(float4(1, 2, 3, 4))
+out = float4(1, 1.4142135, 1.7320508, 2)", Category = "Math Functions")]
+        public static void Test_sqrt(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Log(Kalk.Core.KalkDoubleValue)"/> or `log`.
+        /// </summary>
+        [TestCase(@"log 1
+log 2
+log 0
+log float4(0,1,2,3)", @"# log(1)
+out = 0
+# log(2)
+out = 0.6931471805599453
+# log(0)
+out = -inf
+# log(float4(0, 1, 2, 3))
+out = float4(-inf, 0, 0.6931472, 1.0986123)", Category = "Math Functions")]
+        public static void Test_log(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Log2(Kalk.Core.KalkDoubleValue)"/> or `log2`.
+        /// </summary>
+        [TestCase(@"log2 0
+log2 8
+log2 129
+log2 float4(0, 2, 16, 257)", @"# log2(0)
+out = -inf
+# log2(8)
+out = 3
+# log2(129)
+out = 7.011227255423254
+# log2(float4(0, 2, 16, 257))
+out = float4(-inf, 1, 4, 8.005625)", Category = "Math Functions")]
+        public static void Test_log2(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Log10(Kalk.Core.KalkDoubleValue)"/> or `log10`.
+        /// </summary>
+        [TestCase(@"log10 0
+log10 10
+log10 100
+log10 1001
+log10(float4(0,10,100,1001))", @"# log10(0)
+out = -inf
+# log10(10)
+out = 1
+# log10(100)
+out = 2
+# log10(1001)
+out = 3.000434077479319
+# log10(float4(0, 10, 100, 1001))
+out = float4(-inf, 1, 2, 3.0004342)", Category = "Math Functions")]
+        public static void Test_log10(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Exp(Kalk.Core.KalkDoubleValue)"/> or `exp`.
+        /// </summary>
+        [TestCase(@"exp(0)
+exp(1)
+exp(float4(0,1,2,3))", @"# exp(0)
+out = 1
+# exp(1)
+out = 2.718281828459045
+# exp(float4(0, 1, 2, 3))
+out = float4(1, 2.7182817, 7.389056, 20.085537)", Category = "Math Functions")]
+        public static void Test_exp(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Exp2(Kalk.Core.KalkDoubleValue)"/> or `exp2`.
+        /// </summary>
+        [TestCase(@"exp2(0)
+exp2(1)
+exp2(4)
+exp2(float4(0,1,2,3))", @"# exp2(0)
+out = 1
+# exp2(1)
+out = 2
+# exp2(4)
+out = 16
+# exp2(float4(0, 1, 2, 3))
+out = float4(1, 2, 4, 8)", Category = "Math Functions")]
+        public static void Test_exp2(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Pow(Kalk.Core.KalkDoubleValue,Kalk.Core.KalkDoubleValue)"/> or `pow`.
+        /// </summary>
+        [TestCase(@"pow(1.5, 3.5)
+pow(2, 4)
+pow(float4(1,2,3,4), 4)
+pow(float4(1..4), float4(5..8))", @"# pow(1.5, 3.5)
+out = 4.133513940946613
+# pow(2, 4)
+out = 16
+# pow(float4(1, 2, 3, 4), 4)
+out = float4(1, 16, 81, 256)
+# pow(float4(1..4), float4(5..8))
+out = float4(1, 64, 2187, 65536)", Category = "Math Functions")]
+        public static void Test_pow(string input, string output) => AssertScript(input, output);
 
     }
 

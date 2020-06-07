@@ -486,13 +486,13 @@ namespace Kalk.Core
             RegisterFunction("asin", (Func<Kalk.Core.KalkDoubleValue, object>)Asin);
             RegisterFunction("sinh", (Func<Kalk.Core.KalkDoubleValue, object>)Sinh);
             RegisterFunction("asinh", (Func<Kalk.Core.KalkDoubleValue, object>)Asinh);
-            RegisterFunction("fmod", (Func<Kalk.Core.KalkDoubleValue, Kalk.Core.KalkDoubleValue, object>)Fmod);
-            RegisterFunction("frac", (Func<Kalk.Core.KalkDoubleValue, object>)Frac);
             RegisterFunction("tan", (Func<Kalk.Core.KalkDoubleValue, object>)Tan);
             RegisterFunction("atan", (Func<Kalk.Core.KalkDoubleValue, object>)Atan);
             RegisterFunction("tanh", (Func<Kalk.Core.KalkDoubleValue, object>)Tanh);
             RegisterFunction("atanh", (Func<Kalk.Core.KalkDoubleValue, object>)Atanh);
             RegisterFunction("atan2", (Func<Kalk.Core.KalkDoubleValue, Kalk.Core.KalkDoubleValue, object>)Atan2);
+            RegisterFunction("fmod", (Func<Kalk.Core.KalkDoubleValue, Kalk.Core.KalkDoubleValue, object>)Fmod);
+            RegisterFunction("frac", (Func<Kalk.Core.KalkDoubleValue, object>)Frac);
             RegisterFunction("rsqrt", (Func<Kalk.Core.KalkDoubleValue, object>)Rsqrt);
             RegisterFunction("sqrt", (Func<Kalk.Core.KalkDoubleValue, object>)Sqrt);
             RegisterFunction("log", (Func<Kalk.Core.KalkDoubleValue, object>)Log);
@@ -878,6 +878,107 @@ namespace Kalk.Core
 ";
             }
             {
+                var descriptor = Descriptors["tan"];
+                descriptor.Category = "Math Functions";
+                descriptor.Description = @"Returns the tangent of the specified value.";
+                descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value, in radians.")  { IsOptional = false });
+                descriptor.Returns = @"The tangent of the x parameter.";
+                descriptor.Example = @">>> tan(0.5)
+    # tan(0.5)
+    out = 0.5463024898437905
+    >>> tan(1)
+    # tan(1)
+    out = 1.5574077246549023
+    >>> tan float4(1, 2, 3, 4)
+    # tan(float4(1, 2, 3, 4))
+    out = float4(1.5574077, -2.1850398, -0.14254655, 1.1578213)
+";
+            }
+            {
+                var descriptor = Descriptors["atan"];
+                descriptor.Category = "Math Functions";
+                descriptor.Description = @"Returns the arctangent of the specified value.";
+                descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"The arctangent of the x parameter. This value is within the range of -π/2 to π/2.";
+                descriptor.Example = @">>> atan(0.5)
+    # atan(0.5)
+    out = 0.4636476090008061
+    >>> atan(1)
+    # atan(1)
+    out = 0.7853981633974483
+    >>> atan(0)
+    # atan(0)
+    out = 0
+    >>> atan(float4(0,1,2,3))
+    # atan(float4(0, 1, 2, 3))
+    out = float4(0, 0.7853982, 1.1071488, 1.2490457)
+";
+            }
+            {
+                var descriptor = Descriptors["tanh"];
+                descriptor.Category = "Math Functions";
+                descriptor.Description = @"Returns the hyperbolic tangent of the specified value.";
+                descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value, in radians.")  { IsOptional = false });
+                descriptor.Returns = @"The hyperbolic tangent of the x parameter.";
+                descriptor.Example = @">>> tanh(0)
+    # tanh(0)
+    out = 0
+    >>> tanh(1)
+    # tanh(1)
+    out = 0.7615941559557649
+    >>> tanh(2)
+    # tanh(2)
+    out = 0.9640275800758169
+    >>> tanh(float4(0, 1, 2, 3))
+    # tanh(float4(0, 1, 2, 3))
+    out = float4(0, 0.7615942, 0.9640276, 0.9950548)
+";
+            }
+            {
+                var descriptor = Descriptors["atanh"];
+                descriptor.Category = "Math Functions";
+                descriptor.Description = @"Returns the inverse hyperbolic tangent of a number.";
+                descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value. Number must be between -1 and 1 (excluding -1 and 1).")  { IsOptional = false });
+                descriptor.Returns = @"The inverse hyperbolic tangent of the x parameter";
+                descriptor.Example = @">>> atanh(0)
+    # atanh(0)
+    out = 0
+    >>> atanh(0.5)
+    # atanh(0.5)
+    out = 0.5493061443340549
+    >>> atanh(float4(-0.5, 0, 0.5, 0.8))
+    # atanh(float4(-0.5, 0, 0.5, 0.8))
+    out = float4(-0.54930615, 0, 0.54930615, 1.0986123)
+";
+            }
+            {
+                var descriptor = Descriptors["atan2"];
+                descriptor.Category = "Math Functions";
+                descriptor.Description = @"Returns the arctangent of two values (x,y).";
+                descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("y", @"The y value.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The x value.")  { IsOptional = false });
+                descriptor.Returns = @"The arctangent of (y,x).";
+                descriptor.Remarks = @"The signs of the x and y parameters are used to determine the quadrant of the return values within the range of -π to π. The `atan2` function is well-defined for every point other than the origin, even if y equals 0 and x does not equal 0.";
+                descriptor.Example = @">>> atan2(1,1)
+    # atan2(1, 1)
+    out = 0.7853981633974483
+    >>> atan2(1,0)
+    # atan2(1, 0)
+    out = 1.5707963267948966
+    >>> atan2(0,1)
+    # atan2(0, 1)
+    out = 0
+    >>> atan2(float4(1), float4(0,1,-1,2))
+    # atan2(float4(1), float4(0, 1, -1, 2))
+    out = float4(1.5707964, 0.7853982, 2.3561945, 0.4636476)
+";
+            }
+            {
                 var descriptor = Descriptors["fmod"];
                 descriptor.Category = "Math Functions";
                 descriptor.Description = @"Returns the floating-point remainder of x/y.";
@@ -925,82 +1026,168 @@ namespace Kalk.Core
 ";
             }
             {
-                var descriptor = Descriptors["tan"];
-                descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["atan"];
-                descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["tanh"];
-                descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["atanh"];
-                descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
-                var descriptor = Descriptors["atan2"];
-                descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
-                descriptor.IsCommand = false;
-            }
-            {
                 var descriptor = Descriptors["rsqrt"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the reciprocal of the square root of the specified value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"The reciprocal of the square root of the x parameter.";
+                descriptor.Remarks = @"This function uses the following formula: 1 / sqrt(x).";
+                descriptor.Example = @">>> rsqrt(1)
+    # rsqrt(1)
+    out = 1
+    >>> rsqrt(2)
+    # rsqrt(2)
+    out = 0.7071067811865475
+    >>> rsqrt(float4(1,2,3,4))
+    # rsqrt(float4(1, 2, 3, 4))
+    out = float4(1, 0.70710677, 0.57735026, 0.5)
+";
             }
             {
                 var descriptor = Descriptors["sqrt"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the square root of the specified floating-point value, per component.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified floating-point value.")  { IsOptional = false });
+                descriptor.Returns = @"The square root of the x parameter, per component.";
+                descriptor.Example = @">>> sqrt(1)
+    # sqrt(1)
+    out = 1
+    >>> sqrt(2)
+    # sqrt(2)
+    out = 1.4142135623730951
+    >>> sqrt(float4(1,2,3,4))
+    # sqrt(float4(1, 2, 3, 4))
+    out = float4(1, 1.4142135, 1.7320508, 2)
+";
             }
             {
                 var descriptor = Descriptors["log"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the base-e logarithm of the specified value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"The base-e logarithm of the x parameter. If the x parameter is negative, this function returns indefinite. If the x parameter is 0, this function returns `-inf`.";
+                descriptor.Example = @">>> log 1
+    # log(1)
+    out = 0
+    >>> log 2
+    # log(2)
+    out = 0.6931471805599453
+    >>> log 0
+    # log(0)
+    out = -inf
+    >>> log float4(0,1,2,3)
+    # log(float4(0, 1, 2, 3))
+    out = float4(-inf, 0, 0.6931472, 1.0986123)
+";
             }
             {
                 var descriptor = Descriptors["log2"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the base-2 logarithm of the specified value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"The base-2 logarithm of the x parameter. If the x parameter is negative, this function returns indefinite. If the x parameter is 0, this function returns -inf.";
+                descriptor.Example = @">>> log2 0
+    # log2(0)
+    out = -inf
+    >>> log2 8
+    # log2(8)
+    out = 3
+    >>> log2 129
+    # log2(129)
+    out = 7.011227255423254
+    >>> log2 float4(0, 2, 16, 257)
+    # log2(float4(0, 2, 16, 257))
+    out = float4(-inf, 1, 4, 8.005625)
+";
             }
             {
                 var descriptor = Descriptors["log10"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the base-10 logarithm of the specified value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"The base-10 logarithm of the x parameter. If the x parameter is negative, this function returns indefinite. If the x is 0, this function returns -inf.";
+                descriptor.Example = @">>> log10 0
+    # log10(0)
+    out = -inf
+    >>> log10 10
+    # log10(10)
+    out = 1
+    >>> log10 100
+    # log10(100)
+    out = 2
+    >>> log10 1001
+    # log10(1001)
+    out = 3.000434077479319
+    >>> log10(float4(0,10,100,1001))
+    # log10(float4(0, 10, 100, 1001))
+    out = float4(-inf, 1, 2, 3.0004342)
+";
             }
             {
                 var descriptor = Descriptors["exp"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the base-e exponential, or e^x, of the specified value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"The base-e exponential of the x parameter.";
+                descriptor.Example = @">>> exp(0)
+    # exp(0)
+    out = 1
+    >>> exp(1)
+    # exp(1)
+    out = 2.718281828459045
+    >>> exp(float4(0,1,2,3))
+    # exp(float4(0, 1, 2, 3))
+    out = float4(1, 2.7182817, 7.389056, 20.085537)
+";
             }
             {
                 var descriptor = Descriptors["exp2"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the base 2 exponential, or 2^x, of the specified value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"The base-2 exponential of the x parameter.";
+                descriptor.Example = @">>> exp2(0)
+    # exp2(0)
+    out = 1
+    >>> exp2(1)
+    # exp2(1)
+    out = 2
+    >>> exp2(4)
+    # exp2(4)
+    out = 16
+    >>> exp2(float4(0,1,2,3))
+    # exp2(float4(0, 1, 2, 3))
+    out = float4(1, 2, 4, 8)
+";
             }
             {
                 var descriptor = Descriptors["pow"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the specified value raised to the specified power.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("y", @"The specified power.")  { IsOptional = false });
+                descriptor.Returns = @"The x parameter raised to the power of the y parameter.";
+                descriptor.Example = @">>> pow(1.5, 3.5)
+    # pow(1.5, 3.5)
+    out = 4.133513940946613
+    >>> pow(2, 4)
+    # pow(2, 4)
+    out = 16
+    >>> pow(float4(1,2,3,4), 4)
+    # pow(float4(1, 2, 3, 4), 4)
+    out = float4(1, 16, 81, 256)
+    >>> pow(float4(1..4), float4(5..8))
+    # pow(float4(1..4), float4(5..8))
+    out = float4(1, 64, 2187, 65536)
+";
             }
             {
                 var descriptor = Descriptors["round"];

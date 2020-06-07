@@ -102,7 +102,7 @@ namespace Kalk.Core
         /// out = 12586269025
         /// ```
         /// </example>
-        [KalkDoc("fib", CategoryMathFunctions)]
+        [KalkDoc("fib", CategoryMathFunctions, Functor = true)]
         public object Fib(KalkIntValue x) => x.TransformArg(Engine, FibFunc);
 
         /// <summary>
@@ -317,7 +317,7 @@ namespace Kalk.Core
         /// out = 3.141592653589793
         /// ```
         /// </example>
-        [KalkDoc("radians", CategoryMathFunctions)]
+        [KalkDoc("radians", CategoryMathFunctions, Functor = true)]
         public object Radians(KalkCompositeValue x) => x.TransformArg(Engine, RadiansFunc);
 
         /// <summary>
@@ -334,7 +334,7 @@ namespace Kalk.Core
         /// out = 180
         /// ```
         /// </example>
-        [KalkDoc("degrees", CategoryMathFunctions)]
+        [KalkDoc("degrees", CategoryMathFunctions, Functor = true)]
         public object Degrees(KalkCompositeValue x) => x.TransformArg(Engine, DegreesFunc);
 
         /// <summary>
@@ -359,7 +359,7 @@ namespace Kalk.Core
         /// out = float4(-1, 1, 0, 1)
         /// ```
         /// </example>
-        [KalkDoc("sign", CategoryMathFunctions)]
+        [KalkDoc("sign", CategoryMathFunctions, Functor = true)]
         public object Sign(KalkCompositeValue x) => x.TransformArg(Engine, SignFunc);
 
         /// <summary>
@@ -377,7 +377,7 @@ namespace Kalk.Core
         /// out = float4(-1, -4.371139E-08, 1, 0.87758255)
         /// ```
         /// </example>
-        [KalkDoc("cos", CategoryMathFunctions)]
+        [KalkDoc("cos", CategoryMathFunctions, Functor = true)]
         public object Cos(KalkDoubleValue x) => x.TransformArg(Engine, CosFunc);
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace Kalk.Core
         /// out = float4(3.1415927, 1.5707964, 0, 1.0471976)
         /// ```
         /// </example>
-        [KalkDoc("acos", CategoryMathFunctions)]
+        [KalkDoc("acos", CategoryMathFunctions, Functor = true)]
         public object Acos(KalkDoubleValue x) => x.TransformArg(Engine, AcosFunc);
 
         /// <summary>
@@ -425,7 +425,7 @@ namespace Kalk.Core
         /// out = float4(1.5430807, 1.5430807, 1, 3.7621956)
         /// ```
         /// </example>
-        [KalkDoc("cosh", CategoryMathFunctions)]
+        [KalkDoc("cosh", CategoryMathFunctions, Functor = true)]
         public object Cosh(KalkDoubleValue x) => x.TransformArg(Engine, CoshFunc);
 
         /// <summary>
@@ -446,7 +446,7 @@ namespace Kalk.Core
         /// out = float4(0, 1.316958, 2.063437, 2.993223)
         /// ```
         /// </example>
-        [KalkDoc("acosh", CategoryMathFunctions)]
+        [KalkDoc("acosh", CategoryMathFunctions, Functor = true)]
         public object Acosh(KalkDoubleValue x) => x.TransformArg(Engine, AcoshFunc);
 
         /// <summary>
@@ -464,7 +464,7 @@ namespace Kalk.Core
         /// out = float4(-8.742278E-08, 1, 0, 0.47942555)
         /// ```
         /// </example>
-        [KalkDoc("sin", CategoryMathFunctions)]
+        [KalkDoc("sin", CategoryMathFunctions, Functor = true)]
         public object Sin(KalkDoubleValue x) => x.TransformArg(Engine, SinFunc);
 
         /// <summary>
@@ -482,7 +482,7 @@ namespace Kalk.Core
         /// out = float4(-1.5707964, 0, 1.5707964, 0.5235988)
         /// ```
         /// </example>
-        [KalkDoc("asin", CategoryMathFunctions)]
+        [KalkDoc("asin", CategoryMathFunctions, Functor = true)]
         public object Asin(KalkDoubleValue x) => x.TransformArg(Engine, AsinFunc);
 
         /// <summary>
@@ -506,7 +506,7 @@ namespace Kalk.Core
         /// out = float4(-1.1752012, 1.1752012, 0, 3.6268604)
         /// ```
         /// </example>
-        [KalkDoc("sinh", CategoryMathFunctions)]
+        [KalkDoc("sinh", CategoryMathFunctions, Functor = true)]
         public object Sinh(KalkDoubleValue x) => x.TransformArg(Engine, SinhFunc);
 
         /// <summary>
@@ -530,8 +530,134 @@ namespace Kalk.Core
         /// out = float4(-1, 0, 1, 1.4436355)
         /// ```
         /// </example>
-        [KalkDoc("asinh", CategoryMathFunctions)]
+        [KalkDoc("asinh", CategoryMathFunctions, Functor = true)]
         public object Asinh(KalkDoubleValue x) => x.TransformArg(Engine, AsinhFunc);
+
+        /// <summary>
+        /// Returns the tangent of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value, in radians.</param>
+        /// <returns>The tangent of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> tan(0.5)
+        /// # tan(0.5)
+        /// out = 0.5463024898437905
+        /// >>> tan(1)
+        /// # tan(1)
+        /// out = 1.5574077246549023
+        /// >>> tan float4(1, 2, 3, 4)
+        /// # tan(float4(1, 2, 3, 4))
+        /// out = float4(1.5574077, -2.1850398, -0.14254655, 1.1578213)
+        /// ```
+        /// </example>
+        [KalkDoc("tan", CategoryMathFunctions, Functor = true)]
+        public object Tan(KalkDoubleValue x) => x.TransformArg(Engine, TanFunc);
+
+        /// <summary>
+        /// Returns the arctangent of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The arctangent of the x parameter. This value is within the range of -π/2 to π/2.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> atan(0.5)
+        /// # atan(0.5)
+        /// out = 0.4636476090008061
+        /// >>> atan(1)
+        /// # atan(1)
+        /// out = 0.7853981633974483
+        /// >>> atan(0)
+        /// # atan(0)
+        /// out = 0
+        /// >>> atan(float4(0,1,2,3))
+        /// # atan(float4(0, 1, 2, 3))
+        /// out = float4(0, 0.7853982, 1.1071488, 1.2490457)
+        /// ```
+        /// </example>
+        [KalkDoc("atan", CategoryMathFunctions, Functor = true)]
+        public object Atan(KalkDoubleValue x) => x.TransformArg(Engine, AtanFunc);
+
+        /// <summary>
+        /// Returns the hyperbolic tangent of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value, in radians.</param>
+        /// <returns>The hyperbolic tangent of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> tanh(0)
+        /// # tanh(0)
+        /// out = 0
+        /// >>> tanh(1)
+        /// # tanh(1)
+        /// out = 0.7615941559557649
+        /// >>> tanh(2)
+        /// # tanh(2)
+        /// out = 0.9640275800758169
+        /// >>> tanh(float4(0, 1, 2, 3))
+        /// # tanh(float4(0, 1, 2, 3))
+        /// out = float4(0, 0.7615942, 0.9640276, 0.9950548)
+        /// ```
+        /// </example>
+        [KalkDoc("tanh", CategoryMathFunctions, Functor = true)]
+        public object Tanh(KalkDoubleValue x) => x.TransformArg(Engine, TanhFunc);
+
+        /// <summary>
+        /// Returns the inverse hyperbolic tangent of a number.
+        /// </summary>
+        /// <param name="x">The specified value. Number must be between -1 and 1 (excluding -1 and 1).</param>
+        /// <returns>The inverse hyperbolic tangent of the x parameter</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> atanh(0)
+        /// # atanh(0)
+        /// out = 0
+        /// >>> atanh(0.5)
+        /// # atanh(0.5)
+        /// out = 0.5493061443340549
+        /// >>> atanh(float4(-0.5, 0, 0.5, 0.8))
+        /// # atanh(float4(-0.5, 0, 0.5, 0.8))
+        /// out = float4(-0.54930615, 0, 0.54930615, 1.0986123)
+        /// ```
+        /// </example>
+        [KalkDoc("atanh", CategoryMathFunctions, Functor = true)]
+        public object Atanh(KalkDoubleValue x) => x.TransformArg(Engine, AtanhFunc);
+
+        /// <summary>
+        /// Returns the arctangent of two values (x,y).
+        /// </summary>
+        /// <param name="y">The y value.</param>
+        /// <param name="x">The x value.</param>
+        /// <returns>The arctangent of (y,x).</returns>
+        /// <remarks>The signs of the x and y parameters are used to determine the quadrant of the return values within the range of -π to π. The `atan2` function is well-defined for every point other than the origin, even if y equals 0 and x does not equal 0.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> atan2(1,1)
+        /// # atan2(1, 1)
+        /// out = 0.7853981633974483
+        /// >>> atan2(1,0)
+        /// # atan2(1, 0)
+        /// out = 1.5707963267948966
+        /// >>> atan2(0,1)
+        /// # atan2(0, 1)
+        /// out = 0
+        /// >>> atan2(float4(1), float4(0,1,-1,2))
+        /// # atan2(float4(1), float4(0, 1, -1, 2))
+        /// out = float4(1.5707964, 0.7853982, 2.3561945, 0.4636476)
+        /// ```
+        /// </example>
+        [KalkDoc("atan2", CategoryMathFunctions, Functor = true)]
+        public object Atan2(KalkDoubleValue y, KalkDoubleValue x)
+        {
+            var (xValues, yValues) = GetPairValues(x, y);
+            int index = 0;
+            return x.TransformArg(Engine, (double v) =>
+            {
+                var result = Math.Atan2(yValues[index], xValues[index]);
+                index++;
+                return result;
+            });
+        }
 
         /// <summary>
         /// Returns the floating-point remainder of x/y.
@@ -556,7 +682,7 @@ namespace Kalk.Core
         /// out = float4(0.09999998, 2.9802322E-08, -0.09999992, -0.19999984)
         /// ```
         /// </example>
-        [KalkDoc("fmod", CategoryMathFunctions)]
+        [KalkDoc("fmod", CategoryMathFunctions, Functor = true)]
         public object Fmod(KalkDoubleValue x, KalkDoubleValue y)
         {
             var (xValues, yValues) = GetPairValues(x, y);
@@ -593,47 +719,195 @@ namespace Kalk.Core
         /// out = float4(0.25, 0.5, 0.25, 0.75)
         /// ```
         /// </example>
-        [KalkDoc("frac", CategoryMathFunctions)]
+        [KalkDoc("frac", CategoryMathFunctions, Functor = true)]
         public object Frac(KalkDoubleValue x) => x.TransformArg(Engine, FracFunc);
 
-        [KalkDoc("tan", CategoryMathFunctions)]
-        public object Tan(KalkDoubleValue x) => x.TransformArg(Engine, TanFunc);
-        [KalkDoc("atan", CategoryMathFunctions)]
-        public object Atan(KalkDoubleValue x) => x.TransformArg(Engine, AtanFunc);
-        [KalkDoc("tanh", CategoryMathFunctions)]
-        public object Tanh(KalkDoubleValue x) => x.TransformArg(Engine, TanhFunc);
-        [KalkDoc("atanh", CategoryMathFunctions)]
-        public object Atanh(KalkDoubleValue x) => x.TransformArg(Engine, AtanhFunc);
-
-        [KalkDoc("atan2", CategoryMathFunctions)]
-        public object Atan2(KalkDoubleValue y, KalkDoubleValue x)
-        {
-            var (xValues, yValues) = GetPairValues(x, y);
-            int index = 0;
-            return x.TransformArg(Engine, (double v) =>
-            {
-                var result = Math.Atan2(yValues[index], xValues[index]);
-                index++;
-                return result;
-            });
-        }
-
-        [KalkDoc("rsqrt", CategoryMathFunctions)]
+        /// <summary>
+        /// Returns the reciprocal of the square root of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The reciprocal of the square root of the x parameter.</returns>
+        /// <remarks>This function uses the following formula: 1 / sqrt(x).</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> rsqrt(1)
+        /// # rsqrt(1)
+        /// out = 1
+        /// >>> rsqrt(2)
+        /// # rsqrt(2)
+        /// out = 0.7071067811865475
+        /// >>> rsqrt(float4(1,2,3,4))
+        /// # rsqrt(float4(1, 2, 3, 4))
+        /// out = float4(1, 0.70710677, 0.57735026, 0.5)
+        /// ```
+        /// </example>
+        [KalkDoc("rsqrt", CategoryMathFunctions, Functor = true)]
         public object Rsqrt(KalkDoubleValue x) => x.TransformArg(Engine, RsqrtFunc);
-        [KalkDoc("sqrt", CategoryMathFunctions)]
+
+        /// <summary>
+        /// Returns the square root of the specified floating-point value, per component.
+        /// </summary>
+        /// <param name="x">The specified floating-point value.</param>
+        /// <returns>The square root of the x parameter, per component.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> sqrt(1)
+        /// # sqrt(1)
+        /// out = 1
+        /// >>> sqrt(2)
+        /// # sqrt(2)
+        /// out = 1.4142135623730951
+        /// >>> sqrt(float4(1,2,3,4))
+        /// # sqrt(float4(1, 2, 3, 4))
+        /// out = float4(1, 1.4142135, 1.7320508, 2)
+        /// ```
+        /// </example>
+        [KalkDoc("sqrt", CategoryMathFunctions, Functor = true)]
         public object Sqrt(KalkDoubleValue x) => x.TransformArg(Engine, SqrtFunc);
-        [KalkDoc("log", CategoryMathFunctions)]
+
+        /// <summary>
+        /// Returns the base-e logarithm of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The base-e logarithm of the x parameter. If the x parameter is negative, this function returns indefinite. If the x parameter is 0, this function returns `-inf`.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> log 1
+        /// # log(1)
+        /// out = 0
+        /// >>> log 2
+        /// # log(2)
+        /// out = 0.6931471805599453
+        /// >>> log 0
+        /// # log(0)
+        /// out = -inf
+        /// >>> log float4(0,1,2,3)
+        /// # log(float4(0, 1, 2, 3))
+        /// out = float4(-inf, 0, 0.6931472, 1.0986123)
+        /// ```
+        /// </example>
+        [KalkDoc("log", CategoryMathFunctions, Functor = true)]
         public object Log(KalkDoubleValue x) => x.TransformArg(Engine, LogFunc);
-        [KalkDoc("log2", CategoryMathFunctions)]
+
+        /// <summary>
+        /// Returns the base-2 logarithm of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The base-2 logarithm of the x parameter. If the x parameter is negative, this function returns indefinite. If the x parameter is 0, this function returns -inf.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> log2 0
+        /// # log2(0)
+        /// out = -inf
+        /// >>> log2 8
+        /// # log2(8)
+        /// out = 3
+        /// >>> log2 129
+        /// # log2(129)
+        /// out = 7.011227255423254
+        /// >>> log2 float4(0, 2, 16, 257)
+        /// # log2(float4(0, 2, 16, 257))
+        /// out = float4(-inf, 1, 4, 8.005625)
+        /// ```
+        /// </example>
+        [KalkDoc("log2", CategoryMathFunctions, Functor = true)]
         public object Log2(KalkDoubleValue x) => x.TransformArg(Engine, Log2Func);
-        [KalkDoc("log10", CategoryMathFunctions)]
+
+        /// <summary>
+        /// Returns the base-10 logarithm of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The base-10 logarithm of the x parameter. If the x parameter is negative, this function returns indefinite. If the x is 0, this function returns -inf.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> log10 0
+        /// # log10(0)
+        /// out = -inf
+        /// >>> log10 10
+        /// # log10(10)
+        /// out = 1
+        /// >>> log10 100
+        /// # log10(100)
+        /// out = 2
+        /// >>> log10 1001
+        /// # log10(1001)
+        /// out = 3.000434077479319
+        /// >>> log10(float4(0,10,100,1001))
+        /// # log10(float4(0, 10, 100, 1001))
+        /// out = float4(-inf, 1, 2, 3.0004342)
+        /// ```
+        /// </example>
+        [KalkDoc("log10", CategoryMathFunctions, Functor = true)]
         public object Log10(KalkDoubleValue x) => x.TransformArg(Engine, Log10Func);
-        [KalkDoc("exp", CategoryMathFunctions)]
+
+        /// <summary>
+        /// Returns the base-e exponential, or e^x, of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The base-e exponential of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> exp(0)
+        /// # exp(0)
+        /// out = 1
+        /// >>> exp(1)
+        /// # exp(1)
+        /// out = 2.718281828459045
+        /// >>> exp(float4(0,1,2,3))
+        /// # exp(float4(0, 1, 2, 3))
+        /// out = float4(1, 2.7182817, 7.389056, 20.085537)
+        /// ```
+        /// </example>
+        [KalkDoc("exp", CategoryMathFunctions, Functor = true)]
         public object Exp(KalkDoubleValue x) => x.TransformArg(Engine, ExpFunc);
-        [KalkDoc("exp2", CategoryMathFunctions)]
+
+        /// <summary>
+        /// Returns the base 2 exponential, or 2^x, of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The base-2 exponential of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> exp2(0)
+        /// # exp2(0)
+        /// out = 1
+        /// >>> exp2(1)
+        /// # exp2(1)
+        /// out = 2
+        /// >>> exp2(4)
+        /// # exp2(4)
+        /// out = 16
+        /// >>> exp2(float4(0,1,2,3))
+        /// # exp2(float4(0, 1, 2, 3))
+        /// out = float4(1, 2, 4, 8)
+        /// ```
+        /// </example>
+        [KalkDoc("exp2", CategoryMathFunctions, Functor = true)]
         public object Exp2(KalkDoubleValue x) => x.TransformArg(Engine, Exp2Func);
 
-        [KalkDoc("pow", CategoryMathFunctions)]
+        /// <summary>
+        /// Returns the specified value raised to the specified power.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <param name="y">The specified power.</param>
+        /// <returns>The x parameter raised to the power of the y parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> pow(1.5, 3.5)
+        /// # pow(1.5, 3.5)
+        /// out = 4.133513940946613
+        /// >>> pow(2, 4)
+        /// # pow(2, 4)
+        /// out = 16
+        /// >>> pow(float4(1,2,3,4), 4)
+        /// # pow(float4(1, 2, 3, 4), 4)
+        /// out = float4(1, 16, 81, 256)
+        /// >>> pow(float4(1..4), float4(5..8))
+        /// # pow(float4(1..4), float4(5..8))
+        /// out = float4(1, 64, 2187, 65536)
+        /// ```
+        /// </example>
+        [KalkDoc("pow", CategoryMathFunctions, Functor = true)]
         public object Pow(KalkDoubleValue x, KalkDoubleValue y)
         {
             var (xValues, yValues) = GetPairValues(x, y);
@@ -646,19 +920,19 @@ namespace Kalk.Core
             });
         } 
         
-        [KalkDoc("round", CategoryMathFunctions)]
+        [KalkDoc("round", CategoryMathFunctions, Functor = true)]
         public object Round(KalkDoubleValue x) => x.TransformArg(Engine, RoundFunc);
-        [KalkDoc("floor", CategoryMathFunctions)]
+        [KalkDoc("floor", CategoryMathFunctions, Functor = true)]
         public object Floor(KalkDoubleValue x) => x.TransformArg(Engine, FloorFunc);
-        [KalkDoc("ceil", CategoryMathFunctions)]
+        [KalkDoc("ceil", CategoryMathFunctions, Functor = true)]
         public object Ceiling(KalkDoubleValue x) => x.TransformArg(Engine, CeilFunc);
-        [KalkDoc("trunc", CategoryMathFunctions)]
+        [KalkDoc("trunc", CategoryMathFunctions, Functor = true)]
         public object Trunc(KalkDoubleValue x) => x.TransformArg(Engine, TruncFunc);
         
-        [KalkDoc("saturate", CategoryMathFunctions)]
+        [KalkDoc("saturate", CategoryMathFunctions, Functor = true)]
         public object Saturate(KalkDoubleValue x) => x.TransformArg(Engine, SaturateFunc);
 
-        [KalkDoc("min", CategoryMathFunctions)]
+        [KalkDoc("min", CategoryMathFunctions, Functor = true)]
         public object Min(KalkDoubleValue x, KalkDoubleValue y)
         {
             var (xValues,yValues) = GetPairValues(x,y);
@@ -671,7 +945,7 @@ namespace Kalk.Core
             });
         }
 
-        [KalkDoc("max", CategoryMathFunctions)]
+        [KalkDoc("max", CategoryMathFunctions, Functor = true)]
         public object Max(KalkDoubleValue x, KalkDoubleValue y)
         {
             var (xValues, yValues) = GetPairValues(x, y);
@@ -684,7 +958,7 @@ namespace Kalk.Core
             });
         }
 
-        [KalkDoc("step", CategoryMathFunctions)]
+        [KalkDoc("step", CategoryMathFunctions, Functor = true)]
         public object Step(KalkDoubleValue y, KalkDoubleValue x)
         {
             var (xValues, yValues) = GetPairValues(x, y, nameof(x), nameof(y));
@@ -698,7 +972,7 @@ namespace Kalk.Core
             });
         }
 
-        [KalkDoc("smoothstep", CategoryMathFunctions)]
+        [KalkDoc("smoothstep", CategoryMathFunctions, Functor = true)]
         public object Smoothstep(KalkDoubleValue min, KalkDoubleValue max, KalkDoubleValue x)
         {
             var (xValues, minValues, maxValues) = GetTripleValues(x, min, max, nameof(x), nameof(min), nameof(max));
@@ -714,7 +988,7 @@ namespace Kalk.Core
             });
         }
         
-        [KalkDoc("lerp", CategoryMathFunctions)]
+        [KalkDoc("lerp", CategoryMathFunctions, Functor = true)]
         public object Lerp(KalkDoubleValue x, KalkDoubleValue y, KalkDoubleValue s)
         {
             var (xValues, yValues, sValues) = GetTripleValues(x, y, s, nameof(x), nameof(y), nameof(s));
@@ -728,7 +1002,7 @@ namespace Kalk.Core
             });
         }
 
-        [KalkDoc("clamp", CategoryMathFunctions)]
+        [KalkDoc("clamp", CategoryMathFunctions, Functor = true)]
         public object Clamp(KalkDoubleValue x, KalkDoubleValue min, KalkDoubleValue max)
         {
             var (xValues, minValues, maxValues) = GetTripleValues(x, min, max, nameof(x), nameof(min), nameof(max));
@@ -750,7 +1024,47 @@ namespace Kalk.Core
 
         [KalkDoc("phase", CategoryMathFunctions)]
         public double Phase(KalkComplex x) => x.Phase;
-        
+
+        [KalkDoc("isfinite", CategoryMathFunctions, Functor = true)]
+        public object IsFinite(KalkCompositeValue x) => x.TransformArg(Engine, IsFiniteFunc);
+
+        [KalkDoc("isinf", CategoryMathFunctions, Functor = true)]
+        public object IsInf(KalkCompositeValue x) => x.TransformArg(Engine, IsInfFunc);
+
+        [KalkDoc("isnan", CategoryMathFunctions, Functor = true)]
+        public object IsNan(KalkCompositeValue x) => x.TransformArg(Engine, IsNanFunc);
+
+        [KalkDoc("sum", CategoryMathFunctions)]
+        public object Sum(object value, params object[] values)
+        {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+
+            object result = value;
+            if (value is IEnumerable it)
+            {
+                bool resetFirst = true;
+                foreach (var nextValue in it)
+                {
+                    if (resetFirst)
+                    {
+                        result = nextValue;
+                        resetFirst = false;
+                    }
+                    else
+                    {
+                        result = ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.Add, result, nextValue);
+                    }
+                }
+            }
+
+            foreach (var nextValue in values)
+            {
+                result = ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.Add, result, nextValue);
+            }
+
+            return result;
+        }
+
         private (List<double>, List<double>) GetPairValues(KalkDoubleValue x, KalkDoubleValue y, string nameofx = "x", string nameofy = "y")
         {
             var xValues = new List<double>();
@@ -827,46 +1141,6 @@ namespace Kalk.Core
             }
 
             return (xValues, yValues, zValues);
-        }
-
-        [KalkDoc("isfinite", CategoryMathFunctions)]
-        public object IsFinite(KalkCompositeValue x) => x.TransformArg(Engine, IsFiniteFunc);
-        [KalkDoc("isinf", CategoryMathFunctions)]
-        public object IsInf(KalkCompositeValue x) => x.TransformArg(Engine, IsInfFunc);
-        [KalkDoc("isnan", CategoryMathFunctions)]
-        public object IsNan(KalkCompositeValue x) => x.TransformArg(Engine, IsNanFunc);
-        
-        private delegate object SumDelegate(object value, params object[] values);
-
-        [KalkDoc("sum", CategoryMathFunctions)]
-        public object Sum(object value, params object[] values)
-        {
-            if (value == null) throw new ArgumentNullException(nameof(value));
-
-            object result = value;
-            if (value is IEnumerable it)
-            {
-                bool resetFirst = true;
-                foreach(var nextValue in it)
-                {
-                    if (resetFirst)
-                    {
-                        result = nextValue;
-                        resetFirst = false;
-                    }
-                    else
-                    {
-                        result = ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.Add, result, nextValue);
-                    }
-                }
-            }
-
-            foreach (var nextValue in values)
-            {
-                result = ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.Add, result, nextValue);
-            }
-            
-            return result;
         }
 
         private static double FracImpl(double x)
