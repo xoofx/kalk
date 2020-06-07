@@ -215,7 +215,7 @@ namespace Kalk.Core
             return visit(GetValue());
         }
         
-        public object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
+        public object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply, Type destType)
         {
             return apply(GetValue());
         }

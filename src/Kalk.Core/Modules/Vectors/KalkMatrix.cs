@@ -266,6 +266,17 @@ namespace Kalk.Core
             return newValue;
         }
 
+        public object TransformToBool(Func<T, KalkBool> apply)
+        {
+            var newValue = new KalkMatrix<KalkBool>(RowCount, ColumnCount);
+            for (int i = 0; i < _values.Length; i++)
+            {
+                var result = apply(_values[i]);
+                newValue._values[i] = result;
+            }
+            return newValue;
+        }
+
         public override bool CanTransform(Type transformType)
         {
             return typeof(T) == typeof(int) && (typeof(long) == transformType || typeof(int) == transformType) ||
@@ -288,8 +299,17 @@ namespace Kalk.Core
             return true;
         }
 
-        public override object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
+        public override object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply, Type destType)
         {
+            if (destType == typeof(KalkBool))
+            {
+                return TransformToBool(value =>
+                {
+                    var result = apply(value);
+                    return context.ToObject<KalkBool>(span, result);
+                });
+            }
+
             return this.Transform(value =>
             {
                 var result = apply(value);

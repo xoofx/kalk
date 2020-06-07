@@ -32,7 +32,7 @@ namespace Kalk.Core
 
         public abstract bool Visit(TemplateContext context, SourceSpan span, Func<object, bool> visit);
 
-        public abstract object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply);
+        public abstract object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply, Type destType);
 
         public static bool IsNumber(object value)
         {

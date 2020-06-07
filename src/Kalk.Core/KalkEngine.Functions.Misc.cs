@@ -254,7 +254,7 @@ namespace Kalk.Core
             }
 
             var composite = new KalkCompositeValue(value);
-            return composite.Transform(this, CurrentSpan, input => ReplaceImpl(input, match, @by));
+            return composite.Transform(this, CurrentSpan, input => ReplaceImpl(input, match, @by), typeof(object));
         }
 
         [KalkDoc("slice", CategoryMisc)]

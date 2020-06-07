@@ -401,6 +401,17 @@ namespace Kalk.Core
             return newValue;
         }
 
+        public virtual object TransformToBool(Func<T, KalkBool> apply)
+        {
+            var newValue = new KalkVector<KalkBool>(Length);
+            for (int i = 0; i < Length; i++)
+            {
+                var result = apply(_values[i]);
+                newValue[i] = result;
+            }
+            return newValue;
+        }
+
         public override bool Visit(TemplateContext context, SourceSpan span, Func<object, bool> visit)
         {
             for (int i = 0; i < Length; i++)
@@ -413,8 +424,17 @@ namespace Kalk.Core
             return true;
         }
 
-        public override object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
+        public override object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply, Type destType)
         {
+            if (destType == typeof(KalkBool))
+            {
+                return TransformToBool(value =>
+                {
+                    var result = apply(value);
+                    return context.ToObject<KalkBool>(span, result);
+                });
+            }
+
             return this.Transform(value =>
             {
                 var result = apply(value);

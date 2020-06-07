@@ -53,7 +53,7 @@ namespace Kalk.Core
                     var nestedValue = (KalkCompositeValue)context.ToObject(context.CurrentSpan, value, this.GetType());
                     // Recursively apply the transformation with the same value
                     return nestedValue.Transform(context, apply);
-                });
+                }, typeof(TTo));
             }
 
             return apply(context.ToObject<TFrom>(context.CurrentSpan, Value));
@@ -76,9 +76,9 @@ namespace Kalk.Core
             return visit(Value);
         }
 
-        public object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply)
+        public object Transform(TemplateContext context, SourceSpan span, Func<object, object> apply, Type destType)
         {
-            if (Transformable != null) return Transformable.Transform(context, span, apply);
+            if (Transformable != null) return Transformable.Transform(context, span, apply, destType);
             return apply(Value);
         }
         
