@@ -260,6 +260,7 @@ namespace Kalk.Core
         /// Setup the seed function for rnd. The default seed is random.
         /// </summary>
         /// <param name="x">An original seed value for the `rnd` function.</param>
+        /// <remarks>The x is not specified, it will generate a random seed automatically.</remarks>
         /// <example>
         /// ```kalk
         /// >>> seed(0); rnd
@@ -271,9 +272,9 @@ namespace Kalk.Core
         /// ```
         /// </example>
         [KalkDoc("seed", CategoryMathFunctions)]
-        public void Seed(int x)
+        public void Seed(int? x = null)
         {
-            _random = new Random(x);
+            _random = x.HasValue ? new Random(x.Value) : new Random();
         }
 
         /// <summary>
@@ -302,17 +303,40 @@ namespace Kalk.Core
         }
 
         /// <summary>
-        /// Converts x from degrees to radians.
+        /// Converts the specified value from degrees to radians.
         /// </summary>
+        /// <param name="x">The specified value in degrees.</param>
+        /// <returns>The x parameter converted from degrees to radians.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> radians(90)
+        /// # radians(90)
+        /// out = 1.5707963267948966
+        /// >>> radians(180)
+        /// # radians(180)
+        /// out = 3.141592653589793
+        /// ```
+        /// </example>
         [KalkDoc("radians", CategoryMathFunctions)]
         public object Radians(KalkCompositeValue x) => x.TransformArg(Engine, RadiansFunc);
 
         /// <summary>
-        /// Converts x from radians to degrees.
+        /// Converts the specified value from radians to degrees.
         /// </summary>
+        /// <returns>The x parameter converted from radians to degrees.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> degrees(pi/2)
+        /// # degrees(pi / 2)
+        /// out = 90
+        /// >>> degrees(pi)
+        /// # degrees(pi)
+        /// out = 180
+        /// ```
+        /// </example>
         [KalkDoc("degrees", CategoryMathFunctions)]
         public object Degrees(KalkCompositeValue x) => x.TransformArg(Engine, DegreesFunc);
-        
+
         /// <summary>
         /// Returns an integer that indicates the sign of a number.
         /// </summary>
@@ -323,33 +347,215 @@ namespace Kalk.Core
         ///  - 0 if x is equal to zero
         ///  - 1 if x is greater than zero.
         /// </returns>
+        /// <example>
+        /// ```kalk
+        /// >>> sign(-5); sign(0); sign(2.3)
+        /// # sign(-5); sign(0); sign(2.3)
+        /// out = -1
+        /// out = 0
+        /// out = 1
+        /// >>> sign float4(-1, 2, 0, 1.5)
+        /// # sign(float4(-1, 2, 0, 1.5))
+        /// out = float4(-1, 1, 0, 1)
+        /// ```
+        /// </example>
         [KalkDoc("sign", CategoryMathFunctions)]
         public object Sign(KalkCompositeValue x) => x.TransformArg(Engine, SignFunc);
 
+        /// <summary>
+        /// Returns the cosine of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value, in radians.</param>
+        /// <returns>The cosine of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> cos 0.5
+        /// # cos(0.5)
+        /// out = 0.8775825618903728
+        /// >>> cos float4(pi, pi/2, 0, 0.5)
+        /// # cos(float4(pi, pi / 2, 0, 0.5))
+        /// out = float4(-1, -4.371139E-08, 1, 0.87758255)
+        /// ```
+        /// </example>
         [KalkDoc("cos", CategoryMathFunctions)]
         public object Cos(KalkDoubleValue x) => x.TransformArg(Engine, CosFunc);
 
+        /// <summary>
+        /// Returns the arccosine of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value. Each component should be a floating-point value within the range of -1 to 1.</param>
+        /// <returns>The arccosine of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> acos(-1)
+        /// # acos(-1)
+        /// out = 3.141592653589793
+        /// >>> acos(0)
+        /// # acos(0)
+        /// out = 1.5707963267948966
+        /// >>> acos(1)
+        /// # acos(1)
+        /// out = 0
+        /// >>> acos(float4(-1,0,1,0.5))
+        /// # acos(float4(-1, 0, 1, 0.5))
+        /// out = float4(3.1415927, 1.5707964, 0, 1.0471976)
+        /// ```
+        /// </example>
         [KalkDoc("acos", CategoryMathFunctions)]
         public object Acos(KalkDoubleValue x) => x.TransformArg(Engine, AcosFunc);
 
+        /// <summary>
+        /// Returns the hyperbolic cosine of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value, in radians.</param>
+        /// <returns>The hyperbolic cosine of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> cosh(-1)
+        /// # cosh(-1)
+        /// out = 1.5430806348152437
+        /// >>> cosh(1)
+        /// # cosh(1)
+        /// out = 1.5430806348152437
+        /// >>> cosh(0)
+        /// # cosh(0)
+        /// out = 1
+        /// >>> cosh(float4(-1, 1, 0, 2))
+        /// # cosh(float4(-1, 1, 0, 2))
+        /// out = float4(1.5430807, 1.5430807, 1, 3.7621956)
+        /// ```
+        /// </example>
         [KalkDoc("cosh", CategoryMathFunctions)]
         public object Cosh(KalkDoubleValue x) => x.TransformArg(Engine, CoshFunc);
 
+        /// <summary>
+        /// Returns the inverse hyperbolic cosine of a number. The number must be greater than or equal to 1.
+        /// </summary>
+        /// <param name="x">Any real number equal to or greater than 1.</param>
+        /// <returns>The inverse hyperbolic cosine of the x parameter</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> acosh(1)
+        /// # acosh(1)
+        /// out = 0
+        /// >>> acosh(10)
+        /// # acosh(10)
+        /// out = 2.993222846126381
+        /// >>> acosh(float4(1,2,4,10))
+        /// # acosh(float4(1, 2, 4, 10))
+        /// out = float4(0, 1.316958, 2.063437, 2.993223)
+        /// ```
+        /// </example>
         [KalkDoc("acosh", CategoryMathFunctions)]
         public object Acosh(KalkDoubleValue x) => x.TransformArg(Engine, AcoshFunc);
 
+        /// <summary>
+        /// Returns the sine of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value, in radians.</param>
+        /// <returns>The sine of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> sin 0.5
+        /// # sin(0.5)
+        /// out = 0.479425538604203
+        /// >>> sin float4(pi, pi/2, 0, 0.5)
+        /// # sin(float4(pi, pi / 2, 0, 0.5))
+        /// out = float4(-8.742278E-08, 1, 0, 0.47942555)
+        /// ```
+        /// </example>
         [KalkDoc("sin", CategoryMathFunctions)]
         public object Sin(KalkDoubleValue x) => x.TransformArg(Engine, SinFunc);
 
+        /// <summary>
+        /// Returns the arcsine of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value. Each component of the x parameter should be within the range of -π/2 to π/2.</param>
+        /// <returns>The arcsine of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> asin 0.5
+        /// # asin(0.5)
+        /// out = 0.5235987755982989
+        /// >>> asin float4(-1, 0, 1, 0.5)
+        /// # asin(float4(-1, 0, 1, 0.5))
+        /// out = float4(-1.5707964, 0, 1.5707964, 0.5235988)
+        /// ```
+        /// </example>
         [KalkDoc("asin", CategoryMathFunctions)]
         public object Asin(KalkDoubleValue x) => x.TransformArg(Engine, AsinFunc);
 
+        /// <summary>
+        /// Returns the hyperbolic sine of the specified value.
+        /// </summary>
+        /// <param name="x">The specified value, in radians.</param>
+        /// <returns>The hyperbolic sine of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> sinh(-1)
+        /// # sinh(-1)
+        /// out = -1.1752011936438014
+        /// >>> sinh(0)
+        /// # sinh(0)
+        /// out = 0
+        /// >>> sinh(1)
+        /// # sinh(1)
+        /// out = 1.1752011936438014
+        /// >>> sinh(float4(-1, 1, 0, 2))
+        /// # sinh(float4(-1, 1, 0, 2))
+        /// out = float4(-1.1752012, 1.1752012, 0, 3.6268604)
+        /// ```
+        /// </example>
         [KalkDoc("sinh", CategoryMathFunctions)]
         public object Sinh(KalkDoubleValue x) => x.TransformArg(Engine, SinhFunc);
 
+        /// <summary>
+        /// Returns the inverse hyperbolic sine of a number.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The inverse hyperbolic sine of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> asinh(-1.1752011936438014)
+        /// # asinh(-1.1752011936438014)
+        /// out = -1
+        /// >>> asinh(0)
+        /// # asinh(0)
+        /// out = 0
+        /// >>> asinh(1.1752011936438014)
+        /// # asinh(1.1752011936438014)
+        /// out = 1
+        /// >>> asinh(float4(-1.1752011936438014, 0, 1.1752011936438014, 2))
+        /// # asinh(float4(-1.1752011936438014, 0, 1.1752011936438014, 2))
+        /// out = float4(-1, 0, 1, 1.4436355)
+        /// ```
+        /// </example>
         [KalkDoc("asinh", CategoryMathFunctions)]
         public object Asinh(KalkDoubleValue x) => x.TransformArg(Engine, AsinhFunc);
 
+        /// <summary>
+        /// Returns the floating-point remainder of x/y.
+        /// </summary>
+        /// <param name="x">The floating-point dividend.</param>
+        /// <param name="y">The floating-point divisor.</param>
+        /// <returns>The floating-point remainder of the x parameter divided by the y parameter.</returns>
+        /// <remarks>The floating-point remainder is calculated such that x = i * y + f, where i is an integer, f has the same sign as x, and the absolute value of f is less than the absolute value of y.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> fmod(2.5, 2)
+        /// # fmod(2.5, 2)
+        /// out = 0.5
+        /// >>> fmod(2.5, 3)
+        /// # fmod(2.5, 3)
+        /// out = 2.5
+        /// >>> fmod(-1.5, 1)
+        /// # fmod(-1.5, 1)
+        /// out = -0.5
+        /// >>> fmod(float4(1.5, 1.2, -2.3, -4.6), 0.2)
+        /// # fmod(float4(1.5, 1.2, -2.3, -4.6), 0.2)
+        /// out = float4(0.09999998, 2.9802322E-08, -0.09999992, -0.19999984)
+        /// ```
+        /// </example>
         [KalkDoc("fmod", CategoryMathFunctions)]
         public object Fmod(KalkDoubleValue x, KalkDoubleValue y)
         {
@@ -363,6 +569,30 @@ namespace Kalk.Core
             });
         }
 
+        /// <summary>
+        /// Returns the fractional (or decimal) part of x; which is greater than or equal to 0 and less than 1.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The fractional part of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> frac(1.25)
+        /// # frac(1.25)
+        /// out = 0.25
+        /// >>> frac(10.5)
+        /// # frac(10.5)
+        /// out = 0.5
+        /// >>> frac(-1.75)
+        /// # frac(-1.75)
+        /// out = 0.25
+        /// >>> frac(-10.25)
+        /// # frac(-10.25)
+        /// out = 0.75
+        /// >>> frac(float4(1.25, 10.5, -1.75, -10.25))
+        /// # frac(float4(1.25, 10.5, -1.75, -10.25))
+        /// out = float4(0.25, 0.5, 0.25, 0.75)
+        /// ```
+        /// </example>
         [KalkDoc("frac", CategoryMathFunctions)]
         public object Frac(KalkDoubleValue x) => x.TransformArg(Engine, FracFunc);
 
