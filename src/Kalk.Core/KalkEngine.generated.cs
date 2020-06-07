@@ -1192,110 +1192,347 @@ namespace Kalk.Core
             {
                 var descriptor = Descriptors["round"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Rounds the specified value to the nearest integer.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"The x parameter, rounded to the nearest integer within a floating-point type.";
+                descriptor.Example = @">>> round(0.2); round(1.5); round(10.7)
+    # round(0.2); round(1.5); round(10.7)
+    out = 0
+    out = 2
+    out = 11
+    >>> round(-0.2); round(-1.5); round(-10.7)
+    # round(-0.2); round(-1.5); round(-10.7)
+    out = -0
+    out = -2
+    out = -11
+";
             }
             {
                 var descriptor = Descriptors["floor"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the largest integer that is less than or equal to the specified value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"The largest integer value (returned as a floating-point type) that is less than or equal to the x parameter.";
+                descriptor.Example = @">>> floor(0.2); floor(1.5); floor(10.7)
+    # floor(0.2); floor(1.5); floor(10.7)
+    out = 0
+    out = 1
+    out = 10
+    >>> floor(-0.2); floor(-1.5); floor(-10.7)
+    # floor(-0.2); floor(-1.5); floor(-10.7)
+    out = -1
+    out = -2
+    out = -11
+";
             }
             {
                 var descriptor = Descriptors["ceil"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the smallest integer value that is greater than or equal to the specified value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified input.")  { IsOptional = false });
+                descriptor.Returns = @"The smallest integer value (returned as a floating-point type) that is greater than or equal to the x parameter.";
+                descriptor.Example = @">>> ceil(0.2); ceil(1.5); ceil(10.7)
+    # ceil(0.2); ceil(1.5); ceil(10.7)
+    out = 1
+    out = 2
+    out = 11
+    >>> ceil(-0.2); ceil(-1.5); ceil(-10.7)
+    # ceil(-0.2); ceil(-1.5); ceil(-10.7)
+    out = -0
+    out = -1
+    out = -10
+";
             }
             {
                 var descriptor = Descriptors["trunc"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Truncates a floating-point value to the integer component.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified input.")  { IsOptional = false });
+                descriptor.Returns = @"The input value truncated to an integer component.";
+                descriptor.Remarks = @"This function truncates a floating-point value to the integer component. Given a floating-point value of 1.6, the trunc function would return 1.0, where as the round function would return 2.0.";
+                descriptor.Example = @">>> trunc(0.2); trunc(1.5); trunc(10.7)
+    # trunc(0.2); trunc(1.5); trunc(10.7)
+    out = 0
+    out = 1
+    out = 10
+    >>> trunc(-0.2); trunc(-1.5); trunc(-10.7)
+    # trunc(-0.2); trunc(-1.5); trunc(-10.7)
+    out = -0
+    out = -1
+    out = -10
+";
             }
             {
                 var descriptor = Descriptors["saturate"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Clamps the specified value within the range of 0 to 1.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"The x parameter, clamped within the range of 0 to 1.";
+                descriptor.Example = @">>> saturate(10)
+    # saturate(10)
+    out = 1
+    >>> saturate(-10)
+    # saturate(-10)
+    out = 0
+    >>> saturate(float4(-1, 0.5, 1, 2))
+    # saturate(float4(-1, 0.5, 1, 2))
+    out = float4(0, 0.5, 1, 1)
+";
             }
             {
                 var descriptor = Descriptors["min"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Selects the lesser of x and y.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The x input value.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("y", @"The y input value.")  { IsOptional = false });
+                descriptor.Returns = @"The x or y parameter, whichever is the smallest value.";
+                descriptor.Example = @">>> min(-5, 6)
+    # min(-5, 6)
+    out = -5
+    >>> min(1, 0)
+    # min(1, 0)
+    out = 0
+    >>> min(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+    # min(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+    out = float4(0, 0, 2, 2)
+";
             }
             {
                 var descriptor = Descriptors["max"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Selects the greater of x and y.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The x input value.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("y", @"The y input value.")  { IsOptional = false });
+                descriptor.Returns = @"The x or y parameter, whichever is the largest value.";
+                descriptor.Example = @">>> max(-5, 6)
+    # max(-5, 6)
+    out = 6
+    >>> max(1, 0)
+    # max(1, 0)
+    out = 1
+    >>> max(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+    # max(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+    out = float4(1, 1, 3, 3)
+";
             }
             {
                 var descriptor = Descriptors["step"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Compares two values, returning 0 or 1 based on which value is greater.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("y", @"The first floating-point value to compare.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The second floating-point value to compare.")  { IsOptional = false });
+                descriptor.Returns = @"1 if the x parameter is greater than or equal to the y parameter; otherwise, 0.";
+                descriptor.Remarks = @"This function uses the following formula: (x >= y) ? 1 : 0. The function returns either 0 or 1 depending on whether the x parameter is greater than the y parameter. To compute a smooth interpolation between 0 and 1, use the `smoothstep` function.";
+                descriptor.Example = @">>> step(1, 5)
+    # step(1, 5)
+    out = 1
+    >>> step(5, 1)
+    # step(5, 1)
+    out = 0
+    >>> step(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+    # step(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+    out = float4(1, 0, 1, 0)
+    >>> step(-10, 5)
+    # step(-10, 5)
+    out = 1
+    >>> step(5.5, -10.5)
+    # step(5.5, -10.5)
+    out = 0
+";
             }
             {
                 var descriptor = Descriptors["smoothstep"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns a smooth Hermite interpolation between 0 and 1, if x is in the range [min, max].";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("min", @"The minimum range of the x parameter.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("max", @"The maximum range of the x parameter.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value to be interpolated.")  { IsOptional = false });
+                descriptor.Returns = @"Returns 0 if x is less than min; 1 if x is greater than max; otherwise, a value between 0 and 1 if x is in the range [min, max].";
+                descriptor.Remarks = @"Use the smoothstep function to create a smooth transition between two values. For example, you can use this function to blend two colors smoothly.";
+                descriptor.Example = @">>> smoothstep(float4(0), float4(1), float4(-0.5))
+    # smoothstep(float4(0), float4(1), float4(-0.5))
+    out = float4(0, 0, 0, 0)
+    >>> smoothstep(float4(0), float4(1), float4(1.5))
+    # smoothstep(float4(0), float4(1), float4(1.5))
+    out = float4(1, 1, 1, 1)
+    >>> smoothstep(float4(0), float4(1), float4(0.5))
+    # smoothstep(float4(0), float4(1), float4(0.5))
+    out = float4(0.5, 0.5, 0.5, 0.5)
+    >>> smoothstep(float4(0), float4(1), float4(0.9))
+    # smoothstep(float4(0), float4(1), float4(0.9))
+    out = float4(0.972, 0.972, 0.972, 0.972)
+";
             }
             {
                 var descriptor = Descriptors["lerp"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Performs a linear interpolation.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The first-floating point value.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("y", @"The second-floating point value.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("s", @"A value that linearly interpolates between the x parameter and the y parameter.")  { IsOptional = false });
+                descriptor.Returns = @"The result of the linear interpolation.";
+                descriptor.Example = @">>> lerp(0, 10, 0.5)
+    # lerp(0, 10, 0.5)
+    out = 5
+    >>> lerp(rgb(""AliceBlue"").xyz, rgb(""Green"").xyz, 0.5)
+    # lerp(rgb(""AliceBlue"").xyz, rgb(""Green"").xyz, 0.5)
+    out = float3(0.47058824, 0.7372549, 0.5)
+";
             }
             {
                 var descriptor = Descriptors["clamp"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Clamps the specified value to the specified minimum and maximum range.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"A value to clamp.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("min", @"The specified minimum range.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("max", @"The specified maximum range.")  { IsOptional = false });
+                descriptor.Returns = @"The clamped value for the x parameter.";
+                descriptor.Remarks = @"For values of -inf or inf, clamp will behave as expected. However for values of `nan`, the results are undefined.";
+                descriptor.Example = @">>> clamp(-1, 0, 1)
+    # clamp(-1, 0, 1)
+    out = 0
+    >>> clamp(2, 0, 1)
+    # clamp(2, 0, 1)
+    out = 1
+    >>> clamp(0.5, 0, 1)
+    # clamp(0.5, 0, 1)
+    out = 0.5
+    >>> clamp(float4(0, 1, -2, 3), float4(0, -1, 3, 4), float4(1, 2, 5, 6))
+    # clamp(float4(0, 1, -2, 3), float4(0, -1, 3, 4), float4(1, 2, 5, 6))
+    out = float4(0, 1, 3, 4)
+";
             }
             {
                 var descriptor = Descriptors["real"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the real part of the complex number.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"A complex number.")  { IsOptional = false });
+                descriptor.Returns = @"The real part of the parameter x complex number.";
+                descriptor.Example = @">>> real(1.5 + 2.5i)
+    # real(1.5 + 2.5 * i)
+    out = 1.5
+";
             }
             {
                 var descriptor = Descriptors["imag"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the imaginary part of the complex number.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"A complex number.")  { IsOptional = false });
+                descriptor.Returns = @"The imaginary part of the parameter x complex number.";
+                descriptor.Example = @">>> imag(1.5 + 2.5i)
+    # imag(1.5 + 2.5 * i)
+    out = 2.5
+";
             }
             {
                 var descriptor = Descriptors["phase"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the phase of the complex number.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"A complex number.")  { IsOptional = false });
+                descriptor.Returns = @"The phase of the parameter x complex number.";
+                descriptor.Example = @">>> phase(1.5 + 2.5i)
+    # phase(1.5 + 2.5 * i)
+    out = 1.0303768265243125
+";
             }
             {
                 var descriptor = Descriptors["isfinite"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Determines if the specified floating-point value is finite.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"Returns a value of the same size as the input, with a value set to `true` if the x parameter is finite; otherwise `false`.";
+                descriptor.Example = @">>> isfinite(1)
+    # isfinite(1)
+    out = true
+    >>> isfinite(nan)
+    # isfinite(nan)
+    out = false
+    >>> isfinite(inf)
+    # isfinite(inf)
+    out = false
+    >>> isfinite(float4(1, -10.5, inf, nan))
+    # isfinite(float4(1, -10.5, inf, nan))
+    out = bool4(true, true, false, false)
+";
             }
             {
                 var descriptor = Descriptors["isinf"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Determines if the specified value is infinite.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"Returns a value of the same size as the input, with a value set to `true` if the x parameter is +inf or -inf. Otherwise, `false`.";
+                descriptor.Example = @">>> isinf(1)
+    # isinf(1)
+    out = false
+    >>> isinf(inf)
+    # isinf(inf)
+    out = true
+    >>> isinf(float4(1, -10.5, inf, nan))
+    # isinf(float4(1, -10.5, inf, nan))
+    out = bool4(false, false, true, false)
+";
             }
             {
                 var descriptor = Descriptors["isnan"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Determines if the specified value is `nan`.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified value.")  { IsOptional = false });
+                descriptor.Returns = @"Returns a value of the same size as the input, with a value set to `true` if the x parameter is `nan`. Otherwise, `false`.";
+                descriptor.Example = @">>> isnan(1)
+    # isnan(1)
+    out = false
+    >>> isnan(inf)
+    # isnan(inf)
+    out = false
+    >>> isnan(nan)
+    # isnan(nan)
+    out = true
+    >>> isnan(float4(1, -10.5, inf, nan))
+    # isnan(float4(1, -10.5, inf, nan))
+    out = bool4(false, false, false, true)
+";
             }
             {
                 var descriptor = Descriptors["sum"];
                 descriptor.Category = "Math Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Performs the summation of the specified value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The specified value.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("values", @"Additional values.")  { IsOptional = false });
+                descriptor.Returns = @"The summation of the values.";
+                descriptor.Example = @">>> sum(1,2,3,4)
+    # sum(1, 2, 3, 4)
+    out = 10
+    >>> sum(float4(1..4))
+    # sum(float4(1..4))
+    out = 10
+    >>> sum(float4(1..4), float4(5..8))
+    # sum(float4(1..4), float4(5..8))
+    out = float4(15, 16, 17, 18)
+    >>> sum(""a"", ""b"", ""c"")
+    # sum(""a"", ""b"", ""c"")
+    out = ""abc""
+    >>> sum([""a"", ""b"", ""c""])
+    # sum([""a"", ""b"", ""c""])
+    out = ""abc""
+";
             }
         }        
     }

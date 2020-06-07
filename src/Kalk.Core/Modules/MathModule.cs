@@ -918,20 +918,137 @@ namespace Kalk.Core
                 index++;
                 return result;
             });
-        } 
-        
+        }
+
+        /// <summary>
+        /// Rounds the specified value to the nearest integer.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The x parameter, rounded to the nearest integer within a floating-point type.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> round(0.2); round(1.5); round(10.7)
+        /// # round(0.2); round(1.5); round(10.7)
+        /// out = 0
+        /// out = 2
+        /// out = 11
+        /// >>> round(-0.2); round(-1.5); round(-10.7)
+        /// # round(-0.2); round(-1.5); round(-10.7)
+        /// out = -0
+        /// out = -2
+        /// out = -11
+        /// ```
+        /// </example>
         [KalkDoc("round", CategoryMathFunctions, Functor = true)]
         public object Round(KalkDoubleValue x) => x.TransformArg(Engine, RoundFunc);
+
+        /// <summary>
+        /// Returns the largest integer that is less than or equal to the specified value.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The largest integer value (returned as a floating-point type) that is less than or equal to the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> floor(0.2); floor(1.5); floor(10.7)
+        /// # floor(0.2); floor(1.5); floor(10.7)
+        /// out = 0
+        /// out = 1
+        /// out = 10
+        /// >>> floor(-0.2); floor(-1.5); floor(-10.7)
+        /// # floor(-0.2); floor(-1.5); floor(-10.7)
+        /// out = -1
+        /// out = -2
+        /// out = -11
+        /// ```
+        /// </example>
         [KalkDoc("floor", CategoryMathFunctions, Functor = true)]
         public object Floor(KalkDoubleValue x) => x.TransformArg(Engine, FloorFunc);
+
+        /// <summary>
+        /// Returns the smallest integer value that is greater than or equal to the specified value.
+        /// </summary>
+        /// <param name="x">The specified input.</param>
+        /// <returns>The smallest integer value (returned as a floating-point type) that is greater than or equal to the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> ceil(0.2); ceil(1.5); ceil(10.7)
+        /// # ceil(0.2); ceil(1.5); ceil(10.7)
+        /// out = 1
+        /// out = 2
+        /// out = 11
+        /// >>> ceil(-0.2); ceil(-1.5); ceil(-10.7)
+        /// # ceil(-0.2); ceil(-1.5); ceil(-10.7)
+        /// out = -0
+        /// out = -1
+        /// out = -10
+        /// ```
+        /// </example>
         [KalkDoc("ceil", CategoryMathFunctions, Functor = true)]
         public object Ceiling(KalkDoubleValue x) => x.TransformArg(Engine, CeilFunc);
+
+        /// <summary>
+        /// Truncates a floating-point value to the integer component.
+        /// </summary>
+        /// <param name="x">The specified input.</param>
+        /// <returns>The input value truncated to an integer component.</returns>
+        /// <remarks>This function truncates a floating-point value to the integer component. Given a floating-point value of 1.6, the trunc function would return 1.0, where as the round function would return 2.0.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> trunc(0.2); trunc(1.5); trunc(10.7)
+        /// # trunc(0.2); trunc(1.5); trunc(10.7)
+        /// out = 0
+        /// out = 1
+        /// out = 10
+        /// >>> trunc(-0.2); trunc(-1.5); trunc(-10.7)
+        /// # trunc(-0.2); trunc(-1.5); trunc(-10.7)
+        /// out = -0
+        /// out = -1
+        /// out = -10
+        /// ```
+        /// </example>
         [KalkDoc("trunc", CategoryMathFunctions, Functor = true)]
         public object Trunc(KalkDoubleValue x) => x.TransformArg(Engine, TruncFunc);
-        
+
+        /// <summary>
+        /// Clamps the specified value within the range of 0 to 1.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>The x parameter, clamped within the range of 0 to 1.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> saturate(10)
+        /// # saturate(10)
+        /// out = 1
+        /// >>> saturate(-10)
+        /// # saturate(-10)
+        /// out = 0
+        /// >>> saturate(float4(-1, 0.5, 1, 2))
+        /// # saturate(float4(-1, 0.5, 1, 2))
+        /// out = float4(0, 0.5, 1, 1)
+        /// ```
+        /// </example>
         [KalkDoc("saturate", CategoryMathFunctions, Functor = true)]
         public object Saturate(KalkDoubleValue x) => x.TransformArg(Engine, SaturateFunc);
 
+        /// <summary>
+        /// Selects the lesser of x and y.
+        /// </summary>
+        /// <param name="x">The x input value.</param>
+        /// <param name="y">The y input value.</param>
+        /// <returns>The x or y parameter, whichever is the smallest value.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> min(-5, 6)
+        /// # min(-5, 6)
+        /// out = -5
+        /// >>> min(1, 0)
+        /// # min(1, 0)
+        /// out = 0
+        /// >>> min(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+        /// # min(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+        /// out = float4(0, 0, 2, 2)
+        /// ```
+        /// </example>
         [KalkDoc("min", CategoryMathFunctions, Functor = true)]
         public object Min(KalkDoubleValue x, KalkDoubleValue y)
         {
@@ -945,6 +1062,25 @@ namespace Kalk.Core
             });
         }
 
+        /// <summary>
+        /// Selects the greater of x and y.
+        /// </summary>
+        /// <param name="x">The x input value.</param>
+        /// <param name="y">The y input value.</param>
+        /// <returns>The x or y parameter, whichever is the largest value.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> max(-5, 6)
+        /// # max(-5, 6)
+        /// out = 6
+        /// >>> max(1, 0)
+        /// # max(1, 0)
+        /// out = 1
+        /// >>> max(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+        /// # max(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+        /// out = float4(1, 1, 3, 3)
+        /// ```
+        /// </example>
         [KalkDoc("max", CategoryMathFunctions, Functor = true)]
         public object Max(KalkDoubleValue x, KalkDoubleValue y)
         {
@@ -958,6 +1094,32 @@ namespace Kalk.Core
             });
         }
 
+        /// <summary>
+        /// Compares two values, returning 0 or 1 based on which value is greater.
+        /// </summary>
+        /// <param name="y">The first floating-point value to compare.</param>
+        /// <param name="x">The second floating-point value to compare.</param>
+        /// <returns>1 if the x parameter is greater than or equal to the y parameter; otherwise, 0.</returns>
+        /// <remarks>This function uses the following formula: (x >= y) ? 1 : 0. The function returns either 0 or 1 depending on whether the x parameter is greater than the y parameter. To compute a smooth interpolation between 0 and 1, use the `smoothstep` function.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> step(1, 5)
+        /// # step(1, 5)
+        /// out = 1
+        /// >>> step(5, 1)
+        /// # step(5, 1)
+        /// out = 0
+        /// >>> step(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+        /// # step(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+        /// out = float4(1, 0, 1, 0)
+        /// >>> step(-10, 5)
+        /// # step(-10, 5)
+        /// out = 1
+        /// >>> step(5.5, -10.5)
+        /// # step(5.5, -10.5)
+        /// out = 0
+        /// ```
+        /// </example>
         [KalkDoc("step", CategoryMathFunctions, Functor = true)]
         public object Step(KalkDoubleValue y, KalkDoubleValue x)
         {
@@ -972,6 +1134,30 @@ namespace Kalk.Core
             });
         }
 
+        /// <summary>
+        /// Returns a smooth Hermite interpolation between 0 and 1, if x is in the range [min, max].
+        /// </summary>
+        /// <param name="min">The minimum range of the x parameter.</param>
+        /// <param name="max">The maximum range of the x parameter.</param>
+        /// <param name="x">The specified value to be interpolated.</param>
+        /// <returns>Returns 0 if x is less than min; 1 if x is greater than max; otherwise, a value between 0 and 1 if x is in the range [min, max].</returns>
+        /// <remarks>Use the smoothstep function to create a smooth transition between two values. For example, you can use this function to blend two colors smoothly.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> smoothstep(float4(0), float4(1), float4(-0.5))
+        /// # smoothstep(float4(0), float4(1), float4(-0.5))
+        /// out = float4(0, 0, 0, 0)
+        /// >>> smoothstep(float4(0), float4(1), float4(1.5))
+        /// # smoothstep(float4(0), float4(1), float4(1.5))
+        /// out = float4(1, 1, 1, 1)
+        /// >>> smoothstep(float4(0), float4(1), float4(0.5))
+        /// # smoothstep(float4(0), float4(1), float4(0.5))
+        /// out = float4(0.5, 0.5, 0.5, 0.5)
+        /// >>> smoothstep(float4(0), float4(1), float4(0.9))
+        /// # smoothstep(float4(0), float4(1), float4(0.9))
+        /// out = float4(0.972, 0.972, 0.972, 0.972)
+        /// ```
+        /// </example>
         [KalkDoc("smoothstep", CategoryMathFunctions, Functor = true)]
         public object Smoothstep(KalkDoubleValue min, KalkDoubleValue max, KalkDoubleValue x)
         {
@@ -987,7 +1173,24 @@ namespace Kalk.Core
                 return v * v * (3.0f - (2.0f * v));
             });
         }
-        
+
+        /// <summary>
+        /// Performs a linear interpolation.
+        /// </summary>
+        /// <param name="x">The first-floating point value.</param>
+        /// <param name="y">The second-floating point value.</param>
+        /// <param name="s">A value that linearly interpolates between the x parameter and the y parameter.</param>
+        /// <returns>The result of the linear interpolation.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> lerp(0, 10, 0.5)
+        /// # lerp(0, 10, 0.5)
+        /// out = 5
+        /// >>> lerp(rgb("AliceBlue").xyz, rgb("Green").xyz, 0.5)
+        /// # lerp(rgb("AliceBlue").xyz, rgb("Green").xyz, 0.5)
+        /// out = float3(0.47058824, 0.7372549, 0.5)
+        /// ```
+        /// </example>
         [KalkDoc("lerp", CategoryMathFunctions, Functor = true)]
         public object Lerp(KalkDoubleValue x, KalkDoubleValue y, KalkDoubleValue s)
         {
@@ -1002,6 +1205,30 @@ namespace Kalk.Core
             });
         }
 
+        /// <summary>
+        /// Clamps the specified value to the specified minimum and maximum range.
+        /// </summary>
+        /// <param name="x">A value to clamp.</param>
+        /// <param name="min">The specified minimum range.</param>
+        /// <param name="max">The specified maximum range.</param>
+        /// <returns>The clamped value for the x parameter.</returns>
+        /// <remarks>For values of -inf or inf, clamp will behave as expected. However for values of `nan`, the results are undefined.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> clamp(-1, 0, 1)
+        /// # clamp(-1, 0, 1)
+        /// out = 0
+        /// >>> clamp(2, 0, 1)
+        /// # clamp(2, 0, 1)
+        /// out = 1
+        /// >>> clamp(0.5, 0, 1)
+        /// # clamp(0.5, 0, 1)
+        /// out = 0.5
+        /// >>> clamp(float4(0, 1, -2, 3), float4(0, -1, 3, 4), float4(1, 2, 5, 6))
+        /// # clamp(float4(0, 1, -2, 3), float4(0, -1, 3, 4), float4(1, 2, 5, 6))
+        /// out = float4(0, 1, 3, 4)
+        /// ```
+        /// </example>
         [KalkDoc("clamp", CategoryMathFunctions, Functor = true)]
         public object Clamp(KalkDoubleValue x, KalkDoubleValue min, KalkDoubleValue max)
         {
@@ -1016,24 +1243,145 @@ namespace Kalk.Core
             });
         }
 
+        /// <summary>
+        /// Returns the real part of the complex number.
+        /// </summary>
+        /// <param name="x">A complex number.</param>
+        /// <returns>The real part of the parameter x complex number.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> real(1.5 + 2.5i)
+        /// # real(1.5 + 2.5 * i)
+        /// out = 1.5
+        /// ```
+        /// </example>
         [KalkDoc("real", CategoryMathFunctions)]
         public double Real(KalkComplex x) => x.Re;
 
+        /// <summary>
+        /// Returns the imaginary part of the complex number.
+        /// </summary>
+        /// <param name="x">A complex number.</param>
+        /// <returns>The imaginary part of the parameter x complex number.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> imag(1.5 + 2.5i)
+        /// # imag(1.5 + 2.5 * i)
+        /// out = 2.5
+        /// ```
+        /// </example>
         [KalkDoc("imag", CategoryMathFunctions)]
         public double Imag(KalkComplex x) => x.Im;
 
+        /// <summary>
+        /// Returns the phase of the complex number.
+        /// </summary>
+        /// <param name="x">A complex number.</param>
+        /// <returns>The phase of the parameter x complex number.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> phase(1.5 + 2.5i)
+        /// # phase(1.5 + 2.5 * i)
+        /// out = 1.0303768265243125
+        /// ```
+        /// </example>
         [KalkDoc("phase", CategoryMathFunctions)]
         public double Phase(KalkComplex x) => x.Phase;
 
+        /// <summary>
+        /// Determines if the specified floating-point value is finite.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>Returns a value of the same size as the input, with a value set to `true` if the x parameter is finite; otherwise `false`.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> isfinite(1)
+        /// # isfinite(1)
+        /// out = true
+        /// >>> isfinite(nan)
+        /// # isfinite(nan)
+        /// out = false
+        /// >>> isfinite(inf)
+        /// # isfinite(inf)
+        /// out = false
+        /// >>> isfinite(float4(1, -10.5, inf, nan))
+        /// # isfinite(float4(1, -10.5, inf, nan))
+        /// out = bool4(true, true, false, false)
+        /// ```
+        /// </example>
         [KalkDoc("isfinite", CategoryMathFunctions, Functor = true)]
         public object IsFinite(KalkCompositeValue x) => x.TransformArg(Engine, IsFiniteFunc);
 
+        /// <summary>
+        /// Determines if the specified value is infinite.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>Returns a value of the same size as the input, with a value set to `true` if the x parameter is +inf or -inf. Otherwise, `false`.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> isinf(1)
+        /// # isinf(1)
+        /// out = false
+        /// >>> isinf(inf)
+        /// # isinf(inf)
+        /// out = true
+        /// >>> isinf(float4(1, -10.5, inf, nan))
+        /// # isinf(float4(1, -10.5, inf, nan))
+        /// out = bool4(false, false, true, false)
+        /// ```
+        /// </example>
         [KalkDoc("isinf", CategoryMathFunctions, Functor = true)]
         public object IsInf(KalkCompositeValue x) => x.TransformArg(Engine, IsInfFunc);
 
+        /// <summary>
+        /// Determines if the specified value is `nan`.
+        /// </summary>
+        /// <param name="x">The specified value.</param>
+        /// <returns>Returns a value of the same size as the input, with a value set to `true` if the x parameter is `nan`. Otherwise, `false`.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> isnan(1)
+        /// # isnan(1)
+        /// out = false
+        /// >>> isnan(inf)
+        /// # isnan(inf)
+        /// out = false
+        /// >>> isnan(nan)
+        /// # isnan(nan)
+        /// out = true
+        /// >>> isnan(float4(1, -10.5, inf, nan))
+        /// # isnan(float4(1, -10.5, inf, nan))
+        /// out = bool4(false, false, false, true)
+        /// ```
+        /// </example>
         [KalkDoc("isnan", CategoryMathFunctions, Functor = true)]
         public object IsNan(KalkCompositeValue x) => x.TransformArg(Engine, IsNanFunc);
 
+        /// <summary>
+        /// Performs the summation of the specified value.
+        /// </summary>
+        /// <param name="value">The specified value.</param>
+        /// <param name="values">Additional values.</param>
+        /// <returns>The summation of the values.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> sum(1,2,3,4)
+        /// # sum(1, 2, 3, 4)
+        /// out = 10
+        /// >>> sum(float4(1..4))
+        /// # sum(float4(1..4))
+        /// out = 10
+        /// >>> sum(float4(1..4), float4(5..8))
+        /// # sum(float4(1..4), float4(5..8))
+        /// out = float4(15, 16, 17, 18)
+        /// >>> sum("a", "b", "c")
+        /// # sum("a", "b", "c")
+        /// out = "abc"
+        /// >>> sum(["a", "b", "c"])
+        /// # sum(["a", "b", "c"])
+        /// out = "abc"
+        /// ```
+        /// </example>
         [KalkDoc("sum", CategoryMathFunctions)]
         public object Sum(object value, params object[] values)
         {

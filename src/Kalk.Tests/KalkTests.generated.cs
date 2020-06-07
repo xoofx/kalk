@@ -492,6 +492,247 @@ out = float4(1, 16, 81, 256)
 out = float4(1, 64, 2187, 65536)", Category = "Math Functions")]
         public static void Test_pow(string input, string output) => AssertScript(input, output);
 
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Round(Kalk.Core.KalkDoubleValue)"/> or `round`.
+        /// </summary>
+        [TestCase(@"round(0.2); round(1.5); round(10.7)
+round(-0.2); round(-1.5); round(-10.7)", @"# round(0.2); round(1.5); round(10.7)
+out = 0
+out = 2
+out = 11
+# round(-0.2); round(-1.5); round(-10.7)
+out = -0
+out = -2
+out = -11", Category = "Math Functions")]
+        public static void Test_round(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Floor(Kalk.Core.KalkDoubleValue)"/> or `floor`.
+        /// </summary>
+        [TestCase(@"floor(0.2); floor(1.5); floor(10.7)
+floor(-0.2); floor(-1.5); floor(-10.7)", @"# floor(0.2); floor(1.5); floor(10.7)
+out = 0
+out = 1
+out = 10
+# floor(-0.2); floor(-1.5); floor(-10.7)
+out = -1
+out = -2
+out = -11", Category = "Math Functions")]
+        public static void Test_floor(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Ceiling(Kalk.Core.KalkDoubleValue)"/> or `ceil`.
+        /// </summary>
+        [TestCase(@"ceil(0.2); ceil(1.5); ceil(10.7)
+ceil(-0.2); ceil(-1.5); ceil(-10.7)", @"# ceil(0.2); ceil(1.5); ceil(10.7)
+out = 1
+out = 2
+out = 11
+# ceil(-0.2); ceil(-1.5); ceil(-10.7)
+out = -0
+out = -1
+out = -10", Category = "Math Functions")]
+        public static void Test_ceil(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Trunc(Kalk.Core.KalkDoubleValue)"/> or `trunc`.
+        /// </summary>
+        [TestCase(@"trunc(0.2); trunc(1.5); trunc(10.7)
+trunc(-0.2); trunc(-1.5); trunc(-10.7)", @"# trunc(0.2); trunc(1.5); trunc(10.7)
+out = 0
+out = 1
+out = 10
+# trunc(-0.2); trunc(-1.5); trunc(-10.7)
+out = -0
+out = -1
+out = -10", Category = "Math Functions")]
+        public static void Test_trunc(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Saturate(Kalk.Core.KalkDoubleValue)"/> or `saturate`.
+        /// </summary>
+        [TestCase(@"saturate(10)
+saturate(-10)
+saturate(float4(-1, 0.5, 1, 2))", @"# saturate(10)
+out = 1
+# saturate(-10)
+out = 0
+# saturate(float4(-1, 0.5, 1, 2))
+out = float4(0, 0.5, 1, 1)", Category = "Math Functions")]
+        public static void Test_saturate(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Min(Kalk.Core.KalkDoubleValue,Kalk.Core.KalkDoubleValue)"/> or `min`.
+        /// </summary>
+        [TestCase(@"min(-5, 6)
+min(1, 0)
+min(float4(0, 1, 2, 3), float4(1, 0, 3, 2))", @"# min(-5, 6)
+out = -5
+# min(1, 0)
+out = 0
+# min(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+out = float4(0, 0, 2, 2)", Category = "Math Functions")]
+        public static void Test_min(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Max(Kalk.Core.KalkDoubleValue,Kalk.Core.KalkDoubleValue)"/> or `max`.
+        /// </summary>
+        [TestCase(@"max(-5, 6)
+max(1, 0)
+max(float4(0, 1, 2, 3), float4(1, 0, 3, 2))", @"# max(-5, 6)
+out = 6
+# max(1, 0)
+out = 1
+# max(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+out = float4(1, 1, 3, 3)", Category = "Math Functions")]
+        public static void Test_max(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Step(Kalk.Core.KalkDoubleValue,Kalk.Core.KalkDoubleValue)"/> or `step`.
+        /// </summary>
+        [TestCase(@"step(1, 5)
+step(5, 1)
+step(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+step(-10, 5)
+step(5.5, -10.5)", @"# step(1, 5)
+out = 1
+# step(5, 1)
+out = 0
+# step(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+out = float4(1, 0, 1, 0)
+# step(-10, 5)
+out = 1
+# step(5.5, -10.5)
+out = 0", Category = "Math Functions")]
+        public static void Test_step(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Smoothstep(Kalk.Core.KalkDoubleValue,Kalk.Core.KalkDoubleValue,Kalk.Core.KalkDoubleValue)"/> or `smoothstep`.
+        /// </summary>
+        [TestCase(@"smoothstep(float4(0), float4(1), float4(-0.5))
+smoothstep(float4(0), float4(1), float4(1.5))
+smoothstep(float4(0), float4(1), float4(0.5))
+smoothstep(float4(0), float4(1), float4(0.9))", @"# smoothstep(float4(0), float4(1), float4(-0.5))
+out = float4(0, 0, 0, 0)
+# smoothstep(float4(0), float4(1), float4(1.5))
+out = float4(1, 1, 1, 1)
+# smoothstep(float4(0), float4(1), float4(0.5))
+out = float4(0.5, 0.5, 0.5, 0.5)
+# smoothstep(float4(0), float4(1), float4(0.9))
+out = float4(0.972, 0.972, 0.972, 0.972)", Category = "Math Functions")]
+        public static void Test_smoothstep(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Lerp(Kalk.Core.KalkDoubleValue,Kalk.Core.KalkDoubleValue,Kalk.Core.KalkDoubleValue)"/> or `lerp`.
+        /// </summary>
+        [TestCase(@"lerp(0, 10, 0.5)
+lerp(rgb(""AliceBlue"").xyz, rgb(""Green"").xyz, 0.5)", @"# lerp(0, 10, 0.5)
+out = 5
+# lerp(rgb(""AliceBlue"").xyz, rgb(""Green"").xyz, 0.5)
+out = float3(0.47058824, 0.7372549, 0.5)", Category = "Math Functions")]
+        public static void Test_lerp(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Clamp(Kalk.Core.KalkDoubleValue,Kalk.Core.KalkDoubleValue,Kalk.Core.KalkDoubleValue)"/> or `clamp`.
+        /// </summary>
+        [TestCase(@"clamp(-1, 0, 1)
+clamp(2, 0, 1)
+clamp(0.5, 0, 1)
+clamp(float4(0, 1, -2, 3), float4(0, -1, 3, 4), float4(1, 2, 5, 6))", @"# clamp(-1, 0, 1)
+out = 0
+# clamp(2, 0, 1)
+out = 1
+# clamp(0.5, 0, 1)
+out = 0.5
+# clamp(float4(0, 1, -2, 3), float4(0, -1, 3, 4), float4(1, 2, 5, 6))
+out = float4(0, 1, 3, 4)", Category = "Math Functions")]
+        public static void Test_clamp(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Real(Kalk.Core.KalkComplex)"/> or `real`.
+        /// </summary>
+        [TestCase(@"real(1.5 + 2.5i)", @"# real(1.5 + 2.5 * i)
+out = 1.5", Category = "Math Functions")]
+        public static void Test_real(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Imag(Kalk.Core.KalkComplex)"/> or `imag`.
+        /// </summary>
+        [TestCase(@"imag(1.5 + 2.5i)", @"# imag(1.5 + 2.5 * i)
+out = 2.5", Category = "Math Functions")]
+        public static void Test_imag(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Phase(Kalk.Core.KalkComplex)"/> or `phase`.
+        /// </summary>
+        [TestCase(@"phase(1.5 + 2.5i)", @"# phase(1.5 + 2.5 * i)
+out = 1.0303768265243125", Category = "Math Functions")]
+        public static void Test_phase(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.IsFinite(Kalk.Core.KalkCompositeValue)"/> or `isfinite`.
+        /// </summary>
+        [TestCase(@"isfinite(1)
+isfinite(nan)
+isfinite(inf)
+isfinite(float4(1, -10.5, inf, nan))", @"# isfinite(1)
+out = true
+# isfinite(nan)
+out = false
+# isfinite(inf)
+out = false
+# isfinite(float4(1, -10.5, inf, nan))
+out = bool4(true, true, false, false)", Category = "Math Functions")]
+        public static void Test_isfinite(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.IsInf(Kalk.Core.KalkCompositeValue)"/> or `isinf`.
+        /// </summary>
+        [TestCase(@"isinf(1)
+isinf(inf)
+isinf(float4(1, -10.5, inf, nan))", @"# isinf(1)
+out = false
+# isinf(inf)
+out = true
+# isinf(float4(1, -10.5, inf, nan))
+out = bool4(false, false, true, false)", Category = "Math Functions")]
+        public static void Test_isinf(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.IsNan(Kalk.Core.KalkCompositeValue)"/> or `isnan`.
+        /// </summary>
+        [TestCase(@"isnan(1)
+isnan(inf)
+isnan(nan)
+isnan(float4(1, -10.5, inf, nan))", @"# isnan(1)
+out = false
+# isnan(inf)
+out = false
+# isnan(nan)
+out = true
+# isnan(float4(1, -10.5, inf, nan))
+out = bool4(false, false, false, true)", Category = "Math Functions")]
+        public static void Test_isnan(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MathModule.Sum(System.Object,System.Object[])"/> or `sum`.
+        /// </summary>
+        [TestCase(@"sum(1,2,3,4)
+sum(float4(1..4))
+sum(float4(1..4), float4(5..8))
+sum(""a"", ""b"", ""c"")
+sum([""a"", ""b"", ""c""])", @"# sum(1, 2, 3, 4)
+out = 10
+# sum(float4(1..4))
+out = 10
+# sum(float4(1..4), float4(5..8))
+out = float4(15, 16, 17, 18)
+# sum(""a"", ""b"", ""c"")
+out = ""abc""
+# sum([""a"", ""b"", ""c""])
+out = ""abc""", Category = "Math Functions")]
+        public static void Test_sum(string input, string output) => AssertScript(input, output);
+
     }
 
     public partial class MemoryModuleTests : KalkTestBase
