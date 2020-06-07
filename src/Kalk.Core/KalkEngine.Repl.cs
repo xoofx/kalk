@@ -259,6 +259,8 @@ namespace Kalk.Core
                                 line.Insert(cursorIndex, resultStr);
                                 cursorIndex += resultStr.Length;
                             }
+                            // reset shortcuts
+                            _currentShortcutKeyMap = Shortcuts.ShortcutKeyMap;
                         }
                         return true;
                     }
