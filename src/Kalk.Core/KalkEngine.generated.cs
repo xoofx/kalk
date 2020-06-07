@@ -1550,7 +1550,7 @@ namespace Kalk.Core
     {
         protected override void RegisterFunctionsAuto()
         {
-            RegisterConstant("ascii", AsciiTable);
+            RegisterFunction("ascii", (Func<object, object>)Ascii);
             RegisterFunction("keys", (Func<object, System.Collections.IEnumerable>)Keys);
             RegisterFunction("guid", (Func<string>)Guid);
             RegisterFunction("size", (Func<object, int>)Size);
@@ -1574,8 +1574,30 @@ namespace Kalk.Core
             {
                 var descriptor = Descriptors["ascii"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"Returns the ascii table or print";
+                descriptor.Description = @"Prints the ascii table or convert an input string to an ascii array, or an ascii array to a string.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("obj", @"An optional input (string or array of numbers or directly an integer).")  { IsOptional = true });
+                descriptor.Returns = @"Depending on the input:
+    - If no input, it will display the ascii table
+    - If the input is an integer, it will convert it to the equivalent ascii char.
+    - If the input is a string, it will convert the string to a byte buffer containing the corresponding ascii bytes.
+    - If the input is an array of integer, it will convert each element to the equivalent ascii char.";
+                descriptor.Example = @">>> ascii 65
+    # ascii(65)
+    out = ""A""
+    >>> ascii 97
+    # ascii(97)
+    out = ""a""
+    >>> ascii ""A""
+    # ascii(""A"")
+    out = 65
+    >>> ascii ""kalk""
+    # ascii(""kalk"")
+    out = bytebuffer([107, 97, 108, 107])
+    >>> ascii out
+    # ascii(out)
+    out = ""kalk""
+";
             }
             {
                 var descriptor = Descriptors["keys"];

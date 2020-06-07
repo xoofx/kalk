@@ -53,6 +53,14 @@ namespace Kalk.Core
             _length = _buffer.Length;
         }
 
+        public KalkNativeBuffer(byte[] buffer)
+        {
+            _buffer = new SharedBuffer(buffer.Length);
+            buffer.CopyTo(_buffer.AsSpan());
+            _offset = 0;
+            _length = _buffer.Length;
+        }
+        
         public static KalkNativeBuffer AsBytes<T>(int byteCount, in T element)
         {
             var buffer = new KalkNativeBuffer(byteCount);

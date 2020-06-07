@@ -14,24 +14,135 @@ using Scriban.Syntax;
 
 namespace Kalk.Core
 {
+    /// <summary>
+    /// Misc module (builtin).
+    /// </summary>
     public sealed partial class MiscModule : KalkModuleWithFunctions
     {
         public const string CategoryMisc = "Misc Functions";
 
+        public static readonly Encoding EncodingExtendedAscii = CodePagesEncodingProvider.Instance.GetEncoding(1252);
+        
         public MiscModule()
         {
             IsBuiltin = true;
-            AsciiTable = new KalkAsciiTable();
             RegisterFunctionsAuto();
         }
 
         /// <summary>
-        /// Returns the ascii table or print
+        /// Prints the ascii table or convert an input string to an ascii array, or an ascii array to a string.
         /// </summary>
+        /// <param name="obj">An optional input (string or array of numbers or directly an integer).</param>
+        /// <returns>Depending on the input:
+        /// - If no input, it will display the ascii table
+        /// - If the input is an integer, it will convert it to the equivalent ascii char.
+        /// - If the input is a string, it will convert the string to a byte buffer containing the corresponding ascii bytes.
+        /// - If the input is an array of integer, it will convert each element to the equivalent ascii char.
+        /// </returns>
+        /// <example>
+        /// ```kalk
+        /// >>> ascii 65
+        /// # ascii(65)
+        /// out = "A"
+        /// >>> ascii 97
+        /// # ascii(97)
+        /// out = "a"
+        /// >>> ascii "A"
+        /// # ascii("A")
+        /// out = 65
+        /// >>> ascii "kalk"
+        /// # ascii("kalk")
+        /// out = bytebuffer([107, 97, 108, 107])
+        /// >>> ascii out
+        /// # ascii(out)
+        /// out = "kalk"
+        /// ```
+        /// </example>
         [KalkDoc("ascii", CategoryMisc)]
-        public KalkAsciiTable AsciiTable { get; }
+        public object Ascii(object obj = null)
+        {
+            if (obj == null && Engine.CurrentNode.Parent is ScriptExpressionStatement)
+            {
+                var builder = new StringBuilder();
 
-       
+                const int alignControls = -38;
+                const int alignStandard = 13;
+                const int columnWidth = 3 + 4 + 1;
+
+                for (int y = 0; y < 32; y++)
+                {
+                    builder.Length = 0;
+                    for (int x = 0; x < 8; x++)
+                    {
+                        var c = x * 32 + y;
+                        if (x > 0) builder.Append(" ");
+
+                        var index = $"{c,3}";
+
+                        var valueAsString = StringFunctions.Escape(ConvertAscii(c));
+                        var strValue = $"\"{valueAsString}\"";
+                        var column = x == 0 ? $"{index} {strValue,-6} {$"({AsciiSpecialCodes[y]})",-27}" : $"{index} {strValue,-4}";
+
+                        OutputColumn(builder, x, column);
+                    }
+
+                    if (y == 0)
+                    {
+                        Engine.WriteHighlightLine($" {"ASCII controls",alignControls} {"ASCII printable characters",-(columnWidth * 2 + alignStandard + 1)} {"Extended ASCII Characters"}");
+                    }
+
+                    Engine.WriteHighlightLine(builder.ToString());
+                }
+
+                void OutputColumn(StringBuilder output, int columnIndex, string text)
+                {
+                    output.Append(columnIndex == 0 ? $"{text,-alignControls}" : columnIndex == 3 ? $"{text,-alignStandard}" : $"{text}");
+                }
+
+
+                return null;
+            }
+
+            // Otherwise convert the argument.
+            return ConvertAscii(Engine, obj);
+        }
+
+        private static readonly string[] AsciiSpecialCodes = new string[32]
+        {
+            "NUL / Null",
+            "SOH / Start of Heading",
+            "STX / Start of Text",
+            "ETX / End of Text",
+            "EOT / End of Transmission",
+            "ENQ / Enquiry",
+            "ACK / Acknowledgment",
+            "BEL / Bell",
+            "BS  / Backspace",
+            "HT  / Horizontal Tab",
+            "LF  / Line Feed",
+            "VT  / Vertical Tab",
+            "FF  / Form Feed",
+            "CR  / Carriage Return",
+            "SO  / Shift Out",
+            "SI  / Shift In",
+            "DLE / Data Link Escape",
+            "DC1 / Device Control 1",
+            "DC2 / Device Control 2",
+            "DC3 / Device Control 3",
+            "DC4 / Device Control 4",
+            "NAK / Negative Ack",
+            "SYN / Synchronous Idle",
+            "ETB / End of Trans Block",
+            "CAN / Cancel",
+            "EM  / End of Medium",
+            "SUB / Substitute",
+            "ESC / Escape",
+            "FS  / File Separator",
+            "GS  / Group Separator",
+            "RS  / Record Separator",
+            "US  / Unit Separator",
+        };
+
         [KalkDoc("keys", CategoryMisc)]
         public IEnumerable Keys(object obj)
         {
@@ -524,6 +635,47 @@ namespace Kalk.Core
                 builder.Append(b.ToString("X2"));
             }
             return builder.ToString();
+        }
+
+        private static object ConvertAscii(KalkEngine context, object argument)
+        {
+            if (argument is string text)
+            {
+                var bytes = EncodingExtendedAscii.GetBytes(text);
+                if (bytes.Length == 1)
+                {
+                    return bytes[0];
+                }
+
+                return new KalkNativeBuffer(bytes);
+            }
+            else if (argument is KalkNativeBuffer buffer)
+            {
+                return EncodingExtendedAscii.GetString(buffer.AsSpan());
+            }
+            else if (argument is IEnumerable it)
+            {
+                return new ScriptRange(ConvertAsciiIteration(context, it));
+            }
+            else
+            {
+                return ConvertAscii(context.ToInt(context.CurrentSpan, argument));
+            }
+        }
+
+        private static IEnumerable ConvertAsciiIteration(KalkEngine context, IEnumerable it)
+        {
+            var iterator = it.GetEnumerator();
+            while (iterator.MoveNext())
+            {
+                yield return ConvertAscii(context, iterator.Current);
+            }
+        }
+
+        private static unsafe string ConvertAscii(int c)
+        {
+            var value = (byte)c;
+            return EncodingExtendedAscii.GetString(&value, 1);
         }
     }
 }

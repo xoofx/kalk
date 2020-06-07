@@ -741,6 +741,25 @@ out = ""abc""", Category = "Math Functions")]
 
     public partial class MiscModuleTests : KalkTestBase
     {
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.Ascii(System.Object)"/> or `ascii`.
+        /// </summary>
+        [TestCase(@"ascii 65
+ascii 97
+ascii ""A""
+ascii ""kalk""
+ascii out", @"# ascii(65)
+out = ""A""
+# ascii(97)
+out = ""a""
+# ascii(""A"")
+out = 65
+# ascii(""kalk"")
+out = bytebuffer([107, 97, 108, 107])
+# ascii(out)
+out = ""kalk""", Category = "Misc Functions")]
+        public static void Test_ascii(string input, string output) => AssertScript(input, output);
+
     }
 
     public partial class StringModuleTests : KalkTestBase

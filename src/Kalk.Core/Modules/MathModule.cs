@@ -9,7 +9,7 @@ using Scriban.Syntax;
 namespace Kalk.Core
 {
     /// <summary>
-    /// Mathematical module.
+    /// Mathematical module (builtin).
     /// </summary>
     public partial class MathModule : KalkModuleWithFunctions
     {
