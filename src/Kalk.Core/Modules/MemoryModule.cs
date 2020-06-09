@@ -2,14 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
+using System.Runtime.CompilerServices;
 using System.Text;
-using CsvHelper.Configuration;
 using Kalk.Core.Helpers;
 
 namespace Kalk.Core.Modules
 {
-    public partial class MemoryModule : KalkModuleWithFunctions
+    public sealed partial class MemoryModule : KalkModuleWithFunctions
     {
         public const string CategoryMiscMemory = "Misc Memory Functions";
 
@@ -433,6 +432,8 @@ namespace Kalk.Core.Modules
                     return d;
                 case float f:
                     return f;
+                case KalkNativeBuffer buffer:
+                    return BitCastTo<double>(buffer);
             }
 
             var bigInteger = Engine.ToObject<BigInteger>(0, x);
@@ -457,6 +458,8 @@ namespace Kalk.Core.Modules
                     return (float)d;
                 case float f:
                     return f;
+                case KalkNativeBuffer buffer:
+                    return BitCastTo<float>(buffer);
             }
 
             var bigInteger = Engine.ToObject<BigInteger>(0, x);
@@ -481,6 +484,8 @@ namespace Kalk.Core.Modules
                     return BitConverter.DoubleToInt64Bits(f64);
                 case float f32:
                     return BitConverter.SingleToInt32Bits(f32);
+                case KalkNativeBuffer buffer:
+                    return BitCastTo<long>(buffer);
                 default:
                     return (long)Engine.ToObject<BigInteger>(0, x);
             }
@@ -503,6 +508,8 @@ namespace Kalk.Core.Modules
                     return (ulong)BitConverter.DoubleToInt64Bits(f64);
                 case float f32:
                     return (ulong)BitConverter.SingleToInt32Bits(f32);
+                case KalkNativeBuffer buffer:
+                    return BitCastTo<ulong>(buffer);
                 default:
                     return (ulong)(long)Engine.ToObject<BigInteger>(0, x);
             }
@@ -525,6 +532,8 @@ namespace Kalk.Core.Modules
                     return BitConverter.SingleToInt32Bits((float)f64);
                 case float f32:
                     return BitConverter.SingleToInt32Bits(f32);
+                case KalkNativeBuffer buffer:
+                    return BitCastTo<int>(buffer);
                 default:
                     return (int)Engine.ToObject<BigInteger>(0, x);
             }
@@ -547,10 +556,24 @@ namespace Kalk.Core.Modules
                     return (uint)BitConverter.SingleToInt32Bits((float)f64);
                 case float f32:
                     return (uint)BitConverter.SingleToInt32Bits(f32);
+                case KalkNativeBuffer buffer:
+                    return BitCastTo<uint>(buffer);
                 default:
                     return (uint)(int)Engine.ToObject<BigInteger>(0, x);
             }
-        }        
+        }
+
+        private static unsafe T BitCastTo<T>(KalkNativeBuffer buffer) where T: unmanaged
+        {
+            var sizeOfT = Unsafe.SizeOf<T>();
+            T value = default;
+            var maxLength = Math.Min(buffer.Count, sizeOfT);
+            for (int i = 0; i < maxLength; i++)
+            {
+                ((byte*) (&value))[i] = buffer[i];
+            }
+            return value;
+        }
 
         [KalkDoc("bytebuffer", CategoryMiscMemory)]
         public KalkNativeBuffer ByteBuffer(object array)
