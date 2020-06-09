@@ -108,9 +108,9 @@ namespace Kalk.Core
         }
 
         /// <summary>
-        /// Returns the keys of an object.
+        /// Returns the keys of the specified object.
         /// </summary>
-        /// <param name="obj">An object.</param>
+        /// <param name="obj">An object to get the keys from.</param>
         /// <returns>The keys of the parameter obj.</returns>
         /// <example>
         /// ```kalk
@@ -163,6 +163,19 @@ namespace Kalk.Core
             return ObjectFunctions.Size(obj);
         }
 
+        /// <summary>
+        /// Returns the values of the specified object.
+        /// </summary>
+        /// <param name="obj">An object to get the values from.</param>
+        /// <returns>The values of the parameter obj.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> obj = {m: 1, n: 2}; values obj
+        /// # obj = {m: 1, n: 2}; values(obj)
+        /// obj = {m: 1, n: 2}
+        /// out = [1, 2]
+        /// ```
+        /// </example>
         [KalkDoc("values", CategoryMisc)]
         public IEnumerable Values(object obj)
         {
@@ -176,7 +189,59 @@ namespace Kalk.Core
                     return new ScriptArray() {obj};
             }
         }
-        
+
+        /// <summary>
+        /// Returns the hexadecimal representation of the input or convert the hexadecimal input string
+        /// to an integral/bytebuffer representation.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <param name="separator">The character used to separate hexadecimal bytes when converting
+        /// from integral to hexadecimal.</param>
+        /// <param name="prefix">Output the prefix `0x` in front of each hexadecimal bytes when converting
+        /// from integral to hexadecimal.</param>
+        /// <returns>The hexadecimal representation of the input or convert the hexadecimal input string
+        /// to an integral representation.</returns>
+        /// <remarks> When converting from a hexadecimal string to an integral representation, this method
+        /// will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+        /// dash `-`.
+        /// When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+        /// it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+        /// See the following examples.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> hex 10
+        /// # hex(10)
+        /// out = "0A"
+        /// >>> hex "0a"
+        /// # hex("0a")
+        /// out = 10
+        /// >>> hex "01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F"
+        /// # hex("01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F")
+        /// out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+        /// >>> hex(out, ",", true)
+        /// # hex(out, ",", true)
+        /// out = "0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F"
+        /// >>> hex out
+        /// # hex(out)
+        /// out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+        /// >>> hex "1a,2b;3c 4d-5e_6f"
+        /// # hex("1a,2b;3c 4d-5e_6f")
+        /// out = 122450813397786
+        /// >>> hex out
+        /// # hex(out)
+        /// out = "1A 2B 3C 4D 5E 6F 00 00"
+        /// >>> hex short(12345)
+        /// # hex(short(12345))
+        /// out = "39 30"
+        /// >>> hex int (12345789)
+        /// # hex(int(12345789))
+        /// out = "BD 61 BC 00"
+        /// >>> hex float4(1,2,3,4)
+        /// # hex(float4(1, 2, 3, 4))
+        /// out = "00 00 80 3F 00 00 00 40 00 00 40 40 00 00 80 40"
+        /// ```
+        /// </example>
         [KalkDoc("hex", CategoryMisc)]
         public object Hexadecimal(object value, string separator = " ", bool prefix = false)
         {
@@ -452,11 +517,25 @@ namespace Kalk.Core
                 {
                     var array = new List<byte>();
                     int count = 0;
+                    bool hasPrefix = false;
                     int hexa = 0;
                     for (int i = 0; i < str.Length; i++)
                     {
                         var c = str[i];
-                        if (char.IsWhiteSpace(c) || c == ',' || c == ':' || c == ';' || c == '_' || c == '-') continue;
+                        if (char.IsWhiteSpace(c) || c == ',' || c == ':' || c == ';' || c == '_' || c == '-')
+                        {
+                            hasPrefix = c == '_' && hasPrefix; // reset prefix after parsing but not for `_`
+                            continue;
+                        }
+
+                        // Skip 0x prefix
+                        if (!hasPrefix && count == 0 && c == '0' && i + 1 < str.Length && str[i + 1] == 'x')
+                        {
+                            hasPrefix = true;
+                            i++;
+                            continue;
+                        }
+
                         //if (c >= '0' && c <= '9' || c >= 'A' && c <= 'F' || c )
                         if (CharHelper.TryHexaToInt(c, out var n))
                         {
@@ -481,7 +560,7 @@ namespace Kalk.Core
 
                     if (count > 0)
                     {
-                        throw new ArgumentException($"Invalid odd number of hexadecimal character found. Expecting an hexadecimal character.", nameof(value));
+                        array.Add((byte)hexa);
                     }
 
                     if (array.Count <= 8)
