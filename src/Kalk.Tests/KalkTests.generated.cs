@@ -856,6 +856,118 @@ out = bytebuffer([107, 0, 0, 0, 97, 0, 0, 0, 108, 0, 0, 0, 107, 0, 0, 0])
 out = ""kalk""", Category = "Misc Functions")]
         public static void Test_utf32(string input, string output) => AssertScript(input, output);
 
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.InsertAt(System.Object,System.Int32,System.Object)"/> or `insert_at`.
+        /// </summary>
+        [TestCase(@"insert_at(""kalk"", 0, ""YES"")
+insert_at(""kalk"", -1, ""YES"")
+insert_at(0..10, 1, 50)
+insert_at(0..9, 21, 50) # final index is 21 % 10 = 1
+insert_at([], 3, 1)", @"# insert_at(""kalk"", 0, ""YES"")
+out = ""YESkalk""
+# insert_at(""kalk"", -1, ""YES"")
+out = ""kalkYES""
+# insert_at(0..10, 1, 50)
+out = [0, 50, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+# insert_at(0..9, 21, 50) # final index is 21 % 10 = 1
+out = [0, 50, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+# insert_at([], 3, 1)
+out = [1]", Category = "Misc Functions")]
+        public static void Test_insert_at(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.RemoveAt(System.Object,System.Int32)"/> or `remove_at`.
+        /// </summary>
+        [TestCase(@"remove_at(""kalk"", 0)
+remove_at(""kalk"", -1)
+remove_at(0..9, 5)
+remove_at(0..9, -1)
+remove_at(asbytes(0x04030201), 1)", @"# remove_at(""kalk"", 0)
+out = ""alk""
+# remove_at(""kalk"", -1)
+out = ""kal""
+# remove_at(0..9, 5)
+out = [0, 1, 2, 3, 4, 6, 7, 8, 9]
+# remove_at(0..9, -1)
+out = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+# remove_at(asbytes(67305985), 1)
+out = bytebuffer([1, 3, 4])", Category = "Misc Functions")]
+        public static void Test_remove_at(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.Contains(System.Object,System.Object)"/> or `contains`.
+        /// </summary>
+        [TestCase(@"contains(""kalk"", ""l"")
+contains(""kalk"", ""e"")
+contains([1,2,3,4,5], 3)
+contains([1,2,3,4,5], 6)
+contains(float4(1,2,3,4), 3)
+contains(float4(1,2,3,4), 6)", @"# contains(""kalk"", ""l"")
+out = true
+# contains(""kalk"", ""e"")
+out = false
+# contains([1,2,3,4,5], 3)
+out = true
+# contains([1,2,3,4,5], 6)
+out = false
+# contains(float4(1, 2, 3, 4), 3)
+out = true
+# contains(float4(1, 2, 3, 4), 6)
+out = false", Category = "Misc Functions")]
+        public static void Test_contains(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.Replace(System.Object,System.Object,System.Object)"/> or `replace`.
+        /// </summary>
+        [TestCase(@"replace(""kalk"", ""k"", ""woo"")
+replace([1,2,3,4], 3, 5)
+replace(float4(1,2,3,4), 3, 5)", @"# replace(""kalk"", ""k"", ""woo"")
+out = ""wooalwoo""
+# replace([1,2,3,4], 3, 5)
+out = [1, 2, 5, 4]
+# replace(float4(1, 2, 3, 4), 3, 5)
+out = float4(1, 2, 5, 4)", Category = "Misc Functions")]
+        public static void Test_replace(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.Slice(System.Object,System.Int32,System.Nullable{System.Int32})"/> or `slice`.
+        /// </summary>
+        [TestCase(@"slice(""kalk"", 1)
+slice(""kalk"", -2)
+slice(""kalk"", 1, 2)
+slice([1,2,3,4], 1)
+slice([1,2,3,4], -1)
+slice([1,2,3,4], -1, 3) # length is bigger than expected, no errors
+slice(asbytes(0x04030201), 1, 2)", @"# slice(""kalk"", 1)
+out = ""alk""
+# slice(""kalk"", -2)
+out = ""lk""
+# slice(""kalk"", 1, 2)
+out = ""al""
+# slice([1,2,3,4], 1)
+out = [2, 3, 4]
+# slice([1,2,3,4], -1)
+out = [4]
+# slice([1,2,3,4], -1, 3) # length is bigger than expected, no errors
+out = [4]
+# slice(asbytes(67305985), 1, 2)
+out = slice(bytebuffer([2, 3]), 1, 2)", Category = "Misc Functions")]
+        public static void Test_slice(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.Lines(System.String)"/> or `lines`.
+        /// </summary>
+        [TestCase(@"lines(""k\na\nl\nk"")", @"# lines(""k\na\nl\nk"")
+out = [""k"", ""a"", ""l"", ""k""]", Category = "Misc Functions")]
+        public static void Test_lines(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.Colors"/> or `colors`.
+        /// </summary>
+        [TestCase(@"colors[0]", @"# colors[0]
+out = rgb(240, 248, 255) ## F0F8FF AliceBlue ##", Category = "Misc Functions")]
+        public static void Test_colors(string input, string output) => AssertScript(input, output);
+
     }
 
     public partial class StringModuleTests : KalkTestBase

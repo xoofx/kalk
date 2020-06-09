@@ -374,18 +374,45 @@ namespace Kalk.Core
                     throw new ArgumentException($"The type {Engine.GetTypeName(value)} is not supported ", nameof(value));
             }
         }
-        
+
+        /// <summary>
+        /// Inserts an item into a string or list at the specified index.
+        /// </summary>
+        /// <param name="list">A string or list to insert an item into.</param>
+        /// <param name="index">The index at which to insert the item.</param>
+        /// <param name="item">The item to insert.</param>
+        /// <returns>A new string with the item inserted, or a new list with the item inserted at the specified index.</returns>
+        /// <remarks>The index is adjusted at the modulo of the length of the input value.
+        /// If the index is &lt; 0, then the index starts from the end of the string/list length + 1. A value of -1 for the index would insert the item at the end, after the last element of the string or list.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> insert_at("kalk", 0, "YES")
+        /// # insert_at("kalk", 0, "YES")
+        /// out = "YESkalk"
+        /// >>> insert_at("kalk", -1, "YES")
+        /// # insert_at("kalk", -1, "YES")
+        /// out = "kalkYES"
+        /// >>> insert_at(0..10, 1, 50)
+        /// # insert_at(0..10, 1, 50)
+        /// out = [0, 50, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        /// >>> insert_at(0..9, 21, 50) # final index is 21 % 10 = 1
+        /// # insert_at(0..9, 21, 50) # final index is 21 % 10 = 1
+        /// out = [0, 50, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        /// >>> insert_at([], 3, 1)
+        /// # insert_at([], 3, 1)
+        /// out = [1]
+        /// ```
+        /// </example>
         [KalkDoc("insert_at", CategoryMisc)]
-        public object InsertAt(object value, int index, object item)
+        public object InsertAt(object list, int index, object item)
         {
-            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (list == null) throw new ArgumentNullException(nameof(list));
             if (item == null) throw new ArgumentNullException(nameof(item));
-            if (value is string valueStr)
+            if (list is string valueStr)
             {
                 var itemStr = Engine.ObjectToString(item);
-
-                index = index % valueStr.Length;
-                index = index < 0 ? valueStr.Length + 1 + index : index;
+                index = valueStr.Length == 0 ? 0 : index < 0 ? valueStr.Length + (index + 1) % valueStr.Length : index % valueStr.Length;
 
                 var builder = new StringBuilder(valueStr.Substring(0, index));
                 builder.Append(itemStr);
@@ -395,28 +422,65 @@ namespace Kalk.Core
                 }
                 return builder.ToString();
             }
-            else if (value is IList list)
+            else if (list is KalkNativeBuffer buffer)
             {
-                index = index % list.Count;
-                index = index < 0 ? list.Count + 1 + index : index;
+                var byteItem = Engine.ToObject<byte>(2, item);
+                index = buffer.Count == 0 ? 0 : index < 0 ? buffer.Count + (index + 1) % buffer.Count : index % buffer.Count;
 
-                list.Insert(index, item);
-                return list;
+                var newBuffer = new KalkNativeBuffer(buffer.Count + 1);
+                for (int i = 0; i < index; i++) newBuffer[i] = buffer[i];
+                newBuffer[index] = byteItem;
+                for (int i = index + 1; i < newBuffer.Count; i++) newBuffer[i] = buffer[i - 1];
+                return newBuffer;
+            }
+            else if (list is IList listCollection)
+            {
+                index = listCollection.Count == 0 ? 0 : index < 0 ? listCollection.Count + (index + 1) % listCollection.Count : index % listCollection.Count;
+                listCollection.Insert(index, item);
+                return listCollection;
             }
             else
             {
-                throw new ArgumentException($"The type {Engine.GetTypeName(value)} is not supported ", nameof(value));
+                throw new ArgumentException($"The type {Engine.GetTypeName(list)} is not supported ", nameof(list));
             }
         }
 
+        /// <summary>
+        /// Removes an item from a string or list at the specified index.
+        /// </summary>
+        /// <param name="list">A string or list to remove an item from.</param>
+        /// <param name="index">The index at which to remove the item.</param>
+        /// <returns>A new string/list with the item at the specified index removed.</returns>
+        /// <remarks>The index is adjusted at the modulo of the length of the input value.
+        /// If the index is &lt; 0, then the index starts from the end of the string/list length. A value of -1 for the index would remove the last element.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> remove_at("kalk", 0)
+        /// # remove_at("kalk", 0)
+        /// out = "alk"
+        /// >>> remove_at("kalk", -1)
+        /// # remove_at("kalk", -1)
+        /// out = "kal"
+        /// >>> remove_at(0..9, 5)
+        /// # remove_at(0..9, 5)
+        /// out = [0, 1, 2, 3, 4, 6, 7, 8, 9]
+        /// >>> remove_at(0..9, -1)
+        /// # remove_at(0..9, -1)
+        /// out = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        /// >>> remove_at(asbytes(0x04030201), 1)
+        /// # remove_at(asbytes(67305985), 1)
+        /// out = bytebuffer([1, 3, 4])
+        /// ```
+        /// </example>
         [KalkDoc("remove_at", CategoryMisc)]
-        public object RemoveAt(object value, int index)
+        public object RemoveAt(object list, int index)
         {
-            if (value == null) throw new ArgumentNullException(nameof(value));
-            if (value is string valueStr)
+            if (list == null) throw new ArgumentNullException(nameof(list));
+            if (list is string valueStr)
             {
-                index = index % valueStr.Length;
-                index = index < 0 ? valueStr.Length + index : index;
+                if (valueStr == string.Empty) return valueStr;
+                index = index < 0 ? valueStr.Length + index  % valueStr.Length : index % valueStr.Length;
 
                 var builder = new StringBuilder(valueStr.Substring(0, index));
                 if (index < valueStr.Length)
@@ -425,38 +489,77 @@ namespace Kalk.Core
                 }
                 return builder.ToString();
             }
-            else if (value is IList list)
+            else if (list is KalkNativeBuffer buffer)
             {
-                index = index % list.Count;
-                index = index < 0 ? list.Count + index : index;
+                if (buffer.Count == 0) return buffer;
 
-                list.RemoveAt(index);
-                return list;
+                index = index < 0 ? buffer.Count + index % buffer.Count : index % buffer.Count;
+                var newBuffer = new KalkNativeBuffer(buffer.Count - 1);
+
+                for (int i = 0; i < index; i++) newBuffer[i] = buffer[i];
+                for (int i = index; i < newBuffer.Count; i++) newBuffer[i] = buffer[i + 1];
+                return newBuffer;
+            }
+            else if (list is IList listCollection)
+            {
+                if (listCollection.Count == 0) return listCollection;
+
+                index = index < 0 ? listCollection.Count + index % listCollection.Count : index % listCollection.Count;
+                listCollection.RemoveAt(index);
+                return listCollection;
             }
             else
             {
-                throw new ArgumentException($"The type {Engine.GetTypeName(value)} is not supported ", nameof(value));
+                throw new ArgumentException($"The type {Engine.GetTypeName(list)} is not supported ", nameof(list));
             }
         }
-        
+
+        /// <summary>
+        /// Checks if an object (string, list, vector types, bytebuffer...) is containing the specified value.
+        /// </summary>
+        /// <param name="list">The list to search into.</param>
+        /// <param name="value">The value to search into the list.</param>
+        /// <returns>true if value was found in the list input; otherwise false.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> contains("kalk", "l")
+        /// # contains("kalk", "l")
+        /// out = true
+        /// >>> contains("kalk", "e")
+        /// # contains("kalk", "e")
+        /// out = false
+        /// >>> contains([1,2,3,4,5], 3)
+        /// # contains([1,2,3,4,5], 3)
+        /// out = true
+        /// >>> contains([1,2,3,4,5], 6)
+        /// # contains([1,2,3,4,5], 6)
+        /// out = false
+        /// >>> contains(float4(1,2,3,4), 3)
+        /// # contains(float4(1, 2, 3, 4), 3)
+        /// out = true
+        /// >>> contains(float4(1,2,3,4), 6)
+        /// # contains(float4(1, 2, 3, 4), 6)
+        /// out = false
+        /// ```
+        /// </example>
         [KalkDoc("contains", CategoryMisc)]
-        public KalkBool Contains(object value, object match)
+        public KalkBool Contains(object list, object value)
         {
+            if (list == null) throw new ArgumentNullException(nameof(list));
             if (value == null) throw new ArgumentNullException(nameof(value));
-            if (match == null) throw new ArgumentNullException(nameof(match));
-            if (value is string valueStr)
+            if (list is string valueStr)
             {
-                var matchStr = Engine.ObjectToString(match);
+                var matchStr = Engine.ObjectToString(value);
                 return valueStr.Contains(matchStr, StringComparison.Ordinal);
             }
 
-            var composite = new KalkCompositeValue(value);
+            var composite = new KalkCompositeValue(list);
             bool contains = false;
 
             // Force the evaluation of the object
             composite.Visit(Engine, Engine.CurrentSpan, input =>
             {
-                var result = (bool) ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.CompareEqual, input, match);
+                var result = (bool) ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.CompareEqual, input, value);
                 if (result)
                 {
                     contains = true;
@@ -469,84 +572,196 @@ namespace Kalk.Core
             return contains;
         }
 
+        /// <summary>
+        /// Replaces in an object (string, list, vector types, bytebuffer...) an item of the specified value by another value.
+        /// </summary>
+        /// <param name="list">The list to search into to replace an element.</param>
+        /// <param name="value">The item to replace.</param>
+        /// <param name="by">The value to replace with.</param>
+        /// <returns>The modified object.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> replace("kalk", "k", "woo")
+        /// # replace("kalk", "k", "woo")
+        /// out = "wooalwoo"
+        /// >>> replace([1,2,3,4], 3, 5)
+        /// # replace([1,2,3,4], 3, 5)
+        /// out = [1, 2, 5, 4]
+        /// >>> replace(float4(1,2,3,4), 3, 5)
+        /// # replace(float4(1, 2, 3, 4), 3, 5)
+        /// out = float4(1, 2, 5, 4)
+        /// ```
+        /// </example>
         [KalkDoc("replace", CategoryMisc)]
-        public object Replace(object value, object match, object by)
+        public object Replace(object list, object value, object by)
         {
+            if (list == null) throw new ArgumentNullException(nameof(list));
             if (value == null) throw new ArgumentNullException(nameof(value));
-            if (match == null) throw new ArgumentNullException(nameof(match));
             if (@by == null) throw new ArgumentNullException(nameof(@by));
-            if (value is string valueStr)
+            if (list is string valueStr)
             {
-                var matchStr = Engine.ObjectToString(match);
+                var matchStr = Engine.ObjectToString(value);
                 var byStr = Engine.ObjectToString(by);
                 return valueStr.Replace(matchStr, byStr);
             }
 
-            var composite = new KalkCompositeValue(value);
-            return composite.Transform(Engine, Engine.CurrentSpan, input => ReplaceImpl(input, match, @by), typeof(object));
+            var composite = new KalkCompositeValue(list);
+            return composite.Transform(Engine, Engine.CurrentSpan, input => ReplaceImpl(input, value, @by), typeof(object));
         }
 
+        /// <summary>
+        /// Creates a slice of an object (string, list, vector types, bytebuffer...) starting at the specified index and with the specified length;
+        /// </summary>
+        /// <param name="list">The object to create a slice from.</param>
+        /// <param name="index">The index into the object.</param>
+        /// <param name="length">The optional length of the slice. If the length is not defined, the length will start from index with the remaining elements.</param>
+        /// <returns>A slice of the input object.</returns>
+        /// <remarks>The index is adjusted at the modulo of the specified length of the input object.
+        /// If the index is &lt; 0, then the index starts from the end of the input object length. A value of -1 for the index would take a slice with the only the last element.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> slice("kalk", 1)
+        /// # slice("kalk", 1)
+        /// out = "alk"
+        /// >>> slice("kalk", -2)
+        /// # slice("kalk", -2)
+        /// out = "lk"
+        /// >>> slice("kalk", 1, 2)
+        /// # slice("kalk", 1, 2)
+        /// out = "al"
+        /// >>> slice([1,2,3,4], 1)
+        /// # slice([1,2,3,4], 1)
+        /// out = [2, 3, 4]
+        /// >>> slice([1,2,3,4], -1)
+        /// # slice([1,2,3,4], -1)
+        /// out = [4]
+        /// >>> slice([1,2,3,4], -1, 3) # length is bigger than expected, no errors
+        /// # slice([1,2,3,4], -1, 3) # length is bigger than expected, no errors
+        /// out = [4]
+        /// >>> slice(asbytes(0x04030201), 1, 2)
+        /// # slice(asbytes(67305985), 1, 2)
+        /// out = slice(bytebuffer([2, 3]), 1, 2)
+        /// ```
+        /// </example>
         [KalkDoc("slice", CategoryMisc)]
-        public object Slice(object value, int index, int? length = null)
+        public object Slice(object list, int index, int? length = null)
         {
-            if (value is string str)
+            if (list is string str)
             {
                 return StringFunctions.Slice(str, index, length);
             }
 
-            var list = value as IList;
-            if (list == null)
+            var listCollection = list as IList;
+            if (listCollection == null)
             {
-                if (value is IEnumerable it)
+                if (list is IEnumerable it)
                 {
-                    list = new ScriptRange(it);
+                    listCollection = new ScriptRange(it);
                 }
                 else
                 {
-                    throw new ArgumentException("The argument is not a string, bytebuffer or array.");
+                    throw new ArgumentException("The argument is not a string, bytebuffer or array.", nameof(list));
                 }
             }
-            
-            if (index < 0)
+
+            // Wrap index
+            index = index < 0 ? listCollection.Count + index % listCollection.Count : index % listCollection.Count;
+
+            // Compute length
+            length ??= listCollection.Count;
+            if (length < 0)
             {
-                index = index + list.Count;
+                throw new ArgumentOutOfRangeException(nameof(length), "Length must be >= 0");
             }
 
-            length ??= list.Count;
-
-            if (index < 0)
+            // Trim length if required
+            if (index + length > listCollection.Count)
             {
-                if (index + length <= 0)
-                {
-                    return new KalkNativeBuffer(0);
-                }
-                length = length + index;
-                index = 0;
-            }
-
-            if (index + length > list.Count)
-            {
-                length = list.Count - index;
+                length = listCollection.Count - index;
             }
             
-            if (value is KalkNativeBuffer nativeBuffer)
+            if (list is KalkNativeBuffer nativeBuffer)
             {
                 return nativeBuffer.Slice(index, length.Value);
             }
 
-            return new ScriptRange(list.Cast<object>().Skip(index).Take(length.Value));
+            return new ScriptRange(listCollection.Cast<object>().Skip(index).Take(length.Value));
         }
 
+        /// <summary>
+        /// Extract lines from the specified string.
+        /// </summary>
+        /// <param name="text">A string to extract lines from.</param>
+        /// <returns>Lines extracted from the input string.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> lines("k\na\nl\nk")
+        /// # lines("k\na\nl\nk")
+        /// out = ["k", "a", "l", "k"]
+        /// ```
+        /// </example>
         [KalkDoc("lines", CategoryMisc)]
         public ScriptRange Lines(string text)
         {
             if (text == null) return new ScriptRange();
             return new ScriptRange(new LineReader(() => new StringReader(text)));
         }
-        
+
+        /// <summary>
+        /// Display or returns the known CSS colors.
+        /// </summary>
+        /// <returns>Prints known CSS colors or return a list if this function is used in an expression.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> colors[0]
+        /// # colors[0]
+        /// out = rgb(240, 248, 255) ## F0F8FF AliceBlue ##
+        /// ```
+        /// </example>
+        [KalkDoc("colors", CategoryMisc)]
+        public object Colors()
+        {
+            var colors = KalkColorRgb.GetKnownColors();
+            if (!(Engine.CurrentNode is ScriptVariable))
+            {
+                return new ScriptArray(colors);
+            }
+
+            var builder = new StringBuilder();
+            int count = 0;
+            const int PerColumn = 2;
+            foreach (var knownColor in colors)
+            {
+                var colorName = knownColor.ToString("aligned", Engine);
+                builder.Append(colorName);
+                count++;
+
+                if (count == PerColumn)
+                {
+                    Engine.WriteHighlightLine(builder.ToString());
+                    builder.Clear();
+                    count = 0;
+                }
+                else
+                {
+                    builder.Append(" ");
+                }
+            }
+
+            if (builder.Length > 0)
+            {
+                Engine.WriteHighlightLine(builder.ToString());
+                builder.Clear();
+            }
+
+            return null;
+        }
+
+
         private object ReplaceImpl(object value, object match, object by)
         {
-            var result = (bool) ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.CompareEqual, value, match);
+            var result = (bool)ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.CompareEqual, value, match);
             return result ? @by : value;
         }
 
@@ -629,43 +844,43 @@ namespace Kalk.Core
                 case short vshort:
                 {
                     int size = 2;
-                    if (vshort >= sbyte.MinValue && vshort <= byte.MaxValue) size = 1; 
+                    if (vshort >= sbyte.MinValue && vshort <= byte.MaxValue) size = 1;
                     return HexaFromBytes(size, vshort, prefix, separator);
                 }
                 case ushort vushort:
                 {
                     int size = 2;
-                    if (vushort <= byte.MaxValue) size = 1; 
+                    if (vushort <= byte.MaxValue) size = 1;
                     return HexaFromBytes(size, vushort, prefix, separator);
                 }
                 case int vint:
                 {
                     int size = 4;
-                    if (vint >= sbyte.MinValue && vint <= byte.MaxValue) size = 1; 
-                    else if (vint >= short.MinValue && vint <= ushort.MaxValue) size = 2; 
+                    if (vint >= sbyte.MinValue && vint <= byte.MaxValue) size = 1;
+                    else if (vint >= short.MinValue && vint <= ushort.MaxValue) size = 2;
                     return HexaFromBytes(size, vint, prefix, separator);
                 }
                 case uint vuint:
                 {
                     int size = 4;
-                    if (vuint <= byte.MaxValue) size = 1; 
-                    else if (vuint <= ushort.MaxValue) size = 2; 
+                    if (vuint <= byte.MaxValue) size = 1;
+                    else if (vuint <= ushort.MaxValue) size = 2;
                     return HexaFromBytes(size, vuint, prefix, separator);
                 }
                 case long vlong:
                 {
                     int size = 8;
-                    if (vlong >= sbyte.MinValue && vlong <= byte.MaxValue) size = 1; 
-                    else if (vlong >= short.MinValue && vlong <= ushort.MaxValue) size = 2; 
-                    else if (vlong >= int.MinValue && vlong <= uint.MaxValue) size = 4; 
+                    if (vlong >= sbyte.MinValue && vlong <= byte.MaxValue) size = 1;
+                    else if (vlong >= short.MinValue && vlong <= ushort.MaxValue) size = 2;
+                    else if (vlong >= int.MinValue && vlong <= uint.MaxValue) size = 4;
                     return HexaFromBytes(size, vlong, prefix, separator);
                 }
                 case ulong vulong:
                 {
                     int size = 8;
-                    if (vulong <= byte.MaxValue) size = 1; 
-                    else if (vulong <= ushort.MaxValue) size = 2; 
-                    else if (vulong <= uint.MaxValue) size = 4; 
+                    if (vulong <= byte.MaxValue) size = 1;
+                    else if (vulong <= ushort.MaxValue) size = 2;
+                    else if (vulong <= uint.MaxValue) size = 4;
                     return HexaFromBytes(size, vulong, prefix, separator);
                 }
                 case float vfloat:
@@ -708,45 +923,6 @@ namespace Kalk.Core
                 default:
                     throw new ArgumentException($"The type {Engine.GetTypeName(value)} is not supported ", nameof(value));
             }
-        }
-
-        [KalkDoc("colors", CategoryMisc)]
-        public object Colors()
-        {
-            var colors = KalkColorRgb.GetKnownColors();
-            if (Engine.CurrentNode?.Parent?.GetType() != typeof(ScriptExpressionStatement))
-            {
-                return new ScriptArray(colors);
-            }
-
-            var builder = new StringBuilder();
-            int count = 0;
-            const int PerColumn = 2;
-            foreach (var knownColor in colors)
-            {
-                var colorName = knownColor.ToString("aligned", Engine);
-                builder.Append(colorName);
-                count++;
-
-                if (count == PerColumn)
-                {
-                    Engine.WriteHighlightLine(builder.ToString());
-                    builder.Clear();
-                    count = 0;
-                }
-                else
-                {
-                    builder.Append(" ");
-                }
-            }
-
-            if (builder.Length > 0)
-            {
-                Engine.WriteHighlightLine(builder.ToString());
-                builder.Clear();
-            }
-
-            return null;
         }
 
         private static string HexaFromBytes<T>(int byteCount, in T element, bool prefix, string separator)

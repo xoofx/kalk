@@ -1752,44 +1752,162 @@ namespace Kalk.Core
             {
                 var descriptor = Descriptors["insert_at"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Inserts an item into a string or list at the specified index.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("list", @"A string or list to insert an item into.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("index", @"The index at which to insert the item.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("item", @"The item to insert.")  { IsOptional = false });
+                descriptor.Returns = @"A new string with the item inserted, or a new list with the item inserted at the specified index.";
+                descriptor.Remarks = @"The index is adjusted at the modulo of the length of the input value.
+    If the index is < 0, then the index starts from the end of the string/list length + 1. A value of -1 for the index would insert the item at the end, after the last element of the string or list.";
+                descriptor.Example = @">>> insert_at(""kalk"", 0, ""YES"")
+    # insert_at(""kalk"", 0, ""YES"")
+    out = ""YESkalk""
+    >>> insert_at(""kalk"", -1, ""YES"")
+    # insert_at(""kalk"", -1, ""YES"")
+    out = ""kalkYES""
+    >>> insert_at(0..10, 1, 50)
+    # insert_at(0..10, 1, 50)
+    out = [0, 50, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    >>> insert_at(0..9, 21, 50) # final index is 21 % 10 = 1
+    # insert_at(0..9, 21, 50) # final index is 21 % 10 = 1
+    out = [0, 50, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    >>> insert_at([], 3, 1)
+    # insert_at([], 3, 1)
+    out = [1]
+";
             }
             {
                 var descriptor = Descriptors["remove_at"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Removes an item from a string or list at the specified index.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("list", @"A string or list to remove an item from.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("index", @"The index at which to remove the item.")  { IsOptional = false });
+                descriptor.Returns = @"A new string/list with the item at the specified index removed.";
+                descriptor.Remarks = @"The index is adjusted at the modulo of the length of the input value.
+    If the index is < 0, then the index starts from the end of the string/list length. A value of -1 for the index would remove the last element.";
+                descriptor.Example = @">>> remove_at(""kalk"", 0)
+    # remove_at(""kalk"", 0)
+    out = ""alk""
+    >>> remove_at(""kalk"", -1)
+    # remove_at(""kalk"", -1)
+    out = ""kal""
+    >>> remove_at(0..9, 5)
+    # remove_at(0..9, 5)
+    out = [0, 1, 2, 3, 4, 6, 7, 8, 9]
+    >>> remove_at(0..9, -1)
+    # remove_at(0..9, -1)
+    out = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    >>> remove_at(asbytes(0x04030201), 1)
+    # remove_at(asbytes(67305985), 1)
+    out = bytebuffer([1, 3, 4])
+";
             }
             {
                 var descriptor = Descriptors["contains"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Checks if an object (string, list, vector types, bytebuffer...) is containing the specified value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("list", @"The list to search into.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The value to search into the list.")  { IsOptional = false });
+                descriptor.Returns = @"true if value was found in the list input; otherwise false.";
+                descriptor.Example = @">>> contains(""kalk"", ""l"")
+    # contains(""kalk"", ""l"")
+    out = true
+    >>> contains(""kalk"", ""e"")
+    # contains(""kalk"", ""e"")
+    out = false
+    >>> contains([1,2,3,4,5], 3)
+    # contains([1,2,3,4,5], 3)
+    out = true
+    >>> contains([1,2,3,4,5], 6)
+    # contains([1,2,3,4,5], 6)
+    out = false
+    >>> contains(float4(1,2,3,4), 3)
+    # contains(float4(1, 2, 3, 4), 3)
+    out = true
+    >>> contains(float4(1,2,3,4), 6)
+    # contains(float4(1, 2, 3, 4), 6)
+    out = false
+";
             }
             {
                 var descriptor = Descriptors["replace"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Replaces in an object (string, list, vector types, bytebuffer...) an item of the specified value by another value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("list", @"The list to search into to replace an element.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The item to replace.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("by", @"The value to replace with.")  { IsOptional = false });
+                descriptor.Returns = @"The modified object.";
+                descriptor.Example = @">>> replace(""kalk"", ""k"", ""woo"")
+    # replace(""kalk"", ""k"", ""woo"")
+    out = ""wooalwoo""
+    >>> replace([1,2,3,4], 3, 5)
+    # replace([1,2,3,4], 3, 5)
+    out = [1, 2, 5, 4]
+    >>> replace(float4(1,2,3,4), 3, 5)
+    # replace(float4(1, 2, 3, 4), 3, 5)
+    out = float4(1, 2, 5, 4)
+";
             }
             {
                 var descriptor = Descriptors["slice"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates a slice of an object (string, list, vector types, bytebuffer...) starting at the specified index and with the specified length;";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("list", @"The object to create a slice from.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("index", @"The index into the object.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("length", @"The optional length of the slice. If the length is not defined, the length will start from index with the remaining elements.")  { IsOptional = true });
+                descriptor.Returns = @"A slice of the input object.";
+                descriptor.Remarks = @"The index is adjusted at the modulo of the specified length of the input object.
+    If the index is < 0, then the index starts from the end of the input object length. A value of -1 for the index would take a slice with the only the last element.";
+                descriptor.Example = @">>> slice(""kalk"", 1)
+    # slice(""kalk"", 1)
+    out = ""alk""
+    >>> slice(""kalk"", -2)
+    # slice(""kalk"", -2)
+    out = ""lk""
+    >>> slice(""kalk"", 1, 2)
+    # slice(""kalk"", 1, 2)
+    out = ""al""
+    >>> slice([1,2,3,4], 1)
+    # slice([1,2,3,4], 1)
+    out = [2, 3, 4]
+    >>> slice([1,2,3,4], -1)
+    # slice([1,2,3,4], -1)
+    out = [4]
+    >>> slice([1,2,3,4], -1, 3) # length is bigger than expected, no errors
+    # slice([1,2,3,4], -1, 3) # length is bigger than expected, no errors
+    out = [4]
+    >>> slice(asbytes(0x04030201), 1, 2)
+    # slice(asbytes(67305985), 1, 2)
+    out = slice(bytebuffer([2, 3]), 1, 2)
+";
             }
             {
                 var descriptor = Descriptors["lines"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Extract lines from the specified string.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"A string to extract lines from.")  { IsOptional = false });
+                descriptor.Returns = @"Lines extracted from the input string.";
+                descriptor.Example = @">>> lines(""k\na\nl\nk"")
+    # lines(""k\na\nl\nk"")
+    out = [""k"", ""a"", ""l"", ""k""]
+";
             }
             {
                 var descriptor = Descriptors["colors"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Display or returns the known CSS colors.";
                 descriptor.IsCommand = false;
+                descriptor.Returns = @"Prints known CSS colors or return a list if this function is used in an expression.";
+                descriptor.Example = @">>> colors[0]
+    # colors[0]
+    out = rgb(240, 248, 255) ## F0F8FF AliceBlue ##
+";
             }
         }        
     }
