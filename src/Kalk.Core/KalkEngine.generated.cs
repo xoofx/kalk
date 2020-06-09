@@ -1656,7 +1656,7 @@ namespace Kalk.Core
             {
                 var descriptor = Descriptors["hex"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"Returns the hexadecimal representation of the input or convert the hexadecimal input string
+                descriptor.Description = @"Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
     to an integral/bytebuffer representation.";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = false });
@@ -1707,20 +1707,47 @@ namespace Kalk.Core
             {
                 var descriptor = Descriptors["utf8"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Converts a string to an UTF8 bytebuffer or convert a bytebuffer of UTF8 bytes to a string.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The specified input.")  { IsOptional = false });
+                descriptor.Returns = @"The UTF8 bytebuffer representation of the input string or the string representation of the input UTF8 bytebuffer.";
+                descriptor.Example = @">>> utf8 ""kalk""
+    # utf8(""kalk"")
+    out = bytebuffer([107, 97, 108, 107])
+    >>> utf8 out
+    # utf8(out)
+    out = ""kalk""
+";
             }
             {
                 var descriptor = Descriptors["utf16"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Converts a string to an UTF16 bytebuffer or convert a bytebuffer of UTF16 bytes to a string.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The specified input.")  { IsOptional = false });
+                descriptor.Returns = @"The UTF16 bytebuffer representation of the input string or the string representation of the input UTF16 bytebuffer.";
+                descriptor.Example = @">>> utf16 ""kalk""
+    # utf16(""kalk"")
+    out = bytebuffer([107, 0, 97, 0, 108, 0, 107, 0])
+    >>> utf16 out
+    # utf16(out)
+    out = ""kalk""
+";
             }
             {
                 var descriptor = Descriptors["utf32"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Converts a string to an UTF32 bytebuffer or convert a bytebuffer of UTF32 bytes to a string.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The specified input.")  { IsOptional = false });
+                descriptor.Returns = @"The UTF32 bytebuffer representation of the input string or the string representation of the input UTF32 bytebuffer.";
+                descriptor.Example = @">>> utf32 ""kalk""
+    # utf32(""kalk"")
+    out = bytebuffer([107, 0, 0, 0, 97, 0, 0, 0, 108, 0, 0, 0, 107, 0, 0, 0])
+    >>> utf32 out
+    # utf32(out)
+    out = ""kalk""
+";
             }
             {
                 var descriptor = Descriptors["insert_at"];

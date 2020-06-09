@@ -191,7 +191,7 @@ namespace Kalk.Core
         }
 
         /// <summary>
-        /// Returns the hexadecimal representation of the input or convert the hexadecimal input string
+        /// Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
         /// to an integral/bytebuffer representation.
         /// </summary>
         /// <param name="value">The input value.</param>
@@ -248,6 +248,21 @@ namespace Kalk.Core
             return Hexadecimal(value, separator, prefix, false);
         }
 
+        /// <summary>
+        /// Converts a string to an UTF8 bytebuffer or convert a bytebuffer of UTF8 bytes to a string.
+        /// </summary>
+        /// <param name="value">The specified input.</param>
+        /// <returns>The UTF8 bytebuffer representation of the input string or the string representation of the input UTF8 bytebuffer.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> utf8 "kalk"
+        /// # utf8("kalk")
+        /// out = bytebuffer([107, 97, 108, 107])
+        /// >>> utf8 out
+        /// # utf8(out)
+        /// out = "kalk"
+        /// ```
+        /// </example>
         [KalkDoc("utf8", CategoryMisc)]
         public object GetUtf8(object value)
         {
@@ -272,7 +287,21 @@ namespace Kalk.Core
             }
         }
 
-
+        /// <summary>
+        /// Converts a string to an UTF16 bytebuffer or convert a bytebuffer of UTF16 bytes to a string.
+        /// </summary>
+        /// <param name="value">The specified input.</param>
+        /// <returns>The UTF16 bytebuffer representation of the input string or the string representation of the input UTF16 bytebuffer.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> utf16 "kalk"
+        /// # utf16("kalk")
+        /// out = bytebuffer([107, 0, 97, 0, 108, 0, 107, 0])
+        /// >>> utf16 out
+        /// # utf16(out)
+        /// out = "kalk"
+        /// ```
+        /// </example>
         [KalkDoc("utf16", CategoryMisc)]
         public object GetUtf16(object value)
         {
@@ -307,6 +336,21 @@ namespace Kalk.Core
             }
         }
 
+        /// <summary>
+        /// Converts a string to an UTF32 bytebuffer or convert a bytebuffer of UTF32 bytes to a string.
+        /// </summary>
+        /// <param name="value">The specified input.</param>
+        /// <returns>The UTF32 bytebuffer representation of the input string or the string representation of the input UTF32 bytebuffer.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> utf32 "kalk"
+        /// # utf32("kalk")
+        /// out = bytebuffer([107, 0, 0, 0, 97, 0, 0, 0, 108, 0, 0, 0, 107, 0, 0, 0])
+        /// >>> utf32 out
+        /// # utf32(out)
+        /// out = "kalk"
+        /// ```
+        /// </example>
         [KalkDoc("utf32", CategoryMisc)]
         public object GetUtf32(object value)
         {

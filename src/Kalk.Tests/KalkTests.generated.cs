@@ -826,6 +826,36 @@ out = ""BD 61 BC 00""
 out = ""00 00 80 3F 00 00 00 40 00 00 40 40 00 00 80 40""", Category = "Misc Functions")]
         public static void Test_hex(string input, string output) => AssertScript(input, output);
 
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.GetUtf8(System.Object)"/> or `utf8`.
+        /// </summary>
+        [TestCase(@"utf8 ""kalk""
+utf8 out", @"# utf8(""kalk"")
+out = bytebuffer([107, 97, 108, 107])
+# utf8(out)
+out = ""kalk""", Category = "Misc Functions")]
+        public static void Test_utf8(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.GetUtf16(System.Object)"/> or `utf16`.
+        /// </summary>
+        [TestCase(@"utf16 ""kalk""
+utf16 out", @"# utf16(""kalk"")
+out = bytebuffer([107, 0, 97, 0, 108, 0, 107, 0])
+# utf16(out)
+out = ""kalk""", Category = "Misc Functions")]
+        public static void Test_utf16(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.GetUtf32(System.Object)"/> or `utf32`.
+        /// </summary>
+        [TestCase(@"utf32 ""kalk""
+utf32 out", @"# utf32(""kalk"")
+out = bytebuffer([107, 0, 0, 0, 97, 0, 0, 0, 108, 0, 0, 0, 107, 0, 0, 0])
+# utf32(out)
+out = ""kalk""", Category = "Misc Functions")]
+        public static void Test_utf32(string input, string output) => AssertScript(input, output);
+
     }
 
     public partial class StringModuleTests : KalkTestBase
