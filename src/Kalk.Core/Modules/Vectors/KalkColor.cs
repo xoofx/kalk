@@ -27,6 +27,15 @@ namespace Kalk.Core
 
         public int rgb => (int)((r << 16) | (g << 8) | b);
 
+        public string Name
+        {
+            get
+            {
+                KalkColorRgb.TryGetKnownColor(rgb, out var name);
+                return name;
+            }
+        }
+
         public override IEnumerable<string> GetMembers()
         {
             for (int i = 0; i < Math.Min(4, Length); i++)
@@ -47,7 +56,21 @@ namespace Kalk.Core
                         break;
                 }
             }
+
+            yield return "name";
         }
+
+        public override bool TryGetValue(TemplateContext context, SourceSpan span, string member, out object result)
+        {
+            if (member == "name")
+            {
+                result = Name;
+                return true;
+            }
+
+            return base.TryGetValue(context, span, member, out result);
+        }
+
 
         private static float Clamp01(float value) => Math.Clamp(value, 0.0f, 1.0f);
 

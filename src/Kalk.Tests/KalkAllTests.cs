@@ -6,23 +6,25 @@ namespace Kalk.Tests
 {
     public abstract class KalkTestBase
     {
-        protected static void AssertScript(string input, string output)
+        protected static void AssertScript(string input, string expectedOutput)
         {
+            var singleOutput = new StringWriter();
             var kalk = new KalkEngine
             {
                 InputReader = new StringReader(input),
-                OutputWriter = new StringWriter(),
+                OutputWriter = singleOutput,
+                ErrorWriter = singleOutput,
                 DisplayVersion = false,
                 EchoInput = false,
                 IsOutputSupportHighlighting = false
             };
             kalk.Run();
 
-            output = output.Replace("\r\n", "\n").Trim();
+            expectedOutput = expectedOutput.Replace("\r\n", "\n").Trim();
             var result = kalk.OutputWriter.ToString();
             result = result.Replace("\r\n", "\n").Trim();
 
-            Assert.AreEqual(result, output);
+            Assert.AreEqual(expectedOutput, result);
         }
     }
 

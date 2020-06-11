@@ -42,6 +42,7 @@ namespace Kalk.Core
 
         protected override KalkVector<byte> NewVector(int length) => new KalkColorRgb();
 
+
         public static bool TryGetKnownColor(string color, out int rgb)
         {
             if (color == null) throw new ArgumentNullException(nameof(color));

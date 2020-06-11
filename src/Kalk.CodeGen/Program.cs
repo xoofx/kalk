@@ -546,7 +546,7 @@ namespace Kalk.CodeGen
         }
         
         
-        private static readonly Regex RemoveCode = new Regex(@"^\s*```\w*\s*[\r\n]*", RegexOptions.Multiline);
+        private static readonly Regex RemoveCode = new Regex(@"^\s*```\w*[ \t]*[\r\n]*", RegexOptions.Multiline);
 
         static async Task Main(string[] args)
         {
@@ -754,7 +754,8 @@ namespace Kalk.CodeGen
                             }
                             else if (element.Name == "example")
                             {
-                                desc.Example = RemoveCode.Replace(text, string.Empty);
+                                text = RemoveCode.Replace(text, string.Empty);
+                                desc.Example = text;
                                 var test = TryParseTest(text);
                                 if (test != null)
                                 {
@@ -907,27 +908,28 @@ namespace Kalk.Tests
             //Console.WriteLine(result);
         }
 
+        private static readonly Regex PromptRegex = new Regex(@"^(\s*)>>>\s");
+
         private static (string, string)? TryParseTest(string text)
         {
             var testLines = new StringReader(text);
             string line;
             string input = null;
             string output = string.Empty;
-            const string prompt = ">>> ";
+            int startColumn = -1;
             while ((line = testLines.ReadLine()) != null)
             {
                 line = line.TrimEnd();
-                if (line.StartsWith("```kalk")) continue;
-                else if (line.Contains("```")) break;
-
-                line = line.Substring(4);
-
-                if (line.StartsWith(prompt))
+                var matchPrompt = PromptRegex.Match(line);
+                if (matchPrompt.Success)
                 {
-                    input += line.Substring(prompt.Length) + Environment.NewLine;
+                    startColumn = matchPrompt.Groups[1].Length;
+                    input += line.Substring(matchPrompt.Length) + Environment.NewLine;
                 }
                 else
                 {
+                    if (startColumn < 0) throw new InvalidOperationException($"Expecting a previous prompt line >>> before `{line}`");
+                    line = line.Substring(startColumn);
                     output += line + Environment.NewLine;
                 }
             }

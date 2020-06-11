@@ -50,6 +50,7 @@ namespace Kalk.Core
             EnableEngineOutput = true;
             EchoEnabled = true;
             DisplayVersion = true;
+            CurrentDisplay = KalkDisplayMode.Standard;
             KalkUserFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile, Environment.SpecialFolderOption.DoNotVerify), ".kalk");
 
             HighlightOutput = new ConsoleText();

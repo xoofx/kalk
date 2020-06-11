@@ -136,17 +136,15 @@ namespace Kalk.Core
 
         private void WriteValueWithDisplayMode(object value)
         {
-            var display = KalkDisplayModeHelper.SafeParse(Config.Display);
-
             // If the type is displayable
             if (value is IKalkDisplayable displayable)
             {
-                displayable.Display(this, display);
+                displayable.Display(this, CurrentDisplay);
                 return;
             }
             
             // Otherwise supports the default.
-            switch (display)
+            switch (CurrentDisplay)
             {
                 case KalkDisplayMode.Standard:
                     return;

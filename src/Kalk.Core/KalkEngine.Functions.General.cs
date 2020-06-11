@@ -22,6 +22,8 @@ namespace Kalk.Core
 
         private delegate object EvaluateDelegate(string text, bool output = false);
 
+        public KalkDisplayMode CurrentDisplay { get; private set; }
+        
         public T GetOrCreateModule<T>() where T : KalkModule, new()
         {
             var typeOfT = typeof(T);
@@ -54,6 +56,22 @@ namespace Kalk.Core
             return moduleT;
         }
 
+        /// <summary>
+        /// Gets or sets the current content of the clipboard.
+        /// </summary>
+        /// <param name="value">Value to set the clipboard to. If not set, this function returns the current content of the clipboard.</param>
+        /// <returns>Returns the content of the clipboard.</returns>
+        /// <remarks>On Unix platform, if you are running from WSL or from raw console, the clipboard is not supported.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> clipboard "text"
+        /// # clipboard("text")
+        /// out = "text"
+        /// >>> clipboard
+        /// # clipboard
+        /// out = "text"
+        /// ```
+        /// </example>
         [KalkDoc("clipboard", CategoryGeneral)]
         public object Clipboard(object value = null)
         {
@@ -61,25 +79,57 @@ namespace Kalk.Core
             {
                 return GetClipboardText?.Invoke();
             }
-            else
-            {
-                SetClipboardText?.Invoke(ObjectToString(value));
-                return null;
-            }
+
+            var newclip = ObjectToString(value);
+            SetClipboardText?.Invoke(newclip);
+            return newclip;
         }
 
+        /// <summary>
+        /// Gets or sets the display mode.
+        ///
+        /// - `std` for standard mode
+        /// - `dev` for developer mode to display advanced details about integers, vectors and floating point values.
+        /// - `eng` for engineering mode to display floating point values using 3 digits for the exponent.
+        /// </summary>
+        /// <param name="name">An optional parameter to set the display mode. Default is `std`. If this parameter is not set, this function will display the display mode currently used.</param>
+        /// <example>
+        /// ```kalk
+        /// >>> display
+        /// # Display mode: std (Standard)
+        /// >>> display dev
+        /// # Display mode: dev (Developer)
+        /// >>> 1.5
+        /// # 1.5
+        /// out = 1.5
+        ///     # IEEE 754 - double - 64-bit
+        ///     #
+        ///     = 0x_3FF80000_00000000
+        ///     = 0x____3____F____F____8____0____0____0____0____0____0____0____0____0____0____0____0
+        ///     #    seee eeee eeee ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff
+        ///     = 0b_0011_1111_1111_1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000
+        ///     #   63                48                  32                  16                   0
+        ///     #
+        ///     # sign    exponent              |-------------------- fraction --------------------|
+        ///     =   1 * 2 ^ (1023 - 1023) * 0b1.1000000000000000000000000000000000000000000000000000
+        /// >>> display invalid
+        /// Invalid display name `invalid`. Expecting `std`, `dev` or `eng`. (Parameter 'name')
+        /// ```
+        /// </example>
         [KalkDoc("display", CategoryGeneral)]
         public void Display(ScriptVariable name = null)
         {
-            var mode = name?.Name ?? Config.Display;
-
-            if (!KalkDisplayModeHelper.TryParse(mode, out var fullMode))
+            var mode = name?.Name;
+            if (mode != null)
             {
-                throw new ArgumentException($"Invalid display name `{mode}`. Expecting `std` or `dev`.", nameof(name));
+                if (!KalkDisplayModeHelper.TryParse(mode, out var fullMode))
+                {
+                    throw new ArgumentException($"Invalid display name `{mode}`. Expecting `std`, `dev` or `eng`.", nameof(name));
+                }
+                CurrentDisplay = fullMode;
             }
 
-            Config.Display = mode;
-            WriteHighlightLine($"# Display mode: {mode} ({fullMode})");
+            WriteHighlightLine($"# Display mode: {CurrentDisplay.ToText()} ({CurrentDisplay})");
         }
 
         [KalkDoc("echo", CategoryGeneral)]

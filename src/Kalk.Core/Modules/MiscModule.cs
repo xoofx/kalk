@@ -717,21 +717,30 @@ namespace Kalk.Core
         /// >>> colors[0]
         /// # colors[0]
         /// out = rgb(240, 248, 255) ## F0F8FF AliceBlue ##
+        /// >>> mycolor = colors["AliceBlue"]; mycolor.name
+        /// # mycolor = colors["AliceBlue"]; mycolor.name
+        /// mycolor = rgb(240, 248, 255) ## F0F8FF AliceBlue ##
+        /// out = "AliceBlue"
         /// ```
         /// </example>
         [KalkDoc("colors", CategoryMisc)]
         public object Colors()
         {
-            var colors = KalkColorRgb.GetKnownColors();
-            if (!(Engine.CurrentNode is ScriptVariable))
+            var knownColorsInternal = KalkColorRgb.GetKnownColors();
+            if (!(Engine?.CurrentNode is ScriptVariable) || !(Engine?.CurrentNode?.Parent is ScriptExpressionStatement))
             {
-                return new ScriptArray(colors);
+                var colors = new ScriptArray(knownColorsInternal);
+                foreach (var color in knownColorsInternal)
+                {
+                    colors.SetValue(color.Name, color, false);
+                }
+                return colors;
             }
 
             var builder = new StringBuilder();
             int count = 0;
             const int PerColumn = 2;
-            foreach (var knownColor in colors)
+            foreach (var knownColor in knownColorsInternal)
             {
                 var colorName = knownColor.ToString("aligned", Engine);
                 builder.Append(colorName);
