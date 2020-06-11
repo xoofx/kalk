@@ -62,6 +62,23 @@ out = 1.5
 Invalid display name `invalid`. Expecting `std`, `dev` or `eng`. (Parameter 'name')", Category = "General")]
         public static void Test_display(string input, string output) => AssertScript(input, output);
 
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.Echo(Scriban.Syntax.ScriptVariable)"/> or `echo`.
+        /// </summary>
+        [TestCase(@"echo
+1 + 2
+echo off
+1 + 2
+echo
+echo on
+1 + 2", @"    # Echo is on.
+# 1 + 2
+out = 3
+# Echo is on.
+# 1 + 2
+out = 3", Category = "General")]
+        public static void Test_echo(string input, string output) => AssertScript(input, output);
+
     }
 
     public partial class MathModuleTests : KalkTestBase
