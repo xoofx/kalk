@@ -930,6 +930,11 @@ namespace Kalk.Tests
                 {
                     if (startColumn < 0) throw new InvalidOperationException($"Expecting a previous prompt line >>> before `{line}`");
                     line = line.Substring(startColumn);
+                    // If we have a result with ellipsis `...` we can't test this text.
+                    if (line.StartsWith("..."))
+                    {
+                        return null;
+                    }
                     output += line + Environment.NewLine;
                 }
             }

@@ -35,7 +35,7 @@ namespace Kalk.Core
             _clockReplInput = Stopwatch.StartNew();
             OnErrorToNextLineMaxDelayInMilliseconds = 300;
 
-            OnClear = Clear;
+            OnClearScreen = ClearScreen;
 
             Repl.GetClipboardTextImpl = GetClipboardText;
             Repl.SetClipboardTextImpl = SetClipboardText;
@@ -211,7 +211,7 @@ namespace Kalk.Core
             }
         }
 
-        public void Clear()
+        public void ClearScreen()
         {
             Repl?.Clear();
             HighlightOutput.Clear();

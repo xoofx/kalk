@@ -71,13 +71,117 @@ echo off
 1 + 2
 echo
 echo on
-1 + 2", @"    # Echo is on.
+1 + 2", @"# Echo is on.
 # 1 + 2
 out = 3
 # Echo is on.
 # 1 + 2
 out = 3", Category = "General")]
         public static void Test_echo(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.Print(System.Object)"/> or `print`.
+        /// </summary>
+        [TestCase(@"print ""kalk""
+echo off
+print ""kalk2""", @"kalk
+kalk2", Category = "General")]
+        public static void Test_print(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.Printh(System.Object)"/> or `printh`.
+        /// </summary>
+        [TestCase(@"printh ""# This is a kalk comment""", @"# This is a kalk comment", Category = "General")]
+        public static void Test_printh(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.Reset"/> or `reset`.
+        /// </summary>
+        [TestCase(@"x = 5; y = 2
+list
+reset
+list", @"# x = 5; y = 2
+x = 5
+y = 2
+# Variables
+x = 5
+y = 2
+# No variables", Category = "General")]
+        public static void Test_reset(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.List"/> or `list`.
+        /// </summary>
+        [TestCase(@"x = 5; y = 2
+list", @"# x = 5; y = 2
+x = 5
+y = 2
+# Variables
+x = 5
+y = 2", Category = "General")]
+        public static void Test_list(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.DeleteVariable(Scriban.Syntax.ScriptVariable)"/> or `del`.
+        /// </summary>
+        [TestCase(@"x = 5; y = 2
+del x
+list", @"# x = 5; y = 2
+x = 5
+y = 2
+# Variable `x == 5` deleted.
+# Variables
+y = 2", Category = "General")]
+        public static void Test_del(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.History(System.Object)"/> or `history`.
+        /// </summary>
+        [TestCase(@"1 + 5
+abs(out)
+history", @"# 1 + 5
+out = 6
+# abs(out)
+out = 6
+0: 1 + 5
+1: abs(out)", Category = "General")]
+        public static void Test_history(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.EvaluateText(System.String,System.Boolean)"/> or `eval`.
+        /// </summary>
+        [TestCase(@"eval ""1+5""", @"# eval(""1+5"")
+out = 6", Category = "General")]
+        public static void Test_eval(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.Last"/> or `out`.
+        /// </summary>
+        [TestCase(@"1 + 2
+out + 1", @"# 1 + 2
+out = 3
+# out + 1
+out = 4", Category = "General")]
+        public static void Test_out(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.LastToClipboard"/> or `out2clipboard`.
+        /// </summary>
+        [TestCase(@"1 + 2
+out2clipboard
+clipboard", @"# 1 + 2
+out = 3
+# clipboard
+out = ""3""", Category = "General")]
+        public static void Test_out2clipboard(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.Shortcut(Scriban.Syntax.ScriptVariable,Scriban.Syntax.ScriptExpression[])"/> or `shortcut`.
+        /// </summary>
+        [TestCase(@"shortcut(myshortcut, ""CTRL+R"", 1 + 2) # Creates a shortcut that will print 3 when pressing CTRL+R.
+shortcut(myshortcut, ""CTRL+R"", ""kalk"") # Overrides the previous shortcut that will print the text `kalk` when pressing CTRL+R.
+shortcut(myshortcut, ""CTRL+R"", ""kalk"", ""CTRL+E r"", ""kalk2"") # Overrides the previous shortcut that will print the text `kalk` when pressing CTRL+R or the text `kalk2` when pressing CTRL+E and r key.", @"", Category = "General")]
+        public static void Test_shortcut(string input, string output) => AssertScript(input, output);
 
     }
 

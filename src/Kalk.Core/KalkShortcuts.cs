@@ -30,10 +30,56 @@ namespace Kalk.Core
         {
             throw new NotSupportedException("Shortcuts don't have any parameters.");
         }
-       
-        public void AddSymbolShortcut(KalkShortcut shortcut)
+
+        public void RemoveShortcut(string name)
+        {
+            if (!TryGetValue(name, out var shortcut)) return;
+            Remove(name);
+
+            foreach (KalkShortcutKey shortcutKey in shortcut.Keys)
+            {
+                var map = ShortcutKeyMap;
+                KalkConsoleKey consoleKey = default;
+                for (int i = 0; i < shortcutKey.Keys.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        if (!map.TryGetShortcut(consoleKey, out var newMap) || !(newMap is KalkShortcutKeyMap))
+                        {
+                            continue;
+                        }
+                        map = (KalkShortcutKeyMap)newMap;
+                    }
+                    consoleKey = shortcutKey.Keys[i];
+                }
+                map.Remove(consoleKey);
+            }
+
+            // Cleanup all maps to remove empty ones
+            CleanupMap(ShortcutKeyMap);
+
+        }
+
+        private void CleanupMap(KalkShortcutKeyMap map)
+        {
+            var keyParis = map.ToList();
+            foreach (var keyPair in keyParis)
+            {
+                if (keyPair.Value is KalkShortcutKeyMap nestedMap)
+                {
+                    CleanupMap(nestedMap);
+                    if (nestedMap.Count == 0)
+                    {
+                        map.Remove(keyPair.Key);
+                    }
+                }
+            }
+        }
+        
+        public void SetSymbolShortcut(KalkShortcut shortcut)
         {
             if (shortcut == null) throw new ArgumentNullException(nameof(shortcut));
+            RemoveShortcut(shortcut.Name);
             Add(shortcut.Name, shortcut);
 
             foreach (KalkShortcutKey shortcutKey in shortcut.Keys)

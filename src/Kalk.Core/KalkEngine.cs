@@ -189,7 +189,7 @@ namespace Kalk.Core
 
         public Dictionary<string, KalkDescriptor> Descriptors { get; }
 
-        public Action OnClear { get; set; }
+        public Action OnClearScreen { get; set; }
 
         public bool HasExit { get; private set; }
 
@@ -270,9 +270,9 @@ namespace Kalk.Core
         
         public override TemplateContext Write(SourceSpan span, object textAsObject)
         {
+            SetLastResult(textAsObject);
             if (EnableEngineOutput && EchoEnabled)
             {
-                SetLastResult(textAsObject);
                 WriteHighlightVariableAndValueToConsole("out", textAsObject);
             }
             return this;
