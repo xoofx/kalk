@@ -159,7 +159,10 @@ namespace Kalk.Core
 
         public ScriptObject Builtins { get; }
 
-        [KalkDoc("config", CategoryGeneral)]
+        /// <summary>
+        /// Gets the config object.
+        /// </summary>
+        [KalkExport("config", CategoryGeneral)]
         public KalkConfig Config { get; }
 
         public Action<string> SetClipboardText { get; set; }
@@ -168,7 +171,11 @@ namespace Kalk.Core
         
         public ScriptObject Variables { get; }
 
-        [KalkDoc("aliases", CategoryGeneral)]
+        /// <summary>
+        /// Displays all built-in and user-defined aliases.
+        /// </summary>
+        /// <remarks>Aliases are usually used to define equivalent variable names for equivalent mathematical symbols. To create an alias, see the command `alias`.</remarks>
+        [KalkExport("aliases", CategoryGeneral)]
         public KalkAliases Aliases { get; }
 
         private bool EnableEngineOutput { get; set; }
@@ -181,10 +188,14 @@ namespace Kalk.Core
         /// If used in an expression, returns an object containing all units defined.
         /// Otherwise it will display units in a friendly format.
         /// </summary>
-        [KalkDoc("units", CategoryUnits)]
+        [KalkExport("units", CategoryUnits)]
         public KalkUnits Units { get; }
 
-        [KalkDoc("shortcuts", CategoryGeneral)]
+        /// <summary>
+        /// Displays all built-in and user-defined keyboard shortcuts.
+        /// </summary>
+        /// <remarks>To create an keyboard shortcut, see the command `shortcut`.</remarks>
+        [KalkExport("shortcuts", CategoryGeneral)]
         public KalkShortcuts Shortcuts { get; }
 
         public Dictionary<string, KalkDescriptor> Descriptors { get; }

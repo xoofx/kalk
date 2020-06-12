@@ -6,19 +6,19 @@ namespace Kalk.Core.Modules
 {
     public partial class VectorModule
     {
-        [KalkDoc("transpose", CategoryMathVectorMatrixFunctions)]
+        [KalkExport("transpose", CategoryMathVectorMatrixFunctions)]
         public static KalkMatrix Transpose(KalkMatrix m) => KalkMatrix.Transpose(m);
 
-        [KalkDoc("identity", CategoryMathVectorMatrixFunctions)]
+        [KalkExport("identity", CategoryMathVectorMatrixFunctions)]
         public static KalkMatrix Identity(KalkMatrix m) => KalkMatrix.Identity(m);
         
-        [KalkDoc("determinant", CategoryMathVectorMatrixFunctions)]
+        [KalkExport("determinant", CategoryMathVectorMatrixFunctions)]
         public static object Determinant(KalkMatrix m) => KalkMatrix.Determinant(m);
 
-        [KalkDoc("inverse", CategoryMathVectorMatrixFunctions)]
+        [KalkExport("inverse", CategoryMathVectorMatrixFunctions)]
         public static KalkMatrix Inverse(KalkMatrix m) => KalkMatrix.Inverse(m);
         
-        [KalkDoc("diag", CategoryMathVectorMatrixFunctions)]
+        [KalkExport("diag", CategoryMathVectorMatrixFunctions)]
         public object Diagonal(object x)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
@@ -36,7 +36,7 @@ namespace Kalk.Core.Modules
             throw new ArgumentException($"Invalid argument type {Engine.GetTypeName(x)}. Expecting a matrix or a vector type.", nameof(x));
         }
         
-        [KalkDoc("matrix", CategoryMatrixConstructors)]
+        [KalkExport("matrix", CategoryMatrixConstructors)]
         public object CreateMatrix(ScriptVariable name, int row, int column, params object[] arguments)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
@@ -57,20 +57,20 @@ namespace Kalk.Core.Modules
             throw new ArgumentException($"Unsupported matrix type {name.Name}. Only bool, int, float and double are supported", nameof(name));
         }
 
-        [KalkDoc("row", CategoryMathVectorMatrixFunctions)]
+        [KalkExport("row", CategoryMathVectorMatrixFunctions)]
         public KalkVector GetRow(KalkMatrix x, int index)
         {
             return x.GetRow(index);
         }
         
-        [KalkDoc("col", CategoryMathVectorMatrixFunctions)]
+        [KalkExport("col", CategoryMathVectorMatrixFunctions)]
         public KalkVector GetColumn(KalkMatrix x, int index)
         {
             return x.GetColumn(index);
         }
         
 
-        [KalkDoc("mul", CategoryMathVectorMatrixFunctions)]
+        [KalkExport("mul", CategoryMathVectorMatrixFunctions)]
         public object Multiply(object x, object y)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));

@@ -72,7 +72,7 @@ namespace Kalk.Core
         /// out = "text"
         /// ```
         /// </example>
-        [KalkDoc("clipboard", CategoryGeneral)]
+        [KalkExport("clipboard", CategoryGeneral)]
         public object Clipboard(object value = null)
         {
             if (value == null)
@@ -116,7 +116,7 @@ namespace Kalk.Core
         /// Invalid display name `invalid`. Expecting `std`, `dev` or `eng`. (Parameter 'name')
         /// ```
         /// </example>
-        [KalkDoc("display", CategoryGeneral)]
+        [KalkExport("display", CategoryGeneral)]
         public void Display(ScriptVariable name = null)
         {
             var mode = name?.Name;
@@ -153,7 +153,7 @@ namespace Kalk.Core
         /// out = 3
         /// ```
         /// </example>
-        [KalkDoc("echo", CategoryGeneral)]
+        [KalkExport("echo", CategoryGeneral)]
         public void Echo(ScriptVariable value = null)
         {
             if (value == null)
@@ -192,7 +192,7 @@ namespace Kalk.Core
         /// kalk2
         /// ```
         /// </example>
-        [KalkDoc("print", CategoryGeneral)]
+        [KalkExport("print", CategoryGeneral)]
         public void Print(object value)
         {
             var previousEcho = EchoEnabled;
@@ -218,7 +218,7 @@ namespace Kalk.Core
         /// # This is a kalk comment
         /// ```
         /// </example>
-        [KalkDoc("printh", CategoryGeneral)]
+        [KalkExport("printh", CategoryGeneral)]
         public void Printh(object value)
         {
             var previousEcho = EchoEnabled;
@@ -245,7 +245,7 @@ namespace Kalk.Core
         /// ... # Displays the help for the `alias` function.
         /// ```
         /// </example>
-        [KalkDoc("help", CategoryGeneral)]
+        [KalkExport("help", CategoryGeneral)]
         public void Help(ScriptExpression expression = null)
         {
             var name = expression?.ToString();
@@ -300,7 +300,7 @@ namespace Kalk.Core
         /// # No variables
         /// ```
         /// </example>
-        [KalkDoc("reset", CategoryGeneral)]
+        [KalkExport("reset", CategoryGeneral)]
         public void Reset()
         {
             Variables.Clear();
@@ -309,7 +309,7 @@ namespace Kalk.Core
         /// <summary>
         /// Prints the version of kalk.
         /// </summary>
-        [KalkDoc("version", CategoryGeneral)]
+        [KalkExport("version", CategoryGeneral)]
         public void ShowVersion()
         {
             var text = $"{ConsoleStyle.BrightRed}k{ConsoleStyle.BrightYellow}a{ConsoleStyle.BrightGreen}l{ConsoleStyle.BrightCyan}k{ConsoleStyle.Reset} {Version} - Copyright (c) 2020 Alexandre Mutel";
@@ -321,17 +321,20 @@ namespace Kalk.Core
         /// </summary>
         /// <example>
         /// ```kalk
-        /// >>> x = 5; y = 2
-        /// # x = 5; y = 2
+        /// >>> x = 5; y = 2; f(x) = x + 5
+        /// # x = 5; y = 2; f(x) = x + 5
         /// x = 5
         /// y = 2
+        ///  f(x) = x + 5
         /// >>> list
         /// # Variables
         /// x = 5
         /// y = 2
+        /// # Functions
+        ///  f(x) = x + 5
         /// ```
         /// </example>
-        [KalkDoc("list", CategoryGeneral)]
+        [KalkExport("list", CategoryGeneral)]
         public void List()
         {
             // Highlight line per line
@@ -375,9 +378,9 @@ namespace Kalk.Core
         }
 
         /// <summary>
-        /// Deletes a user defined variable.
+        /// Deletes a user defined variable or function.
         /// </summary>
-        /// <param name="variable">Name of the variable to delete.</param>
+        /// <param name="variable">Name of the variable or function to delete.</param>
         /// <example>
         /// ```kalk
         /// >>> x = 5; y = 2
@@ -389,9 +392,21 @@ namespace Kalk.Core
         /// >>> list
         /// # Variables
         /// y = 2
+        /// >>> del y
+        /// # Variable `y == 2` deleted.
+        /// >>> f(x) = x + 5
+        /// # f(x) = x + 5
+        /// f(x) = x + 5
+        /// >>> list
+        /// # Functions
+        /// f(x) = x + 5
+        /// >>> del f
+        /// # Function `f(x) = x + 5` deleted.
+        /// >>> list
+        /// # No variables
         /// ```
         /// </example>
-        [KalkDoc("del", CategoryGeneral)]
+        [KalkExport("del", CategoryGeneral)]
         public void DeleteVariable(ScriptVariable variable)
         {
             if (variable == null) throw new ArgumentNullException(nameof(variable));
@@ -417,7 +432,7 @@ namespace Kalk.Core
         /// <summary>
         /// Exits kalk.
         /// </summary>
-        [KalkDoc("exit", CategoryGeneral)]
+        [KalkExport("exit", CategoryGeneral)]
         public void Exit()
         {
             HasExit = true;
@@ -470,7 +485,7 @@ namespace Kalk.Core
         /// 1: abs(out)
         /// ```
         /// </example>
-        [KalkDoc("history", CategoryGeneral)]
+        [KalkExport("history", CategoryGeneral)]
         public void History(object line = null)
         {
             // Always remove the history command (which is the command being executed
@@ -532,9 +547,12 @@ namespace Kalk.Core
         /// >>> eval "1+5"
         /// # eval("1+5")
         /// out = 6
+        /// >>> eval "eval '1+5'"
+        /// # eval("eval '1+5'")
+        /// out = 6
         /// ```
         /// </example>
-        [KalkDoc("eval", CategoryGeneral)]
+        [KalkExport("eval", CategoryGeneral)]
         public object EvaluateText(string text, bool output = false)
         {
             return EvaluateTextImpl(text, null, output);
@@ -546,7 +564,7 @@ namespace Kalk.Core
         /// <param name="path">The file location of the script to load and evaluate.</param>
         /// <param name="output">An optional parameter to output intermediate results of nested expressions. Default is `false`.</param>
         /// <returns>The result of the evaluation.</returns>
-        [KalkDoc("load", CategoryGeneral)]
+        [KalkExport("load", CategoryGeneral)]
         public object LoadFile(string path, bool output = false)
         {
             var fullPath = FileModule.AssertReadFile(path);
@@ -561,7 +579,7 @@ namespace Kalk.Core
         /// * screen: to clear the screen (default if not passed)
         /// * history: to clear the history
         /// </param>
-        [KalkDoc("clear", CategoryGeneral)]
+        [KalkExport("clear", CategoryGeneral)]
         public void Clear(ScriptExpression what = null)
         {
             if (what != null)
@@ -587,7 +605,7 @@ namespace Kalk.Core
         /// <summary>
         /// Clears the screen.
         /// </summary>
-        [KalkDoc("cls", CategoryGeneral)]
+        [KalkExport("cls", CategoryGeneral)]
         public void Cls()
         {
             Clear(null);
@@ -607,7 +625,7 @@ namespace Kalk.Core
         /// out = 4
         /// ```
         /// </example>
-        [KalkDoc("out", CategoryGeneral)]
+        [KalkExport("out", CategoryGeneral)]
         public object Last()
         {
             return _lastResult;
@@ -629,7 +647,7 @@ namespace Kalk.Core
         /// out = "3"
         /// ```
         /// </example>
-        [KalkDoc("out2clipboard", CategoryGeneral)]
+        [KalkExport("out2clipboard", CategoryGeneral)]
         public void LastToClipboard()
         {
             Clipboard(Last());
@@ -642,11 +660,19 @@ namespace Kalk.Core
         /// <param name="shortcuts">A collection of pair of shortcut description (e.g `CTRL+A`) and associated shortcut expression (e.g `1 + 2`).</param>
         /// <remarks>See the command `shortcuts` to list the shortcuts currently defined. By default several shortcuts for common mathematical symbols are defined (e.g for the symbol pi: `shortcut(pi, "CTRL+G P", "Π", "CTRL+G p", "π")`).</remarks>
         /// <example>
-        /// >>> shortcut(myshortcut, "CTRL+R", 1 + 2) # Creates a shortcut that will print 3 when pressing CTRL+R.
-        /// >>> shortcut(myshortcut, "CTRL+R", "kalk") # Overrides the previous shortcut that will print the text `kalk` when pressing CTRL+R.
-        /// >>> shortcut(myshortcut, "CTRL+R", "kalk", "CTRL+E r", "kalk2") # Overrides the previous shortcut that will print the text `kalk` when pressing CTRL+R or the text `kalk2` when pressing CTRL+E and r key.
+        /// ```kalk
+        /// >>> # Creates a shortcut that will print 3 when pressing CTRL+R.
+        /// >>> shortcut(myshortcut, "CTRL+R", 1 + 2)
+        /// >>> # Overrides the previous shortcut that will print the text
+        /// >>> # `kalk` when pressing CTRL+R.
+        /// >>> shortcut(myshortcut, "CTRL+R", "kalk")
+        /// >>> # Overrides the previous shortcut that will print the text
+        /// >>> # `kalk` when pressing CTRL+R or the text `kalk2` when pressing
+        /// >>> # CTRL+E and r key.
+        /// >>> shortcut(myshortcut, "CTRL+R", "kalk", "CTRL+E r", "kalk2")
+        /// ```
         /// </example>
-        [KalkDoc("shortcut", CategoryGeneral)]
+        [KalkExport("shortcut", CategoryGeneral)]
         public void Shortcut(ScriptVariable name, params ScriptExpression[] shortcuts)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
@@ -670,10 +696,36 @@ namespace Kalk.Core
             Shortcuts.SetSymbolShortcut(shortcut);
         }
 
-
-        private delegate void DefineAliasDelegate(ScriptVariable name, params ScriptVariable[] aliases);
-
-        [KalkDoc("alias", CategoryGeneral)]
+        /// <summary>
+        /// Creates an alias between variable names.
+        /// </summary>
+        /// <param name="name">Name of the original alias name.</param>
+        /// <param name="aliases">Variable names that are all equivalent to the alias name.</param>
+        /// <remarks>See the command `aliases` to list the aliases currently defined. Several aliases are defined by default for common mathematical symbols (e.g `alias(pi, Π, π)`).</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> alias(var1, var2, var3)
+        /// >>> var1 = 2
+        /// # var1 = 2
+        /// var1 = 2
+        /// >>> var2
+        /// # var2
+        /// out = 2
+        /// >>> var3
+        /// # var3
+        /// out = 2
+        /// >>> list
+        /// # Variables
+        /// var1 = 2
+        /// >>> var2 = 1
+        /// # var2 = 1
+        /// var2 = 1
+        /// >>> list
+        /// # Variables
+        /// var1 = 1
+        /// ```kalk
+        /// </example>
+        [KalkExport("alias", CategoryGeneral)]
         public void Alias(ScriptVariable name, params ScriptVariable[] aliases)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));

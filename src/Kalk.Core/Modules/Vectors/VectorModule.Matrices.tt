@@ -43,7 +43,7 @@ namespace Kalk.Core.Modules
 
 <# foreach(var type in types) { #>
         /// <summary>Creates a <#= type.Item3 #> (rows) x <#= type.Item4 #> (columns) matrix of <#= type.Item1 #>.</summary>
-        [KalkDoc("<#= type.Item2.ToLowerInvariant() #>", CategoryMatrixConstructors)]
+        [KalkExport("<#= type.Item2.ToLowerInvariant() #>", CategoryMatrixConstructors)]
         public KalkMatrix<<#= type.Item5 #>> Create<#= type.Item2 #>(params object[] arguments) => <#= type.Item2 #>Constructor.Invoke(Engine, arguments);
 <# } #>
     }

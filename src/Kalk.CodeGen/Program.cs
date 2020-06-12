@@ -638,7 +638,7 @@ namespace Kalk.CodeGen
 
                 foreach (var member in typeSymbol.GetMembers())
                 {
-                    var attr = member.GetAttributes().FirstOrDefault(x => x.AttributeClass.Name == "KalkDocAttribute");
+                    var attr = member.GetAttributes().FirstOrDefault(x => x.AttributeClass.Name == "KalkExportAttribute");
                     if (attr == null) continue;
 
                     var name = attr.ConstructorArguments[0].Value.ToString();

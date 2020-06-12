@@ -15,28 +15,28 @@ namespace Kalk.Core.Modules
             RegisterFunctionsAuto();
         }
 
-        [KalkDoc("url_encode", CategoryWeb)]
+        [KalkExport("url_encode", CategoryWeb)]
         public string UrlEncode(string url) => WebUtility.UrlEncode(url);
 
-        [KalkDoc("url_decode", CategoryWeb)]
+        [KalkExport("url_decode", CategoryWeb)]
         public string UrlDecode(string url) => WebUtility.UrlDecode(url);
 
-        [KalkDoc("url_escape", CategoryWeb)]
+        [KalkExport("url_escape", CategoryWeb)]
         public string UrlEscape(string url) => HtmlFunctions.UrlEscape(url);
 
-        [KalkDoc("html_encode", CategoryWeb)]
+        [KalkExport("html_encode", CategoryWeb)]
         public string HtmlEncode(string text) => HtmlFunctions.Escape(text);
 
-        [KalkDoc("html_decode", CategoryWeb)]
+        [KalkExport("html_decode", CategoryWeb)]
         public string HtmlDecode(string text)
         {
             return string.IsNullOrEmpty(text) ? text : System.Net.WebUtility.HtmlDecode(text);
         }
         
-        [KalkDoc("html_strip", CategoryWeb)]
+        [KalkExport("html_strip", CategoryWeb)]
         public string HtmlStrip(string text) => HtmlFunctions.Strip(Engine, text);
         
-        [KalkDoc("wget", CategoryWeb)]
+        [KalkExport("wget", CategoryWeb)]
         public object WebGet(string url)
         {
             if (url == null) throw new ArgumentNullException(nameof(url));

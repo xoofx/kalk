@@ -58,7 +58,7 @@ namespace Kalk.Core
         /// out = "kalk"
         /// ```
         /// </example>
-        [KalkDoc("ascii", CategoryMisc)]
+        [KalkExport("ascii", CategoryMisc)]
         public object Ascii(object obj = null)
         {
             if (obj == null && Engine.CurrentNode.Parent is ScriptExpressionStatement)
@@ -120,7 +120,7 @@ namespace Kalk.Core
         /// out = ["m", "n"]
         /// ```
         /// </example>
-        [KalkDoc("keys", CategoryMisc)]
+        [KalkExport("keys", CategoryMisc)]
         public IEnumerable Keys(object obj)
         {
             return ObjectFunctions.Keys(Engine, obj);
@@ -130,7 +130,7 @@ namespace Kalk.Core
         /// Returns a new GUID as a string.
         /// </summary>
         /// <returns>A new GUID as a string.</returns>
-        [KalkDoc("guid", CategoryMisc)]
+        [KalkExport("guid", CategoryMisc)]
         public string Guid()
         {
             return System.Guid.NewGuid().ToString();
@@ -157,7 +157,7 @@ namespace Kalk.Core
         /// out = 3
         /// ```
         /// </example>
-        [KalkDoc("size", CategoryMisc)]
+        [KalkExport("size", CategoryMisc)]
         public int Size(object obj)
         {
             return ObjectFunctions.Size(obj);
@@ -176,7 +176,7 @@ namespace Kalk.Core
         /// out = [1, 2]
         /// ```
         /// </example>
-        [KalkDoc("values", CategoryMisc)]
+        [KalkExport("values", CategoryMisc)]
         public IEnumerable Values(object obj)
         {
             switch (obj)
@@ -242,7 +242,7 @@ namespace Kalk.Core
         /// out = "00 00 80 3F 00 00 00 40 00 00 40 40 00 00 80 40"
         /// ```
         /// </example>
-        [KalkDoc("hex", CategoryMisc)]
+        [KalkExport("hex", CategoryMisc)]
         public object Hexadecimal(object value, string separator = " ", bool prefix = false)
         {
             return Hexadecimal(value, separator, prefix, false);
@@ -263,7 +263,7 @@ namespace Kalk.Core
         /// out = "kalk"
         /// ```
         /// </example>
-        [KalkDoc("utf8", CategoryMisc)]
+        [KalkExport("utf8", CategoryMisc)]
         public object GetUtf8(object value)
         {
             switch (value)
@@ -302,7 +302,7 @@ namespace Kalk.Core
         /// out = "kalk"
         /// ```
         /// </example>
-        [KalkDoc("utf16", CategoryMisc)]
+        [KalkExport("utf16", CategoryMisc)]
         public object GetUtf16(object value)
         {
             switch (value)
@@ -351,7 +351,7 @@ namespace Kalk.Core
         /// out = "kalk"
         /// ```
         /// </example>
-        [KalkDoc("utf32", CategoryMisc)]
+        [KalkExport("utf32", CategoryMisc)]
         public object GetUtf32(object value)
         {
             switch (value)
@@ -404,7 +404,7 @@ namespace Kalk.Core
         /// out = [1]
         /// ```
         /// </example>
-        [KalkDoc("insert_at", CategoryMisc)]
+        [KalkExport("insert_at", CategoryMisc)]
         public object InsertAt(object list, int index, object item)
         {
             if (list == null) throw new ArgumentNullException(nameof(list));
@@ -473,7 +473,7 @@ namespace Kalk.Core
         /// out = bytebuffer([1, 3, 4])
         /// ```
         /// </example>
-        [KalkDoc("remove_at", CategoryMisc)]
+        [KalkExport("remove_at", CategoryMisc)]
         public object RemoveAt(object list, int index)
         {
             if (list == null) throw new ArgumentNullException(nameof(list));
@@ -542,7 +542,7 @@ namespace Kalk.Core
         /// out = false
         /// ```
         /// </example>
-        [KalkDoc("contains", CategoryMisc)]
+        [KalkExport("contains", CategoryMisc)]
         public KalkBool Contains(object list, object value)
         {
             if (list == null) throw new ArgumentNullException(nameof(list));
@@ -592,7 +592,7 @@ namespace Kalk.Core
         /// out = float4(1, 2, 5, 4)
         /// ```
         /// </example>
-        [KalkDoc("replace", CategoryMisc)]
+        [KalkExport("replace", CategoryMisc)]
         public object Replace(object list, object value, object by)
         {
             if (list == null) throw new ArgumentNullException(nameof(list));
@@ -644,7 +644,7 @@ namespace Kalk.Core
         /// out = slice(bytebuffer([2, 3]), 1, 2)
         /// ```
         /// </example>
-        [KalkDoc("slice", CategoryMisc)]
+        [KalkExport("slice", CategoryMisc)]
         public object Slice(object list, int index, int? length = null)
         {
             if (list is string str)
@@ -701,7 +701,7 @@ namespace Kalk.Core
         /// out = ["k", "a", "l", "k"]
         /// ```
         /// </example>
-        [KalkDoc("lines", CategoryMisc)]
+        [KalkExport("lines", CategoryMisc)]
         public ScriptRange Lines(string text)
         {
             if (text == null) return new ScriptRange();
@@ -723,7 +723,7 @@ namespace Kalk.Core
         /// out = "AliceBlue"
         /// ```
         /// </example>
-        [KalkDoc("colors", CategoryMisc)]
+        [KalkExport("colors", CategoryMisc)]
         public object Colors()
         {
             var knownColorsInternal = KalkColorRgb.GetKnownColors();

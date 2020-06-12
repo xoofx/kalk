@@ -8,6 +8,9 @@ using Kalk.Core.Helpers;
 
 namespace Kalk.Core.Modules
 {
+    /// <summary>
+    /// Memory functions.
+    /// </summary>
     public sealed partial class MemoryModule : KalkModuleWithFunctions
     {
         public const string CategoryMiscMemory = "Misc Memory Functions";
@@ -18,14 +21,59 @@ namespace Kalk.Core.Modules
             RegisterFunctionsAuto();
         }
 
-        [KalkDoc("malloc", CategoryMiscMemory)]
+        /// <summary>
+        /// Allocates a `bytebuffer` of the specified size.
+        /// </summary>
+        /// <param name="size">Size of the bytebuffer.</param>
+        /// <returns>A bytebuffer of the specified size.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> buffer = malloc(16)
+        /// # buffer = malloc(16)
+        /// buffer = bytebuffer([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        /// >>> buffer[0] = 5
+        /// >>> buffer
+        /// # buffer
+        /// out = bytebuffer([5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        /// ```
+        /// </example>
+        [KalkExport("malloc", CategoryMiscMemory)]
         public KalkNativeBuffer Malloc(int size)
         {
             if (size < 0) throw new ArgumentOutOfRangeException(nameof(size), "Size must be >= 0");
             return new KalkNativeBuffer(size);
         }
 
-        [KalkDoc("bitcast", CategoryMiscMemory)]
+        /// <summary>
+        /// Binary cast of a value to a target type.
+        /// </summary>
+        /// <param name="type">The type to cast to.</param>
+        /// <param name="value">The value to cast.</param>
+        /// <returns>The binary cast of the input value.</returns>
+        /// <remarks>The supported types are `byte`, `sbyte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `float`, `double`, `rgb`, `rgba` and all vector and matrix types.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> bitcast(int, 1.5f)
+        /// # bitcast(int, 1.5f)
+        /// out = 1069547520
+        /// >>> bitcast(float, out)
+        /// # bitcast(float, out)
+        /// out = 1.5
+        /// >>> bitcast(long, 2.5)
+        /// # bitcast(long, 2.5)
+        /// out = 4612811918334230528
+        /// >>> bitcast(double, out)
+        /// # bitcast(double, out)
+        /// out = 2.5
+        /// >>> asbytes(float4(1..4))
+        /// # asbytes(float4(1..4))
+        /// out = bytebuffer([0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64, 0, 0, 128, 64])
+        /// >>> bitcast(float4, out)
+        /// # bitcast(float4, out)
+        /// out = float4(1, 2, 3, 4)
+        /// ```
+        /// </example>
+        [KalkExport("bitcast", CategoryMiscMemory)]
         public object Bitcast(object type, object value)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -35,6 +83,12 @@ namespace Kalk.Core.Modules
 
             switch (type)
             {
+                case byte vbyte:
+                    UnsafeHelpers.BitCast(ref vbyte, 1, bytes);
+                    return vbyte;
+                case sbyte vsbyte:
+                    UnsafeHelpers.BitCast(ref vsbyte, 1, bytes);
+                    return vsbyte;
                 case short vshort:
                     UnsafeHelpers.BitCast(ref vshort, 2, bytes);
                     return vshort;
@@ -47,18 +101,20 @@ namespace Kalk.Core.Modules
                 case uint vuint:
                     UnsafeHelpers.BitCast(ref vuint, 4, bytes);
                     return (long) vuint;
+                case ulong vulong:
+                    UnsafeHelpers.BitCast(ref vulong, 8, bytes);
+                    return vulong;
+                case long vlong:
+                    UnsafeHelpers.BitCast(ref vlong, 8, bytes);
+                    return vlong;
                 case float _:
                     int vfloat = 0;
                     UnsafeHelpers.BitCast(ref vfloat, 4, bytes);
                     return BitConverter.Int32BitsToSingle(vfloat);
                 case double _:
                     long vdouble = 0;
-                    UnsafeHelpers.BitCast(ref vdouble, 4, bytes);
+                    UnsafeHelpers.BitCast(ref vdouble, 8, bytes);
                     return BitConverter.Int64BitsToDouble(vdouble);
-                case long vlong:
-                    UnsafeHelpers.BitCast(ref vlong, 4, bytes);
-                    return vlong;
-
                 case KalkValue kalkValue:
                     var dest = (KalkValue)kalkValue.Clone(true);
                     dest.BitCastFrom(bytes.AsSpan());
@@ -69,7 +125,28 @@ namespace Kalk.Core.Modules
             }
         }
 
-        [KalkDoc("asbytes", CategoryMiscMemory)]
+        /// <summary>
+        /// Binary cast the specified value to a bytebuffer.
+        /// </summary>
+        /// <param name="value">An input value.</param>
+        /// <returns>A binary bytebuffer representing the value in binary form. The size of the buffer equals the binary size in memory of the input value.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> asbytes(float4(1..4))
+        /// # asbytes(float4(1..4))
+        /// out = bytebuffer([0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64, 0, 0, 128, 64])
+        /// >>> asbytes(int(0x01020304))
+        /// # asbytes(int(16909060))
+        /// out = bytebuffer([4, 3, 2, 1])
+        /// >>> asbytes(1.5)
+        /// # asbytes(1.5)
+        /// out = bytebuffer([0, 0, 0, 0, 0, 0, 248, 63])
+        /// >>> asbytes(2.5f)
+        /// # asbytes(2.5f)
+        /// out = bytebuffer([0, 0, 32, 64])
+        /// ```
+        /// </example>
+        [KalkExport("asbytes", CategoryMiscMemory)]
         public KalkNativeBuffer AsBytes(object value)
         {
             if (value == null) return null;
@@ -122,7 +199,32 @@ namespace Kalk.Core.Modules
             }
         }
 
-        [KalkDoc("countbits", CategoryMiscMemory)]
+        /// <summary>
+        /// Counts the number of bits (per component) of the input value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>The number of bits (per component if the input is an int vector).</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> for val in 0..7; countbits(val); end;
+        /// # for val in 0..7; countbits(val); end;
+        /// out = 0
+        /// out = 1
+        /// out = 1
+        /// out = 2
+        /// out = 1
+        /// out = 2
+        /// out = 2
+        /// out = 3
+        /// >>> countbits(int4(1,2,3,4))
+        /// # countbits(int4(1, 2, 3, 4))
+        /// out = int4(1, 1, 2, 1)
+        /// >>> countbits(bytebuffer(1..16))
+        /// # countbits(bytebuffer(1..16))
+        /// out = 33
+        /// ```
+        /// </example>
+        [KalkExport("countbits", CategoryMiscMemory)]
         public object CountBits(object value)
         {
             if (value == null) return 0;
@@ -196,7 +298,7 @@ namespace Kalk.Core.Modules
             }
         }
 
-        [KalkDoc("firstbithigh", CategoryMiscMemory)]
+        [KalkExport("firstbithigh", CategoryMiscMemory)]
         public object LeadingZeroCount(object value)
         {
             if (value == null) return 0;
@@ -249,7 +351,7 @@ namespace Kalk.Core.Modules
             }
         }
 
-        [KalkDoc("firstbitlow", CategoryMiscMemory)]
+        [KalkExport("firstbitlow", CategoryMiscMemory)]
         public object TrailingZeroCount(object value)
         {
             if (value == null) return 0;
@@ -310,7 +412,7 @@ namespace Kalk.Core.Modules
             }
         }
 
-        [KalkDoc("reversebits", CategoryMiscMemory)]
+        [KalkExport("reversebits", CategoryMiscMemory)]
         public object ReverseBits(object value)
         {
             if (value == null) return 0;
@@ -415,7 +517,7 @@ namespace Kalk.Core.Modules
             }
         }
 
-        [KalkDoc("asdouble", CategoryMiscMemory)]
+        [KalkExport("asdouble", CategoryMiscMemory)]
         public double AsDouble(object x)
         {
             switch (x)
@@ -441,7 +543,7 @@ namespace Kalk.Core.Modules
             return BitConverter.Int64BitsToDouble(value);
         }
 
-        [KalkDoc("asfloat", CategoryMiscMemory)]
+        [KalkExport("asfloat", CategoryMiscMemory)]
         public float AsFloat(object x)
         {
             switch (x)
@@ -467,7 +569,7 @@ namespace Kalk.Core.Modules
             return (float)BitConverter.Int64BitsToDouble(value);
         }
 
-        [KalkDoc("aslong", CategoryMiscMemory)]
+        [KalkExport("aslong", CategoryMiscMemory)]
         public long AsLong(object x)
         {
             switch (x)
@@ -491,7 +593,7 @@ namespace Kalk.Core.Modules
             }
         }
         
-        [KalkDoc("asulong", CategoryMiscMemory)]
+        [KalkExport("asulong", CategoryMiscMemory)]
         public ulong AsULong(object x)
         {
             switch (x)
@@ -515,7 +617,7 @@ namespace Kalk.Core.Modules
             }
         }
 
-        [KalkDoc("asint", CategoryMiscMemory)]
+        [KalkExport("asint", CategoryMiscMemory)]
         public int AsInt(object x)
         {
             switch (x)
@@ -539,7 +641,7 @@ namespace Kalk.Core.Modules
             }
         }
 
-        [KalkDoc("asuint", CategoryMiscMemory)]
+        [KalkExport("asuint", CategoryMiscMemory)]
         public uint AsUInt(object x)
         {
             switch (x)
@@ -575,7 +677,7 @@ namespace Kalk.Core.Modules
             return value;
         }
 
-        [KalkDoc("bytebuffer", CategoryMiscMemory)]
+        [KalkExport("bytebuffer", CategoryMiscMemory)]
         public KalkNativeBuffer ByteBuffer(object array)
         {
             if (array == null) new KalkNativeBuffer(0);

@@ -16,14 +16,14 @@ namespace Kalk.Core.Modules
             RegisterFunctionsAuto();
         }
         
-        [KalkDoc("parse_csv", StringModule.CategoryString)]
+        [KalkExport("parse_csv", StringModule.CategoryString)]
         public ScriptRange ParseCsv(string text, bool headers = true)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
             return new ScriptRange(new KalkCsvReader(() => new StringReader(text), headers));
         }
 
-        [KalkDoc("load_csv", FileModule.CategoryMiscFile)]
+        [KalkExport("load_csv", FileModule.CategoryMiscFile)]
         public ScriptRange LoadCsv(string path, bool headers = true)
         {
             var fullPath = FileModule.AssertReadFile(path);

@@ -26,7 +26,7 @@ namespace Kalk.Core.Modules
             RegisterFunctionsAuto();
         }
         
-        [KalkDoc("currencies", CategoryUnitsAndCurrencies)]
+        [KalkExport("currencies", CategoryUnitsAndCurrencies)]
         public KalkCurrencies Currencies { get; }
 
         public DateTime LastUpdate { get; private set; }
@@ -44,7 +44,7 @@ namespace Kalk.Core.Modules
             UpdateCurrencies();
         }
 
-        [KalkDoc("currency", CategoryUnitsAndCurrencies)]
+        [KalkExport("currency", CategoryUnitsAndCurrencies)]
         public KalkCurrency Currency(ScriptVariable name = null, decimal? value = null)
         {
             return GetOrSetCurrency(name?.Name, value);

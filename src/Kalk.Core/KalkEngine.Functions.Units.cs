@@ -9,13 +9,13 @@ namespace Kalk.Core
     {
         public const string CategoryUnits = "Unit Functions";
 
-        [KalkDoc("to", CategoryUnits)]
+        [KalkExport("to", CategoryUnits)]
         public KalkExpression ConvertTo(KalkExpression src, KalkExpression dst)
         {
             return src.ConvertTo(this, dst);
         }
 
-        [KalkDoc("unit", CategoryUnits)]
+        [KalkExport("unit", CategoryUnits)]
         public KalkExpression DefineUserUnit(ScriptVariable name, string description = null, ScriptVariable symbol = null, KalkExpression value = null, string plural = null, string prefix = null)
         {
             if (name == null || string.IsNullOrEmpty(name.Name)) throw new ArgumentNullException(nameof(name));

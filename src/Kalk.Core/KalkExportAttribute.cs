@@ -3,9 +3,9 @@
 namespace Kalk.Core
 {
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
-    public class KalkDocAttribute : System.Attribute
+    public class KalkExportAttribute : System.Attribute
     {
-        public KalkDocAttribute(string alias, string category)
+        public KalkExportAttribute(string alias, string category)
         {
             Alias = alias;
             Category = category;
