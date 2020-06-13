@@ -298,35 +298,101 @@ namespace Kalk.Core.Modules
             }
         }
 
+        /// <summary>
+        /// Gets the location of the first set bit starting from the highest order bit and working downward, per component.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>The location of the first set bit.</returns>
+        /// <remarks>If no bits are sets, this function will return -1.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> firstbithigh 128
+        /// # firstbithigh(128)
+        /// out = 24
+        /// >>> firstbithigh byte(128)
+        /// # firstbithigh(byte(128))
+        /// out = 0
+        /// >>> firstbithigh 0
+        /// # firstbithigh(0)
+        /// out = -1
+        /// >>> firstbithigh(int4(1, -1, 65536, 1 &lt;&lt; 20))
+        /// # firstbithigh(int4(1, -1, 65536, 1 &lt;&lt; 20))
+        /// out = int4(31, 0, 15, 11)
+        /// ```
+        /// </example>
+        /// <test>
+        /// ```kalk
+        /// >>> firstbithigh ulong(1 &lt;&lt; 63)
+        /// # firstbithigh(ulong(1 &lt;&lt; 63))
+        /// out = 0
+        /// >>> firstbithigh long(1)
+        /// # firstbithigh(long(1))
+        /// out = 63
+        /// >>> firstbithigh long(0)
+        /// # firstbithigh(long(0))
+        /// out = -1
+        /// ```
+        /// </test>
         [KalkExport("firstbithigh", CategoryMiscMemory)]
-        public object LeadingZeroCount(object value)
+        public object FirstBitHigh(object value)
         {
             if (value == null) return 0;
 
             switch (value)
             {
-                case byte vbyte:
-                    return BitOperations.LeadingZeroCount(vbyte);
                 case sbyte vsbyte:
-                    return BitOperations.LeadingZeroCount((uint)vsbyte);
+                {
+                    var result = BitOperations.LeadingZeroCount((byte)(uint)vsbyte);
+                    if (result >= 32) return -1;
+                    return result - 24;
+                }
+                case byte vbyte:
+                {
+                    var result = BitOperations.LeadingZeroCount(vbyte);
+                    if (result >= 32) return -1;
+                    return result - 24;
+                }
                 case short vshort:
-                    return BitOperations.LeadingZeroCount((uint)vshort);
+                {
+                    var result = BitOperations.LeadingZeroCount((ushort)(uint)vshort);
+                    if (result >= 32) return -1;
+                    return result - 16;
+                }
                 case ushort vushort:
-                    return BitOperations.LeadingZeroCount((uint)vushort);
+                {
+                    var result = BitOperations.LeadingZeroCount((uint)vushort);
+                    if (result >= 32) return -1;
+                    return result - 16;
+                }
                 case int vint:
-                    return BitOperations.LeadingZeroCount((uint)vint);
+                {
+                    var result = BitOperations.LeadingZeroCount((uint)vint);
+                    if (result >= 32) return -1;
+                    return result;
+                }
                 case uint vuint:
-                    return BitOperations.LeadingZeroCount((uint)vuint);
+                {
+                    var result = BitOperations.LeadingZeroCount((uint)vuint);
+                    if (result >= 32) return -1;
+                    return result;
+                }
                 case long vlong:
-                    return BitOperations.LeadingZeroCount((ulong)vlong);
+                {
+                    var result = BitOperations.LeadingZeroCount((ulong)vlong);
+                    if (result >= 64) return -1;
+                    return result;
+                }
                 case ulong vulong:
-                    return BitOperations.LeadingZeroCount((ulong)vulong);
-
+                {
+                    var result = BitOperations.LeadingZeroCount((ulong)vulong);
+                    if (result >= 64) return -1;
+                    return result;
+                }
                 case KalkVector vector:
                     var uintVector = new KalkVector<int>(vector.Length);
                     for (int i = 0; i < vector.Length; i++)
                     {
-                        var result = LeadingZeroCount(vector.GetComponent(i));
+                        var result = FirstBitHigh(vector.GetComponent(i));
                         if (result is int intv)
                         {
                             uintVector[i] = (int)intv;
@@ -342,7 +408,7 @@ namespace Kalk.Core.Modules
                     var uintMatrix = new KalkMatrix<int>(matrix.RowCount, matrix.ColumnCount);
                     for (int y = 0; y < matrix.RowCount; y++)
                     {
-                        uintMatrix.SetRow(y, (KalkVector<int>)LeadingZeroCount(matrix.GetRow(y)));
+                        uintMatrix.SetRow(y, (KalkVector<int>)FirstBitHigh(matrix.GetRow(y)));
                     }
                     return uintMatrix;
 
@@ -351,43 +417,117 @@ namespace Kalk.Core.Modules
             }
         }
 
+        /// <summary>
+        /// Returns the location of the first set bit starting from the lowest order bit and working upward, per component.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>The location of the first set bit.</returns>
+        /// <remarks>If no bits are sets, this function will return -1.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> firstbitlow 128
+        /// # firstbitlow(128)
+        /// out = 7
+        /// >>> firstbitlow byte(128)
+        /// # firstbitlow(byte(128))
+        /// out = 7
+        /// >>> firstbitlow 0
+        /// # firstbitlow(0)
+        /// out = -1
+        /// >>> firstbitlow(int4(1, -1, 65536, 1 &lt;&lt; 20))
+        /// # firstbitlow(int4(1, -1, 65536, 1 &lt;&lt; 20))
+        /// out = int4(0, 0, 16, 20)
+        /// ```
+        /// </example>
+        /// <test>
+        /// ```kalk
+        /// >>> firstbitlow ulong(1 &lt;&lt; 63)
+        /// # firstbitlow(ulong(1 &lt;&lt; 63))
+        /// out = 63
+        /// >>> firstbitlow long(1)
+        /// # firstbitlow(long(1))
+        /// out = 0
+        /// >>> firstbitlow long(0)
+        /// # firstbitlow(long(0))
+        /// out = -1
+        /// ```
+        /// </test>
         [KalkExport("firstbitlow", CategoryMiscMemory)]
-        public object TrailingZeroCount(object value)
+        public object FirstBitLow(object value)
         {
             if (value == null) return 0;
 
             switch (value)
             {
-                case byte vbyte:
-                    return BitOperations.TrailingZeroCount(vbyte);
                 case sbyte vsbyte:
-                    return BitOperations.TrailingZeroCount((uint)vsbyte);
+                {
+                    var result = BitOperations.TrailingZeroCount(vsbyte);
+                    if (result >= 32) return -1;
+                    return result;
+                }
+                case byte vbyte:
+                {
+                    var result = BitOperations.TrailingZeroCount(vbyte);
+                    if (result >= 32) return -1;
+                    return result;
+                }
                 case short vshort:
-                    return BitOperations.TrailingZeroCount((uint)vshort);
+                {
+                    var result = BitOperations.TrailingZeroCount(vshort);
+                    if (result >= 32) return -1;
+                    return result;
+                }
                 case ushort vushort:
-                    return BitOperations.TrailingZeroCount((uint)vushort);
+                {
+                    var result = BitOperations.TrailingZeroCount(vushort);
+                    if (result >= 32) return -1;
+                    return result;
+                }
                 case int vint:
-                    return BitOperations.TrailingZeroCount((uint)vint);
+                {
+                    var result = BitOperations.TrailingZeroCount(vint);
+                    if (result >= 32) return -1;
+                    return result;
+                }
                 case uint vuint:
-                    return BitOperations.TrailingZeroCount((uint)vuint);
+                {
+                    var result = BitOperations.TrailingZeroCount(vuint);
+                    if (result >= 32) return -1;
+                    return result;
+                }
                 case long vlong:
-                    return BitOperations.TrailingZeroCount((ulong)vlong);
+                {
+                    var result = BitOperations.TrailingZeroCount(vlong);
+                    if (result >= 64) return -1;
+                    return result;
+                }
                 case ulong vulong:
-                    return BitOperations.TrailingZeroCount((ulong)vulong);
-
+                {
+                    var result = BitOperations.TrailingZeroCount(vulong);
+                    if (result >= 64) return -1;
+                    return result;
+                }
                 case BigInteger bigint:
                     if (bigint >= 0 && bigint <= ulong.MaxValue)
                     {
-                        
-                        return BitOperations.TrailingZeroCount((ulong)bigint);
+                        var result = BitOperations.TrailingZeroCount((ulong)bigint);
+                        if (result >= 64) return -1;
+                        return result;
                     }
+                    else if (bigint < 0 && bigint >= long.MinValue)
+                    {
+                        var result = BitOperations.TrailingZeroCount((long)bigint);
+                        if (result >= 64) return -1;
+                        return result;
+                    }
+                    // TODO: implement this case for bigint
                     goto default;
                     
                 case KalkVector vector:
                     var uintVector = new KalkVector<int>(vector.Length);
                     for (int i = 0; i < vector.Length; i++)
                     {
-                        var result = TrailingZeroCount(vector.GetComponent(i));
+                        var result = FirstBitLow(vector.GetComponent(i));
                         if (result is int intv)
                         {
                             uintVector[i] = (int)intv;
@@ -403,7 +543,7 @@ namespace Kalk.Core.Modules
                     var uintMatrix = new KalkMatrix<int>(matrix.RowCount, matrix.ColumnCount);
                     for (int y = 0; y < matrix.RowCount; y++)
                     {
-                        uintMatrix.SetRow(y, (KalkVector<int>)TrailingZeroCount(matrix.GetRow(y)));
+                        uintMatrix.SetRow(y, (KalkVector<int>)FirstBitLow(matrix.GetRow(y)));
                     }
                     return uintMatrix;
 

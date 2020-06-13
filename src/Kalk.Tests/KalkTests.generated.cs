@@ -1007,6 +1007,60 @@ out = int4(1, 1, 2, 1)
 out = 33", Category = "Misc Memory Functions")]
         public static void Test_countbits(string input, string output) => AssertScript(input, output);
 
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.FirstBitHigh(System.Object)"/> or `firstbithigh`.
+        /// </summary>
+        [TestCase(@"firstbithigh 128
+firstbithigh byte(128)
+firstbithigh 0
+firstbithigh(int4(1, -1, 65536, 1 << 20))", @"# firstbithigh(128)
+out = 24
+# firstbithigh(byte(128))
+out = 0
+# firstbithigh(0)
+out = -1
+# firstbithigh(int4(1, -1, 65536, 1 << 20))
+out = int4(31, 0, 15, 11)", Category = "Misc Memory Functions")]
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.FirstBitHigh(System.Object)"/> or `firstbithigh`.
+        /// </summary>
+        [TestCase(@"firstbithigh ulong(1 << 63)
+firstbithigh long(1)
+firstbithigh long(0)", @"# firstbithigh(ulong(1 << 63))
+out = 0
+# firstbithigh(long(1))
+out = 63
+# firstbithigh(long(0))
+out = -1", Category = "Misc Memory Functions")]
+        public static void Test_firstbithigh(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.FirstBitLow(System.Object)"/> or `firstbitlow`.
+        /// </summary>
+        [TestCase(@"firstbitlow 128
+firstbitlow byte(128)
+firstbitlow 0
+firstbitlow(int4(1, -1, 65536, 1 << 20))", @"# firstbitlow(128)
+out = 7
+# firstbitlow(byte(128))
+out = 7
+# firstbitlow(0)
+out = -1
+# firstbitlow(int4(1, -1, 65536, 1 << 20))
+out = int4(0, 0, 16, 20)", Category = "Misc Memory Functions")]
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.FirstBitLow(System.Object)"/> or `firstbitlow`.
+        /// </summary>
+        [TestCase(@"firstbitlow ulong(1 << 63)
+firstbitlow long(1)
+firstbitlow long(0)", @"# firstbitlow(ulong(1 << 63))
+out = 63
+# firstbitlow(long(1))
+out = 0
+# firstbitlow(long(0))
+out = -1", Category = "Misc Memory Functions")]
+        public static void Test_firstbitlow(string input, string output) => AssertScript(input, output);
+
     }
 
     public partial class MiscModuleTests : KalkTestBase

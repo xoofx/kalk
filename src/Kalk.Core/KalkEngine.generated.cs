@@ -1632,8 +1632,8 @@ namespace Kalk.Core.Modules
             RegisterFunction("bitcast", (Func<object, object, object>)Bitcast);
             RegisterFunction("asbytes", (Func<object, Kalk.Core.KalkNativeBuffer>)AsBytes);
             RegisterFunction("countbits", (Func<object, object>)CountBits);
-            RegisterFunction("firstbithigh", (Func<object, object>)LeadingZeroCount);
-            RegisterFunction("firstbitlow", (Func<object, object>)TrailingZeroCount);
+            RegisterFunction("firstbithigh", (Func<object, object>)FirstBitHigh);
+            RegisterFunction("firstbitlow", (Func<object, object>)FirstBitLow);
             RegisterFunction("reversebits", (Func<object, object>)ReverseBits);
             RegisterFunction("asdouble", (Func<object, double>)AsDouble);
             RegisterFunction("asfloat", (Func<object, float>)AsFloat);
@@ -1741,14 +1741,46 @@ namespace Kalk.Core.Modules
             {
                 var descriptor = Descriptors["firstbithigh"];
                 descriptor.Category = "Misc Memory Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Gets the location of the first set bit starting from the highest order bit and working downward, per component.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = false });
+                descriptor.Returns = @"The location of the first set bit.";
+                descriptor.Remarks = @"If no bits are sets, this function will return -1.";
+                descriptor.Example = @"    >>> firstbithigh 128
+    # firstbithigh(128)
+    out = 24
+    >>> firstbithigh byte(128)
+    # firstbithigh(byte(128))
+    out = 0
+    >>> firstbithigh 0
+    # firstbithigh(0)
+    out = -1
+    >>> firstbithigh(int4(1, -1, 65536, 1 << 20))
+    # firstbithigh(int4(1, -1, 65536, 1 << 20))
+    out = int4(31, 0, 15, 11)
+";
             }
             {
                 var descriptor = Descriptors["firstbitlow"];
                 descriptor.Category = "Misc Memory Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the location of the first set bit starting from the lowest order bit and working upward, per component.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = false });
+                descriptor.Returns = @"The location of the first set bit.";
+                descriptor.Remarks = @"If no bits are sets, this function will return -1.";
+                descriptor.Example = @"    >>> firstbitlow 128
+    # firstbitlow(128)
+    out = 7
+    >>> firstbitlow byte(128)
+    # firstbitlow(byte(128))
+    out = 7
+    >>> firstbitlow 0
+    # firstbitlow(0)
+    out = -1
+    >>> firstbitlow(int4(1, -1, 65536, 1 << 20))
+    # firstbitlow(int4(1, -1, 65536, 1 << 20))
+    out = int4(0, 0, 16, 20)
+";
             }
             {
                 var descriptor = Descriptors["reversebits"];
