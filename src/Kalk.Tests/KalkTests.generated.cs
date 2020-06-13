@@ -1449,6 +1449,118 @@ out = ""AliceBlue""", Category = "Misc Functions")]
 
     public partial class VectorModuleTests : KalkTestBase
     {
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.Length(System.Object)"/> or `length`.
+        /// </summary>
+        [TestCase(@"length float2(1, 2)
+length -5", @"# length(float2(1, 2))
+out = 2.23606797749979
+# length(-5)
+out = 5", Category = "Math Vector/Matrix Functions")]
+        public static void Test_length(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.Normalize(System.Object)"/> or `normalize`.
+        /// </summary>
+        [TestCase(@"normalize float2(1,2)", @"# normalize(float2(1, 2))
+out = float2(0.4472136, 0.8944272)", Category = "Math Vector/Matrix Functions")]
+        public static void Test_normalize(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.Dot(System.Object,System.Object)"/> or `dot`.
+        /// </summary>
+        [TestCase(@"dot(float3(1,2,3), float3(4,5,6))
+dot(float3(1,2,3), 4)
+dot(4, float3(1,2,3))
+dot(5,6)", @"# dot(float3(1, 2, 3), float3(4, 5, 6))
+out = 32
+# dot(float3(1, 2, 3), 4)
+out = 24
+# dot(4, float3(1, 2, 3))
+out = 24
+# dot(5, 6)
+out = 30", Category = "Math Vector/Matrix Functions")]
+        public static void Test_dot(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.Cross(Kalk.Core.KalkVector,Kalk.Core.KalkVector)"/> or `cross`.
+        /// </summary>
+        [TestCase(@"cross(float3(1,2,3), float3(4,5,6))
+cross(float3(1,0,0), float3(0,1,0))
+cross(float3(0,0,1), float3(0,1,0))", @"# cross(float3(1, 2, 3), float3(4, 5, 6))
+out = float3(-3, 6, -3)
+# cross(float3(1, 0, 0), float3(0, 1, 0))
+out = float3(0, 0, 1)
+# cross(float3(0, 0, 1), float3(0, 1, 0))
+out = float3(-1, 0, 0)", Category = "Math Vector/Matrix Functions")]
+        public static void Test_cross(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateByte(System.Object)"/> or `byte`.
+        /// </summary>
+        [TestCase(@"byte
+byte 0
+byte 255
+byte 256", @"# byte
+out = 0
+# byte(0)
+out = 0
+# byte(255)
+out = 255
+Unable to convert type `int` to `byte`", Category = "Type Constructors")]
+        public static void Test_byte(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateSByte(System.Object)"/> or `sbyte`.
+        /// </summary>
+        [TestCase(@"sbyte
+sbyte 0
+sbyte 127
+sbyte -128
+sbyte 128", @"# sbyte
+out = 0
+# sbyte(0)
+out = 0
+# sbyte(127)
+out = 127
+# sbyte(-128)
+out = -128
+Unable to convert type `int` to `sbyte`", Category = "Type Constructors")]
+        public static void Test_sbyte(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateShort(System.Object)"/> or `short`.
+        /// </summary>
+        [TestCase(@"short
+short 0
+short 32767
+short -32768
+short 32768", @"# short
+out = 0
+# short(0)
+out = 0
+# short(32767)
+out = 32767
+# short(-32768)
+out = -32768
+Unable to convert type `int` to `short`", Category = "Type Constructors")]
+        public static void Test_short(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateUShort(System.Object)"/> or `ushort`.
+        /// </summary>
+        [TestCase(@"ushort
+ushort 0
+ushort 65535
+ushort 65536", @"# ushort
+out = 0
+# ushort(0)
+out = 0
+# ushort(65535)
+out = 65535
+Unable to convert type `int` to `ushort`", Category = "Type Constructors")]
+        public static void Test_ushort(string input, string output) => AssertScript(input, output);
+
     }
 
     public partial class WebModuleTests : KalkTestBase

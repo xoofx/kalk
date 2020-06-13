@@ -375,6 +375,22 @@ namespace Kalk.Core
             }
         }
 
+        public object ToObject(int argIndex, object value, Type destinationType)
+        {
+            try
+            {
+                return ToObject(CurrentSpan, value, destinationType);
+            }
+            catch (ScriptRuntimeException ex)
+            {
+                throw new ScriptArgumentException(argIndex, ex.OriginalMessage);
+            }
+            catch (Exception ex)
+            {
+                throw new ScriptArgumentException(argIndex, ex.Message);
+            }
+        }
+
         public override object ToObject(SourceSpan span, object value, Type destinationType)
         {
             var converters = TryConverters;

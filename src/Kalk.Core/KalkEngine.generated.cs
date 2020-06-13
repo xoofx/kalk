@@ -2514,7 +2514,7 @@ namespace Kalk.Core.Modules
         {
             RegisterFunction("length", (Func<object, object>)Length);
             RegisterFunction("normalize", (Func<object, object>)Normalize);
-            RegisterFunction("dot", (Func<Kalk.Core.KalkVector, Kalk.Core.KalkVector, object>)Dot);
+            RegisterFunction("dot", (Func<object, object, object>)Dot);
             RegisterFunction("cross", (Func<Kalk.Core.KalkVector, Kalk.Core.KalkVector, object>)Cross);
             RegisterFunction("byte", (Func<object, byte>)CreateByte);
             RegisterFunction("sbyte", (Func<object, sbyte>)CreateSByte);
@@ -2631,50 +2631,156 @@ namespace Kalk.Core.Modules
             {
                 var descriptor = Descriptors["length"];
                 descriptor.Category = "Math Vector/Matrix Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the length of the specified floating-point vector.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The specified floating-point vector.")  { IsOptional = false });
+                descriptor.Returns = @"A floating-point scalar that represents the length of the x parameter.";
+                descriptor.Example = @"    >>> length float2(1, 2)
+    # length(float2(1, 2))
+    out = 2.23606797749979
+    >>> length -5
+    # length(-5)
+    out = 5
+";
             }
             {
                 var descriptor = Descriptors["normalize"];
                 descriptor.Category = "Math Vector/Matrix Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Normalizes the specified floating-point vector according to x / length(x).";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"he specified floating-point vector.")  { IsOptional = false });
+                descriptor.Returns = @"The normalized x parameter. If the length of the x parameter is 0, the result is indefinite.";
+                descriptor.Example = @"    >>> normalize float2(1,2)
+    # normalize(float2(1, 2))
+    out = float2(0.4472136, 0.8944272)
+";
             }
             {
                 var descriptor = Descriptors["dot"];
                 descriptor.Category = "Math Vector/Matrix Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the dot product of two vectors.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The first vector.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("y", @"The second vector.")  { IsOptional = false });
+                descriptor.Returns = @"The dot product of the x parameter and the y parameter.";
+                descriptor.Example = @"    >>> dot(float3(1,2,3), float3(4,5,6))
+    # dot(float3(1, 2, 3), float3(4, 5, 6))
+    out = 32
+    >>> dot(float3(1,2,3), 4)
+    # dot(float3(1, 2, 3), 4)
+    out = 24
+    >>> dot(4, float3(1,2,3))
+    # dot(4, float3(1, 2, 3))
+    out = 24
+    >>> dot(5,6)
+    # dot(5, 6)
+    out = 30
+";
             }
             {
                 var descriptor = Descriptors["cross"];
                 descriptor.Category = "Math Vector/Matrix Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns the cross product of two floating-point, 3D vectors.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The first floating-point, 3D vector.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("y", @"The second floating-point, 3D vector.")  { IsOptional = false });
+                descriptor.Returns = @"The cross product of the x parameter and the y parameter.";
+                descriptor.Example = @"    >>> cross(float3(1,2,3), float3(4,5,6))
+    # cross(float3(1, 2, 3), float3(4, 5, 6))
+    out = float3(-3, 6, -3)
+    >>> cross(float3(1,0,0), float3(0,1,0))
+    # cross(float3(1, 0, 0), float3(0, 1, 0))
+    out = float3(0, 0, 1)
+    >>> cross(float3(0,0,1), float3(0,1,0))
+    # cross(float3(0, 0, 1), float3(0, 1, 0))
+    out = float3(-1, 0, 0)
+";
             }
             {
                 var descriptor = Descriptors["byte"];
                 descriptor.Category = "Type Constructors";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates an unsigned byte value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = true });
+                descriptor.Returns = @"An unsigned byte value";
+                descriptor.Example = @"    >>> byte
+    # byte
+    out = 0
+    >>> byte 0
+    # byte(0)
+    out = 0
+    >>> byte 255
+    # byte(255)
+    out = 255
+    >>> byte 256
+    Unable to convert type `int` to `byte`
+";
             }
             {
                 var descriptor = Descriptors["sbyte"];
                 descriptor.Category = "Type Constructors";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates a signed-byte value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = true });
+                descriptor.Returns = @"A signed-byte value";
+                descriptor.Example = @"    >>> sbyte
+    # sbyte
+    out = 0
+    >>> sbyte 0
+    # sbyte(0)
+    out = 0
+    >>> sbyte 127
+    # sbyte(127)
+    out = 127
+    >>> sbyte -128
+    # sbyte(-128)
+    out = -128
+    >>> sbyte 128
+    Unable to convert type `int` to `sbyte`
+";
             }
             {
                 var descriptor = Descriptors["short"];
                 descriptor.Category = "Type Constructors";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates a signed-short (16-bit) value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = true });
+                descriptor.Returns = @"A signed-short (16-bit) value";
+                descriptor.Example = @"    >>> short
+    # short
+    out = 0
+    >>> short 0
+    # short(0)
+    out = 0
+    >>> short 32767
+    # short(32767)
+    out = 32767
+    >>> short -32768
+    # short(-32768)
+    out = -32768
+    >>> short 32768
+    Unable to convert type `int` to `short`
+";
             }
             {
                 var descriptor = Descriptors["ushort"];
                 descriptor.Category = "Type Constructors";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates an unsigned short (16-bit) value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = true });
+                descriptor.Returns = @"An unsigned short (16-bit) value";
+                descriptor.Example = @"    >>> ushort
+    # ushort
+    out = 0
+    >>> ushort 0
+    # ushort(0)
+    out = 0
+    >>> ushort 65535
+    # ushort(65535)
+    out = 65535
+    >>> ushort 65536
+    Unable to convert type `int` to `ushort`
+";
             }
             {
                 var descriptor = Descriptors["uint"];

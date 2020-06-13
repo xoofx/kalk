@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Text;
-using Scriban.Runtime;
 using Scriban.Syntax;
 
 namespace Kalk.Core.Modules
@@ -86,7 +83,22 @@ namespace Kalk.Core.Modules
             _mathModule = Engine.GetOrCreateModule<MathModule>();
             //Engine.LoadSystemFile(Path.Combine("Modules", "Vectors", "colorspaces.kalk"));
         }
-        
+
+        /// <summary>
+        /// Returns the length of the specified floating-point vector.
+        /// </summary>
+        /// <param name="x">The specified floating-point vector.</param>
+        /// <returns>A floating-point scalar that represents the length of the x parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> length float2(1, 2)
+        /// # length(float2(1, 2))
+        /// out = 2.23606797749979
+        /// >>> length -5
+        /// # length(-5)
+        /// out = 5
+        /// ```
+        /// </example>
         [KalkExport("length", CategoryMathVectorMatrixFunctions)]
         public object Length(object x)
         {
@@ -99,39 +111,289 @@ namespace Kalk.Core.Modules
             return _mathModule.Abs(new KalkCompositeValue(x));
         }
 
+        /// <summary>
+        /// Normalizes the specified floating-point vector according to x / length(x).
+        /// </summary>
+        /// <param name="x">he specified floating-point vector.</param>
+        /// <returns>The normalized x parameter. If the length of the x parameter is 0, the result is indefinite.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> normalize float2(1,2)
+        /// # normalize(float2(1, 2))
+        /// out = float2(0.4472136, 0.8944272)
+        /// ```
+        /// </example>
         [KalkExport("normalize", CategoryMathVectorMatrixFunctions)]
         public object Normalize(object x)
         {
             return ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.Divide, x, Length(x));
         }
 
+        /// <summary>
+        /// Returns the dot product of two vectors.
+        /// </summary>
+        /// <param name="x">The first vector.</param>
+        /// <param name="y">The second vector.</param>
+        /// <returns>The dot product of the x parameter and the y parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> dot(float3(1,2,3), float3(4,5,6))
+        /// # dot(float3(1, 2, 3), float3(4, 5, 6))
+        /// out = 32
+        /// >>> dot(float3(1,2,3), 4)
+        /// # dot(float3(1, 2, 3), 4)
+        /// out = 24
+        /// >>> dot(4, float3(1,2,3))
+        /// # dot(4, float3(1, 2, 3))
+        /// out = 24
+        /// >>> dot(5,6)
+        /// # dot(5, 6)
+        /// out = 30
+        /// ```
+        /// </example>
         [KalkExport("dot", CategoryMathVectorMatrixFunctions)]
-        public static object Dot(KalkVector x, KalkVector y) => KalkVector.Dot(x, y);
+        public object Dot(object x, object y)
+        {
+            if (x is KalkVector vx)
+            {
+                if (y is KalkVector vy)
+                {
+                    return KalkVector.Dot(vx, vy);
+                }
+                return KalkVector.Dot(vx, vx.FromValue(Engine.ToObject(1, y, vx.ElementType)));
+            }
+            else if (y is KalkVector vy)
+            {
+                return KalkVector.Dot(vy.FromValue(Engine.ToObject(1, x, vy.ElementType)), vy);
+            }
 
+            return ScriptBinaryExpression.Evaluate(Engine, Engine.CurrentSpan, ScriptBinaryOperator.Multiply, x, y);
+        }
+
+        /// <summary>
+        /// Returns the cross product of two floating-point, 3D vectors.
+        /// </summary>
+        /// <param name="x">The first floating-point, 3D vector.</param>
+        /// <param name="y">The second floating-point, 3D vector.</param>
+        /// <returns>The cross product of the x parameter and the y parameter.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> cross(float3(1,2,3), float3(4,5,6))
+        /// # cross(float3(1, 2, 3), float3(4, 5, 6))
+        /// out = float3(-3, 6, -3)
+        /// >>> cross(float3(1,0,0), float3(0,1,0))
+        /// # cross(float3(1, 0, 0), float3(0, 1, 0))
+        /// out = float3(0, 0, 1)
+        /// >>> cross(float3(0,0,1), float3(0,1,0))
+        /// # cross(float3(0, 0, 1), float3(0, 1, 0))
+        /// out = float3(-1, 0, 0)
+        /// ```
+        /// </example>
         [KalkExport("cross", CategoryMathVectorMatrixFunctions)]
-        public static object Cross(KalkVector x, KalkVector y) => KalkVector.Cross(x, y);
+        public object Cross(KalkVector x, KalkVector y)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
+            if (x.Length != 3 || (x.ElementType != typeof(float) && x.ElementType != typeof(double))) throw new ArgumentOutOfRangeException(nameof(x), "Expecting a float3 or double3 vector.");
+            if (y.Length != 3 || (y.ElementType != typeof(float) && y.ElementType != typeof(double))) throw new ArgumentOutOfRangeException(nameof(y), "Expecting a float3 or double3 vector.");
+            return KalkVector.Cross(x, y);
+        }
 
+        /// <summary>
+        /// Creates an unsigned byte value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>An unsigned byte value</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> byte
+        /// # byte
+        /// out = 0
+        /// >>> byte 0
+        /// # byte(0)
+        /// out = 0
+        /// >>> byte 255
+        /// # byte(255)
+        /// out = 255
+        /// >>> byte 256
+        /// Unable to convert type `int` to `byte`
+        /// ```
+        /// </example>
         [KalkExport("byte", CategoryTypeConstructors)]
         public byte CreateByte(object value = null) => value == null ? (byte)0 : Engine.ToObject<byte>(0, value);
+
+        /// <summary>
+        /// Creates a signed-byte value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>A signed-byte value</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> sbyte
+        /// # sbyte
+        /// out = 0
+        /// >>> sbyte 0
+        /// # sbyte(0)
+        /// out = 0
+        /// >>> sbyte 127
+        /// # sbyte(127)
+        /// out = 127
+        /// >>> sbyte -128
+        /// # sbyte(-128)
+        /// out = -128
+        /// >>> sbyte 128
+        /// Unable to convert type `int` to `sbyte`
+        /// ```
+        /// </example>
         [KalkExport("sbyte", CategoryTypeConstructors)]
         public sbyte CreateSByte(object value = null) => value == null ? (sbyte)0 : Engine.ToObject<sbyte>(0, value);
 
+        /// <summary>
+        /// Creates a signed-short (16-bit) value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>A signed-short (16-bit) value</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> short
+        /// # short
+        /// out = 0
+        /// >>> short 0
+        /// # short(0)
+        /// out = 0
+        /// >>> short 32767
+        /// # short(32767)
+        /// out = 32767
+        /// >>> short -32768
+        /// # short(-32768)
+        /// out = -32768
+        /// >>> short 32768
+        /// Unable to convert type `int` to `short`
+        /// ```
+        /// </example>
         [KalkExport("short", CategoryTypeConstructors)]
         public short CreateShort(object value = null) => value == null ? (short)0 : Engine.ToObject<short>(0, value);
+
+        /// <summary>
+        /// Creates an unsigned short (16-bit) value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>An unsigned short (16-bit) value</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> ushort
+        /// # ushort
+        /// out = 0
+        /// >>> ushort 0
+        /// # ushort(0)
+        /// out = 0
+        /// >>> ushort 65535
+        /// # ushort(65535)
+        /// out = 65535
+        /// >>> ushort 65536
+        /// Unable to convert type `int` to `ushort`
+        /// ```
+        /// </example>
         [KalkExport("ushort", CategoryTypeConstructors)]
         public ushort CreateUShort(object value = null) => value == null ? (ushort)0 : Engine.ToObject<ushort>(0, value);
-        
+
+        /// <summary>
+        /// Creates an unsigned int (32-bit) value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>An unsigned int (32-bit) value</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> uint
+        /// # uint
+        /// out = 0
+        /// >>> uint 0
+        /// # uint(0)
+        /// out = 0
+        /// >>> uint(1&lt;&lt;32 - 1)
+        /// # uint(1 &lt;&lt; 32 - 1)
+        /// out = 4294967295
+        /// >>> uint 1 &lt;&lt; 32
+        /// Unable to convert type `long` to `uint`
+        /// ```
+        /// </example>
         [KalkExport("uint", CategoryTypeConstructors)]
-        public uint CreateUInt(object value = null) => value == null ? (uint)0 : Engine.ToObject<uint>(0, value);
-        
+        public uint CreateUInt(object value = null) => value == null ? 0U : Engine.ToObject<uint>(0, value);
+
+        /// <summary>
+        /// Creates a signed-int (32-bit) value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>A signed-int (32-bit) value</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> int
+        /// # int
+        /// out = 0
+        /// >>> int 0
+        /// # int(0)
+        /// out = 0
+        /// >>> int(1 &lt;&lt; 31 - 1)
+        /// # int(1 &lt;&lt; 31 - 1)
+        /// out = 2147483647
+        /// >>> int(-(1&lt;&lt;31))
+        /// # int(-(1 &lt;&lt; 31))
+        /// out = -2147483648
+        /// >>> int 1 &lt;&lt; 31
+        /// Unable to convert type `long` to `int`
+        /// ```
+        /// </example>
         [KalkExport("int", CategoryTypeConstructors)]
         public int CreateInt(object value = null) => value == null ? 0 : Engine.ToObject<int>(0, value);
-        
+
+        /// <summary>
+        /// Creates an unsigned long (64-bit) value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>An unsigned long (64-bit) value</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> ulong
+        /// # ulong
+        /// out = 0
+        /// >>> ulong 0
+        /// # ulong(0)
+        /// out = 0
+        /// >>> ulong(1 &lt;&lt; 64 - 1)
+        /// # ulong(1 &lt;&lt; 64 - 1)
+        /// out = 18446744073709551615
+        /// >>> ulong 1 &lt;&lt; 64
+        /// Unable to convert type `bigint` to `ulong`
+        /// ```
+        /// </example>
         [KalkExport("ulong", CategoryTypeConstructors)]
-        public ulong CreateULong(object value = null) => value == null ? (ulong)0 : Engine.ToObject<ulong>(0, value);
-        
+        public ulong CreateULong(object value = null) => value == null ? 0UL : Engine.ToObject<ulong>(0, value);
+
+        /// <summary>
+        /// Creates a signed-long (64-bit) value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>A signed-long (64-bit) value</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> long
+        /// # long
+        /// out = 0
+        /// >>> long 0
+        /// # long(0)
+        /// out = 0
+        /// >>> long(1 &lt;&lt; 63 - 1)
+        /// # long(1 &lt;&lt; 63 - 1)
+        /// out = 9223372036854775807
+        /// >>> long(-(1&lt;&lt;63))
+        /// # long(-(1 &lt;&lt; 63))
+        /// out = -9223372036854775808
+        /// >>> long 1 &lt;&lt; 63
+        /// Unable to convert type `bigint` to `long`
+        /// ```
+        /// </example>
         [KalkExport("long", CategoryTypeConstructors)]
-        public long CreateLong(object value = null) => value == null ? (long)0 : Engine.ToObject<long>(0, value);
+        public long CreateLong(object value = null) => value == null ? 0L : Engine.ToObject<long>(0, value);
 
         [KalkExport("bool", CategoryTypeConstructors)]
         public KalkBool CreateBool(object value = null) => value != null && Engine.ToObject<KalkBool>(0, value);

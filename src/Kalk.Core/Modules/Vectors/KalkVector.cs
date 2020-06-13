@@ -29,6 +29,8 @@ namespace Kalk.Core
 
         public abstract KalkVector Clone();
 
+        public abstract KalkVector FromValue(object value);
+
         protected abstract KalkVector GenericCross(KalkVector y);
 
         protected abstract KalkMatrix GenericDiagonal();
@@ -149,6 +151,18 @@ namespace Kalk.Core
             }
 
             return matrix;
+        }
+
+        public override KalkVector FromValue(object value)
+        {
+            var tValue = (T)value;
+            var vector = (KalkVector<T>)Clone();
+            for (int i = 0; i < Length; i++)
+            {
+                vector[i] = tValue;
+            }
+
+            return vector;
         }
 
         protected override KalkVector GenericCross(KalkVector y)
