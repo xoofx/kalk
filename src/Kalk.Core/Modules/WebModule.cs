@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Scriban.Functions;
+using Scriban.Runtime;
 
 namespace Kalk.Core.Modules
 {
@@ -37,7 +39,7 @@ namespace Kalk.Core.Modules
         public string HtmlStrip(string text) => HtmlFunctions.Strip(Engine, text);
         
         [KalkExport("wget", CategoryWeb)]
-        public object WebGet(string url)
+        public ScriptObject WebGet(string url)
         {
             if (url == null) throw new ArgumentNullException(nameof(url));
             using (var httpClient = new HttpClient())
@@ -55,19 +57,65 @@ namespace Kalk.Core.Modules
                     }
                     else
                     {
+                        var headers = new ScriptObject();
+                        foreach (var headerItem in result.Content.Headers)
+                        {
+                            var items = new ScriptArray(headerItem.Value);
+                            object itemValue = items;
+                            if (items.Count == 1)
+                            {
+                                var str = (string) items[0];
+                                itemValue = str;
+                                if (str == "true")
+                                {
+                                    itemValue = (KalkBool)true;
+                                }
+                                else if (str == "false")
+                                {
+                                    itemValue = (KalkBool)false;
+                                }
+                                else if (long.TryParse(str, out var longValue))
+                                {
+                                    if (longValue >= int.MinValue && longValue <= int.MaxValue)
+                                    {
+                                        itemValue = (int) longValue;
+                                    }
+                                    else
+                                    {
+                                        itemValue = longValue;
+                                    }
+                                }
+                                else if (DateTime.TryParse(str, out var time))
+                                {
+                                    itemValue = time;
+                                }
+                            }
+                            headers[headerItem.Key] = itemValue;
+                        }
+
                         var mediaType = result.Content.Headers.ContentType.MediaType;
+                        var resultObj = new ScriptObject()
+                        {
+                            {"version", result.Version.ToString()},
+                            {"code", (int) result.StatusCode},
+                            {"reason", result.ReasonPhrase},
+                            {"headers", headers}
+                        };
+
                         if (mediaType.StartsWith("text/"))
                         {
                             var readTask = Task.Run(async () => await result.Content.ReadAsStringAsync());
                             readTask.Wait();
-                            return readTask.Result;
+                            resultObj["content"] = readTask.Result;
                         }
                         else
                         {
                             var readTask = Task.Run(async () => await result.Content.ReadAsByteArrayAsync());
                             readTask.Wait();
-                            return readTask.Result;
+                            resultObj["content"] = new KalkNativeBuffer(readTask.Result);
                         }
+
+                        return resultObj;
                     }
                 }
                 catch (Exception ex)

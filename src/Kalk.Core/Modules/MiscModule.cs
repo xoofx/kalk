@@ -26,9 +26,16 @@ namespace Kalk.Core
         public MiscModule()
         {
             IsBuiltin = true;
+            DateObject = new DateTimeFunctions {Format = "%D %T"};
             RegisterFunctionsAuto();
         }
 
+        /// <summary>
+        /// Gets the date object.
+        /// </summary>
+        [KalkExport("date", CategoryMisc)]
+        public DateTimeFunctions DateObject { get; }
+        
         /// <summary>
         /// Prints the ascii table or convert an input string to an ascii array, or an ascii array to a string.
         /// </summary>

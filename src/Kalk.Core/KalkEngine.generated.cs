@@ -1935,6 +1935,7 @@ namespace Kalk.Core
     {
         protected override void RegisterFunctionsAuto()
         {
+            RegisterConstant("date", DateObject);
             RegisterFunction("ascii", (Func<object, object>)Ascii);
             RegisterFunction("keys", (Func<object, System.Collections.IEnumerable>)Keys);
             RegisterFunction("guid", (Func<string>)Guid);
@@ -1957,6 +1958,12 @@ namespace Kalk.Core
 
         private void RegisterDocumentationAuto()
         {
+            {
+                var descriptor = Descriptors["date"];
+                descriptor.Category = "Misc Functions";
+                descriptor.Description = @"Gets the date object.";
+                descriptor.IsCommand = false;
+            }
             {
                 var descriptor = Descriptors["ascii"];
                 descriptor.Category = "Misc Functions";
@@ -3519,7 +3526,7 @@ namespace Kalk.Core.Modules
             RegisterFunction("html_encode", (Func<string, string>)HtmlEncode);
             RegisterFunction("html_decode", (Func<string, string>)HtmlDecode);
             RegisterFunction("html_strip", (Func<string, string>)HtmlStrip);
-            RegisterFunction("wget", (Func<string, object>)WebGet);
+            RegisterFunction("wget", (Func<string, Scriban.Runtime.ScriptObject>)WebGet);
             RegisterDocumentationAuto();
         }
 
