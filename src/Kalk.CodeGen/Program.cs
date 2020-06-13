@@ -764,6 +764,7 @@ namespace Kalk.CodeGen
                             }
                             else if (element.Name == "test")
                             {
+                                text = RemoveCode.Replace(text, string.Empty);
                                 var test = TryParseTest(text);
                                 if (test != null)
                                 {

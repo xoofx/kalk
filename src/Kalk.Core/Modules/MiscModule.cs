@@ -216,36 +216,89 @@ namespace Kalk.Core
         /// >>> hex "0a"
         /// # hex("0a")
         /// out = 10
+        /// >>> hex "0xff030201"
+        /// # hex("0xff030201")
+        /// out = 4278387201
+        /// >>> hex out
+        /// # hex(out)
+        /// out = "01 02 03 FF"
         /// >>> hex "01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F"
         /// # hex("01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F")
         /// out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
-        /// >>> hex(out, ",", true)
-        /// # hex(out, ",", true)
+        /// >>> hex(out, true, ",")
+        /// # hex(out, true, ",")
         /// out = "0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F"
         /// >>> hex out
         /// # hex(out)
         /// out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
-        /// >>> hex "1a,2b;3c 4d-5e_6f"
+        /// >>> hex("1a,2b;3c 4d-5e_6f")
         /// # hex("1a,2b;3c 4d-5e_6f")
-        /// out = 122450813397786
+        /// out = 103832130169626
         /// >>> hex out
         /// # hex(out)
-        /// out = "1A 2B 3C 4D 5E 6F 00 00"
+        /// out = "1A 2B 3C 4D 6F 5E 00 00"
+        /// >>> hex float4(1,2,3,4)
+        /// # hex(float4(1, 2, 3, 4))
+        /// out = "00 00 80 3F 00 00 00 40 00 00 40 40 00 00 80 40"
+        /// ```
+        /// </example>
+        /// <test>
+        /// ```kalk
         /// >>> hex short(12345)
         /// # hex(short(12345))
         /// out = "39 30"
         /// >>> hex int (12345789)
         /// # hex(int(12345789))
         /// out = "BD 61 BC 00"
-        /// >>> hex float4(1,2,3,4)
-        /// # hex(float4(1, 2, 3, 4))
-        /// out = "00 00 80 3F 00 00 00 40 00 00 40 40 00 00 80 40"
+        /// ```
+        /// </test>
+        [KalkExport("hex", CategoryMisc)]
+        public object Hexadecimal(object value, bool prefix = false, string separator = " ")
+        {
+            return Hexadecimal(value, prefix, separator, false);
+        }
+
+        /// <summary>
+        /// Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+        /// to an integral/bytebuffer representation.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <param name="prefix">Output the prefix `0x` in front of each binary bytes when converting
+        ///     from integral to binary.</param>
+        /// <param name="separator">The character used to separate binary bytes when converting
+        ///     from integral to binary.</param>
+        /// <returns>The binary representation of the input or convert the binary input string
+        /// to an integral representation.</returns>
+        /// <remarks> When converting from a binary string to an integral representation, this method
+        /// will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+        /// dash `-`.
+        /// When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+        /// it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+        /// See the following examples.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> bin 10
+        /// # bin(10)
+        /// out = "00001010"
+        /// >>> bin out
+        /// # bin(out)
+        /// out = 10
+        /// >>> bin 0xff030201
+        /// # bin(-16580095)
+        /// out = "00000001 00000010 00000011 11111111"
+        /// >>> bin out
+        /// # bin(out)
+        /// out = 4278387201
+        /// >>> bin "11111111000000110000001000000001"
+        /// # bin("11111111000000110000001000000001")
+        /// out = 4278387201
         /// ```
         /// </example>
-        [KalkExport("hex", CategoryMisc)]
-        public object Hexadecimal(object value, string separator = " ", bool prefix = false)
+        [KalkExport("bin", CategoryMisc)]
+        public object Binary(object value, bool prefix = false, string separator = " ")
         {
-            return Hexadecimal(value, separator, prefix, false);
+            return Binary(value, prefix, separator, false);
         }
 
         /// <summary>
@@ -774,7 +827,7 @@ namespace Kalk.Core
             return result ? @by : value;
         }
 
-        private object Hexadecimal(object value, string separator, bool prefix, bool returnString)
+        private object Hexadecimal(object value, bool prefix, string separator, bool returnString)
         {
             Engine.CheckAbort();
             switch (value)
@@ -784,21 +837,47 @@ namespace Kalk.Core
                 case string str:
                 {
                     var array = new List<byte>();
+                    var temp = new List<byte>();
                     int count = 0;
                     bool hasPrefix = false;
                     int hexa = 0;
+
+                    void FlushBytes()
+                    {
+                        if (count > 0)
+                        {
+                            array.Add((byte)hexa);
+                        }
+                        count = 0;
+
+                        if (temp.Count > 0)
+                        {
+                            for (int j = temp.Count - 1; j >= 0; j--)
+                            {
+                                array.Add(temp[j]);
+                            }
+
+                            temp.Clear();
+                        }
+                    }
+
                     for (int i = 0; i < str.Length; i++)
                     {
                         var c = str[i];
                         if (char.IsWhiteSpace(c) || c == ',' || c == ':' || c == ';' || c == '_' || c == '-')
                         {
+                            if (c != '_')
+                            {
+                                FlushBytes();
+                            }
                             hasPrefix = c == '_' && hasPrefix; // reset prefix after parsing but not for `_`
                             continue;
                         }
 
                         // Skip 0x prefix
-                        if (!hasPrefix && count == 0 && c == '0' && i + 1 < str.Length && str[i + 1] == 'x')
+                        if (!hasPrefix && c == '0' && i + 1 < str.Length && str[i + 1] == 'x')
                         {
+                            FlushBytes();
                             hasPrefix = true;
                             i++;
                             continue;
@@ -811,7 +890,7 @@ namespace Kalk.Core
                             hexa = (hexa << 4) | n;
                             if (count == 1)
                             {
-                                array.Add((byte)hexa);
+                                temp.Add((byte)hexa);
                                 hexa = 0;
                                 count = 0;
                             }
@@ -826,10 +905,7 @@ namespace Kalk.Core
                         }
                     }
 
-                    if (count > 0)
-                    {
-                        array.Add((byte)hexa);
-                    }
+                    FlushBytes();
 
                     if (array.Count <= 8)
                     {
@@ -943,6 +1019,210 @@ namespace Kalk.Core
                 var b = Unsafe.As<T, byte>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
                 if (prefix) builder.Append("0x");
                 builder.Append(b.ToString("X2"));
+            }
+            return builder.ToString();
+        }
+
+        private object Binary(object value, bool prefix, string separator, bool returnString)
+        {
+            Engine.CheckAbort();
+            switch (value)
+            {
+                case string str when returnString:
+                    throw new ArgumentException($"Cannot convert a string to binary inside a list", nameof(value));
+                case string str:
+                {
+                    var array = new List<byte>();
+                    var temp = new List<byte>();
+                    int count = 0;
+                    bool hasPrefix = false;
+                    int bin = 0;
+
+                    void FlushBytes()
+                    {
+                        if (count > 0)
+                        {
+                            array.Add((byte)bin);
+                        }
+                        bin = 0;
+                        count = 0;
+
+                        if (temp.Count > 0)
+                        {
+                            for (int j = temp.Count - 1; j >= 0; j--)
+                            {
+                                array.Add(temp[j]);
+                            }
+
+                            temp.Clear();
+                        }
+                    }
+
+                    for (int i = 0; i < str.Length; i++)
+                    {
+                        var c = str[i];
+                        if (char.IsWhiteSpace(c) || c == ',' || c == ':' || c == ';' || c == '_' || c == '-')
+                        {
+                            if (c != '_')
+                            {
+                                FlushBytes();
+                            }
+                            hasPrefix = c == '_' && hasPrefix; // reset prefix after parsing but not for `_`
+                            continue;
+                        }
+
+                        // Skip 0b prefix
+                        if (!hasPrefix && c == '0' && i + 1 < str.Length && str[i + 1] == 'b')
+                        {
+                            FlushBytes();
+                            hasPrefix = true;
+                            i++;
+                            continue;
+                        }
+
+                        if (c == '0' || c == '1')
+                        {
+                            bin = (bin << 1) | (c - '0');
+                            if (count == 7)
+                            {
+                                temp.Add((byte)bin);
+                                bin = 0;
+                                count = 0;
+                            }
+                            else
+                            {
+                                count++;
+                            }
+                        }
+                        else
+                        {
+                            throw new ArgumentException($"Invalid character found `{StringFunctions.Escape(c.ToString())}`. Expecting only binary 0 or 1.", nameof(value));
+                        }
+                    }
+
+                    FlushBytes();
+
+                    if (array.Count <= 8)
+                    {
+                        long ulongValue = 0;
+                        unsafe
+                        {
+                            for (int i = 0; i < array.Count; i++)
+                            {
+                                ((byte*)&ulongValue)[i] = array[i];
+                            }
+                        }
+                        return ulongValue;
+                    }
+
+                    return new KalkNativeBuffer(array);
+                }
+                case byte vbyte:
+                    return BinaryFromBytes(1, vbyte, prefix, separator);
+                case sbyte vsbyte:
+                    return BinaryFromBytes(1, vsbyte, prefix, separator);
+                case short vshort:
+                {
+                    int size = 2;
+                    if (vshort >= sbyte.MinValue && vshort <= byte.MaxValue) size = 1;
+                    return BinaryFromBytes(size, vshort, prefix, separator);
+                }
+                case ushort vushort:
+                {
+                    int size = 2;
+                    if (vushort <= byte.MaxValue) size = 1;
+                    return BinaryFromBytes(size, vushort, prefix, separator);
+                }
+                case int vint:
+                {
+                    int size = 4;
+                    if (vint >= sbyte.MinValue && vint <= byte.MaxValue) size = 1;
+                    else if (vint >= short.MinValue && vint <= ushort.MaxValue) size = 2;
+                    return BinaryFromBytes(size, vint, prefix, separator);
+                }
+                case uint vuint:
+                {
+                    int size = 4;
+                    if (vuint <= byte.MaxValue) size = 1;
+                    else if (vuint <= ushort.MaxValue) size = 2;
+                    return BinaryFromBytes(size, vuint, prefix, separator);
+                }
+                case long vlong:
+                {
+                    int size = 8;
+                    if (vlong >= sbyte.MinValue && vlong <= byte.MaxValue) size = 1;
+                    else if (vlong >= short.MinValue && vlong <= ushort.MaxValue) size = 2;
+                    else if (vlong >= int.MinValue && vlong <= uint.MaxValue) size = 4;
+                    return BinaryFromBytes(size, vlong, prefix, separator);
+                }
+                case ulong vulong:
+                {
+                    int size = 8;
+                    if (vulong <= byte.MaxValue) size = 1;
+                    else if (vulong <= ushort.MaxValue) size = 2;
+                    else if (vulong <= uint.MaxValue) size = 4;
+                    return BinaryFromBytes(size, vulong, prefix, separator);
+                }
+                case float vfloat:
+                {
+                    var floatAsInt = BitConverter.SingleToInt32Bits(vfloat);
+                    return BinaryFromBytes(4, floatAsInt, prefix, separator);
+                }
+                case double vdouble:
+                {
+                    var doubleAsLong = BitConverter.DoubleToInt64Bits(vdouble);
+                    return BinaryFromBytes(8, doubleAsLong, prefix, separator);
+                }
+                case BigInteger bigInt:
+                {
+                    var array = bigInt.ToByteArray();
+                    return BinaryFromBytes(array.Length, array[0], prefix, separator);
+                }
+                case KalkValue kalkValue:
+                {
+                    var span = kalkValue.AsSpan();
+                    return BinaryFromBytes(span.Length, span[0], prefix, separator);
+                }
+                case IEnumerable list:
+                {
+                    var builder = new StringBuilder();
+                    bool isFirst = true;
+                    foreach (var item in list)
+                    {
+                        if (!isFirst)
+                        {
+                            builder.Append(separator);
+                        }
+                        isFirst = false;
+                        byte byteItem = Engine.ToObject<byte>(0, item);
+                        if (prefix) builder.Append("0b");
+                        AppendBinaryByte(builder, byteItem);
+                    }
+                    return builder.ToString();
+                }
+                default:
+                    throw new ArgumentException($"The type {Engine.GetTypeName(value)} is not supported ", nameof(value));
+            }
+        }
+
+        private static void AppendBinaryByte(StringBuilder builder, byte byteItem)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                var b = (byteItem >> (7 - i)) & 1;
+                builder.Append(b == 1 ? '1' : '0');
+            }
+        }
+
+        private static string BinaryFromBytes<T>(int byteCount, in T element, bool prefix, string separator)
+        {
+            var builder = new StringBuilder(byteCount * 8);
+            for (int i = 0; i < byteCount; i++)
+            {
+                if (i > 0) builder.Append(separator);
+                var b = Unsafe.As<T, byte>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                if (prefix) builder.Append("0b");
+                AppendBinaryByte(builder, b);
             }
             return builder.ToString();
         }
