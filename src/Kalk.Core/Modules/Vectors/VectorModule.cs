@@ -340,7 +340,7 @@ namespace Kalk.Core.Modules
         /// # int(-(1 &lt;&lt; 31))
         /// out = -2147483648
         /// >>> int 1 &lt;&lt; 31
-        /// Unable to convert type `long` to `int`
+        /// Unable to convert type `long` to int
         /// ```
         /// </example>
         [KalkExport("int", CategoryTypeConstructors)]
@@ -395,12 +395,72 @@ namespace Kalk.Core.Modules
         [KalkExport("long", CategoryTypeConstructors)]
         public long CreateLong(object value = null) => value == null ? 0L : Engine.ToObject<long>(0, value);
 
+        /// <summary>
+        /// Creates a boolean value (32-bit) value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>A boolean (32-bit) value</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> bool 1
+        /// # bool(1)
+        /// out = true
+        /// >>> bool 0
+        /// # bool(0)
+        /// out = false
+        /// >>> bool true
+        /// # bool(true)
+        /// out = true
+        /// >>> bool false
+        /// # bool(false)
+        /// out = false
+        /// ```
+        /// </example>
         [KalkExport("bool", CategoryTypeConstructors)]
         public KalkBool CreateBool(object value = null) => value != null && Engine.ToObject<KalkBool>(0, value);
 
+        /// <summary>
+        /// Creates a float value (32-bit) value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>A float (32-bit) value</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> float(1)
+        /// # float(1)
+        /// out = 1
+        /// >>> float(-1)
+        /// # float(-1)
+        /// out = -1
+        /// >>> float(100000000000)
+        /// # float(100000000000)
+        /// out = 1E+11
+        /// ```
+        /// </example>
         [KalkExport("float", CategoryTypeConstructors)]
         public float CreateFloat(object value = null) => value == null ? 0.0f : Engine.ToObject<float>(0, value);
 
+        /// <summary>
+        /// Creates a double value (64-bit) value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>A double (64-bit) value</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> double(1)
+        /// # double(1)
+        /// out = 1
+        /// >>> double(-1)
+        /// # double(-1)
+        /// out = -1
+        /// >>> double(100000000000)
+        /// # double(100000000000)
+        /// out = 100000000000
+        /// >>> double(1&lt;&lt;200)
+        /// # double(1 &lt;&lt; 200)
+        /// out = 1.6069380442589903E+60
+        /// ```
+        /// </example>
         [KalkExport("double", CategoryTypeConstructors)]
         public double CreateDouble(object value = null) => value == null ? 0.0 : Engine.ToObject<double>(0, value);
 

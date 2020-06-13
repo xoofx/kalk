@@ -2785,44 +2785,148 @@ namespace Kalk.Core.Modules
             {
                 var descriptor = Descriptors["uint"];
                 descriptor.Category = "Type Constructors";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates an unsigned int (32-bit) value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = true });
+                descriptor.Returns = @"An unsigned int (32-bit) value";
+                descriptor.Example = @"    >>> uint
+    # uint
+    out = 0
+    >>> uint 0
+    # uint(0)
+    out = 0
+    >>> uint(1<<32 - 1)
+    # uint(1 << 32 - 1)
+    out = 4294967295
+    >>> uint 1 << 32
+    Unable to convert type `long` to `uint`
+";
             }
             {
                 var descriptor = Descriptors["int"];
                 descriptor.Category = "Type Constructors";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates a signed-int (32-bit) value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = true });
+                descriptor.Returns = @"A signed-int (32-bit) value";
+                descriptor.Example = @"    >>> int
+    # int
+    out = 0
+    >>> int 0
+    # int(0)
+    out = 0
+    >>> int(1 << 31 - 1)
+    # int(1 << 31 - 1)
+    out = 2147483647
+    >>> int(-(1<<31))
+    # int(-(1 << 31))
+    out = -2147483648
+    >>> int 1 << 31
+    Unable to convert type `long` to int
+";
             }
             {
                 var descriptor = Descriptors["ulong"];
                 descriptor.Category = "Type Constructors";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates an unsigned long (64-bit) value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = true });
+                descriptor.Returns = @"An unsigned long (64-bit) value";
+                descriptor.Example = @"    >>> ulong
+    # ulong
+    out = 0
+    >>> ulong 0
+    # ulong(0)
+    out = 0
+    >>> ulong(1 << 64 - 1)
+    # ulong(1 << 64 - 1)
+    out = 18446744073709551615
+    >>> ulong 1 << 64
+    Unable to convert type `bigint` to `ulong`
+";
             }
             {
                 var descriptor = Descriptors["long"];
                 descriptor.Category = "Type Constructors";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates a signed-long (64-bit) value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = true });
+                descriptor.Returns = @"A signed-long (64-bit) value";
+                descriptor.Example = @"    >>> long
+    # long
+    out = 0
+    >>> long 0
+    # long(0)
+    out = 0
+    >>> long(1 << 63 - 1)
+    # long(1 << 63 - 1)
+    out = 9223372036854775807
+    >>> long(-(1<<63))
+    # long(-(1 << 63))
+    out = -9223372036854775808
+    >>> long 1 << 63
+    Unable to convert type `bigint` to `long`
+";
             }
             {
                 var descriptor = Descriptors["bool"];
                 descriptor.Category = "Type Constructors";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates a boolean value (32-bit) value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = true });
+                descriptor.Returns = @"A boolean (32-bit) value";
+                descriptor.Example = @"    >>> bool 1
+    # bool(1)
+    out = true
+    >>> bool 0
+    # bool(0)
+    out = false
+    >>> bool true
+    # bool(true)
+    out = true
+    >>> bool false
+    # bool(false)
+    out = false
+";
             }
             {
                 var descriptor = Descriptors["float"];
                 descriptor.Category = "Type Constructors";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates a float value (32-bit) value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = true });
+                descriptor.Returns = @"A float (32-bit) value";
+                descriptor.Example = @"    >>> float(1)
+    # float(1)
+    out = 1
+    >>> float(-1)
+    # float(-1)
+    out = -1
+    >>> float(100000000000)
+    # float(100000000000)
+    out = 1E+11
+";
             }
             {
                 var descriptor = Descriptors["double"];
                 descriptor.Category = "Type Constructors";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates a double value (64-bit) value.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = true });
+                descriptor.Returns = @"A double (64-bit) value";
+                descriptor.Example = @"    >>> double(1)
+    # double(1)
+    out = 1
+    >>> double(-1)
+    # double(-1)
+    out = -1
+    >>> double(100000000000)
+    # double(100000000000)
+    out = 100000000000
+    >>> double(1<<200)
+    # double(1 << 200)
+    out = 1.6069380442589903E+60
+";
             }
             {
                 var descriptor = Descriptors["byte16"];

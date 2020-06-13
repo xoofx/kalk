@@ -1561,6 +1561,117 @@ out = 65535
 Unable to convert type `int` to `ushort`", Category = "Type Constructors")]
         public static void Test_ushort(string input, string output) => AssertScript(input, output);
 
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateUInt(System.Object)"/> or `uint`.
+        /// </summary>
+        [TestCase(@"uint
+uint 0
+uint(1<<32 - 1)
+uint 1 << 32", @"# uint
+out = 0
+# uint(0)
+out = 0
+# uint(1 << 32 - 1)
+out = 4294967295
+Unable to convert type `long` to `uint`", Category = "Type Constructors")]
+        public static void Test_uint(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateInt(System.Object)"/> or `int`.
+        /// </summary>
+        [TestCase(@"int
+int 0
+int(1 << 31 - 1)
+int(-(1<<31))
+int 1 << 31", @"# int
+out = 0
+# int(0)
+out = 0
+# int(1 << 31 - 1)
+out = 2147483647
+# int(-(1 << 31))
+out = -2147483648
+Unable to convert type `long` to int", Category = "Type Constructors")]
+        public static void Test_int(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateULong(System.Object)"/> or `ulong`.
+        /// </summary>
+        [TestCase(@"ulong
+ulong 0
+ulong(1 << 64 - 1)
+ulong 1 << 64", @"# ulong
+out = 0
+# ulong(0)
+out = 0
+# ulong(1 << 64 - 1)
+out = 18446744073709551615
+Unable to convert type `bigint` to `ulong`", Category = "Type Constructors")]
+        public static void Test_ulong(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateLong(System.Object)"/> or `long`.
+        /// </summary>
+        [TestCase(@"long
+long 0
+long(1 << 63 - 1)
+long(-(1<<63))
+long 1 << 63", @"# long
+out = 0
+# long(0)
+out = 0
+# long(1 << 63 - 1)
+out = 9223372036854775807
+# long(-(1 << 63))
+out = -9223372036854775808
+Unable to convert type `bigint` to `long`", Category = "Type Constructors")]
+        public static void Test_long(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateBool(System.Object)"/> or `bool`.
+        /// </summary>
+        [TestCase(@"bool 1
+bool 0
+bool true
+bool false", @"# bool(1)
+out = true
+# bool(0)
+out = false
+# bool(true)
+out = true
+# bool(false)
+out = false", Category = "Type Constructors")]
+        public static void Test_bool(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateFloat(System.Object)"/> or `float`.
+        /// </summary>
+        [TestCase(@"float(1)
+float(-1)
+float(100000000000)", @"# float(1)
+out = 1
+# float(-1)
+out = -1
+# float(100000000000)
+out = 1E+11", Category = "Type Constructors")]
+        public static void Test_float(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateDouble(System.Object)"/> or `double`.
+        /// </summary>
+        [TestCase(@"double(1)
+double(-1)
+double(100000000000)
+double(1<<200)", @"# double(1)
+out = 1
+# double(-1)
+out = -1
+# double(100000000000)
+out = 100000000000
+# double(1 << 200)
+out = 1.6069380442589903E+60", Category = "Type Constructors")]
+        public static void Test_double(string input, string output) => AssertScript(input, output);
+
     }
 
     public partial class WebModuleTests : KalkTestBase
