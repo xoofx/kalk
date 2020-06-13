@@ -1,0 +1,21 @@
+# Site Settings
+author: Alexandre Mutel
+title: kalk
+description: kalk website
+baseurl: ""
+url: "https://xoofx.com/kalk"
+encoding: UTF-8
+
+# Github repository
+github_user: xoofx
+github_repo_url: https://github.com/xoofx/kalk/
+
+excerpt_separator: "" 
+markdown: kramdown
+kramdown:
+    input: GFM
+    syntax_highlighter_opts:
+      disable : true
+
+gems:
+  - jekyll-sitemap
