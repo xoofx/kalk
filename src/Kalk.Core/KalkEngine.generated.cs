@@ -1641,7 +1641,7 @@ namespace Kalk.Core.Modules
             RegisterFunction("asulong", (Func<object, ulong>)AsULong);
             RegisterFunction("asint", (Func<object, int>)AsInt);
             RegisterFunction("asuint", (Func<object, uint>)AsUInt);
-            RegisterFunction("bytebuffer", (Func<object, Kalk.Core.KalkNativeBuffer>)ByteBuffer);
+            RegisterFunction("bytebuffer", (Func<object[], Kalk.Core.KalkNativeBuffer>)ByteBuffer);
             RegisterDocumentationAuto();
         }
 
@@ -1785,50 +1785,146 @@ namespace Kalk.Core.Modules
             {
                 var descriptor = Descriptors["reversebits"];
                 descriptor.Category = "Misc Memory Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Reverses the order of the bits, per component";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = false });
+                descriptor.Returns = @"The input value, with the bit order reversed";
+                descriptor.Example = @"    >>> reversebits 128
+    # reversebits(128)
+    out = 16777216
+    >>> reversebits out
+    # reversebits(out)
+    out = 128
+    >>> reversebits byte(128)
+    # reversebits(byte(128))
+    out = 1
+    >>> reversebits(out)
+    # reversebits(out)
+    out = 128
+    >>> reversebits(int4(1,2,3,4))
+    # reversebits(int4(1, 2, 3, 4))
+    out = int4(-2147483648, 1073741824, -1073741824, 536870912)
+    >>> reversebits out
+    # reversebits(out)
+    out = int4(1, 2, 3, 4)
+";
             }
             {
                 var descriptor = Descriptors["asdouble"];
                 descriptor.Category = "Misc Memory Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Reinterprets a 64-bit value into a double.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The input value.")  { IsOptional = false });
+                descriptor.Returns = @"The input recast as a double.";
+                descriptor.Example = @"    >>> asdouble(1.5)
+    # asdouble(1.5)
+    out = 1.5
+    >>> aslong(1.5)
+    # aslong(1.5)
+    out = 4609434218613702656
+    >>> asdouble(out)
+    # asdouble(out)
+    out = 1.5
+";
             }
             {
                 var descriptor = Descriptors["asfloat"];
                 descriptor.Category = "Misc Memory Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Reinterprets a 32-bit value into a float.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The input value.")  { IsOptional = false });
+                descriptor.Returns = @"The input recast as a float.";
+                descriptor.Example = @"    >>> asfloat(1.5f)
+    # asfloat(1.5f)
+    out = 1.5
+    >>> asint(1.5f)
+    # asint(1.5f)
+    out = 1069547520
+    >>> asfloat(out)
+    # asfloat(out)
+    out = 1.5
+";
             }
             {
                 var descriptor = Descriptors["aslong"];
                 descriptor.Category = "Misc Memory Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Reinterprets an input value to a 64-bit long.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The input value.")  { IsOptional = false });
+                descriptor.Returns = @"The input recast as a 64-bit long.";
+                descriptor.Example = @"    >>> aslong(1.5)
+    # aslong(1.5)
+    out = 4609434218613702656
+    >>> asdouble(out)
+    # asdouble(out)
+    out = 1.5
+";
             }
             {
                 var descriptor = Descriptors["asulong"];
                 descriptor.Category = "Misc Memory Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Reinterprets an input value to a 64-bit ulong.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The input value.")  { IsOptional = false });
+                descriptor.Returns = @"The input recast as a 64-bit ulong.";
+                descriptor.Example = @"    >>> asulong(-1.5)
+    # asulong(-1.5)
+    out = 13832806255468478464
+    >>> asdouble(out)
+    # asdouble(out)
+    out = -1.5
+";
             }
             {
                 var descriptor = Descriptors["asint"];
                 descriptor.Category = "Misc Memory Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Reinterprets an input value into a 32-bit int.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The input value.")  { IsOptional = false });
+                descriptor.Returns = @"The input recast as a 32-bit int.";
+                descriptor.Example = @"    >>> asint(1.5f)
+    # asint(1.5f)
+    out = 1069547520
+    >>> asfloat(out)
+    # asfloat(out)
+    out = 1.5
+";
             }
             {
                 var descriptor = Descriptors["asuint"];
                 descriptor.Category = "Misc Memory Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Reinterprets an input value into a 32-bit uint.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("x", @"The input value.")  { IsOptional = false });
+                descriptor.Returns = @"The input recast as a 32-bit uint.";
+                descriptor.Example = @"    >>> asuint(-1.5f)
+    # asuint(-1.5f)
+    out = 3217031168
+    >>> asfloat(out)
+    # asfloat(out)
+    out = -1.5
+";
             }
             {
                 var descriptor = Descriptors["bytebuffer"];
                 descriptor.Category = "Misc Memory Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Creates a bytebuffer from the specified input.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("values", @"The input values.")  { IsOptional = false });
+                descriptor.Returns = @"A bytebuffer from the specified input.";
+                descriptor.Example = @"    >>> bytebuffer
+    # bytebuffer
+    out = bytebuffer([])
+    >>> bytebuffer(0,1,2,3,4)
+    # bytebuffer(0, 1, 2, 3, 4)
+    out = bytebuffer([0, 1, 2, 3, 4])
+    >>> bytebuffer(float4(1))
+    # bytebuffer(float4(1))
+    out = bytebuffer([0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63])
+    >>> bytebuffer([1,2,3,4])
+    # bytebuffer([1,2,3,4])
+    out = bytebuffer([1, 2, 3, 4])
+";
             }
         }        
     }

@@ -552,6 +552,49 @@ namespace Kalk.Core.Modules
             }
         }
 
+        /// <summary>
+        /// Reverses the order of the bits, per component
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>The input value, with the bit order reversed</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> reversebits 128
+        /// # reversebits(128)
+        /// out = 16777216
+        /// >>> reversebits out
+        /// # reversebits(out)
+        /// out = 128
+        /// >>> reversebits byte(128)
+        /// # reversebits(byte(128))
+        /// out = 1
+        /// >>> reversebits(out)
+        /// # reversebits(out)
+        /// out = 128
+        /// >>> reversebits(int4(1,2,3,4))
+        /// # reversebits(int4(1, 2, 3, 4))
+        /// out = int4(-2147483648, 1073741824, -1073741824, 536870912)
+        /// >>> reversebits out
+        /// # reversebits(out)
+        /// out = int4(1, 2, 3, 4)
+        /// ```
+        /// </example>
+        /// <test>
+        /// ```kalk
+        /// >>> reversebits long(1)
+        /// # reversebits(long(1))
+        /// out = -9223372036854775808
+        /// >>> reversebits out
+        /// # reversebits(out)
+        /// out = 1
+        /// >>> reversebits(bytebuffer([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]))
+        /// # reversebits(bytebuffer([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]))
+        /// out = bytebuffer([240, 112, 176, 48, 208, 80, 144, 16, 224, 96, 160, 32, 192, 64, 128])
+        /// >>> reversebits out
+        /// # reversebits(out)
+        /// out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+        /// ```
+        /// </test>
         [KalkExport("reversebits", CategoryMiscMemory)]
         public object ReverseBits(object value)
         {
@@ -657,6 +700,24 @@ namespace Kalk.Core.Modules
             }
         }
 
+        /// <summary>
+        /// Reinterprets a 64-bit value into a double.
+        /// </summary>
+        /// <param name="x">The input value.</param>
+        /// <returns>The input recast as a double.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> asdouble(1.5)
+        /// # asdouble(1.5)
+        /// out = 1.5
+        /// >>> aslong(1.5)
+        /// # aslong(1.5)
+        /// out = 4609434218613702656
+        /// >>> asdouble(out)
+        /// # asdouble(out)
+        /// out = 1.5
+        /// ```
+        /// </example>
         [KalkExport("asdouble", CategoryMiscMemory)]
         public double AsDouble(object x)
         {
@@ -683,6 +744,24 @@ namespace Kalk.Core.Modules
             return BitConverter.Int64BitsToDouble(value);
         }
 
+        /// <summary>
+        /// Reinterprets a 32-bit value into a float.
+        /// </summary>
+        /// <param name="x">The input value.</param>
+        /// <returns>The input recast as a float.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> asfloat(1.5f)
+        /// # asfloat(1.5f)
+        /// out = 1.5
+        /// >>> asint(1.5f)
+        /// # asint(1.5f)
+        /// out = 1069547520
+        /// >>> asfloat(out)
+        /// # asfloat(out)
+        /// out = 1.5
+        /// ```
+        /// </example>
         [KalkExport("asfloat", CategoryMiscMemory)]
         public float AsFloat(object x)
         {
@@ -709,6 +788,21 @@ namespace Kalk.Core.Modules
             return (float)BitConverter.Int64BitsToDouble(value);
         }
 
+        /// <summary>
+        /// Reinterprets an input value to a 64-bit long.
+        /// </summary>
+        /// <param name="x">The input value.</param>
+        /// <returns>The input recast as a 64-bit long.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> aslong(1.5)
+        /// # aslong(1.5)
+        /// out = 4609434218613702656
+        /// >>> asdouble(out)
+        /// # asdouble(out)
+        /// out = 1.5
+        /// ```
+        /// </example>
         [KalkExport("aslong", CategoryMiscMemory)]
         public long AsLong(object x)
         {
@@ -732,7 +826,22 @@ namespace Kalk.Core.Modules
                     return (long)Engine.ToObject<BigInteger>(0, x);
             }
         }
-        
+
+        /// <summary>
+        /// Reinterprets an input value to a 64-bit ulong.
+        /// </summary>
+        /// <param name="x">The input value.</param>
+        /// <returns>The input recast as a 64-bit ulong.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> asulong(-1.5)
+        /// # asulong(-1.5)
+        /// out = 13832806255468478464
+        /// >>> asdouble(out)
+        /// # asdouble(out)
+        /// out = -1.5
+        /// ```
+        /// </example>
         [KalkExport("asulong", CategoryMiscMemory)]
         public ulong AsULong(object x)
         {
@@ -757,6 +866,21 @@ namespace Kalk.Core.Modules
             }
         }
 
+        /// <summary>
+        /// Reinterprets an input value into a 32-bit int.
+        /// </summary>
+        /// <param name="x">The input value.</param>
+        /// <returns>The input recast as a 32-bit int.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> asint(1.5f)
+        /// # asint(1.5f)
+        /// out = 1069547520
+        /// >>> asfloat(out)
+        /// # asfloat(out)
+        /// out = 1.5
+        /// ```
+        /// </example>
         [KalkExport("asint", CategoryMiscMemory)]
         public int AsInt(object x)
         {
@@ -781,6 +905,21 @@ namespace Kalk.Core.Modules
             }
         }
 
+        /// <summary>
+        /// Reinterprets an input value into a 32-bit uint.
+        /// </summary>
+        /// <param name="x">The input value.</param>
+        /// <returns>The input recast as a 32-bit uint.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> asuint(-1.5f)
+        /// # asuint(-1.5f)
+        /// out = 3217031168
+        /// >>> asfloat(out)
+        /// # asfloat(out)
+        /// out = -1.5
+        /// ```
+        /// </example>
         [KalkExport("asuint", CategoryMiscMemory)]
         public uint AsUInt(object x)
         {
@@ -805,47 +944,84 @@ namespace Kalk.Core.Modules
             }
         }
 
-        private static unsafe T BitCastTo<T>(KalkNativeBuffer buffer) where T: unmanaged
+        /// <summary>
+        /// Creates a bytebuffer from the specified input.
+        /// </summary>
+        /// <param name="values">The input values.</param>
+        /// <returns>A bytebuffer from the specified input.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> bytebuffer
+        /// # bytebuffer
+        /// out = bytebuffer([])
+        /// >>> bytebuffer(0,1,2,3,4)
+        /// # bytebuffer(0, 1, 2, 3, 4)
+        /// out = bytebuffer([0, 1, 2, 3, 4])
+        /// >>> bytebuffer(float4(1))
+        /// # bytebuffer(float4(1))
+        /// out = bytebuffer([0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63])
+        /// >>> bytebuffer([1,2,3,4])
+        /// # bytebuffer([1,2,3,4])
+        /// out = bytebuffer([1, 2, 3, 4])
+        /// ```
+        /// </example>
+        [KalkExport("bytebuffer", CategoryMiscMemory)]
+        public KalkNativeBuffer ByteBuffer(params object[] values)
+        {
+            if (values == null || values.Length == 0) return new KalkNativeBuffer(0);
+
+            // If we have a single value, try to extract a buffer from it.
+            if (values.Length == 1)
+            {
+                var element = values[0];
+                if (element is KalkNativeBuffer nativeBuffer)
+                {
+                    return nativeBuffer;
+                }
+
+                if (element is string || element is IKalkSpannable)
+                {
+                    return AsBytes(element);
+                }
+
+                if (element is IEnumerable it)
+                {
+                    var buffer = new List<byte>();
+                    foreach (var item in it)
+                    {
+                        var b = Engine.ToObject<byte>(0, item);
+                        buffer.Add(b);
+                    }
+                    var result = new KalkNativeBuffer(buffer.Count);
+                    var span = result.AsSpan();
+                    for (int i = 0; i < buffer.Count; i++)
+                    {
+                        span[i] = buffer[i];
+                    }
+
+                    return result;
+                }
+            }
+
+            var byteBuffer = new KalkNativeBuffer(values.Length);
+            for (int i = 0; i < values.Length; i++)
+            {
+                byteBuffer[i] = (byte) Engine.ToObject<long>(i, values[i]);
+            }
+
+            return byteBuffer;
+        }
+
+        private static unsafe T BitCastTo<T>(KalkNativeBuffer buffer) where T : unmanaged
         {
             var sizeOfT = Unsafe.SizeOf<T>();
             T value = default;
             var maxLength = Math.Min(buffer.Count, sizeOfT);
             for (int i = 0; i < maxLength; i++)
             {
-                ((byte*) (&value))[i] = buffer[i];
+                ((byte*)(&value))[i] = buffer[i];
             }
             return value;
-        }
-
-        [KalkExport("bytebuffer", CategoryMiscMemory)]
-        public KalkNativeBuffer ByteBuffer(object array)
-        {
-            if (array == null) new KalkNativeBuffer(0);
-
-            if (array is KalkNativeBuffer nativeBuffer)
-            {
-                return nativeBuffer;
-            }
-            
-            if (array is IEnumerable it)
-            {
-                var buffer = new List<byte>();
-                foreach (var item in it)
-                {
-                    var b = Engine.ToObject<byte>(0, item);
-                    buffer.Add(b);
-                }
-                var result = new KalkNativeBuffer(buffer.Count);
-                var span = result.AsSpan();
-                for (int i = 0; i < buffer.Count; i++)
-                {
-                    span[i] = buffer[i];
-                }
-
-                return result;
-            }
-            
-            throw new ArgumentException($"Invalid argument type {Engine.GetTypeName(array)}. Must be an array of byte or an existing bytebuffer.", nameof(array));
         }
 
         private static readonly byte[] ReverseBytes = new byte[256]

@@ -1061,6 +1061,124 @@ out = 0
 out = -1", Category = "Misc Memory Functions")]
         public static void Test_firstbitlow(string input, string output) => AssertScript(input, output);
 
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.ReverseBits(System.Object)"/> or `reversebits`.
+        /// </summary>
+        [TestCase(@"reversebits 128
+reversebits out
+reversebits byte(128)
+reversebits(out)
+reversebits(int4(1,2,3,4))
+reversebits out", @"# reversebits(128)
+out = 16777216
+# reversebits(out)
+out = 128
+# reversebits(byte(128))
+out = 1
+# reversebits(out)
+out = 128
+# reversebits(int4(1, 2, 3, 4))
+out = int4(-2147483648, 1073741824, -1073741824, 536870912)
+# reversebits(out)
+out = int4(1, 2, 3, 4)", Category = "Misc Memory Functions")]
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.ReverseBits(System.Object)"/> or `reversebits`.
+        /// </summary>
+        [TestCase(@"reversebits long(1)
+reversebits out
+reversebits(bytebuffer([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]))
+reversebits out", @"# reversebits(long(1))
+out = -9223372036854775808
+# reversebits(out)
+out = 1
+# reversebits(bytebuffer([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]))
+out = bytebuffer([240, 112, 176, 48, 208, 80, 144, 16, 224, 96, 160, 32, 192, 64, 128])
+# reversebits(out)
+out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])", Category = "Misc Memory Functions")]
+        public static void Test_reversebits(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.AsDouble(System.Object)"/> or `asdouble`.
+        /// </summary>
+        [TestCase(@"asdouble(1.5)
+aslong(1.5)
+asdouble(out)", @"# asdouble(1.5)
+out = 1.5
+# aslong(1.5)
+out = 4609434218613702656
+# asdouble(out)
+out = 1.5", Category = "Misc Memory Functions")]
+        public static void Test_asdouble(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.AsFloat(System.Object)"/> or `asfloat`.
+        /// </summary>
+        [TestCase(@"asfloat(1.5f)
+asint(1.5f)
+asfloat(out)", @"# asfloat(1.5f)
+out = 1.5
+# asint(1.5f)
+out = 1069547520
+# asfloat(out)
+out = 1.5", Category = "Misc Memory Functions")]
+        public static void Test_asfloat(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.AsLong(System.Object)"/> or `aslong`.
+        /// </summary>
+        [TestCase(@"aslong(1.5)
+asdouble(out)", @"# aslong(1.5)
+out = 4609434218613702656
+# asdouble(out)
+out = 1.5", Category = "Misc Memory Functions")]
+        public static void Test_aslong(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.AsULong(System.Object)"/> or `asulong`.
+        /// </summary>
+        [TestCase(@"asulong(-1.5)
+asdouble(out)", @"# asulong(-1.5)
+out = 13832806255468478464
+# asdouble(out)
+out = -1.5", Category = "Misc Memory Functions")]
+        public static void Test_asulong(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.AsInt(System.Object)"/> or `asint`.
+        /// </summary>
+        [TestCase(@"asint(1.5f)
+asfloat(out)", @"# asint(1.5f)
+out = 1069547520
+# asfloat(out)
+out = 1.5", Category = "Misc Memory Functions")]
+        public static void Test_asint(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.AsUInt(System.Object)"/> or `asuint`.
+        /// </summary>
+        [TestCase(@"asuint(-1.5f)
+asfloat(out)", @"# asuint(-1.5f)
+out = 3217031168
+# asfloat(out)
+out = -1.5", Category = "Misc Memory Functions")]
+        public static void Test_asuint(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.MemoryModule.ByteBuffer(System.Object[])"/> or `bytebuffer`.
+        /// </summary>
+        [TestCase(@"bytebuffer
+bytebuffer(0,1,2,3,4)
+bytebuffer(float4(1))
+bytebuffer([1,2,3,4])", @"# bytebuffer
+out = bytebuffer([])
+# bytebuffer(0, 1, 2, 3, 4)
+out = bytebuffer([0, 1, 2, 3, 4])
+# bytebuffer(float4(1))
+out = bytebuffer([0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63])
+# bytebuffer([1,2,3,4])
+out = bytebuffer([1, 2, 3, 4])", Category = "Misc Memory Functions")]
+        public static void Test_bytebuffer(string input, string output) => AssertScript(input, output);
+
     }
 
     public partial class MiscModuleTests : KalkTestBase
