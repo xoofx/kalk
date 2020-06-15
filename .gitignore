@@ -10,6 +10,13 @@
 *.userosscache
 *.sln.docstates
 
+# Jekyll
+_site/
+.jekyll-cache/
+
+# Rider
+.idea/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
