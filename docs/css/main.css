@@ -78,7 +78,7 @@ a {
 
 .jumbotron {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background: transparent url("/img/kalk-banner.png") 50% 50% no-repeat;
+    background: transparent url("/img/kalk-banner.jpg") 50% 50% no-repeat;
     color: white;
     text-shadow: 4px 4px 3px #111111;
 }
