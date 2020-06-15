@@ -1500,14 +1500,16 @@ out = float3(-1, 0, 0)", Category = "Math Vector/Matrix Functions")]
         /// </summary>
         [TestCase(@"byte
 byte 0
-byte 255
-byte 256", @"# byte
+byte 255", @"# byte
 out = 0
 # byte(0)
 out = 0
 # byte(255)
-out = 255
-Unable to convert type `int` to `byte`", Category = "Type Constructors")]
+out = 255", Category = "Type Constructors")]
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateByte(System.Object)"/> or `byte`.
+        /// </summary>
+        [TestCase(@"byte 256", @"Unable to convert type `int` to `byte`", Category = "Type Constructors")]
         public static void Test_byte(string input, string output) => AssertScript(input, output);
 
         /// <summary>
@@ -1516,16 +1518,18 @@ Unable to convert type `int` to `byte`", Category = "Type Constructors")]
         [TestCase(@"sbyte
 sbyte 0
 sbyte 127
-sbyte -128
-sbyte 128", @"# sbyte
+sbyte -128", @"# sbyte
 out = 0
 # sbyte(0)
 out = 0
 # sbyte(127)
 out = 127
 # sbyte(-128)
-out = -128
-Unable to convert type `int` to `sbyte`", Category = "Type Constructors")]
+out = -128", Category = "Type Constructors")]
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateSByte(System.Object)"/> or `sbyte`.
+        /// </summary>
+        [TestCase(@"sbyte 128", @"Unable to convert type `int` to `sbyte`", Category = "Type Constructors")]
         public static void Test_sbyte(string input, string output) => AssertScript(input, output);
 
         /// <summary>
@@ -1544,6 +1548,10 @@ out = 32767
 # short(-32768)
 out = -32768
 Unable to convert type `int` to `short`", Category = "Type Constructors")]
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateShort(System.Object)"/> or `short`.
+        /// </summary>
+        [TestCase(@"short 32768", @"Unable to convert type `int` to `short`", Category = "Type Constructors")]
         public static void Test_short(string input, string output) => AssertScript(input, output);
 
         /// <summary>
@@ -1551,14 +1559,16 @@ Unable to convert type `int` to `short`", Category = "Type Constructors")]
         /// </summary>
         [TestCase(@"ushort
 ushort 0
-ushort 65535
-ushort 65536", @"# ushort
+ushort 65535", @"# ushort
 out = 0
 # ushort(0)
 out = 0
 # ushort(65535)
-out = 65535
-Unable to convert type `int` to `ushort`", Category = "Type Constructors")]
+out = 65535", Category = "Type Constructors")]
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateUShort(System.Object)"/> or `ushort`.
+        /// </summary>
+        [TestCase(@"ushort 65536", @"Unable to convert type `int` to `ushort`", Category = "Type Constructors")]
         public static void Test_ushort(string input, string output) => AssertScript(input, output);
 
         /// <summary>
@@ -1566,14 +1576,16 @@ Unable to convert type `int` to `ushort`", Category = "Type Constructors")]
         /// </summary>
         [TestCase(@"uint
 uint 0
-uint(1<<32 - 1)
-uint 1 << 32", @"# uint
+uint(1<<32 - 1)", @"# uint
 out = 0
 # uint(0)
 out = 0
 # uint(1 << 32 - 1)
-out = 4294967295
-Unable to convert type `long` to `uint`", Category = "Type Constructors")]
+out = 4294967295", Category = "Type Constructors")]
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateUInt(System.Object)"/> or `uint`.
+        /// </summary>
+        [TestCase(@"uint 1 << 32", @"Unable to convert type `long` to `uint`", Category = "Type Constructors")]
         public static void Test_uint(string input, string output) => AssertScript(input, output);
 
         /// <summary>
@@ -1582,16 +1594,18 @@ Unable to convert type `long` to `uint`", Category = "Type Constructors")]
         [TestCase(@"int
 int 0
 int(1 << 31 - 1)
-int(-(1<<31))
-int 1 << 31", @"# int
+int(-(1<<31))", @"# int
 out = 0
 # int(0)
 out = 0
 # int(1 << 31 - 1)
 out = 2147483647
 # int(-(1 << 31))
-out = -2147483648
-Unable to convert type `long` to int", Category = "Type Constructors")]
+out = -2147483648", Category = "Type Constructors")]
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateInt(System.Object)"/> or `int`.
+        /// </summary>
+        [TestCase(@"int 1 << 31", @"Unable to convert type `long` to int", Category = "Type Constructors")]
         public static void Test_int(string input, string output) => AssertScript(input, output);
 
         /// <summary>
@@ -1599,14 +1613,16 @@ Unable to convert type `long` to int", Category = "Type Constructors")]
         /// </summary>
         [TestCase(@"ulong
 ulong 0
-ulong(1 << 64 - 1)
-ulong 1 << 64", @"# ulong
+ulong(1 << 64 - 1)", @"# ulong
 out = 0
 # ulong(0)
 out = 0
 # ulong(1 << 64 - 1)
-out = 18446744073709551615
-Unable to convert type `bigint` to `ulong`", Category = "Type Constructors")]
+out = 18446744073709551615", Category = "Type Constructors")]
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateULong(System.Object)"/> or `ulong`.
+        /// </summary>
+        [TestCase(@"ulong 1 << 64", @"Unable to convert type `bigint` to `ulong`", Category = "Type Constructors")]
         public static void Test_ulong(string input, string output) => AssertScript(input, output);
 
         /// <summary>
@@ -1615,16 +1631,18 @@ Unable to convert type `bigint` to `ulong`", Category = "Type Constructors")]
         [TestCase(@"long
 long 0
 long(1 << 63 - 1)
-long(-(1<<63))
-long 1 << 63", @"# long
+long(-(1<<63))", @"# long
 out = 0
 # long(0)
 out = 0
 # long(1 << 63 - 1)
 out = 9223372036854775807
 # long(-(1 << 63))
-out = -9223372036854775808
-Unable to convert type `bigint` to `long`", Category = "Type Constructors")]
+out = -9223372036854775808", Category = "Type Constructors")]
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.VectorModule.CreateLong(System.Object)"/> or `long`.
+        /// </summary>
+        [TestCase(@"long 1 << 63", @"Unable to convert type `bigint` to `long`", Category = "Type Constructors")]
         public static void Test_long(string input, string output) => AssertScript(input, output);
 
         /// <summary>

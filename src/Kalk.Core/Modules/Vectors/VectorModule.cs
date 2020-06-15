@@ -215,10 +215,14 @@ namespace Kalk.Core.Modules
         /// >>> byte 255
         /// # byte(255)
         /// out = 255
+        /// ```
+        /// </example>
+        /// <test>
+        /// ```kalk
         /// >>> byte 256
         /// Unable to convert type `int` to `byte`
         /// ```
-        /// </example>
+        /// </test>
         [KalkExport("byte", CategoryTypeConstructors)]
         public byte CreateByte(object value = null) => value == null ? (byte)0 : Engine.ToObject<byte>(0, value);
 
@@ -241,10 +245,14 @@ namespace Kalk.Core.Modules
         /// >>> sbyte -128
         /// # sbyte(-128)
         /// out = -128
+        /// ```
+        /// </example>
+        /// <test>
+        /// ```kalk
         /// >>> sbyte 128
         /// Unable to convert type `int` to `sbyte`
         /// ```
-        /// </example>
+        /// </test>
         [KalkExport("sbyte", CategoryTypeConstructors)]
         public sbyte CreateSByte(object value = null) => value == null ? (sbyte)0 : Engine.ToObject<sbyte>(0, value);
 
@@ -271,6 +279,12 @@ namespace Kalk.Core.Modules
         /// Unable to convert type `int` to `short`
         /// ```
         /// </example>
+        /// <test>
+        /// ```kalk
+        /// >>> short 32768
+        /// Unable to convert type `int` to `short`
+        /// ```
+        /// </test>
         [KalkExport("short", CategoryTypeConstructors)]
         public short CreateShort(object value = null) => value == null ? (short)0 : Engine.ToObject<short>(0, value);
 
@@ -290,10 +304,14 @@ namespace Kalk.Core.Modules
         /// >>> ushort 65535
         /// # ushort(65535)
         /// out = 65535
+        /// ```
+        /// </example>
+        /// <test>
+        /// ```kalk
         /// >>> ushort 65536
         /// Unable to convert type `int` to `ushort`
         /// ```
-        /// </example>
+        /// </test>
         [KalkExport("ushort", CategoryTypeConstructors)]
         public ushort CreateUShort(object value = null) => value == null ? (ushort)0 : Engine.ToObject<ushort>(0, value);
 
@@ -313,10 +331,14 @@ namespace Kalk.Core.Modules
         /// >>> uint(1&lt;&lt;32 - 1)
         /// # uint(1 &lt;&lt; 32 - 1)
         /// out = 4294967295
+        /// ```
+        /// </example>
+        /// <test>
+        /// ```kalk
         /// >>> uint 1 &lt;&lt; 32
         /// Unable to convert type `long` to `uint`
         /// ```
-        /// </example>
+        /// </test>
         [KalkExport("uint", CategoryTypeConstructors)]
         public uint CreateUInt(object value = null) => value == null ? 0U : Engine.ToObject<uint>(0, value);
 
@@ -339,10 +361,14 @@ namespace Kalk.Core.Modules
         /// >>> int(-(1&lt;&lt;31))
         /// # int(-(1 &lt;&lt; 31))
         /// out = -2147483648
+        /// ```
+        /// </example>
+        /// <test>
+        /// ```kalk
         /// >>> int 1 &lt;&lt; 31
         /// Unable to convert type `long` to int
         /// ```
-        /// </example>
+        /// </test>
         [KalkExport("int", CategoryTypeConstructors)]
         public int CreateInt(object value = null) => value == null ? 0 : Engine.ToObject<int>(0, value);
 
@@ -362,10 +388,14 @@ namespace Kalk.Core.Modules
         /// >>> ulong(1 &lt;&lt; 64 - 1)
         /// # ulong(1 &lt;&lt; 64 - 1)
         /// out = 18446744073709551615
+        /// ```
+        /// </example>
+        /// <test>
+        /// ```kalk
         /// >>> ulong 1 &lt;&lt; 64
         /// Unable to convert type `bigint` to `ulong`
         /// ```
-        /// </example>
+        /// </test>
         [KalkExport("ulong", CategoryTypeConstructors)]
         public ulong CreateULong(object value = null) => value == null ? 0UL : Engine.ToObject<ulong>(0, value);
 
@@ -388,10 +418,14 @@ namespace Kalk.Core.Modules
         /// >>> long(-(1&lt;&lt;63))
         /// # long(-(1 &lt;&lt; 63))
         /// out = -9223372036854775808
+        /// ```
+        /// </example>
+        /// <test>
+        /// ```kalk
         /// >>> long 1 &lt;&lt; 63
         /// Unable to convert type `bigint` to `long`
         /// ```
-        /// </example>
+        /// </test>
         [KalkExport("long", CategoryTypeConstructors)]
         public long CreateLong(object value = null) => value == null ? 0L : Engine.ToObject<long>(0, value);
 

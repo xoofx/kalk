@@ -2719,8 +2719,6 @@ namespace Kalk.Core.Modules
     >>> byte 255
     # byte(255)
     out = 255
-    >>> byte 256
-    Unable to convert type `int` to `byte`
 ";
             }
             {
@@ -2742,8 +2740,6 @@ namespace Kalk.Core.Modules
     >>> sbyte -128
     # sbyte(-128)
     out = -128
-    >>> sbyte 128
-    Unable to convert type `int` to `sbyte`
 ";
             }
             {
@@ -2785,8 +2781,6 @@ namespace Kalk.Core.Modules
     >>> ushort 65535
     # ushort(65535)
     out = 65535
-    >>> ushort 65536
-    Unable to convert type `int` to `ushort`
 ";
             }
             {
@@ -2805,8 +2799,6 @@ namespace Kalk.Core.Modules
     >>> uint(1<<32 - 1)
     # uint(1 << 32 - 1)
     out = 4294967295
-    >>> uint 1 << 32
-    Unable to convert type `long` to `uint`
 ";
             }
             {
@@ -2828,8 +2820,6 @@ namespace Kalk.Core.Modules
     >>> int(-(1<<31))
     # int(-(1 << 31))
     out = -2147483648
-    >>> int 1 << 31
-    Unable to convert type `long` to int
 ";
             }
             {
@@ -2848,8 +2838,6 @@ namespace Kalk.Core.Modules
     >>> ulong(1 << 64 - 1)
     # ulong(1 << 64 - 1)
     out = 18446744073709551615
-    >>> ulong 1 << 64
-    Unable to convert type `bigint` to `ulong`
 ";
             }
             {
@@ -2871,8 +2859,6 @@ namespace Kalk.Core.Modules
     >>> long(-(1<<63))
     # long(-(1 << 63))
     out = -9223372036854775808
-    >>> long 1 << 63
-    Unable to convert type `bigint` to `long`
 ";
             }
             {
@@ -3525,6 +3511,7 @@ namespace Kalk.Core.Modules
             RegisterFunction("url_escape", (Func<string, string>)UrlEscape);
             RegisterFunction("html_encode", (Func<string, string>)HtmlEncode);
             RegisterFunction("html_decode", (Func<string, string>)HtmlDecode);
+            RegisterFunction("json", (Func<object, object>)Json);
             RegisterFunction("html_strip", (Func<string, string>)HtmlStrip);
             RegisterFunction("wget", (Func<string, Scriban.Runtime.ScriptObject>)WebGet);
             RegisterDocumentationAuto();
@@ -3558,6 +3545,12 @@ namespace Kalk.Core.Modules
             }
             {
                 var descriptor = Descriptors["html_decode"];
+                descriptor.Category = "Web & Html Functions";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
+            {
+                var descriptor = Descriptors["json"];
                 descriptor.Category = "Web & Html Functions";
                 descriptor.Description = @"";
                 descriptor.IsCommand = false;
