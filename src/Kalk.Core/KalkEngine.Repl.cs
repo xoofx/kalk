@@ -361,6 +361,7 @@ namespace Kalk.Core
             var startTextToFind = text.Substring(_startIndexForCompletion, cursorIndex - _startIndexForCompletion);
 
             Collect(startTextToFind, ScriptKeywords, _completionMatchingList);
+            Collect(startTextToFind, ValueKeywords, _completionMatchingList);
             Collect(startTextToFind, Variables.Keys, _completionMatchingList);
             Collect(startTextToFind, Builtins.Keys, _completionMatchingList);
 

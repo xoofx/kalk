@@ -46,6 +46,13 @@ namespace Kalk.Core
             "wrap",
             "do",
         };
+
+        private readonly HashSet<string> ValueKeywords = new HashSet<string>()
+        {
+            "null",
+            "true",
+            "false",
+        };
         
         private static List<string> SplitStringBySpaceAndKeepSpace(string text)
         {
@@ -674,7 +681,7 @@ namespace Kalk.Core
                                 return ConsoleStyle.BrightYellow;
                             }
                         }
-                        if (Builtins.ContainsKey(key))
+                        if (Builtins.ContainsKey(key) || ValueKeywords.Contains(key))
                         {
                             return ConsoleStyle.Cyan;
                         }
