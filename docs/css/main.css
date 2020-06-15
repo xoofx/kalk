@@ -1,0 +1,109 @@
+.kalk-logo {
+    background: transparent url("/img/kalk-logo.png") no-repeat scroll 0px 0px;
+    display: block;
+    width: 50px;
+    height: 50px;    
+}
+body {
+    background-color: #fdf6e3;
+    color: #445258;
+}
+
+a {
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+}
+
+.navbar a {
+    text-decoration: none;
+}
+
+.active a.nav-link {
+    border-bottom-color: red;
+    border-bottom-style: solid;    
+}
+
+.frontpage {
+    font-size: 1.25em;
+}
+
+#kalk .navbar .navbar-nav a {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.img-card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 0.8em;
+    border-radius: 0.6rem!important;
+    width: 332px;
+}
+
+#kalk .btn-info {
+    color: white;
+}
+
+#kalk .btn-success {
+    color: white;
+}
+
+#kalk .btn-outline-secondary {
+    border-color: #6c757d;
+}
+
+#kalk .btn-outline-secondary:hover {
+    color: white;
+}
+
+#kalk .btn-outline-secondary:hover {
+    color: white;
+}
+
+#kalk .btn-secondary {
+    color: white;
+}
+
+.frontpage h3 > i {
+    font-size: 1.3em;
+    margin-right: 1rem;
+}
+
+#kalk .navbar .navbar-nav li {
+    padding-right: 10px;
+}
+
+.fa-heart-o {
+    color: #ea4aaa;
+}
+
+.jumbotron {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background: transparent url("/img/kalk-banner.png") 50% 50% no-repeat;
+    color: white;
+    text-shadow: 4px 4px 3px #111111;
+}
+
+.frontpage h3 i.fa {
+    text-shadow: 1px 1px 3px #444444;
+}
+
+.navbar {
+    margin-bottom: 0.5em;
+}
+
+footer {
+    text-align: center;
+}
+
+.kalk-color-0 { 
+    color: #FF7F2A; 
+}
+.kalk-color-1 {
+    color: #FFCC00; 
+}
+.kalk-color-2 { 
+    color: #66FF00; 
+}
+.kalk-color-3 {
+    color: #00CCFF;
+}

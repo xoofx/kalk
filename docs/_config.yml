@@ -9,6 +9,7 @@ encoding: UTF-8
 # Github repository
 github_user: xoofx
 github_repo_url: https://github.com/xoofx/kalk/
+github_sponsor_url: https://github.com/sponsors/xoofx
 
 excerpt_separator: "" 
 markdown: kramdown
@@ -16,6 +17,13 @@ kramdown:
     input: GFM
     syntax_highlighter_opts:
       disable : true
+
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+    values:
+      layout: "default"
 
 gems:
   - jekyll-sitemap
