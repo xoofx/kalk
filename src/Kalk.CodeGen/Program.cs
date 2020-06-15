@@ -573,8 +573,8 @@ namespace Kalk.CodeGen
             Console.WriteLine($"Using {typeof(BigInteger).Assembly.FullName}");
             Console.WriteLine($"Using {typeof(HttpStatusCode).Assembly.FullName}");
             Console.WriteLine($"Using {typeof(System.Runtime.Intrinsics.Vector128).Assembly.Location}");
+            Console.WriteLine($"Using {typeof(System.Text.Json.JsonDocument).Assembly.Location}");
 
-            
             var project = solution.Projects.First(x => x.Name == "Kalk.Core");
             //var scriban = solution.Projects.First(x => x.Name == "Scriban");
             //project = project.AddMetadataReferences(scriban.MetadataReferences);
