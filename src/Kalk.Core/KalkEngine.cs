@@ -289,7 +289,7 @@ namespace Kalk.Core
             return this;
         }
 
-        public override string ObjectToString(object value, bool escape = false)
+        public override string ObjectToString(object value, bool nested = false)
         {
             if (value is float f32)
             {
@@ -304,7 +304,7 @@ namespace Kalk.Core
                 if (double.IsNaN(f64)) return "nan";
             }
 
-            return base.ObjectToString(value, escape);
+            return base.ObjectToString(value, nested);
         }
 
         protected override IObjectAccessor GetMemberAccessorImpl(object target)
