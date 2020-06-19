@@ -1,6 +1,6 @@
 # Site Settings
 author = "Alexandre Mutel"
-title = "kalk"
+title = "kalk calculator app"
 description = "kalk website"
 
 basepath = ""

@@ -1,7 +1,7 @@
-+++
-title = "This is the kalk"
-url = "/index.html"
-+++
+---
+title: home
+url: /index.html
+---
 <div class="frontpage">
     <div class="jumbotron text-center">
     <h1><span class="kalk-color-0">k</span><span class="kalk-color-1">a</span><span class="kalk-color-2">l</span><span class="kalk-color-3">k</span> - calculator</h1>
