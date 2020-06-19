@@ -23,9 +23,20 @@ a {
     border-bottom-style: solid;    
 }
 
-.frontpage {
+/* frontpage */
+.kalk-fp {
     font-size: 1.25em;
 }
+
+.kalk-fp h3 > i {
+    font-size: 1.3em;
+    margin-right: 1rem;
+}
+
+.kalk-fp h3 i.fa {
+    text-shadow: 1px 1px 3px #444444;
+}
+
 
 #kalk .navbar .navbar-nav a {
     padding-top: 4px;
@@ -63,10 +74,6 @@ a {
     color: white;
 }
 
-.frontpage h3 > i {
-    font-size: 1.3em;
-    margin-right: 1rem;
-}
 
 #kalk .navbar .navbar-nav li {
     padding-right: 10px;
@@ -81,10 +88,6 @@ a {
     background: transparent url("/img/kalk-banner.jpg") 50% 50% no-repeat;
     color: white;
     text-shadow: 4px 4px 3px #111111;
-}
-
-.frontpage h3 i.fa {
-    text-shadow: 1px 1px 3px #444444;
 }
 
 .navbar {

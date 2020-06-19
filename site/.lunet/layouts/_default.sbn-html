@@ -2,13 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{{ page.title }}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.title }} - {{ site.title }}</title>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
     <meta name="twitter:title" content="kalk - calculator">
     <meta name="twitter:description" content="kalk is a powerfull command-line calculator application for developers.">
-    <meta name="twitter:image" content="{{ '/img/twitter-banner.jpg' | prepend: site.baseurl | prepend: site.url }}">
+    <meta name="twitter:image" content="{{ '/img/twitter-banner.jpg' | string.prepend site.baseurl | string.prepend site.url }}">
     <meta name="twitter:image:alt" content="kalk - calculator">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">    
@@ -16,6 +17,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    {{ include "builtins/head.sbn-html" }}
   </head>
   <body>    
     <div id="kalk" class="container">
@@ -24,11 +26,11 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        {% assign current_nav = page.url | downcase | split: '/' %}        
+        {{  current_nav = page.url | string.downcase | string.split '/' }}
         <div id="navbarSupportedContent" class="collapse navbar-collapse">
           <ul class="navbar-nav mr-auto">
-            <li class='nav-item{% if current_nav[1] == 'index.html' %} active{% endif %}'><a class="nav-link" href="/">Home</a></li>
-            <li class='nav-item{% if current_nav[1] == 'doc' %} active{% endif %}'><a class="nav-link" href="/doc">Documentation</a></li>
+            <li class='nav-item{{ if current_nav[0] == 'index.html' }} active{{ end }}'><a class="nav-link" href="/">Home</a></li>
+            <li class='nav-item{{ if current_nav[0] == 'doc' }} active{{ end }}'><a class="nav-link" href="/doc">Documentation</a></li>
           </ul>
           <ul class="navbar-nav navbar-right">
             <li class='nav-item'><a class="nav-link btn btn-success" href="/download">Download</a></li>
@@ -38,11 +40,33 @@
         </div>
       </nav>
       <section>
-        {{ content }}
+{{ case current_nav[0] }}
+        {{ when 'index.html' }}
+          <div class="kalk-fp">
+            {{ content }}
+          </div>
+        {{ when 'doc' }}
+          <div class="kalk-doc">
+            <div class="container">
+              <div class="row">
+                  <div class="col-sm-2">
+                    Left
+                  </div>
+                  <div class="col-sm-10">
+                    {{ content }}
+                  </div>
+              </div>
+            </div>
+          </div>
+        {{ when 'download' }}
+          <div class="kalk-download">
+            {{ content }}
+          </div>
+{{ end }}
       </section>
       <footer>
         <hr>
-        <p>Copyright &copy; {{ "now" | date: "%Y" }}, Alexandre Mutel aka <a href="https://xoofx.com">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site powered by <a href="http://jekyllrb.com/">Jekyll</a></p>
+        <p>Copyright &copy; {{ date.now.year }}, Alexandre Mutel aka <a href="https://xoofx.com">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site powered by <a href="http://jekyllrb.com/">Jekyll</a></p>
       </footer>
     </div>
   </body>

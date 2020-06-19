@@ -1,0 +1,12 @@
+# Site Settings
+author = "Alexandre Mutel"
+title = "kalk"
+description = "kalk website"
+
+basepath = ""
+baseurl = baseurl ?? "https://kalk.dev"
+
+# Github repository
+github_user = "xoofx"
+github_repo_url = "https://github.com/xoofx/kalk/"
+github_sponsor_url = "https://github.com/sponsors/xoofx"

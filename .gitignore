@@ -10,10 +10,6 @@
 *.userosscache
 *.sln.docstates
 
-# Jekyll
-_site/
-.jekyll-cache/
-
 # Rider
 .idea/
 
@@ -33,6 +29,7 @@ x86/
 [Ww][Ii][Nn]32/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
+build/
 bld/
 [Bb]in/
 [Oo]bj/
