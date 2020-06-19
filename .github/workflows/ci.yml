@@ -1,0 +1,49 @@
+name: ci
+
+env:
+  PROJECT_NAME: Lunet
+
+on:
+  push:
+    paths-ignore:
+    - 'doc/**'
+    - 'img/**'
+    - 'changelog.md'
+    - 'readme.md'
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.300
+
+    - name: Build & test (Release)
+      run: dotnet build src -c Release
+
+    - name: Build web site
+      run: |
+          dotnet tool install --global lunet --version "0.1.0-alpha.*"
+          lunet --input-dir site build 
+
+    - name: Deploy web site
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./site/.lunet/build/www
+
+    - name: Publish
+      if: github.event_name == 'push'
+      run: |
+          if ( "${{github.ref}}" -match "^refs/tags/[0-9]+\.[0-9]+\.[0-9]+" ) {
+              dotnet nuget push src\${{env.PROJECT_NAME}}\bin\Release\*.nupkg -s nuget.org -k ${{secrets.NUGET_TOKEN}}
+          } else {
+              echo "publish is only enabled by tagging with a release tag"
+          }
