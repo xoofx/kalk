@@ -12,6 +12,7 @@ body {
 a {
     text-decoration-line: underline;
     text-decoration-style: dotted;
+    color: #138496
 }
 
 .navbar a {
@@ -74,9 +75,21 @@ a {
     color: white;
 }
 
-
 #kalk .navbar .navbar-nav li {
     padding-right: 10px;
+}
+
+#kalk .navbar-right .nav-link {
+    padding-right: 1em;
+}
+
+#kalk .navbar-right a.nav-link.active {
+    border-bottom-color: red;
+    border-bottom-style: solid;  
+}
+
+.navbar-right .btn .fa {
+    padding: 0.25em;
 }
 
 .fa-heart-o {
@@ -96,6 +109,70 @@ a {
 
 footer {
     text-align: center;
+}
+
+.kalk-doc ul.menu {    
+    list-style: none;
+    padding-inline-start: 0px;
+}
+
+.kalk-doc ul.submenu {    
+    list-style: disc;
+    padding-inline-start: 0px;
+}
+
+.kalk-doc .submenu  li.menu-item {    
+    list-style-type: none;
+    padding-inline-start: 1em;
+    white-space: nowrap;
+    margin-bottom: 0px;
+    padding-bottom: 0px;   
+}
+
+.kalk-doc li.menu-item:hover {
+    background-color: rgb(0,0,0,0.05);
+}
+
+.kalk-doc .submenu  li.menu-item {    
+    border-style: none;
+}
+
+.kalk-doc li.menu-item.active, .kalk-doc .submenu li.menu-item.active{
+    background-color: rgb(0,0,0,0.03);
+    border-right-color: red;
+    border-right-style: solid;
+    border-right-width: 2px;
+}
+
+.kalk-doc .submenu  li::before {    
+    content: "\2022";
+    color: rgba(0, 0, 0, 0.1);
+    width: 1em;
+    margin-left: -1em;
+    padding-right: 1em;
+}
+
+
+.kalk-doc li.menu-item {    
+    list-style-type: none;
+    padding-inline-start: 0px;
+    border-width: thin;
+    border-color: rgba(0, 0, 0, 0.1);
+    padding-left: 0.5em;
+    border-top-style: none;
+    border-left-style: none;
+    border-right-style: none;    
+    border-bottom-style: solid;
+    margin-bottom: 0.5em;
+    padding-bottom: 0.5em;    
+}
+
+.kalk-doc li.menu-item a
+{
+    text-decoration-line: none;
+    text-decoration-style: none;
+    display: inline-block;
+    width: 100%;
 }
 
 .kalk-color-0 { 

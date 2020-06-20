@@ -1,9 +1,7 @@
 ---
 title: Language
-order: 2
-doc: true
-doc-level: 1
-doc-parent: readme.md
+weight: 20
+menu: doc
 ---
 
 This is the Language

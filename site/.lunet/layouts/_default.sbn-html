@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+  {{~  path0 = (page.url | string.downcase | string.split '/')[0] ?? "home" ## first part of the url ## ~}}
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -26,37 +27,27 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        {{  current_nav = page.url | string.downcase | string.split '/' }}
         <div id="navbarSupportedContent" class="collapse navbar-collapse">
           <ul class="navbar-nav mr-auto">
-            <li class='nav-item{{ if current_nav[0] == 'index.html' }} active{{ end }}'><a class="nav-link" href="/">Home</a></li>
-            <li class='nav-item{{ if current_nav[0] == 'doc' }} active{{ end }}'><a class="nav-link" href="/doc">Documentation</a></li>
+            <li class='nav-item{{ if path0 == 'home' }} active{{ end }}'><a class="nav-link" href="/">Home</a></li>
+            <li class='nav-item{{ if path0 == 'doc' }} active{{ end }}'><a class="nav-link" href="/doc">Documentation</a></li>
           </ul>
           <ul class="navbar-nav navbar-right">
-            <li class='nav-item'><a class="nav-link btn btn-success" href="/download">Download</a></li>
-            <li class='nav-item'><a class="btn btn-outline-secondary" href="{{ site.github_sponsor_url }}"><i class="fa fa-heart-o"></i> Sponsor</a></li>
-            <li class='nav-item'><a class="btn btn-info" href="{{ site.github_repo_url }}"><i class="fa fa-github"></i> GitHub</a></li>
+            <li class='nav-item'><a class="nav-link btn btn-success{{ if path0 == 'download' }} active{{ end }}" href="/download"><i class="fa fa-download"></i> Download</a></li>
+            <li class='nav-item'><a class="nav-link btn btn-outline-secondary" href="{{ site.github_sponsor_url }}"><i class="fa fa-heart-o"></i> Sponsor</a></li>
+            <li class='nav-item'><a class="nav-link btn btn-info" href="{{ site.github_repo_url }}"><i class="fa fa-github"></i> GitHub</a></li>
           </ul>
         </div>
       </nav>
       <section>
-{{ case current_nav[0] }}
-        {{ when 'index.html' }}
+{{ case path0 }}
+        {{ when 'home' }}
           <div class="kalk-fp">
             {{ content }}
           </div>
         {{ when 'doc' }}
           <div class="kalk-doc">
-            <div class="container">
-              <div class="row">
-                  <div class="col-sm-2">
-                    Left
-                  </div>
-                  <div class="col-sm-10">
-                    {{ content }}
-                  </div>
-              </div>
-            </div>
+            {{ content }}
           </div>
         {{ when 'download' }}
           <div class="kalk-download">

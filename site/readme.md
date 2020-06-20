@@ -1,6 +1,6 @@
 ---
 title: home
-url: /index.html
+url: /
 ---
 <div class="frontpage">
     <div class="jumbotron text-center">

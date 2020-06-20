@@ -1,8 +1,7 @@
 ---
 title: Documentation
-url: /doc/index.html
-doc: true
-doc-level: 0
+url: /doc/
+weight: 0
 ---
 
 This is the root documentation 4
