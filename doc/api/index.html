@@ -26,16 +26,15 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        
         <div id="navbarSupportedContent" class="collapse navbar-collapse">
           <ul class="navbar-nav mr-auto">
             <li class='nav-item'><a class="nav-link" href="/">Home</a></li>
             <li class='nav-item active'><a class="nav-link" href="/doc">Documentation</a></li>
           </ul>
           <ul class="navbar-nav navbar-right">
-            <li class='nav-item'><a class="nav-link btn btn-success" href="/download">Download</a></li>
-            <li class='nav-item'><a class="btn btn-outline-secondary" href="https://github.com/sponsors/xoofx"><i class="fa fa-heart-o"></i> Sponsor</a></li>
-            <li class='nav-item'><a class="btn btn-info" href="https://github.com/xoofx/kalk/"><i class="fa fa-github"></i> GitHub</a></li>
+            <li class='nav-item'><a class="nav-link btn btn-success" href="/download"><i class="fa fa-download"></i> Download</a></li>
+            <li class='nav-item'><a class="nav-link btn btn-outline-secondary" href="https://github.com/sponsors/xoofx"><i class="fa fa-heart-o"></i> Sponsor</a></li>
+            <li class='nav-item'><a class="nav-link btn btn-info" href="https://github.com/xoofx/kalk/"><i class="fa fa-github"></i> GitHub</a></li>
           </ul>
         </div>
       </nav>
@@ -43,16 +42,28 @@
 
           <div class="kalk-doc">
             <div class="container">
-              <div class="row">
-                  <div class="col-sm-2">
-                    Left
-                  </div>
-                  <div class="col-sm-10">
-                    <p>This is the API</p>
+  <div class="row">
+      <div class="col-sm-3">
+        <ul class='menu'>
+  <li class='menu-item'>
+    <a href='/doc/getting-started/'><span>Getting Started</span></a>  </li>
+  <li class='menu-item'>
+    <a href='/doc/language/'><span>Language</span></a>  </li>
+  <li class='menu-item active'>
+    <span>API Reference</span>  <ul class='submenu submenu-1'>
+    <li class='menu-item'>
+      <a href='/doc/api/general/'><span>General Functions</span></a>    </li>
+  </ul>
+  </li>
+</ul>
 
-                  </div>
-              </div>
-            </div>
+      </div>
+      <div class="col-sm-9">
+        <p>This is the API</p>
+
+      </div>
+  </div>
+</div>
           </div>
         
       </section>
