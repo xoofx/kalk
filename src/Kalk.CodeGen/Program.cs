@@ -559,7 +559,9 @@ namespace Kalk.CodeGen
 //               {"TargetFramework", "netcoreapp3.1"},
             });
 
-            var srcFolder = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"../../../.."));
+            var rootFolder = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"../../../../.."));
+            var siteFolder = Path.Combine(rootFolder, "site");
+            var srcFolder = Path.Combine(rootFolder, "src");
             var testsFolder = Path.Combine(srcFolder, "Kalk.Tests");
 
             var pathToSolution = Path.Combine(srcFolder, @"kalk.sln");
@@ -574,6 +576,7 @@ namespace Kalk.CodeGen
             Console.WriteLine($"Using {typeof(HttpStatusCode).Assembly.FullName}");
             Console.WriteLine($"Using {typeof(System.Runtime.Intrinsics.Vector128).Assembly.Location}");
             Console.WriteLine($"Using {typeof(System.Text.Json.JsonDocument).Assembly.Location}");
+            Console.WriteLine($"Using {typeof(Scriban.TemplateContext).Assembly.Location}");
 
             var project = solution.Projects.First(x => x.Name == "Kalk.Core");
             //var scriban = solution.Projects.First(x => x.Name == "Scriban");
@@ -587,7 +590,7 @@ namespace Kalk.CodeGen
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 if (assembly.IsDynamic) continue;
-                if (assembly.GetName().Name == "Scriban") continue;
+                //if (assembly.GetName().Name == "Scriban") continue;
                 project = project.AddMetadataReference(MetadataReference.CreateFromFile(assembly.Location));
             }
 
@@ -906,7 +909,14 @@ namespace Kalk.Tests
             result = templateTests.Render(new { modules = modules }, x => x.Name);
             File.WriteAllText(Path.Combine(testsFolder, "KalkTests.generated.cs"), result);
 
-            //Console.WriteLine(result);
+            // Prism templates
+            var prismTemplateStr = @"Prism.languages.kalk = /\b(?:{{ functions | array.join '|' }})\b/;
+";
+            var prismTemplate = Template.Parse(prismTemplateStr);
+
+            var allFunctionNames = modules.SelectMany(x => x.Members.Select(y => y.Name)).Concat(intrinsicModules.SelectMany(x => x.Members.Select(y => y.Name))).ToList();
+            result = prismTemplate.Render(new { functions = allFunctionNames });
+            File.WriteAllText(Path.Combine(siteFolder, ".lunet", "js", "prism-kalk.generated.js"), result);
         }
 
         private static readonly Regex PromptRegex = new Regex(@"^(\s*)>>>\s");
