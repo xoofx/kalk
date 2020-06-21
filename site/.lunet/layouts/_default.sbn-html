@@ -1,23 +1,17 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   {{~  path0 = (page.url | string.downcase | string.split '/')[0] ?? "home" ## first part of the url ## ~}}
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ page.title }} - {{ site.title }}</title>
+    <title>{{ if path0 == 'home'; "kalk"; else; page.title }} - {{ site.title; end }}</title>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
     <meta name="twitter:title" content="kalk - calculator">
     <meta name="twitter:description" content="kalk is a powerfull command-line calculator application for developers.">
     <meta name="twitter:image" content="{{ '/img/twitter-banner.jpg' | string.prepend site.baseurl | string.prepend site.url }}">
     <meta name="twitter:image:alt" content="kalk - calculator">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">    
-    <link rel="stylesheet" href="/css/main.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     {{ include "builtins/head.sbn-html" ~}}
   </head>
   <body>    
@@ -33,7 +27,7 @@
             <li class='nav-item{{ if path0 == 'doc' }} active{{ end }}'><a class="nav-link" href="/doc">Documentation</a></li>
           </ul>
           <ul class="navbar-nav navbar-right">
-            <li class='nav-item'><a class="nav-link btn btn-success{{ if path0 == 'download' }} active{{ end }}" href="/download"><i class="fa fa-download"></i> Download</a></li>
+            <li class='nav-item{{ if path0 == 'download' }} active{{ end }}'>{{ if path0 == 'download' }}<a class="nav-link" href="/doc"><i class="fa fa-download"></i> Download</a>{{ else }}<a class="nav-link btn btn-success" href="/download"><i class="fa fa-download"></i> Download</a>{{ end }}</li>
             <li class='nav-item'><a class="nav-link btn btn-outline-secondary" href="{{ site.github_sponsor_url }}"><i class="fa fa-heart-o"></i> Sponsor</a></li>
             <li class='nav-item'><a class="nav-link btn btn-info" href="{{ site.github_repo_url }}"><i class="fa fa-github"></i> GitHub</a></li>
           </ul>

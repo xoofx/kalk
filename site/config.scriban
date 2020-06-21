@@ -10,3 +10,30 @@ baseurl = baseurl ?? "https://kalk.dev"
 github_user = "xoofx"
 github_repo_url = "https://github.com/xoofx/kalk/"
 github_sponsor_url = "https://github.com/sponsors/xoofx"
+
+# Resources bundle
+with bundle
+    fontawesome = resource "npm:font-awesome" "4.7.0"
+    jquery = resource "npm:jquery" "3.5.1"
+    popperjs = resource "npm:@popperjs/core" "2.4.2"
+    bootstrap = resource "npm:bootstrap" "4.5.0"
+    tocbot = resource "npm:tocbot" "4.11.2"
+
+    # css files
+    css fontawesome "/css/font-awesome.min.css"
+    css bootstrap "/dist/css/bootstrap.min.css"
+	css tocbot "/dist/tocbot.css"
+    css "/css/main.css"
+
+    # js files
+    js jquery "/dist/jquery.min.js"
+    js popperjs "/dist/umd/popper.min.js"
+    js bootstrap "/dist/js/bootstrap.min.js"
+    js tocbot"/dist/tocbot.min.js"
+    
+    # copy font files
+    content fontawesome "/fonts/fontawesome-webfont.*" "/fonts/"
+
+    # concatenate css/js files
+    concat = true
+end
