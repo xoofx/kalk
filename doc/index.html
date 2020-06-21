@@ -35,11 +35,11 @@
         </div>
       </nav>
       <section>
-
           <div class="kalk-doc">
-            <div class="container">
+            
+<div class="container">
   <div class="row">
-      <div class="col-sm-3">
+      <div class="col-sm-3 align-self-start sticky-top">
         <ul class='menu'>
   <li class='menu-item'>
     <a href='/doc/getting-started/'><span>Getting Started</span></a>  </li>
@@ -53,8 +53,12 @@
   </li>
 </ul>
 
+        <div class="toc">
+          <div class="toc-title">Table of Contents</div>        
+          <nav class="js-toc toc"></nav>
+        </div>
       </div>
-      <div class="col-sm-9">
+      <div class="col-sm-9 js-toc-content">
         <p>This is the root documentation 4</p>
 <p>Check</p>
 
@@ -62,13 +66,25 @@
   </div>
 </div>
           </div>
-        
       </section>
       <footer>
         <hr>
         <p>Copyright &copy; 2020, Alexandre Mutel aka <a href="https://xoofx.com">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site powered by <a href="https://github.com/lunet-io/lunet">lunet</a></p>
       </footer>
     </div>
+    <script>
+      anchors.add();
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.js-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.js-toc-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3, h4, h5',
+        collapseDepth: 3,
+        orderedList: true,
+      });
+    </script>
   </body>
 </html>
 
