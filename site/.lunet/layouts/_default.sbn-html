@@ -34,30 +34,45 @@
         </div>
       </nav>
       <section>
-{{ case path0 }}
-        {{ when 'home' }}
+{{~ case path0 ~}}
+        {{~ when 'home' ~}}
           <div class="kalk-fp">
             {{ content }}
           </div>
-        {{ when 'doc' }}
+        {{~ when 'doc' ~}}
           <div class="kalk-doc">
             {{ content }}
           </div>
-        {{ when 'download' }}
+        {{~ when 'download' ~}}
           <div class="kalk-download">
             {{ content }}
           </div>
-        {{ else }}
+        {{~ else ~}}
           <div class="kalk-404">
             {{ content }}        
           </div>
-{{ end }}
+{{~ end ~}}
       </section>
       <footer>
         <hr>
         <p>Copyright &copy; {{ date.now.year }}, Alexandre Mutel aka <a href="https://xoofx.com">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site powered by <a href="https://github.com/lunet-io/lunet">lunet</a></p>
       </footer>
     </div>
+{{~ if path0 != 'home' ~}}
+    <script>
+      anchors.add();
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.js-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.js-toc-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3, h4, h5',
+        collapseDepth: 3,
+        orderedList: true,
+      });
+    </script>
+{{~ end ~}}
   </body>
 </html>
 

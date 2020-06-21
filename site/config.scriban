@@ -18,6 +18,7 @@ with bundle
     popperjs = resource "npm:@popperjs/core" "2.4.2"
     bootstrap = resource "npm:bootstrap" "4.5.0"
     tocbot = resource "npm:tocbot" "4.11.2"
+    anchorjs = resource "npm:anchor-js" "4.2.2"
 
     # css files
     css fontawesome "/css/font-awesome.min.css"
@@ -28,6 +29,7 @@ with bundle
     # js files
     js jquery "/dist/jquery.min.js"
     js popperjs "/dist/umd/popper.min.js"
+    js anchorjs "/anchor.min.js"
     js bootstrap "/dist/js/bootstrap.min.js"
     js tocbot"/dist/tocbot.min.js"
     
@@ -36,4 +38,5 @@ with bundle
 
     # concatenate css/js files
     concat = true
+    minify = true
 end
