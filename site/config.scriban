@@ -19,11 +19,14 @@ with bundle
     bootstrap = resource "npm:bootstrap" "4.5.0"
     tocbot = resource "npm:tocbot" "4.11.2"
     anchorjs = resource "npm:anchor-js" "4.2.2"
+    prismjs = resource "npm:prismjs" "1.20.0"
 
     # css files
     css fontawesome "/css/font-awesome.min.css"
     css bootstrap "/dist/css/bootstrap.min.css"
-	css tocbot "/dist/tocbot.css"
+    css tocbot "/dist/tocbot.css"
+    css prismjs "/themes/prism.css"
+    css "/css/prism-kalk.css"
     css "/css/main.css"
 
     # js files
@@ -31,7 +34,10 @@ with bundle
     js popperjs "/dist/umd/popper.min.js"
     js anchorjs "/anchor.min.js"
     js bootstrap "/dist/js/bootstrap.min.js"
-    js tocbot"/dist/tocbot.min.js"
+    js tocbot "/dist/tocbot.min.js"
+    js prismjs "/prism.js"
+    js "/js/prism-kalk.js"    
+    js "/js/prism-kalk.generated.js"
     
     # copy font files
     content fontawesome "/fonts/fontawesome-webfont.*" "/fonts/"
