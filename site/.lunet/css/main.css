@@ -20,6 +20,7 @@ a {
 }
 
 .active a.nav-link {
+    font-weight: bold;
     border-bottom-color: red;
     border-bottom-style: solid;    
 }
@@ -142,6 +143,10 @@ footer {
     border-right-color: red;
     border-right-style: solid;
     border-right-width: 2px;
+}
+
+.kalk-doc li.menu-item.active > span, .kalk-doc .submenu li.menu-item.active > span {
+    font-weight: bold;
 }
 
 .kalk-doc .submenu  li::before {    
