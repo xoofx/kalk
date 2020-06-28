@@ -910,11 +910,15 @@ namespace Kalk.Tests
             File.WriteAllText(Path.Combine(testsFolder, "KalkTests.generated.cs"), result);
 
             // Prism templates
-            var prismTemplateStr = @"Prism.languages.kalk = /\b(?:{{ functions | array.join '|' }})\b/;
+            var prismTemplateStr = @"Prism.languages.kalk.function = /\b(?:{{ functions | array.join '|' }})\b/;
 ";
             var prismTemplate = Template.Parse(prismTemplateStr);
 
             var allFunctionNames = modules.SelectMany(x => x.Members.Select(y => y.Name)).Concat(intrinsicModules.SelectMany(x => x.Members.Select(y => y.Name))).ToList();
+            // special values
+            allFunctionNames.AddRange(new []{"null", "true", "false"});
+            // modules
+            allFunctionNames.AddRange(new[] {"All", "Csv", "Currencies", "Files", "HardwareIntrinsics", "StandardUnits", "Strings", "Web"});
             result = prismTemplate.Render(new { functions = allFunctionNames });
             File.WriteAllText(Path.Combine(siteFolder, ".lunet", "js", "prism-kalk.generated.js"), result);
         }
