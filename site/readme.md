@@ -1,6 +1,8 @@
 ---
-title: home
+title: Home
 url: /
+submenus: true
+search: false
 ---
 <div class="frontpage">
     <div class="jumbotron text-center">

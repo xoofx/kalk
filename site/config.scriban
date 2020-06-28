@@ -1,7 +1,7 @@
 # Site Settings
 author = "Alexandre Mutel"
-title = "kalk calculator app"
-description = "kalk website"
+title = "kalk"
+description = "kalk - calculator app"
 
 basepath = ""
 baseurl = baseurl ?? "https://kalk.dev"
@@ -11,23 +11,33 @@ github_user = "xoofx"
 github_repo_url = "https://github.com/xoofx/kalk/"
 github_sponsor_url = "https://github.com/sponsors/xoofx"
 
+# Enable search indexing
+with search 
+    enable = true
+    # Exclude this file manually here as it not public and doesn't have a frontmatter
+    excludes.add ["/test.html", "/404.md", "/download.md"]
+end
+
 # Resources bundle
 with bundle
     fontawesome = resource "npm:font-awesome" "4.7.0"
     jquery = resource "npm:jquery" "3.5.1"
-    popperjs = resource "npm:@popperjs/core" "2.4.2"
+    popperjs = resource "npm:popper.js" "1.16.1"
     bootstrap = resource "npm:bootstrap" "4.5.0"
     tocbot = resource "npm:tocbot" "4.11.2"
     anchorjs = resource "npm:anchor-js" "4.2.2"
     prismjs = resource "npm:prismjs" "1.20.0"
+    select2 = resource "npm:select2" version: "4.0.13"
+
+    scss.includes.add bootstrap.path + "/scss"
 
     # css files
     css fontawesome "/css/font-awesome.min.css"
-    css bootstrap "/dist/css/bootstrap.min.css"
     css tocbot "/dist/tocbot.css"
     css prismjs "/themes/prism.css"
+    css select2 "/dist/css/select2.min.css"
     css "/css/prism-kalk.css"
-    css "/css/main.css"
+    css "/css/main.scss"
 
     # js files
     js jquery "/dist/jquery.min.js"
@@ -36,6 +46,7 @@ with bundle
     js bootstrap "/dist/js/bootstrap.min.js"
     js tocbot "/dist/tocbot.min.js"
     js prismjs "/prism.js"
+    js select2 "/dist/js/select2.min.js"
     js "/js/prism-kalk.js"    
     js "/js/prism-kalk.generated.js"
     

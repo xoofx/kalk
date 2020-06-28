@@ -1,10 +1,8 @@
 ---
 title: Documentation
 url: /doc/
-weight: 0
+submenus: true
 ---
-
-# Documentation
 
 This is the root documentation 4
 
@@ -76,4 +74,9 @@ out = 1.1367372182078337
 out = 0.04234051967661534
 out = 1.6603167082440802
 out = 1.408082061813392
+
+null, true, false
+
+​​This is an error
+
 ```

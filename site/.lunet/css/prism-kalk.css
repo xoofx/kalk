@@ -99,12 +99,14 @@ pre[class*="language-"] {
 	color: #F9F1A5;
 }
 
-.token.regex,
-.token.important {
+.token.regex {
 	color: #fd971f;
 }
 
-.token.important,
+.token.error {
+	color: #C50F1F;
+}
+
 .token.bold {
 	font-weight: bold;
 }

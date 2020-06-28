@@ -1,4 +1,5 @@
 Prism.languages.kalk = {
+    'error': /^\u200B.*/m,
 	'comment': [
 		{
 			pattern: /##(?:##)/,
@@ -24,27 +25,10 @@ Prism.languages.kalk = {
             greedy: true
         }
     ],
-	'class-name': [
-        {
-            pattern: /((?:class|module|struct|interface|extends|implements|instanceof|new)\s+)[A-Za-z_]\w*/,
-            lookbehind: true,
-            inside: {                
-                'punctuation': /\./
-            }
-        },
-		{
-			// @Foo
-			pattern: /(\@)[a-z_A-Z]\w*(?:\.\w+)*\b/,
-			lookbehind: true,
-			inside: {
-				punctuation: /\./
-			}
-		}
-    ],
 	'keyword': /\b(?:if|else|end|for|in|case|when|while|break|continue|func|import|readonly|with|capture|ret|wrap|do)\b/,
     'number': /\b0x[\da-f]+\b|(?:\b\d+\.?\d*|\B\.\d+)(?:e[+-]?\d+)?/i,
     'function': /[\w_]+/,
 	'variable': /[\w_]+/,
 	'operator': /&\+-\*\:\=\?\!,\.<>;\[\]\{\}\|\\\/\(\)\^%@/,
-	'punctuation': /\?\.?|::|[{}[\];(),.:]/    
+    'punctuation': /\?\.?|::|[{}[\];(),.:]/
 };

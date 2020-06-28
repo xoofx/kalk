@@ -1,0 +1,8 @@
+home:
+  - readme.md
+  - doc/readme.md
+
+home2:  
+  - {path: download.md, title: '<i class="fa fa-download"></i> Download', link_class: btn btn-success, link_class_active: ''}
+  - {url: "https://github.com/sponsors/xoofx", title: '<i class="fa fa-heart-o"></i> Sponsor', link_class: btn btn-outline-secondary, pre:  }
+  - {url: "https://github.com/xoofx/kalk/", title: '<i class="fa fa-github"></i> GitHub', link_class: btn btn-info}

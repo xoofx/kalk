@@ -1,6 +1,15 @@
 /**********************************************
  * general
  **********************************************/
+
+$body-bg: #fdf6e3;
+$search-bg: lighten($body-bg, 2%);
+$body-color: #445258;
+$primary: #138496;
+$breadcrumb-bg: $body-bg;
+ 
+ @import "bootstrap";
+
 .kalk-logo {
     background: transparent url("/img/kalk-logo.png") no-repeat scroll 0px 0px;
     display: block;
@@ -9,28 +18,21 @@
 }
 
 body {
-    background-color: #fdf6e3;
-    color: #445258;
+    width: calc(100vw - 34px); /* https://stackoverflow.com/a/25981719 */
 }
 
 a {
     text-decoration-line: underline;
     text-decoration-style: dotted;
-    color: #138496
-}
-
-.navbar a {
-    text-decoration: none;
-}
-
-.active a.nav-link {
-    font-weight: bold;
-    border-bottom-color: red;
-    border-bottom-style: solid;    
 }
 
 h1, h2, h3, h4, h5, h6 {
     outline: none;
+    padding-bottom: 0.25em;
+}
+
+#kalk .breadcrumb {
+    padding-left: 0.1rem
 }
 
 .kalk-color-0 { 
@@ -47,24 +49,49 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /**********************************************
- * frontpage
+ * search bar
  **********************************************/
-.kalk-fp {
-    font-size: 1.25em;
+.select2-selection {
+    background-color: $search-bg!important;
 }
 
-.kalk-fp h3 > i {
+.select2-dropdown {
+    background-color: $search-bg!important;
+}
+
+.select2-results__option.select2-results__message {
+    width: auto;
+}
+
+.select2-results__option {
+    width: 50vh;
+    user-select: auto!important;
+}
+
+.select2-results__option--highlighted {
+    background-color: rgba(0, 0, 0, 0.1)!important;
+    color: $body-color!important;
+}
+
+/**********************************************
+ * frontpage
+ **********************************************/
+.kalk-home {
+    font-size: 1.25rem;
+}
+
+.kalk-home h3 > i {
     font-size: 1.3em;
     margin-right: 1rem;
 }
 
-.kalk-fp h3 i.fa {
+.kalk-home h3 i.fa {
     text-shadow: 1px 1px 3px #444444;
 }
 
 .img-card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    margin-bottom: 0.8em;
+    margin-bottom: 0.8rem;
     border-radius: 0.6rem!important;
     width: 332px;
 }
@@ -113,74 +140,96 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #kalk .navbar-right .nav-link {
-    padding-right: 1em;
+    padding-right: 1rem;
 }
 
-#kalk .navbar-right a.nav-link.active {
+#kalk .navbar a {
+    text-decoration: none;
+}
+
+#kalk li.nav-item.active a.nav-link {
+    font-weight: bold;
     border-bottom-color: red;
     border-bottom-style: solid;  
 }
 
-.navbar-right .btn .fa {
-    padding: 0.25em;
+#kalk .navbar-right .btn .fa {
+    padding: 0.25rem;
 }
 
 .fa-heart-o {
     color: #ea4aaa;
 }
 
-.navbar {
-    margin-bottom: 0.5em;
+#kalk .navbar {
+    margin-bottom: 0.5rem;
 }
 
 footer {
     text-align: center;
+    font-size: 1rem;
 }
 
 /**********************************************
  * menu in documentation
  **********************************************/
-.kalk-doc ul.menu {    
+.kalk-doc ol.menu {    
     list-style: none;
     padding-inline-start: 0px;
 }
 
-.kalk-doc ul.submenu {    
-    list-style: disc;
-    padding-inline-start: 0px;
+.kalk-doc span.menu-item-row {
+    display: inline-block;
+    width: 100%;
+    padding-left: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
-.kalk-doc .submenu  li.menu-item {    
-    list-style-type: none;
-    padding-inline-start: 1em;
-    margin-bottom: 0px;
-    padding-bottom: 0px;   
+.kalk-doc a.menu-link {
+    display: inline-block;
+    width: 100%;
+    position: relative
 }
 
-.kalk-doc li.menu-item:hover {
+.kalk-doc a.menu-link-show {
+    display: inline-block;
+    position: absolute;
+    right: 30px;    
+}
+
+.kalk-doc span.menu-item-row:hover {
     background-color: rgba(0,0,0,0.05);
 }
 
-.kalk-doc .submenu  li.menu-item {    
-    border-style: none;
+.kalk-doc li.menu-item.active {
+    border-left-color: red;
+    border-left-style: solid;
+    border-left-width: 2px;
 }
 
-.kalk-doc li.menu-item.active, .kalk-doc .submenu li.menu-item.active{
-    background-color: rgba(0,0,0,0.03);
-    border-right-color: red;
-    border-right-style: solid;
-    border-right-width: 2px;
-}
-
-.kalk-doc li.menu-item.active > span, .kalk-doc .submenu li.menu-item.active > span {
+.kalk-doc li.menu-item.active > span {
+    display: inline-block;
+    width: 100%;
+    background-color: rgba(0,0,0,0.05);
     font-weight: bold;
 }
 
-.kalk-doc .submenu  li::before {    
-    content: "\2022";
-    color: rgba(0, 0, 0, 0.1);
-    width: 1em;
-    margin-left: -1em;
+.kalk-doc a.menu-link-show::before {
+    content: '\276F';
+    display: inline-block;
+    transform: translateY(3px) rotate(90deg);
+    transition: transform 0.2s;
+}
+
+.kalk-doc a.menu-link-show.collapsed::before {
+    display: inline-block;
+    content: '\276F';
+    transform: translateY(2px) rotate(0deg);
+    transition: transform 0.2s;
+}
+
+.kalk-doc ol.menu ol.menu  {    
+    margin-left: 0.8rem;
 }
 
 .kalk-doc li.menu-item {    
@@ -188,21 +237,24 @@ footer {
     padding-inline-start: 0px;
     border-width: thin;
     border-color: rgba(0, 0, 0, 0.1);
-    padding-left: 0.5em;
     border-top-style: none;
     border-left-style: none;
     border-right-style: none;    
     border-bottom-style: solid;
-    margin-bottom: 0.5em;
-    padding-bottom: 0.5em;    
+}
+
+.kalk-doc li.menu-item li.menu-item:last-child {
+    border-bottom-style: none;
 }
 
 .kalk-doc li.menu-item a
 {
     text-decoration-line: none;
     text-decoration-style: none;
-    display: inline-block;
-    width: 100%;
+}
+
+.kalk-doc footer {
+    padding-bottom: 80vh;
 }
 
 /**********************************************
@@ -212,10 +264,25 @@ footer {
     width: 0px;
 }
 
+.kalk-doc .toc-list {
+    padding-bottom: 0.8rem;
+}
+
 .kalk-doc .toc-link {
     border-right-width: 2px;
     border-right-color: #EEE;
     border-right-style: solid;
+    font-size: 0.9rem;
+}
+
+.kalk-doc .menu a.toc-link {
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+}
+
+.kalk-doc a.toc-link:hover {
+    text-decoration-line: underline;
+    text-decoration-style: solid;
 }
 
 .kalk-doc a.toc-link {
@@ -230,7 +297,7 @@ footer {
 .kalk-doc .toc-title {
     border-bottom-style: solid;
     border-bottom-width: thin;
-    padding-inline-start: 0.5em;    
+    padding-inline-start: 0.5rem;    
     border-bottom-color: rgba(0, 0, 0, 0.1);
     text-align: center;
 }

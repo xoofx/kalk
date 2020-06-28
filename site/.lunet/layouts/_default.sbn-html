@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-  {{~  path0 = (page.url | string.downcase | string.split '/')[0] ?? "home" ## first part of the url ## ~}}
+  {{~  
+    path0 = (page.url | string.downcase | string.split '/')[0] ?? "home" ## first part of the url ## 
+    case path0 
+      when 'home', 'doc', 'download'
+        pathclass = 'kalk-' + path0
+      else
+        pathclass = 'kalk-404'
+    end
+  ~}}
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,41 +30,38 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div id="navbarSupportedContent" class="collapse navbar-collapse">
-          <ul class="navbar-nav mr-auto">
+          {{~ site.menu.home.render { 
+                depth: 1,
+                kind: "nav",
+                list_class: "mr-auto",
+              } 
+          ~}}
+          <!-- <ul class="navbar-nav mr-auto">
             <li class='nav-item{{ if path0 == 'home' }} active{{ end }}'><a class="nav-link" href="/">Home</a></li>
             <li class='nav-item{{ if path0 == 'doc' }} active{{ end }}'><a class="nav-link" href="/doc">Documentation</a></li>
-          </ul>
-          <ul class="navbar-nav navbar-right">
+          </ul> -->
+          {{~ site.menu.home2.render { 
+                depth: 1,
+                kind: "nav"
+              } 
+          ~}}
+          <!-- list_class: "navbar-right", -->
+          <!-- <ul class="navbar-nav navbar-right">
             <li class='nav-item{{ if path0 == 'download' }} active{{ end }}'>{{ if path0 == 'download' }}<a class="nav-link" href="/doc"><i class="fa fa-download"></i> Download</a>{{ else }}<a class="nav-link btn btn-success" href="/download"><i class="fa fa-download"></i> Download</a>{{ end }}</li>
             <li class='nav-item'><a class="nav-link btn btn-outline-secondary" href="{{ site.github_sponsor_url }}"><i class="fa fa-heart-o"></i> Sponsor</a></li>
             <li class='nav-item'><a class="nav-link btn btn-info" href="{{ site.github_repo_url }}"><i class="fa fa-github"></i> GitHub</a></li>
-          </ul>
+          </ul> -->
         </div>
       </nav>
-      <section>
-{{~ case path0 ~}}
-        {{~ when 'home' ~}}
-          <div class="kalk-fp">
+      <div class="{{ pathclass }}">
+        <section>
             {{ content }}
-          </div>
-        {{~ when 'doc' ~}}
-          <div class="kalk-doc">
-            {{ content }}
-          </div>
-        {{~ when 'download' ~}}
-          <div class="kalk-download">
-            {{ content }}
-          </div>
-        {{~ else ~}}
-          <div class="kalk-404">
-            {{ content }}        
-          </div>
-{{~ end ~}}
-      </section>
-      <footer>
-        <hr>
-        <p>Copyright &copy; {{ date.now.year }}, Alexandre Mutel aka <a href="https://xoofx.com">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site powered by <a href="https://github.com/lunet-io/lunet">lunet</a></p>
-      </footer>
+        </section>
+        <footer>
+          <hr>
+          <p>Copyright &copy; {{ date.now.year }}, Alexandre Mutel aka <a href="https://xoofx.com">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site powered by <a href="https://github.com/lunet-io/lunet">lunet</a></p>
+        </footer>
+      </div>
     </div>
 {{~ if path0 != 'home' ~}}
     <script>
@@ -67,7 +72,7 @@
         // Where to grab the headings to build the table of contents.
         contentSelector: '.js-toc-content',
         // Which headings to grab inside of the contentSelector element.
-        headingSelector: 'h1, h2, h3, h4, h5',
+        headingSelector: 'h2, h3, h4, h5',
         collapseDepth: 3,
         orderedList: true,
       });

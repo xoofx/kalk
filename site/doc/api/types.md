@@ -1,5 +1,5 @@
 ---
-title: General Functions
+title: Type Constructors
 ---
 
 This is the general function API
