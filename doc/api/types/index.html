@@ -55,7 +55,6 @@
 <div class="container">
   <div class="row">
       <div class="col-sm-3 align-self-start sticky-top">
-        <boubou></boubou>
         <ol id='menu-id-doc-0' class='menu collapse  show '>
   <li class='menu-item '>
     <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Documentation</a></span>  </li>
@@ -87,6 +86,7 @@
     Type Constructors  </li>
 </ol>
 
+        <p id="lunet-results"></p>
         <h1>Type Constructors</h1>
         <p>This is the general function API</p>
 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
@@ -122,8 +122,8 @@
 
 <script>
     DefaultLunetSearchPromise.then(() => {
-      var body = document.getElementsByTagName("boubou")[0];
-      body.innerHTML = `<p>This is the time: ${DefaultLunetSearch.perf.duration}</p>` + body.innerHTML;
+      const body = document.getElementById("lunet-results");
+      body.innerHTML = `This is the time: ${DefaultLunetSearch.perf.duration}`;
     });
   const lunetSearch = { noResults: "No results found"};
 
