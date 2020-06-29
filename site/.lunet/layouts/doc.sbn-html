@@ -4,12 +4,12 @@ layout: _default
 <div class="container">
   <div class="row">
       <div class="col-sm-3 align-self-start sticky-top">
-        <boubou></boubou>
         {{ site.menu.doc.render { kind: "menu",  collapsible: true, post_active: '<div class="toc"><nav class="js-toc toc"></nav></div>'} }}
         <select id="search-box" style="width: 100%"></select>
       </div>
       <div class="col-sm-9 js-toc-content">
         {{ site.menu.doc.breadcrumb }}
+        <p id="lunet-results"></p>
         <h1>{{ page.title }}</h1>
         {{ content }}
       </div>
@@ -18,8 +18,8 @@ layout: _default
 
 <script>
     DefaultLunetSearchPromise.then(() => {
-      var body = document.getElementsByTagName("boubou")[0];
-      body.innerHTML = `<p>This is the time: ${DefaultLunetSearch.perf.duration}</p>` + body.innerHTML;
+      const body = document.getElementById("lunet-results");
+      body.innerHTML = `This is the time: ${DefaultLunetSearch.perf.duration}`;
     });
   const lunetSearch = { noResults: "No results found"};
 
