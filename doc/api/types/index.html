@@ -55,6 +55,7 @@
 <div class="container">
   <div class="row">
       <div class="col-sm-3 align-self-start sticky-top">
+        <boubou></boubou>
         <ol id='menu-id-doc-0' class='menu collapse  show '>
   <li class='menu-item '>
     <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Documentation</a></span>  </li>
@@ -120,6 +121,10 @@
 </div>
 
 <script>
+    DefaultLunetSearchPromise.then(() => {
+      var body = document.getElementsByTagName("boubou")[0];
+      body.innerHTML = `<p>This is the time: ${DefaultLunetSearch.perf.duration}</p>` + body.innerHTML;
+    });
   const lunetSearch = { noResults: "No results found"};
 
   $('#search-box').select2({
