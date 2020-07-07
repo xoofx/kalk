@@ -5,8 +5,10 @@
 $body-bg: #fdf6e3;
 $search-bg: lighten($body-bg, 2%);
 $body-color: #445258;
+$body-color-bold-shadow: lighten($body-color, 20%);
 $primary: #138496;
 $breadcrumb-bg: $body-bg;
+$kalk-top-offset: 74px;
  
  @import "bootstrap";
 
@@ -29,6 +31,7 @@ a {
 h1, h2, h3, h4, h5, h6 {
     outline: none;
     padding-bottom: 0.25em;
+    scroll-margin-top: $kalk-top-offset;
 }
 
 #kalk .breadcrumb {
@@ -64,7 +67,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .select2-results__option {
-    width: 50vh;
     user-select: auto!important;
 }
 
@@ -72,6 +74,48 @@ h1, h2, h3, h4, h5, h6 {
     background-color: rgba(0, 0, 0, 0.1)!important;
     color: $body-color!important;
 }
+
+input.select2-search__field
+{
+    margin-inline-start: 2rem;
+}
+
+input.select2-search__field::placeholder
+{
+    color: rgba(0,0,0,0.3);
+}
+
+.kalk-search {
+    position: relative;
+}
+
+.search-icon {
+    z-index: 2;
+    left: 10px;
+    top: 3px;
+    font-size: 1.2rem;
+    display: block;
+    position: absolute;
+    pointer-events: none;
+    color: rgba(0,0,0,0.2);
+}
+
+.select2-results  ::-webkit-scrollbar {
+    width: 8px;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.select2-results ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-color: rgba(0, 0, 0, 0.4);
+    border-style: solid;
+    border-width: thin;
+}
+
+.select2-results ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
 
 /**********************************************
  * frontpage
@@ -136,11 +180,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #kalk .navbar .navbar-nav li {
-    padding-right: 10px;
+    margin-right: 10px;
 }
 
 #kalk .navbar-right .nav-link {
-    padding-right: 1rem;
+    //padding-right: 1rem;
 }
 
 #kalk .navbar a {
@@ -148,7 +192,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #kalk li.nav-item.active a.nav-link {
-    font-weight: bold;
+    // use text-shadow instead of font-weight to avoid resize of container and shift of the following menu items
+    text-shadow: 0px 0px 1px $body-color-bold-shadow;
     border-bottom-color: red;
     border-bottom-style: solid;  
 }
@@ -163,11 +208,12 @@ h1, h2, h3, h4, h5, h6 {
 
 #kalk .navbar {
     margin-bottom: 0.5rem;
+    background-color: $body-bg;
 }
 
 footer {
     text-align: center;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 /**********************************************
@@ -254,7 +300,11 @@ footer {
 }
 
 .kalk-doc footer {
-    padding-bottom: 80vh;
+    padding-bottom: 75vh;
+}
+
+.menu-level1, .menu-level2, .menu-level3, .menu-level4 {
+    font-size: 0.95em;
 }
 
 /**********************************************
@@ -262,6 +312,11 @@ footer {
  **********************************************/
 .kalk-doc .toc-link::before {
     width: 0px;
+}
+
+.menu-sidebar {
+    top: $kalk-top-offset; 
+    z-index: 0;
 }
 
 .kalk-doc .toc-list {
@@ -302,9 +357,43 @@ footer {
     text-align: center;
 }
 
+.kalk-doc .toc{
+    padding-right: 3px;
+}
+
+.kalk-doc ::-webkit-scrollbar {
+    padding-left: 2px;
+    width: 8px;
+    background-color: $search-bg;
+}
+
+.kalk-doc ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-color: rgba(0, 0, 0, 0.4);
+    border-style: solid;
+    border-width: thin;
+}
+
+.kalk-doc ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.kalk-doc .js-toc {
+    max-height: 50vh;
+}
+
 /* Remove sticky on mobile */
 @media screen and (max-width: 768px) {
     .sticky-top {
         position: relative !important;
     }
+
+    .select2-results__option {
+        width: auto;
+    }
+
+    pre.language-kalk {
+        font-size: 0.75rem;
+    }
 }
+

@@ -3,9 +3,8 @@ layout: _default
 ---
 <div class="container">
   <div class="row">
-      <div class="col-sm-3 align-self-start sticky-top">
-        {{ site.menu.doc.render { kind: "menu",  collapsible: true, post_active: '<div class="toc"><nav class="js-toc toc"></nav></div>'} }}
-        <select id="search-box" style="width: 100%"></select>
+      <div class="col-sm-3 align-self-start sticky-top menu-sidebar">
+        {{ site.menu.doc.render { kind: "menu",  collapsible: true, post_active: '<nav class="js-toc toc"></nav>'} }}
       </div>
       <div class="col-sm-9 js-toc-content">
         {{ site.menu.doc.breadcrumb }}
@@ -15,63 +14,3 @@ layout: _default
       </div>
   </div>
 </div>
-
-<script>
-    DefaultLunetSearchPromise.then(() => {
-      const body = document.getElementById("lunet-results");
-      body.innerHTML = `This is the time: ${DefaultLunetSearch.perf.duration}`;
-    });
-  const lunetSearch = { noResults: "No results found"};
-
-  $('#search-box').select2({
-    multiple: true,
-    placeholder: "Search",
-    dropdownAutoWidth: true,
-    escapeMarkup: function (markup) { return markup; },
-    language: {
-        noResults: function () {
-              return lunetSearch.noResults;
-        }
-    },
-    ajax: {
-      dataType: 'json',
-      transport: function (params, success, failure) {
-          if (!("term" in params.data) || params.data.term === "")
-          {
-            lunetSearch.noResults = DefaultLunetSearch.available ? "Enter words to search..." : DefaultLunetSearch.reason;
-            success({results: []});
-          }
-          else 
-          {
-            lunetSearch.noResults = "No results found.";
-            results = [];
-            if (DefaultLunetSearch.available)
-            {
-              try {
-                var rows = DefaultLunetSearch.query(params.data.term);
-                for(let i = 0; i < rows.length; i++) {
-                    var row = rows[i];
-                    results.push({id: i, text: `<a href='${row.url}'>${row.title}</a><div>${row.snippet}</div>`, url: row.url});
-                }
-              } catch(err)
-              {
-                lunetSearch.noResults = `Error while querying search database. ${err}`;
-              }
-            }
-            else {
-              lunetSearch.noResults = DefaultLunetSearch.reason;
-            }
-            success({results: results});
-          }
-      }
-    }
-  });
-
-  $('#search-box').on('select2:selecting', function (e) {
-      e.preventDefault(); // Avoid the tags
-      // Jump to the new location
-      window.location = e.params.args.data.url;
-  });
-
-</script>
-

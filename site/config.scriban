@@ -14,6 +14,7 @@ github_sponsor_url = "https://github.com/sponsors/xoofx"
 # Enable search indexing
 with search 
     enable = true
+    worker = true
     # Exclude this file manually here as it not public and doesn't have a frontmatter
     excludes.add ["/test.html", "/404.md", "/download.md"]
 end
@@ -49,6 +50,7 @@ with bundle
     js select2 "/dist/js/select2.min.js"
     js "/js/prism-kalk.js"    
     js "/js/prism-kalk.generated.js"
+    js "/js/kalk.js"
     
     # copy font files
     content fontawesome "/fonts/fontawesome-webfont.*" "/fonts/"
