@@ -4,36 +4,43 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lunet 0.2.0.0">
     <title>General Functions - kalk</title>
+    <link rel="stylesheet" href="/css/site.css">
+    <script src="/js/site.js" type="text/javascript" ></script>
+    <script src="/js/site-defer.js" type="text/javascript" defer></script>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
     <meta name="twitter:title" content="kalk - calculator">
     <meta name="twitter:description" content="kalk is a powerfull command-line calculator application for developers.">
     <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
     <meta name="twitter:image:alt" content="kalk - calculator">
-    <meta name="generator" content="lunet 0.1.0.0" />
-    <link rel="stylesheet" href="/css/site.css">
-    <script src="/js/site.js" type="text/javascript"></script>
   </head>
   <body>    
     <div id="kalk" class="container">
-      <nav class="navbar navbar-expand-sm navbar-light">
+      <nav class="navbar navbar-expand-md navbar-light sticky-top">
         <a class="kalk-logo navbar-brand" href="/"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div id="navbarSupportedContent" class="collapse navbar-collapse">
-<ol id='nav-id-home-0' class='navbar-nav  mr-auto'>
+        <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
+<ol id='nav-id-home-0' class='navbar-nav nav-level0  '>
   <li class='nav-item '>
     <span class='nav-item-row'><a href='/' class='nav-link  '>Home</a></span>  </li>
   <li class='nav-item  active'>
     <span class='nav-item-row'><a href='/doc/' class='nav-link  '>Documentation</a></span>  </li>
 </ol>
-          <!-- <ul class="navbar-nav mr-auto">
-            <li class='nav-item'><a class="nav-link" href="/">Home</a></li>
-            <li class='nav-item active'><a class="nav-link" href="/doc">Documentation</a></li>
-          </ul> -->
-<ol id='nav-id-home2-0' class='navbar-nav  '>
+          <!-- d-inline w-100 -->
+          <!-- <ol class="navbar-nav" style="width: 40%;padding-right: 0.5rem;"> -->
+          <ol class="navbar-nav flex-grow-1" style="padding-right: 0.5rem;">
+            <li class="nav-item w-100">
+                <div class="kalk-search">
+                  <label class="search-icon"><i class="fa fa-search"></i></label>
+                  <select id="search-box"></select>
+                </div>
+            </li>
+          </ol>
+<ol id='nav-id-home2-0' class='navbar-nav nav-level0  flex-shrink-0'>
   <li class='nav-item '>
     <span class='nav-item-row'><a href='/download/' class='nav-link  btn btn-success'><i class="fa fa-download"></i> Download</a></span>  </li>
   <li class='nav-item '>
@@ -41,12 +48,6 @@
   <li class='nav-item '>
     <span class='nav-item-row'><a href='https://github.com/xoofx/kalk/' class='nav-link  btn btn-info'><i class="fa fa-github"></i> GitHub</a></span>  </li>
 </ol>
-          <!-- list_class: "navbar-right", -->
-          <!-- <ul class="navbar-nav navbar-right">
-            <li class='nav-item'><a class="nav-link btn btn-success" href="/download"><i class="fa fa-download"></i> Download</a></li>
-            <li class='nav-item'><a class="nav-link btn btn-outline-secondary" href="https://github.com/sponsors/xoofx"><i class="fa fa-heart-o"></i> Sponsor</a></li>
-            <li class='nav-item'><a class="nav-link btn btn-info" href="https://github.com/xoofx/kalk/"><i class="fa fa-github"></i> GitHub</a></li>
-          </ul> -->
         </div>
       </nav>
       <div class="kalk-doc">
@@ -54,8 +55,8 @@
             
 <div class="container">
   <div class="row">
-      <div class="col-sm-3 align-self-start sticky-top">
-        <ol id='menu-id-doc-0' class='menu collapse  show '>
+      <div class="col-sm-3 align-self-start sticky-top menu-sidebar">
+        <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
   <li class='menu-item '>
     <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Documentation</a></span>  </li>
   <li class='menu-item '>
@@ -63,16 +64,15 @@
   <li class='menu-item '>
     <span class='menu-item-row'><a href='/doc/language/' class='menu-link  '>Language</a></span>  </li>
   <li class='menu-item '>
-    <span class='menu-item-row'><a href='/doc/api/readme/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-3' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-3' class='menu-link-show'></a></span>  <ol id='menu-id-doc-3' class='menu collapse  show '>
+    <span class='menu-item-row'><a href='/doc/api/readme/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-3' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-3' class='menu-link-show'></a></span>  <ol id='menu-id-doc-3' class='menu menu-level1 collapse  show '>
     <li class='menu-item  active'>
-      <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span><div class="toc"><nav class="js-toc toc"></nav></div>    </li>
+      <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span><nav class="js-toc toc"></nav>    </li>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/types/' class='menu-link  '>Type Constructors</a></span>    </li>
   </ol>
   </li>
 </ol>
 
-        <select id="search-box" style="width: 100%"></select>
       </div>
       <div class="col-sm-9 js-toc-content">
         <ol class='breadcrumb'>
@@ -119,87 +119,13 @@
       </div>
   </div>
 </div>
-
-<script>
-    DefaultLunetSearchPromise.then(() => {
-      const body = document.getElementById("lunet-results");
-      body.innerHTML = `This is the time: ${DefaultLunetSearch.perf.duration}`;
-    });
-  const lunetSearch = { noResults: "No results found"};
-
-  $('#search-box').select2({
-    multiple: true,
-    placeholder: "Search",
-    dropdownAutoWidth: true,
-    escapeMarkup: function (markup) { return markup; },
-    language: {
-        noResults: function () {
-              return lunetSearch.noResults;
-        }
-    },
-    ajax: {
-      dataType: 'json',
-      transport: function (params, success, failure) {
-          if (!("term" in params.data) || params.data.term === "")
-          {
-            lunetSearch.noResults = DefaultLunetSearch.available ? "Enter words to search..." : DefaultLunetSearch.reason;
-            success({results: []});
-          }
-          else 
-          {
-            lunetSearch.noResults = "No results found.";
-            results = [];
-            if (DefaultLunetSearch.available)
-            {
-              try {
-                var rows = DefaultLunetSearch.query(params.data.term);
-                for(let i = 0; i < rows.length; i++) {
-                    var row = rows[i];
-                    results.push({id: i, text: `<a href='${row.url}'>${row.title}</a><div>${row.snippet}</div>`, url: row.url});
-                }
-              } catch(err)
-              {
-                lunetSearch.noResults = `Error while querying search database. ${err}`;
-              }
-            }
-            else {
-              lunetSearch.noResults = DefaultLunetSearch.reason;
-            }
-            success({results: results});
-          }
-      }
-    }
-  });
-
-  $('#search-box').on('select2:selecting', function (e) {
-      e.preventDefault(); // Avoid the tags
-      // Jump to the new location
-      window.location = e.params.args.data.url;
-  });
-
-</script>
-
-
         </section>
         <footer>
           <hr>
-          <p>Copyright &copy; 2020, Alexandre Mutel aka <a href="https://xoofx.com">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site powered by <a href="https://github.com/lunet-io/lunet">lunet</a></p>
+          <p>Copyright &copy; 2020, Alexandre Mutel aka <a href="https://xoofx.com">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site generated by <a href="https://github.com/lunet-io/lunet">lunet</a> hosted on <a href="https://pages.github.com/">GitHub Pages</a></p>
         </footer>
       </div>
     </div>
-    <script>
-      anchors.add();
-      tocbot.init({
-        // Where to render the table of contents.
-        tocSelector: '.js-toc',
-        // Where to grab the headings to build the table of contents.
-        contentSelector: '.js-toc-content',
-        // Which headings to grab inside of the contentSelector element.
-        headingSelector: 'h2, h3, h4, h5',
-        collapseDepth: 3,
-        orderedList: true,
-      });
-    </script>
   </body>
 </html>
 
