@@ -1,6 +1,6 @@
 home:
-  - readme.md
-  - doc/readme.md
+  - {path: readme.md, folder: true}
+  - {path: doc/readme.md, folder: true}
 
 home2:  
   - {path: download.md, title: '<i class="fa fa-download"></i> Download', link_class: btn btn-success, link_class_active: ''}

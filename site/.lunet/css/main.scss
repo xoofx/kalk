@@ -5,12 +5,14 @@
 $body-bg: #fdf6e3;
 $search-bg: lighten($body-bg, 2%);
 $body-color: #445258;
+$secondary:  #FF7F2A;
 $body-color-bold-shadow: lighten($body-color, 20%);
 $primary: #138496;
 $breadcrumb-bg: $body-bg;
 $kalk-top-offset: 74px;
  
  @import "bootstrap";
+ @import "font-awesome";
 
 .kalk-logo {
     background: transparent url("/img/kalk-logo.png") no-repeat scroll 0px 0px;
@@ -49,6 +51,122 @@ h1, h2, h3, h4, h5, h6 {
 }
 .kalk-color-3 {
     color: #00CCFF;
+}
+
+blockquote {
+    color: #777;
+    background-color: rgba(0,0,0, 0.05);
+    border-left-color: #35cb8c;
+    border-left-style: solid;
+    border-left-width: 5px;
+    padding-left: 10px;
+}
+
+*:focus {
+    outline: 0 !important;
+}
+
+/**********************************************
+ * alerts (NOTE, TIP, WARNING, CAUTION, IMPORTANT)
+ **********************************************/
+
+@mixin lunet-alert-icon {
+    @extend .fa;
+    font-size: 1.3em;
+    padding-right: 0.5rem;
+    width: 1.4em;    
+}
+
+@mixin lunet-alert {
+    @extend .alert;
+    border-radius: .5em;
+}
+
+@mixin lunet-alert-heading-text {
+    font-weight: bold;
+    text-transform: uppercase;
+    content: "Information";
+}
+
+.lunet-alert-note-icon {
+    @include lunet-alert-icon;
+    @extend .fa-info-circle;
+}
+
+.lunet-alert-note {
+    @include lunet-alert;
+    @extend .alert-info;
+}
+
+.lunet-alert-note-heading-text::before {
+    @include lunet-alert-heading-text;
+    content: "Note";
+}
+
+.lunet-alert-tip-icon {
+    @include lunet-alert-icon;
+    @extend .fa-lightbulb-o;
+}
+
+.lunet-alert-tip {
+    @include lunet-alert;
+    @extend .alert-success;
+}
+
+.lunet-alert-tip-heading-text::before {
+    @include lunet-alert-heading-text;
+    content: "Tip";
+}
+
+.lunet-alert-warning-icon {
+    @include lunet-alert-icon;
+    @extend .fa-hand-o-right;
+}
+
+.lunet-alert-warning {
+    @include lunet-alert;
+    @extend .alert-warning;
+}
+
+.lunet-alert-warning-heading-text::before {
+    @include lunet-alert-heading-text;
+    content: "Warning";
+}
+
+.lunet-alert-caution-icon, .lunet-alert-important-icon {
+    @include lunet-alert-icon;
+    @extend .fa-warning;
+}
+
+.lunet-alert-caution, .lunet-alert-important {
+    @include lunet-alert;
+    @extend .alert-danger;
+}
+
+.lunet-alert-caution-heading-text::before {
+    @include lunet-alert-heading-text;
+    content: "Caution";
+}
+
+.lunet-alert-important-heading-text::before {
+    @include lunet-alert-heading-text;
+    content: "Important";
+}
+
+.lunet-alert-callout-icon {
+    @include lunet-alert-icon;
+    @extend .fa-bullhorn;
+}
+
+.lunet-alert-callout {
+    @include lunet-alert;
+    @extend .alert-success;
+    @extend .alert-dismissible;
+}
+
+.lunet-alert-callout-heading-text::before {
+    @include lunet-alert-heading-text;
+    content: "Announcement";
 }
 
 /**********************************************
@@ -317,10 +435,6 @@ footer {
 .menu-sidebar {
     top: $kalk-top-offset; 
     z-index: 0;
-}
-
-.kalk-doc .toc-list {
-    padding-bottom: 0.8rem;
 }
 
 .kalk-doc .toc-link {

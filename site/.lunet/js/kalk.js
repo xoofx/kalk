@@ -1,13 +1,6 @@
 var jstoc = document.getElementsByClassName("js-toc");
 if (jstoc.length > 0)
 {        
-    function UpdateVisibleToc() {
-        var activeItem = jstoc[0].getElementsByClassName("is-active-li");
-        if (activeItem.length > 0) {
-            jstoc[0].scrollTop = activeItem[0].offsetTop;
-        }
-    }
-
     tocbot.init({
         // Where to render the table of contents.
         tocSelector: '.js-toc',
@@ -15,13 +8,8 @@ if (jstoc.length > 0)
         contentSelector: '.js-toc-content',
         // Which headings to grab inside of the contentSelector element.
         headingSelector: 'h2, h3, h4, h5',
-        scrollEndCallback: e => UpdateVisibleToc(),
         collapseDepth: 3,
         orderedList: true,
-    });
-
-    window.addEventListener("scroll", e => {
-        UpdateVisibleToc();
     });
 }
 

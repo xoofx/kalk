@@ -8,15 +8,23 @@ baseurl = baseurl ?? "https://kalk.dev"
 
 # Github repository
 github_user = "xoofx"
-github_repo_url = "https://github.com/xoofx/kalk/"
+github_repo_url = "https://github.com/xoofx/kalk"
 github_sponsor_url = "https://github.com/sponsors/xoofx"
 
 # Enable search indexing
 with search 
     enable = true
+    # engine = "lunr"
     worker = true
     # Exclude this file manually here as it not public and doesn't have a frontmatter
     excludes.add ["/test.html", "/404.md", "/download.md"]
+end
+
+with cards.twitter
+    enable = true
+    card = "summary_large_image"
+    user = "xoofx"
+    image = "/img/twitter-banner.jpg"
 end
 
 # Resources bundle
@@ -25,15 +33,15 @@ with bundle
     jquery = resource "npm:jquery" "3.5.1"
     popperjs = resource "npm:popper.js" "1.16.1"
     bootstrap = resource "npm:bootstrap" "4.5.0"
-    tocbot = resource "npm:tocbot" "4.11.2"
+    tocbot = resource "npm:tocbot" "4.12.0"
     anchorjs = resource "npm:anchor-js" "4.2.2"
     prismjs = resource "npm:prismjs" "1.20.0"
     select2 = resource "npm:select2" version: "4.0.13"
 
     scss.includes.add bootstrap.path + "/scss"
+    scss.includes.add fontawesome.path + "/scss"
 
     # css files
-    css fontawesome "/css/font-awesome.min.css"
     css tocbot "/dist/tocbot.css"
     css prismjs "/themes/prism.css"
     css select2 "/dist/css/select2.min.css"

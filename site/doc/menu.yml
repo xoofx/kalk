@@ -1,5 +1,5 @@
 doc:
-- readme.md
-- getting-started.md
-- language.md
-- api/readme.md
+- {path: readme.md, title: Introduction} # Change the title for the root documentation menu entry
+- {path: user/readme.md, folder: true}
+- {path: api/readme.md, folder: true}
+- {path: advanced/readme.md, folder: true}
