@@ -29,45 +29,79 @@ class LunetSearch {
 	    return this._perf;
     }
 
+    _initializeDbFromResponse(sqlLoader, response, resolve) {
+        const thisInstance = this;
+        response.arrayBuffer().then((buffer) => {
+            const u8Buffer = new Uint8Array(buffer);
+            thisInstance._reason = "Please wait, initializing search engine...";
+            sqlLoader.then((sql) => {
+                this.db = new sql.Database(u8Buffer);
+                try {
+                    // fake exec to check if the database is valid
+                    thisInstance.db.exec("pragma schema_version;");
+                    thisInstance._available = true;
+                    thisInstance._reason = "Search database available for queries.";
+
+                    performance.mark("lunet-search-end");
+                    thisInstance._perf = performance.measure("lunet-search-init",
+                        "lunet-search-start",
+                        "lunet-search-end");
+
+                    resolve();
+                } catch (err) {
+                    thisInstance._reason = `Error while loading search database. ${err}`;
+                }
+            });
+        });
+    }
+
     initialize(dbUrl = "/js/lunet-search.db", locateSqliteWasm = (file) => `/js/lunet-${file}`)
     {
         const thisInstance = this;
-        if ("caches" in self) {
+        if ("caches" in self && "fetch" in self) {
             return new Promise(function(resolve, reject) {
                 caches.open("lunet.cache").then((lunetCache) => {
                     const sqlLoader = self.lunetInitSqlJs({locateFile: function(file, prefix){ return locateSqliteWasm(file);} });
-                    lunetCache.add(dbUrl);
                     thisInstance._reason = "Please wait, initializing search database...";
-                    lunetCache.match(dbUrl).then((cachedResponse) => {
-                        if (cachedResponse) {
-                            cachedResponse.arrayBuffer().then((buffer) => {
-                                const u8Buffer = new Uint8Array(buffer);
-                                thisInstance._reason = "Please wait, initializing search engine...";
-                                sqlLoader.then((sql) => {
-                                    thisInstance.db = new sql.Database(u8Buffer);
-                                    try {
-                                        // fake exec to check if the database is valid
-                                        thisInstance.db.exec("pragma schema_version;");
-                                        thisInstance._available = true;
-                                        thisInstance._reason = "Search database available for queries.";
+                    // Always fecth the headers for the DB to check if we need to update it
+                    fetch(dbUrl, { method: "HEAD" }).then((latestResponse) => {
+                        lunetCache.match(dbUrl).then((cachedResponse) => {
+                            var requiresFetch = false;
+                            if (cachedResponse && cachedResponse.ok) {
+                                var latestResponseLastModified = Date.parse(latestResponse.headers.get("Last-Modified"));
+                                var cachedResponseLastModified = Date.parse(cachedResponse.headers.get("Last-Modified"));
+                                // Check if the latest DB is more recent than the cached version
+                                if (latestResponseLastModified > cachedResponseLastModified) {
+                                    // console.log("Clearing db cache. latest: " + latestResponse.headers.get("Last-Modified") + " / current: " + cachedResponse.headers.get("Last-Modified"));
+                                    requiresFetch = true;
+                                } else {
+                                    // We can use the cached version
+                                    thisInstance._initializeDbFromResponse(sqlLoader, cachedResponse, resolve);
+                                }
+                            } else {
+                                requiresFetch = true;
+                            }
 
-                                        performance.mark("lunet-search-end");
-                                        thisInstance._perf = performance.measure("lunet-search-init", "lunet-search-start", "lunet-search-end");
-
-                                        resolve();
-                                    } catch (err) {
-                                        thisInstance._reason = `Error while loading search database. ${err}`;
+                            if (requiresFetch) {
+                                fetch(dbUrl).then((latestResponse2) => {
+                                    if (latestResponse2.ok) {
+                                        // update cache
+                                        lunetCache.put(dbUrl, latestResponse2);
+                                        // refetch from cache
+                                        lunetCache.match(dbUrl).then((cachedResponse2) => {
+                                            thisInstance._initializeDbFromResponse(sqlLoader,
+                                                cachedResponse2,
+                                                resolve);
+                                        });
                                     }
                                 });
-                            });
-                        } else {
-                            thisInstance._reason = "Error, search database not found.";
-                        }
+                            }
+                        });
                     });
                 });
             });
         } else {
-            thisInstance._reason = "Browser does not support cache required by search.";
+            thisInstance._reason = "Browser does not support cache/fetch API required by search.";
             return new Promise(function(resolve, reject) { resolve() });
         }
     }

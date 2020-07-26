@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lunet 0.2.0.0">
+    <title>Language Syntax - kalk</title>
+    <link rel="stylesheet" href="/css/site.css">
+    <script src="/js/site.js" type="text/javascript" ></script>
+    <script src="/js/site-defer.js" type="text/javascript" defer></script>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@xoofx">
+    <meta name="twitter:title" content="Language Syntax - kalk">
+    <meta name="twitter:description" content="kalk - calculator app">
+    <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
+    <meta name="twitter:image:alt" content="Language Syntax - kalk">    
+  </head>
+  <body>    
+    <div id="kalk" class="container">
+      <nav class="navbar navbar-expand-md navbar-light sticky-top">
+        <a class="kalk-logo navbar-brand" href="/"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
+<ol id='nav-id-home-0' class='navbar-nav nav-level0  '>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/' class='nav-link  '>Home</a></span>  </li>
+  <li class='nav-item  active'>
+    <span class='nav-item-row'><a href='/doc/' class='nav-link  '>Documentation</a></span>  </li>
+</ol>
+          <!-- d-inline w-100 -->
+          <!-- <ol class="navbar-nav" style="width: 40%;padding-right: 0.5rem;"> -->
+          <ol class="navbar-nav flex-grow-1" style="padding-right: 0.5rem;">
+            <li class="nav-item w-100">
+                <div class="kalk-search">
+                  <label class="search-icon"><i class="fa fa-search"></i></label>
+                  <select id="search-box"></select>
+                </div>
+            </li>
+          </ol>
+<ol id='nav-id-home2-0' class='navbar-nav nav-level0  flex-shrink-0'>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/download/' class='nav-link  btn btn-success'><i class="fa fa-download"></i> Download</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/sponsors/xoofx' class='nav-link  btn btn-outline-secondary'><i class="fa fa-heart-o"></i> Sponsor</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/xoofx/kalk/' class='nav-link  btn btn-info'><i class="fa fa-github"></i> GitHub</a></span>  </li>
+</ol>
+        </div>
+      </nav>
+      <div class="kalk-doc">
+        <section>
+            
+<div class="container">
+  <div class="row">
+      <div class="col-sm-3 align-self-start sticky-top menu-sidebar">
+        <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-2' class='menu-link-show'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  show '>
+    <li class='menu-item  active'>
+      <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span><nav class="js-toc toc"></nav>    </li>
+  </ol>
+  </li>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-4' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  '>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a><a href='#menu-id-doc-5' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-5' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-5' class='menu menu-level2 collapse  '>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/general/abs/' class='menu-link  '>This is abs</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/general/sin/' class='menu-link  '>sin</a></span>      </li>
+    </ol>
+    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/types/' class='menu-link  '>Type Constructors</a></span>    </li>
+  </ol>
+  </li>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/advanced/' class='menu-link  '>Advanced Topics</a></span>  </li>
+</ol>
+
+      </div>
+      <div class="col-sm-9 js-toc-content">
+        <ol class='breadcrumb'>
+  <li class='breadcrumb-item '>
+    <a href='/' class='breadcrumb-link  '>Home</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/user/' class='breadcrumb-link  '>User Guide</a>  </li>
+  <li class='breadcrumb-item  active'>
+    Language Syntax  </li>
+</ol>
+
+        <p id="lunet-results"></p>
+        <h1>Language Syntax</h1>
+        <h2 id="types">Types</h2>
+<p><code>kalk</code> supports different type of numbers and formats. All digits can be separated with the underscore <code>_</code> character.</p>
+<h3 id="integers">Integers</h3>
+<p>Integers: from a byte to large integers with any number of digits.</p>
+<h4 id="simple-integers">Simple Integers</h4>
+<p>From 8 bits to 64 bits integers:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; 3
+# 3
+out = 3
+&gt;&gt;&gt; 14_768
+# 14768
+out = 14768
+&gt;&gt;&gt; display dev
+# Display mode: dev (Developer)
+&gt;&gt;&gt; 3
+# 3
+out = 3
+    # int - 32-bit
+    = 0x_0000_0003
+    = 0x____0____0____0____0____0____0____0____3
+    = 0b_0000_0000_0000_0000_0000_0000_0000_0011
+</code></pre>
+<p>By default, an integer will be represented by an <code>int</code> (32 bits) or a <code>long</code> (64 bits) if the value is exceeding the range of an <code>int</code>.</p>
+<p>But size of integers can be enforced by using specific type constructors:</p>
+<ul>
+<li>8 bits: <code>byte</code>, <code>sbyte</code></li>
+<li>16 bits: <code>ushort</code>, <code>short</code></li>
+<li>32 bits: <code>uint</code>, <code>int</code></li>
+<li>64 bits: <code>ulong</code>, <code>long</code></li>
+</ul>
+<pre><code class="language-kalk">&gt;&gt;&gt; display dev
+# Display mode: dev (Developer)
+&gt;&gt;&gt; int(5)
+# int(5)
+out = 5
+    # int - 32-bit
+    = 0x_0000_0005
+    = 0x____0____0____0____0____0____0____0____5
+    = 0b_0000_0000_0000_0000_0000_0000_0000_0101
+&gt;&gt;&gt; long(5)
+# long(5)
+out = 5
+    # long - 64-bit
+    = 0x_00000000_00000005
+    = 0x____0____0____0____0____0____0____0____0____0____0____0____0____0____0____0____5
+    = 0b_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0101
+</code></pre>
+<p>You can convert a <code>string</code> to a specific integer value:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; int(&quot;5&quot;)
+# int(&quot;5&quot;)
+out = 5
+</code></pre>
+<h4 id="big-integers">Big Integers</h4>
+<p>With any number of digits:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; 1e50
+# 100000000000000000000000000000000000000000000000000
+out = 100000000000000000000000000000000000000000000000000
+</code></pre>
+<h4 id="hexadecimal-integers">Hexadecimal Integers</h4>
+<p>Hexadecimal integers are prefixed by <code>0x</code> followed by hexadecimal characters <code>[0-9A-Fa-f]</code> with an optional postfix specifier for unsigned (<code>u</code> or <code>U</code>):</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; 0xFC1234 # hexa
+# 16519732 # hexa
+out = 16519732
+&gt;&gt;&gt; hex out
+# hex(out)
+out = &quot;34 12 FC 00&quot;
+&gt;&gt;&gt; hex out
+# hex(out)
+out = 16519732  
+&gt;&gt;&gt; 0x80000001
+# -2147483647
+out = -2147483647
+&gt;&gt;&gt; 0x80000001u # force unsigned with `u` postfix
+# 2147483649 # force unsigned with `u` postfix
+out = 2147483649
+&gt;&gt;&gt; 0xFF_AB_12_E3
+# -5565725
+out = -5565725  
+</code></pre>
+<h4 id="binary-integers">Binary Integers</h4>
+<p>Binary integers are prefixed by <code>0b</code> followed by binary characters <code>0</code> or <code>1</code> with an optional postfix specifier for unsigned (<code>u</code> or <code>U</code>):</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; 0b11111010 # binary
+# 250 # binary
+out = 250
+&gt;&gt;&gt; bin out
+# bin(out)
+out = &quot;11111010&quot;
+&gt;&gt;&gt; bin out
+# bin(out)
+out = 250
+&gt;&gt;&gt; 0b11110000_00000000_00000000_00000000
+# -268435456
+out = -268435456
+&gt;&gt;&gt; 0b11110000_00000000_00000000_00000000u
+# 4026531840
+out = 4026531840    
+</code></pre>
+<h3 id="floats">Floats</h3>
+<h4 id="float">Float</h4>
+<p>Float IEEE 754 32-bit single precision float (6-9 digits precision). Use the postfix <code>f</code> to enforce a <code>float</code>.</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; 1.5f
+# 1.5f
+out = 1.5
+&gt;&gt;&gt; 2.3e-5f
+# 2.3E-05f
+out = 2.3E-05
+&gt;&gt;&gt; display dev
+# Display mode: dev (Developer)
+&gt;&gt;&gt; 1.5f
+# 1.5f
+out = 1.5
+    # IEEE 754 - float - 32-bit
+    #
+    = 0x_3FC0_0000
+    = 0x____3____F____C____0____0____0____0____0
+    #    seee eeee efff ffff ffff ffff ffff ffff
+    = 0b_0011_1111_1100_0000_0000_0000_0000_0000
+    #   31      24        16         8         0
+    #
+    #  sign   exponent            |------ fraction -----|
+    =   1 * 2 ^ (127 - 127) * 0b1.10000000000000000000000f
+</code></pre>
+<h4 id="double">Double</h4>
+<p>Double IEEE 754 64-bit double precision float (15-17 digits precision). This is the default when using a floating point number.</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; 1.5
+# 1.5
+out = 1.5
+&gt;&gt;&gt; 3.7e21
+# 3.7E+21
+out = 3.7E+21
+&gt;&gt;&gt; display dev
+# Display mode: dev (Developer)
+&gt;&gt;&gt; 1.5
+# 1.5
+out = 1.5
+    # IEEE 754 - double - 64-bit
+    #
+    = 0x_3FF80000_00000000
+    = 0x____3____F____F____8____0____0____0____0____0____0____0____0____0____0____0____0
+    #    seee eeee eeee ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff
+    = 0b_0011_1111_1111_1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000
+    #   63                48                  32                  16                   0
+    #
+    # sign    exponent              |-------------------- fraction --------------------|
+    =   1 * 2 ^ (1023 - 1023) * 0b1.1000000000000000000000000000000000000000000000000000
+</code></pre>
+<h4 id="decimal">Decimal</h4>
+<p>Decimal 128-bit precision float (28-29 digits precision). Use the postfix <code>m</code> for enforcing a <code>decimal</code>.</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; 1.5m
+# 1.5m
+out = 1.5
+&gt;&gt;&gt; 1.56781920303940591068762166827m
+# 1.5678192030394059106876216683m
+out = 1.5678192030394059106876216683
+&gt;&gt;&gt; 1.56781920303940591068762166827m
+# 1.5678192030394059106876216683m
+out = 1.5678192030394059106876216683
+    # Decimal 128-bit displayed as IEEE 754 - double - 64-bit
+    #
+    = 0x_3FF915C9_96B18541
+    = 0x____3____F____F____9____1____5____C____9____9____6____B____1____8____5____4____1
+    #    seee eeee eeee ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff ffff
+    = 0b_0011_1111_1111_1001_0001_0101_1100_1001_1001_0110_1011_0001_1000_0101_0100_0001
+    #   63                48                  32                  16                   0
+    #
+    # sign    exponent              |-------------------- fraction --------------------|
+    =   1 * 2 ^ (1023 - 1023) * 0b1.1001000101011100100110010110101100011000010101000001
+</code></pre>
+<h4 id="binary-as-floats">Binary as floats</h4>
+<p>By using the binary prefix <code>0b</code> associated with a dot <code>.</code> you can express a floating point number. The postfix <code>f</code> can be applied to enforce <code>float</code> precision.</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; 0b1.101f
+# 1.625f
+out = 1.625
+    # IEEE 754 - float - 32-bit
+    #
+    = 0x_3FD0_0000
+    = 0x____3____F____D____0____0____0____0____0
+    #    seee eeee efff ffff ffff ffff ffff ffff
+    = 0b_0011_1111_1101_0000_0000_0000_0000_0000
+    #   31      24        16         8         0
+    #
+    #  sign   exponent            |------ fraction -----|
+    =   1 * 2 ^ (127 - 127) * 0b1.10100000000000000000000f
+</code></pre>
+<h3 id="boolean">Boolean</h3>
+<p>A boolean value is <code>true</code> or <code>false</code>.</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; true
+# true
+out = true
+&gt;&gt;&gt; false
+# false
+out = false
+&gt;&gt;&gt; bool(1)
+# bool(1)
+out = true
+&gt;&gt;&gt; bool(0)
+# bool(0)
+out = false
+&gt;&gt;&gt; bool(&quot;true&quot;)
+# bool(&quot;true&quot;)
+out = true
+&gt;&gt;&gt; bool(&quot;false&quot;)
+# bool(&quot;false&quot;)
+out = false
+</code></pre>
+<h3 id="vectors">Vectors</h3>
+<h3 id="matrices">Matrices</h3>
+<h3 id="strings">Strings</h3>
+<h3 id="arrays">Arrays</h3>
+<h3 id="ranges">Ranges</h3>
+<h3 id="objects">Objects</h3>
+<h3 id="bytebuffers">ByteBuffers</h3>
+<h2 id="expressions">Expressions</h2>
+<h2 id="control-flows">Control Flows</h2>
+
+      </div>
+  </div>
+</div>
+        </section>
+        <footer>
+          <hr>
+          <p>Copyright &copy; 2020, Alexandre Mutel aka <a href="https://xoofx.com">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site generated by <a href="https://github.com/lunet-io/lunet">lunet</a> hosted on <a href="https://pages.github.com/">GitHub Pages</a></p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
+
