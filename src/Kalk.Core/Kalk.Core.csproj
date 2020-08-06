@@ -32,7 +32,7 @@
     <PackageReference Include="MathNet.Numerics" Version="4.11.0" />
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
-    <PackageReference Include="Scriban" Version="3.0.0-alpha.1" />
+    <PackageReference Include="Scriban" Version="3.0.0-alpha.7" />
   </ItemGroup>
 
   <ItemGroup>
