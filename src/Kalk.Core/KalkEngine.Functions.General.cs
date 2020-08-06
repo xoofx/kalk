@@ -744,6 +744,17 @@ namespace Kalk.Core
             Aliases.AddAlias(alias);
         }
 
+        /// <summary>
+        /// Gets the kind of a value.
+        /// </summary>
+        /// <param name="value">A value to inspect the kind</param>
+        [KalkExport("kind", CategoryGeneral)]
+        public string Kind(object value)
+        {
+            if (value == null) return "null";
+            return GetTypeName(value);
+        }
+
         private object EvaluateTextImpl(string text, string path, bool output = false)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
