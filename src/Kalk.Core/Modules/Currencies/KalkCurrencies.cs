@@ -100,7 +100,7 @@ namespace Kalk.Core
 
         public int ParameterCount => 0;
 
-        public bool HasVariableParams => false;
+        public ScriptVarParamKind VarParamKind => ScriptVarParamKind.None;
 
         public Type ReturnType => typeof(object);
 

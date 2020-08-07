@@ -74,7 +74,7 @@ namespace Kalk.Core
 
         int IScriptFunctionInfo.ParameterCount => 0;
 
-        bool IScriptFunctionInfo.HasVariableParams => false;
+        ScriptVarParamKind IScriptFunctionInfo.VarParamKind => ScriptVarParamKind.None;
 
         Type IScriptFunctionInfo.ReturnType => typeof(object);
 

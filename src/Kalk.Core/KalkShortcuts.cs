@@ -21,8 +21,8 @@ namespace Kalk.Core
         public int RequiredParameterCount => 0;
 
         public int ParameterCount => 0;
-
-        public bool HasVariableParams => false;
+        
+        public ScriptVarParamKind VarParamKind => ScriptVarParamKind.None;
 
         public Type ReturnType => typeof(object);
 

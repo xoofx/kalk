@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Scriban" Version="3.0.0-alpha.7" />
+    <PackageReference Include="Scriban" Version="3.0.0-alpha.8" />
     <PackageReference Include="CsvHelper" Version="15.0.5" />
     <PackageReference Include="Microsoft.Build" Version="16.5.0" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.Build.Framework" Version="16.5.0" ExcludeAssets="runtime" />
