@@ -612,22 +612,6 @@ namespace Consolus
                 _stackIndex = -1;
                 hasShift = false;
             }
-            else if (hasControl && key.Key == ConsoleKey.R)
-            {
-                Write(ConsoleStyle.BrightRed);
-            }
-            else if (hasControl && key.Key == ConsoleKey.U)
-            {
-                Write(ConsoleStyle.Underline);
-            }
-            else if (hasControl && key.Key == ConsoleKey.B)
-            {
-                Write(ConsoleStyle.BrightYellow);
-            }
-            else if (hasControl && key.Key == ConsoleKey.N)
-            {
-                Write(ConsoleStyle.Reset);
-            }
             else if (key.Key == ConsoleKey.LeftArrow)
             {
                 MoveLeft(hasControl);
@@ -663,10 +647,6 @@ namespace Consolus
                     SetLine(History[index]);
                 }
             }
-            //else if (hasControl && key.Key == ConsoleKey.R)
-            //{
-            //    Console.WriteLine(string.Concat(Esc, Header1, "Yo, this is a header", Esc, EndSequence));
-            //}
             else if (key.Key == ConsoleKey.Enter)
             {
                 Enter(hasControl);
