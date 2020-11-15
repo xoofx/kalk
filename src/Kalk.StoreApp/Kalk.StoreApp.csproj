@@ -11,6 +11,7 @@
     <AssemblyName>kalk</AssemblyName>
     <SignAssembly>false</SignAssembly>
     <KalkGitVersion>true</KalkGitVersion>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -22,7 +23,7 @@
   	<!--<PublishReadyToRun>true</PublishReadyToRun>-->
   </PropertyGroup>
 
-	<ItemGroup>
+  <ItemGroup>
 	  <Content Include="AppxManifest.xml" CopyToOutputDirectory="PreserveNewest" />
     <None Remove="Images\**" />
 	  <Content Include="Images\**" CopyToOutputDirectory="PreserveNewest" />
@@ -37,10 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\lunet\scriban\src\Scriban\Scriban.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Kalk.Core\Kalk.Core.csproj" />
   </ItemGroup>
 
@@ -51,7 +48,9 @@
       <PublishPackagePath>$([System.IO.Path]::GetFullPath('$(PublishDirFullPath)..\$(PublishPackageName)'))</PublishPackagePath>
 		</PropertyGroup>
 
-		<Message Importance="High" Text="Create appx $(MSBuildProjectName) -&gt; $(PublishPackagePath)" />
+		<Message Importance="High" Text="Create appx $(MSBuildProjectName) -&gt; $(PublishPackagePath) (Version $(FileVersion))" />
+
+    <XmlPoke XmlInputPath="$(PublishDirFullPath)AppxManifest.xml" Namespaces="&lt;Namespace Prefix='n' Uri='http://schemas.microsoft.com/appx/manifest/foundation/windows10' /&gt;" Query="/n:Package/n:Identity/@Version" Value="$(FileVersion)" />
 
     <Exec Command="&quot;$(MSBuildProgramFiles32)\Windows Kits\10\bin\$(TargetPlatformVersion)\x86\MakePri.exe&quot; new /pr &quot;$(PublishDirFullPath).&quot; /cf priconfig.xml /of &quot;$(PublishDirFullPath)resources.pri&quot; /o" />
 

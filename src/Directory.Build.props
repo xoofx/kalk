@@ -2,7 +2,5 @@
   <PropertyGroup>
     <VersionPrefix>0.1.0</VersionPrefix>
     <VersionSuffix>preview</VersionSuffix>
-    <BuildNumber>1</BuildNumber>
-    <VersionSuffix Condition="'$(VersionSuffix)' != '' AND '$(BuildNumber)' != ''">$(VersionSuffix).$(BuildNumber)</VersionSuffix>
   </PropertyGroup>
 </Project>

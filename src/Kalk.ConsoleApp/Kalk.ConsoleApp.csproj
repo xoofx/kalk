@@ -6,6 +6,7 @@
     <ApplicationIcon>..\..\img\kalk.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>kalk</AssemblyName>
+    <PackageName>kalk</PackageName>
     <KalkGitVersion>true</KalkGitVersion>
   </PropertyGroup>
 
