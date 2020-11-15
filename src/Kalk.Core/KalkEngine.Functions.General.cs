@@ -56,6 +56,18 @@ namespace Kalk.Core
             return moduleT;
         }
 
+
+        /// <summary>
+        /// Gets the date object
+        /// </summary>
+        /// <returns></returns>
+        [KalkExport("date", CategoryGeneral)]
+        public object Date(string[] date)
+        {
+            if (date.Length > 0) return DateTimeFunctions.Parse(this, date[0]);
+            return new DateTimeFunctions();
+        }
+        
         /// <summary>
         /// Gets or sets the current content of the clipboard.
         /// </summary>

@@ -17,7 +17,6 @@ namespace kalk
 
         //private const int STD_INPUT_HANDLE = -10;
 
-
         //public class ConsoleWaitHandle : WaitHandle
         //{
         //    public ConsoleWaitHandle(IntPtr handle)
@@ -53,13 +52,12 @@ namespace kalk
             //    }
             //} 
 
-            var clippoard = new TextCopy.Clipboard();
 
             //return;
             var app = new KalkEngine
             {
-                GetClipboardText = clippoard.GetText,
-                SetClipboardText = clippoard.SetText
+                GetClipboardText = TextCopy.ClipboardService.GetText,
+                SetClipboardText = TextCopy.ClipboardService.SetText
             };
 
 #if KALK_WINDOWS_STOREAPP

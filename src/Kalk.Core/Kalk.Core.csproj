@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -32,10 +32,11 @@
     <PackageReference Include="MathNet.Numerics" Version="4.11.0" />
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
-    <PackageReference Include="Scriban" Version="3.0.0-alpha.8" />
+    <!--<PackageReference Include="Scriban" Version="3.0.0-alpha.9" />-->
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\lunet\scriban\src\Scriban\Scriban.csproj" />
     <ProjectReference Include="..\Consolus\Consolus.csproj" />
   </ItemGroup>
 
@@ -57,5 +58,4 @@
       <DependentUpon>VectorModule.Matrices.tt</DependentUpon>
     </Compile>
   </ItemGroup>
-
 </Project>

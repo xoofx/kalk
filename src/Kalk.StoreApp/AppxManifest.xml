@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:desktop4="http://schemas.microsoft.com/appx/manifest/desktop/windows10/4"
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
+  IgnorableNamespaces="uap rescap">
+
+  <Identity
+    Name="34981xoofx.kalk"
+    Publisher="CN=5334FAFA-9485-4A68-84B7-3BD8EFD2B4C3"
+    Version="1.0.0.0" />
+
+  <Properties>
+    <DisplayName>kalk</DisplayName>
+    <PublisherDisplayName>xoofx</PublisherDisplayName>
+    <Logo>Images\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+	<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14393.0" MaxVersionTested="10.0.14393.0" />
+  </Dependencies>
+
+  <Resources>
+	  <Resource Language="EN-US" />
+    <Resource uap:Scale="100" />
+    <Resource uap:Scale="125" />
+    <Resource uap:Scale="150" />
+    <Resource uap:Scale="200" />
+    <Resource uap:Scale="400" />
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+      Executable="kalk.exe"
+      EntryPoint="kalk.Program"
+      desktop4:SupportsMultipleInstances="true" 
+      desktop4:Subsystem="console">
+      <uap:VisualElements
+        DisplayName="kalk"
+        Description="KalkApp"
+        BackgroundColor="transparent"
+        Square150x150Logo="Images\Square150x150Logo.png"
+        Square44x44Logo="Images\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Images\Wide310x150Logo.png"  Square71x71Logo="Images\SmallTile.png" Square310x310Logo="Images\LargeTile.png"/>
+        <uap:SplashScreen Image="Images\SplashScreen.png" />
+      </uap:VisualElements>
+
+      <Extensions>
+        <uap5:Extension Category="windows.appExecutionAlias" Executable="kalk.exe" EntryPoint="kalk.Program">
+          <uap5:AppExecutionAlias desktop4:Subsystem="console">
+            <uap5:ExecutionAlias Alias="kalk.exe" />
+          </uap5:AppExecutionAlias>
+        </uap5:Extension>
+      </Extensions>
+
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <rescap:Capability Name="runFullTrust" />
+    <rescap:Capability Name="broadFileSystemAccess" />
+  </Capabilities>
+</Package>

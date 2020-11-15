@@ -1,23 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows10.0.17763.0</TargetFramework>
     <ApplicationIcon>..\..\img\kalk.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Platforms>x64</Platforms>
-    <DefineConstants>KALK_WINDOWS_STOREAPP</DefineConstants>
-    <AssemblyName>kalk</AssemblyName>
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <!--<PublishTrimmed>true</PublishTrimmed>-->
-    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
     <!--<Platforms>x64</Platforms>-->
-    <!--<PublishTrimmed>true</PublishTrimmed>-->
+    <DefineConstants>KALK_WINDOWS_STOREAPP</DefineConstants>
+    <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <AssemblyName>kalk</AssemblyName>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <!--<PublishTrimmed>true</PublishTrimmed>-->
+  	<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+  	<PublishTrimmed>true</PublishTrimmed>
+  	<TrimMode>Link</TrimMode>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+  	<!--<PublishReadyToRun>true</PublishReadyToRun>-->
   </PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="AppxManifest.xml" CopyToOutputDirectory="PreserveNewest" />
+    <None Remove="Images\**" />
+	  <Content Include="Images\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\Kalk.ConsoleApp\Program.cs" Link="Program.cs" />
@@ -28,14 +36,33 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.17134.1000" />
-    <PackageReference Include="TextCopy" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\lunet\scriban\src\Scriban\Scriban.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Kalk.Core\Kalk.Core.csproj" />
   </ItemGroup>
 
-  <Target Name="_CheckForGenerateAppxPackageOnBuild" />
+	<Target Name="CustomPublish" AfterTargets="Publish">
+		<PropertyGroup>
+			<PublishDirFullPath>$([System.IO.Path]::GetFullPath('$(PublishDir)'))</PublishDirFullPath>
+      <PublishPackageName>$(AssemblyName)_$(RuntimeIdentifier).appx</PublishPackageName>
+      <PublishPackagePath>$([System.IO.Path]::GetFullPath('$(PublishDirFullPath)..\$(PublishPackageName)'))</PublishPackagePath>
+		</PropertyGroup>
+
+		<Message Importance="High" Text="Create appx $(MSBuildProjectName) -&gt; $(PublishPackagePath)" />
+
+    <Exec Command="&quot;$(MSBuildProgramFiles32)\Windows Kits\10\bin\$(TargetPlatformVersion)\x86\MakePri.exe&quot; new /pr &quot;$(PublishDirFullPath).&quot; /cf priconfig.xml /of &quot;$(PublishDirFullPath)resources.pri&quot; /o" />
+
+    <Exec Command="&quot;$(MSBuildProgramFiles32)\Windows Kits\10\App Certification Kit\makeappx.exe&quot; pack /o /d &quot;$(PublishDirFullPath).&quot; /p &quot;$(PublishPackagePath)&quot;" />
+		<!--<Exec Command='"$(MSBuildProgramFiles32)\Windows Kits\10\App Certification Kit\signtool.exe" sign /f kalk.pfx /fd sha256 "$(PublishDirFullPath)..\kalk_x64.appx"' />-->
+	</Target>
+
+	<!--<Target Name="RegisterManifest" AfterTargets="MakePri">
+		<Exec Command="PowerShell Add-AppxPackage -Register $(OutputPath)AppxManifest.xml" />
+	</Target>-->
 
 </Project>

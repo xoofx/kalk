@@ -2,17 +2,19 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <ApplicationIcon>..\..\img\kalk.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>kalk</AssemblyName>
-    <!--<PublishTrimmed>true</PublishTrimmed>-->
-    <!--<PublishReadyToRun>true</PublishReadyToRun>-->
-    <!--<PublishTrimmed>true</PublishTrimmed>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <!--<PublishTrimmed>true</PublishTrimmed>-->
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>Link</TrimMode>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <!--<PublishReadyToRun>true</PublishReadyToRun>-->
   </PropertyGroup>
 
   <ItemGroup>

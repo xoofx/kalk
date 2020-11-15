@@ -43,7 +43,7 @@ namespace Kalk.Core
         public KalkEngine() : base(new KalkObjectWithAlias())
         {
             KalkSettings.Initialize();
-            KalkEngineFolder = Path.GetDirectoryName(typeof(KalkEngine).Assembly.Location ?? Process.GetCurrentProcess().MainModule?.FileName);
+            KalkEngineFolder = AppContext.BaseDirectory;
 
             // Enforce UTF8 encoding
             Console.OutputEncoding = Encoding.UTF8;

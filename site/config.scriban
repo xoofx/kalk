@@ -14,8 +14,8 @@ github_sponsor_url = "https://github.com/sponsors/xoofx"
 # Enable search indexing
 with search 
     enable = true
-    # engine = "lunr"
-    worker = true
+    # engine = "lunr"    
+    # worker = true
     # Exclude this file manually here as it not public and doesn't have a frontmatter
     excludes.add ["/test.html", "/404.md", "/download.md"]
 end
