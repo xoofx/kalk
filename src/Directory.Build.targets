@@ -1,0 +1,9 @@
+<Project>
+  <ItemGroup Condition="'$(KalkGitVersion)' == 'true'">
+    <AssemblyMetadataCommand Remove="GitDescription"/>
+    <PackageReference Include="MSBuildGitHash" Version="2.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>
