@@ -14,9 +14,10 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
 using System.Xml.Linq;
+using Broslyn;
 using Kalk.Core;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.MSBuild;
+using Microsoft.CodeAnalysis.CSharp;
 using Scriban;
 using Scriban.Runtime;
 
@@ -97,8 +98,6 @@ namespace Kalk.CodeGen
             public List<IntrinsicParameter> Parameters { get; } 
             
             public bool HasPointerArguments { get; set; }
-            
-            public MethodInfo Method { get; set; }
             
             public IMethodSymbol MethodSymbol { get; set; }
             
@@ -192,47 +191,18 @@ namespace Kalk.CodeGen
             })
             {
                 var x86Sse = compilation.GetTypeByMetadataName(type.FullName);
-                foreach(var method in type.GetMethods(BindingFlags.Static | BindingFlags.Public))
+                foreach(var method in x86Sse.GetMembers().OfType<IMethodSymbol>().Where(x => x.IsStatic))
                 {
-                    if (method.GetParameters().Length == 0)
-                    {
-                        continue;
-                    }
+                    if (method.Parameters.Length == 0) continue;
 
-                    var reflectionParameters = method.GetParameters();
-                    IMethodSymbol sseMember = null;
-                    foreach (var matchingMember in x86Sse.GetMembers(method.Name).OfType<IMethodSymbol>().Where(x => x.Parameters.Length == method.GetParameters().Length))
-                    {
-                        sseMember = matchingMember;
-                        for (int i = 0; i < matchingMember.Parameters.Length; i++)
-                        {
-                            var reflectionParameter = reflectionParameters[i];
-                            var isReflectionPointer = reflectionParameter.ParameterType.IsPointer;
-                            var isRoslynPointer = matchingMember.Parameters[i].Type is IPointerTypeSymbol;
-                            if (isReflectionPointer != isRoslynPointer)
-                            {
-                                sseMember = null;
-                                break;
-                            }
-                        }
-
-                        if (sseMember != null)
-                        {
-                            break;
-                        }
-                    }
-
-                    if (sseMember == null)
-                    {
-                        Console.WriteLine($"Unable to match {method}");
-                        continue;
-                    }
-                    
                     var groupName = type.FullName.Substring(type.FullName.LastIndexOf('.') + 1).Replace("+", string.Empty);
                     var docGroupName = type.Name == "X64" ? type.DeclaringType.Name : type.Name;
                     
-                    var xmlDocStr = sseMember.GetDocumentationCommentXml();
-                    if (string.IsNullOrEmpty(xmlDocStr)) continue;
+                    var xmlDocStr = method.GetDocumentationCommentXml();
+                    if (string.IsNullOrEmpty(xmlDocStr))
+                    {
+                        continue;
+                    }
                     
                     var xmlDoc = XElement.Parse($"<root>{xmlDocStr.Trim()}</root>");
                     var elements = xmlDoc.Elements().First();
@@ -241,7 +211,10 @@ namespace Kalk.CodeGen
 
                     var summaryTrimmed = csharpSummary.Replace("unsigned", string.Empty);
                     var match = regexName.Match(summaryTrimmed);
-                    if (!match.Success) continue;
+                    if (!match.Success)
+                    {
+                        continue;
+                    }
                     
                     var rawIntrinsicName = match.Groups[1].Value;
                     var intrinsicName = rawIntrinsicName.TrimStart('_');
@@ -249,9 +222,8 @@ namespace Kalk.CodeGen
                     var desc = new KalkIntrinsic
                     {
                         Name = intrinsicName,
-                        Method = method,
                         Class = groupName,
-                        MethodSymbol = sseMember,
+                        MethodSymbol = method,
                         IsFunc = true,
                     };
                     
@@ -309,7 +281,7 @@ namespace Kalk.CodeGen
                             Debug.Assert(method.Name.StartsWith("Round"));
                             var postfix = method.Name.Substring("Round".Length);
                             Debug.Assert(hasInteldoc);
-                            if (desc.Name != "mm_round_ps" && desc.Name != "mm256_round_ps" && (desc.Params.Count >= 2 && sseMember.Parameters.Length == 1))
+                            if (desc.Name != "mm_round_ps" && desc.Name != "mm256_round_ps" && (desc.Params.Count >= 2 && method.Parameters.Length == 1))
                             {
                                 desc.Name += "1";
                             }
@@ -330,7 +302,7 @@ namespace Kalk.CodeGen
                         case "mm_rcp_ss":
                         case "mm_rsqrt_ss":
                         case "mm_sqrt_ss":
-                            if (sseMember.Parameters.Length == 1)
+                            if (method.Parameters.Length == 1)
                             {
                                 desc.Name += "1";
                             }
@@ -339,7 +311,7 @@ namespace Kalk.CodeGen
                         case "mm_sqrt_sd":
                         case "mm_ceil_sd":
                         case "mm_floor_sd":
-                            if (sseMember.Parameters.Length == 1)
+                            if (method.Parameters.Length == 1)
                             {
                                 desc.Name += "1";
                             }
@@ -348,9 +320,9 @@ namespace Kalk.CodeGen
                         default:
                             if (hasInteldoc)
                             {
-                                if (sseMember.Parameters.Length != desc.Params.Count)
+                                if (method.Parameters.Length != desc.Params.Count)
                                 {
-                                    Console.WriteLine($"Parameters not matching for {sseMember.ToDisplayString()}. Expecting: {desc.Params.Count} but got {sseMember.Parameters.Length}  ");
+                                    Console.WriteLine($"Parameters not matching for {method.ToDisplayString()}. Expecting: {desc.Params.Count} but got {method.Parameters.Length}  ");
                                 }
                             }
                             break;
@@ -358,26 +330,26 @@ namespace Kalk.CodeGen
 
                     desc.CSharpName = desc.Name;
                     desc.Names.Add(desc.Name);                    
-                    desc.RealReturnType = sseMember.ReturnType.ToDisplayString();
+                    desc.RealReturnType = method.ReturnType.ToDisplayString();
                     if (desc.RealReturnType == "bool") desc.RealReturnType = "KalkBool";
-                    desc.ReturnType = method.ReturnType.IsConstructedGenericType ? "object" : desc.RealReturnType;
-                    desc.GenericCompatibleRealReturnType = method.ReturnType.IsPointer ? "IntPtr" : desc.RealReturnType;
+                    desc.ReturnType = method.ReturnType is INamedTypeSymbol retType && retType.IsGenericType ? "object" : desc.RealReturnType;
+                    desc.GenericCompatibleRealReturnType = method.ReturnType is IPointerTypeSymbol ? "IntPtr" : desc.RealReturnType;
                     
-                    (desc.BaseNativeReturnType, desc.NativeReturnType) = GetBaseTypeAndType(sseMember.ReturnType);
+                    (desc.BaseNativeReturnType, desc.NativeReturnType) = GetBaseTypeAndType(method.ReturnType);
 
                     desc.HasPointerArguments = false;
 
-                    for (int i = 0; i < sseMember.Parameters.Length; i++)
+                    for (int i = 0; i < method.Parameters.Length; i++)
                     {
                         var intrinsicParameter = new IntrinsicParameter();
-                        var parameter = sseMember.Parameters[i];
+                        var parameter = method.Parameters[i];
                         intrinsicParameter.Name = i < desc.Params.Count ? desc.Params[i].Name : parameter.Name;
 
-                        var parameterType = method.GetParameters()[i].ParameterType;
-                        intrinsicParameter.Type =  parameterType.IsConstructedGenericType || parameterType.IsPointer ? "object" : parameter.Type.ToDisplayString();
+                        var parameterType = method.Parameters[i].Type;
+                        intrinsicParameter.Type =  parameterType is INamedTypeSymbol paramType && paramType.IsGenericType || parameterType is IPointerTypeSymbol ? "object" : parameter.Type.ToDisplayString();
                         intrinsicParameter.RealType = parameter.Type.ToDisplayString();
-                        intrinsicParameter.GenericCompatibleRealType = parameterType.IsPointer ? "IntPtr" : intrinsicParameter.RealType;
-                        if (parameterType.IsPointer)
+                        intrinsicParameter.GenericCompatibleRealType = parameterType is IPointerTypeSymbol ? "IntPtr" : intrinsicParameter.RealType;
+                        if (parameterType is IPointerTypeSymbol)
                         {
                             desc.HasPointerArguments = true;
                         }
@@ -396,7 +368,7 @@ namespace Kalk.CodeGen
                         methodDeclaration.Append($"{parameter.Type} {parameter.Name}");
                     }
 
-                    bool isAction = method.ReturnType == typeof(void);
+                    bool isAction = method.ReturnType.ToDisplayString() == "void";
                     desc.IsAction = isAction;
                     desc.IsFunc = !desc.IsAction;
                     
@@ -442,8 +414,8 @@ namespace Kalk.CodeGen
                         }
                     }
 
-                    var finalSSEMethod = $"{sseMember.ContainingType.ToDisplayString()}.{sseMember.Name}";
-                    var sseMethodName = desc.HasPointerArguments ? $"{groupName}_{sseMember.Name}" : finalSSEMethod;
+                    var finalSSEMethod = $"{method.ContainingType.ToDisplayString()}.{method.Name}";
+                    var sseMethodName = desc.HasPointerArguments ? $"{groupName}_{method.Name}{count}" : finalSSEMethod;
                     methodDeclaration.Append(sseMethodName);
                     methodDeclaration.Append(");");
                     desc.Cast = $"({castBuilder})";
@@ -550,66 +522,55 @@ namespace Kalk.CodeGen
 
         static async Task Main(string[] args)
         {
-            Microsoft.Build.Locator.MSBuildLocator.RegisterDefaults();
-
             var x = typeof(System.Composition.CompositionContext).Name;
-
-            var workspace = MSBuildWorkspace.Create(new Dictionary<string, string>()
-            {
-//               {"TargetFramework", "netcoreapp3.1"},
-            });
 
             var rootFolder = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"../../../../.."));
             var siteFolder = Path.Combine(rootFolder, "site");
             var srcFolder = Path.Combine(rootFolder, "src");
             var testsFolder = Path.Combine(srcFolder, "Kalk.Tests");
 
-            var pathToSolution = Path.Combine(srcFolder, @"kalk.sln");
-            var solution = await workspace.OpenSolutionAsync(pathToSolution);
+            var pathToSolution = Path.Combine(srcFolder, @"Kalk.Core", "Kalk.Core.csproj");
 
-            // Force this assembly to reference the following types in order to compile Kalk.Core correctly
-            // (this is awful but Roslyn doesn't help us here)
-            Console.WriteLine($"Using {typeof(Unsafe).Assembly.FullName}");
-            Console.WriteLine($"Using {typeof(CsvHelper.CsvParser).Assembly.FullName}");
-            Console.WriteLine($"Using {typeof(HttpClient).Assembly.FullName}");
-            Console.WriteLine($"Using {typeof(BigInteger).Assembly.FullName}");
-            Console.WriteLine($"Using {typeof(HttpStatusCode).Assembly.FullName}");
-            Console.WriteLine($"Using {typeof(System.Runtime.Intrinsics.Vector128).Assembly.Location}");
-            Console.WriteLine($"Using {typeof(System.Text.Json.JsonDocument).Assembly.Location}");
-            Console.WriteLine($"Using {typeof(Scriban.TemplateContext).Assembly.Location}");
-
+            var broResult = CSharpCompilationCapture.Build(pathToSolution);
+            var solution = broResult.Workspace.CurrentSolution;
             var project = solution.Projects.First(x => x.Name == "Kalk.Core");
+
+            //var project = solution.Projects.First(x => x.Name == "Kalk.Core").WithCompilationOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
             //var scriban = solution.Projects.First(x => x.Name == "Scriban");
             //project = project.AddMetadataReferences(scriban.MetadataReferences);
 
-            string homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
-                               Environment.OSVersion.Platform == PlatformID.MacOSX)
-                ? Environment.GetEnvironmentVariable("HOME")
-                : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+            //string homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
+            //                   Environment.OSVersion.Platform == PlatformID.MacOSX)
+            //    ? Environment.GetEnvironmentVariable("HOME")
+            //    : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
 
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                if (assembly.IsDynamic) continue;
-                //if (assembly.GetName().Name == "Scriban") continue;
-                project = project.AddMetadataReference(MetadataReference.CreateFromFile(assembly.Location));
-            }
+            //foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            //{
+            //    if (assembly.IsDynamic) continue;
+            //    //if (assembly.GetName().Name == "Scriban") continue;
+            //    project = project.AddMetadataReference(MetadataReference.CreateFromFile(assembly.Location));
+            //}
 
-            {
-                var refPackage = Path.Combine(homePath, ".nuget", "packages", "mathnet.numerics", "4.9.1", "lib", "netstandard2.0", "MathNet.Numerics.dll");
-                project = project.AddMetadataReference(MetadataReference.CreateFromFile(refPackage));
-            }
-            {
-                var refPackage = Path.Combine(homePath, ".nuget", "packages", "System.Text.Encoding.CodePages", "4.7.0", "lib", "netstandard2.0", "System.Text.Encoding.CodePages.dll");
-                project = project.AddMetadataReference(MetadataReference.CreateFromFile(refPackage));
-            }
+            //{
+            //    var refPackage = Path.Combine(homePath, ".nuget", "packages", "mathnet.numerics", "4.9.1", "lib", "netstandard2.0", "MathNet.Numerics.dll");
+            //    project = project.AddMetadataReference(MetadataReference.CreateFromFile(refPackage));
+            //}
+            //{
+            //    var refPackage = Path.Combine(homePath, ".nuget", "packages", "System.Text.Encoding.CodePages", "4.7.0", "lib", "netstandard2.0", "System.Text.Encoding.CodePages.dll");
+            //    project = project.AddMetadataReference(MetadataReference.CreateFromFile(refPackage));
+            //}
 
             // Hack re-add System.Runtime.Intrinsics with doc
             var docProvider = XmlDocumentationProvider.CreateFromFile("System.Runtime.Intrinsics.xml");
-            var intrinsicsAssembly = MetadataReference.CreateFromFile(typeof(System.Runtime.Intrinsics.X86.Sse).Assembly.Location, documentation: docProvider);
             var toRemove = project.MetadataReferences.FirstOrDefault(x => x.Display.Contains("System.Runtime.Intrinsics"));
+            var intrinsicsAssembly = MetadataReference.CreateFromFile(toRemove.Display, documentation: docProvider);
             project = project.RemoveMetadataReference(toRemove);
             project = project.AddMetadataReference(intrinsicsAssembly);
-            
+
+            // Make sure that doc will be parsed
+            project = project.WithParseOptions(project.ParseOptions.WithDocumentationMode(DocumentationMode.Parse));
+
             // Compile the project
             var compilation = await project.GetCompilationAsync();
 
@@ -1005,20 +966,6 @@ namespace Kalk.Tests
                 text = builder.ToString();
             }
             return HttpUtility.HtmlDecode(text);
-        }
-
-        private class ConsoleProgressReporter : IProgress<ProjectLoadProgress>
-        {
-            public void Report(ProjectLoadProgress loadProgress)
-            {
-                var projectDisplay = Path.GetFileName(loadProgress.FilePath);
-                if (loadProgress.TargetFramework != null)
-                {
-                    projectDisplay += $" ({loadProgress.TargetFramework})";
-                }
-
-                Console.WriteLine($"{loadProgress.Operation,-15} {loadProgress.ElapsedTime,-15:m\\:ss\\.fffffff} {projectDisplay}");
-            }
         }
     }
 }
