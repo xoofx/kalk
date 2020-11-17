@@ -12,7 +12,7 @@ search: false
 <div class="col-sm-12">
 
 {{CALLOUT class:'alert show fade' do}}
-<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button>
 
 `kalk` just launched and is available as a preview, [try it out](download.md)! If you have any feedback, please log them [here]({{site.github_repo_url}}/issues/new) on GitHub <i class="fa fa-heart-o"></i>
 {{end}}
