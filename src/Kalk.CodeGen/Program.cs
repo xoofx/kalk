@@ -16,6 +16,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Broslyn;
 using Kalk.Core;
+using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Scriban;
@@ -157,6 +158,18 @@ namespace Kalk.CodeGen
             {"mm256_stream_pd", 32},
             {"mm256_stream_ps", 32},
             {"mm256_stream_load_si256", 32},
+        };
+
+        private static readonly Dictionary<string, string> FixIntrinsicsDocumentation = new Dictionary<string, string>()
+        {
+            {"<summary>_MM_FROUND_CUR_DIRECTION; ROUNDPD", "<summary>__m128d _mm_round_pd (__m128d a, _MM_FROUND_CUR_DIRECTION); ROUNDPD"},
+            {"<summary>_MM_FROUND_CUR_DIRECTION; ROUNDPS", "<summary>__m128 _mm_round_ps (__m128 a, _MM_FROUND_CUR_DIRECTION); ROUNDPS"},
+            {"<summary>_MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC; ROUNDPD", "<summary>__m128d _mm_round_pd (__m128d a, _MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC); ROUNDPD"},
+            {"<summary>_MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC; ROUNDPS", "<summary>__m128 _mm_round_ps (__m128 a, _MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC); ROUNDPS"},
+            {"<summary>_MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC; ROUNDPD", "<summary>__m128d _mm_round_pd (__m128d a, _MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC); ROUNDPD"},
+            {"<summary>_MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC; ROUNDPS", "<summary>__m128 _mm_round_ps (__m128 a, _MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC); ROUNDPS"},
+            {"<summary>_MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC; ROUNDPD", "<summary>__m128d _mm_round_pd (__m128d a, _MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC); ROUNDPD"},
+            {"<summary>_MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC; ROUNDPS", "<summary>__m128 _mm_round_ps (__m128 a, _MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC); ROUNDPS"}
         };
        
         private static List<ModuleToGenerate> FindIntrinsics(Compilation compilation)
@@ -562,7 +575,38 @@ namespace Kalk.CodeGen
             //}
 
             // Hack re-add System.Runtime.Intrinsics with doc
-            var docProvider = XmlDocumentationProvider.CreateFromFile("System.Runtime.Intrinsics.xml");
+
+
+            // @"packs/Microsoft.NETCore.App.Ref/5.0.0/ref/net5.0";
+
+            var instances = MSBuildLocator.QueryVisualStudioInstances(new VisualStudioInstanceQueryOptions() {DiscoveryTypes = DiscoveryType.DotNetSdk, WorkingDirectory = AppContext.BaseDirectory});
+
+            string intrinsicsPath = null;
+            foreach (var instance in instances)
+            {
+                var file = Path.GetFullPath(Path.Combine(instance.MSBuildPath, "..", "..", "packs", "Microsoft.NETCore.App.Ref", "5.0.0", "ref", "net5.0", "System.Runtime.Intrinsics.xml"));
+                if (File.Exists(file))
+                {
+                    intrinsicsPath = file;
+                    break;
+                }
+            }
+
+            if (intrinsicsPath == null)
+            {
+                Console.WriteLine("Unable to find System.Runtime.Intrinsics.xml from dotnet SDK installed");
+                Environment.Exit(1);
+                return;
+            }
+
+            // Patch intrinsics documentation
+            var intrinsicDoc = File.ReadAllText(intrinsicsPath);
+            foreach (var fixDocPair in FixIntrinsicsDocumentation)
+            {
+                intrinsicDoc = intrinsicDoc.Replace(fixDocPair.Key, fixDocPair.Value);
+            }
+
+            var docProvider = XmlDocumentationProvider.CreateFromBytes(new UTF8Encoding(false).GetBytes(intrinsicDoc));
             var toRemove = project.MetadataReferences.FirstOrDefault(x => x.Display.Contains("System.Runtime.Intrinsics"));
             var intrinsicsAssembly = MetadataReference.CreateFromFile(toRemove.Display, documentation: docProvider);
             project = project.RemoveMetadataReference(toRemove);
@@ -964,6 +1008,11 @@ namespace Kalk.Tests
                 }
 
                 text = builder.ToString();
+            }
+
+            if (element.Name == "para")
+            {
+                text = text + "\n";
             }
             return HttpUtility.HtmlDecode(text);
         }
