@@ -15,9 +15,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\Kalk.CodeGen\KalkToGenerate.cs" Link="KalkToGenerate.cs" />
     <Compile Include="..\Kalk.Core\Model\KalkDescriptor.cs">
       <Link>KalkDescriptor.cs</Link>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="intel-intrinsics-data-latest.xml" />
+    <Content Include="intel-intrinsics-data-latest.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

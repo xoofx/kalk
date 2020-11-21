@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Numerics;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,521 +10,13 @@ using System.Xml;
 using System.Xml.Linq;
 using Broslyn;
 using Kalk.Core;
-using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Scriban;
-using Scriban.Runtime;
 
 namespace Kalk.CodeGen
 {
     class Program
     {
-        internal class ModuleToGenerate
-        {
-            public ModuleToGenerate()
-            {
-                Members = new List<KalkGeneratedMember>();
-            }
-
-            public string Namespace { get; set; }
-
-            public string ClassName { get; set; }
-
-            public List<KalkGeneratedMember> Members { get; }
-        }
-
-        public class IntrinsicParameter : KalkParamDescriptor
-        {
-            public IntrinsicParameter()
-            {
-            }
-
-            public string Type { get; set; }
-            
-            public string RealType { get; set; }
-            
-            public string GenericCompatibleRealType { get; set; }
-
-            public string BaseNativeType { get; set; }
-            
-            public string NativeType { get; set; }
-        }
-
-        public class KalkGeneratedMember : KalkDescriptor
-        {
-            public KalkGeneratedMember()
-            {
-                Tests = new List<(string, string)>();
-            }
-
-            public string Name { get; set; }
-
-            public string XmlId { get; set; }
-
-            public string CSharpName { get; set; }
-
-            public bool IsFunc { get; set; }
-            
-            public bool IsAction { get; set; }
-
-            public bool IsConst { get; set; }
-
-            public string Cast { get; set; }
-
-            public List<(string, string)> Tests { get; }
-        }
-
-        public class KalkIntrinsic : KalkGeneratedMember
-        {
-            public KalkIntrinsic()
-            {
-                Parameters = new List<IntrinsicParameter>();
-            }
-
-            public string Class { get; set; }
-            
-            public string ReturnType { get; set; }
-            
-            public string RealReturnType { get; set; }
-
-            public string GenericCompatibleRealReturnType { get; set; }
-            
-            public List<IntrinsicParameter> Parameters { get; } 
-            
-            public bool HasPointerArguments { get; set; }
-            
-            public IMethodSymbol MethodSymbol { get; set; }
-            
-            public string MethodDeclaration { get; set; }
-            
-            public string IndirectMethodDeclaration { get; set; }
-
-            public string BaseNativeReturnType { get; set; }
-
-            public string NativeReturnType { get; set; }
-            
-            public bool IsSupported { get; set; }
-        }
-
-        private static readonly HashSet<string> IntrinsicsSupports = new HashSet<string>()
-        {
-            "SSE",
-            "SSE2",
-            "SSE3",
-            "SSSE3",
-            "SSE4.1",
-            "SSE4.2",
-            "AVX",
-            "AVX2",
-        };
-
-        /// <summary>
-        /// Instructions requiring alignment (via parameter mem_addr)
-        /// </summary>
-        private static readonly Dictionary<string, int> RequiredAlignments = new Dictionary<string, int>()
-        {
-            {"mm_load_ps", 16},
-            {"mm_loadr_ps", 16},
-            {"mm_stream_ps", 16},
-            {"mm_store1_ps", 16},
-            {"mm_store_ps1", 16},
-            {"mm_store_ps", 16},
-            {"mm_storer_ps", 16},
-            {"mm_load_si128", 16},
-            {"mm_store_si128", 16},
-            {"mm_stream_si128", 16},
-            {"mm_load_pd", 16},
-            {"mm_loadr_pd", 16},
-            {"mm_stream_pd", 16},
-            {"mm_store1_pd", 16},
-            {"mm_store_pd1", 16},
-            {"mm_store_pd", 16},
-            {"mm_storer_pd", 16},
-            {"mm_stream_load_si128", 16},
-            {"mm256_load_pd", 32},
-            {"mm256_store_pd", 32},
-            {"mm256_load_ps", 32},
-            {"mm256_store_ps", 32},
-            {"mm256_load_si256", 32},
-            {"mm256_store_si256", 32},
-            {"mm256_stream_si256", 32},
-            {"mm256_stream_pd", 32},
-            {"mm256_stream_ps", 32},
-            {"mm256_stream_load_si256", 32},
-        };
-
-        private static readonly Dictionary<string, string> FixIntrinsicsDocumentation = new Dictionary<string, string>()
-        {
-            {"<summary>_MM_FROUND_CUR_DIRECTION; ROUNDPD", "<summary>__m128d _mm_round_pd (__m128d a, _MM_FROUND_CUR_DIRECTION); ROUNDPD"},
-            {"<summary>_MM_FROUND_CUR_DIRECTION; ROUNDPS", "<summary>__m128 _mm_round_ps (__m128 a, _MM_FROUND_CUR_DIRECTION); ROUNDPS"},
-            {"<summary>_MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC; ROUNDPD", "<summary>__m128d _mm_round_pd (__m128d a, _MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC); ROUNDPD"},
-            {"<summary>_MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC; ROUNDPS", "<summary>__m128 _mm_round_ps (__m128 a, _MM_FROUND_TO_NEG_INF |_MM_FROUND_NO_EXC); ROUNDPS"},
-            {"<summary>_MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC; ROUNDPD", "<summary>__m128d _mm_round_pd (__m128d a, _MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC); ROUNDPD"},
-            {"<summary>_MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC; ROUNDPS", "<summary>__m128 _mm_round_ps (__m128 a, _MM_FROUND_TO_POS_INF |_MM_FROUND_NO_EXC); ROUNDPS"},
-            {"<summary>_MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC; ROUNDPD", "<summary>__m128d _mm_round_pd (__m128d a, _MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC); ROUNDPD"},
-            {"<summary>_MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC; ROUNDPS", "<summary>__m128 _mm_round_ps (__m128 a, _MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC); ROUNDPS"}
-        };
-       
-        private static List<ModuleToGenerate> FindIntrinsics(Compilation compilation)
-        {
-            var regexName = new Regex(@"^\s*\w+\s+(_\w+)");
-            int count = 0;
-            
-            var intelDoc = XDocument.Load("intel-intrinsics-data-latest.xml");
-            var nameToDoc = intelDoc.Descendants("intrinsic").Where(x => IntrinsicsSupports.Contains(x.Attribute("tech").Value ?? string.Empty)).ToDictionary(x => x.Attribute("name").Value, x => x);
-            
-            var generatedIntrinsics = new Dictionary<string, KalkIntrinsic>();
-            
-            foreach (var type in new Type[]
-            {
-                typeof(System.Runtime.Intrinsics.X86.Sse.X64),
-                typeof(System.Runtime.Intrinsics.X86.Sse),
-                typeof(System.Runtime.Intrinsics.X86.Sse2),
-                typeof(System.Runtime.Intrinsics.X86.Sse2.X64),
-                typeof(System.Runtime.Intrinsics.X86.Sse3),
-                typeof(System.Runtime.Intrinsics.X86.Ssse3),
-                typeof(System.Runtime.Intrinsics.X86.Sse41),
-                typeof(System.Runtime.Intrinsics.X86.Sse41.X64),
-                typeof(System.Runtime.Intrinsics.X86.Sse42),
-                typeof(System.Runtime.Intrinsics.X86.Sse42.X64),
-                typeof(System.Runtime.Intrinsics.X86.Aes),
-                typeof(System.Runtime.Intrinsics.X86.Avx),
-                typeof(System.Runtime.Intrinsics.X86.Avx2),
-                typeof(System.Runtime.Intrinsics.X86.Bmi1),
-                typeof(System.Runtime.Intrinsics.X86.Bmi1.X64),
-                typeof(System.Runtime.Intrinsics.X86.Bmi2),
-                typeof(System.Runtime.Intrinsics.X86.Bmi2.X64),
-            })
-            {
-                var x86Sse = compilation.GetTypeByMetadataName(type.FullName);
-                foreach(var method in x86Sse.GetMembers().OfType<IMethodSymbol>().Where(x => x.IsStatic))
-                {
-                    if (method.Parameters.Length == 0) continue;
-
-                    var groupName = type.FullName.Substring(type.FullName.LastIndexOf('.') + 1).Replace("+", string.Empty);
-                    var docGroupName = type.Name == "X64" ? type.DeclaringType.Name : type.Name;
-                    
-                    var xmlDocStr = method.GetDocumentationCommentXml();
-                    if (string.IsNullOrEmpty(xmlDocStr))
-                    {
-                        continue;
-                    }
-                    
-                    var xmlDoc = XElement.Parse($"<root>{xmlDocStr.Trim()}</root>");
-                    var elements = xmlDoc.Elements().First();
-
-                    var csharpSummary = GetCleanedString(elements);
-
-                    var summaryTrimmed = csharpSummary.Replace("unsigned", string.Empty);
-                    var match = regexName.Match(summaryTrimmed);
-                    if (!match.Success)
-                    {
-                        continue;
-                    }
-                    
-                    var rawIntrinsicName = match.Groups[1].Value;
-                    var intrinsicName = rawIntrinsicName.TrimStart('_');
-
-                    var desc = new KalkIntrinsic
-                    {
-                        Name = intrinsicName,
-                        Class = groupName,
-                        MethodSymbol = method,
-                        IsFunc = true,
-                    };
-                    
-                    bool hasInteldoc = false;
-                    if (nameToDoc.TryGetValue(rawIntrinsicName, out var elementIntelDoc))
-                    {
-                        hasInteldoc = true;
-                        desc.Description = GetCleanedString(elementIntelDoc.Descendants("description").FirstOrDefault());
-
-                        foreach (var parameter in elementIntelDoc.Descendants("parameter"))
-                        {
-                            desc.Params.Add(new KalkParamDescriptor(parameter.Attribute("varname").Value, parameter.Attribute("type").Value));
-                        }
-                        
-                        desc.Description = desc.Description.Replace("[round_note]", string.Empty).Trim();
-                        desc.Description = desc.Description + "\n\n" + csharpSummary;
-                    }
-                    else
-                    {
-                        desc.Description = csharpSummary;
-                    }
-
-                    // Patching special methods
-                    switch (desc.Name)
-                    {
-                        case "mm_prefetch":
-                            if (method.Name.EndsWith("0"))
-                            {
-                                desc.Name += "0";
-                            }
-                            else if (method.Name.EndsWith("1"))
-                            {
-                                desc.Name += "1";
-                            }
-                            else if (method.Name.EndsWith("2"))
-                            {
-                                desc.Name += "2";
-                            }
-                            else if (method.Name.EndsWith("Temporal"))
-                            {
-                                desc.Name += "nta";
-                            }
-                            else
-                            {
-                                goto default;
-                            }
-                            break;
-                        
-                        case "mm_round_sd":
-                        case "mm_round_ss":
-                        case "mm_round_pd":
-                        case "mm_round_ps":
-                        case "mm256_round_pd":
-                        case "mm256_round_ps":
-                            Debug.Assert(method.Name.StartsWith("Round"));
-                            var postfix = method.Name.Substring("Round".Length);
-                            Debug.Assert(hasInteldoc);
-                            if (desc.Name != "mm_round_ps" && desc.Name != "mm256_round_ps" && (desc.Params.Count >= 2 && method.Parameters.Length == 1))
-                            {
-                                desc.Name += "1";
-                            }
-                            
-                            if (!postfix.StartsWith("CurrentDirection"))
-                            {
-                                postfix = StandardMemberRenamer.Rename(postfix);
-                                desc.Name = $"{desc.Name}_{postfix}";
-                            }
-
-                            // Remove rounding from doc
-                            var index = desc.Params.FindIndex(x => x.Name == "rounding");
-                            if (index >= 0)
-                            {
-                                desc.Params.RemoveAt(index);
-                            }
-                            break;
-                        case "mm_rcp_ss":
-                        case "mm_rsqrt_ss":
-                        case "mm_sqrt_ss":
-                            if (method.Parameters.Length == 1)
-                            {
-                                desc.Name += "1";
-                            }
-                            break;
-                        
-                        case "mm_sqrt_sd":
-                        case "mm_ceil_sd":
-                        case "mm_floor_sd":
-                            if (method.Parameters.Length == 1)
-                            {
-                                desc.Name += "1";
-                            }
-                            break;
-                            
-                        default:
-                            if (hasInteldoc)
-                            {
-                                if (method.Parameters.Length != desc.Params.Count)
-                                {
-                                    Console.WriteLine($"Parameters not matching for {method.ToDisplayString()}. Expecting: {desc.Params.Count} but got {method.Parameters.Length}  ");
-                                }
-                            }
-                            break;
-                    }
-
-                    desc.CSharpName = desc.Name;
-                    desc.Names.Add(desc.Name);                    
-                    desc.RealReturnType = method.ReturnType.ToDisplayString();
-                    if (desc.RealReturnType == "bool") desc.RealReturnType = "KalkBool";
-                    desc.ReturnType = method.ReturnType is INamedTypeSymbol retType && retType.IsGenericType ? "object" : desc.RealReturnType;
-                    desc.GenericCompatibleRealReturnType = method.ReturnType is IPointerTypeSymbol ? "IntPtr" : desc.RealReturnType;
-                    
-                    (desc.BaseNativeReturnType, desc.NativeReturnType) = GetBaseTypeAndType(method.ReturnType);
-
-                    desc.HasPointerArguments = false;
-
-                    for (int i = 0; i < method.Parameters.Length; i++)
-                    {
-                        var intrinsicParameter = new IntrinsicParameter();
-                        var parameter = method.Parameters[i];
-                        intrinsicParameter.Name = i < desc.Params.Count ? desc.Params[i].Name : parameter.Name;
-
-                        var parameterType = method.Parameters[i].Type;
-                        intrinsicParameter.Type =  parameterType is INamedTypeSymbol paramType && paramType.IsGenericType || parameterType is IPointerTypeSymbol ? "object" : parameter.Type.ToDisplayString();
-                        intrinsicParameter.RealType = parameter.Type.ToDisplayString();
-                        intrinsicParameter.GenericCompatibleRealType = parameterType is IPointerTypeSymbol ? "IntPtr" : intrinsicParameter.RealType;
-                        if (parameterType is IPointerTypeSymbol)
-                        {
-                            desc.HasPointerArguments = true;
-                        }
-                        
-                        (intrinsicParameter.BaseNativeType, intrinsicParameter.NativeType) = GetBaseTypeAndType(parameter.Type);
-                        desc.Parameters.Add(intrinsicParameter);
-                    }
-                    
-                    // public object mm_add_ps(object left, object right) => ProcessArgs<float, Vector128<float>, float, Vector128<float>, float, Vector128<float>>(left, right, Sse.Add);
-                    var methodDeclaration = new StringBuilder();
-                    methodDeclaration.Append($"public {desc.ReturnType} {desc.Name}(");
-                    for (int i = 0; i < desc.Parameters.Count; i++)
-                    {
-                        var parameter = desc.Parameters[i];
-                        if (i > 0) methodDeclaration.Append(", ");
-                        methodDeclaration.Append($"{parameter.Type} {parameter.Name}");
-                    }
-
-                    bool isAction = method.ReturnType.ToDisplayString() == "void";
-                    desc.IsAction = isAction;
-                    desc.IsFunc = !desc.IsAction;
-                    
-                    methodDeclaration.Append(isAction ? $") => ProcessAction<" : $") => ({desc.ReturnType})ProcessFunc<");
-
-                    var castBuilder = new StringBuilder(isAction ? "Action<" : "Func<");
-                    for (int i = 0; i < desc.Parameters.Count; i++)
-                    {
-                        var parameter = desc.Parameters[i];
-                        if (i > 0)
-                        {
-                            methodDeclaration.Append(", ");
-                            castBuilder.Append(", ");
-                        }
-                        methodDeclaration.Append($"{parameter.BaseNativeType}, {parameter.NativeType}");
-                        castBuilder.Append($"{parameter.Type}");
-                    }
-
-                    if (!isAction)
-                    {
-                        if (desc.Parameters.Count > 0)
-                        {
-                            methodDeclaration.Append(", ");
-                            castBuilder.Append(", ");                        
-                        }
-                        
-                        methodDeclaration.Append($"{desc.BaseNativeReturnType}, {desc.NativeReturnType}");
-                        castBuilder.Append($"{desc.ReturnType}");
-                    }
-                    methodDeclaration.Append($">(");
-                    castBuilder.Append($">");
-                    
-                    // Gets any memory alignment
-                    RequiredAlignments.TryGetValue(intrinsicName, out int memAlign);
-                    
-                    for (int i = 0; i < desc.Parameters.Count; i++)
-                    {
-                        var parameter = desc.Parameters[i];
-                        methodDeclaration.Append($"{parameter.Name}, ");
-                        if (memAlign > 0 && parameter.Name == "mem_addr")
-                        {
-                            methodDeclaration.Append($"{memAlign}, ");
-                        }
-                    }
-
-                    var finalSSEMethod = $"{method.ContainingType.ToDisplayString()}.{method.Name}";
-                    var sseMethodName = desc.HasPointerArguments ? $"{groupName}_{method.Name}{count}" : finalSSEMethod;
-                    methodDeclaration.Append(sseMethodName);
-                    methodDeclaration.Append(");");
-                    desc.Cast = $"({castBuilder})";
-                    desc.MethodDeclaration = methodDeclaration.ToString();
-
-                    if (desc.HasPointerArguments)
-                    {
-                        methodDeclaration.Clear();
-
-                        castBuilder.Clear();
-                        castBuilder.Append(isAction ? "Action<" : "Func<");
-                        for (int i = 0; i < desc.Parameters.Count; i++)
-                        {
-                            var parameter = desc.Parameters[i];
-                            if (i > 0)
-                            {
-                                castBuilder.Append(", ");
-                            }
-                            castBuilder.Append($"{parameter.GenericCompatibleRealType}");
-                        }
-
-                        if (!isAction)
-                        {
-                            castBuilder.Append($", {desc.GenericCompatibleRealReturnType}");
-                        }
-                        castBuilder.Append(">");
-
-                        methodDeclaration.Append($"private unsafe readonly static {castBuilder} {sseMethodName} = new {castBuilder}((");
-                        for (int i = 0; i < desc.Parameters.Count; i++)
-                        {
-                            if (i > 0) methodDeclaration.Append(", ");
-                            methodDeclaration.Append($"arg{i}");
-                        }
-                        methodDeclaration.Append($") => {finalSSEMethod}(");
-                        for (int i = 0; i < desc.Parameters.Count; i++)
-                        {
-                            if (i > 0) methodDeclaration.Append(", ");
-                            var parameter = desc.Parameters[i];
-                            methodDeclaration.Append($"({parameter.RealType})arg{i}");
-                        }
-                        methodDeclaration.Append("));");
-                        desc.IndirectMethodDeclaration = methodDeclaration.ToString();
-                    }
-
-                    desc.Category = $"Vector Hardware Intrinsics / {docGroupName.ToUpperInvariant()}";
-
-                    generatedIntrinsics.TryGetValue(desc.Name, out var existingDesc);
-
-                    // TODO: handle line for comments
-                    desc.Description = desc.Description.Trim().Replace("\r\n", "\n");
-                    if (existingDesc == null || desc.Parameters[0].BaseNativeType == "float")
-                    {
-                        generatedIntrinsics[desc.Name] = desc;
-                    }
-                    
-                    desc.IsSupported = true;
-                    
-                    count++;
-                }
-            }
-            
-            Console.WriteLine($"{generatedIntrinsics.Count} intrinsics");
-
-            var intrinsics = generatedIntrinsics.Values.Where(x => x.IsSupported).ToList();
-
-            var intrinsicsPerClass = intrinsics.GroupBy(x => x.Class).ToDictionary(x => x.Key, y => y.OrderBy(x => x.Name).ToList());
-
-            var modules = new List<ModuleToGenerate>();
-            foreach (var keyPair in intrinsicsPerClass.OrderBy(x => x.Key))
-            {
-                var module = new ModuleToGenerate();
-                module.Namespace = "Kalk.Core.Modules.HardwareIntrinsics";
-                module.ClassName = $"{keyPair.Key}IntrinsicsModule";
-                module.Members.AddRange(keyPair.Value);
-                modules.Add(module);
-            }
-            
-            return modules;
-        }
-
-        private static (string, string) GetBaseTypeAndType(ITypeSymbol type)
-        {
-            if (type is IPointerTypeSymbol)
-            {
-                return ("IntPtr", "IntPtr");
-            }
-            
-            var typeStr = type.ToDisplayString();
-            string baseType;
-            var nativeType = type as INamedTypeSymbol;
-            if (nativeType != null && nativeType.TypeArguments.Length > 0)
-            {
-                baseType = nativeType.TypeArguments[0].ToDisplayString();
-            }
-            else
-            {
-                baseType = typeStr;
-            }
-            return (baseType, typeStr);
-        }
-        
-        
         private static readonly Regex RemoveCode = new Regex(@"^\s*```\w*[ \t]*[\r\n]*", RegexOptions.Multiline);
 
         static async Task Main(string[] args)
@@ -547,70 +33,6 @@ namespace Kalk.CodeGen
             var broResult = CSharpCompilationCapture.Build(pathToSolution);
             var solution = broResult.Workspace.CurrentSolution;
             var project = solution.Projects.First(x => x.Name == "Kalk.Core");
-
-            //var project = solution.Projects.First(x => x.Name == "Kalk.Core").WithCompilationOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
-
-            //var scriban = solution.Projects.First(x => x.Name == "Scriban");
-            //project = project.AddMetadataReferences(scriban.MetadataReferences);
-
-            //string homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
-            //                   Environment.OSVersion.Platform == PlatformID.MacOSX)
-            //    ? Environment.GetEnvironmentVariable("HOME")
-            //    : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
-
-            //foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            //{
-            //    if (assembly.IsDynamic) continue;
-            //    //if (assembly.GetName().Name == "Scriban") continue;
-            //    project = project.AddMetadataReference(MetadataReference.CreateFromFile(assembly.Location));
-            //}
-
-            //{
-            //    var refPackage = Path.Combine(homePath, ".nuget", "packages", "mathnet.numerics", "4.9.1", "lib", "netstandard2.0", "MathNet.Numerics.dll");
-            //    project = project.AddMetadataReference(MetadataReference.CreateFromFile(refPackage));
-            //}
-            //{
-            //    var refPackage = Path.Combine(homePath, ".nuget", "packages", "System.Text.Encoding.CodePages", "4.7.0", "lib", "netstandard2.0", "System.Text.Encoding.CodePages.dll");
-            //    project = project.AddMetadataReference(MetadataReference.CreateFromFile(refPackage));
-            //}
-
-            // Hack re-add System.Runtime.Intrinsics with doc
-
-
-            // @"packs/Microsoft.NETCore.App.Ref/5.0.0/ref/net5.0";
-
-            var instances = MSBuildLocator.QueryVisualStudioInstances(new VisualStudioInstanceQueryOptions() {DiscoveryTypes = DiscoveryType.DotNetSdk, WorkingDirectory = AppContext.BaseDirectory});
-
-            string intrinsicsPath = null;
-            foreach (var instance in instances)
-            {
-                var file = Path.GetFullPath(Path.Combine(instance.MSBuildPath, "..", "..", "packs", "Microsoft.NETCore.App.Ref", "5.0.0", "ref", "net5.0", "System.Runtime.Intrinsics.xml"));
-                if (File.Exists(file))
-                {
-                    intrinsicsPath = file;
-                    break;
-                }
-            }
-
-            if (intrinsicsPath == null)
-            {
-                Console.WriteLine("Unable to find System.Runtime.Intrinsics.xml from dotnet SDK installed");
-                Environment.Exit(1);
-                return;
-            }
-
-            // Patch intrinsics documentation
-            var intrinsicDoc = File.ReadAllText(intrinsicsPath);
-            foreach (var fixDocPair in FixIntrinsicsDocumentation)
-            {
-                intrinsicDoc = intrinsicDoc.Replace(fixDocPair.Key, fixDocPair.Value);
-            }
-
-            var docProvider = XmlDocumentationProvider.CreateFromBytes(new UTF8Encoding(false).GetBytes(intrinsicDoc));
-            var toRemove = project.MetadataReferences.FirstOrDefault(x => x.Display.Contains("System.Runtime.Intrinsics"));
-            var intrinsicsAssembly = MetadataReference.CreateFromFile(toRemove.Display, documentation: docProvider);
-            project = project.RemoveMetadataReference(toRemove);
-            project = project.AddMetadataReference(intrinsicsAssembly);
 
             // Make sure that doc will be parsed
             project = project.WithParseOptions(project.ParseOptions.WithDocumentationMode(DocumentationMode.Parse));
@@ -633,11 +55,9 @@ namespace Kalk.CodeGen
                 return;
             }
 
-            var intrinsicModules = FindIntrinsics(compilation);
-
             //var kalkEngine = compilation.GetTypeByMetadataName("Kalk.Core.KalkEngine");
 
-            var mapNameToModule = new Dictionary<string, ModuleToGenerate>();
+            var mapNameToModule = new Dictionary<string, KalkModuleToGenerate>();
 
             foreach (var type in compilation.GetSymbolsWithName(x => true, SymbolFilter.Type))
             {
@@ -656,7 +76,7 @@ namespace Kalk.CodeGen
 
                     if (!mapNameToModule.TryGetValue(className, out var moduleToGenerate))
                     {
-                        moduleToGenerate = new ModuleToGenerate()
+                        moduleToGenerate = new KalkModuleToGenerate()
                         {
                             Namespace = member.ContainingNamespace.ToDisplayString(),
                             ClassName = className
@@ -665,7 +85,7 @@ namespace Kalk.CodeGen
                     }
 
                     var method = member as IMethodSymbol;
-                    var desc = new KalkGeneratedMember()
+                    var desc = new KalkMemberToGenerate()
                     {
                         Name = name,
                         XmlId = member.GetDocumentationCommentId(),
@@ -797,22 +217,6 @@ namespace Kalk.CodeGen
 //------------------------------------------------------------------------------
 using System;
 
-{{~ for module in intrinsics ~}}
-namespace {{ module.Namespace }}
-{
-    public partial class {{ module.ClassName }}
-    {
-        {{~ for member in module.Members ~}}
-        /// <summary>
-        /// {{ member.Description | string.replace '\n' '\n        ///' }}
-        /// </summary>
-        {{ member.MethodDeclaration }}
-        {{ member.IndirectMethodDeclaration }}
-        {{~ end ~}}
-    }
-}
-{{~ end ~}}
-
 {{~ for module in modules ~}}
 namespace {{ module.Namespace }}
 {
@@ -865,11 +269,8 @@ namespace {{ module.Namespace }}
 ";
             var template = Template.Parse(templateStr);
             
-            var result = template.Render(new {modules = modules, intrinsics = new List<ModuleToGenerate>()}, x => x.Name);
+            var result = template.Render(new {modules = modules}, x => x.Name);
             File.WriteAllText(Path.Combine(srcFolder, "Kalk.Core/KalkEngine.generated.cs"), result);
-            
-            result = template.Render(new {modules = intrinsicModules, intrinsics = intrinsicModules}, x => x.Name);
-            File.WriteAllText(Path.Combine(srcFolder, "Kalk.Core/Modules/HardwareIntrinsics/Intrinsics.generated.cs"), result);
 
 
             var testsTemplateStr = @"//------------------------------------------------------------------------------
@@ -919,7 +320,7 @@ namespace Kalk.Tests
 ";
             var prismTemplate = Template.Parse(prismTemplateStr);
 
-            var allFunctionNames = modules.SelectMany(x => x.Members.Select(y => y.Name)).Concat(intrinsicModules.SelectMany(x => x.Members.Select(y => y.Name))).ToList();
+            var allFunctionNames = modules.SelectMany(x => x.Members.Select(y => y.Name)).ToList();
             // special values
             allFunctionNames.AddRange(new []{"null", "true", "false"});
             // modules
