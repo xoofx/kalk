@@ -142,6 +142,136 @@ out = 1.844507977497004 * EUR", Category = "Unit Functions")]
 
     public partial class FileModuleTests : KalkTestBase
     {
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.CurrentDirectory"/> or `pwd`.
+        /// </summary>
+        [TestCase(@"pwd", @"# pwd
+out = ""/code/kalk/tests""", Category = "Misc File Functions")]
+        public static void Test_pwd(string input, string output) => AssertScript(input, output, "Files");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.ChangeDirectory(System.String)"/> or `cd`.
+        /// </summary>
+        [TestCase(@"cd
+mkdir ""testdir""
+cd ""testdir""
+cd ""..""
+rmdir ""testdir""
+dir_exists ""testdir""", @"# cd
+out = ""/code/kalk/tests""
+# cd(""testdir"")
+out = ""/code/kalk/tests/testdir""
+# cd("".."")
+out = ""/code/kalk/tests""
+# dir_exists(""testdir"")
+out = false", Category = "Misc File Functions")]
+        public static void Test_cd(string input, string output) => AssertScript(input, output, "Files");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.FileExists(System.String)"/> or `file_exists`.
+        /// </summary>
+        [TestCase(@"rm ""test.txt""
+file_exists ""test.txt""
+save_text(""content"", ""test.txt"")
+file_exists ""test.txt""", @"# file_exists(""test.txt"")
+out = false
+# file_exists(""test.txt"")
+out = true", Category = "Misc File Functions")]
+        public static void Test_file_exists(string input, string output) => AssertScript(input, output, "Files");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.DirectoryExists(System.String)"/> or `dir_exists`.
+        /// </summary>
+        [TestCase(@"mkdir ""testdir""
+dir_exists ""testdir""
+rmdir ""testdir""
+dir_exists ""testdir""", @"# dir_exists(""testdir"")
+out = true
+# dir_exists(""testdir"")
+out = false", Category = "Misc File Functions")]
+        public static void Test_dir_exists(string input, string output) => AssertScript(input, output, "Files");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.DirectoryListing(System.String,System.Boolean)"/> or `dir`.
+        /// </summary>
+        [TestCase(@"mkdir ""testdir""
+cd ""testdir""
+mkdir ""subdir""
+save_text(""content"", ""file.txt"")
+dir "".""
+save_text(""content"", ""subdir/file2.txt"")
+dir(""."", true)
+cd ""..""
+rmdir(""testdir"", true)", @"# cd(""testdir"")
+out = ""/code/kalk/tests/testdir""
+# dir(""."")
+out = [""./file.txt"", ""./subdir""]
+# dir(""."", true)
+out = [""./file.txt"", ""./subdir"", ""./subdir/file2.txt""]
+# cd("".."")
+out = ""/code/kalk/tests""", Category = "Misc File Functions")]
+        public static void Test_dir(string input, string output) => AssertScript(input, output, "Files");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.RemoveFile(System.String)"/> or `rm`.
+        /// </summary>
+        [TestCase(@"rm ""test.txt""
+file_exists ""test.txt""
+save_text(""content"", ""test.txt"")
+file_exists ""test.txt""", @"# file_exists(""test.txt"")
+out = false
+# file_exists(""test.txt"")
+out = true", Category = "Misc File Functions")]
+        public static void Test_rm(string input, string output) => AssertScript(input, output, "Files");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.CreateDirectory(System.String)"/> or `mkdir`.
+        /// </summary>
+        [TestCase(@"mkdir ""testdir""
+dir_exists ""testdir""
+rmdir ""testdir""
+dir_exists ""testdir""", @"# dir_exists(""testdir"")
+out = true
+# dir_exists(""testdir"")
+out = false", Category = "Misc File Functions")]
+        public static void Test_mkdir(string input, string output) => AssertScript(input, output, "Files");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.RemoveDirectory(System.String,System.Boolean)"/> or `rmdir`.
+        /// </summary>
+        [TestCase(@"mkdir ""testdir""
+dir_exists ""testdir""
+rmdir ""testdir""
+dir_exists ""testdir""", @"# dir_exists(""testdir"")
+out = true
+# dir_exists(""testdir"")
+out = false", Category = "Misc File Functions")]
+        public static void Test_rmdir(string input, string output) => AssertScript(input, output, "Files");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.LoadText(System.String,System.String)"/> or `load_text`.
+        /// </summary>
+        [TestCase(@"load_text ""test.csv""", @"# load_text(""test.csv"")
+out = ""a,b,c\n1,2,3\n4,5,6""", Category = "Misc File Functions")]
+        public static void Test_load_text(string input, string output) => AssertScript(input, output, "Files");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.LoadBytes(System.String)"/> or `load_bytes`.
+        /// </summary>
+        [TestCase(@"load_bytes ""test.csv""
+ascii out", @"# load_bytes(""test.csv"")
+out = bytebuffer([97, 44, 98, 44, 99, 10, 49, 44, 50, 44, 51, 10, 52, 44, 53, 44, 54])
+# ascii(out)
+out = ""a,b,c\n1,2,3\n4,5,6""", Category = "Misc File Functions")]
+        public static void Test_load_bytes(string input, string output) => AssertScript(input, output, "Files");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.LoadLines(System.String,System.String)"/> or `load_lines`.
+        /// </summary>
+        [TestCase(@"load_lines ""test.csv""", @"# load_lines(""test.csv"")
+out = [""a,b,c"", ""1,2,3"", ""4,5,6""]", Category = "Misc File Functions")]
+        public static void Test_load_lines(string input, string output) => AssertScript(input, output, "Files");
+
     }
 
     public partial class KalkEngineTests : KalkTestBase

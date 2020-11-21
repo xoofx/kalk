@@ -7,6 +7,9 @@ using Scriban.Runtime;
 
 namespace Kalk.Core.Modules
 {
+    /// <summary>
+    /// Modules providing file related functions.
+    /// </summary>
     [KalkExportModule(ModuleName)]
     public partial class FileModule : KalkModuleWithFunctions
     {
@@ -19,6 +22,75 @@ namespace Kalk.Core.Modules
             RegisterFunctionsAuto();
         }
 
+        /// <summary>
+        /// Gets the current directory.
+        /// </summary>
+        /// <returns>The current directory.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> pwd
+        /// # pwd
+        /// out = "/code/kalk/tests"
+        /// ```
+        /// </example>
+        [KalkExport("pwd", CategoryMiscFile)]
+        public string CurrentDirectory()
+        {
+            return Environment.CurrentDirectory;
+        }
+
+        /// <summary>
+        /// Changes the current directory to the specified path.
+        /// </summary>
+        /// <param name="path">Path to the directory to change.</param>
+        /// <returns>The current directory or throws an exception if the directory does not exists</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> cd
+        /// # cd
+        /// out = "/code/kalk/tests"
+        /// >>> mkdir "testdir"
+        /// >>> cd "testdir"
+        /// # cd("testdir")
+        /// out = "/code/kalk/tests/testdir"
+        /// >>> cd ".."
+        /// # cd("..")
+        /// out = "/code/kalk/tests"
+        /// >>> rmdir "testdir"
+        /// >>> dir_exists "testdir"
+        /// # dir_exists("testdir")
+        /// out = false
+        /// ```
+        /// </example>
+        [KalkExport("cd", CategoryMiscFile)]
+        public string ChangeDirectory(string path = null)
+        {
+            if (path != null)
+            {
+                if (!DirectoryExists(path)) throw new ArgumentException($"The folder `{path}` does not exists", nameof(path));
+                Environment.CurrentDirectory = Path.Combine(Environment.CurrentDirectory, path);
+            }
+
+            return CurrentDirectory();
+        }
+
+        /// <summary>
+        /// Checks if the specified file path exists on the disk.
+        /// </summary>
+        /// <param name="path">Path to a file.</param>
+        /// <returns>`true` if the specified file path exists on the disk.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> rm "test.txt"
+        /// >>> file_exists "test.txt"
+        /// # file_exists("test.txt")
+        /// out = false
+        /// >>> save_text("content", "test.txt")
+        /// >>> file_exists "test.txt"
+        /// # file_exists("test.txt")
+        /// out = true
+        /// ```
+        /// </example>
         [KalkExport("file_exists", CategoryMiscFile)]
         public KalkBool FileExists(string path)
         {
@@ -26,13 +98,57 @@ namespace Kalk.Core.Modules
             return File.Exists(Path.Combine(Environment.CurrentDirectory, path));
         }
 
-        [KalkExport("directory_exists", CategoryMiscFile)]
+        /// <summary>
+        /// Checks if the specified directory path exists on the disk.
+        /// </summary>
+        /// <param name="path">Path to a directory.</param>
+        /// <returns>`true` if the specified directory path exists on the disk.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> mkdir "testdir"
+        /// >>> dir_exists "testdir"
+        /// # dir_exists("testdir")
+        /// out = true
+        /// >>> rmdir "testdir"
+        /// >>> dir_exists "testdir"
+        /// # dir_exists("testdir")
+        /// out = false
+        /// ```
+        /// </example>
+        [KalkExport("dir_exists", CategoryMiscFile)]
         public KalkBool DirectoryExists(string path)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             return Directory.Exists(Path.Combine(Environment.CurrentDirectory, path));
         }
 
+        /// <summary>
+        /// List files and directories from the specified path or the current directory.
+        /// </summary>
+        /// <param name="path">The specified directory or the current directory if not specified.</param>
+        /// <param name="recursive">A boolean to perform a recursive list. Default is `false`.</param>
+        /// <returns>An enumeration of the files and directories.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> mkdir "testdir"
+        /// >>> cd "testdir"
+        /// # cd("testdir")
+        /// out = "/code/kalk/tests/testdir"
+        /// >>> mkdir "subdir"
+        /// >>> save_text("content", "file.txt")
+        /// >>> dir "."
+        /// # dir(".")
+        /// out = ["./file.txt", "./subdir"]
+        /// >>> save_text("content", "subdir/file2.txt")
+        /// >>> dir(".", true)
+        /// # dir(".", true)
+        /// out = ["./file.txt", "./subdir", "./subdir/file2.txt"]
+        /// >>> cd ".."
+        /// # cd("..")
+        /// out = "/code/kalk/tests"
+        /// >>> rmdir("testdir", true)
+        /// ```
+        /// </example>
         [KalkExport("dir", CategoryMiscFile)]
         public IEnumerable DirectoryListing(string path = null, bool recursive = false)
         {
@@ -57,6 +173,95 @@ namespace Kalk.Core.Modules
             return new ScriptRange(Directory.EnumerateFileSystemEntries(path, search, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly));
         }
 
+        /// <summary>
+        /// Deletes a file from the specified path.
+        /// </summary>
+        /// <param name="path">Path to the file to delete.</param>
+        /// <example>
+        /// ```kalk
+        /// >>> rm "test.txt"
+        /// >>> file_exists "test.txt"
+        /// # file_exists("test.txt")
+        /// out = false
+        /// >>> save_text("content", "test.txt")
+        /// >>> file_exists "test.txt"
+        /// # file_exists("test.txt")
+        /// out = true
+        /// ```
+        /// </example>
+        [KalkExport("rm", CategoryMiscFile)]
+        public void RemoveFile(string path)
+        {
+            if (path == null) throw new ArgumentNullException(nameof(path));
+            if (FileExists(path))
+            {
+                File.Delete(Path.Combine(Environment.CurrentDirectory, path));
+            }
+        }
+
+        /// <summary>
+        /// Creates a directory at the specified path.
+        /// </summary>
+        /// <param name="path">Path of the directory to create.</param>
+        /// <example>
+        /// ```kalk
+        /// >>> mkdir "testdir"
+        /// >>> dir_exists "testdir"
+        /// # dir_exists("testdir")
+        /// out = true
+        /// >>> rmdir "testdir"
+        /// >>> dir_exists "testdir"
+        /// # dir_exists("testdir")
+        /// out = false
+        /// ```
+        /// </example>
+        [KalkExport("mkdir", CategoryMiscFile)]
+        public void CreateDirectory(string path)
+        {
+            if (path == null) throw new ArgumentNullException(nameof(path));
+            if (DirectoryExists(path)) return;
+            Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, path));
+        }
+
+        /// <summary>
+        /// Deletes the directory at the specified path.
+        /// </summary>
+        /// <param name="path">Path to the directory to delete.</param>
+        /// <example>
+        /// ```kalk
+        /// >>> mkdir "testdir"
+        /// >>> dir_exists "testdir"
+        /// # dir_exists("testdir")
+        /// out = true
+        /// >>> rmdir "testdir"
+        /// >>> dir_exists "testdir"
+        /// # dir_exists("testdir")
+        /// out = false
+        /// ```
+        /// </example>
+        [KalkExport("rmdir", CategoryMiscFile)]
+        public void RemoveDirectory(string path, bool recursive = true)
+        {
+            if (path == null) throw new ArgumentNullException(nameof(path));
+            if (DirectoryExists(path))
+            {
+                Directory.Delete(Path.Combine(Environment.CurrentDirectory, path), recursive);
+            }
+        }
+
+        /// <summary>
+        /// Loads the specified file as text.
+        /// </summary>
+        /// <param name="path">Path to a file to load as text.</param>
+        /// <param name="encoding">The encoding of the file. Default is "utf-8"</param>
+        /// <returns>The file loaded as a string.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> load_text "test.csv"
+        /// # load_text("test.csv")
+        /// out = "a,b,c\n1,2,3\n4,5,6"
+        /// ```
+        /// </example>
         [KalkExport("load_text", CategoryMiscFile)]
         public string LoadText(string path, string encoding = KalkConfig.DefaultEncoding)
         {
@@ -66,6 +271,21 @@ namespace Kalk.Core.Modules
             return new StreamReader(stream, encoder).ReadToEnd();
         }
 
+        /// <summary>
+        /// Loads the specified file as binary.
+        /// </summary>
+        /// <param name="path">Path to a file to load as binary.</param>
+        /// <returns>The file loaded as a a byte buffer.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> load_bytes "test.csv"
+        /// # load_bytes("test.csv")
+        /// out = bytebuffer([97, 44, 98, 44, 99, 10, 49, 44, 50, 44, 51, 10, 52, 44, 53, 44, 54])
+        /// >>> ascii out
+        /// # ascii(out)
+        /// out = "a,b,c\n1,2,3\n4,5,6"
+        /// ```
+        /// </example>
         [KalkExport("load_bytes", CategoryMiscFile)]
         public KalkNativeBuffer LoadBytes(string path)
         {
@@ -76,6 +296,19 @@ namespace Kalk.Core.Modules
             return buffer;
         }
 
+        /// <summary>
+        /// Load each lines from the specified file path.
+        /// </summary>
+        /// <param name="path">Path to a file to load lines from.</param>
+        /// <param name="encoding">The encoding of the file. Default is "utf-8"</param>
+        /// <returns>An enumeration on the lines.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> load_lines "test.csv"
+        /// # load_lines("test.csv")
+        /// out = ["a,b,c", "1,2,3", "4,5,6"]
+        /// ```
+        /// </example>
         [KalkExport("load_lines", CategoryMiscFile)]
         public ScriptRange LoadLines(string path, string encoding = KalkConfig.DefaultEncoding)
         {

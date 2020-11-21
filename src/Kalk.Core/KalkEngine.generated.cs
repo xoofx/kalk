@@ -3908,9 +3908,14 @@ namespace Kalk.Core.Modules
     {
         protected override void RegisterFunctionsAuto()
         {
+            RegisterFunction("pwd", (Func<string>)CurrentDirectory);
+            RegisterFunction("cd", (Func<string, string>)ChangeDirectory);
             RegisterFunction("file_exists", (Func<string, Kalk.Core.KalkBool>)FileExists);
-            RegisterFunction("directory_exists", (Func<string, Kalk.Core.KalkBool>)DirectoryExists);
+            RegisterFunction("dir_exists", (Func<string, Kalk.Core.KalkBool>)DirectoryExists);
             RegisterFunction("dir", (Func<string, bool, System.Collections.IEnumerable>)DirectoryListing);
+            RegisterAction("rm", (Action<string>)RemoveFile);
+            RegisterAction("mkdir", (Action<string>)CreateDirectory);
+            RegisterAction("rmdir", (Action<string, bool>)RemoveDirectory);
             RegisterFunction("load_text", (Func<string, string, string>)LoadText);
             RegisterFunction("load_bytes", (Func<string, Kalk.Core.KalkNativeBuffer>)LoadBytes);
             RegisterFunction("load_lines", (Func<string, string, Scriban.Runtime.ScriptRange>)LoadLines);
@@ -3923,40 +3928,188 @@ namespace Kalk.Core.Modules
         private void RegisterDocumentationAuto()
         {
             {
-                var descriptor = Descriptors["file_exists"];
+                var descriptor = Descriptors["pwd"];
                 descriptor.Category = "Misc File Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Gets the current directory.";
                 descriptor.IsCommand = false;
+                descriptor.Returns = @"The current directory.";
+                descriptor.Example = @"    >>> pwd
+    # pwd
+    out = ""/code/kalk/tests""
+";
             }
             {
-                var descriptor = Descriptors["directory_exists"];
+                var descriptor = Descriptors["cd"];
                 descriptor.Category = "Misc File Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Changes the current directory to the specified path.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"Path to the directory to change.")  { IsOptional = true });
+                descriptor.Returns = @"The current directory or throws an exception if the directory does not exists";
+                descriptor.Example = @"    >>> cd
+    # cd
+    out = ""/code/kalk/tests""
+    >>> mkdir ""testdir""
+    >>> cd ""testdir""
+    # cd(""testdir"")
+    out = ""/code/kalk/tests/testdir""
+    >>> cd ""..""
+    # cd("".."")
+    out = ""/code/kalk/tests""
+    >>> rmdir ""testdir""
+    >>> dir_exists ""testdir""
+    # dir_exists(""testdir"")
+    out = false
+";
+            }
+            {
+                var descriptor = Descriptors["file_exists"];
+                descriptor.Category = "Misc File Functions";
+                descriptor.Description = @"Checks if the specified file path exists on the disk.";
+                descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"Path to a file.")  { IsOptional = false });
+                descriptor.Returns = @"`true` if the specified file path exists on the disk.";
+                descriptor.Example = @"    >>> rm ""test.txt""
+    >>> file_exists ""test.txt""
+    # file_exists(""test.txt"")
+    out = false
+    >>> save_text(""content"", ""test.txt"")
+    >>> file_exists ""test.txt""
+    # file_exists(""test.txt"")
+    out = true
+";
+            }
+            {
+                var descriptor = Descriptors["dir_exists"];
+                descriptor.Category = "Misc File Functions";
+                descriptor.Description = @"Checks if the specified directory path exists on the disk.";
+                descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"Path to a directory.")  { IsOptional = false });
+                descriptor.Returns = @"`true` if the specified directory path exists on the disk.";
+                descriptor.Example = @"    >>> mkdir ""testdir""
+    >>> dir_exists ""testdir""
+    # dir_exists(""testdir"")
+    out = true
+    >>> rmdir ""testdir""
+    >>> dir_exists ""testdir""
+    # dir_exists(""testdir"")
+    out = false
+";
             }
             {
                 var descriptor = Descriptors["dir"];
                 descriptor.Category = "Misc File Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"List files and directories from the specified path or the current directory.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"The specified directory or the current directory if not specified.")  { IsOptional = true });
+                descriptor.Params.Add(new KalkParamDescriptor("recursive", @"A boolean to perform a recursive list. Default is `false`.")  { IsOptional = true });
+                descriptor.Returns = @"An enumeration of the files and directories.";
+                descriptor.Example = @"    >>> mkdir ""testdir""
+    >>> cd ""testdir""
+    # cd(""testdir"")
+    out = ""/code/kalk/tests/testdir""
+    >>> mkdir ""subdir""
+    >>> save_text(""content"", ""file.txt"")
+    >>> dir "".""
+    # dir(""."")
+    out = [""./file.txt"", ""./subdir""]
+    >>> save_text(""content"", ""subdir/file2.txt"")
+    >>> dir(""."", true)
+    # dir(""."", true)
+    out = [""./file.txt"", ""./subdir"", ""./subdir/file2.txt""]
+    >>> cd ""..""
+    # cd("".."")
+    out = ""/code/kalk/tests""
+    >>> rmdir(""testdir"", true)
+";
+            }
+            {
+                var descriptor = Descriptors["rm"];
+                descriptor.Category = "Misc File Functions";
+                descriptor.Description = @"Deletes a file from the specified path.";
+                descriptor.IsCommand = true;
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"Path to the file to delete.")  { IsOptional = false });
+                descriptor.Example = @"    >>> rm ""test.txt""
+    >>> file_exists ""test.txt""
+    # file_exists(""test.txt"")
+    out = false
+    >>> save_text(""content"", ""test.txt"")
+    >>> file_exists ""test.txt""
+    # file_exists(""test.txt"")
+    out = true
+";
+            }
+            {
+                var descriptor = Descriptors["mkdir"];
+                descriptor.Category = "Misc File Functions";
+                descriptor.Description = @"Creates a directory at the specified path.";
+                descriptor.IsCommand = true;
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"Path of the directory to create.")  { IsOptional = false });
+                descriptor.Example = @"    >>> mkdir ""testdir""
+    >>> dir_exists ""testdir""
+    # dir_exists(""testdir"")
+    out = true
+    >>> rmdir ""testdir""
+    >>> dir_exists ""testdir""
+    # dir_exists(""testdir"")
+    out = false
+";
+            }
+            {
+                var descriptor = Descriptors["rmdir"];
+                descriptor.Category = "Misc File Functions";
+                descriptor.Description = @"Deletes the directory at the specified path.";
+                descriptor.IsCommand = true;
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"Path to the directory to delete.")  { IsOptional = false });
+                descriptor.Example = @"    >>> mkdir ""testdir""
+    >>> dir_exists ""testdir""
+    # dir_exists(""testdir"")
+    out = true
+    >>> rmdir ""testdir""
+    >>> dir_exists ""testdir""
+    # dir_exists(""testdir"")
+    out = false
+";
             }
             {
                 var descriptor = Descriptors["load_text"];
                 descriptor.Category = "Misc File Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Loads the specified file as text.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"Path to a file to load as text.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("encoding", @"The encoding of the file. Default is ""utf-8""")  { IsOptional = true });
+                descriptor.Returns = @"The file loaded as a string.";
+                descriptor.Example = @"    >>> load_text ""test.csv""
+    # load_text(""test.csv"")
+    out = ""a,b,c\n1,2,3\n4,5,6""
+";
             }
             {
                 var descriptor = Descriptors["load_bytes"];
                 descriptor.Category = "Misc File Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Loads the specified file as binary.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"Path to a file to load as binary.")  { IsOptional = false });
+                descriptor.Returns = @"The file loaded as a a byte buffer.";
+                descriptor.Example = @"    >>> load_bytes ""test.csv""
+    # load_bytes(""test.csv"")
+    out = bytebuffer([97, 44, 98, 44, 99, 10, 49, 44, 50, 44, 51, 10, 52, 44, 53, 44, 54])
+    >>> ascii out
+    # ascii(out)
+    out = ""a,b,c\n1,2,3\n4,5,6""
+";
             }
             {
                 var descriptor = Descriptors["load_lines"];
                 descriptor.Category = "Misc File Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Load each lines from the specified file path.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"Path to a file to load lines from.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("encoding", @"The encoding of the file. Default is ""utf-8""")  { IsOptional = true });
+                descriptor.Returns = @"An enumeration on the lines.";
+                descriptor.Example = @"    >>> load_lines ""test.csv""
+    # load_lines(""test.csv"")
+    out = [""a,b,c"", ""1,2,3"", ""4,5,6""]
+";
             }
             {
                 var descriptor = Descriptors["save_lines"];

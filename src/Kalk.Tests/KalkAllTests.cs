@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Kalk.Core;
 using NUnit.Framework;
@@ -9,9 +11,13 @@ namespace Kalk.Tests
     {
         private const string ModuleSplit = "%%%%%%";
 
+        
+
         protected static void AssertScript(string input, string expectedOutput, params string[] modules)
         {
             var singleOutput = new StringWriter();
+
+            bool hasFiles = false;
 
             if (modules.Length > 0)
             {
@@ -19,6 +25,7 @@ namespace Kalk.Tests
                 foreach (var module in modules)
                 {
                     input = $"import {module}\n{input}";
+                    if (module == "Files") hasFiles = true;
                 }
             }
 
@@ -38,6 +45,25 @@ namespace Kalk.Tests
             var result = kalk.OutputWriter.ToString();
             result = result.Replace("\r\n", "\n").Trim();
 
+            // Replace paths for all file operations
+            if (hasFiles) 
+            { 
+                var pathToReplace = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? @"C:\\code\\kalk\\tests" : "/code/kalk/tests";
+                result = result.Replace(Environment.CurrentDirectory.Replace("\\", "\\\\"), pathToReplace);
+                expectedOutput = expectedOutput.Replace("/code/kalk/tests", pathToReplace);
+
+                string LocalDirReplace(string input)
+                {
+                    var strToReplace = Path.DirectorySeparatorChar == '/' ? "/" : "\\\\";
+                    input = Regex.Replace(input, "\\+", strToReplace);
+                    input = input.Replace("/", strToReplace);
+                    return input;
+                }
+
+                result = LocalDirReplace(result);
+                expectedOutput = LocalDirReplace(expectedOutput);
+            }
+
             var match = $"{ModuleSplit}\n";
             var indexOfSplit = result.IndexOf(match);
             if (indexOfSplit > 0)
@@ -47,6 +73,8 @@ namespace Kalk.Tests
             Assert.AreEqual(expectedOutput, result);
         }
     }
+
+
 
     public partial class KalkAllTests : KalkTestBase
     {
