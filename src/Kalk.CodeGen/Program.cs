@@ -327,6 +327,31 @@ namespace Kalk.Tests
             allFunctionNames.AddRange(new[] {"All", "Csv", "Currencies", "Files", "HardwareIntrinsics", "StandardUnits", "Strings", "Web"});
             result = prismTemplate.Render(new { functions = allFunctionNames });
             File.WriteAllText(Path.Combine(siteFolder, ".lunet", "js", "prism-kalk.generated.js"), result);
+
+            // Log any errors if a member doesn't have any doc or tests
+            int functionWithMissingDoc = 0;
+            int functionWithMissingTests = 0;
+            foreach (var module in modules)
+            {
+                foreach (var member in module.Members)
+                {
+                    var hasNoDesc = string.IsNullOrEmpty(member.Description);
+                    var hasNoTests = member.Tests.Count == 0;
+                    if ((hasNoDesc || hasNoTests) && !module.ClassName.Contains("Intrinsics"))
+                    {
+                        if (hasNoDesc) ++functionWithMissingDoc;
+                        if (hasNoTests) ++functionWithMissingTests;
+
+                        Console.WriteLine($"The member {member.Name} => {module.ClassName}.{member.CSharpName} doesn't have {(hasNoTests ? "any tests" + (hasNoDesc? " and":"") : "")} {(hasNoDesc ? "any docs" : "")}");
+                    }
+                }
+            }
+
+            Console.WriteLine($"{modules.Count} modules generated.");
+            Console.WriteLine($"{modules.SelectMany(x => x.Members).Count()} functions generated.");
+            Console.WriteLine($"{modules.SelectMany(x => x.Members).SelectMany(y => y.Tests).Count()} tests generated.");
+            Console.WriteLine($"{functionWithMissingDoc} functions with missing doc.");
+            Console.WriteLine($"{functionWithMissingTests} functions with missing tests.");
         }
 
         private static readonly Regex PromptRegex = new Regex(@"^(\s*)>>>\s");
