@@ -29,7 +29,8 @@ namespace Kalk.Tests
                 ErrorWriter = singleOutput,
                 DisplayVersion = false,
                 EchoInput = false,
-                IsOutputSupportHighlighting = false
+                IsOutputSupportHighlighting = false,
+                IsTesting = true // put the engine in special testing mode
             };
             kalk.Run();
 

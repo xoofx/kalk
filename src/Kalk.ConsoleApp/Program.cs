@@ -57,7 +57,7 @@ namespace kalk
             var app = new KalkEngine
             {
                 GetClipboardText = TextCopy.ClipboardService.GetText,
-                SetClipboardText = TextCopy.ClipboardService.SetText
+                SetClipboardText = TextCopy.ClipboardService.SetText,
             };
 
 #if KALK_WINDOWS_STOREAPP

@@ -131,6 +131,11 @@ namespace Kalk.Core
 
         public string KalkUserFolder { get; set; }
 
+        /// <summary>
+        /// The engine is in testing mode.
+        /// </summary>
+        public bool IsTesting { get; set; }
+
         public string KalkEngineFolder { get; }
 
         public Func<string, Stream> GetAppContentStream;
