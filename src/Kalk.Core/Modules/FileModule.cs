@@ -321,6 +321,20 @@ namespace Kalk.Core.Modules
             }));
         }
 
+        /// <summary>
+        /// Saves an array of data as string to the specified files.
+        /// </summary>
+        /// <param name="lines">An array of data.</param>
+        /// <param name="path">Path to the file to save the lines to.</param>
+        /// <param name="encoding">The encoding of the file. Default is "utf-8"</param>
+        /// <example>
+        /// ```kalk
+        /// >>> save_lines(1..10, "lines.txt")
+        /// >>> load_lines("lines.txt")
+        /// # load_lines("lines.txt")
+        /// out = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+        /// ```
+        /// </example>
         [KalkExport("save_lines", CategoryMiscFile)]
         public object SaveLines(IEnumerable lines, string path, string encoding = KalkConfig.DefaultEncoding)
         {
@@ -338,6 +352,20 @@ namespace Kalk.Core.Modules
             return null;
         }
 
+        /// <summary>
+        /// Saves a text to the specified file path.
+        /// </summary>
+        /// <param name="text">The text to save.</param>
+        /// <param name="path">Path to the file to save the text to.</param>
+        /// <param name="encoding">The encoding of the file. Default is "utf-8"</param>
+        /// <example>
+        /// ```kalk
+        /// >>> save_text("Hello World!", "test.txt")
+        /// >>> load_text("test.txt")
+        /// # load_text("test.txt")
+        /// out = "Hello World!"
+        /// ```
+        /// </example>
         [KalkExport("save_text", CategoryMiscFile)]
         public object SaveText(string text, string path, string encoding = KalkConfig.DefaultEncoding)
         {
@@ -351,6 +379,25 @@ namespace Kalk.Core.Modules
             return null;
         }
 
+        /// <summary>
+        /// Saves a byte buffer to the specified file path.
+        /// </summary>
+        /// <param name="data">The data to save.</param>
+        /// <param name="path">Path to the file to save the data to.</param>
+        /// <example>
+        /// ```kalk
+        /// >>> utf8("Hello World!")
+        /// # utf8("Hello World!")
+        /// out = bytebuffer([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33])
+        /// >>> save_bytes(out, "test.bin")
+        /// >>> load_bytes("test.bin")
+        /// # load_bytes("test.bin")
+        /// out = bytebuffer([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33])
+        /// >>> utf8(out)
+        /// # utf8(out)
+        /// out = "Hello World!"
+        /// ```
+        /// </example>
         [KalkExport("save_bytes", CategoryMiscFile)]
         public object SaveBytes(IEnumerable data, string path)
         {
@@ -446,12 +493,5 @@ namespace Kalk.Core.Modules
                 throw new ArgumentException($"Invalid encoding name `{encoding}`. Reason: {ex.Message}");
             }
         }
-
-
-
-
-
-
-
     }
 }

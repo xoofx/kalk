@@ -4114,20 +4114,49 @@ namespace Kalk.Core.Modules
             {
                 var descriptor = Descriptors["save_lines"];
                 descriptor.Category = "Misc File Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Saves an array of data as string to the specified files.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("lines", @"An array of data.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"Path to the file to save the lines to.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("encoding", @"The encoding of the file. Default is ""utf-8""")  { IsOptional = true });
+                descriptor.Example = @"    >>> save_lines(1..10, ""lines.txt"")
+    >>> load_lines(""lines.txt"")
+    # load_lines(""lines.txt"")
+    out = [""1"", ""2"", ""3"", ""4"", ""5"", ""6"", ""7"", ""8"", ""9"", ""10""]
+";
             }
             {
                 var descriptor = Descriptors["save_text"];
                 descriptor.Category = "Misc File Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Saves a text to the specified file path.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The text to save.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"Path to the file to save the text to.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("encoding", @"The encoding of the file. Default is ""utf-8""")  { IsOptional = true });
+                descriptor.Example = @"    >>> save_text(""Hello World!"", ""test.txt"")
+    >>> load_text(""test.txt"")
+    # load_text(""test.txt"")
+    out = ""Hello World!""
+";
             }
             {
                 var descriptor = Descriptors["save_bytes"];
                 descriptor.Category = "Misc File Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Saves a byte buffer to the specified file path.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("data", @"The data to save.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("path", @"Path to the file to save the data to.")  { IsOptional = false });
+                descriptor.Example = @"    >>> utf8(""Hello World!"")
+    # utf8(""Hello World!"")
+    out = bytebuffer([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33])
+    >>> save_bytes(out, ""test.bin"")
+    >>> load_bytes(""test.bin"")
+    # load_bytes(""test.bin"")
+    out = bytebuffer([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33])
+    >>> utf8(out)
+    # utf8(out)
+    out = ""Hello World!""
+";
             }
         }        
     }

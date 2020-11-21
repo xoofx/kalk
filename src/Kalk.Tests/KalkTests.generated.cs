@@ -272,6 +272,36 @@ out = ""a,b,c\n1,2,3\n4,5,6""", Category = "Misc File Functions")]
 out = [""a,b,c"", ""1,2,3"", ""4,5,6""]", Category = "Misc File Functions")]
         public static void Test_load_lines(string input, string output) => AssertScript(input, output, "Files");
 
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.SaveLines(System.Collections.IEnumerable,System.String,System.String)"/> or `save_lines`.
+        /// </summary>
+        [TestCase(@"save_lines(1..10, ""lines.txt"")
+load_lines(""lines.txt"")", @"# load_lines(""lines.txt"")
+out = [""1"", ""2"", ""3"", ""4"", ""5"", ""6"", ""7"", ""8"", ""9"", ""10""]", Category = "Misc File Functions")]
+        public static void Test_save_lines(string input, string output) => AssertScript(input, output, "Files");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.SaveText(System.String,System.String,System.String)"/> or `save_text`.
+        /// </summary>
+        [TestCase(@"save_text(""Hello World!"", ""test.txt"")
+load_text(""test.txt"")", @"# load_text(""test.txt"")
+out = ""Hello World!""", Category = "Misc File Functions")]
+        public static void Test_save_text(string input, string output) => AssertScript(input, output, "Files");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.FileModule.SaveBytes(System.Collections.IEnumerable,System.String)"/> or `save_bytes`.
+        /// </summary>
+        [TestCase(@"utf8(""Hello World!"")
+save_bytes(out, ""test.bin"")
+load_bytes(""test.bin"")
+utf8(out)", @"# utf8(""Hello World!"")
+out = bytebuffer([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33])
+# load_bytes(""test.bin"")
+out = bytebuffer([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33])
+# utf8(out)
+out = ""Hello World!""", Category = "Misc File Functions")]
+        public static void Test_save_bytes(string input, string output) => AssertScript(input, output, "Files");
+
     }
 
     public partial class KalkEngineTests : KalkTestBase
