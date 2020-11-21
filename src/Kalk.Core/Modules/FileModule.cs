@@ -7,11 +7,14 @@ using Scriban.Runtime;
 
 namespace Kalk.Core.Modules
 {
+    [KalkExportModule(ModuleName)]
     public partial class FileModule : KalkModuleWithFunctions
     {
+        private const string ModuleName = "Files";
+
         public const string CategoryMiscFile = "Misc File Functions";
 
-        public FileModule() : base("Files")
+        public FileModule() : base(ModuleName)
         {
             RegisterFunctionsAuto();
         }

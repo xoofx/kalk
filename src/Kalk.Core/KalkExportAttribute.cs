@@ -17,4 +17,15 @@ namespace Kalk.Core
 
         public bool Functor { get; set; }
     }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class KalkExportModuleAttribute : System.Attribute
+    {
+        public KalkExportModuleAttribute(string alias)
+        {
+            Alias = alias;
+        }
+
+        public string Alias { get; }
+    }
 }

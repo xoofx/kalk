@@ -72,7 +72,8 @@ namespace Kalk.CodeGen
                     var name = attr.ConstructorArguments[0].Value.ToString();
                     var category = attr.ConstructorArguments[1].Value.ToString();
 
-                    var className = member is ITypeSymbol ? member.Name : member.ContainingSymbol.Name;
+                    var containingType = member is ITypeSymbol ? (ITypeSymbol) member : (ITypeSymbol) member.ContainingSymbol;
+                    var className = containingType.Name;
 
                     if (!mapNameToModule.TryGetValue(className, out var moduleToGenerate))
                     {
@@ -82,6 +83,12 @@ namespace Kalk.CodeGen
                             ClassName = className
                         };
                         mapNameToModule.Add(className, moduleToGenerate);
+
+                        var moduleAttribute = containingType.GetAttributes().FirstOrDefault(x => x.AttributeClass.Name == "KalkExportModuleAttribute");
+                        if (moduleAttribute != null)
+                        {
+                            moduleToGenerate.Name = moduleAttribute.ConstructorArguments[0].Value.ToString();
+                        }
                     }
 
                     var method = member as IMethodSymbol;
@@ -302,7 +309,11 @@ namespace Kalk.Tests
         /// </summary>
         [TestCase(@""{{ test.Item1 | string.replace '""' '""""' }}"", @""{{ test.Item2 | string.replace '""' '""""' }}"", Category = ""{{ member.Category }}"")]
                 {{~ end ~}}
+        {{~ if module.Name ~}}
+        public static void Test_{{ member.Name }}(string input, string output) => AssertScript(input, output, ""{{module.Name}}"");
+        {{~ else ~}}
         public static void Test_{{ member.Name }}(string input, string output) => AssertScript(input, output);
+        {{~ end ~}}
 
             {{~ end ~}}
         {{~ end ~}}

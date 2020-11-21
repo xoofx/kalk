@@ -46,6 +46,38 @@ namespace Kalk.Tests
 
     public partial class CsvModuleTests : KalkTestBase
     {
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.CsvModule.ParseCsv(System.String,System.Boolean)"/> or `parse_csv`.
+        /// </summary>
+        [TestCase(@"items = parse_csv(""a,b,c\n1,2,3\n4,5,6\n"")
+items[0].a
+items[0].b
+items[0].c", @"# items = parse_csv(""a,b,c\n1,2,3\n4,5,6\n"")
+items = [[1, 2, 3], [4, 5, 6]]
+# items[0].a
+out = 1
+# items[0].b
+out = 2
+# items[0].c
+out = 3", Category = "Text Functions")]
+        public static void Test_parse_csv(string input, string output) => AssertScript(input, output, "Csv");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.CsvModule.LoadCsv(System.String,System.Boolean)"/> or `load_csv`.
+        /// </summary>
+        [TestCase(@"items = load_csv(""test.csv"")
+items[0].a
+items[1].a
+items[1].c", @"# items = load_csv(""test.csv"")
+items = [[1, 2, 3], [4, 5, 6]]
+# items[0].a
+out = 1
+# items[1].a
+out = 4
+# items[1].c
+out = 6", Category = "Misc File Functions")]
+        public static void Test_load_csv(string input, string output) => AssertScript(input, output, "Csv");
+
     }
 
     public partial class CurrencyModuleTests : KalkTestBase

@@ -10,6 +10,8 @@ namespace Kalk.CodeGen
             Members = new List<KalkMemberToGenerate>();
         }
 
+        public string Name { get; set; }
+
         public string Namespace { get; set; }
 
         public string ClassName { get; set; }
