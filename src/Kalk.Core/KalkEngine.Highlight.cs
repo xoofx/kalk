@@ -114,7 +114,7 @@ namespace Kalk.Core
                     var limitStr = Config.LimitToString;
                     if (limitStr == "auto")
                     {
-                        if (HasInteractiveConsole)
+                        if (HasInteractiveConsole && IsOutputSupportHighlighting)
                         {
                             limit = Console.WindowWidth * Console.WindowHeight;
                         }
@@ -359,7 +359,7 @@ namespace Kalk.Core
             var builder = new StringBuilder();
             bool lineHasItem = false;
 
-            var maxColumn = Math.Min(Config.HelpMaxColumn, Console.BufferWidth);
+            var maxColumn = IsOutputSupportHighlighting ? Math.Min(Config.HelpMaxColumn, Console.BufferWidth) : Config.HelpMaxColumn;
 
             if (nextPrefix == null)
             {

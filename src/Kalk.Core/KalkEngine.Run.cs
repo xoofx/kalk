@@ -121,6 +121,7 @@ namespace Kalk.Core
                     {
                         WriteErrorLine(ex.Message);
                     }
+                    //Console.WriteLine(ex.InnerException);
                     success = false;
                     break;
                 }
