@@ -11,11 +11,16 @@ using Scriban.Runtime;
 
 namespace Kalk.Core.Modules
 {
+    /// <summary>
+    /// Module that provides Web functions (e.g `url_encode`, `json`, `wget`...)
+    /// </summary>
+    [KalkExportModule(ModuleName)]
     public sealed partial class WebModule : KalkModuleWithFunctions
     {
+        private const string ModuleName = "Web";
         public const string CategoryWeb = "Web & Html Functions";
 
-        public WebModule() : base("Web")
+        public WebModule() : base(ModuleName)
         {
             RegisterFunctionsAuto();
         }

@@ -59,10 +59,39 @@ namespace Kalk.CodeGen
 
             var mapNameToModule = new Dictionary<string, KalkModuleToGenerate>();
 
+            void GetOrCreateModule(ITypeSymbol typeSymbol, string className, AttributeData moduleAttribute, out KalkModuleToGenerate moduleToGenerate)
+            {
+                if (!mapNameToModule.TryGetValue(className, out moduleToGenerate))
+                {
+                    moduleToGenerate = new KalkModuleToGenerate()
+                    {
+                        Namespace = typeSymbol.ContainingNamespace.ToDisplayString(),
+                        ClassName = className,
+                    };
+                    mapNameToModule.Add(className, moduleToGenerate);
+
+                    if (moduleAttribute != null)
+                    {
+                        moduleToGenerate.Name = moduleAttribute.ConstructorArguments[0].Value.ToString();
+                        moduleToGenerate.Names.Add(moduleToGenerate.Name);
+                        moduleToGenerate.Category = "Modules (e.g `import Files`)";
+                    }
+
+                    ExtractDocumentation(typeSymbol, moduleToGenerate);
+                }
+            }
+
             foreach (var type in compilation.GetSymbolsWithName(x => true, SymbolFilter.Type))
             {
                 var typeSymbol = type as ITypeSymbol;
                 if (typeSymbol == null) continue;
+
+                var moduleAttribute = typeSymbol.GetAttributes().FirstOrDefault(x => x.AttributeClass.Name == "KalkExportModuleAttribute");
+                KalkModuleToGenerate moduleToGenerate = null;
+                if (moduleAttribute != null)
+                {
+                    GetOrCreateModule(typeSymbol, typeSymbol.Name, moduleAttribute, out moduleToGenerate);
+                }
 
                 foreach (var member in typeSymbol.GetMembers())
                 {
@@ -72,23 +101,13 @@ namespace Kalk.CodeGen
                     var name = attr.ConstructorArguments[0].Value.ToString();
                     var category = attr.ConstructorArguments[1].Value.ToString();
 
-                    var containingType = member is ITypeSymbol ? (ITypeSymbol) member : (ITypeSymbol) member.ContainingSymbol;
+                    var containingType = member.ContainingSymbol;
                     var className = containingType.Name;
 
-                    if (!mapNameToModule.TryGetValue(className, out var moduleToGenerate))
+                    // In case the module is built-in, we still generate a module for it
+                    if (moduleToGenerate == null)
                     {
-                        moduleToGenerate = new KalkModuleToGenerate()
-                        {
-                            Namespace = member.ContainingNamespace.ToDisplayString(),
-                            ClassName = className
-                        };
-                        mapNameToModule.Add(className, moduleToGenerate);
-
-                        var moduleAttribute = containingType.GetAttributes().FirstOrDefault(x => x.AttributeClass.Name == "KalkExportModuleAttribute");
-                        if (moduleAttribute != null)
-                        {
-                            moduleToGenerate.Name = moduleAttribute.ConstructorArguments[0].Value.ToString();
-                        }
+                        GetOrCreateModule(typeSymbol, className, moduleAttribute, out moduleToGenerate);
                     }
 
                     var method = member as IMethodSymbol;
@@ -145,69 +164,7 @@ namespace Kalk.CodeGen
                     }
 
                     moduleToGenerate.Members.Add(desc);
-                    
-                    var xmlStr = member.GetDocumentationCommentXml();
-
-                    if (!string.IsNullOrEmpty(xmlStr))
-                    {
-                        var xmlDoc = XElement.Parse(xmlStr);
-                        var elements = xmlDoc.Elements().ToList();
-
-                        foreach (var element in elements)
-                        {
-                            var text = GetCleanedString(element).Trim();
-                            if (element.Name == "summary")
-                            {
-                                desc.Description = text;
-                            }
-                            else if (element.Name == "param")
-                            {
-                                var argName = element.Attribute("name").Value;
-                                if (method != null)
-                                {
-                                    var parameterSymbol = method.Parameters.FirstOrDefault(x => x.Name == argName);
-                                    bool isOptional = false;
-                                    if (parameterSymbol == null)
-                                    {
-                                        Console.WriteLine($"Invalid XML doc parameter name {argName} not found on method {method}");
-                                    }
-                                    else
-                                    {
-                                        isOptional = parameterSymbol.IsOptional;
-                                    }
-
-                                    desc.Params.Add(new KalkParamDescriptor(element.Attribute("name").Value, text) {IsOptional = isOptional});
-                                }
-                            }
-                            else if (element.Name == "returns")
-                            {
-                                desc.Returns = text;
-                            }
-                            else if (element.Name == "remarks")
-                            {
-                                desc.Remarks = text;
-                            }
-                            else if (element.Name == "example")
-                            {
-                                text = RemoveCode.Replace(text, string.Empty);
-                                desc.Example = text;
-                                var test = TryParseTest(text);
-                                if (test != null)
-                                {
-                                    desc.Tests.Add(test.Value);
-                                }
-                            }
-                            else if (element.Name == "test")
-                            {
-                                text = RemoveCode.Replace(text, string.Empty);
-                                var test = TryParseTest(text);
-                                if (test != null)
-                                {
-                                    desc.Tests.Add(test.Value);
-                                }
-                            }
-                        }
-                    }
+                    ExtractDocumentation(member, desc);
                 }
             }
 
@@ -224,11 +181,32 @@ namespace Kalk.CodeGen
 //------------------------------------------------------------------------------
 using System;
 
+{{~ func GenerateDocDescriptor(item) ~}}
+            {
+                var descriptor = {{ if item.IsModule }}Descriptor{{ else }}Descriptors[""{{ item.Name }}""]{{ end }};
+                descriptor.Category = ""{{ item.Category }}"";
+                descriptor.Description = @""{{ item.Description | string.replace '""' '""""' }}"";
+                descriptor.IsCommand = {{ item.IsCommand }};
+            {{~ for param in item.Params ~}}
+                descriptor.Params.Add(new KalkParamDescriptor(""{{ param.Name }}"", @""{{ param.Description | string.replace '""' '""""' }}"")  { IsOptional = {{ param.IsOptional }} });
+            {{~ end ~}}
+                {{~ if item.Returns ~}}
+                descriptor.Returns = @""{{ item.Returns | string.replace '""' '""""' }}"";
+                {{~ end ~}}
+                {{~ if item.Remarks ~}}
+                descriptor.Remarks = @""{{ item.Remarks | string.replace '""' '""""' }}"";
+                {{~ end ~}}
+                {{~ if item.Example ~}}
+                descriptor.Example = @""{{ item.Example | string.replace '""' '""""' }}"";
+                {{~ end ~}}
+            }
+{{~ end ~}}
 {{~ for module in modules ~}}
 namespace {{ module.Namespace }}
 {
     public partial class {{ module.ClassName }}
     {
+    {{~ if module.Name != 'All' ~}}
         {{~ if module.ClassName == 'KalkEngine' ~}}
         protected void RegisterFunctionsAuto()
         {{~ else ~}}
@@ -247,28 +225,17 @@ namespace {{ module.Namespace }}
             RegisterDocumentationAuto();
         }
 
+    {{~ end ~}}
         private void RegisterDocumentationAuto()
         {
-            {{~ for item in module.Members ~}}
-            {
-                var descriptor = Descriptors[""{{ item.Names[0] }}""];
-                descriptor.Category = ""{{ item.Category }}"";
-                descriptor.Description = @""{{ item.Description | string.replace '""' '""""' }}"";
-                descriptor.IsCommand = {{ item.IsCommand }};
-            {{~ for param in item.Params ~}}
-                descriptor.Params.Add(new KalkParamDescriptor(""{{ param.Name }}"", @""{{ param.Description | string.replace '""' '""""' }}"")  { IsOptional = {{ param.IsOptional }} });
-            {{~ end ~}}
-                {{~ if item.Returns ~}}
-                descriptor.Returns = @""{{ item.Returns | string.replace '""' '""""' }}"";
-                {{~ end ~}}
-                {{~ if item.Remarks ~}}
-                descriptor.Remarks = @""{{ item.Remarks | string.replace '""' '""""' }}"";
-                {{~ end ~}}
-                {{~ if item.Example ~}}
-                descriptor.Example = @""{{ item.Example | string.replace '""' '""""' }}"";
-                {{~ end ~}}
-            }
-            {{~ end ~}}
+            {{~ 
+            if module.Name 
+                GenerateDocDescriptor module
+            end
+            for item in module.Members
+                GenerateDocDescriptor item
+            end
+            ~}}
         }        
     }
 }
@@ -397,6 +364,72 @@ namespace Kalk.Tests
             }
 
             return input != null ? (input.TrimEnd(), output.TrimEnd()) : ((string, string)?)null;
+        }
+
+        private static void ExtractDocumentation(ISymbol symbol, KalkDescriptorToGenerate desc)
+        {
+            var xmlStr = symbol.GetDocumentationCommentXml();
+
+            if (!string.IsNullOrEmpty(xmlStr))
+            {
+                var xmlDoc = XElement.Parse(xmlStr);
+                var elements = xmlDoc.Elements().ToList();
+
+                foreach (var element in elements)
+                {
+                    var text = GetCleanedString(element).Trim();
+                    if (element.Name == "summary")
+                    {
+                        desc.Description = text;
+                    }
+                    else if (element.Name == "param")
+                    {
+                        var argName = element.Attribute("name")?.Value;
+                        if (argName != null && symbol is IMethodSymbol method)
+                        {
+                            var parameterSymbol = method.Parameters.FirstOrDefault(x => x.Name == argName);
+                            bool isOptional = false;
+                            if (parameterSymbol == null)
+                            {
+                                Console.WriteLine($"Invalid XML doc parameter name {argName} not found on method {method}");
+                            }
+                            else
+                            {
+                                isOptional = parameterSymbol.IsOptional;
+                            }
+
+                            desc.Params.Add(new KalkParamDescriptor(argName, text) { IsOptional = isOptional });
+                        }
+                    }
+                    else if (element.Name == "returns")
+                    {
+                        desc.Returns = text;
+                    }
+                    else if (element.Name == "remarks")
+                    {
+                        desc.Remarks = text;
+                    }
+                    else if (element.Name == "example")
+                    {
+                        text = RemoveCode.Replace(text, string.Empty);
+                        desc.Example = text;
+                        var test = TryParseTest(text);
+                        if (test != null)
+                        {
+                            desc.Tests.Add(test.Value);
+                        }
+                    }
+                    else if (element.Name == "test")
+                    {
+                        text = RemoveCode.Replace(text, string.Empty);
+                        var test = TryParseTest(text);
+                        if (test != null)
+                        {
+                            desc.Tests.Add(test.Value);
+                        }
+                    }
+                }
+            }
         }
 
 

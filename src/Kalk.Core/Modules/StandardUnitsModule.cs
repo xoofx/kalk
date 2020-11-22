@@ -2,8 +2,18 @@
 
 namespace Kalk.Core.Modules
 {
-    public class StandardUnitsModule : KalkModuleWithFunctions
+    /// <summary>
+    /// Modules that contains standard units.
+    /// </summary>
+    [KalkExportModule(ModuleName)]
+    public partial class StandardUnitsModule : KalkModuleWithFunctions
     {
+        private const string ModuleName = "StandardUnits";
+        public StandardUnitsModule() : base(ModuleName)
+        {
+            RegisterFunctionsAuto();
+        }
+
         protected override void Initialize()
         {
         }

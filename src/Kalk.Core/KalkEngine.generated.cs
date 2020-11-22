@@ -71,6 +71,21 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
         }        
     }
 }
+namespace Kalk.Core.Modules
+{
+    public partial class AllModule
+    {
+        private void RegisterDocumentationAuto()
+        {
+            {
+                var descriptor = Descriptor;
+                descriptor.Category = "Modules (e.g `import Files`)";
+                descriptor.Description = @"Import all modules.";
+                descriptor.IsCommand = false;
+            }
+        }        
+    }
+}
 namespace Kalk.Core.Modules.HardwareIntrinsics
 {
     public partial class Avx2IntrinsicsModule
@@ -3774,6 +3789,12 @@ namespace Kalk.Core.Modules
         private void RegisterDocumentationAuto()
         {
             {
+                var descriptor = Descriptor;
+                descriptor.Category = "Modules (e.g `import Files`)";
+                descriptor.Description = @"Module for loading/parsing CSV text/files.";
+                descriptor.IsCommand = false;
+            }
+            {
                 var descriptor = Descriptors["parse_csv"];
                 descriptor.Category = "Text Functions";
                 descriptor.Description = @"Parse the specified text as a CSV, returning each CSV line in an array.";
@@ -3833,6 +3854,12 @@ namespace Kalk.Core.Modules
 
         private void RegisterDocumentationAuto()
         {
+            {
+                var descriptor = Descriptor;
+                descriptor.Category = "Modules (e.g `import Files`)";
+                descriptor.Description = @"";
+                descriptor.IsCommand = false;
+            }
             {
                 var descriptor = Descriptors["currencies"];
                 descriptor.Category = "Unit Functions";
@@ -3927,6 +3954,12 @@ namespace Kalk.Core.Modules
 
         private void RegisterDocumentationAuto()
         {
+            {
+                var descriptor = Descriptor;
+                descriptor.Category = "Modules (e.g `import Files`)";
+                descriptor.Description = @"Modules providing file related functions.";
+                descriptor.IsCommand = false;
+            }
             {
                 var descriptor = Descriptors["pwd"];
                 descriptor.Category = "Misc File Functions";
@@ -4157,6 +4190,26 @@ namespace Kalk.Core.Modules
     # utf8(out)
     out = ""Hello World!""
 ";
+            }
+        }        
+    }
+}
+namespace Kalk.Core.Modules
+{
+    public partial class HardwareIntrinsicsModule
+    {
+        protected override void RegisterFunctionsAuto()
+        {
+            RegisterDocumentationAuto();
+        }
+
+        private void RegisterDocumentationAuto()
+        {
+            {
+                var descriptor = Descriptor;
+                descriptor.Category = "Modules (e.g `import Files`)";
+                descriptor.Description = @"Module with CPU Hardware intrinsics.";
+                descriptor.IsCommand = false;
             }
         }        
     }
@@ -10399,6 +10452,26 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
 }
 namespace Kalk.Core.Modules
 {
+    public partial class StandardUnitsModule
+    {
+        protected override void RegisterFunctionsAuto()
+        {
+            RegisterDocumentationAuto();
+        }
+
+        private void RegisterDocumentationAuto()
+        {
+            {
+                var descriptor = Descriptor;
+                descriptor.Category = "Modules (e.g `import Files`)";
+                descriptor.Description = @"Modules that contains standard units.";
+                descriptor.IsCommand = false;
+            }
+        }        
+    }
+}
+namespace Kalk.Core.Modules
+{
     public partial class StringModule
     {
         protected override void RegisterFunctionsAuto()
@@ -10430,6 +10503,12 @@ namespace Kalk.Core.Modules
 
         private void RegisterDocumentationAuto()
         {
+            {
+                var descriptor = Descriptor;
+                descriptor.Category = "Modules (e.g `import Files`)";
+                descriptor.Description = @"Modules that provides string functions (e.g `upcase`, `downcase`, `regex_escape`...).";
+                descriptor.IsCommand = false;
+            }
             {
                 var descriptor = Descriptors["escape"];
                 descriptor.Category = "Text Functions";
@@ -11571,6 +11650,12 @@ namespace Kalk.Core.Modules
 
         private void RegisterDocumentationAuto()
         {
+            {
+                var descriptor = Descriptor;
+                descriptor.Category = "Modules (e.g `import Files`)";
+                descriptor.Description = @"Module that provides Web functions (e.g `url_encode`, `json`, `wget`...)";
+                descriptor.IsCommand = false;
+            }
             {
                 var descriptor = Descriptors["url_encode"];
                 descriptor.Category = "Web & Html Functions";

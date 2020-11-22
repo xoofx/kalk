@@ -5,11 +5,16 @@ using Scriban.Runtime;
 
 namespace Kalk.Core.Modules
 {
+    /// <summary>
+    /// Modules that provides string functions (e.g `upcase`, `downcase`, `regex_escape`...).
+    /// </summary>
+    [KalkExportModule(ModuleName)]
     public partial class StringModule : KalkModuleWithFunctions
     {
+        private const string ModuleName = "Strings";
         public const string CategoryString = "Text Functions";
 
-        public StringModule() : base("Strings")
+        public StringModule() : base(ModuleName)
         {
             RegisterFunctionsAuto();
         }

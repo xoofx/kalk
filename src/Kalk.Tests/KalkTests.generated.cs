@@ -20,6 +20,10 @@ namespace Kalk.Tests
     {
     }
 
+    public partial class AllModuleTests : KalkTestBase
+    {
+    }
+
     public partial class Avx2IntrinsicsModuleTests : KalkTestBase
     {
     }
@@ -302,6 +306,10 @@ out = bytebuffer([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33])
 out = ""Hello World!""", Category = "Misc File Functions")]
         public static void Test_save_bytes(string input, string output) => AssertScript(input, output, "Files");
 
+    }
+
+    public partial class HardwareIntrinsicsModuleTests : KalkTestBase
+    {
     }
 
     public partial class KalkEngineTests : KalkTestBase
@@ -1757,6 +1765,10 @@ out = ""AliceBlue""", Category = "Misc Functions")]
     }
 
     public partial class Ssse3IntrinsicsModuleTests : KalkTestBase
+    {
+    }
+
+    public partial class StandardUnitsModuleTests : KalkTestBase
     {
     }
 

@@ -38,12 +38,8 @@ namespace Kalk.Core
             if (!module.IsBuiltin)
             {
                 Builtins.SetValue(module.Name, module, true);
-
-                Descriptors.Add(module.Name, new KalkDescriptor()
-                {
-                    Names = { module.Name },
-                    Category = "Modules (e.g `import Files`)",
-                });
+                // Register the module descriptor
+                Descriptors.Add(module.Name, module.Descriptor);
             }
 
             module.Initialize(this);
@@ -273,6 +269,14 @@ namespace Kalk.Core
             }
 
             WriteHighlightLine($"# help [name]");
+
+            // Verify that all function/modules belong to a category
+            var invalidRegistered = Descriptors.FirstOrDefault(x => x.Value.Category == null);
+            if (invalidRegistered.Value != null)
+            {
+                throw new InvalidOperationException($"The function or module `{invalidRegistered.Key}` doesn't have a category. This is an invalid state of the program");
+            }
+
             var categoryToDescriptors = Descriptors.GroupBy(x => x.Value.Category).ToDictionary(x => x.Key, y => y.Select(x => x.Value).Distinct().ToList());
             WriteHighlightLine($"#");
             foreach (var categoryPair in categoryToDescriptors.OrderBy(x => x.Key))

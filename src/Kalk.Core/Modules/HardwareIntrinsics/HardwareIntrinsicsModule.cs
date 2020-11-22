@@ -2,12 +2,18 @@
 
 namespace Kalk.Core.Modules
 {
+    /// <summary>
+    /// Module with CPU Hardware intrinsics.
+    /// </summary>
+    [KalkExportModule(ModuleName)]
     public partial class HardwareIntrinsicsModule : KalkModuleWithFunctions
     {
+        private const string ModuleName = "HardwareIntrinsics";
         private const string CategoryIntrinsics = "Vector Hardware Intrinsics";
         
-        public HardwareIntrinsicsModule()
+        public HardwareIntrinsicsModule() : base(ModuleName)
         {
+            RegisterDocumentationAuto();
         }
 
         protected override void Import()

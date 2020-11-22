@@ -3,11 +3,25 @@ using Kalk.Core;
 
 namespace Kalk.CodeGen
 {
-    internal class KalkModuleToGenerate
+    public abstract class KalkDescriptorToGenerate : KalkDescriptor
+    {
+        protected KalkDescriptorToGenerate()
+        {
+            Tests = new List<(string, string)>();
+        }
+
+        public bool IsModule { get; set; }
+
+        public List<(string, string)> Tests { get; }
+    }
+
+
+    public class KalkModuleToGenerate : KalkDescriptorToGenerate
     {
         public KalkModuleToGenerate()
         {
             Members = new List<KalkMemberToGenerate>();
+            IsModule = true;
         }
 
         public string Name { get; set; }
@@ -16,16 +30,13 @@ namespace Kalk.CodeGen
 
         public string ClassName { get; set; }
 
-        public string Category { get; set; }
-
         public List<KalkMemberToGenerate> Members { get; }
     }
     
-    public class KalkMemberToGenerate : KalkDescriptor
+    public class KalkMemberToGenerate : KalkDescriptorToGenerate
     {
         public KalkMemberToGenerate()
         {
-            Tests = new List<(string, string)>();
         }
 
         public string Name { get; set; }
@@ -41,7 +52,5 @@ namespace Kalk.CodeGen
         public bool IsConst { get; set; }
 
         public string Cast { get; set; }
-
-        public List<(string, string)> Tests { get; }
     }
 }

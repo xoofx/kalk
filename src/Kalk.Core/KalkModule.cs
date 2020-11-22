@@ -27,6 +27,7 @@ namespace Kalk.Core
                 }
             }
             Descriptors = new Dictionary<string, KalkDescriptor>();
+            Descriptor = new KalkDescriptor() { Names = { Name } };
         }
 
         public string Name { get; private set; }
@@ -38,6 +39,8 @@ namespace Kalk.Core
         public bool IsBuiltin { get; protected set; }
 
         public bool IsInitialized { get; private set; }
+
+        public KalkDescriptor Descriptor { get; private set; }
 
         internal void Initialize(KalkEngine engine)
         {
