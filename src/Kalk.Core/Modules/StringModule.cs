@@ -19,24 +19,104 @@ namespace Kalk.Core.Modules
             RegisterFunctionsAuto();
         }
 
+        /// <summary>Escapes a string with escape characters.</summary>
+        /// <param name="text">The input string</param>
+        /// <returns>The two strings concatenated</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> "Hel\tlo\n\"W\\orld" |> escape
+        /// # "Hel\tlo\n\"W\\orld" |> escape
+        /// out = "Hel\\tlo\\n\\\"W\\\\orld"
+        /// ```
+        /// </example>
         [KalkExport("escape", CategoryString)]
         public string StringEscape(string text) => StringFunctions.Escape(text);
 
+        /// <summary>
+        /// Converts the first character of the passed string to a upper case character.
+        /// </summary>
+        /// <param name="text">The input string</param>
+        /// <returns>The capitalized input string</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> "test" |> capitalize
+        /// # "test" |> capitalize
+        /// out = "Test"
+        /// ```
+        /// </example>
         [KalkExport("capitalize", CategoryString)]
         public string StringCapitalize(string text) => StringFunctions.Capitalize(text);
-        
+
+        /// <summary>
+        /// Converts the first character of each word in the passed string to a upper case character.
+        /// </summary>
+        /// <param name="text">The input string</param>
+        /// <returns>The capitalized input string</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> "This is easy" |> capitalize_words
+        /// # "This is easy" |> capitalize_words
+        /// out = "This Is Easy"
+        /// ```
+        /// </example>
         [KalkExport("capitalize_words", CategoryString)]
         public string StringCapitalizeWords(string text) => StringFunctions.Capitalizewords(text);
 
+        /// <summary>Converts the string to lower case.</summary>
+        /// <param name="text">The input string</param>
+        /// <returns>The input string lower case</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> "TeSt" |> downcase
+        /// # "TeSt" |> downcase
+        /// out = "test"
+        /// ```
+        /// </example>
         [KalkExport("downcase", CategoryString)]
         public string StringDowncase(string text) => StringFunctions.Downcase(text);
 
+        /// <summary>Converts the string to uppercase</summary>
+        /// <param name="text">The input string</param>
+        /// <returns>The input string upper case</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> "test" |> upcase
+        /// # "test" |> upcase
+        /// out = "TEST"
+        /// ```
+        /// </example>
         [KalkExport("upcase", CategoryString)]
         public string StringUpcase(string text) => StringFunctions.Upcase(text);
 
+        /// <summary>
+        /// Returns a boolean indicating whether the input string ends with the specified string `value`.
+        /// </summary>
+        /// <param name="text">The input string</param>
+        /// <param name="end">The string to look for</param>
+        /// <returns><c>true</c> if `text` ends with the specified string `value`</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> "This is easy" |> endswith "easy"
+        /// # "This is easy" |> endswith("easy")
+        /// out = true
+        /// >>> "This is easy" |> endswith "none"
+        /// # "This is easy" |> endswith("none")
+        /// out = false
+        /// ```
+        /// </example>
         [KalkExport("endswith", CategoryString)]
         public KalkBool StringEndsWith(string text, string end) => StringFunctions.EndsWith(text, end);
 
+        /// <summary>Returns a url handle from the input string.</summary>
+        /// <param name="text">The input string</param>
+        /// <returns>A url handle</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> '100% M @ Ms!!!' |> handleize
+        /// # '100% M @ Ms!!!' |> handleize
+        /// out = "100-m-ms"
+        /// ```
+        /// </example>
         [KalkExport("handleize", CategoryString)]
         public string StringHandleize(string text) => StringFunctions.Handleize(text);
 

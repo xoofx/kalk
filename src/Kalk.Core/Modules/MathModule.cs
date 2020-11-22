@@ -76,21 +76,49 @@ namespace Kalk.Core
         /// <summary>
         /// Defines the "Not a Number" constant for a double.
         /// </summary>
+        /// <example>
+        /// ```kalk
+        /// >>> nan
+        /// # nan
+        /// out = nan
+        /// ```
+        /// </example>
         [KalkExport("nan", CategoryMathFunctions)] public const double Nan = double.NaN;
 
         /// <summary>
         /// Defines the infinity constant for a double.
         /// </summary>
+        /// <example>
+        /// ```kalk
+        /// >>> inf
+        /// # inf
+        /// out = inf
+        /// ```
+        /// </example>
         [KalkExport("inf", CategoryMathFunctions)] public const double Inf = double.PositiveInfinity;
 
         /// <summary>
         /// Defines the PI constant. pi = 3.14159265358979
         /// </summary>
+        /// <example>
+        /// ```kalk
+        /// >>> pi
+        /// # pi
+        /// out = 3.141592653589793
+        /// ```
+        /// </example>
         [KalkExport("pi", CategoryMathFunctions)] public const double Pi = Math.PI;
 
         /// <summary>
         /// Defines the natural logarithmic base. e = 2.71828182845905
         /// </summary>
+        /// <example>
+        /// ```kalk
+        /// >>> e
+        /// # e
+        /// out = 2.718281828459045
+        /// ```
+        /// </example>
         [KalkExport("e", CategoryMathFunctions)] public const double E = Math.E;
 
         /// <summary>

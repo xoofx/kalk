@@ -8,28 +8,24 @@
 
   <ItemGroup>
     <None Remove="core.kalk" />
-    <None Remove="Modules\standard_units.kalk" />
-    <None Remove="Modules\Vectors\colorspaces.kalk" />
+    <None Remove="units.kalk" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Modules\standard_units.kalk">
+    <Content Include="units.kalk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="core.kalk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Vectors\colorspaces.kalk">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="16.0.0" />
+    <PackageReference Include="CsvHelper" Version="16.1.0" />
     <PackageReference Include="MathNet.Numerics" Version="4.12.0" />
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
-    <PackageReference Include="Scriban" Version="3.0.0" />
+    <PackageReference Include="Scriban" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Modules\Vectors\colorspaces.kalk">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
     <None Update="Modules\Vectors\VectorModule.Matrices.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>VectorModule.Matrices.generated.cs</LastGenOutput>

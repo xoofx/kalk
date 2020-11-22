@@ -12,10 +12,58 @@ namespace Kalk.Core
         /// <summary>
         /// If used in an expression, returns an object containing all units defined.
         /// Otherwise it will display units in a friendly format.
+        /// By default, no units are defined. You can define units by using the `unit` function
+        /// and you can also import predefined units or currencies via `import StandardUnits` or
+        /// `import Currencies`.
         /// </summary>
+        /// <example>
+        /// ```kalk
+        /// >>> unit(tomato, "A tomato unit", prefix: "decimal")
+        /// # unit(tomato, "A tomato unit", prefix: "decimal")
+        /// out = tomato
+        /// >>> unit(ketchup, "A ketchup unit", kup, 5 tomato, prefix: "decimal")
+        /// # unit(ketchup, "A ketchup unit", kup, 5 * tomato, prefix: "decimal")
+        /// out = kup
+        /// >>> units
+        /// # User Defined Units
+        /// unit(ketchup, "A ketchup unit", kup, 5 * tomato, prefix: "decimal")
+        ///   - yottaketchup/Ykup, zettaketchup/Zkup, exaketchup/Ekup, petaketchup/Pkup, teraketchup/Tkup,
+        ///     gigaketchup/Gkup, megaketchup/Mkup, kiloketchup/kkup, hectoketchup/hkup, decaketchup/dakup,
+        ///     deciketchup/dkup, centiketchup/ckup, milliketchup/mkup, microketchup/µkup, nanoketchup/nkup,
+        ///     picoketchup/pkup, femtoketchup/fkup, attoketchup/akup, zeptoketchup/zkup, yoctoketchup/ykup
+        /// 
+        /// unit(tomato, "A tomato unit", tomato, prefix: "decimal")
+        ///   - yottatomato/Ytomato, zettatomato/Ztomato, exatomato/Etomato, petatomato/Ptomato,
+        ///     teratomato/Ttomato, gigatomato/Gtomato, megatomato/Mtomato, kilotomato/ktomato,
+        ///     hectotomato/htomato, decatomato/datomato, decitomato/dtomato, centitomato/ctomato,
+        ///     millitomato/mtomato, microtomato/µtomato, nanotomato/ntomato, picotomato/ptomato,
+        ///     femtotomato/ftomato, attotomato/atomato, zeptotomato/ztomato, yoctotomato/ytomato
+        /// ```
+        /// </example>
         [KalkExport("units", CategoryUnits)]
         public KalkUnits Units { get; }
 
+        /// <summary>
+        /// Converts from one value unit to a destination unit.
+        ///
+        /// The pipe operator |> can be used between the src and destination unit to make it
+        /// more readable. Example: `105 g |> to kg`
+        /// </summary>
+        /// <param name="src">The source value with units.</param>
+        /// <param name="dst">The destination unit.</param>
+        /// <returns>The result of the calculation.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> import StandardUnits
+        /// # 1294 units successfully imported from module `StandardUnits`.
+        /// >>> 10 kg/s |> to kg/h
+        /// # ((10 * kg) / s) |> to(kg / h)
+        /// out = 36000 * kg / h
+        /// >>> 50 kg/m |> to g/km
+        /// # ((50 * kg) / m) |> to(g / km)
+        /// out = 50000000 * g / km
+        /// ```
+        /// </example>
         [KalkExport("to", CategoryUnits)]
         public KalkExpression ConvertTo(KalkExpression src, KalkExpression dst)
         {

@@ -4223,7 +4223,6 @@ namespace Kalk.Core
             RegisterConstant("config", Config);
             RegisterConstant("aliases", Aliases);
             RegisterConstant("shortcuts", Shortcuts);
-            RegisterFunction("date", (Func<string[], object>)Date);
             RegisterFunction("clipboard", (Func<object, object>)Clipboard);
             RegisterAction("display", (Action<Scriban.Syntax.ScriptVariable>)Display);
             RegisterAction("echo", (Action<Scriban.Syntax.ScriptVariable>)Echo);
@@ -4303,13 +4302,6 @@ namespace Kalk.Core
                 descriptor.Description = @"Displays all built-in and user-defined keyboard shortcuts.";
                 descriptor.IsCommand = false;
                 descriptor.Remarks = @"To create an keyboard shortcut, see the command `shortcut`.";
-            }
-            {
-                var descriptor = Descriptors["date"];
-                descriptor.Category = "General";
-                descriptor.Description = @"Gets the date object";
-                descriptor.IsCommand = false;
-                descriptor.Returns = @"";
             }
             {
                 var descriptor = Descriptors["clipboard"];
@@ -4637,19 +4629,74 @@ namespace Kalk.Core
                 descriptor.Description = @"Gets the kind of a value.";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("value", @"A value to inspect the kind")  { IsOptional = false });
+                descriptor.Example = @"    >>> kind 1
+    # kind(1)
+    out = ""int""
+    >>> kind ""a""
+    # kind(""a"")
+    out = ""string""
+    >>> kind byte (1)
+    # kind(byte(1))
+    out = ""byte""
+    >>> kind []
+    # kind([])
+    out = ""array""
+    >>> kind {}
+    # kind({})
+    out = ""object""
+";
             }
             {
                 var descriptor = Descriptors["units"];
                 descriptor.Category = "Unit Functions";
                 descriptor.Description = @"If used in an expression, returns an object containing all units defined.
-    Otherwise it will display units in a friendly format.";
+    Otherwise it will display units in a friendly format.
+    By default, no units are defined. You can define units by using the `unit` function
+    and you can also import predefined units or currencies via `import StandardUnits` or
+    `import Currencies`.";
                 descriptor.IsCommand = false;
+                descriptor.Example = @"    >>> unit(tomato, ""A tomato unit"", prefix: ""decimal"")
+    # unit(tomato, ""A tomato unit"", prefix: ""decimal"")
+    out = tomato
+    >>> unit(ketchup, ""A ketchup unit"", kup, 5 tomato, prefix: ""decimal"")
+    # unit(ketchup, ""A ketchup unit"", kup, 5 * tomato, prefix: ""decimal"")
+    out = kup
+    >>> units
+    # User Defined Units
+    unit(ketchup, ""A ketchup unit"", kup, 5 * tomato, prefix: ""decimal"")
+      - yottaketchup/Ykup, zettaketchup/Zkup, exaketchup/Ekup, petaketchup/Pkup, teraketchup/Tkup,
+        gigaketchup/Gkup, megaketchup/Mkup, kiloketchup/kkup, hectoketchup/hkup, decaketchup/dakup,
+        deciketchup/dkup, centiketchup/ckup, milliketchup/mkup, microketchup/µkup, nanoketchup/nkup,
+        picoketchup/pkup, femtoketchup/fkup, attoketchup/akup, zeptoketchup/zkup, yoctoketchup/ykup
+    
+    unit(tomato, ""A tomato unit"", tomato, prefix: ""decimal"")
+      - yottatomato/Ytomato, zettatomato/Ztomato, exatomato/Etomato, petatomato/Ptomato,
+        teratomato/Ttomato, gigatomato/Gtomato, megatomato/Mtomato, kilotomato/ktomato,
+        hectotomato/htomato, decatomato/datomato, decitomato/dtomato, centitomato/ctomato,
+        millitomato/mtomato, microtomato/µtomato, nanotomato/ntomato, picotomato/ptomato,
+        femtotomato/ftomato, attotomato/atomato, zeptotomato/ztomato, yoctotomato/ytomato
+";
             }
             {
                 var descriptor = Descriptors["to"];
                 descriptor.Category = "Unit Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Converts from one value unit to a destination unit.
+    
+     The pipe operator |> can be used between the src and destination unit to make it
+     more readable. Example: `105 g |> to kg`";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("src", @"The source value with units.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("dst", @"The destination unit.")  { IsOptional = false });
+                descriptor.Returns = @"The result of the calculation.";
+                descriptor.Example = @"     >>> import StandardUnits
+     # 1294 units successfully imported from module `StandardUnits`.
+     >>> 10 kg/s |> to kg/h
+     # ((10 * kg) / s) |> to(kg / h)
+     out = 36000 * kg / h
+     >>> 50 kg/m |> to g/km
+     # ((50 * kg) / m) |> to(g / km)
+     out = 50000000 * g / km
+";
             }
             {
                 var descriptor = Descriptors["unit"];
@@ -4796,24 +4843,40 @@ namespace Kalk.Core
                 descriptor.Category = "Math Functions";
                 descriptor.Description = @"Defines the ""Not a Number"" constant for a double.";
                 descriptor.IsCommand = false;
+                descriptor.Example = @"    >>> nan
+    # nan
+    out = nan
+";
             }
             {
                 var descriptor = Descriptors["inf"];
                 descriptor.Category = "Math Functions";
                 descriptor.Description = @"Defines the infinity constant for a double.";
                 descriptor.IsCommand = false;
+                descriptor.Example = @"    >>> inf
+    # inf
+    out = inf
+";
             }
             {
                 var descriptor = Descriptors["pi"];
                 descriptor.Category = "Math Functions";
                 descriptor.Description = @"Defines the PI constant. pi = 3.14159265358979";
                 descriptor.IsCommand = false;
+                descriptor.Example = @"    >>> pi
+    # pi
+    out = 3.141592653589793
+";
             }
             {
                 var descriptor = Descriptors["e"];
                 descriptor.Category = "Math Functions";
                 descriptor.Description = @"Defines the natural logarithmic base. e = 2.71828182845905";
                 descriptor.IsCommand = false;
+                descriptor.Example = @"    >>> e
+    # e
+    out = 2.718281828459045
+";
             }
             {
                 var descriptor = Descriptors["fib"];
@@ -6117,7 +6180,7 @@ namespace Kalk.Core
     {
         protected override void RegisterFunctionsAuto()
         {
-            RegisterConstant("date", DateObject);
+            RegisterFunction("date", (Func<string, object>)Date);
             RegisterFunction("ascii", (Func<object, object>)Ascii);
             RegisterFunction("keys", (Func<object, System.Collections.IEnumerable>)Keys);
             RegisterFunction("guid", (Func<string>)Guid);
@@ -6143,8 +6206,114 @@ namespace Kalk.Core
             {
                 var descriptor = Descriptors["date"];
                 descriptor.Category = "Misc Functions";
-                descriptor.Description = @"Gets the date object.";
+                descriptor.Description = @"Gets the current date, parse the input date or return the date object, depending on use cases.
+     - If this function doesn't have any parameter and is not used to index a member, it returns the current date. It is equivalent of `date.now`
+    
+       The return date object has the following properties:
+    
+       | Name             | Description
+       |--------------    |-----------------
+       | `.year`          | Gets the year of a date object
+       | `.month`         | Gets the month of a date object
+       | `.day`           | Gets the day in the month of a date object
+       | `.day_of_year`   | Gets the day within the year
+       | `.hour`          | Gets the hour of the date object
+       | `.minute`        | Gets the minute of the date object
+       | `.second`        | Gets the second of the date object
+       | `.millisecond`   | Gets the millisecond of the date object
+     
+     - If this function has a string parameter, it will try to parse the string as a date
+     - Otherwise, if this function provides the following sub functions and members:
+       - `date.add_days`: Example `'2016/01/05' |> date |> date.add_days 1`
+       - `date.add_months`: Example `'2016/01/05' |> date |> date.add_months 1`
+       - `date.add_years`: Example `'2016/01/05' |> date |> date.add_years 1`
+       - `date.add_hours`
+       - `date.add_minutes`
+       - `date.add_seconds`
+       - `date.add_milliseconds`
+       - `date.to_string`: Converts a datetime object to a textual representation using the specified format string.
+     
+          By default, if you are using a date, it will use the format specified by `date.format` which defaults to `date.default_format` (readonly) which default to `%d %b %Y`
+          
+          You can override the format used for formatting all dates by assigning the a new format: `date.format = '%a %b %e %T %Y';`
+          
+          You can recover the default format by using `date.format = date.default_format;`
+          
+          By default, the to_string format is using the **current culture**, but you can switch to an invariant culture by using the modifier `%g`
+          
+          For example, using `%g %d %b %Y` will output the date using an invariant culture.
+          
+          If you are using `%g` alone, it will output the date with `date.format` using an invariant culture.
+          
+          Suppose that `date.now` would return the date `2013-09-12 22:49:27 +0530`, the following table explains the format modifiers:
+          
+          | Format | Result            | Description
+          |--------|-------------------|--------------------------------------------
+          | `""%a""` |  `""Thu""`          | Name of week day in short form of the
+          | `""%A""` |  `""Thursday""`     | Week day in full form of the time
+          | `""%b""` |  `""Sep""`          | Month in short form of the time
+          | `""%B""` |  `""September""`    | Month in full form of the time
+          | `""%c""` |                   | Date and time (%a %b %e %T %Y)
+          | `""%C""` |  `""20""`           | Century of the time
+          | `""%d""` |  `""12""`           | Day of the month of the time
+          | `""%D""` |  `""09/12/13""`     | Date (%m/%d/%y)
+          | `""%e""` |  `""12""`           | Day of the month, blank-padded ( 1..31)
+          | `""%F""` |  `""2013-09-12""`   | ISO 8601 date (%Y-%m-%d)
+          | `""%h""` |  `""Sep""`          | Alias for %b
+          | `""%H""` |  `""22""`           | Hour of the time in 24 hour clock format
+          | `""%I""` |  `""10""`           | Hour of the time in 12 hour clock format
+          | `""%j""` |  `""255""`          | Day of the year (001..366) (3 digits, left padded with zero)
+          | `""%k""` |  `""22""`           | Hour of the time in 24 hour clock format, blank-padded ( 0..23)
+          | `""%l""` |  `""10""`           | Hour of the time in 12 hour clock format, blank-padded ( 0..12)
+          | `""%L""` |  `""000""`          | Millisecond of the time (3 digits, left padded with zero)
+          | `""%m""` |  `""09""`           | Month of the time
+          | `""%M""` |  `""49""`           | Minutes of the time (2 digits, left padded with zero e.g 01 02)
+          | `""%n""` |                   | Newline character (\n)
+          | `""%N""` |  `""000000000""`    | Nanoseconds of the time (9 digits, left padded with zero)
+          | `""%p""` |  `""PM""`           | Gives AM / PM of the time
+          | `""%P""` |  `""pm""`           | Gives am / pm of the time
+          | `""%r""` |  `""10:49:27 PM""`  | Long time in 12 hour clock format (%I:%M:%S %p)
+          | `""%R""` |  `""22:49""`        | Short time in 24 hour clock format (%H:%M)
+          | `""%s""` |                   | Number of seconds since 1970-01-01 00:00:00 +0000
+          | `""%S""` |  `""27""`           | Seconds of the time
+          | `""%t""` |                   | Tab character (\t)
+          | `""%T""` |  `""22:49:27""`     | Long time in 24 hour clock format (%H:%M:%S)
+          | `""%u""` |  `""4""`            | Day of week of the time (from 1 for Monday to 7 for Sunday)
+          | `""%U""` |  `""36""`           | Week number of the current year, starting with the first Sunday as the first day of the first week (00..53)
+          | `""%v""` |  `""12-SEP-2013""`  | VMS date (%e-%b-%Y) (culture invariant)
+          | `""%V""` |  `""37""`           | Week number of the current year according to ISO 8601 (01..53)
+          | `""%W""` |  `""36""`           | Week number of the current year, starting with the first Monday as the first day of the first week (00..53)
+          | `""%w""` |  `""4""`            | Day of week of the time (from 0 for Sunday to 6 for Saturday)
+          | `""%x""` |                   | Preferred representation for the date alone, no time
+          | `""%X""` |                   | Preferred representation for the time alone, no date
+          | `""%y""` |  `""13""`           | Gives year without century of the time
+          | `""%Y""` |  `""2013""`         | Year of the time
+          | `""%Z""` |  `""IST""`          | Gives Time Zone of the time
+          | `""%%""` |  `""%""`            | Output the character `%`
+          
+          Note that the format is using a good part of the ruby format ([source](http://apidock.com/ruby/DateTime/strftime))";
                 descriptor.IsCommand = false;
+                descriptor.Returns = @"The current date, parse the input date or return the date object, depending on use cases.";
+                descriptor.Example = @"     >>> today = date
+     # today = date
+     today = 11/22/20 10:13:00
+     >>> today.year
+     # today.year
+     out = 2020
+     >>> today.month
+     # today.month
+     out = 11
+     >>> ""30 Nov 2020"" |> date
+     # ""30 Nov 2020"" |> date
+     out = 11/30/20 00:00:00
+     >>> out |> date.add_days 4
+     # out |> date.add_days(4)
+     out = 12/04/20 00:00:00
+     >>> date.format = ""%F""
+     >>> date
+     # date
+     out = 2020-11-22
+";
             }
             {
                 var descriptor = Descriptors["ascii"];
@@ -10607,44 +10776,90 @@ namespace Kalk.Core.Modules
             {
                 var descriptor = Descriptors["escape"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Escapes a string with escape characters.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Returns = @"The two strings concatenated";
+                descriptor.Example = @"    >>> ""Hel\tlo\n\""W\\orld"" |> escape
+    # ""Hel\tlo\n\""W\\orld"" |> escape
+    out = ""Hel\\tlo\\n\\\""W\\\\orld""
+";
             }
             {
                 var descriptor = Descriptors["capitalize"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Converts the first character of the passed string to a upper case character.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Returns = @"The capitalized input string";
+                descriptor.Example = @"    >>> ""test"" |> capitalize
+    # ""test"" |> capitalize
+    out = ""Test""
+";
             }
             {
                 var descriptor = Descriptors["capitalize_words"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Converts the first character of each word in the passed string to a upper case character.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Returns = @"The capitalized input string";
+                descriptor.Example = @"    >>> ""This is easy"" |> capitalize_words
+    # ""This is easy"" |> capitalize_words
+    out = ""This Is Easy""
+";
             }
             {
                 var descriptor = Descriptors["downcase"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Converts the string to lower case.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Returns = @"The input string lower case";
+                descriptor.Example = @"    >>> ""TeSt"" |> downcase
+    # ""TeSt"" |> downcase
+    out = ""test""
+";
             }
             {
                 var descriptor = Descriptors["upcase"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Converts the string to uppercase";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Returns = @"The input string upper case";
+                descriptor.Example = @"    >>> ""test"" |> upcase
+    # ""test"" |> upcase
+    out = ""TEST""
+";
             }
             {
                 var descriptor = Descriptors["endswith"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns a boolean indicating whether the input string ends with the specified string `value`.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("end", @"The string to look for")  { IsOptional = false });
+                descriptor.Returns = @"true if `text` ends with the specified string `value`";
+                descriptor.Example = @"    >>> ""This is easy"" |> endswith ""easy""
+    # ""This is easy"" |> endswith(""easy"")
+    out = true
+    >>> ""This is easy"" |> endswith ""none""
+    # ""This is easy"" |> endswith(""none"")
+    out = false
+";
             }
             {
                 var descriptor = Descriptors["handleize"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns a url handle from the input string.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Returns = @"A url handle";
+                descriptor.Example = @"    >>> '100% M @ Ms!!!' |> handleize
+    # '100% M @ Ms!!!' |> handleize
+    out = ""100-m-ms""
+";
             }
             {
                 var descriptor = Descriptors["lstrip"];

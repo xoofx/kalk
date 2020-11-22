@@ -52,18 +52,6 @@ namespace Kalk.Core
             return moduleT;
         }
 
-
-        /// <summary>
-        /// Gets the date object
-        /// </summary>
-        /// <returns></returns>
-        [KalkExport("date", CategoryGeneral)]
-        public object Date(string[] date)
-        {
-            if (date.Length > 0) return DateTimeFunctions.Parse(this, date[0]);
-            return new DateTimeFunctions();
-        }
-        
         /// <summary>
         /// Gets or sets the current content of the clipboard.
         /// </summary>
@@ -764,6 +752,25 @@ namespace Kalk.Core
         /// Gets the kind of a value.
         /// </summary>
         /// <param name="value">A value to inspect the kind</param>
+        /// <example>
+        /// ```kalk
+        /// >>> kind 1
+        /// # kind(1)
+        /// out = "int"
+        /// >>> kind "a"
+        /// # kind("a")
+        /// out = "string"
+        /// >>> kind byte (1)
+        /// # kind(byte(1))
+        /// out = "byte"
+        /// >>> kind []
+        /// # kind([])
+        /// out = "array"
+        /// >>> kind {}
+        /// # kind({})
+        /// out = "object"
+        /// ```
+        /// </example>
         [KalkExport("kind", CategoryGeneral)]
         public string Kind(object value)
         {

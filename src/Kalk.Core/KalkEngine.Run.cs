@@ -1,22 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using Consolus;
-using Scriban;
-using Scriban.Functions;
-using Scriban.Parsing;
-using Scriban.Runtime;
 using Scriban.Syntax;
 
 namespace Kalk.Core
@@ -25,8 +10,6 @@ namespace Kalk.Core
     {
         public bool Run(params string[] args)
         {
-//            Debugger.Launch();
-
             if (!Console.IsInputRedirected && !Console.IsOutputRedirected && ConsoleHelper.HasInteractiveConsole)
             {
                 Repl = new ConsoleRepl();

@@ -338,6 +338,11 @@ namespace Kalk.Core
                 if (double.IsInfinity(f64)) return "inf";
                 if (double.IsNaN(f64)) return "nan";
             }
+            else if (value is DateTime && _miscModule != null)
+            {
+                // Output DateTime only if we have the date builtin object accessible (that provides the implementation of the ToString method)
+                return _miscModule.DateObject.ToString((DateTime)value, _miscModule.DateObject.Format, CurrentCulture);
+            }
 
             return base.ObjectToString(value, nested);
         }

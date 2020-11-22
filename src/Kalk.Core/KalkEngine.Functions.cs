@@ -12,13 +12,15 @@ namespace Kalk.Core
 
         private const string CoreFileName = "core.kalk";
 
+        private MiscModule _miscModule;
+
         private void RegisterFunctions()
         {
             RegisterFunctionsAuto();
 
             // builtins
             GetOrCreateModule<MathModule>();
-            GetOrCreateModule<MiscModule>();
+            _miscModule = GetOrCreateModule<MiscModule>();
             GetOrCreateModule<MemoryModule>();
             GetOrCreateModule<VectorModule>();
 

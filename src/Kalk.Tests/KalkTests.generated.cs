@@ -553,6 +553,61 @@ var1 = 1", Category = "General")]
         public static void Test_alias(string input, string output) => AssertScript(input, output);
 
         /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.Kind(System.Object)"/> or `kind`.
+        /// </summary>
+        [TestCase(@"kind 1
+kind ""a""
+kind byte (1)
+kind []
+kind {}", @"# kind(1)
+out = ""int""
+# kind(""a"")
+out = ""string""
+# kind(byte(1))
+out = ""byte""
+# kind([])
+out = ""array""
+# kind({})
+out = ""object""", Category = "General")]
+        public static void Test_kind(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="P:Kalk.Core.KalkEngine.Units"/> or `units`.
+        /// </summary>
+        [TestCase(@"unit(tomato, ""A tomato unit"", prefix: ""decimal"")
+unit(ketchup, ""A ketchup unit"", kup, 5 tomato, prefix: ""decimal"")
+units", @"# unit(tomato, ""A tomato unit"", prefix: ""decimal"")
+out = tomato
+# unit(ketchup, ""A ketchup unit"", kup, 5 * tomato, prefix: ""decimal"")
+out = kup
+# User Defined Units
+unit(ketchup, ""A ketchup unit"", kup, 5 * tomato, prefix: ""decimal"")
+  - yottaketchup/Ykup, zettaketchup/Zkup, exaketchup/Ekup, petaketchup/Pkup, teraketchup/Tkup,
+    gigaketchup/Gkup, megaketchup/Mkup, kiloketchup/kkup, hectoketchup/hkup, decaketchup/dakup,
+    deciketchup/dkup, centiketchup/ckup, milliketchup/mkup, microketchup/µkup, nanoketchup/nkup,
+    picoketchup/pkup, femtoketchup/fkup, attoketchup/akup, zeptoketchup/zkup, yoctoketchup/ykup
+
+unit(tomato, ""A tomato unit"", tomato, prefix: ""decimal"")
+  - yottatomato/Ytomato, zettatomato/Ztomato, exatomato/Etomato, petatomato/Ptomato,
+    teratomato/Ttomato, gigatomato/Gtomato, megatomato/Mtomato, kilotomato/ktomato,
+    hectotomato/htomato, decatomato/datomato, decitomato/dtomato, centitomato/ctomato,
+    millitomato/mtomato, microtomato/µtomato, nanotomato/ntomato, picotomato/ptomato,
+    femtotomato/ftomato, attotomato/atomato, zeptotomato/ztomato, yoctotomato/ytomato", Category = "Unit Functions")]
+        public static void Test_units(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.ConvertTo(Kalk.Core.KalkExpression,Kalk.Core.KalkExpression)"/> or `to`.
+        /// </summary>
+        [TestCase(@"import StandardUnits
+10 kg/s |> to kg/h
+50 kg/m |> to g/km", @"# 1294 units successfully imported from module `StandardUnits`.
+# ((10 * kg) / s) |> to(kg / h)
+out = 36000 * kg / h
+# ((50 * kg) / m) |> to(g / km)
+out = 50000000 * g / km", Category = "Unit Functions")]
+        public static void Test_to(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
         /// Test for <see cref="M:Kalk.Core.KalkEngine.DefineUserUnit(Scriban.Syntax.ScriptVariable,System.String,Scriban.Syntax.ScriptVariable,Kalk.Core.KalkExpression,System.String,System.String)"/> or `unit`.
         /// </summary>
         [TestCase(@"unit(tomato, ""A tomato unit"", prefix: ""decimal"")
@@ -582,6 +637,34 @@ unit(ketchup, ""A ketchup unit"", kup, 5 * tomato, prefix: ""decimal"")
 
     public partial class MathModuleTests : KalkTestBase
     {
+        /// <summary>
+        /// Test for <see cref="F:Kalk.Core.MathModule.Nan"/> or `nan`.
+        /// </summary>
+        [TestCase(@"nan", @"# nan
+out = nan", Category = "Math Functions")]
+        public static void Test_nan(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="F:Kalk.Core.MathModule.Inf"/> or `inf`.
+        /// </summary>
+        [TestCase(@"inf", @"# inf
+out = inf", Category = "Math Functions")]
+        public static void Test_inf(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="F:Kalk.Core.MathModule.Pi"/> or `pi`.
+        /// </summary>
+        [TestCase(@"pi", @"# pi
+out = 3.141592653589793", Category = "Math Functions")]
+        public static void Test_pi(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="F:Kalk.Core.MathModule.E"/> or `e`.
+        /// </summary>
+        [TestCase(@"e", @"# e
+out = 2.718281828459045", Category = "Math Functions")]
+        public static void Test_e(string input, string output) => AssertScript(input, output);
+
         /// <summary>
         /// Test for <see cref="M:Kalk.Core.MathModule.Fib(Kalk.Core.KalkIntValue)"/> or `fib`.
         /// </summary>
@@ -1532,6 +1615,29 @@ out = bytebuffer([1, 2, 3, 4])", Category = "Misc Memory Functions")]
     public partial class MiscModuleTests : KalkTestBase
     {
         /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.Date(System.String)"/> or `date`.
+        /// </summary>
+        [TestCase(@"today = date
+today.year
+today.month
+""30 Nov 2020"" |> date
+out |> date.add_days 4
+date.format = ""%F""
+date", @"# today = date
+today = 11/22/20 10:13:00
+# today.year
+out = 2020
+# today.month
+out = 11
+# ""30 Nov 2020"" |> date
+out = 11/30/20 00:00:00
+# out |> date.add_days(4)
+out = 12/04/20 00:00:00
+# date
+out = 2020-11-22", Category = "Misc Functions")]
+        public static void Test_date(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
         /// Test for <see cref="M:Kalk.Core.MiscModule.Ascii(System.Object)"/> or `ascii`.
         /// </summary>
         [TestCase(@"ascii 65
@@ -1837,6 +1943,58 @@ out = ""AliceBlue""", Category = "Misc Functions")]
 
     public partial class StringModuleTests : KalkTestBase
     {
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringEscape(System.String)"/> or `escape`.
+        /// </summary>
+        [TestCase(@"""Hel\tlo\n\""W\\orld"" |> escape", @"# ""Hel\tlo\n\""W\\orld"" |> escape
+out = ""Hel\\tlo\\n\\\""W\\\\orld""", Category = "Text Functions")]
+        public static void Test_escape(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringCapitalize(System.String)"/> or `capitalize`.
+        /// </summary>
+        [TestCase(@"""test"" |> capitalize", @"# ""test"" |> capitalize
+out = ""Test""", Category = "Text Functions")]
+        public static void Test_capitalize(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringCapitalizeWords(System.String)"/> or `capitalize_words`.
+        /// </summary>
+        [TestCase(@"""This is easy"" |> capitalize_words", @"# ""This is easy"" |> capitalize_words
+out = ""This Is Easy""", Category = "Text Functions")]
+        public static void Test_capitalize_words(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringDowncase(System.String)"/> or `downcase`.
+        /// </summary>
+        [TestCase(@"""TeSt"" |> downcase", @"# ""TeSt"" |> downcase
+out = ""test""", Category = "Text Functions")]
+        public static void Test_downcase(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringUpcase(System.String)"/> or `upcase`.
+        /// </summary>
+        [TestCase(@"""test"" |> upcase", @"# ""test"" |> upcase
+out = ""TEST""", Category = "Text Functions")]
+        public static void Test_upcase(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringEndsWith(System.String,System.String)"/> or `endswith`.
+        /// </summary>
+        [TestCase(@"""This is easy"" |> endswith ""easy""
+""This is easy"" |> endswith ""none""", @"# ""This is easy"" |> endswith(""easy"")
+out = true
+# ""This is easy"" |> endswith(""none"")
+out = false", Category = "Text Functions")]
+        public static void Test_endswith(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringHandleize(System.String)"/> or `handleize`.
+        /// </summary>
+        [TestCase(@"'100% M @ Ms!!!' |> handleize", @"# '100% M @ Ms!!!' |> handleize
+out = ""100-m-ms""", Category = "Text Functions")]
+        public static void Test_handleize(string input, string output) => AssertScript(input, output, "Strings");
+
     }
 
     public partial class VectorModuleTests : KalkTestBase
