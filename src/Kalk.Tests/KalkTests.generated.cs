@@ -1995,6 +1995,114 @@ out = false", Category = "Text Functions")]
 out = ""100-m-ms""", Category = "Text Functions")]
         public static void Test_handleize(string input, string output) => AssertScript(input, output, "Strings");
 
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringLeftStrip(System.String)"/> or `lstrip`.
+        /// </summary>
+        [TestCase(@"'   too many spaces' |> lstrip", @"# '   too many spaces' |> lstrip
+out = ""too many spaces""", Category = "Text Functions")]
+        public static void Test_lstrip(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringPluralize(System.Int32,System.String,System.String)"/> or `pluralize`.
+        /// </summary>
+        [TestCase(@"3 |> pluralize('product', 'products')", @"# 3 |> pluralize('product', 'products')
+out = ""products""", Category = "Text Functions")]
+        public static void Test_pluralize(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringRightStrip(System.String)"/> or `rstrip`.
+        /// </summary>
+        [TestCase(@"'   too many spaces           ' |> rstrip", @"# '   too many spaces           ' |> rstrip
+out = ""   too many spaces""", Category = "Text Functions")]
+        public static void Test_rstrip(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringSplit(System.String,System.String)"/> or `split`.
+        /// </summary>
+        [TestCase(@"""Hi, how are you today?"" |> split ' '", @"# ""Hi, how are you today?"" |> split(' ')
+out = [""Hi,"", ""how"", ""are"", ""you"", ""today?""]", Category = "Text Functions")]
+        public static void Test_split(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringStartsWith(System.String,System.String)"/> or `startswith`.
+        /// </summary>
+        [TestCase(@"""This is easy"" |> startswith ""This""
+""This is easy"" |> startswith ""easy""", @"# ""This is easy"" |> startswith(""This"")
+out = true
+# ""This is easy"" |> startswith(""easy"")
+out = false", Category = "Text Functions")]
+        public static void Test_startswith(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringStrip(System.String)"/> or `strip`.
+        /// </summary>
+        [TestCase(@"'   too many spaces           ' |> strip", @"# '   too many spaces           ' |> strip
+out = ""too many spaces""", Category = "Text Functions")]
+        public static void Test_strip(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringStripNewlines(System.String)"/> or `strip_newlines`.
+        /// </summary>
+        [TestCase(@"""This is a string.\r\n With \nanother \rstring"" |> strip_newlines", @"# ""This is a string.\r\n With \nanother \rstring"" |> strip_newlines
+out = ""This is a string. With another string""", Category = "Text Functions")]
+        public static void Test_strip_newlines(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringPadLeft(System.String,System.Int32)"/> or `pad_left`.
+        /// </summary>
+        [TestCase(@"""world"" |> pad_left 10", @"# ""world"" |> pad_left(10)
+out = ""     world""", Category = "Text Functions")]
+        public static void Test_pad_left(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.StringPadRight(System.String,System.Int32)"/> or `pad_right`.
+        /// </summary>
+        [TestCase(@"""hello"" |> pad_right 10", @"# ""hello"" |> pad_right(10)
+out = ""hello     """, Category = "Text Functions")]
+        public static void Test_pad_right(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.RegexEscape(System.String)"/> or `regex_escape`.
+        /// </summary>
+        [TestCase(@"""(abc.*)"" |> regex_escape", @"# ""(abc.*)"" |> regex_escape
+out = ""\\(abc\\.\\*\\)""", Category = "Text Functions")]
+        public static void Test_regex_escape(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.RegexMatch(System.String,System.String,System.String)"/> or `regex_match`.
+        /// </summary>
+        [TestCase(@"""this is a text123"" |> regex_match `(\w+) a ([a-z]+\d+)`", @"# ""this is a text123"" |> regex_match(`(\w+) a ([a-z]+\d+)`)
+out = [""is a text123"", ""is"", ""text123""]", Category = "Text Functions")]
+        public static void Test_regex_match(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.RegexMatches(System.String,System.String,System.String)"/> or `regex_matches`.
+        /// </summary>
+        [TestCase(@"""this is a text123"" |> regex_matches `(\w+)`", @"# ""this is a text123"" |> regex_matches(`(\w+)`)
+out = [[""this"", ""this""], [""is"", ""is""], [""a"", ""a""], [""text123"", ""text123""]]", Category = "Text Functions")]
+        public static void Test_regex_matches(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.RegexReplace(System.String,System.String,System.String,System.String)"/> or `regex_replace`.
+        /// </summary>
+        [TestCase(@"""abbbbcccd"" |> regex_replace(""b+c+"",""-Yo-"")", @"# ""abbbbcccd"" |> regex_replace(""b+c+"", ""-Yo-"")
+out = ""a-Yo-d""", Category = "Text Functions")]
+        public static void Test_regex_replace(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.RegexSplit(System.String,System.String,System.String)"/> or `regex_split`.
+        /// </summary>
+        [TestCase(@"""a, b   , c,    d"" |> regex_split `\s*,\s*`", @"# ""a, b   , c,    d"" |> regex_split(`\s*,\s*`)
+out = [""a"", ""b"", ""c"", ""d""]", Category = "Text Functions")]
+        public static void Test_regex_split(string input, string output) => AssertScript(input, output, "Strings");
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.Modules.StringModule.RegexUnescape(System.String)"/> or `regex_unescape`.
+        /// </summary>
+        [TestCase(@"""\\(abc\\.\\*\\)"" |> regex_unescape", @"# ""\\(abc\\.\\*\\)"" |> regex_unescape
+out = ""(abc.*)""", Category = "Text Functions")]
+        public static void Test_regex_unescape(string input, string output) => AssertScript(input, output, "Strings");
+
     }
 
     public partial class VectorModuleTests : KalkTestBase

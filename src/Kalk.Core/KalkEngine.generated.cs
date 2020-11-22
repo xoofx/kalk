@@ -10864,92 +10864,219 @@ namespace Kalk.Core.Modules
             {
                 var descriptor = Descriptors["lstrip"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Removes any whitespace characters on the **left** side of the input string.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Returns = @"The input string without any left whitespace characters";
+                descriptor.Example = @"    >>> '   too many spaces' |> lstrip
+    # '   too many spaces' |> lstrip
+    out = ""too many spaces""
+";
             }
             {
                 var descriptor = Descriptors["pluralize"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Outputs the singular or plural version of a string based on the value of a number.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("number", @"The number to check")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("singular", @"The singular string to return if number is == 1")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("plural", @"The plural string to return if number is != 1")  { IsOptional = false });
+                descriptor.Returns = @"The singular or plural string based on number";
+                descriptor.Example = @"    >>> 3 |> pluralize('product', 'products')
+    # 3 |> pluralize('product', 'products')
+    out = ""products""
+";
             }
             {
                 var descriptor = Descriptors["rstrip"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Removes any whitespace characters on the **right** side of the input string.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Returns = @"The input string without any left whitespace characters";
+                descriptor.Example = @"    >>> '   too many spaces           ' |> rstrip
+    # '   too many spaces           ' |> rstrip
+    out = ""   too many spaces""
+";
             }
             {
                 var descriptor = Descriptors["split"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"The `split` function takes on a substring as a parameter.
+    The substring is used as a delimiter to divide a string into an array. You can output different parts of an array using `array` functions.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("match", @"The string used to split the input `text` string")  { IsOptional = false });
+                descriptor.Returns = @"An enumeration of the substrings";
+                descriptor.Example = @"    >>> ""Hi, how are you today?"" |> split ' '
+    # ""Hi, how are you today?"" |> split(' ')
+    out = [""Hi,"", ""how"", ""are"", ""you"", ""today?""]
+";
             }
             {
                 var descriptor = Descriptors["startswith"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Returns a boolean indicating whether the input string starts with the specified string `value`.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("start", @"The string to look for")  { IsOptional = false });
+                descriptor.Returns = @"true if `text` starts with the specified string `value`";
+                descriptor.Example = @"    >>> ""This is easy"" |> startswith ""This""
+    # ""This is easy"" |> startswith(""This"")
+    out = true
+    >>> ""This is easy"" |> startswith ""easy""
+    # ""This is easy"" |> startswith(""easy"")
+    out = false
+";
             }
             {
                 var descriptor = Descriptors["strip"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Removes any whitespace characters on the **left** and **right** side of the input string.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Returns = @"The input string without any left and right whitespace characters";
+                descriptor.Example = @"    >>> '   too many spaces           ' |> strip
+    # '   too many spaces           ' |> strip
+    out = ""too many spaces""
+";
             }
             {
                 var descriptor = Descriptors["strip_newlines"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Removes any line breaks/newlines from a string.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Returns = @"The input string without any breaks/newlines characters";
+                descriptor.Example = @"    >>> ""This is a string.\r\n With \nanother \rstring"" |> strip_newlines
+    # ""This is a string.\r\n With \nanother \rstring"" |> strip_newlines
+    out = ""This is a string. With another string""
+";
             }
             {
                 var descriptor = Descriptors["pad_left"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Pads a string with leading spaces to a specified total length.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("width", @"The number of characters in the resulting string")  { IsOptional = false });
+                descriptor.Returns = @"The input string padded";
+                descriptor.Example = @"    >>> ""world"" |> pad_left 10
+    # ""world"" |> pad_left(10)
+    out = ""     world""
+";
             }
             {
                 var descriptor = Descriptors["pad_right"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Pads a string with trailing spaces to a specified total length.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("width", @"The number of characters in the resulting string")  { IsOptional = false });
+                descriptor.Returns = @"The input string padded";
+                descriptor.Example = @"    >>> ""hello"" |> pad_right 10
+    # ""hello"" |> pad_right(10)
+    out = ""hello     ""
+";
             }
             {
                 var descriptor = Descriptors["regex_escape"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Escapes a minimal set of characters (`\`, `*`, `+`, `?`, `|`, `{`, `[`, `(`,`)`, `^`, `$`,`.`, `#`, and white space)
+    by replacing them with their escape codes.
+    This instructs the regular expression engine to interpret these characters literally rather than as metacharacters.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string that contains the text to convert.")  { IsOptional = false });
+                descriptor.Returns = @"A string of characters with metacharacters converted to their escaped form.";
+                descriptor.Example = @"    >>> ""(abc.*)"" |> regex_escape
+    # ""(abc.*)"" |> regex_escape
+    out = ""\\(abc\\.\\*\\)""
+";
             }
             {
                 var descriptor = Descriptors["regex_match"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Searches an input string for a substring that matches a regular expression pattern and returns an array with the match occurences.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The string to search for a match.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("pattern", @"The regular expression pattern to match.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("options", @"A string with regex options, that can contain the following option characters (default is `null`):
+    - `i`: Specifies case-insensitive matching.
+    - `m`: Multiline mode. Changes the meaning of `^` and `$` so they match at the beginning and end, respectively, of any line, and not just the beginning and end of the entire string.
+    - `s`: Specifies single-line mode. Changes the meaning of the dot `.` so it matches every character (instead of every character except `\n`).
+    - `x`: Eliminates unescaped white space from the pattern and enables comments marked with `#`.")  { IsOptional = true });
+                descriptor.Returns = @"An array that contains all the match groups. The first group contains the entire match. The other elements contain regex matched groups `(..)`. An empty array returned means no match.";
+                descriptor.Example = @"    >>> ""this is a text123"" |> regex_match `(\w+) a ([a-z]+\d+)`
+    # ""this is a text123"" |> regex_match(`(\w+) a ([a-z]+\d+)`)
+    out = [""is a text123"", ""is"", ""text123""]
+";
             }
             {
                 var descriptor = Descriptors["regex_matches"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Searches an input string for multiple substrings that matches a regular expression pattern and returns an array with the match occurences.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The string to search for a match.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("pattern", @"The regular expression pattern to match.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("options", @"A string with regex options, that can contain the following option characters (default is `null`):
+    - `i`: Specifies case-insensitive matching.
+    - `m`: Multiline mode. Changes the meaning of `^` and `$` so they match at the beginning and end, respectively, of any line, and not just the beginning and end of the entire string.
+    - `s`: Specifies single-line mode. Changes the meaning of the dot `.` so it matches every character (instead of every character except `\n`).
+    - `x`: Eliminates unescaped white space from the pattern and enables comments marked with `#`.")  { IsOptional = true });
+                descriptor.Returns = @"An array of matches that contains all the match groups. The first group contains the entire match. The other elements contain regex matched groups `(..)`. An empty array returned means no match.";
+                descriptor.Example = @"    >>> ""this is a text123"" |> regex_matches `(\w+)`
+    # ""this is a text123"" |> regex_matches(`(\w+)`)
+    out = [[""this"", ""this""], [""is"", ""is""], [""a"", ""a""], [""text123"", ""text123""]]
+";
             }
             {
                 var descriptor = Descriptors["regex_replace"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"In a specified input string, replaces strings that match a regular expression pattern with a specified replacement string.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The string to search for a match.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("pattern", @"The regular expression pattern to match.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("replace", @"The replacement string.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("options", @"A string with regex options, that can contain the following option characters (default is `null`):
+    - `i`: Specifies case-insensitive matching.
+    - `m`: Multiline mode. Changes the meaning of `^` and `$` so they match at the beginning and end, respectively, of any line, and not just the beginning and end of the entire string.
+    - `s`: Specifies single-line mode. Changes the meaning of the dot `.` so it matches every character (instead of every character except `\n`).
+    - `x`: Eliminates unescaped white space from the pattern and enables comments marked with `#`.")  { IsOptional = true });
+                descriptor.Returns = @"A new string that is identical to the input string, except that the replacement string takes the place of each matched string. If pattern is not matched in the current instance, the method returns the current instance unchanged.";
+                descriptor.Example = @"    >>> ""abbbbcccd"" |> regex_replace(""b+c+"",""-Yo-"")
+    # ""abbbbcccd"" |> regex_replace(""b+c+"", ""-Yo-"")
+    out = ""a-Yo-d""
+";
             }
             {
                 var descriptor = Descriptors["regex_split"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Splits an input string into an array of substrings at the positions defined by a regular expression match.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The string to split.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("pattern", @"The regular expression pattern to match.")  { IsOptional = false });
+                descriptor.Params.Add(new KalkParamDescriptor("options", @"A string with regex options, that can contain the following option characters (default is `null`):
+    - `i`: Specifies case-insensitive matching.
+    - `m`: Multiline mode. Changes the meaning of `^` and `$` so they match at the beginning and end, respectively, of any line, and not just the beginning and end of the entire string.
+    - `s`: Specifies single-line mode. Changes the meaning of the dot `.` so it matches every character (instead of every character except `\n`).
+    - `x`: Eliminates unescaped white space from the pattern and enables comments marked with `#`.")  { IsOptional = true });
+                descriptor.Returns = @"A string array.";
+                descriptor.Example = @"    >>> ""a, b   , c,    d"" |> regex_split `\s*,\s*`
+    # ""a, b   , c,    d"" |> regex_split(`\s*,\s*`)
+    out = [""a"", ""b"", ""c"", ""d""]
+";
             }
             {
                 var descriptor = Descriptors["regex_unescape"];
                 descriptor.Category = "Text Functions";
-                descriptor.Description = @"";
+                descriptor.Description = @"Converts any escaped characters in the input string.";
                 descriptor.IsCommand = false;
+                descriptor.Params.Add(new KalkParamDescriptor("text", @"The input string containing the text to convert.")  { IsOptional = false });
+                descriptor.Returns = @"A string of characters with any escaped characters converted to their unescaped form.";
+                descriptor.Example = @"    >>> ""\\(abc\\.\\*\\)"" |> regex_unescape
+    # ""\\(abc\\.\\*\\)"" |> regex_unescape
+    out = ""(abc.*)""
+";
             }
         }        
     }
