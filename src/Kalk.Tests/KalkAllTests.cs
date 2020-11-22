@@ -70,11 +70,14 @@ namespace Kalk.Tests
             {
                 result = result.Substring(indexOfSplit + match.Length);
             }
+
+            // Remove any spaces at the end of each line
+            result = Regex.Replace(result, @"\s+$", string.Empty, RegexOptions.Multiline);
+            expectedOutput = Regex.Replace(expectedOutput, @"\s+$", string.Empty, RegexOptions.Multiline);
+            
             Assert.AreEqual(expectedOutput, result);
         }
     }
-
-
 
     public partial class KalkAllTests : KalkTestBase
     {

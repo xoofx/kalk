@@ -167,6 +167,13 @@ namespace Kalk.Core
         /// <summary>
         /// Gets the config object.
         /// </summary>
+        /// <example>
+        /// ```kalk
+        /// >>> config
+        /// # config
+        /// out = {help_max_column: 100, limit_to_string: "auto"}
+        /// ```
+        /// </example>
         [KalkExport("config", CategoryGeneral)]
         public KalkConfig Config { get; }
 
@@ -180,6 +187,36 @@ namespace Kalk.Core
         /// Displays all built-in and user-defined aliases.
         /// </summary>
         /// <remarks>Aliases are usually used to define equivalent variable names for equivalent mathematical symbols. To create an alias, see the command `alias`.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> aliases
+        /// # Builtin Aliases
+        /// alias(alpha, Α, α)
+        /// alias(beta, Β, β)
+        /// alias(chi, Χ, χ)
+        /// alias(delta, Δ, δ)
+        /// alias(epsilon, Ε, ε)
+        /// alias(eta, Η, η)
+        /// alias(gamma, Γ, γ)
+        /// alias(iota, Ι, ι)
+        /// alias(kappa, Κ, κ)
+        /// alias(lambda, Λ, λ)
+        /// alias(mu, Μ, μ)
+        /// alias(nu, Ν, ν)
+        /// alias(omega, Ω, ω)
+        /// alias(omicron, Ο, ο)
+        /// alias(phi, Φ, φ, ϕ)
+        /// alias(pi, Π, π)
+        /// alias(psi, Ψ, ψ)
+        /// alias(rho, Ρ, ρ)
+        /// alias(sigma, Σ, σ)
+        /// alias(tau, Τ, τ)
+        /// alias(theta, Θ, θ, ϑ)
+        /// alias(upsilon, Υ, υ)
+        /// alias(xi, Ξ, ξ)
+        /// alias(zeta, Ζ, ζ)
+        /// ```
+        /// </example>
         [KalkExport("aliases", CategoryGeneral)]
         public KalkAliases Aliases { get; }
 
@@ -188,13 +225,6 @@ namespace Kalk.Core
         public bool IsOutputSupportHighlighting { get; set; }
 
         public bool HasInteractiveConsole { get; private set; }
-
-        /// <summary>
-        /// If used in an expression, returns an object containing all units defined.
-        /// Otherwise it will display units in a friendly format.
-        /// </summary>
-        [KalkExport("units", CategoryUnits)]
-        public KalkUnits Units { get; }
 
         /// <summary>
         /// Displays all built-in and user-defined keyboard shortcuts.
