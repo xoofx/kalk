@@ -36,9 +36,9 @@
     <None Update="Modules\Vectors\colorspaces.kalk">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="Modules\Vectors\VectorModule.Matrices.tt">
+    <None Update="Modules\Vectors\VectorModule.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>VectorModule.Matrices.generated.cs</LastGenOutput>
+      <LastGenOutput>VectorModule.generated.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -47,10 +47,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Modules\Vectors\VectorModule.Matrices.generated.cs">
+    <Compile Update="Modules\Vectors\VectorModule.generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>VectorModule.Matrices.tt</DependentUpon>
+      <DependentUpon>VectorModule.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>
