@@ -1,7 +1,7 @@
 name: ci
 
 env:
-  PROJECT_NAME: Lunet
+  PROJECT_NAME: Kalk
 
 on:
   push:
@@ -44,11 +44,14 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./site/.lunet/build/www
 
+    - name: Pack (Release)
+      run: dotnet pack src -c Release
+
     - name: Publish
       if: github.event_name == 'push'
       run: |
           if ( "${{github.ref}}" -match "^refs/tags/[0-9]+\.[0-9]+\.[0-9]+" ) {
-              dotnet nuget push src\${{env.PROJECT_NAME}}\bin\Release\*.nupkg -s nuget.org -k ${{secrets.NUGET_TOKEN}}
+              dotnet nuget push src\Kalk.ConsoleApp\bin\Release\*.nupkg -s nuget.org -k ${{secrets.NUGET_TOKEN}}
           } else {
               echo "publish is only enabled by tagging with a release tag"
           }
