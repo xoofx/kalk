@@ -369,66 +369,73 @@ namespace Kalk.Tests
         private static void ExtractDocumentation(ISymbol symbol, KalkDescriptorToGenerate desc)
         {
             var xmlStr = symbol.GetDocumentationCommentXml();
-
-            if (!string.IsNullOrEmpty(xmlStr))
+            try
             {
-                var xmlDoc = XElement.Parse(xmlStr);
-                var elements = xmlDoc.Elements().ToList();
 
-                foreach (var element in elements)
+                if (!string.IsNullOrEmpty(xmlStr))
                 {
-                    var text = GetCleanedString(element).Trim();
-                    if (element.Name == "summary")
-                    {
-                        desc.Description = text;
-                    }
-                    else if (element.Name == "param")
-                    {
-                        var argName = element.Attribute("name")?.Value;
-                        if (argName != null && symbol is IMethodSymbol method)
-                        {
-                            var parameterSymbol = method.Parameters.FirstOrDefault(x => x.Name == argName);
-                            bool isOptional = false;
-                            if (parameterSymbol == null)
-                            {
-                                Console.WriteLine($"Invalid XML doc parameter name {argName} not found on method {method}");
-                            }
-                            else
-                            {
-                                isOptional = parameterSymbol.IsOptional;
-                            }
+                    var xmlDoc = XElement.Parse(xmlStr);
+                    var elements = xmlDoc.Elements().ToList();
 
-                            desc.Params.Add(new KalkParamDescriptor(argName, text) { IsOptional = isOptional });
-                        }
-                    }
-                    else if (element.Name == "returns")
+                    foreach (var element in elements)
                     {
-                        desc.Returns = text;
-                    }
-                    else if (element.Name == "remarks")
-                    {
-                        desc.Remarks = text;
-                    }
-                    else if (element.Name == "example")
-                    {
-                        text = RemoveCode.Replace(text, string.Empty);
-                        desc.Example = text;
-                        var test = TryParseTest(text);
-                        if (test != null)
+                        var text = GetCleanedString(element).Trim();
+                        if (element.Name == "summary")
                         {
-                            desc.Tests.Add(test.Value);
+                            desc.Description = text;
                         }
-                    }
-                    else if (element.Name == "test")
-                    {
-                        text = RemoveCode.Replace(text, string.Empty);
-                        var test = TryParseTest(text);
-                        if (test != null)
+                        else if (element.Name == "param")
                         {
-                            desc.Tests.Add(test.Value);
+                            var argName = element.Attribute("name")?.Value;
+                            if (argName != null && symbol is IMethodSymbol method)
+                            {
+                                var parameterSymbol = method.Parameters.FirstOrDefault(x => x.Name == argName);
+                                bool isOptional = false;
+                                if (parameterSymbol == null)
+                                {
+                                    Console.WriteLine($"Invalid XML doc parameter name {argName} not found on method {method}");
+                                }
+                                else
+                                {
+                                    isOptional = parameterSymbol.IsOptional;
+                                }
+
+                                desc.Params.Add(new KalkParamDescriptor(argName, text) {IsOptional = isOptional});
+                            }
+                        }
+                        else if (element.Name == "returns")
+                        {
+                            desc.Returns = text;
+                        }
+                        else if (element.Name == "remarks")
+                        {
+                            desc.Remarks = text;
+                        }
+                        else if (element.Name == "example")
+                        {
+                            text = RemoveCode.Replace(text, string.Empty);
+                            desc.Example = text;
+                            var test = TryParseTest(text);
+                            if (test != null)
+                            {
+                                desc.Tests.Add(test.Value);
+                            }
+                        }
+                        else if (element.Name == "test")
+                        {
+                            text = RemoveCode.Replace(text, string.Empty);
+                            var test = TryParseTest(text);
+                            if (test != null)
+                            {
+                                desc.Tests.Add(test.Value);
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error while processing `{symbol}` with XML doc `{xmlStr}", ex);
             }
         }
 

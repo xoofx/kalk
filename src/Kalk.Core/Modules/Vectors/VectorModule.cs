@@ -438,6 +438,20 @@ namespace Kalk.Core.Modules
         [KalkExport("double", CategoryTypeConstructors)]
         public double CreateDouble(object value = null) => value == null ? 0.0 : Engine.ToObject<double>(0, value);
 
+        /// <summary>
+        /// Creates a vector of the specified element type, with the number of elements and optional values.
+        /// </summary>
+        /// <param name="name">The element type of the vector (e.g float).</param>
+        /// <param name="dimension">The dimension of the vector.</param>
+        /// <param name="arguments">The optional values (must have 1 or dimension elements).</param>
+        /// <returns>A matrix of the specified row x column.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> vector(float, 4, 5..8)
+        /// # vector(float, 4, 5..8)
+        /// out = float4(5, 6, 7, 8)
+        /// ```
+        /// </example>
         [KalkExport("vector", CategoryVectorTypeConstructors)]
         public object CreateVector(ScriptVariable name, int dimension, params object[] arguments)
         {
@@ -492,9 +506,75 @@ namespace Kalk.Core.Modules
         }
 
 
+        /// <summary>
+        /// Creates an rgb vector type with the specified argument values.
+        /// </summary>
+        /// <param name="arguments">The vector item values. The total number of values must equal the dimension of the vector (3). The arguments can be:
+        /// - No values: All items of the rgb vector are initialized with the value 0.
+        /// - an integer value: `rgb(0xAABBCC)` will extract the RGB 8-bits component values (AA: R, BB: G, CC: B).
+        /// - a string value: `rgb("#AABBCC")` or `rgb("AABBCC")` will extract the RGB 8-bits component values (AA: R, BB: G, CC: B).
+        /// - an array value: `rgb([0xAA,0xBB,0xCC])` will initialize rgb elements with the array elements. The size of the array must match the size of the rgb vector (3).
+        /// - A combination of vectors/single values (e.g `rgb(float3(0.1, 0.2, 0.3)`).
+        /// </param>
+        /// <returns>A rgb vector initialized with the specified arguments</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> rgb(0xAABBCC)
+        /// # rgb(11189196)
+        /// out = rgb(170, 187, 204) ## AABBCC ##
+        /// >>> rgb("#AABBCC")
+        /// # rgb("#AABBCC")
+        /// out = rgb(170, 187, 204) ## AABBCC ##
+        /// >>> rgb("AABBCC")
+        /// # rgb("AABBCC")
+        /// out = rgb(170, 187, 204) ## AABBCC ##
+        /// >>> rgb([0xAA,0xBB,0xCC])
+        /// # rgb([170,187,204])
+        /// out = rgb(170, 187, 204) ## AABBCC ##
+        /// >>> out.xyz
+        /// # out.xyz
+        /// out = float3(0.6666667, 0.73333335, 0.8)
+        /// >>> rgb(out)
+        /// # rgb(out)
+        /// out = rgb(170, 187, 204) ## AABBCC ##
+        /// ```
+        /// </example>
         [KalkExport("rgb", CategoryVectorTypeConstructors)]
         public KalkColorRgb CreateRgb(params object[] arguments) => (KalkColorRgb)RgbConstructor.Invoke(Engine, arguments);
 
+        /// <summary>
+        /// Creates an rgba vector type with the specified argument values.
+        /// </summary>
+        /// <param name="arguments">The vector item values. The total number of values must equal the dimension of the vector (4). The arguments can be:
+        /// - No values: All items of the rgba vector are initialized with the value 0.
+        /// - an integer value: `rgba(0xFFAABBCC)` will extract the RGB 8-bits component values (FF: A, AA: R, BB: G, CC: B).
+        /// - a string value: `rgba("#FFAABBCC")` or `rgba("FFAABBCC")` will extract the RGB 8-bits component values (FF: A, AA: R, BB: G, CC: B).
+        /// - an array value: `rgba([0xAA,0xBB,0xCC,0xFF])` will initialize rgba elements with the array elements. The size of the array must match the size of the rgb vector (3).
+        /// - A combination of vectors/single values (e.g `rgba(float4(0.1, 0.2, 0.3, 1.0)`).
+        /// </param>
+        /// <returns>A rgb vector initialized with the specified arguments</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> rgba(0xFFAABBCC)
+        /// # rgba(-5588020)
+        /// out = rgba(170, 187, 204, 255) ## AABBCCFF ##
+        /// >>> rgba("#FFAABBCC")
+        /// # rgba("#FFAABBCC")
+        /// out = rgba(170, 187, 204, 255) ## AABBCCFF ##
+        /// >>> rgba("FFAABBCC")
+        /// # rgba("FFAABBCC")
+        /// out = rgba(170, 187, 204, 255) ## AABBCCFF ##
+        /// >>> rgba([0xAA,0xBB,0xCC,0xFF])
+        /// # rgba([170,187,204,255])
+        /// out = rgba(170, 187, 204, 255) ## AABBCCFF ##
+        /// >>> out.xyzw
+        /// # out.xyzw
+        /// out = float4(0.6666667, 0.73333335, 0.8, 1)
+        /// >>> rgba(out)
+        /// # rgba(out)
+        /// out = rgba(170, 187, 204, 255) ## AABBCCFF ##
+        /// ```
+        /// </example>
         [KalkExport("rgba", CategoryVectorTypeConstructors)]
         public KalkColorRgba CreateRgba(params object[] arguments) => (KalkColorRgba)RgbaConstructor.Invoke(Engine, arguments);
     }

@@ -230,6 +230,15 @@ namespace Kalk.Core
         /// Displays all built-in and user-defined keyboard shortcuts.
         /// </summary>
         /// <remarks>To create an keyboard shortcut, see the command `shortcut`.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> clear shortcuts
+        /// >>> shortcut(tester, "CTRL+D", '"' + date + '"')
+        /// >>> shortcuts
+        /// # User-defined Shortcuts
+        /// shortcut(tester, "CTRL+D", '"' + date + '"')                 # CTRL+D => '"' + date + '"'
+        /// ```
+        /// </example>
         [KalkExport("shortcuts", CategoryGeneral)]
         public KalkShortcuts Shortcuts { get; }
 

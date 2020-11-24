@@ -582,6 +582,7 @@ namespace Kalk.Core
         /// <param name="what">An optional argument specifying what to clear. Can be of the following value:
         /// * screen: to clear the screen (default if not passed)
         /// * history: to clear the history
+        /// * shortcuts: to clear all shortcuts defined
         /// </param>
         [KalkExport("clear", CategoryGeneral)]
         public void Clear(ScriptExpression what = null)
@@ -595,10 +596,13 @@ namespace Kalk.Core
                         case "history":
                             ClearHistory();
                             return;
+                        case "shortcuts":
+                            Shortcuts.Clear();
+                            return;
                         case "screen": goto clearScreen;
                     }
                 }
-                throw new ArgumentException("Unexpected argument. `clear` command accepts only `screen` or `history` arguments.");
+                throw new ArgumentException("Unexpected argument. `clear` command accepts only `screen` or `history` or `shortcuts`.");
             }
 
             clearScreen:

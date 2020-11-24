@@ -62,39 +62,68 @@ namespace Kalk.Core.Modules
 <# } #>
 
 <# foreach(var type in vectypes) { #>
-<# foreach(var dim in type.Item4) { #>
-<# if (type.Item3 == "bool") { #>
+<# foreach(var dim in type.Item4) { 
+    var ctor = $"{type.Item3}{dim}";
+    if (type.Item3 == "bool") { #>
         /// <summary>Creates a vector of <#= dim #> `<#= type.Item3 #>` items.</summary>
+        /// <param name="arguments">The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+        /// - No values: The vector is initialized with false values.
+        /// - a single value: `<#= ctor #>(true)` will initialize all elements with 123.
+        /// - an array value: `<#= ctor #>([true, false, ...])` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+        /// - A combination of vectors/single values (e.g `<#= type.Item3 #>4(<#= type.Item3 #>2(true,false), <#= type.Item3 #>2(false,true))` or `<#= type.Item3 #>4(<#= type.Item3 #>3(false,true,true), false)`)
+        /// </param>
+        /// <returns>A <#= ctor #> vector initialized with the specified arguments</returns>
         /// <example>
         /// ```kalk
-        /// >>> <#= type.Item3 #><#= dim #>(true)
-        /// # <#= type.Item3 #><#= dim #>(true)
-        /// out = <#= type.Item3 #><#= dim #>(<#= string.Join(", ", Enumerable.Range(1, dim).Select(x => "true")) #>)
+        /// >>> <#= ctor #>(true)
+        /// # <#= ctor #>(true)
+        /// out = <#= ctor #>(<#= string.Join(", ", Enumerable.Range(1, dim).Select(x => "true")) #>)
 <# } else { #>
         /// <summary>Creates a vector of <#= dim #> `<#= type.Item3 #>` items.</summary>
+        /// <param name="arguments">The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+        /// - No values: All items of the vector are initialized with the value 0.
+        /// - a single value: `<#= ctor #>(123)` will initialize all elements with 123.
+        /// - an array value: `<#= ctor #>(1..<#= dim #>)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+        /// - A combination of vectors/single values (e.g `<#= type.Item3 #>4(<#= type.Item3 #>2(1,2), <#= type.Item3 #>2(3,4))` or `<#= type.Item3 #>4(<#= type.Item3 #>3(1,2,3), 4)`.
+        /// </param>
+        /// <returns>A <#= ctor #> vector initialized with the specified arguments</returns>
         /// <example>
         /// ```kalk
-        /// >>> <#= type.Item3 #><#= dim #>(1..<#= dim #>)
-        /// # <#= type.Item3 #><#= dim #>(1..<#= dim #>)
-        /// out = <#= type.Item3 #><#= dim #>(<#= string.Join(", ", Enumerable.Range(1, dim)) #>)
+        /// >>> <#= ctor #>
+        /// # <#= ctor #>
+        /// out = <#= ctor #>(<#= string.Join(", ", Enumerable.Range(1, dim).Select(x => "0")) #>)
+        /// >>> <#= ctor #>(1..<#= dim #>)
+        /// # <#= ctor #>(1..<#= dim #>)
+        /// out = <#= ctor #>(<#= string.Join(", ", Enumerable.Range(1, dim)) #>)
 <# if (dim <= 16) { #>
-        /// >>> <#= type.Item3 #><#= dim #>(<#= string.Join(", ", Enumerable.Range(10, dim)) #>)
-        /// # <#= type.Item3 #><#= dim #>(<#= string.Join(", ", Enumerable.Range(10, dim)) #>)
-        /// out = <#= type.Item3 #><#= dim #>(<#= string.Join(", ", Enumerable.Range(10, dim)) #>)
+        /// >>> <#= ctor #>(<#= string.Join(", ", Enumerable.Range(10, dim)) #>)
+        /// # <#= ctor #>(<#= string.Join(", ", Enumerable.Range(10, dim)) #>)
+        /// out = <#= ctor #>(<#= string.Join(", ", Enumerable.Range(10, dim)) #>)
 <# }
 }
 #>
         /// ```
         /// </example>
-        [KalkExport("<#= type.Item3 #><#= dim #>", CategoryVectorTypeConstructors)]
+        [KalkExport("<#= ctor #>", CategoryVectorTypeConstructors)]
         public KalkVector<<#= type.Item1 #>> Create<#= type.Item2 #><#= dim #>(params object[] arguments) => <#= type.Item2 #><#= dim #>Constructor.Invoke(Engine, arguments);
 <# } 
 } #>
 
 
-<# foreach(var type in types) { #>
+<# foreach(var type in types) { 
+    var dim = type.Item3 * type.Item4;
+    var ctor_prefix = type.Item1.ToLowerInvariant();
+    var ctor = type.Item2.ToLowerInvariant();
+#>
         /// <summary>Creates a <#= type.Item3 #> (rows) x <#= type.Item4 #> (columns) matrix of <#= type.Item1 #>.</summary>
-        [KalkExport("<#= type.Item2.ToLowerInvariant() #>", CategoryMatrixConstructors)]
+        /// <param name="arguments">The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+        /// - No values: All items of the vector are initialized with the value 0.
+        /// - a single value: `<#= ctor #>(123)` will initialize all elements with 123.
+        /// - an array value: `<#= ctor #>(1..<#= dim #>)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+        /// - A combination of vectors/single values (e.g `<#= ctor_prefix #>3x4(<#= ctor_prefix #>4(1), <#= ctor_prefix #>4(2), <#= ctor_prefix #>4(3))`.
+        /// </param>
+        /// <returns>A <#= ctor #> matrix initialized with the specified arguments</returns>
+        [KalkExport("<#= ctor #>", CategoryMatrixConstructors)]
         public KalkMatrix<<#= type.Item5 #>> Create<#= type.Item2 #>(params object[] arguments) => <#= type.Item2 #>Constructor.Invoke(Engine, arguments);
 <# } #>
     }

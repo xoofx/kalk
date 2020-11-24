@@ -74,7 +74,17 @@ namespace Kalk.Tests
             // Remove any spaces at the end of each line
             result = Regex.Replace(result, @"\s+$", string.Empty, RegexOptions.Multiline);
             expectedOutput = Regex.Replace(expectedOutput, @"\s+$", string.Empty, RegexOptions.Multiline);
-            
+
+            if (expectedOutput != result)
+            {
+                Console.WriteLine("Result");
+                Console.WriteLine("----------");
+                Console.WriteLine(result);
+                Console.WriteLine();
+                Console.WriteLine("Expected");
+                Console.WriteLine("----------");
+                Console.WriteLine(expectedOutput);
+            }
             Assert.AreEqual(expectedOutput, result);
         }
     }

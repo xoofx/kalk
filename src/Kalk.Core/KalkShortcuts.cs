@@ -31,6 +31,12 @@ namespace Kalk.Core
             throw new NotSupportedException("Shortcuts don't have any parameters.");
         }
 
+        public new void Clear()
+        {
+            base.Clear();
+            ShortcutKeyMap.Clear();
+        }
+
         public void RemoveShortcut(string name)
         {
             if (!TryGetValue(name, out var shortcut)) return;
