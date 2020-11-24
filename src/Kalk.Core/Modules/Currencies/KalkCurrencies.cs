@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Kalk.Core.Modules;
@@ -123,7 +124,7 @@ namespace Kalk.Core
             }
             else
             {
-                _units.Display(engine, $"Builtin Currencies (Last Update: {_currencyModule.LastUpdate})", symbol => symbol is KalkCurrency && !symbol.IsUser, false);
+                _units.Display(engine, $"Builtin Currencies (Last Update: {_currencyModule.LastUpdate.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)})", symbol => symbol is KalkCurrency && !symbol.IsUser, false);
                 _units.Display(engine, "User Defined Currencies", symbol => symbol is KalkCurrency && symbol.IsUser, false);
             }
 

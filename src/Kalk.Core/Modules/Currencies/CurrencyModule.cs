@@ -36,7 +36,7 @@ namespace Kalk.Core.Modules
         /// <example>
         /// ```kalk
         /// >>> currencies
-        /// # Builtin Currencies (Last Update: 08-May-20 00:00:00)
+        /// # Builtin Currencies (Last Update: 08 May 2020)
         /// currency(AUD, 1.6613);      # 1.6613   AUD => 1 EUR
         /// currency(BGN, 1.9558);      # 1.9558   BGN => 1 EUR
         /// currency(BRL, 6.3074);      # 6.3074   BRL => 1 EUR
