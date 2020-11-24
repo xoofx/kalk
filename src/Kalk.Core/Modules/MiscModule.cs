@@ -268,10 +268,17 @@ namespace Kalk.Core
         /// Returns a new GUID as a string.
         /// </summary>
         /// <returns>A new GUID as a string.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> guid
+        /// # guid
+        /// out = "0deafe30-de4d-47c3-9631-2d3292afbb8e"
+        /// ```
+        /// </example>
         [KalkExport("guid", CategoryMisc)]
         public string Guid()
         {
-            return System.Guid.NewGuid().ToString();
+            return Engine.IsTesting ? "0deafe30-de4d-47c3-9631-2d3292afbb8e" : System.Guid.NewGuid().ToString();
         }
 
         /// <summary>

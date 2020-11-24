@@ -426,6 +426,17 @@ kalk2", Category = "General")]
         public static void Test_printh(string input, string output) => AssertScript(input, output);
 
         /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.Help(Scriban.Syntax.ScriptExpression)"/> or `help`.
+        /// </summary>
+        [TestCase(@"help cls", @"# cls
+#
+#   Clears the screen.
+#
+# Example
+.   >>> cls", Category = "General")]
+        public static void Test_help(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
         /// Test for <see cref="M:Kalk.Core.KalkEngine.Reset"/> or `reset`.
         /// </summary>
         [TestCase(@"x = 5; y = 2
@@ -439,6 +450,12 @@ x = 5
 y = 2
 # No variables", Category = "General")]
         public static void Test_reset(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.ShowVersion"/> or `version`.
+        /// </summary>
+        [TestCase(@"version", @"kalk 1.0.0 - Copyright (c) 2020 Alexandre Mutel", Category = "General")]
+        public static void Test_version(string input, string output) => AssertScript(input, output);
 
         /// <summary>
         /// Test for <see cref="M:Kalk.Core.KalkEngine.List"/> or `list`.
@@ -481,6 +498,12 @@ f(x) = x + 5
         public static void Test_del(string input, string output) => AssertScript(input, output);
 
         /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.Exit"/> or `exit`.
+        /// </summary>
+        [TestCase(@"exit", @"", Category = "General")]
+        public static void Test_exit(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
         /// Test for <see cref="M:Kalk.Core.KalkEngine.History(System.Object)"/> or `history`.
         /// </summary>
         [TestCase(@"1 + 5
@@ -502,6 +525,36 @@ out = 6
 # eval(""eval '1+5'"")
 out = 6", Category = "General")]
         public static void Test_eval(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.LoadFile(System.String,System.Boolean)"/> or `load`.
+        /// </summary>
+        [TestCase(@"import Files
+save_text(""x = 1\ny = 2\nx + y"", ""test.kalk"")
+load ""test.kalk""", @"# 14 functions successfully imported from module `Files`.
+# load(""test.kalk"")
+x = 1
+y = 2
+out = 3", Category = "General")]
+        public static void Test_load(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.Clear(Scriban.Syntax.ScriptExpression)"/> or `clear`.
+        /// </summary>
+        [TestCase(@"1 + 2
+history
+clear history
+history", @"# 1 + 2
+out = 3
+0: 1 + 2
+# History empty", Category = "General")]
+        public static void Test_clear(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.KalkEngine.Cls"/> or `cls`.
+        /// </summary>
+        [TestCase(@"cls", @"", Category = "General")]
+        public static void Test_cls(string input, string output) => AssertScript(input, output);
 
         /// <summary>
         /// Test for <see cref="M:Kalk.Core.KalkEngine.Last"/> or `out`.
@@ -1672,6 +1725,13 @@ out = ""kalk""", Category = "Misc Functions")]
 obj = {m: 1, n: 2}
 out = [""m"", ""n""]", Category = "Misc Functions")]
         public static void Test_keys(string input, string output) => AssertScript(input, output);
+
+        /// <summary>
+        /// Test for <see cref="M:Kalk.Core.MiscModule.Guid"/> or `guid`.
+        /// </summary>
+        [TestCase(@"guid", @"# guid
+out = ""0deafe30-de4d-47c3-9631-2d3292afbb8e""", Category = "Misc Functions")]
+        public static void Test_guid(string input, string output) => AssertScript(input, output);
 
         /// <summary>
         /// Test for <see cref="M:Kalk.Core.MiscModule.Size(System.Object)"/> or `size`.

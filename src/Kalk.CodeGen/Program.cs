@@ -320,7 +320,11 @@ namespace Kalk.Tests
                         if (hasNoDesc) ++functionWithMissingDoc;
                         if (hasNoTests) ++functionWithMissingTests;
 
-                        Console.WriteLine($"The member {member.Name} => {module.ClassName}.{member.CSharpName} doesn't have {(hasNoTests ? "any tests" + (hasNoDesc? " and":"") : "")} {(hasNoDesc ? "any docs" : "")}");
+                        // We don't log for all the matrix constructors, as they are tested separately.
+                        if (module.ClassName != "VectorModule" || !member.CSharpName.StartsWith("Create"))
+                        {
+                            Console.WriteLine($"The member {member.Name} => {module.ClassName}.{member.CSharpName} doesn't have {(hasNoTests ? "any tests" + (hasNoDesc ? " and" : "") : "")} {(hasNoDesc ? "any docs" : "")}");
+                        }
                     }
                 }
             }

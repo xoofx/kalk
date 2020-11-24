@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -235,10 +236,13 @@ namespace Kalk.Core
         /// <param name="expression">An optional topic or function name. If this parameter is not set, it will display all available topics and functions.</param>
         /// <example>
         /// ```kalk
-        /// >>> help
-        /// ... # Displays a list of function and topic names to get help from.
-        /// >>> help alias
-        /// ... # Displays the help for the `alias` function.
+        /// >>> help cls
+        /// # cls
+        /// #
+        /// #   Clears the screen.
+        /// #
+        /// # Example
+        /// .   >>> cls
         /// ```
         /// </example>
         [KalkExport("help", CategoryGeneral)]
@@ -313,10 +317,23 @@ namespace Kalk.Core
         /// <summary>
         /// Prints the version of kalk.
         /// </summary>
+        /// <example>
+        /// ```kalk
+        /// >>> version
+        /// kalk 1.0.0 - Copyright (c) 2020 Alexandre Mutel
+        /// ```
+        /// </example>
         [KalkExport("version", CategoryGeneral)]
         public void ShowVersion()
         {
-            var text = $"{ConsoleStyle.BrightRed}k{ConsoleStyle.BrightYellow}a{ConsoleStyle.BrightGreen}l{ConsoleStyle.BrightCyan}k{ConsoleStyle.Reset} {Version} - Copyright (c) 2020 Alexandre Mutel";
+            var dateRange = "2020";
+            var currentYear = DateTime.Now.Year.ToString(CultureInfo.InvariantCulture);
+            if (!IsTesting && currentYear != dateRange)
+            {
+                dateRange = $"{dateRange}-{currentYear}";
+            }
+            var kalkName = IsOutputSupportHighlighting ? $"{ConsoleStyle.BrightRed}k{ConsoleStyle.BrightYellow}a{ConsoleStyle.BrightGreen}l{ConsoleStyle.BrightCyan}k{ConsoleStyle.Reset}" : "kalk";
+            var text = $"{kalkName} {(IsTesting ? "1.0.0" : Version)} - Copyright (c) {dateRange} Alexandre Mutel";
             WriteHighlightLine(text, false);
         }
 
@@ -436,6 +453,11 @@ namespace Kalk.Core
         /// <summary>
         /// Exits kalk.
         /// </summary>
+        /// <example>
+        /// ```kalk
+        /// >>> exit
+        /// ```
+        /// </example>
         [KalkExport("exit", CategoryGeneral)]
         public void Exit()
         {
@@ -568,6 +590,18 @@ namespace Kalk.Core
         /// <param name="path">The file location of the script to load and evaluate.</param>
         /// <param name="output">An optional parameter to output intermediate results of nested expressions. Default is `false`.</param>
         /// <returns>The result of the evaluation.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> import Files
+        /// # 14 functions successfully imported from module `Files`.
+        /// >>> save_text("x = 1\ny = 2\nx + y", "test.kalk")
+        /// >>> load "test.kalk"
+        /// # load("test.kalk")
+        /// x = 1
+        /// y = 2
+        /// out = 3
+        /// ```
+        /// </example>
         [KalkExport("load", CategoryGeneral)]
         public object LoadFile(string path, bool output = false)
         {
@@ -584,6 +618,18 @@ namespace Kalk.Core
         /// * history: to clear the history
         /// * shortcuts: to clear all shortcuts defined
         /// </param>
+        /// <example>
+        /// ```kalk
+        /// >>> 1 + 2
+        /// # 1 + 2
+        /// out = 3
+        /// >>> history
+        /// 0: 1 + 2
+        /// >>> clear history
+        /// >>> history
+        /// # History empty
+        /// ```
+        /// </example>
         [KalkExport("clear", CategoryGeneral)]
         public void Clear(ScriptExpression what = null)
         {
@@ -613,6 +659,11 @@ namespace Kalk.Core
         /// <summary>
         /// Clears the screen.
         /// </summary>
+        /// <example>
+        /// ```kalk
+        /// >>> cls
+        /// ```
+        /// </example>
         [KalkExport("cls", CategoryGeneral)]
         public void Cls()
         {

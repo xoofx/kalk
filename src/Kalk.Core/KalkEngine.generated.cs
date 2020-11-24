@@ -4408,10 +4408,13 @@ namespace Kalk.Core
                 descriptor.Description = @"Displays the documentation of the specified topic or function name.";
                 descriptor.IsCommand = true;
                 descriptor.Params.Add(new KalkParamDescriptor("expression", @"An optional topic or function name. If this parameter is not set, it will display all available topics and functions.")  { IsOptional = true });
-                descriptor.Example = @"    >>> help
-    ... # Displays a list of function and topic names to get help from.
-    >>> help alias
-    ... # Displays the help for the `alias` function.
+                descriptor.Example = @"    >>> help cls
+    # cls
+    #
+    #   Clears the screen.
+    #
+    # Example
+    .   >>> cls
 ";
             }
             {
@@ -4437,6 +4440,9 @@ namespace Kalk.Core
                 descriptor.Category = "General";
                 descriptor.Description = @"Prints the version of kalk.";
                 descriptor.IsCommand = true;
+                descriptor.Example = @"    >>> version
+    kalk 1.0.0 - Copyright (c) 2020 Alexandre Mutel
+";
             }
             {
                 var descriptor = Descriptors["list"];
@@ -4490,6 +4496,8 @@ namespace Kalk.Core
                 descriptor.Category = "General";
                 descriptor.Description = @"Exits kalk.";
                 descriptor.IsCommand = true;
+                descriptor.Example = @"    >>> exit
+";
             }
             {
                 var descriptor = Descriptors["history"];
@@ -4535,6 +4543,15 @@ namespace Kalk.Core
                 descriptor.Params.Add(new KalkParamDescriptor("path", @"The file location of the script to load and evaluate.")  { IsOptional = false });
                 descriptor.Params.Add(new KalkParamDescriptor("output", @"An optional parameter to output intermediate results of nested expressions. Default is `false`.")  { IsOptional = true });
                 descriptor.Returns = @"The result of the evaluation.";
+                descriptor.Example = @"    >>> import Files
+    # 14 functions successfully imported from module `Files`.
+    >>> save_text(""x = 1\ny = 2\nx + y"", ""test.kalk"")
+    >>> load ""test.kalk""
+    # load(""test.kalk"")
+    x = 1
+    y = 2
+    out = 3
+";
             }
             {
                 var descriptor = Descriptors["clear"];
@@ -4545,12 +4562,23 @@ namespace Kalk.Core
     * screen: to clear the screen (default if not passed)
     * history: to clear the history
     * shortcuts: to clear all shortcuts defined")  { IsOptional = true });
+                descriptor.Example = @"    >>> 1 + 2
+    # 1 + 2
+    out = 3
+    >>> history
+    0: 1 + 2
+    >>> clear history
+    >>> history
+    # History empty
+";
             }
             {
                 var descriptor = Descriptors["cls"];
                 descriptor.Category = "General";
                 descriptor.Description = @"Clears the screen.";
                 descriptor.IsCommand = true;
+                descriptor.Example = @"    >>> cls
+";
             }
             {
                 var descriptor = Descriptors["out"];
@@ -6369,6 +6397,10 @@ namespace Kalk.Core
                 descriptor.Description = @"Returns a new GUID as a string.";
                 descriptor.IsCommand = false;
                 descriptor.Returns = @"A new GUID as a string.";
+                descriptor.Example = @"    >>> guid
+    # guid
+    out = ""0deafe30-de4d-47c3-9631-2d3292afbb8e""
+";
             }
             {
                 var descriptor = Descriptors["size"];
