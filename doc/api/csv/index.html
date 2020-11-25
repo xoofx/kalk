@@ -5,16 +5,16 @@
     
     
     
-    <title>User Guide - kalk</title>
+    <title>Csv Functions - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" type="text/javascript" ></script>
     <script src="/js/site-defer.js" type="text/javascript" defer></script>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
-    <meta name="twitter:title" content="User Guide - kalk">
+    <meta name="twitter:title" content="Csv Functions - kalk">
     <meta name="twitter:description" content="kalk - calculator app">
     <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
-    <meta name="twitter:image:alt" content="User Guide - kalk">    
+    <meta name="twitter:image:alt" content="Csv Functions - kalk">    
   </head>
   <body>    
     <div id="kalk" class="container">
@@ -59,14 +59,14 @@
         <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
   <li class='menu-item '>
     <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
-  <li class='menu-item  active'>
-    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-2' class='menu-link-show'></a></span><nav class="js-toc toc"></nav>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  show '>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
   </ol>
   </li>
   <li class='menu-item '>
-    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-4' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  '>
+    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
     <li class='menu-item '>
@@ -79,8 +79,8 @@
       <span class='menu-item-row'><a href='/doc/api/vector/' class='menu-link  '>Vector Functions</a></span>    </li>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/all/' class='menu-link  '>All Functions</a></span>    </li>
-    <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/csv/' class='menu-link  '>Csv Functions</a></span>    </li>
+    <li class='menu-item  active'>
+      <span class='menu-item-row'><a href='/doc/api/csv/' class='menu-link  '>Csv Functions</a></span><nav class="js-toc toc"></nav>    </li>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/currencies/' class='menu-link  '>Currencies Functions</a></span>    </li>
     <li class='menu-item '>
@@ -142,13 +142,64 @@
     <a href='/' class='breadcrumb-link  '>Home</a>  </li>
   <li class='breadcrumb-item '>
     <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
   <li class='breadcrumb-item  active'>
-    User Guide  </li>
+    Csv Functions  </li>
 </ol>
 
         <p id="lunet-results"></p>
-        <h1>User Guide</h1>
-        <p>This is a user documentation</p>
+        <h1>Csv Functions</h1>
+        <p>Module for loading/parsing CSV text/files.</p>
+<p>In order to use the functions provided by this module, you need to import this module:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; import Csv
+</code></pre>
+<h2 id="load_csv">load_csv</h2>
+<p><code>load_csv(path,headers?)</code></p>
+<p>Loads the specified file as a CSV, returning each CSV line in an array.</p>
+<ul>
+<li><code>path</code>: The file path to load and parse as CSV.</li>
+<li><code>headers</code>: true if the file to parse has CSV headers. Default is fault.</li>
+</ul>
+<h3 id="returns">Returns</h3>
+<p>An array of CSV columns values.</p>
+<h3 id="example">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; items = load_csv(&quot;test.csv&quot;)
+# items = load_csv(&quot;test.csv&quot;)
+items = [[1, 2, 3], [4, 5, 6]]
+&gt;&gt;&gt; items[0].a
+# items[0].a
+out = 1
+&gt;&gt;&gt; items[1].a
+# items[1].a
+out = 4
+&gt;&gt;&gt; items[1].c
+# items[1].c
+out = 6
+</code></pre>
+<h2 id="parse_csv">parse_csv</h2>
+<p><code>parse_csv(text,headers?)</code></p>
+<p>Parse the specified text as a CSV, returning each CSV line in an array.</p>
+<ul>
+<li><code>text</code>: The text to parse.</li>
+<li><code>headers</code>: true if the text to parse has CSV headers. Default is fault.</li>
+</ul>
+<h3 id="returns-1">Returns</h3>
+<p>An array of CSV columns values.</p>
+<h3 id="example-1">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; items = parse_csv(&quot;a,b,c\n1,2,3\n4,5,6\n&quot;)
+# items = parse_csv(&quot;a,b,c\n1,2,3\n4,5,6\n&quot;)
+items = [[1, 2, 3], [4, 5, 6]]
+&gt;&gt;&gt; items[0].a
+# items[0].a
+out = 1
+&gt;&gt;&gt; items[0].b
+# items[0].b
+out = 2
+&gt;&gt;&gt; items[0].c
+# items[0].c
+out = 3
+</code></pre>
 
       </div>
   </div>

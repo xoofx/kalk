@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    
+    
+    
+    <title>Intel Sse Intrinsics - kalk</title>
+    <link rel="stylesheet" href="/css/site.css">
+    <script src="/js/site.js" type="text/javascript" ></script>
+    <script src="/js/site-defer.js" type="text/javascript" defer></script>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@xoofx">
+    <meta name="twitter:title" content="Intel Sse Intrinsics - kalk">
+    <meta name="twitter:description" content="kalk - calculator app">
+    <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
+    <meta name="twitter:image:alt" content="Intel Sse Intrinsics - kalk">    
+  </head>
+  <body>    
+    <div id="kalk" class="container">
+      <nav class="navbar navbar-expand-md navbar-light sticky-top">
+        <a class="kalk-logo navbar-brand" href="/"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
+<ol id='nav-id-home-0' class='navbar-nav nav-level0  '>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/' class='nav-link  '>Home</a></span>  </li>
+  <li class='nav-item  active'>
+    <span class='nav-item-row'><a href='/doc/' class='nav-link  '>Documentation</a></span>  </li>
+</ol>
+          <!-- d-inline w-100 -->
+          <!-- <ol class="navbar-nav" style="width: 40%;padding-right: 0.5rem;"> -->
+          <ol class="navbar-nav flex-grow-1" style="padding-right: 0.5rem;">
+            <li class="nav-item w-100">
+                <div class="kalk-search">
+                  <label class="search-icon"><i class="fa fa-search"></i></label>
+                  <select id="search-box"></select>
+                </div>
+            </li>
+          </ol>
+<ol id='nav-id-home2-0' class='navbar-nav nav-level0  flex-shrink-0'>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/download/' class='nav-link  btn btn-success'><i class="fa fa-download"></i> Download</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/sponsors/xoofx' class='nav-link  btn btn-outline-secondary'><i class="fa fa-heart-o"></i> Sponsor</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/xoofx/kalk/' class='nav-link  btn btn-info'><i class="fa fa-github"></i> GitHub</a></span>  </li>
+</ol>
+        </div>
+      </nav>
+      <div class="kalk-doc">
+        <section>
+            
+<div class="container">
+  <div class="row">
+      <div class="col-sm-3 align-self-start sticky-top menu-sidebar">
+        <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
+  </ol>
+  </li>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/math/' class='menu-link  '>Math Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/memory/' class='menu-link  '>Memory Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/misc/' class='menu-link  '>Misc Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/vector/' class='menu-link  '>Vector Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/all/' class='menu-link  '>All Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/csv/' class='menu-link  '>Csv Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/currencies/' class='menu-link  '>Currencies Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/files/' class='menu-link  '>Files Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/standardunits/' class='menu-link  '>StandardUnits Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/strings/' class='menu-link  '>Strings Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/intel/hardware/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-17' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-17' class='menu-link-show'></a></span>    <ol id='menu-id-doc-17' class='menu menu-level2 collapse  show '>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/aes/' class='menu-link  '>Intel Aes Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/avx/' class='menu-link  '>Intel Avx Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/avx2/' class='menu-link  '>Intel Avx2 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/bmi1/' class='menu-link  '>Intel Bmi1 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/bmi1x64/' class='menu-link  '>Intel Bmi1X64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/bmi2/' class='menu-link  '>Intel Bmi2 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/bmi2x64/' class='menu-link  '>Intel Bmi2X64 Intrinsics</a></span>      </li>
+      <li class='menu-item  active'>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse/' class='menu-link  '>Intel Sse Intrinsics</a></span><nav class="js-toc toc"></nav>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/ssex64/' class='menu-link  '>Intel SseX64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse2/' class='menu-link  '>Intel Sse2 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse2x64/' class='menu-link  '>Intel Sse2X64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse3/' class='menu-link  '>Intel Sse3 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/ssse3/' class='menu-link  '>Intel Ssse3 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse41/' class='menu-link  '>Intel Sse41 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse41x64/' class='menu-link  '>Intel Sse41X64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse42/' class='menu-link  '>Intel Sse42 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse42x64/' class='menu-link  '>Intel Sse42X64 Intrinsics</a></span>      </li>
+    </ol>
+    </li>
+  </ol>
+  </li>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/advanced/' class='menu-link  '>Advanced Topics</a></span>  </li>
+</ol>
+
+      </div>
+      <div class="col-sm-9 js-toc-content">
+        <ol class='breadcrumb'>
+  <li class='breadcrumb-item '>
+    <a href='/' class='breadcrumb-link  '>Home</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/intel/hardware/' class='breadcrumb-link  '>Intel Hardware Intrinsics</a>  </li>
+  <li class='breadcrumb-item  active'>
+    Intel Sse Intrinsics  </li>
+</ol>
+
+        <p id="lunet-results"></p>
+        <h1>Intel Sse Intrinsics</h1>
+        <h2 id="mm_add_ps">mm_add_ps</h2>
+<p><code>mm_add_ps</code></p>
+<p>Add packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_add_ps (__m128 a,  __m128 b)
+ADDPS xmm, xmm/m128</p>
+<h2 id="mm_add_ss">mm_add_ss</h2>
+<p><code>mm_add_ss</code></p>
+<p>Add the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot;, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_add_ss (__m128 a,  __m128 b)
+ADDSS xmm, xmm/m32</p>
+<h2 id="mm_and_ps">mm_and_ps</h2>
+<p><code>mm_and_ps</code></p>
+<p>Compute the bitwise AND of packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_and_ps (__m128 a, __m128 b)
+ANDPS xmm, xmm/m128</p>
+<h2 id="mm_andnot_ps">mm_andnot_ps</h2>
+<p><code>mm_andnot_ps</code></p>
+<p>Compute the bitwise NOT of packed single-precision (32-bit) floating-point elements in &quot;a&quot; and then AND with &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_andnot_ps (__m128 a, __m128 b)
+ANDNPS xmm, xmm/m128</p>
+<h2 id="mm_cmpeq_ps">mm_cmpeq_ps</h2>
+<p><code>mm_cmpeq_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for equality, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpeq_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(0)</p>
+<h2 id="mm_cmpeq_ss">mm_cmpeq_ss</h2>
+<p><code>mm_cmpeq_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for equality, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpeq_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(0)</p>
+<h2 id="mm_cmpge_ps">mm_cmpge_ps</h2>
+<p><code>mm_cmpge_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for greater-than-or-equal, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpge_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(5)</p>
+<h2 id="mm_cmpge_ss">mm_cmpge_ss</h2>
+<p><code>mm_cmpge_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for greater-than-or-equal, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpge_ss (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m32, imm8(5)</p>
+<h2 id="mm_cmpgt_ps">mm_cmpgt_ps</h2>
+<p><code>mm_cmpgt_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for greater-than, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpgt_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(6)</p>
+<h2 id="mm_cmpgt_ss">mm_cmpgt_ss</h2>
+<p><code>mm_cmpgt_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for greater-than, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpgt_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(6)</p>
+<h2 id="mm_cmple_ps">mm_cmple_ps</h2>
+<p><code>mm_cmple_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for less-than-or-equal, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_cmple_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(2)</p>
+<h2 id="mm_cmple_ss">mm_cmple_ss</h2>
+<p><code>mm_cmple_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for less-than-or-equal, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cmple_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(2)</p>
+<h2 id="mm_cmplt_ps">mm_cmplt_ps</h2>
+<p><code>mm_cmplt_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for less-than, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_cmplt_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(1)</p>
+<h2 id="mm_cmplt_ss">mm_cmplt_ss</h2>
+<p><code>mm_cmplt_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for less-than, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cmplt_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(1)</p>
+<h2 id="mm_cmpneq_ps">mm_cmpneq_ps</h2>
+<p><code>mm_cmpneq_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for not-equal, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpneq_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(4)</p>
+<h2 id="mm_cmpneq_ss">mm_cmpneq_ss</h2>
+<p><code>mm_cmpneq_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for not-equal, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpneq_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(4)</p>
+<h2 id="mm_cmpnge_ps">mm_cmpnge_ps</h2>
+<p><code>mm_cmpnge_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for not-greater-than-or-equal, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpnge_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(1)</p>
+<h2 id="mm_cmpnge_ss">mm_cmpnge_ss</h2>
+<p><code>mm_cmpnge_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for not-greater-than-or-equal, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpnge_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(1)</p>
+<h2 id="mm_cmpngt_ps">mm_cmpngt_ps</h2>
+<p><code>mm_cmpngt_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for not-greater-than, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpngt_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(2)</p>
+<h2 id="mm_cmpngt_ss">mm_cmpngt_ss</h2>
+<p><code>mm_cmpngt_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for not-greater-than, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpngt_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(2)</p>
+<h2 id="mm_cmpnle_ps">mm_cmpnle_ps</h2>
+<p><code>mm_cmpnle_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for not-less-than-or-equal, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpnle_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(6)</p>
+<h2 id="mm_cmpnle_ss">mm_cmpnle_ss</h2>
+<p><code>mm_cmpnle_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for not-less-than-or-equal, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpnle_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(6)</p>
+<h2 id="mm_cmpnlt_ps">mm_cmpnlt_ps</h2>
+<p><code>mm_cmpnlt_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for not-less-than, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpnlt_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(5)</p>
+<h2 id="mm_cmpnlt_ss">mm_cmpnlt_ss</h2>
+<p><code>mm_cmpnlt_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; for not-less-than, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpnlt_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(5)</p>
+<h2 id="mm_cmpord_ps">mm_cmpord_ps</h2>
+<p><code>mm_cmpord_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; to see if neither is NaN, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpord_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(7)</p>
+<h2 id="mm_cmpord_ss">mm_cmpord_ss</h2>
+<p><code>mm_cmpord_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; to see if neither is NaN, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpord_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(7)</p>
+<h2 id="mm_cmpunord_ps">mm_cmpunord_ps</h2>
+<p><code>mm_cmpunord_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; to see if either is NaN, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpunord_ps (__m128 a,  __m128 b)
+CMPPS xmm, xmm/m128, imm8(3)</p>
+<h2 id="mm_cmpunord_ss">mm_cmpunord_ss</h2>
+<p><code>mm_cmpunord_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot; to see if either is NaN, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cmpunord_ss (__m128 a,  __m128 b)
+CMPSS xmm, xmm/m32, imm8(3)</p>
+<h2 id="mm_comieq_ss">mm_comieq_ss</h2>
+<p><code>mm_comieq_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot; for equality, and return the boolean result (0 or 1).</p>
+<p>int _mm_comieq_ss (__m128 a, __m128 b)
+COMISS xmm, xmm/m32</p>
+<h2 id="mm_comige_ss">mm_comige_ss</h2>
+<p><code>mm_comige_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot; for greater-than-or-equal, and return the boolean result (0 or 1).</p>
+<p>int _mm_comige_ss (__m128 a, __m128 b)
+COMISS xmm, xmm/m32</p>
+<h2 id="mm_comigt_ss">mm_comigt_ss</h2>
+<p><code>mm_comigt_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot; for greater-than, and return the boolean result (0 or 1).</p>
+<p>int _mm_comigt_ss (__m128 a, __m128 b)
+COMISS xmm, xmm/m32</p>
+<h2 id="mm_comile_ss">mm_comile_ss</h2>
+<p><code>mm_comile_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot; for less-than-or-equal, and return the boolean result (0 or 1).</p>
+<p>int _mm_comile_ss (__m128 a, __m128 b)
+COMISS xmm, xmm/m32</p>
+<h2 id="mm_comilt_ss">mm_comilt_ss</h2>
+<p><code>mm_comilt_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot; for less-than, and return the boolean result (0 or 1).</p>
+<p>int _mm_comilt_ss (__m128 a, __m128 b)
+COMISS xmm, xmm/m32</p>
+<h2 id="mm_comineq_ss">mm_comineq_ss</h2>
+<p><code>mm_comineq_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot; for not-equal, and return the boolean result (0 or 1).</p>
+<p>int _mm_comineq_ss (__m128 a, __m128 b)
+COMISS xmm, xmm/m32</p>
+<h2 id="mm_cvtsi32_ss">mm_cvtsi32_ss</h2>
+<p><code>mm_cvtsi32_ss</code></p>
+<p>Convert the 32-bit integer &quot;b&quot; to a single-precision (32-bit) floating-point element, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_cvtsi32_ss (__m128 a, int b)
+CVTSI2SS xmm, reg/m32</p>
+<h2 id="mm_cvtss_si32">mm_cvtss_si32</h2>
+<p><code>mm_cvtss_si32</code></p>
+<p>Convert the lower single-precision (32-bit) floating-point element in &quot;a&quot; to a 32-bit integer, and store the result in &quot;dst&quot;.</p>
+<p>int _mm_cvtss_si32 (__m128 a)
+CVTSS2SI r32, xmm/m32</p>
+<h2 id="mm_cvttss_si32">mm_cvttss_si32</h2>
+<p><code>mm_cvttss_si32</code></p>
+<p>Convert the lower single-precision (32-bit) floating-point element in &quot;a&quot; to a 32-bit integer with truncation, and store the result in &quot;dst&quot;.</p>
+<p>int _mm_cvttss_si32 (__m128 a)
+CVTTSS2SI r32, xmm/m32</p>
+<h2 id="mm_div_ps">mm_div_ps</h2>
+<p><code>mm_div_ps</code></p>
+<p>Divide packed single-precision (32-bit) floating-point elements in &quot;a&quot; by packed elements in &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_div_ps (__m128 a,  __m128 b)
+DIVPS xmm, xmm/m128</p>
+<h2 id="mm_div_ss">mm_div_ss</h2>
+<p><code>mm_div_ss</code></p>
+<p>Divide the lower single-precision (32-bit) floating-point element in &quot;a&quot; by the lower single-precision (32-bit) floating-point element in &quot;b&quot;, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_div_ss (__m128 a,  __m128 b)
+DIVSS xmm, xmm/m32</p>
+<h2 id="mm_load_ps">mm_load_ps</h2>
+<p><code>mm_load_ps</code></p>
+<p>Load 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from memory into &quot;dst&quot;.
+&quot;mem_addr&quot; must be aligned on a 16-byte boundary or a general-protection exception may be generated.</p>
+<p>__m128 _mm_load_ps (float const* mem_address)
+MOVAPS xmm, m128</p>
+<h2 id="mm_load_ss">mm_load_ss</h2>
+<p><code>mm_load_ss</code></p>
+<p>Load a single-precision (32-bit) floating-point element from memory into the lower of &quot;dst&quot;, and zero the upper 3 elements. &quot;mem_addr&quot; does not need to be aligned on any particular boundary.</p>
+<p>__m128 _mm_load_ss (float const* mem_address)
+MOVSS xmm, m32</p>
+<h2 id="mm_loadh_pi">mm_loadh_pi</h2>
+<p><code>mm_loadh_pi</code></p>
+<p>Load 2 single-precision (32-bit) floating-point elements from memory into the upper 2 elements of &quot;dst&quot;, and copy the lower 2 elements from &quot;a&quot; to &quot;dst&quot;. &quot;mem_addr&quot; does not need to be aligned on any particular boundary.</p>
+<p>__m128 _mm_loadh_pi (__m128 a, __m64 const* mem_addr)
+MOVHPS xmm, m64</p>
+<h2 id="mm_loadl_pi">mm_loadl_pi</h2>
+<p><code>mm_loadl_pi</code></p>
+<p>Load 2 single-precision (32-bit) floating-point elements from memory into the lower 2 elements of &quot;dst&quot;, and copy the upper 2 elements from &quot;a&quot; to &quot;dst&quot;. &quot;mem_addr&quot; does not need to be aligned on any particular boundary.</p>
+<p>__m128 _mm_loadl_pi (__m128 a, __m64 const* mem_addr)
+MOVLPS xmm, m64</p>
+<h2 id="mm_loadu_ps">mm_loadu_ps</h2>
+<p><code>mm_loadu_ps</code></p>
+<p>Load 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from memory into &quot;dst&quot;.
+&quot;mem_addr&quot; does not need to be aligned on any particular boundary.</p>
+<p>__m128 _mm_loadu_ps (float const* mem_address)
+MOVUPS xmm, m128</p>
+<h2 id="mm_max_ps">mm_max_ps</h2>
+<p><code>mm_max_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, and store packed maximum values in &quot;dst&quot;.</p>
+<p>__m128 _mm_max_ps (__m128 a,  __m128 b)
+MAXPS xmm, xmm/m128</p>
+<h2 id="mm_max_ss">mm_max_ss</h2>
+<p><code>mm_max_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, store the maximum value in the lower element of &quot;dst&quot;, and copy the upper element from &quot;a&quot; to the upper element of &quot;dst&quot;.</p>
+<p>__m128 _mm_max_ss (__m128 a,  __m128 b)
+MAXSS xmm, xmm/m32</p>
+<h2 id="mm_min_ps">mm_min_ps</h2>
+<p><code>mm_min_ps</code></p>
+<p>Compare packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, and store packed minimum values in &quot;dst&quot;.</p>
+<p>__m128 _mm_min_ps (__m128 a,  __m128 b)
+MINPS xmm, xmm/m128</p>
+<h2 id="mm_min_ss">mm_min_ss</h2>
+<p><code>mm_min_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, store the minimum value in the lower element of &quot;dst&quot;, and copy the upper element from &quot;a&quot; to the upper element of &quot;dst&quot;.</p>
+<p>__m128 _mm_min_ss (__m128 a,  __m128 b)
+MINSS xmm, xmm/m32</p>
+<h2 id="mm_move_ss">mm_move_ss</h2>
+<p><code>mm_move_ss</code></p>
+<p>Move the lower single-precision (32-bit) floating-point element from &quot;b&quot; to the lower element of &quot;dst&quot;, and copy the upper 3 elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_move_ss (__m128 a, __m128 b)
+MOVSS xmm, xmm</p>
+<h2 id="mm_movehl_ps">mm_movehl_ps</h2>
+<p><code>mm_movehl_ps</code></p>
+<p>Move the upper 2 single-precision (32-bit) floating-point elements from &quot;b&quot; to the lower 2 elements of &quot;dst&quot;, and copy the upper 2 elements from &quot;a&quot; to the upper 2 elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_movehl_ps (__m128 a,  __m128 b)
+MOVHLPS xmm, xmm</p>
+<h2 id="mm_movelh_ps">mm_movelh_ps</h2>
+<p><code>mm_movelh_ps</code></p>
+<p>Move the lower 2 single-precision (32-bit) floating-point elements from &quot;b&quot; to the upper 2 elements of &quot;dst&quot;, and copy the lower 2 elements from &quot;a&quot; to the lower 2 elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_movelh_ps (__m128 a,  __m128 b)
+MOVLHPS xmm, xmm</p>
+<h2 id="mm_movemask_ps">mm_movemask_ps</h2>
+<p><code>mm_movemask_ps</code></p>
+<p>Set each bit of mask &quot;dst&quot; based on the most significant bit of the corresponding packed single-precision (32-bit) floating-point element in &quot;a&quot;.</p>
+<p>int _mm_movemask_ps (__m128 a)
+MOVMSKPS reg, xmm</p>
+<h2 id="mm_mul_ps">mm_mul_ps</h2>
+<p><code>mm_mul_ps</code></p>
+<p>Multiply packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_mul_ps (__m128 a, __m128 b)
+MULPS xmm, xmm/m128</p>
+<h2 id="mm_mul_ss">mm_mul_ss</h2>
+<p><code>mm_mul_ss</code></p>
+<p>Multiply the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot;, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_mul_ss (__m128 a, __m128 b)
+MULPS xmm, xmm/m32</p>
+<h2 id="mm_or_ps">mm_or_ps</h2>
+<p><code>mm_or_ps</code></p>
+<p>Compute the bitwise OR of packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_or_ps (__m128 a,  __m128 b)
+ORPS xmm, xmm/m128</p>
+<h2 id="mm_prefetch0">mm_prefetch0</h2>
+<p><code>mm_prefetch0</code></p>
+<p>Fetch the line of data from memory that contains address &quot;p&quot; to a location in the cache heirarchy specified by the locality hint &quot;i&quot;.</p>
+<p>void _mm_prefetch(char* p, int i)
+PREFETCHT0 m8</p>
+<h2 id="mm_prefetch1">mm_prefetch1</h2>
+<p><code>mm_prefetch1</code></p>
+<p>Fetch the line of data from memory that contains address &quot;p&quot; to a location in the cache heirarchy specified by the locality hint &quot;i&quot;.</p>
+<p>void _mm_prefetch(char* p, int i)
+PREFETCHT1 m8</p>
+<h2 id="mm_prefetch2">mm_prefetch2</h2>
+<p><code>mm_prefetch2</code></p>
+<p>Fetch the line of data from memory that contains address &quot;p&quot; to a location in the cache heirarchy specified by the locality hint &quot;i&quot;.</p>
+<p>void _mm_prefetch(char* p, int i)
+PREFETCHT2 m8</p>
+<h2 id="mm_prefetchnta">mm_prefetchnta</h2>
+<p><code>mm_prefetchnta</code></p>
+<p>Fetch the line of data from memory that contains address &quot;p&quot; to a location in the cache heirarchy specified by the locality hint &quot;i&quot;.</p>
+<p>void _mm_prefetch(char* p, int i)
+PREFETCHNTA m8</p>
+<h2 id="mm_rcp_ps">mm_rcp_ps</h2>
+<p><code>mm_rcp_ps</code></p>
+<p>Compute the approximate reciprocal of packed single-precision (32-bit) floating-point elements in &quot;a&quot;, and store the results in &quot;dst&quot;. The maximum relative error for this approximation is less than 1.5*2^-12.</p>
+<p>__m128 _mm_rcp_ps (__m128 a)
+RCPPS xmm, xmm/m128</p>
+<h2 id="mm_rcp_ss">mm_rcp_ss</h2>
+<p><code>mm_rcp_ss</code></p>
+<p>Compute the approximate reciprocal of the lower single-precision (32-bit) floating-point element in &quot;a&quot;, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;. The maximum relative error for this approximation is less than 1.5*2^-12.</p>
+<p>__m128 _mm_rcp_ss (__m128 a, __m128 b)
+RCPSS xmm, xmm/m32</p>
+<h2 id="mm_rcp_ss1">mm_rcp_ss1</h2>
+<p><code>mm_rcp_ss1</code></p>
+<p>Compute the approximate reciprocal of the lower single-precision (32-bit) floating-point element in &quot;a&quot;, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;. The maximum relative error for this approximation is less than 1.5*2^-12.</p>
+<p>__m128 _mm_rcp_ss (__m128 a)
+RCPSS xmm, xmm/m32</p>
+<h2 id="mm_rsqrt_ps">mm_rsqrt_ps</h2>
+<p><code>mm_rsqrt_ps</code></p>
+<p>Compute the approximate reciprocal square root of packed single-precision (32-bit) floating-point elements in &quot;a&quot;, and store the results in &quot;dst&quot;. The maximum relative error for this approximation is less than 1.5*2^-12.</p>
+<p>__m128 _mm_rsqrt_ps (__m128 a)
+RSQRTPS xmm, xmm/m128</p>
+<h2 id="mm_rsqrt_ss">mm_rsqrt_ss</h2>
+<p><code>mm_rsqrt_ss</code></p>
+<p>Compute the approximate reciprocal square root of the lower single-precision (32-bit) floating-point element in &quot;a&quot;, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;. The maximum relative error for this approximation is less than 1.5*2^-12.</p>
+<p>__m128 _mm_rsqrt_ss (__m128 a, __m128 b)
+RSQRTSS xmm, xmm/m32</p>
+<h2 id="mm_rsqrt_ss1">mm_rsqrt_ss1</h2>
+<p><code>mm_rsqrt_ss1</code></p>
+<p>Compute the approximate reciprocal square root of the lower single-precision (32-bit) floating-point element in &quot;a&quot;, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;. The maximum relative error for this approximation is less than 1.5*2^-12.</p>
+<p>__m128 _mm_rsqrt_ss (__m128 a)
+RSQRTSS xmm, xmm/m32</p>
+<h2 id="mm_shuffle_ps">mm_shuffle_ps</h2>
+<p><code>mm_shuffle_ps</code></p>
+<p>Shuffle single-precision (32-bit) floating-point elements in &quot;a&quot; using the control in &quot;imm8&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_shuffle_ps (__m128 a,  __m128 b, unsigned int control)
+SHUFPS xmm, xmm/m128, imm8</p>
+<h2 id="mm_sqrt_ps">mm_sqrt_ps</h2>
+<p><code>mm_sqrt_ps</code></p>
+<p>Compute the square root of packed single-precision (32-bit) floating-point elements in &quot;a&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_sqrt_ps (__m128 a)
+SQRTPS xmm, xmm/m128</p>
+<h2 id="mm_sqrt_ss">mm_sqrt_ss</h2>
+<p><code>mm_sqrt_ss</code></p>
+<p>Compute the square root of the lower single-precision (32-bit) floating-point element in &quot;a&quot;, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_sqrt_ss (__m128 a, __m128 b)
+SQRTSS xmm, xmm/m32</p>
+<h2 id="mm_sqrt_ss1">mm_sqrt_ss1</h2>
+<p><code>mm_sqrt_ss1</code></p>
+<p>Compute the square root of the lower single-precision (32-bit) floating-point element in &quot;a&quot;, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_sqrt_ss (__m128 a)
+SQRTSS xmm, xmm/m32</p>
+<h2 id="mm_store_ps">mm_store_ps</h2>
+<p><code>mm_store_ps</code></p>
+<p>Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from &quot;a&quot; into memory.
+&quot;mem_addr&quot; must be aligned on a 16-byte boundary or a general-protection exception may be generated.</p>
+<p>void _mm_store_ps (float* mem_addr, __m128 a)
+MOVAPS m128, xmm</p>
+<h2 id="mm_store_ss">mm_store_ss</h2>
+<p><code>mm_store_ss</code></p>
+<p>Store the lower single-precision (32-bit) floating-point element from &quot;a&quot; into memory. &quot;mem_addr&quot; does not need to be aligned on any particular boundary.</p>
+<p>void _mm_store_ss (float* mem_addr, __m128 a)
+MOVSS m32, xmm</p>
+<h2 id="mm_storeh_pi">mm_storeh_pi</h2>
+<p><code>mm_storeh_pi</code></p>
+<p>Store the upper 2 single-precision (32-bit) floating-point elements from &quot;a&quot; into memory.</p>
+<p>void _mm_storeh_pi (__m64* mem_addr, __m128 a)
+MOVHPS m64, xmm</p>
+<h2 id="mm_storel_pi">mm_storel_pi</h2>
+<p><code>mm_storel_pi</code></p>
+<p>Store the lower 2 single-precision (32-bit) floating-point elements from &quot;a&quot; into memory.</p>
+<p>void _mm_storel_pi (__m64* mem_addr, __m128 a)
+MOVLPS m64, xmm</p>
+<h2 id="mm_storeu_ps">mm_storeu_ps</h2>
+<p><code>mm_storeu_ps</code></p>
+<p>Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from &quot;a&quot; into memory.
+&quot;mem_addr&quot; does not need to be aligned on any particular boundary.</p>
+<p>void _mm_storeu_ps (float* mem_addr, __m128 a)
+MOVUPS m128, xmm</p>
+<h2 id="mm_stream_ps">mm_stream_ps</h2>
+<p><code>mm_stream_ps</code></p>
+<p>Store 128-bits (composed of 4 packed single-precision (32-bit) floating-point elements) from &quot;a&quot; into memory using a non-temporal memory hint.
+&quot;mem_addr&quot; must be aligned on a 16-byte boundary or a general-protection exception may be generated.</p>
+<p>void _mm_stream_ps (float* mem_addr, __m128 a)
+MOVNTPS m128, xmm</p>
+<h2 id="mm_sub_ps">mm_sub_ps</h2>
+<p><code>mm_sub_ps</code></p>
+<p>Subtract packed single-precision (32-bit) floating-point elements in &quot;b&quot; from packed single-precision (32-bit) floating-point elements in &quot;a&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128d _mm_sub_ps (__m128d a, __m128d b)
+SUBPS xmm, xmm/m128</p>
+<h2 id="mm_sub_ss">mm_sub_ss</h2>
+<p><code>mm_sub_ss</code></p>
+<p>Subtract the lower single-precision (32-bit) floating-point element in &quot;b&quot; from the lower single-precision (32-bit) floating-point element in &quot;a&quot;, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_sub_ss (__m128 a, __m128 b)
+SUBSS xmm, xmm/m32</p>
+<h2 id="mm_ucomieq_ss">mm_ucomieq_ss</h2>
+<p><code>mm_ucomieq_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot; for equality, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.</p>
+<p>int _mm_ucomieq_ss (__m128 a, __m128 b)
+UCOMISS xmm, xmm/m32</p>
+<h2 id="mm_ucomige_ss">mm_ucomige_ss</h2>
+<p><code>mm_ucomige_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot; for greater-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.</p>
+<p>int _mm_ucomige_ss (__m128 a, __m128 b)
+UCOMISS xmm, xmm/m32</p>
+<h2 id="mm_ucomigt_ss">mm_ucomigt_ss</h2>
+<p><code>mm_ucomigt_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot; for greater-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.</p>
+<p>int _mm_ucomigt_ss (__m128 a, __m128 b)
+UCOMISS xmm, xmm/m32</p>
+<h2 id="mm_ucomile_ss">mm_ucomile_ss</h2>
+<p><code>mm_ucomile_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot; for less-than-or-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.</p>
+<p>int _mm_ucomile_ss (__m128 a, __m128 b)
+UCOMISS xmm, xmm/m32</p>
+<h2 id="mm_ucomilt_ss">mm_ucomilt_ss</h2>
+<p><code>mm_ucomilt_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot; for less-than, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.</p>
+<p>int _mm_ucomilt_ss (__m128 a, __m128 b)
+UCOMISS xmm, xmm/m32</p>
+<h2 id="mm_ucomineq_ss">mm_ucomineq_ss</h2>
+<p><code>mm_ucomineq_ss</code></p>
+<p>Compare the lower single-precision (32-bit) floating-point element in &quot;a&quot; and &quot;b&quot; for not-equal, and return the boolean result (0 or 1). This instruction will not signal an exception for QNaNs.</p>
+<p>int _mm_ucomineq_ss (__m128 a, __m128 b)
+UCOMISS xmm, xmm/m32</p>
+<h2 id="mm_unpackhi_ps">mm_unpackhi_ps</h2>
+<p><code>mm_unpackhi_ps</code></p>
+<p>Unpack and interleave single-precision (32-bit) floating-point elements from the high half &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_unpackhi_ps (__m128 a,  __m128 b)
+UNPCKHPS xmm, xmm/m128</p>
+<h2 id="mm_unpacklo_ps">mm_unpacklo_ps</h2>
+<p><code>mm_unpacklo_ps</code></p>
+<p>Unpack and interleave single-precision (32-bit) floating-point elements from the low half of &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_unpacklo_ps (__m128 a,  __m128 b)
+UNPCKLPS xmm, xmm/m128</p>
+<h2 id="mm_xor_ps">mm_xor_ps</h2>
+<p><code>mm_xor_ps</code></p>
+<p>Compute the bitwise XOR of packed single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_xor_ps (__m128 a,  __m128 b)
+XORPS xmm, xmm/m128</p>
+
+      </div>
+  </div>
+</div>
+        </section>
+        <footer>
+          <hr>
+          <p>Copyright &copy; 2020, Alexandre Mutel aka <a href="https://xoofx.com">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site generated by <a href="https://github.com/lunet-io/lunet">lunet</a> hosted on <a href="https://pages.github.com/">GitHub Pages</a></p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
+

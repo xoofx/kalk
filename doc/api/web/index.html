@@ -5,16 +5,16 @@
     
     
     
-    <title>User Guide - kalk</title>
+    <title>Web Functions - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" type="text/javascript" ></script>
     <script src="/js/site-defer.js" type="text/javascript" defer></script>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
-    <meta name="twitter:title" content="User Guide - kalk">
+    <meta name="twitter:title" content="Web Functions - kalk">
     <meta name="twitter:description" content="kalk - calculator app">
     <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
-    <meta name="twitter:image:alt" content="User Guide - kalk">    
+    <meta name="twitter:image:alt" content="Web Functions - kalk">    
   </head>
   <body>    
     <div id="kalk" class="container">
@@ -59,14 +59,14 @@
         <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
   <li class='menu-item '>
     <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
-  <li class='menu-item  active'>
-    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-2' class='menu-link-show'></a></span><nav class="js-toc toc"></nav>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  show '>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
   </ol>
   </li>
   <li class='menu-item '>
-    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-4' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  '>
+    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
     <li class='menu-item '>
@@ -89,8 +89,8 @@
       <span class='menu-item-row'><a href='/doc/api/standardunits/' class='menu-link  '>StandardUnits Functions</a></span>    </li>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/strings/' class='menu-link  '>Strings Functions</a></span>    </li>
-    <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Functions</a></span>    </li>
+    <li class='menu-item  active'>
+      <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Functions</a></span><nav class="js-toc toc"></nav>    </li>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/intel/hardware/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-17' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-17' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-17' class='menu menu-level2 collapse  '>
       <li class='menu-item '>
@@ -142,13 +142,145 @@
     <a href='/' class='breadcrumb-link  '>Home</a>  </li>
   <li class='breadcrumb-item '>
     <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
   <li class='breadcrumb-item  active'>
-    User Guide  </li>
+    Web Functions  </li>
 </ol>
 
         <p id="lunet-results"></p>
-        <h1>User Guide</h1>
-        <p>This is a user documentation</p>
+        <h1>Web Functions</h1>
+        <p>Module that provides Web functions (e.g <code>url_encode</code>, <code>json</code>, <code>wget</code>...)</p>
+<p>In order to use the functions provided by this module, you need to import this module:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; import Web
+</code></pre>
+<h2 id="html_decode">html_decode</h2>
+<p><code>html_decode(text)</code></p>
+<p>Decodes a HTML input string (replacing <code>&amp;amp;</code> by <code>&amp;</code>)</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns">Returns</h3>
+<p>The input string removed with any HTML entities.</p>
+<h3 id="example">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;&lt;p&gt;This is a paragraph&lt;/p&gt;&quot; |&gt; html_encode
+# &quot;&lt;p&gt;This is a paragraph&lt;/p&gt;&quot; |&gt; html_encode
+out = &quot;&amp;lt;p&amp;gt;This is a paragraph&amp;lt;/p&amp;gt;&quot;
+&gt;&gt;&gt; out |&gt; html_decode
+# out |&gt; html_decode
+out = &quot;&lt;p&gt;This is a paragraph&lt;/p&gt;&quot;
+</code></pre>
+<h2 id="html_encode">html_encode</h2>
+<p><code>html_encode(text)</code></p>
+<p>Encodes a HTML input string (replacing <code>&amp;</code> by <code>&amp;amp;</code>)</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns-1">Returns</h3>
+<p>The input string with HTML entities.</p>
+<h3 id="example-1">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;&lt;p&gt;This is a paragraph&lt;/p&gt;&quot; |&gt; html_encode
+# &quot;&lt;p&gt;This is a paragraph&lt;/p&gt;&quot; |&gt; html_encode
+out = &quot;&amp;lt;p&amp;gt;This is a paragraph&amp;lt;/p&amp;gt;&quot;
+&gt;&gt;&gt; out |&gt; html_decode
+# out |&gt; html_decode
+out = &quot;&lt;p&gt;This is a paragraph&lt;/p&gt;&quot;
+</code></pre>
+<h2 id="html_strip">html_strip</h2>
+<p><code>html_strip(text)</code></p>
+<p>Removes any HTML tags from the input string</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns-2">Returns</h3>
+<p>The input string removed with any HTML tags</p>
+<h3 id="example-2">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;&lt;p&gt;This is a paragraph&lt;/p&gt;&quot; |&gt; html_strip
+# &quot;&lt;p&gt;This is a paragraph&lt;/p&gt;&quot; |&gt; html_strip
+out = &quot;This is a paragraph&quot;
+</code></pre>
+<h2 id="json">json</h2>
+<p><code>json(value)</code></p>
+<p>Converts to or from a JSON object depending on the value argument.</p>
+<ul>
+<li><code>value</code>: A value argument:
+<ul>
+<li>If the value is a string, it is expecting this string to be a JSON string and will convert it to the appropriate object.</li>
+<li>If the value is an array or object, it will convert it to a JSON string representation.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-3">Returns</h3>
+<p>A JSON string or an object/array depending on the argument.</p>
+<h3 id="example-3">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; json {a: 1, b: 2, c: [4,5], d: &quot;Hello World&quot;}
+# json({a: 1, b: 2, c: [4,5], d: &quot;Hello World&quot;})
+out = &quot;{\&quot;a\&quot;: 1, \&quot;b\&quot;: 2, \&quot;c\&quot;: [4, 5], \&quot;d\&quot;: \&quot;Hello World\&quot;}&quot;
+&gt;&gt;&gt; json out
+# json(out)
+out = {a: 1, b: 2, c: [4, 5], d: &quot;Hello World&quot;}
+</code></pre>
+<h2 id="url_decode">url_decode</h2>
+<p><code>url_decode(url)</code></p>
+<p>Converts a URL-encoded string into a decoded string.</p>
+<ul>
+<li><code>url</code>: The URL to decode.</li>
+</ul>
+<h3 id="returns-4">Returns</h3>
+<p>The decoded URL</p>
+<h3 id="example-4">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; url_decode &quot;this%3Cis%3Ean%3Aurl+and+another+part&quot;
+# url_decode(&quot;this%3Cis%3Ean%3Aurl+and+another+part&quot;)
+out = &quot;this&lt;is&gt;an:url and another part&quot;
+</code></pre>
+<h2 id="url_encode">url_encode</h2>
+<p><code>url_encode(url)</code></p>
+<p>Converts a specified URL text into a URL-encoded.</p>
+<p>URL encoding converts characters that are not allowed in a URL into character-entity equivalents.
+For example, when the characters &lt; and &gt; are embedded in a block of text to be transmitted in a URL, they are encoded as %3c and %3e.</p>
+<ul>
+<li><code>url</code>: The url text to encode as an URL.</li>
+</ul>
+<h3 id="returns-5">Returns</h3>
+<p>An encoded URL.</p>
+<h3 id="example-5">Example</h3>
+<pre><code class="language-kalk"> &gt;&gt;&gt; url_encode &quot;this&lt;is&gt;an:url and another part&quot;
+ # url_encode(&quot;this&lt;is&gt;an:url and another part&quot;)
+ out = &quot;this%3Cis%3Ean%3Aurl+and+another+part&quot;
+</code></pre>
+<h2 id="url_escape">url_escape</h2>
+<p><code>url_escape(url)</code></p>
+<p>Identifies all characters in a string that are not allowed in URLS, and replaces the characters with their escaped variants.</p>
+<ul>
+<li><code>url</code>: The input string.</li>
+</ul>
+<h3 id="returns-6">Returns</h3>
+<p>The input string url escaped</p>
+<h3 id="example-6">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;&lt;hello&gt; &amp; &lt;scriban&gt;&quot; |&gt; url_escape
+# &quot;&lt;hello&gt; &amp; &lt;scriban&gt;&quot; |&gt; url_escape
+out = &quot;%3Chello%3E%20&amp;%20%3Cscriban%3E&quot;
+</code></pre>
+<h2 id="wget">wget</h2>
+<p><code>wget(url)</code></p>
+<p>Retrieves the content of the following URL by issuing a HTTP GET request.</p>
+<ul>
+<li><code>url</code>: The URL to retrieve the content for.</li>
+</ul>
+<h3 id="returns-7">Returns</h3>
+<p>An object with the result of the request. This object contains the following members:</p>
+<ul>
+<li><code>version</code>: the protocol of the version.</li>
+<li><code>code</code>: the HTTP return code.</li>
+<li><code>reason</code>: the HTTP reason phrase.</li>
+<li><code>headers</code>: the HTTP returned headers.</li>
+<li><code>content</code>: the HTTP content. Either a string if the mime type is <code>text/*</code> or an object if the mime type is <code>application/json</code> otherwise it will return a bytebuffer.</li>
+</ul>
+<h3 id="example-7">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; wget &quot;https://api.exchangeratesapi.io&quot;
+# wget(&quot;https://api.exchangeratesapi.io&quot;)
+out = {version: &quot;1.1&quot;, code: 200, reason: &quot;OK&quot;, headers: {&quot;Content-Type&quot;: &quot;application/json&quot;, &quot;Content-Length&quot;: 41}, content: {details: &quot;https://exchangeratesapi.io&quot;}}
+</code></pre>
 
       </div>
   </div>

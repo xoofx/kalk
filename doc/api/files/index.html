@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    
+    
+    
+    <title>Files Functions - kalk</title>
+    <link rel="stylesheet" href="/css/site.css">
+    <script src="/js/site.js" type="text/javascript" ></script>
+    <script src="/js/site-defer.js" type="text/javascript" defer></script>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@xoofx">
+    <meta name="twitter:title" content="Files Functions - kalk">
+    <meta name="twitter:description" content="kalk - calculator app">
+    <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
+    <meta name="twitter:image:alt" content="Files Functions - kalk">    
+  </head>
+  <body>    
+    <div id="kalk" class="container">
+      <nav class="navbar navbar-expand-md navbar-light sticky-top">
+        <a class="kalk-logo navbar-brand" href="/"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
+<ol id='nav-id-home-0' class='navbar-nav nav-level0  '>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/' class='nav-link  '>Home</a></span>  </li>
+  <li class='nav-item  active'>
+    <span class='nav-item-row'><a href='/doc/' class='nav-link  '>Documentation</a></span>  </li>
+</ol>
+          <!-- d-inline w-100 -->
+          <!-- <ol class="navbar-nav" style="width: 40%;padding-right: 0.5rem;"> -->
+          <ol class="navbar-nav flex-grow-1" style="padding-right: 0.5rem;">
+            <li class="nav-item w-100">
+                <div class="kalk-search">
+                  <label class="search-icon"><i class="fa fa-search"></i></label>
+                  <select id="search-box"></select>
+                </div>
+            </li>
+          </ol>
+<ol id='nav-id-home2-0' class='navbar-nav nav-level0  flex-shrink-0'>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/download/' class='nav-link  btn btn-success'><i class="fa fa-download"></i> Download</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/sponsors/xoofx' class='nav-link  btn btn-outline-secondary'><i class="fa fa-heart-o"></i> Sponsor</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/xoofx/kalk/' class='nav-link  btn btn-info'><i class="fa fa-github"></i> GitHub</a></span>  </li>
+</ol>
+        </div>
+      </nav>
+      <div class="kalk-doc">
+        <section>
+            
+<div class="container">
+  <div class="row">
+      <div class="col-sm-3 align-self-start sticky-top menu-sidebar">
+        <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
+  </ol>
+  </li>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/math/' class='menu-link  '>Math Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/memory/' class='menu-link  '>Memory Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/misc/' class='menu-link  '>Misc Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/vector/' class='menu-link  '>Vector Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/all/' class='menu-link  '>All Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/csv/' class='menu-link  '>Csv Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/currencies/' class='menu-link  '>Currencies Functions</a></span>    </li>
+    <li class='menu-item  active'>
+      <span class='menu-item-row'><a href='/doc/api/files/' class='menu-link  '>Files Functions</a></span><nav class="js-toc toc"></nav>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/standardunits/' class='menu-link  '>StandardUnits Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/strings/' class='menu-link  '>Strings Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/intel/hardware/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-17' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-17' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-17' class='menu menu-level2 collapse  '>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/aes/' class='menu-link  '>Intel Aes Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/avx/' class='menu-link  '>Intel Avx Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/avx2/' class='menu-link  '>Intel Avx2 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/bmi1/' class='menu-link  '>Intel Bmi1 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/bmi1x64/' class='menu-link  '>Intel Bmi1X64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/bmi2/' class='menu-link  '>Intel Bmi2 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/bmi2x64/' class='menu-link  '>Intel Bmi2X64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse/' class='menu-link  '>Intel Sse Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/ssex64/' class='menu-link  '>Intel SseX64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse2/' class='menu-link  '>Intel Sse2 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse2x64/' class='menu-link  '>Intel Sse2X64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse3/' class='menu-link  '>Intel Sse3 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/ssse3/' class='menu-link  '>Intel Ssse3 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse41/' class='menu-link  '>Intel Sse41 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse41x64/' class='menu-link  '>Intel Sse41X64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse42/' class='menu-link  '>Intel Sse42 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse42x64/' class='menu-link  '>Intel Sse42X64 Intrinsics</a></span>      </li>
+    </ol>
+    </li>
+  </ol>
+  </li>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/advanced/' class='menu-link  '>Advanced Topics</a></span>  </li>
+</ol>
+
+      </div>
+      <div class="col-sm-9 js-toc-content">
+        <ol class='breadcrumb'>
+  <li class='breadcrumb-item '>
+    <a href='/' class='breadcrumb-link  '>Home</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
+  <li class='breadcrumb-item  active'>
+    Files Functions  </li>
+</ol>
+
+        <p id="lunet-results"></p>
+        <h1>Files Functions</h1>
+        <p>Modules providing file related functions.</p>
+<p>In order to use the functions provided by this module, you need to import this module:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; import Files
+</code></pre>
+<h2 id="cd">cd</h2>
+<p><code>cd(path?)</code></p>
+<p>Changes the current directory to the specified path.</p>
+<ul>
+<li><code>path</code>: Path to the directory to change.</li>
+</ul>
+<h3 id="returns">Returns</h3>
+<p>The current directory or throws an exception if the directory does not exists</p>
+<h3 id="example">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; cd
+# cd
+out = &quot;/code/kalk/tests&quot;
+&gt;&gt;&gt; mkdir &quot;testdir&quot;
+&gt;&gt;&gt; cd &quot;testdir&quot;
+# cd(&quot;testdir&quot;)
+out = &quot;/code/kalk/tests/testdir&quot;
+&gt;&gt;&gt; cd &quot;..&quot;
+# cd(&quot;..&quot;)
+out = &quot;/code/kalk/tests&quot;
+&gt;&gt;&gt; rmdir &quot;testdir&quot;
+&gt;&gt;&gt; dir_exists &quot;testdir&quot;
+# dir_exists(&quot;testdir&quot;)
+out = false
+</code></pre>
+<h2 id="dir">dir</h2>
+<p><code>dir(path?,recursive?)</code></p>
+<p>List files and directories from the specified path or the current directory.</p>
+<ul>
+<li><code>path</code>: The specified directory or the current directory if not specified.</li>
+<li><code>recursive</code>: A boolean to perform a recursive list. Default is <code>false</code>.</li>
+</ul>
+<h3 id="returns-1">Returns</h3>
+<p>An enumeration of the files and directories.</p>
+<h3 id="example-1">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; mkdir &quot;testdir&quot;
+&gt;&gt;&gt; cd &quot;testdir&quot;
+# cd(&quot;testdir&quot;)
+out = &quot;/code/kalk/tests/testdir&quot;
+&gt;&gt;&gt; mkdir &quot;subdir&quot;
+&gt;&gt;&gt; save_text(&quot;content&quot;, &quot;file.txt&quot;)
+&gt;&gt;&gt; dir &quot;.&quot;
+# dir(&quot;.&quot;)
+out = [&quot;./file.txt&quot;, &quot;./subdir&quot;]
+&gt;&gt;&gt; save_text(&quot;content&quot;, &quot;subdir/file2.txt&quot;)
+&gt;&gt;&gt; dir(&quot;.&quot;, true)
+# dir(&quot;.&quot;, true)
+out = [&quot;./file.txt&quot;, &quot;./subdir&quot;, &quot;./subdir/file2.txt&quot;]
+&gt;&gt;&gt; cd &quot;..&quot;
+# cd(&quot;..&quot;)
+out = &quot;/code/kalk/tests&quot;
+&gt;&gt;&gt; rmdir(&quot;testdir&quot;, true)
+</code></pre>
+<h2 id="dir_exists">dir_exists</h2>
+<p><code>dir_exists(path)</code></p>
+<p>Checks if the specified directory path exists on the disk.</p>
+<ul>
+<li><code>path</code>: Path to a directory.</li>
+</ul>
+<h3 id="returns-2">Returns</h3>
+<p><code>true</code> if the specified directory path exists on the disk.</p>
+<h3 id="example-2">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; mkdir &quot;testdir&quot;
+&gt;&gt;&gt; dir_exists &quot;testdir&quot;
+# dir_exists(&quot;testdir&quot;)
+out = true
+&gt;&gt;&gt; rmdir &quot;testdir&quot;
+&gt;&gt;&gt; dir_exists &quot;testdir&quot;
+# dir_exists(&quot;testdir&quot;)
+out = false
+</code></pre>
+<h2 id="file_exists">file_exists</h2>
+<p><code>file_exists(path)</code></p>
+<p>Checks if the specified file path exists on the disk.</p>
+<ul>
+<li><code>path</code>: Path to a file.</li>
+</ul>
+<h3 id="returns-3">Returns</h3>
+<p><code>true</code> if the specified file path exists on the disk.</p>
+<h3 id="example-3">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; rm &quot;test.txt&quot;
+&gt;&gt;&gt; file_exists &quot;test.txt&quot;
+# file_exists(&quot;test.txt&quot;)
+out = false
+&gt;&gt;&gt; save_text(&quot;content&quot;, &quot;test.txt&quot;)
+&gt;&gt;&gt; file_exists &quot;test.txt&quot;
+# file_exists(&quot;test.txt&quot;)
+out = true
+</code></pre>
+<h2 id="load_bytes">load_bytes</h2>
+<p><code>load_bytes(path)</code></p>
+<p>Loads the specified file as binary.</p>
+<ul>
+<li><code>path</code>: Path to a file to load as binary.</li>
+</ul>
+<h3 id="returns-4">Returns</h3>
+<p>The file loaded as a a byte buffer.</p>
+<h3 id="example-4">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; load_bytes &quot;test.csv&quot;
+# load_bytes(&quot;test.csv&quot;)
+out = bytebuffer([97, 44, 98, 44, 99, 10, 49, 44, 50, 44, 51, 10, 52, 44, 53, 44, 54])
+&gt;&gt;&gt; ascii out
+# ascii(out)
+out = &quot;a,b,c\n1,2,3\n4,5,6&quot;
+</code></pre>
+<h2 id="load_lines">load_lines</h2>
+<p><code>load_lines(path,encoding?)</code></p>
+<p>Load each lines from the specified file path.</p>
+<ul>
+<li><code>path</code>: Path to a file to load lines from.</li>
+<li><code>encoding</code>: The encoding of the file. Default is &quot;utf-8&quot;</li>
+</ul>
+<h3 id="returns-5">Returns</h3>
+<p>An enumeration on the lines.</p>
+<h3 id="example-5">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; load_lines &quot;test.csv&quot;
+# load_lines(&quot;test.csv&quot;)
+out = [&quot;a,b,c&quot;, &quot;1,2,3&quot;, &quot;4,5,6&quot;]
+</code></pre>
+<h2 id="load_text">load_text</h2>
+<p><code>load_text(path,encoding?)</code></p>
+<p>Loads the specified file as text.</p>
+<ul>
+<li><code>path</code>: Path to a file to load as text.</li>
+<li><code>encoding</code>: The encoding of the file. Default is &quot;utf-8&quot;</li>
+</ul>
+<h3 id="returns-6">Returns</h3>
+<p>The file loaded as a string.</p>
+<h3 id="example-6">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; load_text &quot;test.csv&quot;
+# load_text(&quot;test.csv&quot;)
+out = &quot;a,b,c\n1,2,3\n4,5,6&quot;
+</code></pre>
+<h2 id="mkdir">mkdir</h2>
+<p><code>mkdir(path)</code></p>
+<p>Creates a directory at the specified path.</p>
+<ul>
+<li><code>path</code>: Path of the directory to create.</li>
+</ul>
+<h3 id="example-7">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; mkdir &quot;testdir&quot;
+&gt;&gt;&gt; dir_exists &quot;testdir&quot;
+# dir_exists(&quot;testdir&quot;)
+out = true
+&gt;&gt;&gt; rmdir &quot;testdir&quot;
+&gt;&gt;&gt; dir_exists &quot;testdir&quot;
+# dir_exists(&quot;testdir&quot;)
+out = false
+</code></pre>
+<h2 id="pwd">pwd</h2>
+<p><code>pwd</code></p>
+<p>Gets the current directory.</p>
+<h3 id="returns-7">Returns</h3>
+<p>The current directory.</p>
+<h3 id="example-8">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; pwd
+# pwd
+out = &quot;/code/kalk/tests&quot;
+</code></pre>
+<h2 id="rm">rm</h2>
+<p><code>rm(path)</code></p>
+<p>Deletes a file from the specified path.</p>
+<ul>
+<li><code>path</code>: Path to the file to delete.</li>
+</ul>
+<h3 id="example-9">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; rm &quot;test.txt&quot;
+&gt;&gt;&gt; file_exists &quot;test.txt&quot;
+# file_exists(&quot;test.txt&quot;)
+out = false
+&gt;&gt;&gt; save_text(&quot;content&quot;, &quot;test.txt&quot;)
+&gt;&gt;&gt; file_exists &quot;test.txt&quot;
+# file_exists(&quot;test.txt&quot;)
+out = true
+</code></pre>
+<h2 id="rmdir">rmdir</h2>
+<p><code>rmdir(path)</code></p>
+<p>Deletes the directory at the specified path.</p>
+<ul>
+<li><code>path</code>: Path to the directory to delete.</li>
+</ul>
+<h3 id="example-10">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; mkdir &quot;testdir&quot;
+&gt;&gt;&gt; dir_exists &quot;testdir&quot;
+# dir_exists(&quot;testdir&quot;)
+out = true
+&gt;&gt;&gt; rmdir &quot;testdir&quot;
+&gt;&gt;&gt; dir_exists &quot;testdir&quot;
+# dir_exists(&quot;testdir&quot;)
+out = false
+</code></pre>
+<h2 id="save_bytes">save_bytes</h2>
+<p><code>save_bytes(data,path)</code></p>
+<p>Saves a byte buffer to the specified file path.</p>
+<ul>
+<li><code>data</code>: The data to save.</li>
+<li><code>path</code>: Path to the file to save the data to.</li>
+</ul>
+<h3 id="example-11">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; utf8(&quot;Hello World!&quot;)
+# utf8(&quot;Hello World!&quot;)
+out = bytebuffer([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33])
+&gt;&gt;&gt; save_bytes(out, &quot;test.bin&quot;)
+&gt;&gt;&gt; load_bytes(&quot;test.bin&quot;)
+# load_bytes(&quot;test.bin&quot;)
+out = bytebuffer([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33])
+&gt;&gt;&gt; utf8(out)
+# utf8(out)
+out = &quot;Hello World!&quot;
+</code></pre>
+<h2 id="save_lines">save_lines</h2>
+<p><code>save_lines(lines,path,encoding?)</code></p>
+<p>Saves an array of data as string to the specified files.</p>
+<ul>
+<li><code>lines</code>: An array of data.</li>
+<li><code>path</code>: Path to the file to save the lines to.</li>
+<li><code>encoding</code>: The encoding of the file. Default is &quot;utf-8&quot;</li>
+</ul>
+<h3 id="example-12">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; save_lines(1..10, &quot;lines.txt&quot;)
+&gt;&gt;&gt; load_lines(&quot;lines.txt&quot;)
+# load_lines(&quot;lines.txt&quot;)
+out = [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;10&quot;]
+</code></pre>
+<h2 id="save_text">save_text</h2>
+<p><code>save_text(text,path,encoding?)</code></p>
+<p>Saves a text to the specified file path.</p>
+<ul>
+<li><code>text</code>: The text to save.</li>
+<li><code>path</code>: Path to the file to save the text to.</li>
+<li><code>encoding</code>: The encoding of the file. Default is &quot;utf-8&quot;</li>
+</ul>
+<h3 id="example-13">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; save_text(&quot;Hello World!&quot;, &quot;test.txt&quot;)
+&gt;&gt;&gt; load_text(&quot;test.txt&quot;)
+# load_text(&quot;test.txt&quot;)
+out = &quot;Hello World!&quot;
+</code></pre>
+
+      </div>
+  </div>
+</div>
+        </section>
+        <footer>
+          <hr>
+          <p>Copyright &copy; 2020, Alexandre Mutel aka <a href="https://xoofx.com">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site generated by <a href="https://github.com/lunet-io/lunet">lunet</a> hosted on <a href="https://pages.github.com/">GitHub Pages</a></p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
+

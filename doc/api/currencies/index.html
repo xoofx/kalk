@@ -5,16 +5,16 @@
     
     
     
-    <title>User Guide - kalk</title>
+    <title>Currencies Functions - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" type="text/javascript" ></script>
     <script src="/js/site-defer.js" type="text/javascript" defer></script>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
-    <meta name="twitter:title" content="User Guide - kalk">
+    <meta name="twitter:title" content="Currencies Functions - kalk">
     <meta name="twitter:description" content="kalk - calculator app">
     <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
-    <meta name="twitter:image:alt" content="User Guide - kalk">    
+    <meta name="twitter:image:alt" content="Currencies Functions - kalk">    
   </head>
   <body>    
     <div id="kalk" class="container">
@@ -59,14 +59,14 @@
         <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
   <li class='menu-item '>
     <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
-  <li class='menu-item  active'>
-    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-2' class='menu-link-show'></a></span><nav class="js-toc toc"></nav>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  show '>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
   </ol>
   </li>
   <li class='menu-item '>
-    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-4' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  '>
+    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
     <li class='menu-item '>
@@ -81,8 +81,8 @@
       <span class='menu-item-row'><a href='/doc/api/all/' class='menu-link  '>All Functions</a></span>    </li>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/csv/' class='menu-link  '>Csv Functions</a></span>    </li>
-    <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/currencies/' class='menu-link  '>Currencies Functions</a></span>    </li>
+    <li class='menu-item  active'>
+      <span class='menu-item-row'><a href='/doc/api/currencies/' class='menu-link  '>Currencies Functions</a></span><nav class="js-toc toc"></nav>    </li>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/files/' class='menu-link  '>Files Functions</a></span>    </li>
     <li class='menu-item '>
@@ -142,13 +142,83 @@
     <a href='/' class='breadcrumb-link  '>Home</a>  </li>
   <li class='breadcrumb-item '>
     <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
   <li class='breadcrumb-item  active'>
-    User Guide  </li>
+    Currencies Functions  </li>
 </ol>
 
         <p id="lunet-results"></p>
-        <h1>User Guide</h1>
-        <p>This is a user documentation</p>
+        <h1>Currencies Functions</h1>
+        <p>In order to use the functions provided by this module, you need to import this module:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; import Currencies
+</code></pre>
+<h2 id="currencies">currencies</h2>
+<p><code>currencies</code></p>
+<p>Gets all the defined currencies. The default base currency is EUR.</p>
+<h3 id="returns">Returns</h3>
+<p>All the defined currencies.</p>
+<h3 id="example">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; currencies
+# Builtin Currencies (Last Update: 08 May 2020)
+currency(AUD, 1.6613);      # 1.6613   AUD =&gt; 1 EUR
+currency(BGN, 1.9558);      # 1.9558   BGN =&gt; 1 EUR
+currency(BRL, 6.3074);      # 6.3074   BRL =&gt; 1 EUR
+currency(CAD, 1.5118);      # 1.5118   CAD =&gt; 1 EUR
+currency(CHF, 1.0529);      # 1.0529   CHF =&gt; 1 EUR
+currency(CNY, 7.6719);      # 7.6719   CNY =&gt; 1 EUR
+currency(CZK, 27.251);      # 27.251   CZK =&gt; 1 EUR
+currency(DKK, 7.4598);      # 7.4598   DKK =&gt; 1 EUR
+currency(EUR);              # Base currency
+currency(GBP, 0.8754);      # 0.8754   GBP =&gt; 1 EUR
+currency(HKD, 8.4052);      # 8.4052   HKD =&gt; 1 EUR
+currency(HRK, 7.5573);      # 7.5573   HRK =&gt; 1 EUR
+currency(HUF, 349.38);      # 349.38   HUF =&gt; 1 EUR
+currency(IDR, 16229.26);    # 16229.26 IDR =&gt; 1 EUR
+currency(ILS, 3.8031);      # 3.8031   ILS =&gt; 1 EUR
+currency(INR, 81.9615);     # 81.9615  INR =&gt; 1 EUR
+currency(ISK, 158.5);       # 158.5    ISK =&gt; 1 EUR
+currency(JPY, 115.34);      # 115.34   JPY =&gt; 1 EUR
+currency(KRW, 1322.41);     # 1322.41  KRW =&gt; 1 EUR
+currency(MXN, 25.9023);     # 25.9023  MXN =&gt; 1 EUR
+currency(MYR, 4.6994);      # 4.6994   MYR =&gt; 1 EUR
+currency(NOK, 11.0695);     # 11.0695  NOK =&gt; 1 EUR
+currency(NZD, 1.7668);      # 1.7668   NZD =&gt; 1 EUR
+currency(PHP, 54.681);      # 54.681   PHP =&gt; 1 EUR
+currency(PLN, 4.5482);      # 4.5482   PLN =&gt; 1 EUR
+currency(RON, 4.828);       # 4.828    RON =&gt; 1 EUR
+currency(RUB, 79.8383);     # 79.8383  RUB =&gt; 1 EUR
+currency(SEK, 10.5875);     # 10.5875  SEK =&gt; 1 EUR
+currency(SGD, 1.5326);      # 1.5326   SGD =&gt; 1 EUR
+currency(THB, 34.958);      # 34.958   THB =&gt; 1 EUR
+currency(TRY, 7.7252);      # 7.7252   TRY =&gt; 1 EUR
+currency(USD, 1.0843);      # 1.0843   USD =&gt; 1 EUR
+currency(ZAR, 19.997);      # 19.997   ZAR =&gt; 1 EUR
+</code></pre>
+<h2 id="currency">currency</h2>
+<p><code>currency(name?,value?)</code></p>
+<p>Gets or sets the default currency. The default base currency is EUR.</p>
+<ul>
+<li><code>name</code>: If not null, name of the currency to set.</li>
+<li><code>value</code>: If name is not null, value of the currency</li>
+</ul>
+<h3 id="returns-1">Returns</h3>
+<p>The default defined currency.</p>
+<h3 id="example-1">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; USD
+currency(USD, 1.0843);      # 1.0843   USD =&gt; 1 EUR
+&gt;&gt;&gt; 2 USD
+# 2 * USD
+out = 1.8445079774970026745365673706 * EUR
+&gt;&gt;&gt; currency(GBP) # Defines GBP as the default currency instead of EUR
+# currency(GBP) # Defines GBP as the default currency instead of EUR
+out = GBP
+&gt;&gt;&gt; USD
+currency(USD, 1.2387);      # 1.2387   USD =&gt; 1 GBP
+&gt;&gt;&gt; 2 USD |&gt; to EUR # Convert 2 dollars to EUR
+# 2 * USD |&gt; to(EUR) # Convert 2 dollars to EUR
+out = 1.844507977497004 * EUR
+</code></pre>
 
       </div>
   </div>

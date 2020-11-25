@@ -5,16 +5,16 @@
     
     
     
-    <title>User Guide - kalk</title>
+    <title>Intel Ssse3 Intrinsics - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" type="text/javascript" ></script>
     <script src="/js/site-defer.js" type="text/javascript" defer></script>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
-    <meta name="twitter:title" content="User Guide - kalk">
+    <meta name="twitter:title" content="Intel Ssse3 Intrinsics - kalk">
     <meta name="twitter:description" content="kalk - calculator app">
     <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
-    <meta name="twitter:image:alt" content="User Guide - kalk">    
+    <meta name="twitter:image:alt" content="Intel Ssse3 Intrinsics - kalk">    
   </head>
   <body>    
     <div id="kalk" class="container">
@@ -59,14 +59,14 @@
         <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
   <li class='menu-item '>
     <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
-  <li class='menu-item  active'>
-    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-2' class='menu-link-show'></a></span><nav class="js-toc toc"></nav>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  show '>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
   </ol>
   </li>
   <li class='menu-item '>
-    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-4' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  '>
+    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
     <li class='menu-item '>
@@ -92,7 +92,7 @@
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Functions</a></span>    </li>
     <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/intel/hardware/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-17' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-17' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-17' class='menu menu-level2 collapse  '>
+      <span class='menu-item-row'><a href='/doc/api/intel/hardware/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-17' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-17' class='menu-link-show'></a></span>    <ol id='menu-id-doc-17' class='menu menu-level2 collapse  show '>
       <li class='menu-item '>
         <span class='menu-item-row'><a href='/doc/api/intel/aes/' class='menu-link  '>Intel Aes Intrinsics</a></span>      </li>
       <li class='menu-item '>
@@ -117,8 +117,8 @@
         <span class='menu-item-row'><a href='/doc/api/intel/sse2x64/' class='menu-link  '>Intel Sse2X64 Intrinsics</a></span>      </li>
       <li class='menu-item '>
         <span class='menu-item-row'><a href='/doc/api/intel/sse3/' class='menu-link  '>Intel Sse3 Intrinsics</a></span>      </li>
-      <li class='menu-item '>
-        <span class='menu-item-row'><a href='/doc/api/intel/ssse3/' class='menu-link  '>Intel Ssse3 Intrinsics</a></span>      </li>
+      <li class='menu-item  active'>
+        <span class='menu-item-row'><a href='/doc/api/intel/ssse3/' class='menu-link  '>Intel Ssse3 Intrinsics</a></span><nav class="js-toc toc"></nav>      </li>
       <li class='menu-item '>
         <span class='menu-item-row'><a href='/doc/api/intel/sse41/' class='menu-link  '>Intel Sse41 Intrinsics</a></span>      </li>
       <li class='menu-item '>
@@ -142,13 +142,96 @@
     <a href='/' class='breadcrumb-link  '>Home</a>  </li>
   <li class='breadcrumb-item '>
     <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/intel/hardware/' class='breadcrumb-link  '>Intel Hardware Intrinsics</a>  </li>
   <li class='breadcrumb-item  active'>
-    User Guide  </li>
+    Intel Ssse3 Intrinsics  </li>
 </ol>
 
         <p id="lunet-results"></p>
-        <h1>User Guide</h1>
-        <p>This is a user documentation</p>
+        <h1>Intel Ssse3 Intrinsics</h1>
+        <h2 id="mm_abs_epi16">mm_abs_epi16</h2>
+<p><code>mm_abs_epi16</code></p>
+<p>Compute the absolute value of packed 16-bit integers in &quot;a&quot;, and store the unsigned results in &quot;dst&quot;.</p>
+<p>__m128i _mm_abs_epi16 (__m128i a)
+PABSW xmm, xmm/m128</p>
+<h2 id="mm_abs_epi32">mm_abs_epi32</h2>
+<p><code>mm_abs_epi32</code></p>
+<p>Compute the absolute value of packed 32-bit integers in &quot;a&quot;, and store the unsigned results in &quot;dst&quot;.</p>
+<p>__m128i _mm_abs_epi32 (__m128i a)
+PABSD xmm, xmm/m128</p>
+<h2 id="mm_abs_epi8">mm_abs_epi8</h2>
+<p><code>mm_abs_epi8</code></p>
+<p>Compute the absolute value of packed 8-bit integers in &quot;a&quot;, and store the unsigned results in &quot;dst&quot;.</p>
+<p>__m128i _mm_abs_epi8 (__m128i a)
+PABSB xmm, xmm/m128</p>
+<h2 id="mm_alignr_epi8">mm_alignr_epi8</h2>
+<p><code>mm_alignr_epi8</code></p>
+<p>Concatenate 16-byte blocks in &quot;a&quot; and &quot;b&quot; into a 32-byte temporary result, shift the result right by &quot;count&quot; bytes, and store the low 16 bytes in &quot;dst&quot;.</p>
+<p>__m128i _mm_alignr_epi8 (__m128i a, __m128i b, int count)
+PALIGNR xmm, xmm/m128, imm8</p>
+<h2 id="mm_hadd_epi16">mm_hadd_epi16</h2>
+<p><code>mm_hadd_epi16</code></p>
+<p>Horizontally add adjacent pairs of 16-bit integers in &quot;a&quot; and &quot;b&quot;, and pack the signed 16-bit results in &quot;dst&quot;.</p>
+<p>__m128i _mm_hadd_epi16 (__m128i a, __m128i b)
+PHADDW xmm, xmm/m128</p>
+<h2 id="mm_hadd_epi32">mm_hadd_epi32</h2>
+<p><code>mm_hadd_epi32</code></p>
+<p>Horizontally add adjacent pairs of 32-bit integers in &quot;a&quot; and &quot;b&quot;, and pack the signed 32-bit results in &quot;dst&quot;.</p>
+<p>__m128i _mm_hadd_epi32 (__m128i a, __m128i b)
+PHADDD xmm, xmm/m128</p>
+<h2 id="mm_hadds_epi16">mm_hadds_epi16</h2>
+<p><code>mm_hadds_epi16</code></p>
+<p>Horizontally add adjacent pairs of 16-bit integers in &quot;a&quot; and &quot;b&quot; using saturation, and pack the signed 16-bit results in &quot;dst&quot;.</p>
+<p>__m128i _mm_hadds_epi16 (__m128i a, __m128i b)
+PHADDSW xmm, xmm/m128</p>
+<h2 id="mm_hsub_epi16">mm_hsub_epi16</h2>
+<p><code>mm_hsub_epi16</code></p>
+<p>Horizontally subtract adjacent pairs of 16-bit integers in &quot;a&quot; and &quot;b&quot;, and pack the signed 16-bit results in &quot;dst&quot;.</p>
+<p>__m128i _mm_hsub_epi16 (__m128i a, __m128i b)
+PHSUBW xmm, xmm/m128</p>
+<h2 id="mm_hsub_epi32">mm_hsub_epi32</h2>
+<p><code>mm_hsub_epi32</code></p>
+<p>Horizontally subtract adjacent pairs of 32-bit integers in &quot;a&quot; and &quot;b&quot;, and pack the signed 32-bit results in &quot;dst&quot;.</p>
+<p>__m128i _mm_hsub_epi32 (__m128i a, __m128i b)
+PHSUBD xmm, xmm/m128</p>
+<h2 id="mm_hsubs_epi16">mm_hsubs_epi16</h2>
+<p><code>mm_hsubs_epi16</code></p>
+<p>Horizontally subtract adjacent pairs of 16-bit integers in &quot;a&quot; and &quot;b&quot; using saturation, and pack the signed 16-bit results in &quot;dst&quot;.</p>
+<p>__m128i _mm_hsubs_epi16 (__m128i a, __m128i b)
+PHSUBSW xmm, xmm/m128</p>
+<h2 id="mm_maddubs_epi16">mm_maddubs_epi16</h2>
+<p><code>mm_maddubs_epi16</code></p>
+<p>Vertically multiply each unsigned 8-bit integer from &quot;a&quot; with the corresponding signed 8-bit integer from &quot;b&quot;, producing intermediate signed 16-bit integers. Horizontally add adjacent pairs of intermediate signed 16-bit integers, and pack the saturated results in &quot;dst&quot;.</p>
+<p>__m128i _mm_maddubs_epi16 (__m128i a, __m128i b)
+PMADDUBSW xmm, xmm/m128</p>
+<h2 id="mm_mulhrs_epi16">mm_mulhrs_epi16</h2>
+<p><code>mm_mulhrs_epi16</code></p>
+<p>Multiply packed 16-bit integers in &quot;a&quot; and &quot;b&quot;, producing intermediate signed 32-bit integers. Truncate each intermediate integer to the 18 most significant bits, round by adding 1, and store bits [16:1] to &quot;dst&quot;.</p>
+<p>__m128i _mm_mulhrs_epi16 (__m128i a, __m128i b)
+PMULHRSW xmm, xmm/m128</p>
+<h2 id="mm_shuffle_epi8">mm_shuffle_epi8</h2>
+<p><code>mm_shuffle_epi8</code></p>
+<p>Shuffle packed 8-bit integers in &quot;a&quot; according to shuffle control mask in the corresponding 8-bit element of &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128i _mm_shuffle_epi8 (__m128i a, __m128i b)
+PSHUFB xmm, xmm/m128</p>
+<h2 id="mm_sign_epi16">mm_sign_epi16</h2>
+<p><code>mm_sign_epi16</code></p>
+<p>Negate packed 16-bit integers in &quot;a&quot; when the corresponding signed 16-bit integer in &quot;b&quot; is negative, and store the results in &quot;dst&quot;. Element in &quot;dst&quot; are zeroed out when the corresponding element in &quot;b&quot; is zero.</p>
+<p>__m128i _mm_sign_epi16 (__m128i a, __m128i b)
+PSIGNW xmm, xmm/m128</p>
+<h2 id="mm_sign_epi32">mm_sign_epi32</h2>
+<p><code>mm_sign_epi32</code></p>
+<p>Negate packed 32-bit integers in &quot;a&quot; when the corresponding signed 32-bit integer in &quot;b&quot; is negative, and store the results in &quot;dst&quot;. Element in &quot;dst&quot; are zeroed out when the corresponding element in &quot;b&quot; is zero.</p>
+<p>__m128i _mm_sign_epi32 (__m128i a, __m128i b)
+PSIGND xmm, xmm/m128</p>
+<h2 id="mm_sign_epi8">mm_sign_epi8</h2>
+<p><code>mm_sign_epi8</code></p>
+<p>Negate packed 8-bit integers in &quot;a&quot; when the corresponding signed 8-bit integer in &quot;b&quot; is negative, and store the results in &quot;dst&quot;. Element in &quot;dst&quot; are zeroed out when the corresponding element in &quot;b&quot; is zero.</p>
+<p>__m128i _mm_sign_epi8 (__m128i a, __m128i b)
+PSIGNB xmm, xmm/m128</p>
 
       </div>
   </div>

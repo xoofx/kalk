@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    
+    
+    
+    <title>Math Functions - kalk</title>
+    <link rel="stylesheet" href="/css/site.css">
+    <script src="/js/site.js" type="text/javascript" ></script>
+    <script src="/js/site-defer.js" type="text/javascript" defer></script>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@xoofx">
+    <meta name="twitter:title" content="Math Functions - kalk">
+    <meta name="twitter:description" content="kalk - calculator app">
+    <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
+    <meta name="twitter:image:alt" content="Math Functions - kalk">    
+  </head>
+  <body>    
+    <div id="kalk" class="container">
+      <nav class="navbar navbar-expand-md navbar-light sticky-top">
+        <a class="kalk-logo navbar-brand" href="/"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
+<ol id='nav-id-home-0' class='navbar-nav nav-level0  '>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/' class='nav-link  '>Home</a></span>  </li>
+  <li class='nav-item  active'>
+    <span class='nav-item-row'><a href='/doc/' class='nav-link  '>Documentation</a></span>  </li>
+</ol>
+          <!-- d-inline w-100 -->
+          <!-- <ol class="navbar-nav" style="width: 40%;padding-right: 0.5rem;"> -->
+          <ol class="navbar-nav flex-grow-1" style="padding-right: 0.5rem;">
+            <li class="nav-item w-100">
+                <div class="kalk-search">
+                  <label class="search-icon"><i class="fa fa-search"></i></label>
+                  <select id="search-box"></select>
+                </div>
+            </li>
+          </ol>
+<ol id='nav-id-home2-0' class='navbar-nav nav-level0  flex-shrink-0'>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/download/' class='nav-link  btn btn-success'><i class="fa fa-download"></i> Download</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/sponsors/xoofx' class='nav-link  btn btn-outline-secondary'><i class="fa fa-heart-o"></i> Sponsor</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/xoofx/kalk/' class='nav-link  btn btn-info'><i class="fa fa-github"></i> GitHub</a></span>  </li>
+</ol>
+        </div>
+      </nav>
+      <div class="kalk-doc">
+        <section>
+            
+<div class="container">
+  <div class="row">
+      <div class="col-sm-3 align-self-start sticky-top menu-sidebar">
+        <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
+  </ol>
+  </li>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
+    <li class='menu-item  active'>
+      <span class='menu-item-row'><a href='/doc/api/math/' class='menu-link  '>Math Functions</a></span><nav class="js-toc toc"></nav>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/memory/' class='menu-link  '>Memory Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/misc/' class='menu-link  '>Misc Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/vector/' class='menu-link  '>Vector Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/all/' class='menu-link  '>All Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/csv/' class='menu-link  '>Csv Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/currencies/' class='menu-link  '>Currencies Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/files/' class='menu-link  '>Files Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/standardunits/' class='menu-link  '>StandardUnits Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/strings/' class='menu-link  '>Strings Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Functions</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/intel/hardware/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-17' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-17' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-17' class='menu menu-level2 collapse  '>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/aes/' class='menu-link  '>Intel Aes Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/avx/' class='menu-link  '>Intel Avx Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/avx2/' class='menu-link  '>Intel Avx2 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/bmi1/' class='menu-link  '>Intel Bmi1 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/bmi1x64/' class='menu-link  '>Intel Bmi1X64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/bmi2/' class='menu-link  '>Intel Bmi2 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/bmi2x64/' class='menu-link  '>Intel Bmi2X64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse/' class='menu-link  '>Intel Sse Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/ssex64/' class='menu-link  '>Intel SseX64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse2/' class='menu-link  '>Intel Sse2 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse2x64/' class='menu-link  '>Intel Sse2X64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse3/' class='menu-link  '>Intel Sse3 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/ssse3/' class='menu-link  '>Intel Ssse3 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse41/' class='menu-link  '>Intel Sse41 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse41x64/' class='menu-link  '>Intel Sse41X64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse42/' class='menu-link  '>Intel Sse42 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse42x64/' class='menu-link  '>Intel Sse42X64 Intrinsics</a></span>      </li>
+    </ol>
+    </li>
+  </ol>
+  </li>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/advanced/' class='menu-link  '>Advanced Topics</a></span>  </li>
+</ol>
+
+      </div>
+      <div class="col-sm-9 js-toc-content">
+        <ol class='breadcrumb'>
+  <li class='breadcrumb-item '>
+    <a href='/' class='breadcrumb-link  '>Home</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
+  <li class='breadcrumb-item  active'>
+    Math Functions  </li>
+</ol>
+
+        <p id="lunet-results"></p>
+        <h1>Math Functions</h1>
+        <h2 id="abs">abs</h2>
+<p><code>abs(x)</code></p>
+<p>Returns the absolute value of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns">Returns</h3>
+<p>The absolute value of the x parameter.</p>
+<h3 id="example">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; abs(-1)
+# abs(-1)
+out = 1
+&gt;&gt;&gt; abs(float4(-1, 1, -2, -3))
+# abs(float4(-1, 1, -2, -3))
+out = float4(1, 1, 2, 3)
+</code></pre>
+<h2 id="acos">acos</h2>
+<p><code>acos(x)</code></p>
+<p>Returns the arccosine of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value. Each component should be a floating-point value within the range of -1 to 1.</li>
+</ul>
+<h3 id="returns-1">Returns</h3>
+<p>The arccosine of the x parameter.</p>
+<h3 id="example-1">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; acos(-1)
+# acos(-1)
+out = 3.141592653589793
+&gt;&gt;&gt; acos(0)
+# acos(0)
+out = 1.5707963267948966
+&gt;&gt;&gt; acos(1)
+# acos(1)
+out = 0
+&gt;&gt;&gt; acos(float4(-1,0,1,0.5))
+# acos(float4(-1, 0, 1, 0.5))
+out = float4(3.1415927, 1.5707964, 0, 1.0471976)
+</code></pre>
+<h2 id="acosh">acosh</h2>
+<p><code>acosh(x)</code></p>
+<p>Returns the inverse hyperbolic cosine of a number. The number must be greater than or equal to 1.</p>
+<ul>
+<li><code>x</code>: Any real number equal to or greater than 1.</li>
+</ul>
+<h3 id="returns-2">Returns</h3>
+<p>The inverse hyperbolic cosine of the x parameter</p>
+<h3 id="example-2">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; acosh(1)
+# acosh(1)
+out = 0
+&gt;&gt;&gt; acosh(10)
+# acosh(10)
+out = 2.993222846126381
+&gt;&gt;&gt; acosh(float4(1,2,4,10))
+# acosh(float4(1, 2, 4, 10))
+out = float4(0, 1.316958, 2.063437, 2.993223)
+</code></pre>
+<h2 id="all">all</h2>
+<p><code>all(x)</code></p>
+<p>Determines if all components of the specified value are non-zero.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-3">Returns</h3>
+<p>true if all components of the x parameter are non-zero; otherwise, false.</p>
+<h3 id="remarks">Remarks</h3>
+<p>This function is similar to the <code>any</code> function.
+The <code>any</code> function determines if any components of the specified value are non-zero, while the <code>all</code> function determines if all components of the specified value are non-zero.</p>
+<h3 id="example-3">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; all(bool4(true, false, true, false))
+# all(bool4(true, false, true, false))
+out = false
+&gt;&gt;&gt; all(bool4(true, true, true, true))
+# all(bool4(true, true, true, true))
+out = true
+&gt;&gt;&gt; all([0,1,0,2])
+# all([0,1,0,2])
+out = false
+&gt;&gt;&gt; all([1,1,1,1])
+# all([1,1,1,1])
+out = true
+</code></pre>
+<h2 id="any">any</h2>
+<p><code>any(x)</code></p>
+<p>Determines if any components of the specified value are non-zero.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-4">Returns</h3>
+<p>true if any components of the x parameter are non-zero; otherwise, false.</p>
+<h3 id="remarks-1">Remarks</h3>
+<p>This function is similar to the <code>all</code> intrinsic function.
+The <code>any</code> function determines if any components of the specified value are non-zero,
+while the <code>all</code> function determines if all components of the specified value are non-zero.</p>
+<h3 id="example-4">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; any(bool4(true, false, true, false))
+# any(bool4(true, false, true, false))
+out = true
+&gt;&gt;&gt; any(bool4(false, false, false, false))
+# any(bool4(false, false, false, false))
+out = false
+&gt;&gt;&gt; any([0,1,0,2])
+# any([0,1,0,2])
+out = true
+&gt;&gt;&gt; any([0,0,0,0])
+# any([0,0,0,0])
+out = false
+</code></pre>
+<h2 id="asin">asin</h2>
+<p><code>asin(x)</code></p>
+<p>Returns the arcsine of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value. Each component of the x parameter should be within the range of -π/2 to π/2.</li>
+</ul>
+<h3 id="returns-5">Returns</h3>
+<p>The arcsine of the x parameter.</p>
+<h3 id="example-5">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; asin 0.5
+# asin(0.5)
+out = 0.5235987755982989
+&gt;&gt;&gt; asin float4(-1, 0, 1, 0.5)
+# asin(float4(-1, 0, 1, 0.5))
+out = float4(-1.5707964, 0, 1.5707964, 0.5235988)
+</code></pre>
+<h2 id="asinh">asinh</h2>
+<p><code>asinh(x)</code></p>
+<p>Returns the inverse hyperbolic sine of a number.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-6">Returns</h3>
+<p>The inverse hyperbolic sine of the x parameter.</p>
+<h3 id="example-6">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; asinh(-1.1752011936438014)
+# asinh(-1.1752011936438014)
+out = -1
+&gt;&gt;&gt; asinh(0)
+# asinh(0)
+out = 0
+&gt;&gt;&gt; asinh(1.1752011936438014)
+# asinh(1.1752011936438014)
+out = 1
+&gt;&gt;&gt; asinh(float4(-1.1752011936438014, 0, 1.1752011936438014, 2))
+# asinh(float4(-1.1752011936438014, 0, 1.1752011936438014, 2))
+out = float4(-1, 0, 1, 1.4436355)
+</code></pre>
+<h2 id="atan">atan</h2>
+<p><code>atan(x)</code></p>
+<p>Returns the arctangent of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-7">Returns</h3>
+<p>The arctangent of the x parameter. This value is within the range of -π/2 to π/2.</p>
+<h3 id="example-7">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; atan(0.5)
+# atan(0.5)
+out = 0.4636476090008061
+&gt;&gt;&gt; atan(1)
+# atan(1)
+out = 0.7853981633974483
+&gt;&gt;&gt; atan(0)
+# atan(0)
+out = 0
+&gt;&gt;&gt; atan(float4(0,1,2,3))
+# atan(float4(0, 1, 2, 3))
+out = float4(0, 0.7853982, 1.1071488, 1.2490457)
+</code></pre>
+<h2 id="atan2">atan2</h2>
+<p><code>atan2(y,x)</code></p>
+<p>Returns the arctangent of two values (x,y).</p>
+<ul>
+<li><code>y</code>: The y value.</li>
+<li><code>x</code>: The x value.</li>
+</ul>
+<h3 id="returns-8">Returns</h3>
+<p>The arctangent of (y,x).</p>
+<h3 id="remarks-2">Remarks</h3>
+<p>The signs of the x and y parameters are used to determine the quadrant of the return values within the range of -π to π. The <code>atan2</code> function is well-defined for every point other than the origin, even if y equals 0 and x does not equal 0.</p>
+<h3 id="example-8">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; atan2(1,1)
+# atan2(1, 1)
+out = 0.7853981633974483
+&gt;&gt;&gt; atan2(1,0)
+# atan2(1, 0)
+out = 1.5707963267948966
+&gt;&gt;&gt; atan2(0,1)
+# atan2(0, 1)
+out = 0
+&gt;&gt;&gt; atan2(float4(1), float4(0,1,-1,2))
+# atan2(float4(1), float4(0, 1, -1, 2))
+out = float4(1.5707964, 0.7853982, 2.3561945, 0.4636476)
+</code></pre>
+<h2 id="atanh">atanh</h2>
+<p><code>atanh(x)</code></p>
+<p>Returns the inverse hyperbolic tangent of a number.</p>
+<ul>
+<li><code>x</code>: The specified value. Number must be between -1 and 1 (excluding -1 and 1).</li>
+</ul>
+<h3 id="returns-9">Returns</h3>
+<p>The inverse hyperbolic tangent of the x parameter</p>
+<h3 id="example-9">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; atanh(0)
+# atanh(0)
+out = 0
+&gt;&gt;&gt; atanh(0.5)
+# atanh(0.5)
+out = 0.5493061443340549
+&gt;&gt;&gt; atanh(float4(-0.5, 0, 0.5, 0.8))
+# atanh(float4(-0.5, 0, 0.5, 0.8))
+out = float4(-0.54930615, 0, 0.54930615, 1.0986123)
+</code></pre>
+<h2 id="ceil">ceil</h2>
+<p><code>ceil(x)</code></p>
+<p>Returns the smallest integer value that is greater than or equal to the specified value.</p>
+<ul>
+<li><code>x</code>: The specified input.</li>
+</ul>
+<h3 id="returns-10">Returns</h3>
+<p>The smallest integer value (returned as a floating-point type) that is greater than or equal to the x parameter.</p>
+<h3 id="example-10">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; ceil(0.2); ceil(1.5); ceil(10.7)
+# ceil(0.2); ceil(1.5); ceil(10.7)
+out = 1
+out = 2
+out = 11
+&gt;&gt;&gt; ceil(-0.2); ceil(-1.5); ceil(-10.7)
+# ceil(-0.2); ceil(-1.5); ceil(-10.7)
+out = -0
+out = -1
+out = -10
+</code></pre>
+<h2 id="clamp">clamp</h2>
+<p><code>clamp(x,min,max)</code></p>
+<p>Clamps the specified value to the specified minimum and maximum range.</p>
+<ul>
+<li><code>x</code>: A value to clamp.</li>
+<li><code>min</code>: The specified minimum range.</li>
+<li><code>max</code>: The specified maximum range.</li>
+</ul>
+<h3 id="returns-11">Returns</h3>
+<p>The clamped value for the x parameter.</p>
+<h3 id="remarks-3">Remarks</h3>
+<p>For values of -inf or inf, clamp will behave as expected. However for values of <code>nan</code>, the results are undefined.</p>
+<h3 id="example-11">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; clamp(-1, 0, 1)
+# clamp(-1, 0, 1)
+out = 0
+&gt;&gt;&gt; clamp(2, 0, 1)
+# clamp(2, 0, 1)
+out = 1
+&gt;&gt;&gt; clamp(0.5, 0, 1)
+# clamp(0.5, 0, 1)
+out = 0.5
+&gt;&gt;&gt; clamp(float4(0, 1, -2, 3), float4(0, -1, 3, 4), float4(1, 2, 5, 6))
+# clamp(float4(0, 1, -2, 3), float4(0, -1, 3, 4), float4(1, 2, 5, 6))
+out = float4(0, 1, 3, 4)
+</code></pre>
+<h2 id="cos">cos</h2>
+<p><code>cos(x)</code></p>
+<p>Returns the cosine of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value, in radians.</li>
+</ul>
+<h3 id="returns-12">Returns</h3>
+<p>The cosine of the x parameter.</p>
+<h3 id="example-12">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; cos 0.5
+# cos(0.5)
+out = 0.8775825618903728
+&gt;&gt;&gt; cos float4(pi, pi/2, 0, 0.5)
+# cos(float4(pi, pi / 2, 0, 0.5))
+out = float4(-1, -4.371139E-08, 1, 0.87758255)
+</code></pre>
+<h2 id="cosh">cosh</h2>
+<p><code>cosh(x)</code></p>
+<p>Returns the hyperbolic cosine of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value, in radians.</li>
+</ul>
+<h3 id="returns-13">Returns</h3>
+<p>The hyperbolic cosine of the x parameter.</p>
+<h3 id="example-13">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; cosh(-1)
+# cosh(-1)
+out = 1.5430806348152437
+&gt;&gt;&gt; cosh(1)
+# cosh(1)
+out = 1.5430806348152437
+&gt;&gt;&gt; cosh(0)
+# cosh(0)
+out = 1
+&gt;&gt;&gt; cosh(float4(-1, 1, 0, 2))
+# cosh(float4(-1, 1, 0, 2))
+out = float4(1.5430807, 1.5430807, 1, 3.7621956)
+</code></pre>
+<h2 id="degrees">degrees</h2>
+<p><code>degrees</code></p>
+<p>Converts the specified value from radians to degrees.</p>
+<h3 id="returns-14">Returns</h3>
+<p>The x parameter converted from radians to degrees.</p>
+<h3 id="example-14">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; degrees(pi/2)
+# degrees(pi / 2)
+out = 90
+&gt;&gt;&gt; degrees(pi)
+# degrees(pi)
+out = 180
+</code></pre>
+<h2 id="e">e</h2>
+<p><code>e</code></p>
+<p>Defines the natural logarithmic base. e = 2.71828182845905</p>
+<h3 id="example-15">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; e
+# e
+out = 2.718281828459045
+</code></pre>
+<h2 id="exp">exp</h2>
+<p><code>exp(x)</code></p>
+<p>Returns the base-e exponential, or e^x, of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-15">Returns</h3>
+<p>The base-e exponential of the x parameter.</p>
+<h3 id="example-16">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; exp(0)
+# exp(0)
+out = 1
+&gt;&gt;&gt; exp(1)
+# exp(1)
+out = 2.718281828459045
+&gt;&gt;&gt; exp(float4(0,1,2,3))
+# exp(float4(0, 1, 2, 3))
+out = float4(1, 2.7182817, 7.389056, 20.085537)
+</code></pre>
+<h2 id="exp2">exp2</h2>
+<p><code>exp2(x)</code></p>
+<p>Returns the base 2 exponential, or 2^x, of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-16">Returns</h3>
+<p>The base-2 exponential of the x parameter.</p>
+<h3 id="example-17">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; exp2(0)
+# exp2(0)
+out = 1
+&gt;&gt;&gt; exp2(1)
+# exp2(1)
+out = 2
+&gt;&gt;&gt; exp2(4)
+# exp2(4)
+out = 16
+&gt;&gt;&gt; exp2(float4(0,1,2,3))
+# exp2(float4(0, 1, 2, 3))
+out = float4(1, 2, 4, 8)
+</code></pre>
+<h2 id="fib">fib</h2>
+<p><code>fib(x)</code></p>
+<p>Calculates the fibonacci number for the specified input.</p>
+<ul>
+<li><code>x</code>: The input number.</li>
+</ul>
+<h3 id="returns-17">Returns</h3>
+<p>The fibonacci number.</p>
+<h3 id="example-18">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; fib 50
+# fib(50)
+out = 12586269025
+</code></pre>
+<h2 id="floor">floor</h2>
+<p><code>floor(x)</code></p>
+<p>Returns the largest integer that is less than or equal to the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-18">Returns</h3>
+<p>The largest integer value (returned as a floating-point type) that is less than or equal to the x parameter.</p>
+<h3 id="example-19">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; floor(0.2); floor(1.5); floor(10.7)
+# floor(0.2); floor(1.5); floor(10.7)
+out = 0
+out = 1
+out = 10
+&gt;&gt;&gt; floor(-0.2); floor(-1.5); floor(-10.7)
+# floor(-0.2); floor(-1.5); floor(-10.7)
+out = -1
+out = -2
+out = -11
+</code></pre>
+<h2 id="fmod">fmod</h2>
+<p><code>fmod(x,y)</code></p>
+<p>Returns the floating-point remainder of x/y.</p>
+<ul>
+<li><code>x</code>: The floating-point dividend.</li>
+<li><code>y</code>: The floating-point divisor.</li>
+</ul>
+<h3 id="returns-19">Returns</h3>
+<p>The floating-point remainder of the x parameter divided by the y parameter.</p>
+<h3 id="remarks-4">Remarks</h3>
+<p>The floating-point remainder is calculated such that x = i * y + f, where i is an integer, f has the same sign as x, and the absolute value of f is less than the absolute value of y.</p>
+<h3 id="example-20">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; fmod(2.5, 2)
+# fmod(2.5, 2)
+out = 0.5
+&gt;&gt;&gt; fmod(2.5, 3)
+# fmod(2.5, 3)
+out = 2.5
+&gt;&gt;&gt; fmod(-1.5, 1)
+# fmod(-1.5, 1)
+out = -0.5
+&gt;&gt;&gt; fmod(float4(1.5, 1.2, -2.3, -4.6), 0.2)
+# fmod(float4(1.5, 1.2, -2.3, -4.6), 0.2)
+out = float4(0.09999998, 2.9802322E-08, -0.09999992, -0.19999984)
+</code></pre>
+<h2 id="frac">frac</h2>
+<p><code>frac(x)</code></p>
+<p>Returns the fractional (or decimal) part of x; which is greater than or equal to 0 and less than 1.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-20">Returns</h3>
+<p>The fractional part of the x parameter.</p>
+<h3 id="example-21">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; frac(1.25)
+# frac(1.25)
+out = 0.25
+&gt;&gt;&gt; frac(10.5)
+# frac(10.5)
+out = 0.5
+&gt;&gt;&gt; frac(-1.75)
+# frac(-1.75)
+out = 0.25
+&gt;&gt;&gt; frac(-10.25)
+# frac(-10.25)
+out = 0.75
+&gt;&gt;&gt; frac(float4(1.25, 10.5, -1.75, -10.25))
+# frac(float4(1.25, 10.5, -1.75, -10.25))
+out = float4(0.25, 0.5, 0.25, 0.75)
+</code></pre>
+<h2 id="i">i</h2>
+<p><code>i</code></p>
+<p>Defines the imaginary part of a complex number.</p>
+<h3 id="returns-21">Returns</h3>
+<p>A complex number.</p>
+<h3 id="example-22">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; 1 + 2i
+# 1 + 2 * i
+out = 1 + 2i
+</code></pre>
+<h2 id="imag">imag</h2>
+<p><code>imag(x)</code></p>
+<p>Returns the imaginary part of the complex number.</p>
+<ul>
+<li><code>x</code>: A complex number.</li>
+</ul>
+<h3 id="returns-22">Returns</h3>
+<p>The imaginary part of the parameter x complex number.</p>
+<h3 id="example-23">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; imag(1.5 + 2.5i)
+# imag(1.5 + 2.5 * i)
+out = 2.5
+</code></pre>
+<h2 id="inf">inf</h2>
+<p><code>inf</code></p>
+<p>Defines the infinity constant for a double.</p>
+<h3 id="example-24">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; inf
+# inf
+out = inf
+</code></pre>
+<h2 id="isfinite">isfinite</h2>
+<p><code>isfinite(x)</code></p>
+<p>Determines if the specified floating-point value is finite.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-23">Returns</h3>
+<p>Returns a value of the same size as the input, with a value set to <code>true</code> if the x parameter is finite; otherwise <code>false</code>.</p>
+<h3 id="example-25">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; isfinite(1)
+# isfinite(1)
+out = true
+&gt;&gt;&gt; isfinite(nan)
+# isfinite(nan)
+out = false
+&gt;&gt;&gt; isfinite(inf)
+# isfinite(inf)
+out = false
+&gt;&gt;&gt; isfinite(float4(1, -10.5, inf, nan))
+# isfinite(float4(1, -10.5, inf, nan))
+out = bool4(true, true, false, false)
+</code></pre>
+<h2 id="isinf">isinf</h2>
+<p><code>isinf(x)</code></p>
+<p>Determines if the specified value is infinite.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-24">Returns</h3>
+<p>Returns a value of the same size as the input, with a value set to <code>true</code> if the x parameter is +inf or -inf. Otherwise, <code>false</code>.</p>
+<h3 id="example-26">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; isinf(1)
+# isinf(1)
+out = false
+&gt;&gt;&gt; isinf(inf)
+# isinf(inf)
+out = true
+&gt;&gt;&gt; isinf(float4(1, -10.5, inf, nan))
+# isinf(float4(1, -10.5, inf, nan))
+out = bool4(false, false, true, false)
+</code></pre>
+<h2 id="isnan">isnan</h2>
+<p><code>isnan(x)</code></p>
+<p>Determines if the specified value is <code>nan</code>.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-25">Returns</h3>
+<p>Returns a value of the same size as the input, with a value set to <code>true</code> if the x parameter is <code>nan</code>. Otherwise, <code>false</code>.</p>
+<h3 id="example-27">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; isnan(1)
+# isnan(1)
+out = false
+&gt;&gt;&gt; isnan(inf)
+# isnan(inf)
+out = false
+&gt;&gt;&gt; isnan(nan)
+# isnan(nan)
+out = true
+&gt;&gt;&gt; isnan(float4(1, -10.5, inf, nan))
+# isnan(float4(1, -10.5, inf, nan))
+out = bool4(false, false, false, true)
+</code></pre>
+<h2 id="lerp">lerp</h2>
+<p><code>lerp(x,y,s)</code></p>
+<p>Performs a linear interpolation.</p>
+<ul>
+<li><code>x</code>: The first-floating point value.</li>
+<li><code>y</code>: The second-floating point value.</li>
+<li><code>s</code>: A value that linearly interpolates between the x parameter and the y parameter.</li>
+</ul>
+<h3 id="returns-26">Returns</h3>
+<p>The result of the linear interpolation.</p>
+<h3 id="example-28">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; lerp(0, 10, 0.5)
+# lerp(0, 10, 0.5)
+out = 5
+&gt;&gt;&gt; lerp(rgb(&quot;AliceBlue&quot;).xyz, rgb(&quot;Green&quot;).xyz, 0.5)
+# lerp(rgb(&quot;AliceBlue&quot;).xyz, rgb(&quot;Green&quot;).xyz, 0.5)
+out = float3(0.47058824, 0.7372549, 0.5)
+</code></pre>
+<h2 id="log">log</h2>
+<p><code>log(x)</code></p>
+<p>Returns the base-e logarithm of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-27">Returns</h3>
+<p>The base-e logarithm of the x parameter. If the x parameter is negative, this function returns indefinite. If the x parameter is 0, this function returns <code>-inf</code>.</p>
+<h3 id="example-29">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; log 1
+# log(1)
+out = 0
+&gt;&gt;&gt; log 2
+# log(2)
+out = 0.6931471805599453
+&gt;&gt;&gt; log 0
+# log(0)
+out = -inf
+&gt;&gt;&gt; log float4(0,1,2,3)
+# log(float4(0, 1, 2, 3))
+out = float4(-inf, 0, 0.6931472, 1.0986123)
+</code></pre>
+<h2 id="log10">log10</h2>
+<p><code>log10(x)</code></p>
+<p>Returns the base-10 logarithm of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-28">Returns</h3>
+<p>The base-10 logarithm of the x parameter. If the x parameter is negative, this function returns indefinite. If the x is 0, this function returns -inf.</p>
+<h3 id="example-30">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; log10 0
+# log10(0)
+out = -inf
+&gt;&gt;&gt; log10 10
+# log10(10)
+out = 1
+&gt;&gt;&gt; log10 100
+# log10(100)
+out = 2
+&gt;&gt;&gt; log10 1001
+# log10(1001)
+out = 3.000434077479319
+&gt;&gt;&gt; log10(float4(0,10,100,1001))
+# log10(float4(0, 10, 100, 1001))
+out = float4(-inf, 1, 2, 3.0004342)
+</code></pre>
+<h2 id="log2">log2</h2>
+<p><code>log2(x)</code></p>
+<p>Returns the base-2 logarithm of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-29">Returns</h3>
+<p>The base-2 logarithm of the x parameter. If the x parameter is negative, this function returns indefinite. If the x parameter is 0, this function returns -inf.</p>
+<h3 id="example-31">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; log2 0
+# log2(0)
+out = -inf
+&gt;&gt;&gt; log2 8
+# log2(8)
+out = 3
+&gt;&gt;&gt; log2 129
+# log2(129)
+out = 7.011227255423254
+&gt;&gt;&gt; log2 float4(0, 2, 16, 257)
+# log2(float4(0, 2, 16, 257))
+out = float4(-inf, 1, 4, 8.005625)
+</code></pre>
+<h2 id="max">max</h2>
+<p><code>max(x,y)</code></p>
+<p>Selects the greater of x and y.</p>
+<ul>
+<li><code>x</code>: The x input value.</li>
+<li><code>y</code>: The y input value.</li>
+</ul>
+<h3 id="returns-30">Returns</h3>
+<p>The x or y parameter, whichever is the largest value.</p>
+<h3 id="example-32">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; max(-5, 6)
+# max(-5, 6)
+out = 6
+&gt;&gt;&gt; max(1, 0)
+# max(1, 0)
+out = 1
+&gt;&gt;&gt; max(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+# max(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+out = float4(1, 1, 3, 3)
+</code></pre>
+<h2 id="min">min</h2>
+<p><code>min(x,y)</code></p>
+<p>Selects the lesser of x and y.</p>
+<ul>
+<li><code>x</code>: The x input value.</li>
+<li><code>y</code>: The y input value.</li>
+</ul>
+<h3 id="returns-31">Returns</h3>
+<p>The x or y parameter, whichever is the smallest value.</p>
+<h3 id="example-33">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; min(-5, 6)
+# min(-5, 6)
+out = -5
+&gt;&gt;&gt; min(1, 0)
+# min(1, 0)
+out = 0
+&gt;&gt;&gt; min(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+# min(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+out = float4(0, 0, 2, 2)
+</code></pre>
+<h2 id="modf">modf</h2>
+<p><code>modf(x)</code></p>
+<p>Splits the value x into fractional and integer parts, each of which has the same sign as x.</p>
+<ul>
+<li><code>x</code>: The input value.</li>
+</ul>
+<h3 id="returns-32">Returns</h3>
+<p>The signed-fractional portion of x.</p>
+<h3 id="example-34">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; modf(1.5)
+# modf(1.5)
+out = [1, 0.5]
+&gt;&gt;&gt; modf(float2(-1.2, 3.4))
+# modf(float2(-1.2, 3.4))
+out = [float2(-1, 3), float2(-0.20000005, 0.4000001)]
+</code></pre>
+<h2 id="nan">nan</h2>
+<p><code>nan</code></p>
+<p>Defines the &quot;Not a Number&quot; constant for a double.</p>
+<h3 id="example-35">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; nan
+# nan
+out = nan
+</code></pre>
+<h2 id="phase">phase</h2>
+<p><code>phase(x)</code></p>
+<p>Returns the phase of the complex number.</p>
+<ul>
+<li><code>x</code>: A complex number.</li>
+</ul>
+<h3 id="returns-33">Returns</h3>
+<p>The phase of the parameter x complex number.</p>
+<h3 id="example-36">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; phase(1.5 + 2.5i)
+# phase(1.5 + 2.5 * i)
+out = 1.0303768265243125
+</code></pre>
+<h2 id="pi">pi</h2>
+<p><code>pi</code></p>
+<p>Defines the PI constant. pi = 3.14159265358979</p>
+<h3 id="example-37">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; pi
+# pi
+out = 3.141592653589793
+</code></pre>
+<h2 id="pow">pow</h2>
+<p><code>pow(x,y)</code></p>
+<p>Returns the specified value raised to the specified power.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+<li><code>y</code>: The specified power.</li>
+</ul>
+<h3 id="returns-34">Returns</h3>
+<p>The x parameter raised to the power of the y parameter.</p>
+<h3 id="example-38">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; pow(1.5, 3.5)
+# pow(1.5, 3.5)
+out = 4.133513940946613
+&gt;&gt;&gt; pow(2, 4)
+# pow(2, 4)
+out = 16
+&gt;&gt;&gt; pow(float4(1,2,3,4), 4)
+# pow(float4(1, 2, 3, 4), 4)
+out = float4(1, 16, 81, 256)
+&gt;&gt;&gt; pow(float4(1..4), float4(5..8))
+# pow(float4(1..4), float4(5..8))
+out = float4(1, 64, 2187, 65536)
+</code></pre>
+<h2 id="radians">radians</h2>
+<p><code>radians(x)</code></p>
+<p>Converts the specified value from degrees to radians.</p>
+<ul>
+<li><code>x</code>: The specified value in degrees.</li>
+</ul>
+<h3 id="returns-35">Returns</h3>
+<p>The x parameter converted from degrees to radians.</p>
+<h3 id="example-39">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; radians(90)
+# radians(90)
+out = 1.5707963267948966
+&gt;&gt;&gt; radians(180)
+# radians(180)
+out = 3.141592653589793
+</code></pre>
+<h2 id="real">real</h2>
+<p><code>real(x)</code></p>
+<p>Returns the real part of the complex number.</p>
+<ul>
+<li><code>x</code>: A complex number.</li>
+</ul>
+<h3 id="returns-36">Returns</h3>
+<p>The real part of the parameter x complex number.</p>
+<h3 id="example-40">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; real(1.5 + 2.5i)
+# real(1.5 + 2.5 * i)
+out = 1.5
+</code></pre>
+<h2 id="rnd">rnd</h2>
+<p><code>rnd(x?)</code></p>
+<p>Returns a random value.</p>
+<ul>
+<li><code>x</code>: A value to create random values for.</li>
+</ul>
+<h3 id="returns-37">Returns</h3>
+<p>A random value or a random value of the x parameter.</p>
+<h3 id="example-41">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; seed(0); rnd
+# seed(0); rnd
+out = 0.7262432699679598
+&gt;&gt;&gt; rnd
+# rnd
+out = 0.8173253595909687
+&gt;&gt;&gt; rnd(float4)
+# rnd(float4)
+out = float4(0.7680227, 0.5581612, 0.20603316, 0.5588848)
+</code></pre>
+<h2 id="round">round</h2>
+<p><code>round(x)</code></p>
+<p>Rounds the specified value to the nearest integer.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-38">Returns</h3>
+<p>The x parameter, rounded to the nearest integer within a floating-point type.</p>
+<h3 id="example-42">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; round(0.2); round(1.5); round(10.7)
+# round(0.2); round(1.5); round(10.7)
+out = 0
+out = 2
+out = 11
+&gt;&gt;&gt; round(-0.2); round(-1.5); round(-10.7)
+# round(-0.2); round(-1.5); round(-10.7)
+out = -0
+out = -2
+out = -11
+</code></pre>
+<h2 id="rsqrt">rsqrt</h2>
+<p><code>rsqrt(x)</code></p>
+<p>Returns the reciprocal of the square root of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-39">Returns</h3>
+<p>The reciprocal of the square root of the x parameter.</p>
+<h3 id="remarks-5">Remarks</h3>
+<p>This function uses the following formula: 1 / sqrt(x).</p>
+<h3 id="example-43">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; rsqrt(1)
+# rsqrt(1)
+out = 1
+&gt;&gt;&gt; rsqrt(2)
+# rsqrt(2)
+out = 0.7071067811865475
+&gt;&gt;&gt; rsqrt(float4(1,2,3,4))
+# rsqrt(float4(1, 2, 3, 4))
+out = float4(1, 0.70710677, 0.57735026, 0.5)
+</code></pre>
+<h2 id="saturate">saturate</h2>
+<p><code>saturate(x)</code></p>
+<p>Clamps the specified value within the range of 0 to 1.</p>
+<ul>
+<li><code>x</code>: The specified value.</li>
+</ul>
+<h3 id="returns-40">Returns</h3>
+<p>The x parameter, clamped within the range of 0 to 1.</p>
+<h3 id="example-44">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; saturate(10)
+# saturate(10)
+out = 1
+&gt;&gt;&gt; saturate(-10)
+# saturate(-10)
+out = 0
+&gt;&gt;&gt; saturate(float4(-1, 0.5, 1, 2))
+# saturate(float4(-1, 0.5, 1, 2))
+out = float4(0, 0.5, 1, 1)
+</code></pre>
+<h2 id="seed">seed</h2>
+<p><code>seed(x?)</code></p>
+<p>Setup the seed function for rnd. The default seed is random.</p>
+<ul>
+<li><code>x</code>: An original seed value for the <code>rnd</code> function.</li>
+</ul>
+<h3 id="remarks-6">Remarks</h3>
+<p>The x is not specified, it will generate a random seed automatically.</p>
+<h3 id="example-45">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; seed(0); rnd
+# seed(0); rnd
+out = 0.7262432699679598
+&gt;&gt;&gt; seed(1); rnd
+# seed(1); rnd
+out = 0.24866858415709278
+</code></pre>
+<h2 id="sign">sign</h2>
+<p><code>sign(x)</code></p>
+<p>Returns an integer that indicates the sign of a number.</p>
+<ul>
+<li><code>x</code>: A signed number.</li>
+</ul>
+<h3 id="returns-41">Returns</h3>
+<p>A number that indicates the sign of x:</p>
+<ul>
+<li>-1 if x is less than zero</li>
+<li>0 if x is equal to zero</li>
+<li>1 if x is greater than zero.</li>
+</ul>
+<h3 id="example-46">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; sign(-5); sign(0); sign(2.3)
+# sign(-5); sign(0); sign(2.3)
+out = -1
+out = 0
+out = 1
+&gt;&gt;&gt; sign float4(-1, 2, 0, 1.5)
+# sign(float4(-1, 2, 0, 1.5))
+out = float4(-1, 1, 0, 1)
+</code></pre>
+<h2 id="sin">sin</h2>
+<p><code>sin(x)</code></p>
+<p>Returns the sine of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value, in radians.</li>
+</ul>
+<h3 id="returns-42">Returns</h3>
+<p>The sine of the x parameter.</p>
+<h3 id="example-47">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; sin 0.5
+# sin(0.5)
+out = 0.479425538604203
+&gt;&gt;&gt; sin float4(pi, pi/2, 0, 0.5)
+# sin(float4(pi, pi / 2, 0, 0.5))
+out = float4(-8.742278E-08, 1, 0, 0.47942555)
+</code></pre>
+<h2 id="sinh">sinh</h2>
+<p><code>sinh(x)</code></p>
+<p>Returns the hyperbolic sine of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value, in radians.</li>
+</ul>
+<h3 id="returns-43">Returns</h3>
+<p>The hyperbolic sine of the x parameter.</p>
+<h3 id="example-48">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; sinh(-1)
+# sinh(-1)
+out = -1.1752011936438014
+&gt;&gt;&gt; sinh(0)
+# sinh(0)
+out = 0
+&gt;&gt;&gt; sinh(1)
+# sinh(1)
+out = 1.1752011936438014
+&gt;&gt;&gt; sinh(float4(-1, 1, 0, 2))
+# sinh(float4(-1, 1, 0, 2))
+out = float4(-1.1752012, 1.1752012, 0, 3.6268604)
+</code></pre>
+<h2 id="smoothstep">smoothstep</h2>
+<p><code>smoothstep(min,max,x)</code></p>
+<p>Returns a smooth Hermite interpolation between 0 and 1, if x is in the range [min, max].</p>
+<ul>
+<li><code>min</code>: The minimum range of the x parameter.</li>
+<li><code>max</code>: The maximum range of the x parameter.</li>
+<li><code>x</code>: The specified value to be interpolated.</li>
+</ul>
+<h3 id="returns-44">Returns</h3>
+<p>Returns 0 if x is less than min; 1 if x is greater than max; otherwise, a value between 0 and 1 if x is in the range [min, max].</p>
+<h3 id="remarks-7">Remarks</h3>
+<p>Use the smoothstep function to create a smooth transition between two values. For example, you can use this function to blend two colors smoothly.</p>
+<h3 id="example-49">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; smoothstep(float4(0), float4(1), float4(-0.5))
+# smoothstep(float4(0), float4(1), float4(-0.5))
+out = float4(0, 0, 0, 0)
+&gt;&gt;&gt; smoothstep(float4(0), float4(1), float4(1.5))
+# smoothstep(float4(0), float4(1), float4(1.5))
+out = float4(1, 1, 1, 1)
+&gt;&gt;&gt; smoothstep(float4(0), float4(1), float4(0.5))
+# smoothstep(float4(0), float4(1), float4(0.5))
+out = float4(0.5, 0.5, 0.5, 0.5)
+&gt;&gt;&gt; smoothstep(float4(0), float4(1), float4(0.9))
+# smoothstep(float4(0), float4(1), float4(0.9))
+out = float4(0.972, 0.972, 0.972, 0.972)
+</code></pre>
+<h2 id="sqrt">sqrt</h2>
+<p><code>sqrt(x)</code></p>
+<p>Returns the square root of the specified floating-point value, per component.</p>
+<ul>
+<li><code>x</code>: The specified floating-point value.</li>
+</ul>
+<h3 id="returns-45">Returns</h3>
+<p>The square root of the x parameter, per component.</p>
+<h3 id="example-50">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; sqrt(1)
+# sqrt(1)
+out = 1
+&gt;&gt;&gt; sqrt(2)
+# sqrt(2)
+out = 1.4142135623730951
+&gt;&gt;&gt; sqrt(float4(1,2,3,4))
+# sqrt(float4(1, 2, 3, 4))
+out = float4(1, 1.4142135, 1.7320508, 2)
+</code></pre>
+<h2 id="step">step</h2>
+<p><code>step(y,x)</code></p>
+<p>Compares two values, returning 0 or 1 based on which value is greater.</p>
+<ul>
+<li><code>y</code>: The first floating-point value to compare.</li>
+<li><code>x</code>: The second floating-point value to compare.</li>
+</ul>
+<h3 id="returns-46">Returns</h3>
+<p>1 if the x parameter is greater than or equal to the y parameter; otherwise, 0.</p>
+<h3 id="remarks-8">Remarks</h3>
+<p>This function uses the following formula: (x &gt;= y) ? 1 : 0. The function returns either 0 or 1 depending on whether the x parameter is greater than the y parameter. To compute a smooth interpolation between 0 and 1, use the <code>smoothstep</code> function.</p>
+<h3 id="example-51">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; step(1, 5)
+# step(1, 5)
+out = 1
+&gt;&gt;&gt; step(5, 1)
+# step(5, 1)
+out = 0
+&gt;&gt;&gt; step(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+# step(float4(0, 1, 2, 3), float4(1, 0, 3, 2))
+out = float4(1, 0, 1, 0)
+&gt;&gt;&gt; step(-10, 5)
+# step(-10, 5)
+out = 1
+&gt;&gt;&gt; step(5.5, -10.5)
+# step(5.5, -10.5)
+out = 0
+</code></pre>
+<h2 id="sum">sum</h2>
+<p><code>sum(value,values)</code></p>
+<p>Performs the summation of the specified value.</p>
+<ul>
+<li><code>value</code>: The specified value.</li>
+<li><code>values</code>: Additional values.</li>
+</ul>
+<h3 id="returns-47">Returns</h3>
+<p>The summation of the values.</p>
+<h3 id="example-52">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; sum(1,2,3,4)
+# sum(1, 2, 3, 4)
+out = 10
+&gt;&gt;&gt; sum(float4(1..4))
+# sum(float4(1..4))
+out = 10
+&gt;&gt;&gt; sum(float4(1..4), float4(5..8))
+# sum(float4(1..4), float4(5..8))
+out = float4(15, 16, 17, 18)
+&gt;&gt;&gt; sum(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)
+# sum(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)
+out = &quot;abc&quot;
+&gt;&gt;&gt; sum([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;])
+# sum([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;])
+out = &quot;abc&quot;
+</code></pre>
+<h2 id="tan">tan</h2>
+<p><code>tan(x)</code></p>
+<p>Returns the tangent of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value, in radians.</li>
+</ul>
+<h3 id="returns-48">Returns</h3>
+<p>The tangent of the x parameter.</p>
+<h3 id="example-53">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; tan(0.5)
+# tan(0.5)
+out = 0.5463024898437905
+&gt;&gt;&gt; tan(1)
+# tan(1)
+out = 1.5574077246549023
+&gt;&gt;&gt; tan float4(1, 2, 3, 4)
+# tan(float4(1, 2, 3, 4))
+out = float4(1.5574077, -2.1850398, -0.14254655, 1.1578213)
+</code></pre>
+<h2 id="tanh">tanh</h2>
+<p><code>tanh(x)</code></p>
+<p>Returns the hyperbolic tangent of the specified value.</p>
+<ul>
+<li><code>x</code>: The specified value, in radians.</li>
+</ul>
+<h3 id="returns-49">Returns</h3>
+<p>The hyperbolic tangent of the x parameter.</p>
+<h3 id="example-54">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; tanh(0)
+# tanh(0)
+out = 0
+&gt;&gt;&gt; tanh(1)
+# tanh(1)
+out = 0.7615941559557649
+&gt;&gt;&gt; tanh(2)
+# tanh(2)
+out = 0.9640275800758169
+&gt;&gt;&gt; tanh(float4(0, 1, 2, 3))
+# tanh(float4(0, 1, 2, 3))
+out = float4(0, 0.7615942, 0.9640276, 0.9950548)
+</code></pre>
+<h2 id="trunc">trunc</h2>
+<p><code>trunc(x)</code></p>
+<p>Truncates a floating-point value to the integer component.</p>
+<ul>
+<li><code>x</code>: The specified input.</li>
+</ul>
+<h3 id="returns-50">Returns</h3>
+<p>The input value truncated to an integer component.</p>
+<h3 id="remarks-9">Remarks</h3>
+<p>This function truncates a floating-point value to the integer component. Given a floating-point value of 1.6, the trunc function would return 1.0, where as the round function would return 2.0.</p>
+<h3 id="example-55">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; trunc(0.2); trunc(1.5); trunc(10.7)
+# trunc(0.2); trunc(1.5); trunc(10.7)
+out = 0
+out = 1
+out = 10
+&gt;&gt;&gt; trunc(-0.2); trunc(-1.5); trunc(-10.7)
+# trunc(-0.2); trunc(-1.5); trunc(-10.7)
+out = -0
+out = -1
+out = -10
+</code></pre>
+
+      </div>
+  </div>
+</div>
+        </section>
+        <footer>
+          <hr>
+          <p>Copyright &copy; 2020, Alexandre Mutel aka <a href="https://xoofx.com">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site generated by <a href="https://github.com/lunet-io/lunet">lunet</a> hosted on <a href="https://pages.github.com/">GitHub Pages</a></p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
+

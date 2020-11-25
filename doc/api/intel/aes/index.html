@@ -5,16 +5,16 @@
     
     
     
-    <title>User Guide - kalk</title>
+    <title>Intel Aes Intrinsics - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" type="text/javascript" ></script>
     <script src="/js/site-defer.js" type="text/javascript" defer></script>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
-    <meta name="twitter:title" content="User Guide - kalk">
+    <meta name="twitter:title" content="Intel Aes Intrinsics - kalk">
     <meta name="twitter:description" content="kalk - calculator app">
     <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
-    <meta name="twitter:image:alt" content="User Guide - kalk">    
+    <meta name="twitter:image:alt" content="Intel Aes Intrinsics - kalk">    
   </head>
   <body>    
     <div id="kalk" class="container">
@@ -59,14 +59,14 @@
         <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
   <li class='menu-item '>
     <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
-  <li class='menu-item  active'>
-    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-2' class='menu-link-show'></a></span><nav class="js-toc toc"></nav>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  show '>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
   </ol>
   </li>
   <li class='menu-item '>
-    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-4' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  '>
+    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
     <li class='menu-item '>
@@ -92,9 +92,9 @@
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Functions</a></span>    </li>
     <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/intel/hardware/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-17' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-17' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-17' class='menu menu-level2 collapse  '>
-      <li class='menu-item '>
-        <span class='menu-item-row'><a href='/doc/api/intel/aes/' class='menu-link  '>Intel Aes Intrinsics</a></span>      </li>
+      <span class='menu-item-row'><a href='/doc/api/intel/hardware/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-17' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-17' class='menu-link-show'></a></span>    <ol id='menu-id-doc-17' class='menu menu-level2 collapse  show '>
+      <li class='menu-item  active'>
+        <span class='menu-item-row'><a href='/doc/api/intel/aes/' class='menu-link  '>Intel Aes Intrinsics</a></span><nav class="js-toc toc"></nav>      </li>
       <li class='menu-item '>
         <span class='menu-item-row'><a href='/doc/api/intel/avx/' class='menu-link  '>Intel Avx Intrinsics</a></span>      </li>
       <li class='menu-item '>
@@ -142,13 +142,40 @@
     <a href='/' class='breadcrumb-link  '>Home</a>  </li>
   <li class='breadcrumb-item '>
     <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/intel/hardware/' class='breadcrumb-link  '>Intel Hardware Intrinsics</a>  </li>
   <li class='breadcrumb-item  active'>
-    User Guide  </li>
+    Intel Aes Intrinsics  </li>
 </ol>
 
         <p id="lunet-results"></p>
-        <h1>User Guide</h1>
-        <p>This is a user documentation</p>
+        <h1>Intel Aes Intrinsics</h1>
+        <h2 id="mm_aesdec_si128">mm_aesdec_si128</h2>
+<p><code>mm_aesdec_si128</code></p>
+<p>__m128i _mm_aesdec_si128 (__m128i a, __m128i RoundKey)
+AESDEC xmm, xmm/m128</p>
+<h2 id="mm_aesdeclast_si128">mm_aesdeclast_si128</h2>
+<p><code>mm_aesdeclast_si128</code></p>
+<p>__m128i _mm_aesdeclast_si128 (__m128i a, __m128i RoundKey)
+AESDECLAST xmm, xmm/m128</p>
+<h2 id="mm_aesenc_si128">mm_aesenc_si128</h2>
+<p><code>mm_aesenc_si128</code></p>
+<p>__m128i _mm_aesenc_si128 (__m128i a, __m128i RoundKey)
+AESENC xmm, xmm/m128</p>
+<h2 id="mm_aesenclast_si128">mm_aesenclast_si128</h2>
+<p><code>mm_aesenclast_si128</code></p>
+<p>__m128i _mm_aesenclast_si128 (__m128i a, __m128i RoundKey)
+AESENCLAST xmm, xmm/m128</p>
+<h2 id="mm_aesimc_si128">mm_aesimc_si128</h2>
+<p><code>mm_aesimc_si128</code></p>
+<p>__m128i _mm_aesimc_si128 (__m128i a)
+AESIMC xmm, xmm/m128</p>
+<h2 id="mm_aeskeygenassist_si128">mm_aeskeygenassist_si128</h2>
+<p><code>mm_aeskeygenassist_si128</code></p>
+<p>__m128i _mm_aeskeygenassist_si128 (__m128i a, const int imm8)
+AESKEYGENASSIST xmm, xmm/m128, imm8</p>
 
       </div>
   </div>

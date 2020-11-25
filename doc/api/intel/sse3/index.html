@@ -5,16 +5,16 @@
     
     
     
-    <title>User Guide - kalk</title>
+    <title>Intel Sse3 Intrinsics - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" type="text/javascript" ></script>
     <script src="/js/site-defer.js" type="text/javascript" defer></script>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
-    <meta name="twitter:title" content="User Guide - kalk">
+    <meta name="twitter:title" content="Intel Sse3 Intrinsics - kalk">
     <meta name="twitter:description" content="kalk - calculator app">
     <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
-    <meta name="twitter:image:alt" content="User Guide - kalk">    
+    <meta name="twitter:image:alt" content="Intel Sse3 Intrinsics - kalk">    
   </head>
   <body>    
     <div id="kalk" class="container">
@@ -59,14 +59,14 @@
         <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
   <li class='menu-item '>
     <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
-  <li class='menu-item  active'>
-    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-2' class='menu-link-show'></a></span><nav class="js-toc toc"></nav>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  show '>
+  <li class='menu-item '>
+    <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
   </ol>
   </li>
   <li class='menu-item '>
-    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-4' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  '>
+    <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
     <li class='menu-item '>
@@ -92,7 +92,7 @@
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Functions</a></span>    </li>
     <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/intel/hardware/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-17' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-17' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-17' class='menu menu-level2 collapse  '>
+      <span class='menu-item-row'><a href='/doc/api/intel/hardware/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-17' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-17' class='menu-link-show'></a></span>    <ol id='menu-id-doc-17' class='menu menu-level2 collapse  show '>
       <li class='menu-item '>
         <span class='menu-item-row'><a href='/doc/api/intel/aes/' class='menu-link  '>Intel Aes Intrinsics</a></span>      </li>
       <li class='menu-item '>
@@ -115,8 +115,8 @@
         <span class='menu-item-row'><a href='/doc/api/intel/sse2/' class='menu-link  '>Intel Sse2 Intrinsics</a></span>      </li>
       <li class='menu-item '>
         <span class='menu-item-row'><a href='/doc/api/intel/sse2x64/' class='menu-link  '>Intel Sse2X64 Intrinsics</a></span>      </li>
-      <li class='menu-item '>
-        <span class='menu-item-row'><a href='/doc/api/intel/sse3/' class='menu-link  '>Intel Sse3 Intrinsics</a></span>      </li>
+      <li class='menu-item  active'>
+        <span class='menu-item-row'><a href='/doc/api/intel/sse3/' class='menu-link  '>Intel Sse3 Intrinsics</a></span><nav class="js-toc toc"></nav>      </li>
       <li class='menu-item '>
         <span class='menu-item-row'><a href='/doc/api/intel/ssse3/' class='menu-link  '>Intel Ssse3 Intrinsics</a></span>      </li>
       <li class='menu-item '>
@@ -142,13 +142,71 @@
     <a href='/' class='breadcrumb-link  '>Home</a>  </li>
   <li class='breadcrumb-item '>
     <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
+  <li class='breadcrumb-item '>
+    <a href='/doc/api/intel/hardware/' class='breadcrumb-link  '>Intel Hardware Intrinsics</a>  </li>
   <li class='breadcrumb-item  active'>
-    User Guide  </li>
+    Intel Sse3 Intrinsics  </li>
 </ol>
 
         <p id="lunet-results"></p>
-        <h1>User Guide</h1>
-        <p>This is a user documentation</p>
+        <h1>Intel Sse3 Intrinsics</h1>
+        <h2 id="mm_addsub_pd">mm_addsub_pd</h2>
+<p><code>mm_addsub_pd</code></p>
+<p>Alternatively add and subtract packed double-precision (64-bit) floating-point elements in &quot;a&quot; to/from packed elements in &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128d _mm_addsub_pd (__m128d a, __m128d b)
+ADDSUBPD xmm, xmm/m128</p>
+<h2 id="mm_addsub_ps">mm_addsub_ps</h2>
+<p><code>mm_addsub_ps</code></p>
+<p>Alternatively add and subtract packed single-precision (32-bit) floating-point elements in &quot;a&quot; to/from packed elements in &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_addsub_ps (__m128 a, __m128 b)
+ADDSUBPS xmm, xmm/m128</p>
+<h2 id="mm_hadd_pd">mm_hadd_pd</h2>
+<p><code>mm_hadd_pd</code></p>
+<p>Horizontally add adjacent pairs of double-precision (64-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, and pack the results in &quot;dst&quot;.</p>
+<p>__m128d _mm_hadd_pd (__m128d a, __m128d b)
+HADDPD xmm, xmm/m128</p>
+<h2 id="mm_hadd_ps">mm_hadd_ps</h2>
+<p><code>mm_hadd_ps</code></p>
+<p>Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, and pack the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_hadd_ps (__m128 a, __m128 b)
+HADDPS xmm, xmm/m128</p>
+<h2 id="mm_hsub_pd">mm_hsub_pd</h2>
+<p><code>mm_hsub_pd</code></p>
+<p>Horizontally subtract adjacent pairs of double-precision (64-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, and pack the results in &quot;dst&quot;.</p>
+<p>__m128d _mm_hsub_pd (__m128d a, __m128d b)
+HSUBPD xmm, xmm/m128</p>
+<h2 id="mm_hsub_ps">mm_hsub_ps</h2>
+<p><code>mm_hsub_ps</code></p>
+<p>Horizontally add adjacent pairs of single-precision (32-bit) floating-point elements in &quot;a&quot; and &quot;b&quot;, and pack the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_hsub_ps (__m128 a, __m128 b)
+HSUBPS xmm, xmm/m128</p>
+<h2 id="mm_lddqu_si128">mm_lddqu_si128</h2>
+<p><code>mm_lddqu_si128</code></p>
+<p>Load 128-bits of integer data from unaligned memory into &quot;dst&quot;. This intrinsic may perform better than &quot;_mm_loadu_si128&quot; when the data crosses a cache line boundary.</p>
+<p>__m128i _mm_lddqu_si128 (__m128i const* mem_addr)
+LDDQU xmm, m128</p>
+<h2 id="mm_loaddup_pd">mm_loaddup_pd</h2>
+<p><code>mm_loaddup_pd</code></p>
+<p>Load a double-precision (64-bit) floating-point element from memory into both elements of &quot;dst&quot;.</p>
+<p>__m128d _mm_loaddup_pd (double const* mem_addr)
+MOVDDUP xmm, m64</p>
+<h2 id="mm_movedup_pd">mm_movedup_pd</h2>
+<p><code>mm_movedup_pd</code></p>
+<p>Duplicate the low double-precision (64-bit) floating-point element from &quot;a&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128d _mm_movedup_pd (__m128d a)
+MOVDDUP xmm, xmm/m64</p>
+<h2 id="mm_movehdup_ps">mm_movehdup_ps</h2>
+<p><code>mm_movehdup_ps</code></p>
+<p>Duplicate odd-indexed single-precision (32-bit) floating-point elements from &quot;a&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_movehdup_ps (__m128 a)
+MOVSHDUP xmm, xmm/m128</p>
+<h2 id="mm_moveldup_ps">mm_moveldup_ps</h2>
+<p><code>mm_moveldup_ps</code></p>
+<p>Duplicate even-indexed single-precision (32-bit) floating-point elements from &quot;a&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128 _mm_moveldup_ps (__m128 a)
+MOVSLDUP xmm, xmm/m128</p>
 
       </div>
   </div>
