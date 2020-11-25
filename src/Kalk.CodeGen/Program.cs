@@ -303,6 +303,8 @@ namespace Kalk.Tests
             allFunctionNames.AddRange(new []{"null", "true", "false"});
             // modules
             allFunctionNames.AddRange(new[] {"All", "Csv", "Currencies", "Files", "HardwareIntrinsics", "StandardUnits", "Strings", "Web"});
+
+            allFunctionNames = allFunctionNames.OrderByDescending(x => x.Length).ThenBy(x => x).ToList();
             result = prismTemplate.Render(new { functions = allFunctionNames });
             File.WriteAllText(Path.Combine(siteFolder, ".lunet", "js", "prism-kalk.generated.js"), result);
 
