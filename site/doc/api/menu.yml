@@ -1,2 +1,13 @@
-- {path: general/readme.md, folder: true}
-- types.md
+- general.generated.md
+- math.generated.md
+- memory.generated.md
+- misc.generated.md
+- vector.generated.md
+- all.generated.md
+- csv.generated.md
+- currencies.generated.md
+- files.generated.md
+- standardunits.generated.md
+- strings.generated.md
+- web.generated.md
+- {path: intel/readme.md, folder: true}

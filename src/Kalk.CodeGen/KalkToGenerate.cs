@@ -12,6 +12,8 @@ namespace Kalk.CodeGen
 
         public bool IsModule { get; set; }
 
+        public bool IsBuiltin { get; set; }
+
         public List<(string, string)> Tests { get; }
     }
 
@@ -25,6 +27,10 @@ namespace Kalk.CodeGen
         }
 
         public string Name { get; set; }
+
+        public string Title { get; set; }
+
+        public string Url { get; set; }
 
         public string Namespace { get; set; }
 
@@ -52,5 +58,7 @@ namespace Kalk.CodeGen
         public bool IsConst { get; set; }
 
         public string Cast { get; set; }
+
+        public KalkModuleToGenerate Module { get; set; }
     }
 }

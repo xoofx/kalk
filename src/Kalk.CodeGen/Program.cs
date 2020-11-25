@@ -76,6 +76,11 @@ namespace Kalk.CodeGen
                         moduleToGenerate.Names.Add(moduleToGenerate.Name);
                         moduleToGenerate.Category = "Modules (e.g `import Files`)";
                     }
+                    else
+                    {
+                        moduleToGenerate.Name = className.Replace("Module", "");
+                        moduleToGenerate.IsBuiltin = true;
+                    }
 
                     ExtractDocumentation(typeSymbol, moduleToGenerate);
                 }
@@ -116,7 +121,8 @@ namespace Kalk.CodeGen
                         Name = name,
                         XmlId = member.GetDocumentationCommentId(),
                         Category = category,
-                        IsCommand = method != null && method.ReturnsVoid
+                        IsCommand = method != null && method.ReturnsVoid,
+                        Module = moduleToGenerate,
                     };
                     desc.Names.Add(name);
                     
@@ -229,7 +235,7 @@ namespace {{ module.Namespace }}
         private void RegisterDocumentationAuto()
         {
             {{~ 
-            if module.Name 
+            if !module.IsBuiltin 
                 GenerateDocDescriptor module
             end
             for item in module.Members
@@ -276,10 +282,10 @@ namespace Kalk.Tests
         /// </summary>
         [TestCase(@""{{ test.Item1 | string.replace '""' '""""' }}"", @""{{ test.Item2 | string.replace '""' '""""' }}"", Category = ""{{ member.Category }}"")]
                 {{~ end ~}}
-        {{~ if module.Name ~}}
-        public static void Test_{{ member.Name }}(string input, string output) => AssertScript(input, output, ""{{module.Name}}"");
-        {{~ else ~}}
+        {{~ if module.IsBuiltin ~}}
         public static void Test_{{ member.Name }}(string input, string output) => AssertScript(input, output);
+        {{~ else ~}}
+        public static void Test_{{ member.Name }}(string input, string output) => AssertScript(input, output, ""{{module.Name}}"");
         {{~ end ~}}
 
             {{~ end ~}}
@@ -308,6 +314,12 @@ namespace Kalk.Tests
             result = prismTemplate.Render(new { functions = allFunctionNames });
             File.WriteAllText(Path.Combine(siteFolder, ".lunet", "js", "prism-kalk.generated.js"), result);
 
+            // Generate module site documentation
+            foreach(var module in modules)
+            {
+                GenerateModuleSiteDocumentation(module, siteFolder);
+            }
+
             // Log any errors if a member doesn't have any doc or tests
             int functionWithMissingDoc = 0;
             int functionWithMissingTests = 0;
@@ -335,6 +347,90 @@ namespace Kalk.Tests
             Console.WriteLine($"{modules.SelectMany(x => x.Members).SelectMany(y => y.Tests).Count()} tests generated.");
             Console.WriteLine($"{functionWithMissingDoc} functions with missing doc.");
             Console.WriteLine($"{functionWithMissingTests} functions with missing tests.");
+        }
+
+
+        private static void GenerateModuleSiteDocumentation(KalkModuleToGenerate module, string siteFolder)
+        {
+            if (module.Name == "KalkEngine")
+            {
+                module.Name = "General";
+            }
+            
+            module.Members.Sort((left, right) => string.Compare(left.Name, right.Name, StringComparison.Ordinal));
+
+            module.Title = $"{module.Name} Functions";
+
+            if (module.Name.EndsWith("Intrinsics"))
+            {
+                module.Title = $"Intel {module.Name.Replace("Intrinsics", "")} Intrinsics";
+                module.Name = $"Intel{module.Name.Replace("Intrinsics", "")}";
+            }
+            var name = module.Name.ToLowerInvariant();
+            module.Url = $"/doc/api/{name}/";
+
+            const string templateText = @"---
+title: {{module.Title}}
+url: {{module.Url}}
+---
+{{~ if !module.IsBuiltin ~}}
+
+{{ module.Description }}
+
+In order to use the functions provided by this module, you need to import this module:
+
+```kalk
+>>> import {{module.Name}}
+```
+{{~ end ~}}
+{{~ for member in module.Members ~}}
+
+## {{member.Name}}
+
+`{{member.Name}}{{~ if member.Params.size > 0 ~}}({{~ for param in member.Params ~}}{{ param.Name }}{{ param.IsOptional?'?':''}}{{ for.last?'':',' }}{{~ end ~}}){{~ end ~}}`
+
+{{ member.Description | regex.replace `^\s{4}` '' 'm' | string.rstrip }}
+{{~ if member.Params.size > 0 ~}}
+
+    {{~ for param in member.Params ~}}
+- `{{ param.Name }}`: {{ param.Description}}
+    {{~end ~}}
+{{~ end ~}}
+{{~ if member.Returns ~}}
+
+### Returns
+
+{{ member.Returns | regex.replace `^\s{4}` '' 'm' | string.rstrip }}
+{{~ end ~}}
+{{~ if member.Remarks ~}}
+
+### Remarks
+
+{{ member.Remarks | regex.replace `^\s{4}` '' 'm' | string.rstrip }}
+{{~ end ~}}
+{{~ if member.Example ~}}
+
+### Example
+
+```kalk
+{{ member.Example | regex.replace `^\s{4}` '' 'm' | string.rstrip }}
+```
+{{~ end ~}}
+{{~ end ~}}
+";
+            var template = Template.Parse(templateText);
+
+            var apiFolder = Path.Combine(siteFolder, "doc", "api");
+            if (name.StartsWith("intel"))
+            {
+                name = name.Substring("intel".Length);
+                apiFolder = Path.Combine(apiFolder, "intel");
+                module.Url = $"/doc/api/intel/{name}/";
+            }
+            
+            var result = template.Render(new {module = module}, x => x.Name);
+            
+            File.WriteAllText(Path.Combine(apiFolder, $"{name}.generated.md"), result);
         }
 
         private static readonly Regex PromptRegex = new Regex(@"^(\s*)>>>\s");

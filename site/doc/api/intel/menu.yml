@@ -1,0 +1,17 @@
+- aes.generated.md
+- avx.generated.md
+- avx2.generated.md
+- bmi1.generated.md
+- bmi1x64.generated.md
+- bmi2.generated.md
+- bmi2x64.generated.md
+- sse.generated.md
+- ssex64.generated.md
+- sse2.generated.md
+- sse2x64.generated.md
+- sse3.generated.md
+- ssse3.generated.md
+- sse41.generated.md
+- sse41x64.generated.md
+- sse42.generated.md
+- sse42x64.generated.md
