@@ -78,21 +78,23 @@
     <li class='menu-item '>
       <span class='menu-item-row'><a href='/doc/api/vector/' class='menu-link  '>Vector Functions</a></span>    </li>
     <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/all/' class='menu-link  '>All Functions</a></span>    </li>
+      <span class='menu-item-row'><a href='/doc/api/types/' class='menu-link  '>Types Functions</a></span>    </li>
     <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/csv/' class='menu-link  '>Csv Functions</a></span>    </li>
+      <span class='menu-item-row'><a href='/doc/api/all/' class='menu-link  '>All Module</a></span>    </li>
     <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/currencies/' class='menu-link  '>Currencies Functions</a></span>    </li>
+      <span class='menu-item-row'><a href='/doc/api/csv/' class='menu-link  '>Csv Module</a></span>    </li>
     <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/files/' class='menu-link  '>Files Functions</a></span>    </li>
+      <span class='menu-item-row'><a href='/doc/api/currencies/' class='menu-link  '>Currencies Module</a></span>    </li>
     <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/standardunits/' class='menu-link  '>StandardUnits Functions</a></span>    </li>
+      <span class='menu-item-row'><a href='/doc/api/files/' class='menu-link  '>Files Module</a></span>    </li>
     <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/strings/' class='menu-link  '>Strings Functions</a></span>    </li>
+      <span class='menu-item-row'><a href='/doc/api/standardunits/' class='menu-link  '>StandardUnits Module</a></span>    </li>
     <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Functions</a></span>    </li>
+      <span class='menu-item-row'><a href='/doc/api/strings/' class='menu-link  '>Strings Module</a></span>    </li>
     <li class='menu-item '>
-      <span class='menu-item-row'><a href='/doc/api/intel/hardware/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-17' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-17' class='menu-link-show'></a></span>    <ol id='menu-id-doc-17' class='menu menu-level2 collapse  show '>
+      <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Module</a></span>    </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/intel/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-18' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-18' class='menu-link-show'></a></span>    <ol id='menu-id-doc-18' class='menu menu-level2 collapse  show '>
       <li class='menu-item '>
         <span class='menu-item-row'><a href='/doc/api/intel/aes/' class='menu-link  '>Intel Aes Intrinsics</a></span>      </li>
       <li class='menu-item '>
@@ -145,14 +147,20 @@
   <li class='breadcrumb-item '>
     <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
   <li class='breadcrumb-item '>
-    <a href='/doc/api/intel/hardware/' class='breadcrumb-link  '>Intel Hardware Intrinsics</a>  </li>
+    <a href='/doc/api/intel/' class='breadcrumb-link  '>Intel Hardware Intrinsics</a>  </li>
   <li class='breadcrumb-item  active'>
     Intel SseX64 Intrinsics  </li>
 </ol>
 
         <p id="lunet-results"></p>
         <h1>Intel SseX64 Intrinsics</h1>
-        <h2 id="mm_cvtsi64_ss">mm_cvtsi64_ss</h2>
+        <p>In order to use the functions provided by this module, you need to import this module:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; import HardwareIntrinsics
+</code></pre>
+<div class='lunet-alert-note' role='alert'><div class='lunet-alert-note-heading'><span class='lunet-alert-note-icon'></span><span class='lunet-alert-note-heading-text'></span></div><div class='lunet-alert-note-content'>
+<p>These intrinsic functions are only available if your CPU supports <code>SseX64</code> features.</p>
+</div></div>
+<h2 id="mm_cvtsi64_ss">mm_cvtsi64_ss</h2>
 <p><code>mm_cvtsi64_ss</code></p>
 <p>Convert the 64-bit integer &quot;b&quot; to a single-precision (32-bit) floating-point element, store the result in the lower element of &quot;dst&quot;, and copy the upper 3 packed elements from &quot;a&quot; to the upper elements of &quot;dst&quot;.</p>
 <p>__m128 _mm_cvtsi64_ss (__m128 a, __int64 b)
