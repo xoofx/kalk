@@ -47,7 +47,7 @@ using Scriban.Syntax;
 
 namespace Kalk.Core.Modules
 {
-    public partial class VectorModule
+    public partial class TypesModule
     {
         private const string CategoryMatrixConstructors = "Type Matrix Constructors";
 

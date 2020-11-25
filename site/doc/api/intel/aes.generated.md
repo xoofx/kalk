@@ -3,6 +3,18 @@ title: Intel Aes Intrinsics
 url: /doc/api/intel/aes/
 ---
 
+In order to use the functions provided by this module, you need to import this module:
+
+```kalk
+>>> import HardwareIntrinsics
+```
+
+{{NOTE do}}
+These intrinsic functions are only available if your CPU supports `Aes` features.
+
+{{end}}
+
+
 ## mm_aesdec_si128
 
 `mm_aesdec_si128`

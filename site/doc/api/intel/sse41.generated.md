@@ -3,6 +3,18 @@ title: Intel Sse41 Intrinsics
 url: /doc/api/intel/sse41/
 ---
 
+In order to use the functions provided by this module, you need to import this module:
+
+```kalk
+>>> import HardwareIntrinsics
+```
+
+{{NOTE do}}
+These intrinsic functions are only available if your CPU supports `Sse41` features.
+
+{{end}}
+
+
 ## mm_blend_epi16
 
 `mm_blend_epi16`

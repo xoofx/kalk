@@ -3,6 +3,18 @@ title: Intel Sse42 Intrinsics
 url: /doc/api/intel/sse42/
 ---
 
+In order to use the functions provided by this module, you need to import this module:
+
+```kalk
+>>> import HardwareIntrinsics
+```
+
+{{NOTE do}}
+These intrinsic functions are only available if your CPU supports `Sse42` features.
+
+{{end}}
+
+
 ## mm_cmpgt_epi64
 
 `mm_cmpgt_epi64`

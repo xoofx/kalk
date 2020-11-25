@@ -3,6 +3,18 @@ title: Intel SseX64 Intrinsics
 url: /doc/api/intel/ssex64/
 ---
 
+In order to use the functions provided by this module, you need to import this module:
+
+```kalk
+>>> import HardwareIntrinsics
+```
+
+{{NOTE do}}
+These intrinsic functions are only available if your CPU supports `SseX64` features.
+
+{{end}}
+
+
 ## mm_cvtsi64_ss
 
 `mm_cvtsi64_ss`

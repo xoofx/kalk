@@ -3,6 +3,18 @@ title: Intel Sse2 Intrinsics
 url: /doc/api/intel/sse2/
 ---
 
+In order to use the functions provided by this module, you need to import this module:
+
+```kalk
+>>> import HardwareIntrinsics
+```
+
+{{NOTE do}}
+These intrinsic functions are only available if your CPU supports `Sse2` features.
+
+{{end}}
+
+
 ## mm_add_epi16
 
 `mm_add_epi16`

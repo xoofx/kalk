@@ -3,6 +3,18 @@ title: Intel Sse Intrinsics
 url: /doc/api/intel/sse/
 ---
 
+In order to use the functions provided by this module, you need to import this module:
+
+```kalk
+>>> import HardwareIntrinsics
+```
+
+{{NOTE do}}
+These intrinsic functions are only available if your CPU supports `Sse` features.
+
+{{end}}
+
+
 ## mm_add_ps
 
 `mm_add_ps`

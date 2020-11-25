@@ -3,6 +3,18 @@ title: Intel Bmi2X64 Intrinsics
 url: /doc/api/intel/bmi2x64/
 ---
 
+In order to use the functions provided by this module, you need to import this module:
+
+```kalk
+>>> import HardwareIntrinsics
+```
+
+{{NOTE do}}
+These intrinsic functions are only available if your CPU supports `Bmi2X64` features.
+
+{{end}}
+
+
 ## bzhi_u64
 
 `bzhi_u64`

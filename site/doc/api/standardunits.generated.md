@@ -1,5 +1,5 @@
 ---
-title: StandardUnits Functions
+title: StandardUnits Module
 url: /doc/api/standardunits/
 ---
 

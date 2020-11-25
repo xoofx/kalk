@@ -1,5 +1,5 @@
 ---
-title: Currencies Functions
+title: Currencies Module
 url: /doc/api/currencies/
 ---
 

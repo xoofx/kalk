@@ -1,5 +1,5 @@
 ---
-title: All Functions
+title: All Module
 url: /doc/api/all/
 ---
 

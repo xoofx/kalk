@@ -1,5 +1,5 @@
 ---
-title: Web Functions
+title: Web Module
 url: /doc/api/web/
 ---
 

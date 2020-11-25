@@ -22,6 +22,7 @@ namespace Kalk.Core
             GetOrCreateModule<MathModule>();
             _miscModule = GetOrCreateModule<MiscModule>();
             GetOrCreateModule<MemoryModule>();
+            GetOrCreateModule<TypesModule>();
             GetOrCreateModule<VectorModule>();
 
             var allModule = GetOrCreateModule<AllModule>();

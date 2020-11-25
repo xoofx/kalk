@@ -1,5 +1,5 @@
 ---
-title: Strings Functions
+title: Strings Module
 url: /doc/api/strings/
 ---
 

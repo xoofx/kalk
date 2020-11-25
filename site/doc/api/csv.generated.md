@@ -1,5 +1,5 @@
 ---
-title: Csv Functions
+title: Csv Module
 url: /doc/api/csv/
 ---
 

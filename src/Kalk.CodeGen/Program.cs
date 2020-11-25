@@ -332,7 +332,7 @@ namespace Kalk.Tests
                     if ((hasNoDesc || hasNoTests) && !module.ClassName.Contains("Intrinsics"))
                     {
                         // We don't log for all the matrix constructors, as they are tested separately.
-                        if (module.ClassName != "VectorModule" || !member.CSharpName.StartsWith("Create"))
+                        if (module.ClassName != "TypesModule" || !member.CSharpName.StartsWith("Create"))
                         {
                             if (hasNoDesc) ++functionWithMissingDoc;
                             if (hasNoTests) ++functionWithMissingTests;
@@ -359,12 +359,12 @@ namespace Kalk.Tests
             
             module.Members.Sort((left, right) => string.Compare(left.Name, right.Name, StringComparison.Ordinal));
 
-            module.Title = $"{module.Name} Functions";
+            module.Title = $"{module.Name} {(module.IsBuiltin ? "Functions":"Module")}";
 
             if (module.Name.EndsWith("Intrinsics"))
             {
                 module.Title = $"Intel {module.Name.Replace("Intrinsics", "")} Intrinsics";
-                module.Name = $"Intel{module.Name.Replace("Intrinsics", "")}";
+                module.Name = $"{module.Name.Replace("Intrinsics", "")}";
             }
             var name = module.Name.ToLowerInvariant();
             module.Url = $"/doc/api/{name}/";
@@ -382,6 +382,22 @@ In order to use the functions provided by this module, you need to import this m
 ```kalk
 >>> import {{module.Name}}
 ```
+{{~ end ~}}
+{{~ if (module.Title | string.contains 'Intrinsics') ~}}
+
+In order to use the functions provided by this module, you need to import this module:
+
+```kalk
+>>> import HardwareIntrinsics
+```
+{%{~
+{{NOTE do}}
+~}%}
+These intrinsic functions are only available if your CPU supports `{{module.Name}}` features.
+{%{~
+{{end}}
+~}%}
+
 {{~ end ~}}
 {{~ for member in module.Members ~}}
 
@@ -421,15 +437,20 @@ In order to use the functions provided by this module, you need to import this m
             var template = Template.Parse(templateText);
 
             var apiFolder = Path.Combine(siteFolder, "doc", "api");
-            if (name.StartsWith("intel"))
+            if (module.Title.Contains("Intel"))
             {
-                name = name.Substring("intel".Length);
                 apiFolder = Path.Combine(apiFolder, "intel");
                 module.Url = $"/doc/api/intel/{name}/";
             }
-            
+
+            // Don't generate hardware.generated.md
+            if (name == "hardware")
+            {
+                return;
+            }
+
             var result = template.Render(new {module = module}, x => x.Name);
-            
+
             File.WriteAllText(Path.Combine(apiFolder, $"{name}.generated.md"), result);
         }
 

@@ -3,6 +3,18 @@ title: Intel Avx2 Intrinsics
 url: /doc/api/intel/avx2/
 ---
 
+In order to use the functions provided by this module, you need to import this module:
+
+```kalk
+>>> import HardwareIntrinsics
+```
+
+{{NOTE do}}
+These intrinsic functions are only available if your CPU supports `Avx2` features.
+
+{{end}}
+
+
 ## mm256_abs_epi16
 
 `mm256_abs_epi16`

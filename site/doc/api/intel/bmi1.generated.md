@@ -3,6 +3,18 @@ title: Intel Bmi1 Intrinsics
 url: /doc/api/intel/bmi1/
 ---
 
+In order to use the functions provided by this module, you need to import this module:
+
+```kalk
+>>> import HardwareIntrinsics
+```
+
+{{NOTE do}}
+These intrinsic functions are only available if your CPU supports `Bmi1` features.
+
+{{end}}
+
+
 ## andn_u32
 
 `andn_u32`

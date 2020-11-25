@@ -1,5 +1,5 @@
 ---
-title: Files Functions
+title: Files Module
 url: /doc/api/files/
 ---
 

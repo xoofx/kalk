@@ -132,47 +132,6 @@ namespace Kalk.Core.Modules
 
             throw new ArgumentException($"Invalid argument type {Engine.GetTypeName(x)}. Expecting a matrix or a vector type.", nameof(x));
         }
-        
-        /// <summary>
-        /// Creates a matrix of the specified element type, number of rows and columns and optional values.
-        /// </summary>
-        /// <param name="name">The element type of the matrix (e.g float).</param>
-        /// <param name="row">The number of rows.</param>
-        /// <param name="column">The number of columns.</param>
-        /// <param name="arguments">The optional values (must have 1 or row x column elements).</param>
-        /// <returns>A matrix of the specified row x column.</returns>
-        /// <example>
-        /// ```kalk
-        /// >>> matrix(float,4,3,1..12)
-        /// # matrix(float, 4, 3, 1..12)
-        /// out = float4x3(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
-        ///       # col  0           1           2           / row
-        ///       float3(1         , 2         , 3         ) # 0
-        ///       float3(4         , 5         , 6         ) # 1
-        ///       float3(7         , 8         , 9         ) # 2
-        ///       float3(10        , 11        , 12        ) # 3
-        /// ```
-        /// </example>
-        [KalkExport("matrix", CategoryMatrixConstructors)]
-        public object CreateMatrix(ScriptVariable name, int row, int column, params object[] arguments)
-        {
-            if (name == null) throw new ArgumentNullException(nameof(name));
-            if (row <= 1) throw new ArgumentOutOfRangeException(nameof(row), $"Invalid row count {row}. Expecting a value > 1.");
-            if (column <= 1) throw new ArgumentOutOfRangeException(nameof(column), $"Invalid column count {column}. Expecting a value > 1.");
-            switch (name.Name)
-            {
-                case "int":
-                    return new KalkMatrixConstructor<int>(row, column).Invoke(Engine, arguments);
-                case "bool":
-                    return new KalkMatrixConstructor<KalkBool>(row, column).Invoke(Engine, arguments);
-                case "float":
-                    return new KalkMatrixConstructor<float>(row, column).Invoke(Engine, arguments);
-                case "double":
-                    return new KalkMatrixConstructor<double>(row, column).Invoke(Engine, arguments);
-            }
-
-            throw new ArgumentException($"Unsupported matrix type {name.Name}. Only bool, int, float and double are supported", nameof(name));
-        }
 
         /// <summary>
         /// Extract a row from the specified matrix.
