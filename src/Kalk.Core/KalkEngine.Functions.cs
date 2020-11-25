@@ -56,7 +56,7 @@ namespace Kalk.Core
             }
             catch (Exception ex)
             {
-                WriteErrorLine($"Unable to load units from `{packageFilePath}`. Reason:\n{ex.Message}");
+                WriteErrorLine($"Unable to load system file {filename} from `{packageFilePath}`. Reason:\n{ex.Message}");
             }
             finally
             {
