@@ -35,6 +35,9 @@ h1, h2, h3, h4, h5, h6 {
     padding-bottom: 0.25em;
     scroll-margin-top: $kalk-top-offset;
 }
+h2 {
+    border-bottom: solid;    
+}
 
 #kalk .breadcrumb {
     padding-left: 0.1rem
