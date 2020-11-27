@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalk.Tests", "Kalk.Tests\Ka
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalk.IntrinsicsGen", "Kalk.IntrinsicsGen\Kalk.IntrinsicsGen.csproj", "{A31FA853-EDF6-44AC-958A-96B379B9ED2E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalk.Releaser", "Kalk.Releaser\Kalk.Releaser.csproj", "{02646312-823F-4E6D-9F6F-B49DE33D5164}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -197,6 +199,26 @@ Global
 		{A31FA853-EDF6-44AC-958A-96B379B9ED2E}.Release|x64.Build.0 = Release|Any CPU
 		{A31FA853-EDF6-44AC-958A-96B379B9ED2E}.Release|x86.ActiveCfg = Release|Any CPU
 		{A31FA853-EDF6-44AC-958A-96B379B9ED2E}.Release|x86.Build.0 = Release|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Debug|ARM.Build.0 = Debug|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Debug|x64.Build.0 = Debug|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Debug|x86.Build.0 = Debug|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Release|ARM.ActiveCfg = Release|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Release|ARM.Build.0 = Release|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Release|ARM64.Build.0 = Release|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Release|x64.ActiveCfg = Release|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Release|x64.Build.0 = Release|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Release|x86.ActiveCfg = Release|Any CPU
+		{02646312-823F-4E6D-9F6F-B49DE33D5164}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
