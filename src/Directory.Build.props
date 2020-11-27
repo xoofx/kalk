@@ -1,6 +1,3 @@
 <Project>
-  <PropertyGroup>
-    <VersionPrefix>0.1.0</VersionPrefix>
-    <VersionSuffix>preview</VersionSuffix>
-  </PropertyGroup>
+  <Import Project="Version.props"/>
 </Project>

@@ -8,25 +8,28 @@
     <ApplicationIcon>..\..\img\kalk.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>kalk</AssemblyName>
-    <PackageName>kalk</PackageName>
+    <PackageId>kalk</PackageId>
     <KalkGitVersion>true</KalkGitVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <!--<PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>Link</TrimMode>-->
+    <!--<SelfContained>true</SelfContained>-->
     <!--<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
-    <PublishTrimmed>true</PublishTrimmed>
-    <TrimMode>Link</TrimMode>
-    <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>-->
     <!--<PublishReadyToRun>true</PublishReadyToRun>-->
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Packaging.Targets" Version="0.1.189">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="TextCopy" Version="4.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Kalk.Core\Kalk.Core.csproj" />
   </ItemGroup>
-
 </Project>
