@@ -46,17 +46,23 @@ namespace Kalk.Core
         internal void LoadSystemFile(string filename)
         {
             // Register all units
-            var packageFilePath = Path.Combine(KalkEngineFolder, filename);
             bool previousEchoEnabled = EchoEnabled;
             try
             {
                 _registerAsSystem = true;
                 EchoEnabled = false;
-                LoadFile(packageFilePath);
+                var stream = typeof(KalkEngine).Assembly.GetManifestResourceStream($"{typeof(KalkEngine).Namespace}.{filename}");
+                if (stream == null)
+                {
+                    throw new FileNotFoundException($"The resource {filename} was not found");
+                }
+                using var reader = new StreamReader(stream);
+                var text = reader.ReadToEnd();
+                EvaluateTextImpl(text, filename, false);
             }
             catch (Exception ex)
             {
-                WriteErrorLine($"Unable to load system file {filename} from `{packageFilePath}`. Reason:\n{ex.Message}");
+                WriteErrorLine($"Unable to load resource system file {filename}. Reason:\n{ex.Message}");
             }
             finally
             {

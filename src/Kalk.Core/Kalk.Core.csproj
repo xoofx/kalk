@@ -9,15 +9,8 @@
   <ItemGroup>
     <None Remove="core.kalk" />
     <None Remove="units.kalk" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="units.kalk">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="core.kalk">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="units.kalk"/>
+    <EmbeddedResource Include="core.kalk"/>
   </ItemGroup>
 
   <ItemGroup>
