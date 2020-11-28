@@ -1,4 +1,4 @@
-name: ci
+name: code
 
 env:
   PROJECT_NAME: Kalk
