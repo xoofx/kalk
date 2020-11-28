@@ -1,12 +1,18 @@
 # kalk
 
-![Kalk Banner](img/github-banner.png)
+<img align="right" width="160px" height="160px" src="img/kalk.png">
 
-This is the repository of [kalk](https://kalk.dev), a powerful command line calculator app for developers.
+This is the repository of [kalk](https://kalk.dev), a powerful command line **calculator app** for developers.
+
+## Supported Platforms
+
+- Windows x64
+- Linux x64 (Debian derivatives - e.g Ubuntu and Redhat)
+- macOS
 
 ## Download
 
-See the website [Download](https://kalk.dev/download) section.
+Visit the [Download](https://kalk.dev/download) section.
 
 ## License
 
