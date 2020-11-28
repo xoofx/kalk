@@ -24,7 +24,8 @@
   <ItemGroup>
     <PackageReference Include="Packaging.Targets" Version="0.1.189">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <IncludeAssets>compile;build</IncludeAssets>
+      <ExcludeAssets>runtime;contentFiles;native</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="TextCopy" Version="4.2.0" />
   </ItemGroup>
