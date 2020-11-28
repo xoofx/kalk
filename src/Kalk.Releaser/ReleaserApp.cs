@@ -27,6 +27,7 @@ namespace Kalk.Releaser
     /// - Update Release on GitHub with all assets
     /// - Update xoofx/homebrew-kalk
     /// - Push the NuGet package
+    /// - Push the update to site/.lunet/data/version.yml
     /// </summary>
     class ReleaserApp
     {
@@ -235,6 +236,9 @@ namespace Kalk.Releaser
             // Publish NuGet - last
             PublishNuGet(packageInfo, nugetApiToken);
 
+            // Update Website version
+            await UpdateDocumentationVersion(github, packageInfo);
+
             Environment.ExitCode = _hasErrors ? 1 : 0;
             return Environment.ExitCode;
         }
@@ -279,7 +283,8 @@ namespace Kalk.Releaser
                         "push",
                         "*.nupkg",
                         "-s https://api.nuget.org/v3/index.json",
-                        $"-k {nugetSecretKey}"
+                        $"-k {nugetSecretKey}",
+                        "--skip-duplicate"
                     },
                     WorkingDirectory = _buildFolder
                 };
@@ -354,6 +359,29 @@ end
             else
             {
                 Info($"No need to update Homebrew Formula {_user}/{homebrew}. Already up-to-date.");
+            }
+        }
+
+        private async Task UpdateDocumentationVersion(GitHubClient github, PackageInfo packageInfo)
+        {
+            var filePath = $"site/.lunet/data/kalk.yml";
+            var result = await github.Repository.Content.GetAllContents(_user, _repo, filePath);
+            if (result.Count != 1)
+            {
+                Error($"Unable to find file {filePath} on {_user}/{_repo}");
+                return;
+            }
+
+            var versionYml = $"version: {packageInfo.Version}";
+            var file = result[0];
+            if (file.Content != versionYml)
+            {
+                Info($"Updating site version {_user}/{_repo}");
+                await github.Repository.Content.UpdateFile(_user, _repo, filePath, new UpdateFileRequest($"Update site with version {packageInfo.Version}", versionYml, file.Sha));
+            }
+            else
+            {
+                Info($"No need to site version {_user}/{_repo}. Already up-to-date.");
             }
         }
 
