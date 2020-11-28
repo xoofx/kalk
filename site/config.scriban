@@ -55,6 +55,7 @@ with bundle
     js bootstrap "/dist/js/bootstrap.min.js"
     js tocbot "/dist/tocbot.min.js"
     js prismjs "/prism.js"
+    js prismjs "/components/prism-shell-session.min.js"
     js select2 "/dist/js/select2.min.js"
     js "/js/prism-kalk.js"    
     js "/js/prism-kalk.generated.js"
