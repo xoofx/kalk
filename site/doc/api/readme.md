@@ -2,9 +2,13 @@
 title: API Reference
 ---
 
-This is the API
+{{NOTE do}}
+The following function names are not yet clickable. 
 
+You can find the functions in their sub-menu sections on the left or you can query the function by name in the search bar.
 
+They will be made clickable in a future version of this web site.
+{{end}}
 
 ```kalk
 >>> help
@@ -57,22 +61,4 @@ This is the API
 
 # Unit Functions
     - to, unit, units
-
->>> for x in 1..10; 1 + cos 2x; end
-# for x in 1..10; 1 + cos(2 * x); end
-out = 0.5838531634528576
-out = 0.34635637913638806
-out = 1.9601702866503659
-out = 0.8544999661913865
-out = 0.16092847092354756
-out = 1.8438539587324922
-out = 1.1367372182078337
-out = 0.04234051967661534
-out = 1.6603167082440802
-out = 1.408082061813392
-
-null, true, false
-
-​​This is an error
-
 ```
