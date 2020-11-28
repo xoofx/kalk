@@ -14,6 +14,11 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - name: Should Publish
+      if: github.event_name == 'push' && github.ref -match "^refs/tags/[0-9]+\.[0-9]+\.[0-9]+"
+      env:
+        kalk_publish: true
+
     - name: Checkout
       uses: actions/checkout@v1
 
@@ -34,10 +39,12 @@ jobs:
       run: dotnet build src\Kalk.Releaser -c Release
 
     - name: Publish
-      if: github.event_name == 'push'
-      run: |
-          if ( "${{github.ref}}" -match "^refs/tags/[0-9]+\.[0-9]+\.[0-9]+" ) {
-              src\Kalk.Releaser\bin\Release\net5.0\krel.exe --nuget=${{secrets.NUGET_TOKEN}} --github=${{secrets.APP_GITHUB_TOKEN}}
-          } else {
-              echo "publish is only enabled by tagging with a release tag"
-          }
+      if: env.kalk_publish
+      run: src\Kalk.Releaser\bin\Release\net5.0\krel.exe --nuget=${{secrets.NUGET_TOKEN}} --github=${{secrets.APP_GITHUB_TOKEN}}
+
+    - name: Windows Store appx artifact
+      if: env.kalk_publish
+      uses: actions/upload-artifact@v2
+      with:
+        name: appx-artefact
+        path: build/*.appx
