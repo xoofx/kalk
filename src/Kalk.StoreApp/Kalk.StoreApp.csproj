@@ -4,7 +4,6 @@
     <TargetFramework>net5.0-windows10.0.17763.0</TargetFramework>
     <ApplicationIcon>..\..\img\kalk.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <!--<Platforms>x64</Platforms>-->
     <DefineConstants>KALK_WINDOWS_STOREAPP</DefineConstants>
     <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
@@ -20,7 +19,8 @@
   	<TrimMode>Link</TrimMode>
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
-  	<!--<PublishReadyToRun>true</PublishReadyToRun>-->
+    <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+    <SkipCopyingSymbolsToOutputDirectory>true</SkipCopyingSymbolsToOutputDirectory>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,8 +44,8 @@
 	<Target Name="CustomPublish" AfterTargets="Publish">
 		<PropertyGroup>
 			<PublishDirFullPath>$([System.IO.Path]::GetFullPath('$(PublishDir)'))</PublishDirFullPath>
-      <PublishPackageName>$(AssemblyName)_$(RuntimeIdentifier).appx</PublishPackageName>
-      <PublishPackagePath>$([System.IO.Path]::GetFullPath('$(PublishDirFullPath)..\$(PublishPackageName)'))</PublishPackagePath>
+      <PublishPackageName>$(AssemblyName).$(PackageVersion).$(RuntimeIdentifier).appx</PublishPackageName>
+      <PublishPackagePath>$([System.IO.Path]::GetFullPath('$(PublishDirFullPath)..\..\..\$(PublishPackageName)'))</PublishPackagePath>
 		</PropertyGroup>
 
 		<Message Importance="High" Text="Create appx $(MSBuildProjectName) -&gt; $(PublishPackagePath) (Version $(FileVersion))" />
