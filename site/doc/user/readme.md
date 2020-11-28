@@ -186,14 +186,53 @@ mat = float4x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
 out = float4(90, 100, 110, 120)
 ```
 
+### Extras
+
+Some functions like `ascii` can display a convenient ASCII table:
+
+```kalk
+>>> ascii
+ ASCII controls                         ASCII printable characters     Extended ASCII Characters
+  0 "\x00" (NUL / Null)                 32 " "   64 "@"   96 "`"       128 "€"  160 " "  192 "À"  224 "à"
+  1 "\x01" (SOH / Start of Heading)     33 "!"   65 "A"   97 "a"       129 ""  161 "¡"  193 "Á"  225 "á"
+  2 "\x02" (STX / Start of Text)        34 "\""  66 "B"   98 "b"       130 "‚"  162 "¢"  194 "Â"  226 "â"
+  3 "\x03" (ETX / End of Text)          35 "#"   67 "C"   99 "c"       131 "ƒ"  163 "£"  195 "Ã"  227 "ã"
+  4 "\x04" (EOT / End of Transmission)  36 "$"   68 "D"  100 "d"       132 "„"  164 "¤"  196 "Ä"  228 "ä"
+  5 "\x05" (ENQ / Enquiry)              37 "%"   69 "E"  101 "e"       133 "…"  165 "¥"  197 "Å"  229 "å"
+  6 "\x06" (ACK / Acknowledgment)       38 "&"   70 "F"  102 "f"       134 "†"  166 "¦"  198 "Æ"  230 "æ"
+  7 "\a"   (BEL / Bell)                 39 "'"   71 "G"  103 "g"       135 "‡"  167 "§"  199 "Ç"  231 "ç"
+  8 "\b"   (BS  / Backspace)            40 "("   72 "H"  104 "h"       136 "ˆ"  168 "¨"  200 "È"  232 "è"
+  9 "\t"   (HT  / Horizontal Tab)       41 ")"   73 "I"  105 "i"       137 "‰"  169 "©"  201 "É"  233 "é"
+ 10 "\n"   (LF  / Line Feed)            42 "*"   74 "J"  106 "j"       138 "Š"  170 "ª"  202 "Ê"  234 "ê"
+ 11 "\v"   (VT  / Vertical Tab)         43 "+"   75 "K"  107 "k"       139 "‹"  171 "«"  203 "Ë"  235 "ë"
+ 12 "\f"   (FF  / Form Feed)            44 ","   76 "L"  108 "l"       140 ""  173 "­"  205 "Í"  237 "í"
+ 14 "\x0e" (SO  / Shift Out)            46 "."   78 "N"  110 "n"       142 "Ž"  174 "®"  206 "Î"  238 "î"
+ 15 "\x0f" (SI  / Shift In)             47 "/"   79 "O"  111 "o"       143 "¢  175 "¯"  207 "Ï"  239 "ï"
+ 16 "\x10" (DLE / Data Link Escape)     48 "0"   80 "P"  112 "p"       144 "  176 "°"  208 "Ð"  240 "ð"
+ 17 "\x11" (DC1 / Device Control 1)     49 "1"   81 "Q"  113 "q"       145 "‘"  177 "±"  209 "Ñ"  241 "ñ"
+ 18 "\x12" (DC2 / Device Control 2)     50 "2"   82 "R"  114 "r"       146 "’"  178 "²"  210 "Ò"  242 "ò"
+ 19 "\x13" (DC3 / Device Control 3)     51 "3"   83 "S"  115 "s"       147 "“"  179 "³"  211 "Ó"  243 "ó"
+ 20 "\x14" (DC4 / Device Control 4)     52 "4"   84 "T"  116 "t"       148 "”"  180 "´"  212 "Ô"  244 "ô"
+ 21 "\x15" (NAK / Negative Ack)         53 "5"   85 "U"  117 "u"       149 "•"  181 "µ"  213 "Õ"  245 "õ"
+ 22 "\x16" (SYN / Synchronous Idle)     54 "6"   86 "V"  118 "v"       150 "–"  182 "¶"  214 "Ö"  246 "ö"
+ 23 "\x17" (ETB / End of Trans Block)   55 "7"   87 "W"  119 "w"       151 "—"  183 "·"  215 "×"  247 "÷"
+ 24 "\x18" (CAN / Cancel)               56 "8"   88 "X"  120 "x"       152 "˜"  184 "¸"  216 "Ø"  248 "ø"
+ 25 "\x19" (EM  / End of Medium)        57 "9"   89 "Y"  121 "y"       153 "™"  185 "¹"  217 "Ù"  249 "ù"
+ 26 "\x1a" (SUB / Substitute)           58 ":"   90 "Z"  122 "z"       154 "š"  186 "º"  218 "Ú"  250 "ú"
+ 27 "\x1b" (ESC / Escape)               59 ";"   91 "["  123 "{"       155 "›"  187 "»"  219 "Û"  251 "û"
+ 28 "\x1c" (FS  / File Separator)       60 "<"   92 "\\" 124 "|"       156 "œ"  188 "¼"  220 "Ü"  252 "ü"
+ 29 "\x1d" (GS  / Group Separator)      61 "="   93 "]"  125 "}"       157 "  189 "½"  221 "Ý"  253 "ý"
+ 30 "\x1e" (RS  / Record Separator)     62 ">"   94 "^"  126 "~"       158 "ž"  190 "¾"  222 "Þ"  254 "þ"
+ 31 "\x1f" (US  / Unit Separator)       63 "?"   95 "_"  127 ""       159 "Ÿ"  191 "¿"  223 "ß"  255 "ÿ"
+ ```
+
+You can also try the `colors` function to see what it displays!
+
+```kalk
+>>> colors # watch out!
+```
+
 ### Next
 
 - Checkout [Language Syntax](syntax.md) for more details about `kalk` powerful language.
 - Checkout [Advanced Topics](../advanced/readme.md) to use `kalk` in more advanced ways.
-
-
-
-
-
-
-
