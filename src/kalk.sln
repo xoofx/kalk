@@ -11,11 +11,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalk.Core", "Kalk.Core\Kalk
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{93EA1DCA-85A7-4DCB-B869-A0B560831937}"
 	ProjectSection(SolutionItems) = preProject
+		..\changelog.md = ..\changelog.md
 		..\.github\workflows\ci.yml = ..\.github\workflows\ci.yml
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		global.json = global.json
+		..\license.txt = ..\license.txt
 		nuget.config = nuget.config
+		..\privacy.md = ..\privacy.md
+		..\readme.md = ..\readme.md
 		Version.props = Version.props
 	EndProjectSection
 EndProject
@@ -29,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalk.Tests", "Kalk.Tests\Ka
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalk.IntrinsicsGen", "Kalk.IntrinsicsGen\Kalk.IntrinsicsGen.csproj", "{A31FA853-EDF6-44AC-958A-96B379B9ED2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalk.Releaser", "Kalk.Releaser\Kalk.Releaser.csproj", "{02646312-823F-4E6D-9F6F-B49DE33D5164}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalk.Releaser", "Kalk.Releaser\Kalk.Releaser.csproj", "{02646312-823F-4E6D-9F6F-B49DE33D5164}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
