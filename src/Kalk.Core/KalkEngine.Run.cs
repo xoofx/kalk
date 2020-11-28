@@ -30,13 +30,16 @@ namespace Kalk.Core
                 }
             }
 
-            Directory.CreateDirectory(KalkUserFolder);
+            // Directory.CreateDirectory(KalkUserFolder);
 
             if (DisplayVersion)
             {
                 ShowVersion();
                 WriteHighlightLine("# Type `help` for more information and at https://github.com/xoofx/kalk");
             }
+
+            // Load user config file after showing the version
+            LoadUserConfigFile();
 
             if (Repl != null)
             {

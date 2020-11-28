@@ -23,7 +23,7 @@ namespace Kalk.Core.Modules
             base.Import();
 
             var countBeforeImport = Engine.Units.Count;
-            Engine.LoadSystemFile("units.kalk");
+            Engine.LoadSystemFileFromResource("units.kalk");
             var deltaCount = Engine.Units.Count - countBeforeImport;
             Engine.WriteHighlightLine($"# {deltaCount} units successfully imported from module `{Name}`.");
         }

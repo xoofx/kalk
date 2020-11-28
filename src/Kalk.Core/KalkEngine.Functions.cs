@@ -40,29 +40,49 @@ namespace Kalk.Core
 
         private void LoadCoreFile()
         {
-            LoadSystemFile(CoreFileName);
+            LoadSystemFileFromResource(CoreFileName);
         }
 
-        internal void LoadSystemFile(string filename)
+        private void LoadUserConfigFile()
+        {
+            if (KalkUserFolder == null) return;
+            const string configFileName = "config.kalk";
+            var userConfigFile = Path.Combine(KalkUserFolder, configFileName);
+
+            //WriteHighlightLine($"# Try loading from {userConfigFile}");
+
+            if (!File.Exists(userConfigFile)) return;
+
+            using var stream = new FileStream(userConfigFile, FileMode.Open, FileAccess.Read);
+            LoadConfigFile($".kalk/{configFileName}", stream, false);
+        }
+
+        internal void LoadSystemFileFromResource(string filename)
+        {
+            var stream = typeof(KalkEngine).Assembly.GetManifestResourceStream($"{typeof(KalkEngine).Namespace}.{filename}");
+            if (stream == null)
+            {
+                throw new FileNotFoundException($"The resource {filename} was not found");
+            }
+
+            LoadConfigFile(filename, stream, true);
+        }
+
+        internal void LoadConfigFile(string filename, Stream stream, bool isSystem)
         {
             // Register all units
             bool previousEchoEnabled = EchoEnabled;
             try
             {
-                _registerAsSystem = true;
+                _registerAsSystem = isSystem;
                 EchoEnabled = false;
-                var stream = typeof(KalkEngine).Assembly.GetManifestResourceStream($"{typeof(KalkEngine).Namespace}.{filename}");
-                if (stream == null)
-                {
-                    throw new FileNotFoundException($"The resource {filename} was not found");
-                }
                 using var reader = new StreamReader(stream);
                 var text = reader.ReadToEnd();
                 EvaluateTextImpl(text, filename, false);
             }
             catch (Exception ex)
             {
-                WriteErrorLine($"Unable to load resource system file {filename}. Reason:\n{ex.Message}");
+                WriteErrorLine($"Unable to load file {filename}. Reason:\n{ex.Message}");
             }
             finally
             {
