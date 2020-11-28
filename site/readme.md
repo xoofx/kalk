@@ -24,48 +24,48 @@ search: false
     <h3><i class="fa fa-bolt kalk-color-0"></i>Built-in Functions</h3>
     <img src="img/kalk-fp-builtins.gif" class="rounded img-fluid img-card" alt="Built-in Functions"/>
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...
+1000+ functions with a powerful language to automate 
+your calculations. Many functions are similar to the shading HLSL language.
 
 </div>
 <div class="col-sm-4">
     <h3><i class="fa fa-magic kalk-color-1"></i>Enhanced Experience</h3>
     <img src="img/kalk-fp-userexp.gif" class="rounded img-fluid img-card" alt="Enhanced Experience"/>
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...
+Enhanced user experience with syntax highlighting,
+cursor on error, braces matching, keyboard shortcuts (e.g text select, moving cursors by word...).
 
 </div>
 <div class="col-sm-4">
     <h3><i class="fa fa-cogs kalk-color-2"></i>Developer Mode</h3>
     <img src="img/kalk-fp-devmode.gif" class="rounded img-fluid img-card" alt="Developer Mode"/>
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...
+Use the developer mode to get more details about your floating point
+numbers or to get hexadecimal equivalent representation.
 
 </div>
 <div class="col-sm-4">
     <h3><i class="fa fa-h-square kalk-color-3"></i>Hardware Intrinsics</h3>
     <img src="img/kalk-fp-hwintrinsics.gif" class="rounded img-fluid img-card" alt="Hardware Intrinsics"/>
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...
+Use Intel Hardware Intrinsics, from SSE to AVX2, easily accessible as functions.
+Easily bitcast results between vector types or test memory read/write.
 
 </div>
 <div class="col-sm-4">
     <h3><i class="fa fa-book kalk-color-0"></i>Integrated Help</h3>
     <img src="img/kalk-fp-help.gif" class="rounded img-fluid img-card" alt="Integrated Help"/>
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...
+Documentation of all functions is fully integrated in the app. Just type `help` to
+get more information.
 
 </div>
 <div class="col-sm-4">
     <h3><i class="fa fa-th kalk-color-1"></i>Modules</h3>
     <img src="img/kalk-fp-modules.gif" class="rounded img-fluid img-card" alt="Modules"/>
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...
+Modules are a great way to extend the basic calculator experience: `Strings`,
+`Web`, `Currencies`, `StandardUnits`...
 
 </div>    
 </div>
