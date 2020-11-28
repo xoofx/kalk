@@ -32,14 +32,14 @@ On Ubuntu and all Debian derivatives
 
 ```shell-session
 $ wget {{site.github_repo_url}}/releases/download/{{kalk_version}}/kalk.{{kalk_version}}.linux-x64.deb
-$ sudo apt install kalk.{{kalk_version}}.linux-x64.deb
+$ sudo apt install ./kalk.{{kalk_version}}.linux-x64.deb
 ```
 
 On CentOS, RHEL & Fedora (RPM)
 
 ```shell-session
 $ wget {{site.github_repo_url}}/releases/download/{{kalk_version}}/kalk.{{kalk_version}}.linux-x64.rpm
-$ sudo rpm –i kalk.{{kalk_version}}.linux-x64.rpm
+$ sudo rpm –i ./kalk.{{kalk_version}}.linux-x64.rpm
 ```
 
 ## macOS
