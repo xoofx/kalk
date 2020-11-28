@@ -274,6 +274,7 @@ namespace Kalk.Releaser
         
         private void PublishNuGet(PackageInfo packageInfo, string nugetSecretKey)
         {
+            Info($"Publishing NuGet {packageInfo.Version}");
             try
             {
                 var program = new DotNetProgram("nuget")
