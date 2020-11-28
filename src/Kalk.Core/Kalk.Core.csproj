@@ -11,6 +11,7 @@
     <None Remove="units.kalk" />
     <EmbeddedResource Include="units.kalk"/>
     <EmbeddedResource Include="core.kalk"/>
+    <EmbeddedResource Include="..\..\license.txt"/>
   </ItemGroup>
 
   <ItemGroup>

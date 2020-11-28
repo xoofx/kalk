@@ -363,6 +363,12 @@ out = "array"
 out = "object"
 ```
 
+## license
+
+`license`
+
+Displays the license
+
 ## list
 
 `list`

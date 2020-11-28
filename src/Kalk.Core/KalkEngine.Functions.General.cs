@@ -54,6 +54,21 @@ namespace Kalk.Core
         }
 
         /// <summary>
+        /// Displays the license
+        /// </summary>
+        [KalkExport("license", CategoryGeneral)]
+        public void License()
+        {
+            var stream = typeof(KalkEngine).Assembly.GetManifestResourceStream($"{typeof(KalkEngine).Namespace}.license.txt");
+            var reader = new StreamReader(stream);
+            string line = null;
+            while ((line = reader.ReadLine()) != null)
+            {
+                WriteHighlightLine($"# {line}");
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the current content of the clipboard.
         /// </summary>
         /// <param name="value">Value to set the clipboard to. If not set, this function returns the current content of the clipboard.</param>
