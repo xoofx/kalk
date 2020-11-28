@@ -136,6 +136,9 @@ namespace Kalk.Releaser
             // Build NuGet
             BuildNuGet(packageInfo);
 
+            // Build Appx
+            BuildAppx(packageInfo);
+
             // Build all archives
             var win64Zip =  PackPlatform("win-x64", version, PackageKind.Zip);
             var linux64DebAndRpm = PackPlatform("linux-x64", version, PackageKind.Deb, PackageKind.Rpm);
@@ -236,6 +239,35 @@ namespace Kalk.Releaser
             return Environment.ExitCode;
         }
 
+        private void BuildAppx(PackageInfo packageInfo)
+        {
+            Info($"Building Appx {packageInfo.Version}");
+            var storeAppFolder = Path.Combine(_srcFolder, "Kalk.StoreApp");
+            var storeAppBinFolder = Path.Combine(storeAppFolder, "bin", "Release");
+            if (Directory.Exists(storeAppBinFolder))
+            {
+                Directory.Delete(storeAppBinFolder, true);
+            }
+            var storeAppFile = Path.Combine(storeAppBinFolder, $"kalk.{packageInfo.Version}.win-x64.appx");
+            var program = new DotNetProgram("publish")
+            {
+                Arguments =
+                {
+                    "-c Release"
+                },
+                WorkingDirectory = storeAppFolder
+            };
+            program.Run();
+
+            if (!File.Exists(storeAppFile))
+            {
+                Error($"Unable to find generated Appx file {storeAppFile}");
+                return;
+            }
+
+            File.Copy(storeAppFile, Path.Combine(_buildFolder, Path.GetFileName(storeAppFile)), true);
+        }
+        
         private void PublishNuGet(PackageInfo packageInfo, string nugetSecretKey)
         {
             try
