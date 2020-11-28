@@ -606,12 +606,11 @@ end
                 {
                     versionFound = true;
                 }
-                else if (line.StartsWith("## "))
-                {
-                    continue;
-                }
                 else if (versionFound)
                 {
+                    // Stop on the next changelog entry
+                    if (line.StartsWith("## ")) break;
+                    // Otherwise append the line to the log
                     builder.AppendLine(line);
                 }
             }
