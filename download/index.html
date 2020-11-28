@@ -52,7 +52,37 @@
       </nav>
       <div class="kalk-download">
         <section>
-            <p>This is a download page</p>
+            <h1 id="download">Download</h1>
+<p><code>kalk</code> is supported on the following platforms:</p>
+<ul>
+<li>Windows x64</li>
+<li>Linux x64 (Debian derivatives - e.g Ubuntu and Redhat)</li>
+<li>macOS</li>
+</ul>
+<div class='lunet-alert-note' role='alert'><div class='lunet-alert-note-heading'><span class='lunet-alert-note-icon'></span><span class='lunet-alert-note-heading-text'></span></div><div class='lunet-alert-note-content'>
+<p>The current stable version: <strong><code>0.1.0</code></strong></p>
+</div></div>
+<h2 id="windows">Windows</h2>
+<p>The easiest and preferred way to install <code>kalk</code> is <strong>available on the Windows Store</strong>. This version can be updated automatically. (TODO: add link once available)</p>
+<p>You can also download a zip archive <a href="https://github.com/xoofx/kalk/releases/download/0.1.0/kalk.0.1.0.win-x64.zip">kalk.0.1.0.win-x64.zip</a></p>
+<p>Alternatively, if you have <a href="https://dotnet.microsoft.com/download/dotnet/5.0">.NET 5.0 SDK installed</a>, you can install <code>kalk</code> as a .NET global tool:</p>
+<pre><code class="language-shell-session">$ dotnet tool install --global kalk --version 0.1.0
+</code></pre>
+<h2 id="linux">Linux</h2>
+<p>On Ubuntu and all Debian derivatives</p>
+<pre><code class="language-shell-session">$ wget https://github.com/xoofx/kalk/releases/download/0.1.0/kalk.0.1.0.linux-x64.deb
+$ sudo apt install kalk.0.1.0.linux-x64.deb
+</code></pre>
+<p>On CentOS, RHEL &amp; Fedora (RPM)</p>
+<pre><code class="language-shell-session">$ wget https://github.com/xoofx/kalk/releases/download/0.1.0/kalk.0.1.0.linux-x64.rpm
+$ sudo rpm –i kalk.0.1.0.linux-x64.rpm
+</code></pre>
+<h2 id="macos">macOS</h2>
+<p>You can install <code>kalk</code> with <a href="https://brew.sh/">homebrew</a></p>
+<pre><code class="language-shell-session">$ brew tap xoofx/kalk 
+$ brew install kalk
+</code></pre>
+<p>You can also download a tar.gz archive <a href="https://github.com/xoofx/kalk/releases/download/0.1.0/kalk.0.1.0.osx-x64.tar.gz">kalk.0.1.0.osx-x64.tar.gz</a></p>
 
         </section>
         <footer>
