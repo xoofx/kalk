@@ -152,7 +152,10 @@
 
         <p id="lunet-results"></p>
         <h1>Language Syntax</h1>
-        <h2 id="types">Types</h2>
+        <h2 id="overview">Overview</h2>
+<p>The language used by <code>kalk</code> is a <strong>full featured language</strong> with types, expressions, control flows, functions... with an easy and fluent syntax to work with.</p>
+<p>In this document, you will find more details about its language features.</p>
+<h2 id="types">Types</h2>
 <p><code>kalk</code> supports different type of numbers and formats. All digits can be separated with the underscore <code>_</code> character.</p>
 <h3 id="integers">Integers</h3>
 <p>Integers: from a byte to large integers with any number of digits.</p>
@@ -204,12 +207,14 @@ out = 5
 # int(&quot;5&quot;)
 out = 5
 </code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h4 id="big-integers">Big Integers</h4>
 <p>With any number of digits:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 1e50
 # 100000000000000000000000000000000000000000000000000
 out = 100000000000000000000000000000000000000000000000000
 </code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h4 id="hexadecimal-integers">Hexadecimal Integers</h4>
 <p>Hexadecimal integers are prefixed by <code>0x</code> followed by hexadecimal characters <code>[0-9A-Fa-f]</code> with an optional postfix specifier for unsigned (<code>u</code> or <code>U</code>):</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 0xFC1234 # hexa
@@ -231,6 +236,7 @@ out = 2147483649
 # -5565725
 out = -5565725  
 </code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h4 id="binary-integers">Binary Integers</h4>
 <p>Binary integers are prefixed by <code>0b</code> followed by binary characters <code>0</code> or <code>1</code> with an optional postfix specifier for unsigned (<code>u</code> or <code>U</code>):</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 0b11111010 # binary
@@ -249,6 +255,7 @@ out = -268435456
 # 4026531840
 out = 4026531840    
 </code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h3 id="floats">Floats</h3>
 <h4 id="float">Float</h4>
 <p>Float IEEE 754 32-bit single precision float (6-9 digits precision). Use the postfix <code>f</code> to enforce a <code>float</code>.</p>
@@ -274,6 +281,7 @@ out = 1.5
     #  sign   exponent            |------ fraction -----|
     =   1 * 2 ^ (127 - 127) * 0b1.10000000000000000000000f
 </code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h4 id="double">Double</h4>
 <p>Double IEEE 754 64-bit double precision float (15-17 digits precision). This is the default when using a floating point number.</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 1.5
@@ -298,6 +306,7 @@ out = 1.5
     # sign    exponent              |-------------------- fraction --------------------|
     =   1 * 2 ^ (1023 - 1023) * 0b1.1000000000000000000000000000000000000000000000000000
 </code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h4 id="decimal">Decimal</h4>
 <p>Decimal 128-bit precision float (28-29 digits precision). Use the postfix <code>m</code> for enforcing a <code>decimal</code>.</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 1.5m
@@ -320,6 +329,7 @@ out = 1.5678192030394059106876216683
     # sign    exponent              |-------------------- fraction --------------------|
     =   1 * 2 ^ (1023 - 1023) * 0b1.1001000101011100100110010110101100011000010101000001
 </code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h4 id="binary-as-floats">Binary as floats</h4>
 <p>By using the binary prefix <code>0b</code> associated with a dot <code>.</code> you can express a floating point number. The postfix <code>f</code> can be applied to enforce <code>float</code> precision.</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 0b1.101f
@@ -336,6 +346,7 @@ out = 1.625
     #  sign   exponent            |------ fraction -----|
     =   1 * 2 ^ (127 - 127) * 0b1.10100000000000000000000f
 </code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h3 id="boolean">Boolean</h3>
 <p>A boolean value is <code>true</code> or <code>false</code>.</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; true
@@ -357,15 +368,708 @@ out = true
 # bool(&quot;false&quot;)
 out = false
 </code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h3 id="vectors">Vectors</h3>
+<p><code>kalk</code> supports multiple vector types:</p>
+<pre><code class="language-kalk"># Type Vector Constructors
+    - bool16, bool2, bool3, bool4, bool8, byte16, byte32, byte64, double2,
+      double3, double4, double8, float16, float2, float3, float4, float8,
+      int16, int2, int3, int4, int8, long2, long3, long4, long8, rgb, rgba,
+      sbyte16, sbyte32, sbyte64, short16, short2, short32, short4, short8,
+      uint16, uint2, uint3, uint4, uint8, ulong2, ulong3, ulong4, ulong8,
+      ushort16, ushort2, ushort32, ushort4, ushort8, vector
+</code></pre>
+<p>They can be initialized with:</p>
+<ul>
+<li>A single value
+<pre><code class="language-kalk">&gt;&gt;&gt; float4(0.5)
+# float4(0.5)
+out = float4(0.5, 0.5, 0.5, 0.5)
+</code></pre>
+</li>
+<li>An array of values
+<pre><code class="language-kalk">&gt;&gt;&gt; float4([1,3,5,7])
+# float4([1,3,5,7])
+out = float4(1, 3, 5, 7)
+</code></pre>
+</li>
+<li>Direct values
+<pre><code class="language-kalk">&gt;&gt;&gt; float4(1,3,5,7)
+# float4(1, 3, 5, 7)
+out = float4(1, 3, 5, 7)
+</code></pre>
+</li>
+<li>Mixed vector values
+<pre><code class="language-kalk">&gt;&gt;&gt; float4(1.xyz, 5)
+# float4(1.xyz, 5)
+out = float4(1, 1, 1, 5)  
+</code></pre>
+</li>
+</ul>
+<p>They support swizzles <code>xyzw</code> and <code>rgba</code> operator:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; float4(1..4)
+# float4(1..4)
+out = float4(1, 2, 3, 4)
+&gt;&gt;&gt; out.xy
+# out.xy
+out = float2(1, 2)
+</code></pre>
+<p>Components can be array indexed as well:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; float4(5,6,7,8)
+# float4(5, 6, 7, 8)
+out = float4(5, 6, 7, 8)
+&gt;&gt;&gt; out[1]
+# out[1]
+out = 6
+</code></pre>
+<p>Arbitrary vector size can also be created:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; vector(float, 11, [2..12] |&gt; cos)
+# vector(float, 11, [2..12] |&gt; cos)
+out = vector(float, 11, -0.41614684, -0.9899925, -0.6536436, 0.2836622, 0.96017027, 0.75390226, -0.14550003, -0.91113025, -0.8390715, 0.004425698, 0.84385395)
+</code></pre>
+<p>Many functions are able to be applied to vector types as a whole:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; cos(float4(1..4))
+# cos(float4(1..4))
+out = float4(0.5403023, -0.41614684, -0.9899925, -0.6536436)
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h3 id="matrices">Matrices</h3>
+<p>Similar to vector, matrices can be created with a single value:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; float4x4(1)
+# float4x4(1)
+out = float4x4(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+      # col  0           1           2           3           / row
+      float4(1         , 1         , 1         , 1         ) # 0
+      float4(1         , 1         , 1         , 1         ) # 1
+      float4(1         , 1         , 1         , 1         ) # 2
+      float4(1         , 1         , 1         , 1         ) # 3
+</code></pre>
+<p>They can also be created with an array:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; float3x3(1..9)
+# float3x3(1..9)
+out = float3x3(1, 2, 3, 4, 5, 6, 7, 8, 9)
+      # col  0           1           2           / row
+      float3(1         , 2         , 3         ) # 0
+      float3(4         , 5         , 6         ) # 1
+      float3(7         , 8         , 9         ) # 2
+</code></pre>
+<p>They can be created by combining them with vectors:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; float4x3(float3(1), float3(2), float3(3), float3(4))
+# float4x3(float3(1), float3(2), float3(3), float3(4))
+out = float4x3(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4)
+      # col  0           1           2           / row
+      float3(1         , 1         , 1         ) # 0
+      float3(2         , 2         , 2         ) # 1
+      float3(3         , 3         , 3         ) # 2
+      float3(4         , 4         , 4         ) # 3
+</code></pre>
+<p>You can access the row of a matrix</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; float3x3(1..9)
+# float3x3(1..9)
+out = float3x3(1, 2, 3, 4, 5, 6, 7, 8, 9)
+      # col  0           1           2           / row
+      float3(1         , 2         , 3         ) # 0
+      float3(4         , 5         , 6         ) # 1
+      float3(7         , 8         , 9         ) # 2
+&gt;&gt;&gt; out[1]
+# out[1]
+out = float3(4, 5, 6)
+</code></pre>
+<p>Similar to vectors You can use functions to manipulate matrices:</p>
+<pre><code class="language-kalk"># cos(float3x3(1..9))
+out = float3x3(0.5403023, -0.41614684, -0.9899925, -0.6536436, 0.2836622, 0.96017027, 0.75390226, -0.14550003, -0.91113025)
+      # col   0            1            2           / row
+      float3( 0.5403023 , -0.41614684, -0.9899925 ) # 0
+      float3(-0.6536436 ,  0.2836622 ,  0.96017027) # 1
+      float3( 0.75390226, -0.14550003, -0.91113025) # 2
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h3 id="strings">Strings</h3>
+<p>You can create strings:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;This is a string&quot;
+# &quot;This is a string&quot;
+out = &quot;This is a string&quot;
+</code></pre>
+<p>You can access a single character:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;abcd&quot;[1]
+# &quot;abcd&quot;[1]
+out = &quot;b&quot;
+</code></pre>
+<p>You can get the size of a string:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;abcd&quot;.size
+# &quot;abcd&quot;.size
+out = 4
+</code></pre>
+<p>Or by using the <code>size</code> function:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;abcd&quot; |&gt; size
+# &quot;abcd&quot; |&gt; size
+out = 4
+</code></pre>
+<p>You can convert a string to an ascii buffer:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;Hello World!&quot;
+# &quot;Hello World!&quot;
+out = &quot;Hello World!&quot;
+&gt;&gt;&gt; ascii out
+# ascii(out)
+out = bytebuffer([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33])
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h3 id="arrays">Arrays</h3>
+<p>You can create arrays by specifying its values:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; [1, 3, 5, 7]
+# [1, 3, 5, 7]
+out = [1, 3, 5, 7]
+</code></pre>
+<p>You can access an element of the array:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; arr = [1, 3, 5, 7]
+# arr = [1, 3, 5, 7]
+arr = [1, 3, 5, 7]
+&gt;&gt;&gt; arr[2]
+# arr[2]
+out = 5
+</code></pre>
+<p>You can get the size of an array:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; [1, 3, 5, 7].size
+# [1, 3, 5, 7].size
+out = 4
+</code></pre>
+<p>Or by using the <code>size</code> function:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; [1, 3, 5, 7] |&gt; size
+# [1, 3, 5, 7] |&gt; size
+out = 4
+</code></pre>
+<p>Some functions can be applied on each element of the array:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; [1, 3, 5, 7, 10, 11] |&gt; fib
+# [1, 3, 5, 7, 10, 11] |&gt; fib
+out = [1, 2, 5, 13, 55, 89]
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h3 id="ranges">Ranges</h3>
+<p>You can create an enumerator of values based on an inclusive range <code>from..to</code></p>
+<pre><code class="language-kalk">&gt;&gt;&gt; 1..10
+# 1..10
+out = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+</code></pre>
+<p>An exclusive range is defined by <code>from..&lt;to</code></p>
+<pre><code class="language-kalk">&gt;&gt;&gt; 1..&lt;10
+# 1..&lt;10
+out = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+</code></pre>
+<p>A range can be created from variable or function results:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; x = 1
+# x = 1
+x = 1
+&gt;&gt;&gt; y = 6
+# y = 6
+y = 6
+&gt;&gt;&gt; x..y
+# x..y
+out = [1, 2, 3, 4, 5, 6]
+</code></pre>
+<p>Ranges share similar behavior to arrays (size, indexing...).</p>
+<p><a href="#overview">🢁 top</a></p>
 <h3 id="objects">Objects</h3>
+<p>Objects with properties can be created:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; {a: 1, b: 2, c: &quot;yes&quot;, d: float4(1)}
+# {a: 1, b: 2, c: &quot;yes&quot;, d: float4(1)}
+out = {a: 1, b: 2, c: &quot;yes&quot;, d: float4(1, 1, 1, 1)}
+</code></pre>
+<p>Properties can be accessed by name or by dynamic indexer:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; obj = {a: 1, b: 2, c: &quot;yes&quot;, d: float4(1)}
+# obj = {a: 1, b: 2, c: &quot;yes&quot;, d: float4(1)}
+obj = {a: 1, b: 2, c: &quot;yes&quot;, d: float4(1, 1, 1, 1)}
+&gt;&gt;&gt; obj.b
+# obj.b
+out = 2
+&gt;&gt;&gt; obj.c
+# obj.c
+out = &quot;yes&quot;
+&gt;&gt;&gt; obj[&quot;d&quot;]
+# obj[&quot;d&quot;]
+out = float4(1, 1, 1, 1)
+</code></pre>
+<p>You can extract keys and values from an object:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; obj = {a: 1, b: 2, c: &quot;yes&quot;, d: float4(1)}
+# obj = {a: 1, b: 2, c: &quot;yes&quot;, d: float4(1)}
+obj = {a: 1, b: 2, c: &quot;yes&quot;, d: float4(1, 1, 1, 1)}
+&gt;&gt;&gt; obj |&gt; keys
+# obj |&gt; keys
+out = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]
+&gt;&gt;&gt; obj |&gt; values
+# obj |&gt; values
+out = [1, 2, &quot;yes&quot;, float4(1, 1, 1, 1)]
+</code></pre>
+<p>You can convert an object to a json string back and forth:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; import Web
+# 8 functions successfully imported from module `Web`.
+&gt;&gt;&gt; {a: 1, b: &quot;yes&quot;} |&gt; json
+# {a: 1, b: &quot;yes&quot;} |&gt; json
+out = &quot;{\&quot;a\&quot;: 1, \&quot;b\&quot;: \&quot;yes\&quot;}&quot;
+&gt;&gt;&gt; json out
+# json(out)
+out = {a: 1, b: &quot;yes&quot;}
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h3 id="bytebuffers">ByteBuffers</h3>
+<p>Byte buffers are a special kind of array that can be used with CPU intrinsics and other memory functions:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; buf = bytebuffer(1..10)
+# buf = bytebuffer(1..10)
+buf = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+&gt;&gt;&gt; buf[0] = 255
+&gt;&gt;&gt; buf
+# buf
+out = bytebuffer([255, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+</code></pre>
+<p>A bytebuffer can be allocated:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; malloc(16)
+# malloc(16)
+out = bytebuffer([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+</code></pre>
+<p>You can take a slice/view of a buffer, while it manipulates the original content:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; buf = bytebuffer(1..10)
+# buf = bytebuffer(1..10)
+buf = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+&gt;&gt;&gt; buf1 = slice(buf, 1, 5)
+# buf1 = slice(buf, 1, 5)
+buf1 = slice(bytebuffer([2, 3, 4, 5, 6]), 1, 5)
+&gt;&gt;&gt; buf1[0] = 255
+&gt;&gt;&gt; buf
+# buf
+out = bytebuffer([1, 2, 255, 4, 5, 6, 7, 8, 9, 10])
+</code></pre>
+<p>All types (except objects), can be converted to a bytebuffer representation via <code>asbytes</code>:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; float4(1..4) |&gt; asbytes
+# float4(1..4) |&gt; asbytes
+out = bytebuffer([0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64, 0, 0, 128, 64])
+</code></pre>
+<p>A bytebuffer acts as a pointer for + operator with an integer:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; bytebuffer(1..10)
+# bytebuffer(1..10)
+out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+&gt;&gt;&gt; out + 4
+# out + 4
+out = slice(bytebuffer([5, 6, 7, 8, 9, 10]), 4)
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h2 id="expressions">Expressions</h2>
+<h3 id="nested">Nested</h3>
+<p>An expression enclosed by <code>(</code> and <code>)</code></p>
+<pre><code class="language-kalk">&gt;&gt;&gt; (2 - 5 * (1 + 3)) / 3
+# (2 - 5 * (1 + 3)) / 3
+out = -6
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
+<h3 id="with-numbers">With Numbers</h3>
+<p>The following binary operators are supported for <strong>numbers</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;left&gt; + &lt;right&gt;</code></td>
+<td>add left to right number</td>
+</tr>
+<tr>
+<td><code>&lt;left&gt; - &lt;right&gt;</code></td>
+<td>substract right number from left</td>
+</tr>
+<tr>
+<td><code>&lt;left&gt; * &lt;right&gt;</code></td>
+<td>multiply left by right number</td>
+</tr>
+<tr>
+<td><code>&lt;left&gt; / &lt;right&gt;</code></td>
+<td>divide left by right number</td>
+</tr>
+<tr>
+<td><code>&lt;left&gt; // &lt;right&gt;</code></td>
+<td>divide left by right number and round to an integer</td>
+</tr>
+<tr>
+<td><code>&lt;left&gt; % &lt;right&gt;</code></td>
+<td>calculates the modulus of left by right</td>
+</tr>
+<tr>
+<td><code>&lt;left&gt; ^ &lt;right&gt;</code></td>
+<td>calculates the exponent of left by right</td>
+</tr>
+</tbody>
+</table>
+<p>If left or right is a float and the other is an integer, the result of the operation will be a float.</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; 1 + 2
+# 1 + 2
+out = 3
+&gt;&gt;&gt; 3 - 1
+# 3 - 1
+out = 2
+&gt;&gt;&gt; 3 * 4
+# 3 * 4
+out = 12
+&gt;&gt;&gt; 5 / 2
+# 5 / 2
+out = 2.5
+&gt;&gt;&gt; 5 // 2
+# 5 // 2
+out = 2
+&gt;&gt;&gt; 5 % 2
+# 5 % 2
+out = 1
+&gt;&gt;&gt; 4 ^ 3
+# 4 ^ 3
+out = 64
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
+<h3 id="with-strings">With Strings</h3>
+<p>The following binary operators are supported for <strong>strings</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>'left' + &lt;right&gt;</code></td>
+<td>concatenates left to right string: <code>&quot;ab&quot; + &quot;c&quot; -&gt; &quot;abc&quot;</code></td>
+</tr>
+<tr>
+<td><code>'left' * &lt;right&gt;</code></td>
+<td>concatenates the left string <code>right</code> times: <code>'a' * 5  -&gt; aaaaa</code>. left and right and be swapped as long as there is one string and one number.</td>
+</tr>
+</tbody>
+</table>
+<p>As long as there is a string in a binary operation, the other part will be automatically converted to a string.</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;abc&quot; * 2
+# &quot;abc&quot; * 2
+out = &quot;abcabc&quot;
+</code></pre>
+<p>The following literals are converted to plain strings:</p>
+<ul>
+<li><code>null -&gt; &quot;&quot;</code>. e.g: <code>&quot;aaaa&quot; + null -&gt; &quot;aaaa&quot;</code></li>
+<li><code>0 -&gt; &quot;0&quot;</code></li>
+<li><code>1.0 -&gt; &quot;1.0&quot;</code></li>
+<li><code>true -&gt; &quot;true&quot;</code></li>
+<li><code>false -&gt; &quot;false&quot;</code></li>
+</ul>
+<p><a href="#overview">🢁 top</a></p>
+<h3 id="with-arrays">With Arrays</h3>
+<p>The following binary operators are supported for <strong>arrays</strong>:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; [1, 2, 3] + [4, 5, 6]
+# [1, 2, 3] + [4, 5, 6]
+out = [1, 2, 3, 4, 5, 6]
+</code></pre>
+<p>Join array values with <code>|</code>:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; [1, 2, 3] | [1, 2, 4]
+# [1, 2, 3] | [1, 2, 4]
+out = [1, 2, 3, 4]
+</code></pre>
+<p>Select values from both left and right <code>&amp;</code>:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; [1, 2, 3] &amp; [1, 2, 4]
+# [1, 2, 3] &amp; [1, 2, 4]
+out = [1, 2]
+</code></pre>
+<p>Multiply arrays with <code>*</code>:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; [1,3,5] * 3
+# [1,3,5] * 3
+out = [1, 3, 5, 1, 3, 5, 1, 3, 5]
+</code></pre>
+<h3 id="conditional">Conditional</h3>
+<p>A boolean expression produces a boolean by comparing a left and right value.</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;left&gt; == &lt;right&gt;</code></td>
+<td>Is left equal to right?</td>
+</tr>
+<tr>
+<td><code>&lt;left&gt; != &lt;right&gt;</code></td>
+<td>Is left not equal to right?</td>
+</tr>
+<tr>
+<td><code>&lt;left&gt; &gt; &lt;right&gt;</code></td>
+<td>Is left greater than right?</td>
+</tr>
+<tr>
+<td><code>&lt;left&gt; &gt;= &lt;right&gt;</code></td>
+<td>Is left greater or equal to right?</td>
+</tr>
+<tr>
+<td><code>&lt;left&gt; &lt; &lt;right&gt;</code></td>
+<td>Is left less than right?</td>
+</tr>
+<tr>
+<td><code>&lt;left&gt; &lt;= &lt;right&gt;</code></td>
+<td>Is left less or equal to right?</td>
+</tr>
+</tbody>
+</table>
+<p>They work with both <code>numbers</code>, <code>strings</code> and datetimes.</p>
+<p>You can combine conditional expressions with <code>&amp;&amp;</code> (and operator) and <code>||</code> (or operator).
+Unlike in <code>javascript</code> it always returns <code>boolean</code> and never <code>&lt;left&gt;</code> or <code>&lt;right&gt;</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;left&gt; &amp;&amp; &lt;right&gt;</code></td>
+<td>Is left true and right true?</td>
+</tr>
+<tr>
+<td><code>&lt;left&gt; || &lt;right&gt;</code></td>
+<td>Is left true or right true?</td>
+</tr>
+</tbody>
+</table>
+<p>The conditional expression <code>cond ? left : right</code> allow to return <code>left</code> if <code>cond</code> is <code>true</code> otherwise <code>right</code>.</p>
+<p>The operators work with all types except objects (e.g basic, vector, matrices, arrays):</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; 1 == 2
+# 1 == 2
+out = false
+&gt;&gt;&gt; float4(1,2,3,4) == float4(1,0,3,0)
+# float4(1, 2, 3, 4) == float4(1, 0, 3, 0)
+out = bool4(true, false, true, false)
+&gt;&gt;&gt; [1, 2, 3] == [1, 0, 3]
+# [1, 2, 3] == [1, 0, 3]
+out = false
+&gt;&gt;&gt; [1, 2, 3] == [1, 2, 3]
+# [1, 2, 3] == [1, 2, 3]
+out = true
+</code></pre>
+<p>The operator <code>left ?? right</code> can be used to return the <code>right</code> value if <code>left</code> is null.</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; a = null
+# a = null
+a = null
+&gt;&gt;&gt; b = &quot;yes&quot;
+# b = &quot;yes&quot;
+b = &quot;yes&quot;
+&gt;&gt;&gt; a ?? b
+# a ?? b
+out = &quot;yes&quot;
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
 <h2 id="control-flows">Control Flows</h2>
+<h3 id="multiple-statements">Multiple statements</h3>
+<p><code>kalk</code> supports multiple statements on the same line separated by <code>;</code></p>
+<pre><code class="language-kalk">&gt;&gt;&gt; x = 1; y = 2; x + y
+# x = 1; y = 2; x + y
+x = 1
+y = 2
+out = 3
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
+<h3 id="if-statements">If statements</h3>
+<p>Supports for if, else, and else if statements:</p>
+<blockquote>
+<p><code>if &lt;condition&gt;; &lt;statements&gt;; else; &lt;statements&gt;; end;</code></p>
+</blockquote>
+<pre><code class="language-kalk">&gt;&gt;&gt; x = 1; if x &lt; 1; y = 2; else; y = 3; end; x + y
+# x = 1; if x &lt; 1; y = 2; else; y = 3; end; x + y
+x = 1
+y = 3
+out = 4
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
+<h3 id="loop-statements">Loop statements</h3>
+<p>Supports for the following <code>for</code> loop syntax:</p>
+<blockquote>
+<p><code>for &lt;condition&gt; in &lt;expression&gt;; &lt;statements&gt;; end;</code></p>
+</blockquote>
+<pre><code class="language-kalk">&gt;&gt;&gt; for x in 1..10; y = x; end
+# for x in 1..10; y = x; end
+y = 1
+y = 2
+y = 3
+y = 4
+y = 5
+y = 6
+y = 7
+y = 8
+y = 9
+y = 10
+</code></pre>
+<p>Supports for <code>while</code> loop syntax:</p>
+<blockquote>
+<p><code>while &lt;condition&gt;; &lt;statements&gt;; end;</code></p>
+</blockquote>
+<pre><code class="language-kalk">&gt;&gt;&gt; x = 10; while x &gt; 0; x = x - 1; end
+# x = 10; while x &gt; 0; x = x - 1; end
+x = 10
+x = 9
+x = 8
+x = 7
+x = 6
+x = 5
+x = 4
+x = 3
+x = 2
+x = 1
+x = 0
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
+<h4 id="special-loop-variables">Special loop variables</h4>
+<p>The following variables are accessible within a <code>for</code> block:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>for.index</code></td>
+<td>The current <code>index</code> of the for loop</td>
+</tr>
+<tr>
+<td><code>for.rindex</code></td>
+<td>The current <code>index</code> of the for loop starting from the end of the list</td>
+</tr>
+<tr>
+<td><code>for.first</code></td>
+<td>A boolean indicating whether this is the first step in the loop</td>
+</tr>
+<tr>
+<td><code>for.last</code></td>
+<td>A boolean indicating whether this is the last step in the loop</td>
+</tr>
+<tr>
+<td><code>for.even</code></td>
+<td>A boolean indicating whether this is an even row in the loop</td>
+</tr>
+<tr>
+<td><code>for.odd</code></td>
+<td>A boolean indicating whether this is an odd row in the loop</td>
+</tr>
+<tr>
+<td><code>for.changed</code></td>
+<td>A boolean indicating whether a current value of this iteration changed from previous step</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-kalk">&gt;&gt;&gt; for x in 1..10; print(for.index + &quot; first: &quot; + for.first + &quot; last: &quot; + for.last); end;
+0 first: true last: false
+1 first: false last: false
+2 first: false last: false
+3 first: false last: false
+4 first: false last: false
+5 first: false last: false
+6 first: false last: false
+7 first: false last: false
+8 first: false last: false
+9 first: false last: true
+</code></pre>
+<p>Within a <code>while</code> statement, the following variables can be used:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>while.index</code></td>
+<td>The current <code>index</code> of the while loop</td>
+</tr>
+<tr>
+<td><code>while.first</code></td>
+<td>A boolean indicating whether this is the first step in the loop</td>
+</tr>
+<tr>
+<td><code>while.even</code></td>
+<td>A boolean indicating whether this is an even row in the loop</td>
+</tr>
+<tr>
+<td><code>while.odd</code></td>
+<td>A boolean indicating whether this is an odd row in the loop</td>
+</tr>
+</tbody>
+</table>
+<p><a href="#overview">🢁 top</a></p>
+<h4 id="break-and-continue"><code>break</code> and <code>continue</code></h4>
+<p>You can use <code>break</code> and <code>continue</code> within loops as in standard languages.</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; for x in 1..10; if x &gt; 5; break; end; x * 2; end
+# for x in 1..10; if x &gt; 5; break; end; x * 2; end
+out = 2
+out = 4
+out = 6
+out = 8
+out = 10
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
+<h2 id="functions">Functions</h2>
+<h3 id="inline-functions">Inline functions</h3>
+<p>A simple inline function can be declared with:</p>
+<blockquote>
+<p><code>&lt;function_name&gt;(argName1, argName2, ...argNameN) = &lt;expression&gt;</code></p>
+</blockquote>
+<pre><code class="language-kalk">&gt;&gt;&gt; f(x, y, z) = x + 2y + 3z
+# f(x, y, z) = x + 2 * y + 3 * z
+f(x, y, z) = x + 2 y + 3 z
+&gt;&gt;&gt; f(1,2,3)
+# f(1, 2, 3)
+out = 14
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
+<h3 id="multiline-functions">Multiline functions</h3>
+<blockquote>
+<p><code> func &lt;function_name&gt;(argName1, argName2, ...argNameN); &lt;statements&gt;; end;</code></p>
+</blockquote>
+<pre><code class="language-kalk">&gt;&gt;&gt; func f(x,y); for v in x..y; 2v; end; end
+# func f(x,y); for v in x..y; 2 * v; end; end
+func f(x,y); for v in x .. y; 2 v; end; end
+&gt;&gt;&gt; f(1,10)
+# f(1, 10)
+out = 2
+out = 4
+out = 6
+out = 8
+out = 10
+out = 12
+out = 14
+out = 16
+out = 18
+out = 20
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
+<h3 id="anonymous-functions">Anonymous functions</h3>
+<p>Anonymous functions are like simple functions but can be used in expressions (e.g as the last argument of function call)</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; f = do (x,y); ret x + y; end;
+# f = do(x,y); ret x + y; end;
+f = do(x,y); ret x + y; end;
+&gt;&gt;&gt; f(1,2)
+# f(1, 2)
+out = 3
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
+<h3 id="function-pointers">Function Pointers</h3>
+<p>A function can be passed to another function by using the operator <code>@</code> in front of the function to stop the evaluation and allow to pass the function as a &quot;pointer&quot;.</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; f(x) = x + 1
+# f(x) = x + 1
+f(x) = x + 1
+&gt;&gt;&gt; g(y, z) = y(z)
+# g(y, z) = y(z)
+g(y, z) = y(z)
+&gt;&gt;&gt; g(@f, 5)
+# g(@f, 5)
+out = 6
+</code></pre>
+<p><a href="#overview">🢁 top</a></p>
 
       </div>
   </div>

@@ -277,6 +277,45 @@ mat = float4x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
 # mul(mat, x)
 out = float4(90, 100, 110, 120)
 </code></pre>
+<h3 id="extras">Extras</h3>
+<p>Some functions like <code>ascii</code> can display a convenient ASCII table:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; ascii
+ ASCII controls                         ASCII printable characters     Extended ASCII Characters
+  0 &quot;\x00&quot; (NUL / Null)                 32 &quot; &quot;   64 &quot;@&quot;   96 &quot;`&quot;       128 &quot;€&quot;  160 &quot; &quot;  192 &quot;À&quot;  224 &quot;à&quot;
+  1 &quot;\x01&quot; (SOH / Start of Heading)     33 &quot;!&quot;   65 &quot;A&quot;   97 &quot;a&quot;       129 &quot;&quot;  161 &quot;¡&quot;  193 &quot;Á&quot;  225 &quot;á&quot;
+  2 &quot;\x02&quot; (STX / Start of Text)        34 &quot;\&quot;&quot;  66 &quot;B&quot;   98 &quot;b&quot;       130 &quot;‚&quot;  162 &quot;¢&quot;  194 &quot;Â&quot;  226 &quot;â&quot;
+  3 &quot;\x03&quot; (ETX / End of Text)          35 &quot;#&quot;   67 &quot;C&quot;   99 &quot;c&quot;       131 &quot;ƒ&quot;  163 &quot;£&quot;  195 &quot;Ã&quot;  227 &quot;ã&quot;
+  4 &quot;\x04&quot; (EOT / End of Transmission)  36 &quot;$&quot;   68 &quot;D&quot;  100 &quot;d&quot;       132 &quot;„&quot;  164 &quot;¤&quot;  196 &quot;Ä&quot;  228 &quot;ä&quot;
+  5 &quot;\x05&quot; (ENQ / Enquiry)              37 &quot;%&quot;   69 &quot;E&quot;  101 &quot;e&quot;       133 &quot;…&quot;  165 &quot;¥&quot;  197 &quot;Å&quot;  229 &quot;å&quot;
+  6 &quot;\x06&quot; (ACK / Acknowledgment)       38 &quot;&amp;&quot;   70 &quot;F&quot;  102 &quot;f&quot;       134 &quot;†&quot;  166 &quot;¦&quot;  198 &quot;Æ&quot;  230 &quot;æ&quot;
+  7 &quot;\a&quot;   (BEL / Bell)                 39 &quot;'&quot;   71 &quot;G&quot;  103 &quot;g&quot;       135 &quot;‡&quot;  167 &quot;§&quot;  199 &quot;Ç&quot;  231 &quot;ç&quot;
+  8 &quot;\b&quot;   (BS  / Backspace)            40 &quot;(&quot;   72 &quot;H&quot;  104 &quot;h&quot;       136 &quot;ˆ&quot;  168 &quot;¨&quot;  200 &quot;È&quot;  232 &quot;è&quot;
+  9 &quot;\t&quot;   (HT  / Horizontal Tab)       41 &quot;)&quot;   73 &quot;I&quot;  105 &quot;i&quot;       137 &quot;‰&quot;  169 &quot;©&quot;  201 &quot;É&quot;  233 &quot;é&quot;
+ 10 &quot;\n&quot;   (LF  / Line Feed)            42 &quot;*&quot;   74 &quot;J&quot;  106 &quot;j&quot;       138 &quot;Š&quot;  170 &quot;ª&quot;  202 &quot;Ê&quot;  234 &quot;ê&quot;
+ 11 &quot;\v&quot;   (VT  / Vertical Tab)         43 &quot;+&quot;   75 &quot;K&quot;  107 &quot;k&quot;       139 &quot;‹&quot;  171 &quot;«&quot;  203 &quot;Ë&quot;  235 &quot;ë&quot;
+ 12 &quot;\f&quot;   (FF  / Form Feed)            44 &quot;,&quot;   76 &quot;L&quot;  108 &quot;l&quot;       140 &quot;&quot;  173 &quot;­&quot;  205 &quot;Í&quot;  237 &quot;í&quot;
+ 14 &quot;\x0e&quot; (SO  / Shift Out)            46 &quot;.&quot;   78 &quot;N&quot;  110 &quot;n&quot;       142 &quot;Ž&quot;  174 &quot;®&quot;  206 &quot;Î&quot;  238 &quot;î&quot;
+ 15 &quot;\x0f&quot; (SI  / Shift In)             47 &quot;/&quot;   79 &quot;O&quot;  111 &quot;o&quot;       143 &quot;¢  175 &quot;¯&quot;  207 &quot;Ï&quot;  239 &quot;ï&quot;
+ 16 &quot;\x10&quot; (DLE / Data Link Escape)     48 &quot;0&quot;   80 &quot;P&quot;  112 &quot;p&quot;       144 &quot;  176 &quot;°&quot;  208 &quot;Ð&quot;  240 &quot;ð&quot;
+ 17 &quot;\x11&quot; (DC1 / Device Control 1)     49 &quot;1&quot;   81 &quot;Q&quot;  113 &quot;q&quot;       145 &quot;‘&quot;  177 &quot;±&quot;  209 &quot;Ñ&quot;  241 &quot;ñ&quot;
+ 18 &quot;\x12&quot; (DC2 / Device Control 2)     50 &quot;2&quot;   82 &quot;R&quot;  114 &quot;r&quot;       146 &quot;’&quot;  178 &quot;²&quot;  210 &quot;Ò&quot;  242 &quot;ò&quot;
+ 19 &quot;\x13&quot; (DC3 / Device Control 3)     51 &quot;3&quot;   83 &quot;S&quot;  115 &quot;s&quot;       147 &quot;“&quot;  179 &quot;³&quot;  211 &quot;Ó&quot;  243 &quot;ó&quot;
+ 20 &quot;\x14&quot; (DC4 / Device Control 4)     52 &quot;4&quot;   84 &quot;T&quot;  116 &quot;t&quot;       148 &quot;”&quot;  180 &quot;´&quot;  212 &quot;Ô&quot;  244 &quot;ô&quot;
+ 21 &quot;\x15&quot; (NAK / Negative Ack)         53 &quot;5&quot;   85 &quot;U&quot;  117 &quot;u&quot;       149 &quot;•&quot;  181 &quot;µ&quot;  213 &quot;Õ&quot;  245 &quot;õ&quot;
+ 22 &quot;\x16&quot; (SYN / Synchronous Idle)     54 &quot;6&quot;   86 &quot;V&quot;  118 &quot;v&quot;       150 &quot;–&quot;  182 &quot;¶&quot;  214 &quot;Ö&quot;  246 &quot;ö&quot;
+ 23 &quot;\x17&quot; (ETB / End of Trans Block)   55 &quot;7&quot;   87 &quot;W&quot;  119 &quot;w&quot;       151 &quot;—&quot;  183 &quot;·&quot;  215 &quot;×&quot;  247 &quot;÷&quot;
+ 24 &quot;\x18&quot; (CAN / Cancel)               56 &quot;8&quot;   88 &quot;X&quot;  120 &quot;x&quot;       152 &quot;˜&quot;  184 &quot;¸&quot;  216 &quot;Ø&quot;  248 &quot;ø&quot;
+ 25 &quot;\x19&quot; (EM  / End of Medium)        57 &quot;9&quot;   89 &quot;Y&quot;  121 &quot;y&quot;       153 &quot;™&quot;  185 &quot;¹&quot;  217 &quot;Ù&quot;  249 &quot;ù&quot;
+ 26 &quot;\x1a&quot; (SUB / Substitute)           58 &quot;:&quot;   90 &quot;Z&quot;  122 &quot;z&quot;       154 &quot;š&quot;  186 &quot;º&quot;  218 &quot;Ú&quot;  250 &quot;ú&quot;
+ 27 &quot;\x1b&quot; (ESC / Escape)               59 &quot;;&quot;   91 &quot;[&quot;  123 &quot;{&quot;       155 &quot;›&quot;  187 &quot;»&quot;  219 &quot;Û&quot;  251 &quot;û&quot;
+ 28 &quot;\x1c&quot; (FS  / File Separator)       60 &quot;&lt;&quot;   92 &quot;\\&quot; 124 &quot;|&quot;       156 &quot;œ&quot;  188 &quot;¼&quot;  220 &quot;Ü&quot;  252 &quot;ü&quot;
+ 29 &quot;\x1d&quot; (GS  / Group Separator)      61 &quot;=&quot;   93 &quot;]&quot;  125 &quot;}&quot;       157 &quot;  189 &quot;½&quot;  221 &quot;Ý&quot;  253 &quot;ý&quot;
+ 30 &quot;\x1e&quot; (RS  / Record Separator)     62 &quot;&gt;&quot;   94 &quot;^&quot;  126 &quot;~&quot;       158 &quot;ž&quot;  190 &quot;¾&quot;  222 &quot;Þ&quot;  254 &quot;þ&quot;
+ 31 &quot;\x1f&quot; (US  / Unit Separator)       63 &quot;?&quot;   95 &quot;_&quot;  127 &quot;&quot;       159 &quot;Ÿ&quot;  191 &quot;¿&quot;  223 &quot;ß&quot;  255 &quot;ÿ&quot;
+</code></pre>
+<p>You can also try the <code>colors</code> function to see what it displays!</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; colors # watch out!
+</code></pre>
 <h3 id="next">Next</h3>
 <ul>
 <li>Checkout <a href="/doc/user/syntax">Language Syntax</a> for more details about <code>kalk</code> powerful language.</li>
