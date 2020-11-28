@@ -1,16 +1,12 @@
 name: code
 
-env:
-  PROJECT_NAME: Kalk
-
 on:
   push:
     paths-ignore:
-    - 'doc/**'
-    - 'img/**'
     - 'site/**'
-    - 'changelog.md'
-    - 'readme.md'
+    - 'img/**'
+    - '*.md'
+    - '*.txt'
   pull_request:
 
 jobs:
