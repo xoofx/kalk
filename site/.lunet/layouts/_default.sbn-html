@@ -11,6 +11,10 @@
   ~}}
   <head>
     {{~ Head ~}}
+    {{~ if site.baseurl == "https://kalk.dev" }}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z558CWX6J6"></script>
+    <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-Z558CWX6J6');</script>    
+    {{~ end ~}}
   </head>
   <body>    
     <div id="kalk" class="container">
