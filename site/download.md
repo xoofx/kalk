@@ -18,7 +18,7 @@ The current stable version: **`{{ kalk_version }}`**
 
 ## Windows
 
-The easiest and preferred way to install `kalk` is **available on the Windows Store**. This version can be updated automatically. 
+The easiest and preferred way to install `kalk` is **from the Windows Store**. This version can be updated automatically. 
 
 {{WARNING do}}
 The application is being published and is not yet available via the Windows Store.
