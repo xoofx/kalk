@@ -33,7 +33,7 @@ namespace kalk
         {
             try
             {
-                app.KalkUserFolder = Path.Combine(ApplicationData.Current.LocalFolder.Path, ".kalk");
+                app.KalkUserFolder = Path.Combine(UserDataPaths.GetDefault().Profile, ".kalk");
             }
             catch
             {
