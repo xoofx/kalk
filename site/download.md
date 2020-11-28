@@ -55,7 +55,7 @@ You can also download a tar.gz archive [kalk.{{kalk_version}}.osx-x64.tar.gz]({{
 
 ## Installation with .NET
 
-If you have [.NET 5.0 SDK installed](https://dotnet.microsoft.com/download/dotnet/5.0), you can install `kalk` as a .NET global tool:
+If you have [.NET 5.0 SDK installed](https://dotnet.microsoft.com/download/dotnet/5.0), `kalk` is [available on NuGet](https://www.nuget.org/packages/kalk) a .NET global tool:
 
 ```shell-session
 $ dotnet tool install --global kalk --version {{kalk_version}}
