@@ -411,8 +411,12 @@ end
             var path = Path.Combine(_srcFolder, "Version.props");
             var doc = XElement.Load(path);
 
-            var versionPrefix = doc.Descendants("VersionPrefix").First().Value;
-            var versionSuffix = doc.Descendants("VersionSuffix").First().Value;
+            var versionPrefix = doc.Descendants("VersionPrefix").FirstOrDefault()?.Value;
+            var versionSuffix = doc.Descendants("VersionSuffix").FirstOrDefault()?.Value;
+            if (string.IsNullOrEmpty(versionPrefix))
+            {
+                throw new InvalidOperationException("Unable to fetch VersionPrefix from Version.props");
+            }
 
             var version = $"{versionPrefix}";
             if (!string.IsNullOrEmpty(versionSuffix))
