@@ -340,6 +340,7 @@ namespace Kalk.Releaser
 
   def install
     bin.install ""kalk""
+    cp Dir[""*.dylib*""], bin
   end
 end
 ".Replace("\r\n", "\n"); // replace with \n only
