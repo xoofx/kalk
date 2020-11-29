@@ -23,6 +23,7 @@ namespace Kalk.Core
     public partial class KalkEngine : TemplateContext
     {
         private readonly LexerOptions _lexerOptions;
+        private readonly LexerOptions _lexerInterpolatedOptions;
         private readonly ParserOptions _parserOptions;
         private object _lastResult = null;
         private readonly ConsoleText _tempOutputHighlight;
@@ -37,6 +38,7 @@ namespace Kalk.Core
         private bool _isFirstWriteForEval;
         private readonly Dictionary<Type, KalkModule> _modules;
         private string _localClipboard;
+        private bool _formatting;
         
         private KalkShortcutKeyMap _currentShortcutKeyMap;
 
@@ -99,6 +101,12 @@ namespace Kalk.Core
             {
                 KeepTrivia = true,
                 Mode = ScriptMode.ScriptOnly, 
+                Lang = ScriptLang.Scientific
+            };
+            _lexerInterpolatedOptions = new LexerOptions()
+            {
+                KeepTrivia = true,
+                Mode = ScriptMode.Default,
                 Lang = ScriptLang.Scientific
             };
             _tempOutputHighlight = new ConsoleText();
@@ -255,11 +263,11 @@ namespace Kalk.Core
 
         private static readonly Regex MatchHistoryRegex = new Regex(@"^\s*!(\d+)\s*");
 
-        public Template Parse(string text, string filePath = null, bool recordHistory = true)
+        public Template Parse(string text, string filePath = null, bool recordHistory = true, bool interpolated = false)
         {
             if (!TryParseSpecialHistoryBangCommand(text, out var template))
             {
-                var lexerOptions = _lexerOptions;
+                var lexerOptions = interpolated ? _lexerInterpolatedOptions : _lexerOptions;
                 if (filePath != null)
                 {
                     // Don't keep trivia when loading from a file as we are not going to format anything
@@ -325,6 +333,9 @@ namespace Kalk.Core
         
         public override TemplateContext Write(SourceSpan span, object textAsObject)
         {
+            // If we are in formatting mode, we use the normal output
+            if (_formatting) return base.Write(span, textAsObject);
+
             SetLastResult(textAsObject);
             if (EnableEngineOutput && EchoEnabled)
             {

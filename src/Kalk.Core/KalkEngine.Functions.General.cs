@@ -220,6 +220,59 @@ namespace Kalk.Core
         }
 
         /// <summary>
+        /// Prints a formatted string where values to format are embraced by `{{` and `}}`.
+        /// </summary>
+        /// <param name="value">A template string to the output. Values to format must be embraced by `{{` and `}}`.</param>
+        /// <remarks>When the `echo` is off, this method will still output.</remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> x = 1; y = "yes"
+        /// # x = 1; y = "yes"
+        /// x = 1
+        /// y = "yes"
+        /// >>> printf "Hello {{x}} World and {{y}}"
+        /// Hello 1 World and yes
+        /// ```
+        /// </example>
+        [KalkExport("printf", CategoryGeneral)]
+        public void PrintFormatted(object value)
+        {
+            var previousEcho = EchoEnabled;
+            try
+            {
+                EchoEnabled = true;
+                var result = EvaluateTextImpl(ObjectToString(value), null, false, true);
+                WriteHighlightLine(ObjectToString(result), highlight: false);
+            }
+            finally
+            {
+                EchoEnabled = previousEcho;
+            }
+        }
+
+        /// <summary>
+        /// Formats a formatted string where values to format are embraced by `{{` and `}}`.
+        /// </summary>
+        /// <param name="value">A template string to the output. Values to format must be embraced by `{{` and `}}`.</param>
+        /// <returns>A string formatted with the specified embedded values.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> x = 1; y = "yes"
+        /// # x = 1; y = "yes"
+        /// x = 1
+        /// y = "yes"
+        /// >>> sprintf "Hello {{x}} World and {{y}}"
+        /// # sprintf("Hello {{x}} World and {{y}}")
+        /// out = "Hello 1 World and yes"
+        /// ```
+        /// </example>
+        [KalkExport("sprintf", CategoryGeneral)]
+        public string StringPrintFormatted(object value)
+        {
+            return ObjectToString(EvaluateTextImpl(ObjectToString(value), null, false, true));
+        }
+
+        /// <summary>
         /// Prints the specified value to the output formatted with kalk syntax highlighting.
         /// </summary>
         /// <param name="value">A value to print to the output.</param>
@@ -848,7 +901,7 @@ namespace Kalk.Core
             return GetTypeName(value);
         }
 
-        private object EvaluateTextImpl(string text, string path, bool output = false)
+        private object EvaluateTextImpl(string text, string path, bool output = false, bool formatted = false)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
 
@@ -860,21 +913,42 @@ namespace Kalk.Core
                 shouldOutput = _evalDepth <= 1 || output;
             }
             var previous = EnableEngineOutput;
-
+            var previousOutput = EnableOutput;
+            var previousFormatting = _formatting;
             try
             {
                 EnableEngineOutput = shouldOutput;
-                EnableOutput = Repl == null;
-                var evaluate = Parse(text, path, false);
+                EnableOutput = Repl == null || formatted;
+                _formatting = formatted;
+                var evaluate = Parse(text, path, false, formatted);
                 if (evaluate.HasErrors)
                     throw new ArgumentException("This script has errors. Messages:\n" + string.Join("\n", evaluate.Messages), path != null ? nameof(path) : nameof(text));
-                return Evaluate(evaluate.Page);
+
+                if (formatted)
+                {
+                    var scriptOutput = new StringBuilderOutput();
+                    PushOutput(scriptOutput);
+                    try
+                    {
+                        Evaluate(evaluate.Page);
+                    }
+                    finally
+                    {
+                        PopOutput();
+                    }
+                    return scriptOutput.Builder.ToString();
+                }
+                else
+                {
+                    return Evaluate(evaluate.Page);
+                }
             }
             finally
             {
                 _evalDepth--;
-                EnableOutput = _evalDepth == 0;
+                EnableOutput = previousOutput;
                 EnableEngineOutput = previous;
+                _formatting = previousFormatting;
             }
         }
 

@@ -480,6 +480,29 @@ kalk
 kalk2
 ```
 
+## printf
+
+`printf(value)`
+
+Prints a formatted string where values to format are embraced by `{{` and `}}`.
+
+- `value`: A template string to the output. Values to format must be embraced by `{{` and `}}`.
+
+### Remarks
+
+When the `echo` is off, this method will still output.
+
+### Example
+
+```kalk
+>>> x = 1; y = "yes"
+# x = 1; y = "yes"
+x = 1
+y = "yes"
+>>> printf "Hello {{x}} World and {{y}}"
+Hello 1 World and yes
+```
+
 ## printh
 
 `printh(value)`
@@ -566,6 +589,30 @@ To create an keyboard shortcut, see the command `shortcut`.
 >>> shortcuts
 # User-defined Shortcuts
 shortcut(tester, "CTRL+D", '"' + date + '"')                 # CTRL+D => '"' + date + '"'
+```
+
+## sprintf
+
+`sprintf(value)`
+
+Formats a formatted string where values to format are embraced by `{{` and `}}`.
+
+- `value`: A template string to the output. Values to format must be embraced by `{{` and `}}`.
+
+### Returns
+
+A string formatted with the specified embedded values.
+
+### Example
+
+```kalk
+>>> x = 1; y = "yes"
+# x = 1; y = "yes"
+x = 1
+y = "yes"
+>>> sprintf "Hello {{x}} World and {{y}}"
+# sprintf("Hello {{x}} World and {{y}}")
+out = "Hello 1 World and yes"
 ```
 
 ## to
