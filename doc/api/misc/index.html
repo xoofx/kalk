@@ -210,7 +210,7 @@ See the following examples.</p>
 <h3 id="example-1">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; bin 10
 # bin(10)
-out = &quot;00001010&quot;
+out = &quot;00001010 00000000 00000000 00000000&quot;
 &gt;&gt;&gt; bin out
 # bin(out)
 out = 10
@@ -223,6 +223,18 @@ out = 4278387201
 &gt;&gt;&gt; bin &quot;11111111000000110000001000000001&quot;
 # bin(&quot;11111111000000110000001000000001&quot;)
 out = 4278387201
+&gt;&gt;&gt; bin(byte(5))
+# bin(byte(5))
+out = &quot;00000101&quot;
+&gt;&gt;&gt; bin(long(6))
+# bin(long(6))
+out = &quot;00000110 00000000 00000000 00000000 00000000 00000000 00000000 00000000&quot;
+&gt;&gt;&gt; bin(out)
+# bin(out)
+out = 6
+&gt;&gt;&gt; kind(out)
+# kind(out)
+out = &quot;long&quot;
 </code></pre>
 <h2 id="colors">colors</h2>
 <p><code>colors</code></p>

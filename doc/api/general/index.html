@@ -518,22 +518,38 @@ kalk
 &gt;&gt;&gt; print &quot;kalk2&quot;
 kalk2
 </code></pre>
+<h2 id="printf">printf</h2>
+<p><code>printf(value)</code></p>
+<p>Prints a formatted string where values to format are embraced by <code>and</code>.</p>
+<ul>
+<li><code>value</code>: A template string to the output. Values to format must be embraced by <code>and</code>.</li>
+</ul>
+<h3 id="remarks-4">Remarks</h3>
+<p>When the <code>echo</code> is off, this method will still output.</p>
+<h3 id="example-19">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; x = 1; y = &quot;yes&quot;
+# x = 1; y = &quot;yes&quot;
+x = 1
+y = &quot;yes&quot;
+&gt;&gt;&gt; printf &quot;Hello  World and &quot;
+Hello 1 World and yes
+</code></pre>
 <h2 id="printh">printh</h2>
 <p><code>printh(value)</code></p>
 <p>Prints the specified value to the output formatted with kalk syntax highlighting.</p>
 <ul>
 <li><code>value</code>: A value to print to the output.</li>
 </ul>
-<h3 id="remarks-4">Remarks</h3>
+<h3 id="remarks-5">Remarks</h3>
 <p>When the <code>echo</code> is off, this method will still output.</p>
-<h3 id="example-19">Example</h3>
+<h3 id="example-20">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; printh &quot;# This is a kalk comment&quot;
 # This is a kalk comment
 </code></pre>
 <h2 id="reset">reset</h2>
 <p><code>reset</code></p>
 <p>Removes all user-defined variables and functions.</p>
-<h3 id="example-20">Example</h3>
+<h3 id="example-21">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; x = 5; y = 2
 # x = 5; y = 2
 x = 5
@@ -553,9 +569,9 @@ y = 2
 <li><code>name</code>: Name of the shortcut</li>
 <li><code>shortcuts</code>: A collection of pair of shortcut description (e.g <code>CTRL+A</code>) and associated shortcut expression (e.g <code>1 + 2</code>).</li>
 </ul>
-<h3 id="remarks-5">Remarks</h3>
+<h3 id="remarks-6">Remarks</h3>
 <p>See the command <code>shortcuts</code> to list the shortcuts currently defined. By default several shortcuts for common mathematical symbols are defined (e.g for the symbol pi: <code>shortcut(pi, &quot;CTRL+G P&quot;, &quot;Π&quot;, &quot;CTRL+G p&quot;, &quot;π&quot;)</code>).</p>
-<h3 id="example-21">Example</h3>
+<h3 id="example-22">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; # Creates a shortcut that will print 3 when pressing CTRL+R.
 &gt;&gt;&gt; shortcut(myshortcut, &quot;CTRL+R&quot;, 1 + 2)
 &gt;&gt;&gt; # Overrides the previous shortcut that will print the text
@@ -569,14 +585,31 @@ y = 2
 <h2 id="shortcuts">shortcuts</h2>
 <p><code>shortcuts</code></p>
 <p>Displays all built-in and user-defined keyboard shortcuts.</p>
-<h3 id="remarks-6">Remarks</h3>
+<h3 id="remarks-7">Remarks</h3>
 <p>To create an keyboard shortcut, see the command <code>shortcut</code>.</p>
-<h3 id="example-22">Example</h3>
+<h3 id="example-23">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; clear shortcuts
 &gt;&gt;&gt; shortcut(tester, &quot;CTRL+D&quot;, '&quot;' + date + '&quot;')
 &gt;&gt;&gt; shortcuts
 # User-defined Shortcuts
 shortcut(tester, &quot;CTRL+D&quot;, '&quot;' + date + '&quot;')                 # CTRL+D =&gt; '&quot;' + date + '&quot;'
+</code></pre>
+<h2 id="sprintf">sprintf</h2>
+<p><code>sprintf(value)</code></p>
+<p>Formats a formatted string where values to format are embraced by <code>and</code>.</p>
+<ul>
+<li><code>value</code>: A template string to the output. Values to format must be embraced by <code>and</code>.</li>
+</ul>
+<h3 id="returns-4">Returns</h3>
+<p>A string formatted with the specified embedded values.</p>
+<h3 id="example-24">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; x = 1; y = &quot;yes&quot;
+# x = 1; y = &quot;yes&quot;
+x = 1
+y = &quot;yes&quot;
+&gt;&gt;&gt; sprintf &quot;Hello  World and &quot;
+# sprintf(&quot;Hello  World and &quot;)
+out = &quot;Hello 1 World and yes&quot;
 </code></pre>
 <h2 id="to">to</h2>
 <p><code>to(src,dst)</code></p>
@@ -587,9 +620,9 @@ more readable. Example: <code>105 g |&gt; to kg</code></p>
 <li><code>src</code>: The source value with units.</li>
 <li><code>dst</code>: The destination unit.</li>
 </ul>
-<h3 id="returns-4">Returns</h3>
+<h3 id="returns-5">Returns</h3>
 <p>The result of the calculation.</p>
-<h3 id="example-23">Example</h3>
+<h3 id="example-25">Example</h3>
 <pre><code class="language-kalk"> &gt;&gt;&gt; import StandardUnits
  # 1294 units successfully imported from module `StandardUnits`.
  &gt;&gt;&gt; 10 kg/s |&gt; to kg/h
@@ -653,9 +686,9 @@ Decimal prefixes:</p>
 </ul>
 </li>
 </ul>
-<h3 id="returns-5">Returns</h3>
+<h3 id="returns-6">Returns</h3>
 <p>The associated unit object.</p>
-<h3 id="example-24">Example</h3>
+<h3 id="example-26">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; unit(tomato, &quot;A tomato unit&quot;, prefix: &quot;decimal&quot;)
 # unit(tomato, &quot;A tomato unit&quot;, prefix: &quot;decimal&quot;)
 out = tomato
@@ -686,7 +719,7 @@ Otherwise it will display units in a friendly format.
 By default, no units are defined. You can define units by using the <code>unit</code> function
 and you can also import predefined units or currencies via <code>import StandardUnits</code> or
 <code>import Currencies</code>.</p>
-<h3 id="example-25">Example</h3>
+<h3 id="example-27">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; unit(tomato, &quot;A tomato unit&quot;, prefix: &quot;decimal&quot;)
 # unit(tomato, &quot;A tomato unit&quot;, prefix: &quot;decimal&quot;)
 out = tomato
@@ -711,7 +744,7 @@ unit(tomato, &quot;A tomato unit&quot;, tomato, prefix: &quot;decimal&quot;)
 <h2 id="version">version</h2>
 <p><code>version</code></p>
 <p>Prints the version of kalk.</p>
-<h3 id="example-26">Example</h3>
+<h3 id="example-28">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; version
 kalk 1.0.0 - Copyright (c) 2020 Alexandre Mutel
 </code></pre>
