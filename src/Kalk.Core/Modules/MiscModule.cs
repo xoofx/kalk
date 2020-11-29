@@ -425,7 +425,7 @@ namespace Kalk.Core
         /// ```kalk
         /// >>> bin 10
         /// # bin(10)
-        /// out = "00001010"
+        /// out = "00001010 00000000 00000000 00000000"
         /// >>> bin out
         /// # bin(out)
         /// out = 10
@@ -438,6 +438,18 @@ namespace Kalk.Core
         /// >>> bin "11111111000000110000001000000001"
         /// # bin("11111111000000110000001000000001")
         /// out = 4278387201
+        /// >>> bin(byte(5))
+        /// # bin(byte(5))
+        /// out = "00000101"
+        /// >>> bin(long(6))
+        /// # bin(long(6))
+        /// out = "00000110 00000000 00000000 00000000 00000000 00000000 00000000 00000000"
+        /// >>> bin(out)
+        /// # bin(out)
+        /// out = 6
+        /// >>> kind(out)
+        /// # kind(out)
+        /// out = "long"
         /// ```
         /// </example>
         [KalkExport("bin", CategoryMisc)]
@@ -1269,43 +1281,31 @@ namespace Kalk.Core
                 case short vshort:
                 {
                     int size = 2;
-                    if (vshort >= sbyte.MinValue && vshort <= byte.MaxValue) size = 1;
                     return BinaryFromBytes(size, vshort, prefix, separator);
                 }
                 case ushort vushort:
                 {
                     int size = 2;
-                    if (vushort <= byte.MaxValue) size = 1;
                     return BinaryFromBytes(size, vushort, prefix, separator);
                 }
                 case int vint:
                 {
                     int size = 4;
-                    if (vint >= sbyte.MinValue && vint <= byte.MaxValue) size = 1;
-                    else if (vint >= short.MinValue && vint <= ushort.MaxValue) size = 2;
                     return BinaryFromBytes(size, vint, prefix, separator);
                 }
                 case uint vuint:
                 {
                     int size = 4;
-                    if (vuint <= byte.MaxValue) size = 1;
-                    else if (vuint <= ushort.MaxValue) size = 2;
                     return BinaryFromBytes(size, vuint, prefix, separator);
                 }
                 case long vlong:
                 {
                     int size = 8;
-                    if (vlong >= sbyte.MinValue && vlong <= byte.MaxValue) size = 1;
-                    else if (vlong >= short.MinValue && vlong <= ushort.MaxValue) size = 2;
-                    else if (vlong >= int.MinValue && vlong <= uint.MaxValue) size = 4;
                     return BinaryFromBytes(size, vlong, prefix, separator);
                 }
                 case ulong vulong:
                 {
                     int size = 8;
-                    if (vulong <= byte.MaxValue) size = 1;
-                    else if (vulong <= ushort.MaxValue) size = 2;
-                    else if (vulong <= uint.MaxValue) size = 4;
                     return BinaryFromBytes(size, vulong, prefix, separator);
                 }
                 case float vfloat:

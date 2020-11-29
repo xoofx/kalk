@@ -1827,8 +1827,12 @@ out = ""BD 61 BC 00""", Category = "Misc Functions")]
 bin out
 bin 0xff030201
 bin out
-bin ""11111111000000110000001000000001""", @"# bin(10)
-out = ""00001010""
+bin ""11111111000000110000001000000001""
+bin(byte(5))
+bin(long(6))
+bin(out)
+kind(out)", @"# bin(10)
+out = ""00001010 00000000 00000000 00000000""
 # bin(out)
 out = 10
 # bin(-16580095)
@@ -1836,7 +1840,15 @@ out = ""00000001 00000010 00000011 11111111""
 # bin(out)
 out = 4278387201
 # bin(""11111111000000110000001000000001"")
-out = 4278387201", Category = "Misc Functions")]
+out = 4278387201
+# bin(byte(5))
+out = ""00000101""
+# bin(long(6))
+out = ""00000110 00000000 00000000 00000000 00000000 00000000 00000000 00000000""
+# bin(out)
+out = 6
+# kind(out)
+out = ""long""", Category = "Misc Functions")]
         public static void Test_bin(string input, string output) => AssertScript(input, output);
 
         /// <summary>

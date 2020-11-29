@@ -6548,7 +6548,7 @@ namespace Kalk.Core
     See the following examples.";
                 descriptor.Example = @"    >>> bin 10
     # bin(10)
-    out = ""00001010""
+    out = ""00001010 00000000 00000000 00000000""
     >>> bin out
     # bin(out)
     out = 10
@@ -6561,6 +6561,18 @@ namespace Kalk.Core
     >>> bin ""11111111000000110000001000000001""
     # bin(""11111111000000110000001000000001"")
     out = 4278387201
+    >>> bin(byte(5))
+    # bin(byte(5))
+    out = ""00000101""
+    >>> bin(long(6))
+    # bin(long(6))
+    out = ""00000110 00000000 00000000 00000000 00000000 00000000 00000000 00000000""
+    >>> bin(out)
+    # bin(out)
+    out = 6
+    >>> kind(out)
+    # kind(out)
+    out = ""long""
 ";
             }
             {
