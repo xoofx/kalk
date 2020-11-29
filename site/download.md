@@ -9,8 +9,8 @@ title: Download
 `kalk` is supported on the following platforms:
 
 - Windows x64
-- Linux x64 (Debian derivatives - e.g Ubuntu and Redhat)
-- macOS
+- Linux x64 (Debian derivatives - e.g Ubuntu - and distributions supporting RPM packages)
+- macOS (High Sierra and higher)
 
 {{NOTE do}}
 The current stable version: **`{{ kalk_version }}`**

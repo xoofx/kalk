@@ -7,8 +7,8 @@ This is the repository of [kalk](https://kalk.dev), a powerful command line **ca
 ## Supported Platforms
 
 - Windows x64
-- Linux x64 (Debian derivatives - e.g Ubuntu and Redhat)
-- macOS
+- Linux x64 (Debian derivatives - e.g Ubuntu - and distributions supporting RPM packages)
+- macOS (High Sierra and higher)
 
 ## Download
 
