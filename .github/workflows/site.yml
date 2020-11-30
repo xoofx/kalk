@@ -23,7 +23,7 @@ jobs:
 
     - name: Build web site
       run: |
-          dotnet tool install --global lunet --version "0.2.*"
+          dotnet tool install --global lunet --version "0.3.*"
           lunet --input-dir site build 
 
     - name: Deploy web site
