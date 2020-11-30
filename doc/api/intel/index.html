@@ -162,6 +162,41 @@
 <div class='lunet-alert-note' role='alert'><div class='lunet-alert-note-heading'><span class='lunet-alert-note-icon'></span><span class='lunet-alert-note-heading-text'></span></div><div class='lunet-alert-note-content'>
 <p>Depending on the characteristics of your CPU (e.g <code>AVX2</code>, <code>SSE3</code>...), this module will import only the intrinsic functions supported by your CPU.</p>
 </div></div>
+<h2 id="usage">Usage</h2>
+<p>Let's take the example of the instruction <a href="/doc/api/intel/sse/#mm_or_ps"><code>mm_or_ps</code></a> which allows to perform a OR of 4 x int32:</p>
+<pre><code class="language-kalk"># mm_or_ps
+#
+#   Compute the bitwise OR of packed single-precision (32-bit) floating-point 
+#   elements in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.
+#
+#   __m128 _mm_or_ps (__m128 a,  __m128 b)
+#   ORPS xmm, xmm/m128
+</code></pre>
+<p>The arguments <code>__m128</code> in the Intel documentation show that the function is expecting a 128-bit vector.</p>
+<p>In <code>kalk</code>, a 128-bit vector is represented by e.g <code>bool4</code>, or <code>int4</code> or <code>float4</code> or <code>byte16</code> (and more). You can pass these vectors directly to <code>mm_or_ps</code>:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; mm_or_ps(int4(1,2,3,4), int4(5,6,7,8))
+# mm_or_ps(int4(1, 2, 3, 4), int4(5, 6, 7, 8))
+out = float4(7E-45, 8E-45, 1E-44, 1.7E-44)
+</code></pre>
+<p>Note that the result is returned using <code>float4</code>. This is because <code>m128</code> types is by default converted to a <code>float4</code> in <code>kalk</code>.
+But you can easily bitcast it to int4:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; bitcast(int4, out)
+# bitcast(int4, out)
+out = int4(5, 6, 7, 12)
+</code></pre>
+<p>Let's use a similar example with <a href="/doc/api/intel/sse41/#mm_blend_ps"><code>mm_blend_ps</code></a>:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; bitcast(int4, mm_blend_ps(int4(1,2,3,4), int4(5,6,7,8), 0b1010))
+# bitcast(int4, mm_blend_ps(int4(1, 2, 3, 4), int4(5, 6, 7, 8), 10))
+out = int4(1, 6, 3, 8)
+</code></pre>
+<p>Or for example using <a href="/doc/api/intel/sse41/#mm_extract_epi8"><code>mm_extract_epi8</code></a>:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; mm_extract_epi8(int4(1,2,3,4), 0)
+# mm_extract_epi8(int4(1, 2, 3, 4), 0)
+out = 1
+&gt;&gt;&gt; mm_extract_epi8(int4(1,2,3,4), 4)
+# mm_extract_epi8(int4(1, 2, 3, 4), 4)
+out = 2
+</code></pre>
 
       </div>
   </div>
