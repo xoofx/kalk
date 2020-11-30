@@ -19,6 +19,7 @@ Depending on the characteristics of your CPU (e.g `AVX2`, `SSE3`...), this modul
 Let's take the example of the instruction [`mm_or_ps`](/doc/api/intel/sse/#mm_or_ps) which allows to perform a OR of 4 x int32:
 
 ```kalk
+>>> help mm_or_ps
 # mm_or_ps
 #
 #   Compute the bitwise OR of packed single-precision (32-bit) floating-point 
