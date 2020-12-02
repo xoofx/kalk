@@ -14,6 +14,10 @@ title: Download
 
 {{NOTE do}}
 The current stable version: **`{{ kalk_version }}`**
+
+- `kalk` requires a terminal that supports ANSI escape codes. 
+- On Windows, `kalk` works best on **Windows 10** which has built-in support for terminal with ANSI escape codes and with the new [Windows Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701).
+- `kalk` might not work well if your terminal doesn't have the same level of support than the Windows Terminal regarding ANSI escape codes.
 {{end}}
 
 ## Windows
