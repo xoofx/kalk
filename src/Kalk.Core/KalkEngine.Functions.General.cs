@@ -24,6 +24,9 @@ namespace Kalk.Core
         private delegate object EvaluateDelegate(string text, bool output = false);
 
         public KalkDisplayMode CurrentDisplay { get; private set; }
+
+
+        public Action<KalkAction> OnAction { get; set; }
         
         public T GetOrCreateModule<T>() where T : KalkModule, new()
         {
@@ -51,6 +54,52 @@ namespace Kalk.Core
             }
 
             return moduleT;
+        }
+
+        /// <summary>
+        /// Creates an action for the command line editor experience related to
+        /// cursor/text manipulation. This action can then be used by the `shortcut` command.
+        /// </summary>
+        /// <param name="action">The name of the action to create. This name must be
+        ///
+        /// {.table}
+        /// | Action                | Description               |
+        /// |-----------------------|---------------------------|
+        /// | `cursor_left`         | Move the cursor to the left
+        /// | `cursor_right`        | Move the cursor to the right
+        /// | `history_previous`    | Bring the previous command from the history
+        /// | `history_next`        | Bring the next command from the history
+        /// | `copy`                | Copy the selection to the clipboard 
+        /// | `cut`                 | Cut the selection to the clipboard 
+        /// | `paste`               | Paste the content of the clipboard at the position of the cursor
+        /// | `cursor_word_left`    | Move the cursor to the left by one word boundary
+        /// | `cursor_word_right`   | Move the cursor to the right by one word boundary
+        /// | `cursor_line_start`   | Move the cursor to the beginning of the line
+        /// | `cursor_line_end`     | Move the cursor to the end of the line
+        /// | `completion`          | Trigger a completion at the cursor's position
+        /// | `delete_left`         | Delete the character to the left of the cursor
+        /// | `delete_right`        | Delete the character to the right of the cursor
+        /// | `delete_word_left`    | Delete a word to the left of the cursor
+        /// | `delete_word_right`   | Delete a word to the right of the cursor
+        /// | `validate_line`       | Validate the current line
+        /// | `force_validate_line` | Validate the current line and force a new line even in case of a syntax error
+        /// | `exit`                | Exit the program
+        /// | `copy_or_exit`        | Copy the content of the selection to the clipboard or if there is no selection, exit the program
+        /// </param>
+        /// <returns>An action object.</returns>
+        /// <remarks>
+        /// This function is not meant to be used directly but in conjunction with the `shortcut` command.
+        /// </remarks>
+        /// <example>
+        /// ```kalk 
+        /// >>> shortcut(cursor_left, "left, ctrl+b", action("cursor_left"))
+        /// ```
+        /// </example>
+        [KalkExport("action", CategoryGeneral)]
+        public KalkActionObject Action(string action)
+        {
+            if (action == null) return null;
+            return new KalkActionObject(action);
         }
 
         /// <summary>
@@ -684,7 +733,7 @@ namespace Kalk.Core
         /// <param name="what">An optional argument specifying what to clear. Can be of the following value:
         /// * screen: to clear the screen (default if not passed)
         /// * history: to clear the history
-        /// * shortcuts: to clear all shortcuts defined
+        /// * shortcuts: to clear all shortcuts defined. WARNING, clearing shortcuts is removing all common shortcuts, including basic navigation and edition mode!
         /// </param>
         /// <example>
         /// ```kalk
@@ -781,22 +830,27 @@ namespace Kalk.Core
         }
 
         /// <summary>
-        /// Creates a keyboard shortcut associated with an expression.
+        /// Creates a keyboard shortcut associated with an expression or remove a keyboard shortcut.
         /// </summary>
         /// <param name="name">Name of the shortcut</param>
-        /// <param name="shortcuts">A collection of pair of shortcut description (e.g `CTRL+A`) and associated shortcut expression (e.g `1 + 2`).</param>
-        /// <remarks>See the command `shortcuts` to list the shortcuts currently defined. By default several shortcuts for common mathematical symbols are defined (e.g for the symbol pi: `shortcut(pi, "CTRL+G P", "Π", "CTRL+G p", "π")`).</remarks>
+        /// <param name="shortcuts">A collection of pair of shortcut description (e.g `ctrl+a`) and associated shortcut expression (e.g `1 + 2`).</param>
+        /// <remarks>See the command `shortcuts` to list the shortcuts currently defined. By default several shortcuts for common mathematical symbols are defined (e.g for the symbol pi: `shortcut(pi, "ctrl+g p", "Π", "ctrl+g p", "π")`).
+        ///
+        /// If no shortcuts are associated to the name, the existing shortcuts for this name will be removed.
+        /// </remarks>
         /// <example>
         /// ```kalk
-        /// >>> # Creates a shortcut that will print 3 when pressing CTRL+R.
-        /// >>> shortcut(myshortcut, "CTRL+R", 1 + 2)
+        /// >>> # Creates a shortcut that will print 3 when pressing ctrl+R.
+        /// >>> shortcut(myshortcut, "ctrl+g", 1 + 2)
         /// >>> # Overrides the previous shortcut that will print the text
-        /// >>> # `kalk` when pressing CTRL+R.
-        /// >>> shortcut(myshortcut, "CTRL+R", "kalk")
+        /// >>> # `kalk` when pressing ctrl+g.
+        /// >>> shortcut(myshortcut, "ctrl+g", "kalk")
         /// >>> # Overrides the previous shortcut that will print the text
-        /// >>> # `kalk` when pressing CTRL+R or the text `kalk2` when pressing
-        /// >>> # CTRL+E and r key.
-        /// >>> shortcut(myshortcut, "CTRL+R", "kalk", "CTRL+E r", "kalk2")
+        /// >>> # `kalk` when pressing ctrl+g or the text `kalk2` when pressing
+        /// >>> # ctrl+e and r key.
+        /// >>> shortcut(myshortcut, "ctrl+g", "kalk", "ctrl+e r", "kalk2")
+        /// >>> # Remove the previous defined shortcuts
+        /// >>> shortcut(myshortcut)
         /// ```
         /// </example>
         [KalkExport("shortcut", CategoryGeneral)]
@@ -805,22 +859,27 @@ namespace Kalk.Core
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (shortcuts.Length == 0)
             {
-                throw new ArgumentException("Invalid arguments. Missing a key associated to a symbol.", nameof(shortcuts));
+                Shortcuts.RemoveShortcut(name.Name);
             }
-
-            if ((shortcuts.Length % 2) != 0)
+            else
             {
-                throw new ArgumentException("Invalid arguments. Missing a symbol associated to a key.", nameof(shortcuts));
-            }
 
-            var keyList = new List<KalkShortcutKey>();
-            for (int i = 0; i < shortcuts.Length; i += 2)
-            {
-                keyList.Add(KalkShortcutKey.Parse(shortcuts[i], shortcuts[i + 1]));
-            }
+                if ((shortcuts.Length % 2) != 0)
+                {
+                    throw new ArgumentException("Invalid arguments. Missing a symbol associated to a key.", nameof(shortcuts));
+                }
 
-            var shortcut = new KalkShortcut(name.Name, keyList, !_registerAsSystem);
-            Shortcuts.SetSymbolShortcut(shortcut);
+                var keyList = new List<KalkShortcutKeySequence>();
+                for (int i = 0; i < shortcuts.Length; i += 2)
+                {
+                    var keyExpr = shortcuts[i];
+                    var valueExpr = shortcuts[i + 1];
+                    keyList.AddRange(KalkShortcutKeySequence.Parse(keyExpr, valueExpr));
+                }
+
+                var shortcut = new KalkShortcut(name.Name, keyList, !_registerAsSystem);
+                Shortcuts.SetSymbolShortcut(shortcut);
+            }
         }
 
         /// <summary>
@@ -952,7 +1011,7 @@ namespace Kalk.Core
             }
         }
 
-        private object EvaluateExpression(ScriptExpression expression)
+        private object EvaluateExpression(ScriptExpression expression, bool noOutput = false)
         {
             var previousEngineOutput = EnableEngineOutput;
             var previousOutput = EnableOutput;
@@ -960,7 +1019,23 @@ namespace Kalk.Core
             {
                 EnableEngineOutput = false;
                 EnableOutput = false;
-                return Evaluate(expression);
+                if (noOutput)
+                {
+                    var scriptOutput = new StringBuilderOutput();
+                    PushOutput(scriptOutput);
+                    try
+                    {
+                        return Evaluate(expression);
+                    }
+                    finally
+                    {
+                        PopOutput();
+                    }
+                }
+                else
+                {
+                    return Evaluate(expression);
+                }
             }
             finally
             {
@@ -1019,5 +1094,7 @@ namespace Kalk.Core
                 }
             }
         }
+
+
     }
 }

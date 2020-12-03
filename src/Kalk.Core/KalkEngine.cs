@@ -241,10 +241,10 @@ namespace Kalk.Core
         /// <example>
         /// ```kalk
         /// >>> clear shortcuts
-        /// >>> shortcut(tester, "CTRL+D", '"' + date + '"')
+        /// >>> shortcut(tester, "ctrl+d", '"' + date + '"')
         /// >>> shortcuts
         /// # User-defined Shortcuts
-        /// shortcut(tester, "CTRL+D", '"' + date + '"')                 # CTRL+D => '"' + date + '"'
+        /// shortcut(tester, "ctrl+d", '"' + date + '"')                 # ctrl+d => '"' + date + '"'
         /// ```
         /// </example>
         [KalkExport("shortcuts", CategoryGeneral)]

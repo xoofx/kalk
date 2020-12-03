@@ -3,6 +3,53 @@ title: General Functions
 url: /doc/api/general/
 ---
 
+## action
+
+`action(action)`
+
+Creates an action for the command line editor experience related to
+ cursor/text manipulation. This action can then be used by the `shortcut` command.
+
+- `action`: The name of the action to create. This name must be
+    
+     {.table}
+     | Action                | Description               |
+     |-----------------------|---------------------------|
+     | `cursor_left`         | Move the cursor to the left
+     | `cursor_right`        | Move the cursor to the right
+     | `history_previous`    | Bring the previous command from the history
+     | `history_next`        | Bring the next command from the history
+     | `copy`                | Copy the selection to the clipboard 
+     | `cut`                 | Cut the selection to the clipboard 
+     | `paste`               | Paste the content of the clipboard at the position of the cursor
+     | `cursor_word_left`    | Move the cursor to the left by one word boundary
+     | `cursor_word_right`   | Move the cursor to the right by one word boundary
+     | `cursor_line_start`   | Move the cursor to the beginning of the line
+     | `cursor_line_end`     | Move the cursor to the end of the line
+     | `completion`          | Trigger a completion at the cursor's position
+     | `delete_left`         | Delete the character to the left of the cursor
+     | `delete_right`        | Delete the character to the right of the cursor
+     | `delete_word_left`    | Delete a word to the left of the cursor
+     | `delete_word_right`   | Delete a word to the right of the cursor
+     | `validate_line`       | Validate the current line
+     | `force_validate_line` | Validate the current line and force a new line even in case of a syntax error
+     | `exit`                | Exit the program
+     | `copy_or_exit`        | Copy the content of the selection to the clipboard or if there is no selection, exit the program
+
+### Returns
+
+An action object.
+
+### Remarks
+
+This function is not meant to be used directly but in conjunction with the `shortcut` command.
+
+### Example
+
+```kalk
+ >>> shortcut(cursor_left, "left, ctrl+b", action("cursor_left"))
+```
+
 ## alias
 
 `alias(name,aliases)`
@@ -90,7 +137,7 @@ Clears the screen (by default) or the history (e.g clear history).
 - `what`: An optional argument specifying what to clear. Can be of the following value:
     * screen: to clear the screen (default if not passed)
     * history: to clear the history
-    * shortcuts: to clear all shortcuts defined
+    * shortcuts: to clear all shortcuts defined. WARNING, clearing shortcuts is removing all common shortcuts, including basic navigation and edition mode!
 
 ### Example
 
@@ -548,27 +595,31 @@ y = 2
 
 `shortcut(name,shortcuts)`
 
-Creates a keyboard shortcut associated with an expression.
+Creates a keyboard shortcut associated with an expression or remove a keyboard shortcut.
 
 - `name`: Name of the shortcut
-- `shortcuts`: A collection of pair of shortcut description (e.g `CTRL+A`) and associated shortcut expression (e.g `1 + 2`).
+- `shortcuts`: A collection of pair of shortcut description (e.g `ctrl+a`) and associated shortcut expression (e.g `1 + 2`).
 
 ### Remarks
 
-See the command `shortcuts` to list the shortcuts currently defined. By default several shortcuts for common mathematical symbols are defined (e.g for the symbol pi: `shortcut(pi, "CTRL+G P", "Π", "CTRL+G p", "π")`).
+See the command `shortcuts` to list the shortcuts currently defined. By default several shortcuts for common mathematical symbols are defined (e.g for the symbol pi: `shortcut(pi, "ctrl+g p", "Π", "ctrl+g p", "π")`).
+
+ If no shortcuts are associated to the name, the existing shortcuts for this name will be removed.
 
 ### Example
 
 ```kalk
->>> # Creates a shortcut that will print 3 when pressing CTRL+R.
->>> shortcut(myshortcut, "CTRL+R", 1 + 2)
->>> # Overrides the previous shortcut that will print the text
->>> # `kalk` when pressing CTRL+R.
->>> shortcut(myshortcut, "CTRL+R", "kalk")
->>> # Overrides the previous shortcut that will print the text
->>> # `kalk` when pressing CTRL+R or the text `kalk2` when pressing
->>> # CTRL+E and r key.
->>> shortcut(myshortcut, "CTRL+R", "kalk", "CTRL+E r", "kalk2")
+ >>> # Creates a shortcut that will print 3 when pressing ctrl+R.
+ >>> shortcut(myshortcut, "ctrl+g", 1 + 2)
+ >>> # Overrides the previous shortcut that will print the text
+ >>> # `kalk` when pressing ctrl+g.
+ >>> shortcut(myshortcut, "ctrl+g", "kalk")
+ >>> # Overrides the previous shortcut that will print the text
+ >>> # `kalk` when pressing ctrl+g or the text `kalk2` when pressing
+ >>> # ctrl+e and r key.
+ >>> shortcut(myshortcut, "ctrl+g", "kalk", "ctrl+e r", "kalk2")
+ >>> # Remove the previous defined shortcuts
+ >>> shortcut(myshortcut)
 ```
 
 ## shortcuts
@@ -585,10 +636,10 @@ To create an keyboard shortcut, see the command `shortcut`.
 
 ```kalk
 >>> clear shortcuts
->>> shortcut(tester, "CTRL+D", '"' + date + '"')
+>>> shortcut(tester, "ctrl+d", '"' + date + '"')
 >>> shortcuts
 # User-defined Shortcuts
-shortcut(tester, "CTRL+D", '"' + date + '"')                 # CTRL+D => '"' + date + '"'
+shortcut(tester, "ctrl+d", '"' + date + '"')                 # ctrl+d => '"' + date + '"'
 ```
 
 ## sprintf

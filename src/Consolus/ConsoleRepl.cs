@@ -199,7 +199,7 @@ namespace Consolus
             Render();
         }
         
-        public void CopySelectionToClipboard()
+        private void CopySelectionToClipboard()
         {
             if (!HasSelection) return;
 
@@ -254,7 +254,8 @@ namespace Consolus
             return null;
         }
 
-        public void Backspace(bool word)
+
+        private void Backspace(bool word)
         {
             if (HasSelection)
             {
@@ -282,7 +283,7 @@ namespace Consolus
             Render(cursorIndex);
         }
 
-        public void Delete(bool word)
+        private void Delete(bool word)
         {
             if (HasSelection)
             {
@@ -355,16 +356,16 @@ namespace Consolus
             Render(cursorIndex);
         }
 
-        public bool Enter(bool hasControl)
+        private bool Enter(bool force)
         {
-            if (EnterInternal(hasControl))
+            if (EnterInternal(force))
             {
                 while (PendingTextToEnter.Count > 0)
                 {
                     var newTextToEnter = PendingTextToEnter.Dequeue();
                     EditLine.Clear();
                     EditLine.Append(newTextToEnter);
-                    if (!EnterInternal(hasControl)) return false;
+                    if (!EnterInternal(force)) return false;
                 }
                 return true;
             }
@@ -433,7 +434,7 @@ namespace Consolus
             Console.Clear();
         }
 
-        public void Exit()
+        private void Exit()
         {
             End();
 
@@ -519,146 +520,77 @@ namespace Consolus
             }
         }
 
-        protected virtual void ProcessKey(ConsoleKeyInfo key)
+        private void PasteClipboard()
         {
-            bool hasControl = (key.Modifiers & ConsoleModifiers.Control) != 0;
-            bool hasShift = (key.Modifiers & ConsoleModifiers.Shift) != 0;
-
-            // Only support selection if we have support for escape sequences
-            if (SupportEscapeSequences && hasShift)
+            var clipboard = GetClipboardText();
+            if (clipboard != null)
             {
-                BeginSelection();
-            }
-
-            bool hasCopyPaste = false;
-            if (HasSelection && hasControl)
-            {
-                if (key.Key == ConsoleKey.C || key.Key == ConsoleKey.X)
+                int previousIndex = 0;
+                while (true)
                 {
-                    hasCopyPaste = true;
-                    CopySelectionToClipboard();
-                }
-                if (key.Key == ConsoleKey.X)
-                {
-                    RemoveSelection();
-                }
-            }
-
-            if (!hasCopyPaste && hasControl && key.Key == ConsoleKey.C)
-            {
-                Exit();
-                return;
-            }
-
-            if (hasControl && key.Key == ConsoleKey.V)
-            {
-                var clipboard = GetClipboardText();
-                if (clipboard != null)
-                {
-                    int previousIndex = 0;
-                    while (true)
+                    int matchIndex = clipboard.IndexOf('\n', previousIndex);
+                    int index = matchIndex;
+                    bool exit = false;
+                    if (index < 0)
                     {
-                        int matchIndex = clipboard.IndexOf('\n', previousIndex);
-                        int index = matchIndex;
-                        bool exit = false;
-                        if (index < 0)
-                        {
-                            index = clipboard.Length;
-                            exit = true;
-                        }
+                        index = clipboard.Length;
+                        exit = true;
+                    }
 
-                        while (index > 0 && index < clipboard.Length && clipboard[index - 1] == '\r')
-                        {
-                            index--;
-                        }
-                        Write(clipboard, previousIndex, index - previousIndex);
+                    while (index > 0 && index < clipboard.Length && clipboard[index - 1] == '\r')
+                    {
+                        index--;
+                    }
+                    Write(clipboard, previousIndex, index - previousIndex);
 
-                        if (exit)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            previousIndex = matchIndex + 1;
-                            // Otherwise we have a new line
-                            Enter(true);
-                        }
+                    if (exit)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        previousIndex = matchIndex + 1;
+                        // Otherwise we have a new line
+                        Enter(true);
                     }
                 }
             }
+        }
 
+        protected virtual void ProcessKey(ConsoleKeyInfo key)
+        {
+            _isStandardAction = false;
+            _hasShift = (key.Modifiers & ConsoleModifiers.Shift) != 0;
+
+            // Only support selection if we have support for escape sequences
+            if (SupportEscapeSequences && _hasShift)
+            {
+                BeginSelection();
+            }
 
             // Try to pre-process key
             var cursorIndex = CursorIndex;
             if (TryPreProcessKey != null && TryPreProcessKey(key, ref cursorIndex))
             {
-                if (SelectionIndex >= 0)
+                if (!_isStandardAction)
                 {
-                    RemoveSelection();
-                }
-                EndSelection();
-
-                Render(cursorIndex);
-            }
-            else if (key.Key == ConsoleKey.Backspace)
-            {
-                Backspace(hasControl);
-                _stackIndex = -1;
-                hasShift = false;
-            }
-            else if (key.Key == ConsoleKey.Delete)
-            {
-                Delete(hasControl);
-                _stackIndex = -1;
-                hasShift = false;
-            }
-            else if (key.Key == ConsoleKey.LeftArrow)
-            {
-                MoveLeft(hasControl);
-            }
-            else if (key.Key == ConsoleKey.RightArrow)
-            {
-                MoveRight(hasControl);
-            }
-            else if (key.Key == ConsoleKey.Home)
-            {
-                Begin();
-            }
-            else if (key.Key == ConsoleKey.End) // Case for WSL?
-            {
-                End();
-            }
-            else if (key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.DownArrow)
-            {
-                var newStackIndex = _stackIndex + (key.Key == ConsoleKey.DownArrow ? -1 : 1);
-                if (newStackIndex < 0 || newStackIndex >= History.Count)
-                {
-                    if (newStackIndex < 0)
+                    if (SelectionIndex >= 0)
                     {
-                        SetLine(string.Empty);
-                        _stackIndex = -1;
+                        RemoveSelection();
                     }
-                }
-                else
-                {
-                    _stackIndex = newStackIndex;
-                    var index = (History.Count - 1) - _stackIndex;
 
-                    SetLine(History[index]);
+                    EndSelection();
+
+                    Render(cursorIndex);
                 }
-            }
-            else if (key.Key == ConsoleKey.Enter)
-            {
-                Enter(hasControl);
             }
             else if (key.KeyChar >= ' ')
             {
-                //Console.Title = $"{key.Modifiers} {key.Key} {key.KeyChar} {(int)key.KeyChar:x}";
                 Write(key.KeyChar);
             }
 
             // Remove selection if shift is no longer selected
-            if (!hasShift)
+            if (!_hasShift)
             {
                 EndSelection();
             }
@@ -674,5 +606,155 @@ namespace Consolus
         {
             Console.Title = $"x:{Console.CursorLeft} y:{Console.CursorTop} (Size w:{Console.BufferWidth} h:{Console.BufferHeight}){(text == null ? string.Empty: " " + text)}";
         }
+
+        private void GoHistory(bool next)
+        {
+            var newStackIndex = _stackIndex + (next ? -1 : 1);
+            if (newStackIndex < 0 || newStackIndex >= History.Count)
+            {
+                if (newStackIndex < 0)
+                {
+                    SetLine(string.Empty);
+                    _stackIndex = -1;
+                }
+            }
+            else
+            {
+                _stackIndex = newStackIndex;
+                var index = (History.Count - 1) - _stackIndex;
+
+                SetLine(History[index]);
+            }
+        }
+
+
+        private bool _hasShift;
+        private bool _isStandardAction;
+        
+        public void Action(ConsoleAction action)
+        {
+            _isStandardAction = true;
+            switch (action)
+            {
+                case ConsoleAction.CopySelectionOrExit:
+                    if (HasSelection)
+                    {
+                        CopySelectionToClipboard();
+                    }
+                    else
+                    {
+                        Exit();
+                    }
+                    break;
+                case ConsoleAction.Exit:
+                    Exit();
+                    break;
+                case ConsoleAction.CursorLeft:
+                    MoveLeft(false);
+                    break;
+                case ConsoleAction.CursorRight:
+                    MoveRight(false);
+                    break;
+                case ConsoleAction.CursorLeftWord:
+                    MoveLeft(true);
+                    break;
+                case ConsoleAction.CursorRightWord:
+                    MoveRight(true);
+                    break;
+                case ConsoleAction.CursorStartOfLine:
+                    Begin();
+                    break;
+                case ConsoleAction.CursorEndOfLine:
+                    End();
+                    break;
+                case ConsoleAction.HistoryPrevious:
+                    GoHistory(false);
+                    break;
+                case ConsoleAction.HistoryNext:
+                    GoHistory(true);
+                    break;
+                case ConsoleAction.DeleteCharacterLeft:
+                    Backspace(false);
+                    _stackIndex = -1;
+                    _hasShift = false;
+                    break;
+                case ConsoleAction.DeleteCharacterLeftAndCopy:
+                    break;
+                case ConsoleAction.DeleteCharacterRight:
+                    Delete(false);
+                    _stackIndex = -1;
+                    _hasShift = false;
+                    break;
+                case ConsoleAction.DeleteCharacterRightAndCopy:
+                    break;
+                case ConsoleAction.DeleteWordLeft:
+                    Backspace(true);
+                    _stackIndex = -1;
+                    _hasShift = false;
+                    break;
+                case ConsoleAction.DeleteWordRight:
+                    Delete(true);
+                    _stackIndex = -1;
+                    _hasShift = false;
+                    break;
+                case ConsoleAction.Completion:
+                    break;
+                case ConsoleAction.DeleteTextRightAndCopy:
+                    break;
+                case ConsoleAction.DeleteWordRightAndCopy:
+                    break;
+                case ConsoleAction.DeleteWordLeftAndCopy:
+                    break;
+                case ConsoleAction.CopySelection:
+                    CopySelectionToClipboard();
+                    break;
+                case ConsoleAction.CutSelection:
+                    CopySelectionToClipboard();
+                    RemoveSelection();
+                    break;
+                case ConsoleAction.PasteClipboard:
+                    PasteClipboard();
+                    break;
+                case ConsoleAction.ValidateLine:
+                    Enter(false);
+                    break;
+                case ConsoleAction.ForceValidateLine:
+                    Enter(true);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(action), action, $"Invalid action {action}");
+            }
+        }
     }
+
+
+    public enum ConsoleAction
+    {
+        CopySelectionOrExit,
+        Exit,
+        CursorLeft,
+        CursorRight,
+        CursorLeftWord,
+        CursorRightWord,
+        CursorStartOfLine,
+        CursorEndOfLine,
+        HistoryPrevious,
+        HistoryNext,
+        DeleteCharacterLeft,
+        DeleteCharacterLeftAndCopy,
+        DeleteCharacterRight,
+        DeleteCharacterRightAndCopy,
+        DeleteWordLeft,
+        DeleteWordRight,
+        Completion,
+        DeleteTextRightAndCopy,
+        DeleteWordRightAndCopy,
+        DeleteWordLeftAndCopy,
+        CopySelection,
+        CutSelection,
+        PasteClipboard,
+        ValidateLine,
+        ForceValidateLine,
+    }
+
 }

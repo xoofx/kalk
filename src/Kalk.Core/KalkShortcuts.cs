@@ -42,7 +42,7 @@ namespace Kalk.Core
             if (!TryGetValue(name, out var shortcut)) return;
             Remove(name);
 
-            foreach (KalkShortcutKey shortcutKey in shortcut.Keys)
+            foreach (KalkShortcutKeySequence shortcutKey in shortcut.Keys)
             {
                 var map = ShortcutKeyMap;
                 KalkConsoleKey consoleKey = default;
@@ -88,7 +88,7 @@ namespace Kalk.Core
             RemoveShortcut(shortcut.Name);
             Add(shortcut.Name, shortcut);
 
-            foreach (KalkShortcutKey shortcutKey in shortcut.Keys)
+            foreach (KalkShortcutKeySequence shortcutKey in shortcut.Keys)
             {
                 var map = ShortcutKeyMap;
                 KalkConsoleKey consoleKey = default;

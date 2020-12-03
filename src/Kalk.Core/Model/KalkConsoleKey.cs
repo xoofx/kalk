@@ -1,10 +1,47 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
+using Scriban.Runtime;
 
 namespace Kalk.Core
 {
     public readonly struct KalkConsoleKey : IEquatable<KalkConsoleKey>
     {
+        // Maps of name to ConsoleKey
+        private static readonly Dictionary<string, ConsoleKey> MapNameToConsoleKey = new Dictionary<string, ConsoleKey>(StringComparer.OrdinalIgnoreCase);
+
+        // Maps of ConsoleKey to name
+        private static readonly Dictionary<ConsoleKey, string> MapConsoleKeyToName = new Dictionary<ConsoleKey, string>();
+
+        static KalkConsoleKey()
+        {
+            var names = Enum.GetNames<ConsoleKey>();
+            var values = Enum.GetValues<ConsoleKey>();
+
+            for (var i = 0; i < names.Length; i++)
+            {
+                var name = StandardMemberRenamer.Rename(names[i]);
+                var key = values[i];
+                if (key >= ConsoleKey.D0 && key <= ConsoleKey.D9)
+                {
+                    name = ('0' + (key - ConsoleKey.D0)).ToString(CultureInfo.InvariantCulture);
+                }
+                MapKey(name, key);
+            }
+
+            MapKey("left", ConsoleKey.LeftArrow);
+            MapKey("right", ConsoleKey.RightArrow);
+            MapKey("up", ConsoleKey.UpArrow);
+            MapKey("down", ConsoleKey.DownArrow);
+        }
+
+        private static void MapKey(string name, ConsoleKey key)
+        {
+            MapNameToConsoleKey.Add(name, key);
+            MapConsoleKeyToName[key] = name;
+        }
+
         public KalkConsoleKey(ConsoleModifiers modifiers, ConsoleKey key, char keyChar)
         {
             Modifiers = modifiers;
@@ -80,52 +117,64 @@ namespace Kalk.Core
                 }
                 else
                 {
-                    if (string.Compare(keyText, index, "CTRL", 0, "CTRL".Length) == 0)
+                    if (string.Compare(keyText, index, "CTRL", 0, "CTRL".Length, true) == 0)
                     {
                         if ((modifiers & ConsoleModifiers.Control) != 0) throw new ArgumentException("Cannot have multiple CTRL keys in a shortcut.", nameof(keyText));
                         modifiers |= ConsoleModifiers.Control;
                         index += "CTRL".Length;
                         expectingPlus = true;
                     }
-                    else if (string.Compare(keyText, index, "ALT", 0, "ALT".Length) == 0)
+                    else if (string.Compare(keyText, index, "ALT", 0, "ALT".Length, true) == 0)
                     {
                         if ((modifiers & ConsoleModifiers.Alt) != 0) throw new ArgumentException("Cannot have multiple ALT keys in a shortcut.", nameof(keyText));
                         modifiers |= ConsoleModifiers.Alt;
                         index += "ALT".Length;
                         expectingPlus = true;
                     }
-                    else if (string.Compare(keyText, index, "SHIFT", 0, "SHIFT".Length) == 0)
+                    else if (string.Compare(keyText, index, "SHIFT", 0, "SHIFT".Length, true) == 0)
                     {
-                        if ((modifiers & ConsoleModifiers.Shift) != 0) throw new ArgumentException("Cannot have multiple SHIFT keys in a shortcut.", nameof(keyText));
-                        modifiers |= ConsoleModifiers.Shift;
+                        // Skip the shift but don't expect it's modifiers
                         index += "SHIFT".Length;
                         expectingPlus = true;
                     }
                     else
                     {
                         var remainingText = keyText.Substring(index);
-                        if (remainingText.Length == 1 && remainingText[0] >= '0' && remainingText[0] <= '9')
+                        expectingPlus = false;
+                        if (!MapNameToConsoleKey.TryGetValue(remainingText, out key))
+                        {
+                            throw new ArgumentException($"Invalid key found `{remainingText}`. Expecting: {string.Join(", ", Enum.GetNames(typeof(ConsoleKey)))}.", nameof(keyText));
+                        }
+
+                        if (key >= ConsoleKey.D0 && key <= ConsoleKey.D9)
+                        {
+                            keyChar = (char) ('0' + (int) key - (int) ConsoleKey.D0);
+                        }
+                        else if (key >= ConsoleKey.A && key <= ConsoleKey.Z)
                         {
                             keyChar = remainingText[0];
-                            key = ConsoleKey.D0 + (keyChar - '0');
                         }
                         else
                         {
-                            if (!Enum.TryParse<ConsoleKey>(remainingText, true, out key))
+                            keyChar = key switch
                             {
-                                throw new ArgumentException($"Invalid key found `{remainingText}`. Expecting: {string.Join(", ", Enum.GetNames(typeof(ConsoleKey)))}.", nameof(keyText));
-                            }
-
-                            if (key >= ConsoleKey.D0 && key <= ConsoleKey.D9)
-                            {
-                                keyChar = (char) ('0' + (int) key - (int) ConsoleKey.D0);
-                            }
-                            else if (key >= ConsoleKey.A && key <= ConsoleKey.Z)
-                            {
-                                keyChar = remainingText[0];
-                            }
+                                ConsoleKey.Add => '+',
+                                ConsoleKey.Attention => '!',
+                                ConsoleKey.Divide => '/',
+                                ConsoleKey.Multiply => '*',
+                                ConsoleKey.Subtract => '-',
+                                ConsoleKey.OemPlus => '=',
+                                ConsoleKey.OemMinus => '-',
+                                ConsoleKey.OemPeriod => ';',
+                                ConsoleKey.OemComma => ',',
+                                ConsoleKey.Tab => '\t',
+                                ConsoleKey.Enter => '\r',
+                                ConsoleKey.Spacebar => ' ',
+                                ConsoleKey.Backspace => '\b',
+                                ConsoleKey.Escape => (char) 0x1b,
+                                _ => keyChar
+                            };
                         }
-
                         break;
                     }
                 }
@@ -134,41 +183,37 @@ namespace Kalk.Core
             return new KalkConsoleKey(modifiers, key, keyChar);
         }
 
-
         public override string ToString()
         {
             var builder = new StringBuilder();
             var modifiers = Modifiers;
             if ((modifiers & ConsoleModifiers.Control) != 0)
             {
-                builder.Append("CTRL");
+                builder.Append("ctrl");
             }
             if ((modifiers & ConsoleModifiers.Alt) != 0)
             {
-                if (builder.Length > 0) builder.Append("+");
-                builder.Append("ALT");
+                if (builder.Length > 0) builder.Append('+');
+                builder.Append("alt");
             }
             if ((modifiers & ConsoleModifiers.Shift) != 0)
             {
-                if (builder.Length > 0) builder.Append("+");
-                builder.Append("SHIFT");
+                if (builder.Length > 0) builder.Append('+');
+                builder.Append("shift");
             }
 
             if (builder.Length > 0)
             {
-                builder.Append("+");
-                builder.Append(Key.ToString());
+                builder.Append('+');
+            }
+
+            if (Key >= ConsoleKey.A && Key <= ConsoleKey.Z && KeyChar != 0)
+            {
+                builder.Append(KeyChar);
             }
             else
             {
-                if (KeyChar >= '0' && KeyChar <= '9' || KeyChar >= 'A' && KeyChar <= 'Z' || KeyChar >= 'a' && KeyChar <= 'z')
-                {
-                    builder.Append(KeyChar.ToString());
-                }
-                else
-                {
-                    builder.Append(Key.ToString());
-                }
+                builder.Append(MapConsoleKeyToName[Key]);
             }
 
             return builder.ToString();

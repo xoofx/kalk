@@ -55,6 +55,7 @@ namespace Kalk.Core
         {
             try
             {
+                OnAction = InteractiveOnAction;
                 _clockReplInput.Restart();
                 Repl.Run();
             }
@@ -65,6 +66,85 @@ namespace Kalk.Core
             }
 
             return true;
+        }
+
+        private void InteractiveOnAction(KalkAction obj)
+        {
+            switch (obj)
+            {
+                case KalkAction.CopySelectionOrExit:
+                    Repl.Action(ConsoleAction.CopySelectionOrExit);
+                    break;
+                case KalkAction.Exit:
+                    Repl.Action(ConsoleAction.Exit);
+                    break;
+                case KalkAction.CursorLeft:
+                    Repl.Action(ConsoleAction.CursorLeft);
+                    break;
+                case KalkAction.CursorRight:
+                    Repl.Action(ConsoleAction.CursorRight);
+                    break;
+                case KalkAction.CursorLeftWord:
+                    Repl.Action(ConsoleAction.CursorLeftWord);
+                    break;
+                case KalkAction.CursorRightWord:
+                    Repl.Action(ConsoleAction.CursorRightWord);
+                    break;
+                case KalkAction.CursorStartOfLine:
+                    Repl.Action(ConsoleAction.CursorStartOfLine);
+                    break;
+                case KalkAction.CursorEndOfLine:
+                    Repl.Action(ConsoleAction.CursorEndOfLine);
+                    break;
+                case KalkAction.HistoryPrevious:
+                    Repl.Action(ConsoleAction.HistoryPrevious);
+                    break;
+                case KalkAction.HistoryNext:
+                    Repl.Action(ConsoleAction.HistoryNext);
+                    break;
+                case KalkAction.DeleteCharacterLeft:
+                    Repl.Action(ConsoleAction.DeleteCharacterLeft);
+                    break;
+                case KalkAction.DeleteCharacterLeftAndCopy:
+                    break;
+                case KalkAction.DeleteCharacterRight:
+                    Repl.Action(ConsoleAction.DeleteCharacterRight);
+                    break;
+                case KalkAction.DeleteCharacterRightAndCopy:
+                    break;
+                case KalkAction.DeleteWordLeft:
+                    Repl.Action(ConsoleAction.DeleteWordLeft);
+                    break;
+                case KalkAction.DeleteWordRight:
+                    Repl.Action(ConsoleAction.DeleteWordRight);
+                    break;
+                case KalkAction.Completion:
+                    Repl.Action(ConsoleAction.Completion);
+                    break;
+                case KalkAction.DeleteTextRightAndCopy:
+                    break;
+                case KalkAction.DeleteWordRightAndCopy:
+                    break;
+                case KalkAction.DeleteWordLeftAndCopy:
+                    break;
+                case KalkAction.CopySelection:
+                    Repl.Action(ConsoleAction.CopySelection);
+                    break;
+                case KalkAction.CutSelection:
+                    Repl.Action(ConsoleAction.CutSelection);
+                    break;
+                case KalkAction.PasteClipboard:
+                    Repl.Action(ConsoleAction.PasteClipboard);
+                    break;
+                case KalkAction.ValidateLine:
+                    Repl.Action(ConsoleAction.ValidateLine);
+                    break;
+                case KalkAction.ForceValidateLine:
+                    Repl.Action(ConsoleAction.ForceValidateLine);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(obj), obj, null);
+            }
         }
 
         private bool RunNonInteractive()

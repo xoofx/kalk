@@ -1,4 +1,25 @@
-﻿# Shortcuts
+﻿# Default navigation shortcuts
+shortcut(cursor_left, "left, ctrl+b", action("cursor_left"))
+shortcut(cursor_right, "right, ctrl+f", action("cursor_right"))
+shortcut(history_previous, "up, ctrl+p", action("history_previous"))
+shortcut(history_next, "down, ctrl+n", action("history_next"))
+shortcut(copy, "ctrl+c", action("copy_or_exit"))
+shortcut(cut, "ctrl+x", action("cut"))
+shortcut(paste, "ctrl+v", action("paste"))
+shortcut(cursor_word_left, "ctrl+left, alt+b", action("cursor_word_left"))
+shortcut(cursor_word_right, "ctrl+right, alt+f", action("cursor_word_right"))
+shortcut(cursor_line_start, "home, ctrl+a", action("cursor_line_start"))
+shortcut(cursor_line_end, "end, ctrl+e", action("cursor_line_end"))
+shortcut(completion, "tab", action("completion"))
+shortcut(delete_left, "backspace", action("delete_left"))
+shortcut(delete_right, "delete, ctrl+d", action("delete_right"))
+shortcut(delete_word_left, "ctrl+backspace, ctrl+alt+b", action("delete_word_left"))
+shortcut(delete_word_right, "ctrl+delete, ctrl+alt+f", action("delete_word_right"))
+shortcut(validate_line, "enter", action("validate_line"))
+shortcut(force_validate_line, "ctrl+enter", action("force_validate_line"))
+shortcut(clear_screen, "ctrl+l", cls)
+
+# Shortcuts
 shortcut(alpha, "CTRL+G A", "Α", "CTRL+G a", "α")
 shortcut(beta, "CTRL+G B", "Β", "CTRL+G b", "β")
 shortcut(chi, "CTRL+G C", "Χ", "CTRL+G c", "χ")

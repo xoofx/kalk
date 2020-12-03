@@ -11,32 +11,38 @@ $ kalk
 ```
 ### Keyboard Shortcuts
 
-`kalk` provides shortcuts for the command line editing experience:
+`kalk` provides the following default shortcuts for the command line editing experience:
 
 {.table}
-| Keys               | Description                     |
-|--------------------|---------------------------------|
-| `left`             | Move cursor 1 character to the left
-| `right`            | Move cursor 1 character to the right
-| `up`               | Move to the previous command in the history
-| `down`             | Move to the next command in the history
-| `home`             | Move cursor to the beginning of the line
-| `end`              | Move cursor to the end of the line
-| `backspace`        | Delete 1 character at the left of the cursor
-| `del`              | Delete 1 character at the right of the cursor
-| `ctrl+left`        | Move cursor 1 word/special-char to the left
-| `ctrl+right`       | Move cursor 1 word/special-char to the right
-| `shift+left`       | Start selection and cursor 1 character to the left
-| `shift+right`      | Start selection cursor 1 character to the right
-| `ctrl+shift+left`  | Start selection and move the cursor 1 word/special-char to the left
-| `ctrl+shift+right` | Start selection and move the cursor 1 word/special-char to the right
-| `ctrl+backspace`   | Delete 1 word/special-char at the left of the cursor
-| `ctrl+del`         | Delete 1 word/special-char at the right of the cursor
+| Keys                               | Description                     |
+|------------------------------------|---------------------------------|
+| `left` or `ctrl+b`                 | Move cursor 1 character to the left
+| `right` or `ctrl+f`                | Move cursor 1 character to the right
+| `up` or `ctrl+p`                   | Move to the previous command in the history
+| `down` or `ctrl+n`                 | Move to the next command in the history
+| `home` or `ctrl+a`                 | Move cursor to the beginning of the line
+| `end` or `ctrl+e`                  | Move cursor to the end of the line
+| `backspace`                        | Delete 1 character at the left of the cursor
+| `del` or `ctrl+d`                  | Delete 1 character at the right of the cursor
+| `ctrl+left` or `alt+b`             | Move cursor 1 word/special-char to the left
+| `ctrl+right` or `alt+f`            | Move cursor 1 word/special-char to the right
+| `ctrl+backspace` or `ctrl+alt+b`   | Delete 1 word/special-char at the left of the cursor
+| `ctrl+del` or `ctrl+alt+f`         | Delete 1 word/special-char at the right of the cursor
+| `ctrl+c`                           | Copy current selection to clipboard. If no selection, exit `kalk`
+| `ctrl+x`                           | Cut current selection to clipboard
+| `ctrl+v`                           | Paste clipboard at the position of the cursor
+| `tab`                              | Starts completion or go to next completion word
+| `shift+tab`                        | Starts completion or go to previous completion word
+| `enter`                            | Sends the current line to the interpreter
+| `ctrl+enter`                       | Sends the current line to the interpreter and continue to next prompt even in case of an error
+| `ctrl+l`                           | Clears the screen
 
+Some of the shortcuts defined above are compatible with the `readline` keyboard shortcuts.
 
-{{WARNING do}}
-The navigation on macOS with `ctrl` is not working. There is a GitHub issue you can follow [here](https://github.com/xoofx/kalk/issues/4).
-{{end}}
+Combining the modifier `shift` with cursor movements (e.g `left`) will start a selection.
+
+These shortcuts can be configured programmatically via [`shortcut`](../api/general.generated.md#shortcut) and [`action`](../api/general.generated.md#action) functions, see the [advanced section](../advanced/readme.md#keyboard).
+
 ### Expressions
 
 Then you can start to type mathematical expressions and get their results:

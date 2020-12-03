@@ -405,7 +405,9 @@ These intrinsic functions are only available if your CPU supports `{{module.Name
 
 `{{member.Name}}{{~ if member.Params.size > 0 ~}}({{~ for param in member.Params ~}}{{ param.Name }}{{ param.IsOptional?'?':''}}{{ for.last?'':',' }}{{~ end ~}}){{~ end ~}}`
 
+{{~ if member.Description ~}}
 {{ member.Description | regex.replace `^\s{4}` '' 'm' | string.rstrip }}
+{{~ end ~}}
 {{~ if member.Params.size > 0 ~}}
 
     {{~ for param in member.Params ~}}

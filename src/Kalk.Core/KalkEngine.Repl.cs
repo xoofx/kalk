@@ -225,22 +225,17 @@ namespace Kalk.Core
 
         internal bool OnKey(ConsoleKeyInfo arg, ConsoleText line, ref int cursorIndex)
         {
+            bool resetMap = true;
+            bool resetCompletion = true;
             try
             {
-                if (arg.Key == ConsoleKey.Tab)
-                {
-                    if (OnCompletionRequested(arg, line, ref cursorIndex))
-                    {
-                        return true;
-                    }
-                }
+                bool hasShift = (arg.Modifiers & ConsoleModifiers.Shift) != 0;
 
-                // Reset any completion if we are getting here
-                ResetCompletion();
+                // For now, we discard SHIFT entirely, as it is handled separately for range selection
+                // TODO: we should handle them not differently from ctrl/alt, but it's complicated
+                arg = new ConsoleKeyInfo(arg.KeyChar, arg.Key, false, (arg.Modifiers & ConsoleModifiers.Alt) != 0, (arg.Modifiers & ConsoleModifiers.Control) != 0);
 
                 KalkConsoleKey kalkKey = arg;
-                //Console.Title = $"Key {StringFunctions.Escape(arg.KeyChar.ToString())} {arg.Key} {arg.Modifiers} - parsed {kalkKey}";
-
                 if (cursorIndex >= 0 && cursorIndex <= line.Count)
                 {
                     if (_currentShortcutKeyMap.TryGetValue(kalkKey, out var value))
@@ -248,38 +243,59 @@ namespace Kalk.Core
                         if (value is KalkShortcutKeyMap map)
                         {
                             _currentShortcutKeyMap = map;
+                            resetMap = false; // we don't reset if 
                         }
                         else
                         {
-                            var expression = (ScriptExpression)value;
+                            var expression = (ScriptExpression) value;
                             var result = EvaluateExpression(expression);
-                            if (result != null)
+                            if (result is KalkActionObject command)
                             {
-                                var resultStr = result.ToString();
+                                // Particular case the completion action, we handle it here
+                                if (command.Action == "completion")
+                                {
+                                    // In case of shift we go backward
+                                    if (OnCompletionRequested(hasShift, line, ref cursorIndex))
+                                    {
+                                        resetCompletion = false;
+                                        return true;
+                                    }
+                                }
+                                else if (OnAction != null)
+                                {
+                                    command.Call(OnAction);
+                                }
+                            }
+                            else if (result != null)
+                            {
+                                var resultStr = ObjectToString(result);
                                 line.Insert(cursorIndex, resultStr);
                                 cursorIndex += resultStr.Length;
                             }
-                            // reset shortcuts
-                            _currentShortcutKeyMap = Shortcuts.ShortcutKeyMap;
                         }
+
                         return true;
                     }
                 }
-
-
-                _currentShortcutKeyMap = Shortcuts.ShortcutKeyMap;
             }
-            catch
+            finally
             {
-                // Restore the root key map in case of an error.
-                _currentShortcutKeyMap = Shortcuts.ShortcutKeyMap;
-                throw;
+                if (resetMap)
+                {
+                    // Restore the root key map in case of an error.
+                    _currentShortcutKeyMap = Shortcuts.ShortcutKeyMap;
+                }
+
+                if (resetCompletion)
+                {
+                    ResetCompletion();
+                }
             }
 
             return false;
         }
 
-        private bool OnCompletionRequested(ConsoleKeyInfo arg, ConsoleText line, ref int cursorIndex)
+        private bool OnCompletionRequested(bool backward, ConsoleText line, ref int cursorIndex)
         {
             // Nothing to complete
             if (cursorIndex == 0) return false;
@@ -292,7 +308,8 @@ namespace Kalk.Core
                 return false;
             }
 
-            if (!HasPendingCompletion)
+            // _currentIndexInCompletionMatchingList
+            if (_currentIndexInCompletionMatchingList < 0)
             {
                 if (!CollectCompletionList(line, cursorIndex))
                 {
@@ -300,12 +317,27 @@ namespace Kalk.Core
                 }
             }
 
-            return OnCompletionRequested(arg.Modifiers == ConsoleModifiers.Shift, line, ref cursorIndex);
+            // Go to next word
+            _currentIndexInCompletionMatchingList = (_currentIndexInCompletionMatchingList + (backward ? -1 : 1));
+
+            // Wrap the result
+            if (_currentIndexInCompletionMatchingList >= _completionMatchingList.Count) _currentIndexInCompletionMatchingList = 0;
+            if (_currentIndexInCompletionMatchingList < 0) _currentIndexInCompletionMatchingList = _completionMatchingList.Count - 1;
+
+            if (_currentIndexInCompletionMatchingList < 0 || _currentIndexInCompletionMatchingList >= _completionMatchingList.Count) return false;
+
+            var index = _startIndexForCompletion;
+            var newText = _completionMatchingList[_currentIndexInCompletionMatchingList];
+
+            line.RemoveRangeAt(index, cursorIndex - index);
+            line.Insert(index, newText);
+            cursorIndex = index + newText.Length;
+            return true;
         }
 
         private void ResetCompletion()
         {
-            _currentIndexInCompletionMatchingList = 0;
+            _currentIndexInCompletionMatchingList = -1;
             _completionMatchingList.Clear();
         }
 
@@ -374,28 +406,6 @@ namespace Kalk.Core
             return true;
         }
 
-        private bool HasPendingCompletion => _currentIndexInCompletionMatchingList < _completionMatchingList.Count;
-
-        private bool OnCompletionRequested(bool backward, ConsoleText line, ref int cursorIndex)
-        {
-            if (_currentIndexInCompletionMatchingList >= _completionMatchingList.Count) return false;
-
-            var index = _startIndexForCompletion;
-            var newText = _completionMatchingList[_currentIndexInCompletionMatchingList];
-
-            line.RemoveRangeAt(index, cursorIndex - index);
-            line.Insert(index, newText);
-            cursorIndex = index + newText.Length;
-
-            // Go to next word
-            _currentIndexInCompletionMatchingList = (_currentIndexInCompletionMatchingList + (backward ? -1 : 1));
-
-            // Wrap the result
-            if (_currentIndexInCompletionMatchingList >= _completionMatchingList.Count) _currentIndexInCompletionMatchingList = 0;
-            if (_currentIndexInCompletionMatchingList < 0) _currentIndexInCompletionMatchingList = _completionMatchingList.Count - 1;
-
-            return true;
-        }
 
         private static void Collect(string startText, IEnumerable<string> keys, List<string> matchingList)
         {
