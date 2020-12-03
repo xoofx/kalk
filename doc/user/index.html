@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="lunet 0.3.1.0">
+    <meta name="generator" content="lunet 0.3.2.0">
     <title>User Guide - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" type="text/javascript" ></script>
@@ -158,7 +158,7 @@
 <pre><code class="language-shell-session">$ kalk
 </code></pre>
 <h3 id="keyboard-shortcuts">Keyboard Shortcuts</h3>
-<p><code>kalk</code> provides shortcuts for the command line editing experience:</p>
+<p><code>kalk</code> provides the following default shortcuts for the command line editing experience:</p>
 <table class="table">
 <thead>
 <tr>
@@ -168,27 +168,27 @@
 </thead>
 <tbody>
 <tr>
-<td><code>left</code></td>
+<td><code>left</code> or <code>ctrl+b</code></td>
 <td>Move cursor 1 character to the left</td>
 </tr>
 <tr>
-<td><code>right</code></td>
+<td><code>right</code> or <code>ctrl+f</code></td>
 <td>Move cursor 1 character to the right</td>
 </tr>
 <tr>
-<td><code>up</code></td>
+<td><code>up</code> or <code>ctrl+p</code></td>
 <td>Move to the previous command in the history</td>
 </tr>
 <tr>
-<td><code>down</code></td>
+<td><code>down</code> or <code>ctrl+n</code></td>
 <td>Move to the next command in the history</td>
 </tr>
 <tr>
-<td><code>home</code></td>
+<td><code>home</code> or <code>ctrl+a</code></td>
 <td>Move cursor to the beginning of the line</td>
 </tr>
 <tr>
-<td><code>end</code></td>
+<td><code>end</code> or <code>ctrl+e</code></td>
 <td>Move cursor to the end of the line</td>
 </tr>
 <tr>
@@ -196,46 +196,62 @@
 <td>Delete 1 character at the left of the cursor</td>
 </tr>
 <tr>
-<td><code>del</code></td>
+<td><code>del</code> or <code>ctrl+d</code></td>
 <td>Delete 1 character at the right of the cursor</td>
 </tr>
 <tr>
-<td><code>ctrl+left</code></td>
+<td><code>ctrl+left</code> or <code>alt+b</code></td>
 <td>Move cursor 1 word/special-char to the left</td>
 </tr>
 <tr>
-<td><code>ctrl+right</code></td>
+<td><code>ctrl+right</code> or <code>alt+f</code></td>
 <td>Move cursor 1 word/special-char to the right</td>
 </tr>
 <tr>
-<td><code>shift+left</code></td>
-<td>Start selection and cursor 1 character to the left</td>
-</tr>
-<tr>
-<td><code>shift+right</code></td>
-<td>Start selection cursor 1 character to the right</td>
-</tr>
-<tr>
-<td><code>ctrl+shift+left</code></td>
-<td>Start selection and move the cursor 1 word/special-char to the left</td>
-</tr>
-<tr>
-<td><code>ctrl+shift+right</code></td>
-<td>Start selection and move the cursor 1 word/special-char to the right</td>
-</tr>
-<tr>
-<td><code>ctrl+backspace</code></td>
+<td><code>ctrl+backspace</code> or <code>ctrl+alt+b</code></td>
 <td>Delete 1 word/special-char at the left of the cursor</td>
 </tr>
 <tr>
-<td><code>ctrl+del</code></td>
+<td><code>ctrl+del</code> or <code>ctrl+alt+f</code></td>
 <td>Delete 1 word/special-char at the right of the cursor</td>
+</tr>
+<tr>
+<td><code>ctrl+c</code></td>
+<td>Copy current selection to clipboard. If no selection, exit <code>kalk</code></td>
+</tr>
+<tr>
+<td><code>ctrl+x</code></td>
+<td>Cut current selection to clipboard</td>
+</tr>
+<tr>
+<td><code>ctrl+v</code></td>
+<td>Paste clipboard at the position of the cursor</td>
+</tr>
+<tr>
+<td><code>tab</code></td>
+<td>Starts completion or go to next completion word</td>
+</tr>
+<tr>
+<td><code>shift+tab</code></td>
+<td>Starts completion or go to previous completion word</td>
+</tr>
+<tr>
+<td><code>enter</code></td>
+<td>Sends the current line to the interpreter</td>
+</tr>
+<tr>
+<td><code>ctrl+enter</code></td>
+<td>Sends the current line to the interpreter and continue to next prompt even in case of an error</td>
+</tr>
+<tr>
+<td><code>ctrl+l</code></td>
+<td>Clears the screen</td>
 </tr>
 </tbody>
 </table>
-<div class='lunet-alert-warning' role='alert'><div class='lunet-alert-warning-heading'><span class='lunet-alert-warning-icon'></span><span class='lunet-alert-warning-heading-text'></span></div><div class='lunet-alert-warning-content'>
-<p>The navigation on macOS with <code>ctrl</code> is not working. There is a GitHub issue you can follow <a href="https://github.com/xoofx/kalk/issues/4">here</a>.</p>
-</div></div>
+<p>Some of the shortcuts defined above are compatible with the <code>readline</code> keyboard shortcuts.</p>
+<p>Combining the modifier <code>shift</code> with cursor movements (e.g <code>left</code>) will start a selection.</p>
+<p>These shortcuts can be configured programmatically via <a href="/doc/api/general#shortcut"><code>shortcut</code></a> and <a href="/doc/api/general#action"><code>action</code></a> functions, see the <a href="/doc/advanced#keyboard">advanced section</a>.</p>
 <h3 id="expressions">Expressions</h3>
 <p>Then you can start to type mathematical expressions and get their results:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 1+2

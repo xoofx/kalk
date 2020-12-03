@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="lunet 0.3.1.0">
+    <meta name="generator" content="lunet 0.3.2.0">
     <title>General Functions - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" type="text/javascript" ></script>
@@ -155,16 +155,121 @@
 
         <p id="lunet-results"></p>
         <h1>General Functions</h1>
-        <h2 id="alias">alias</h2>
+        <h2 id="action">action</h2>
+<p><code>action(action)</code></p>
+<p>Creates an action for the command line editor experience related to
+cursor/text manipulation. This action can then be used by the <code>shortcut</code> command.</p>
+<ul>
+<li><p><code>action</code>: The name of the action to create. This name must be</p>
+<table class="table">
+<thead>
+<tr>
+<th>Action</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cursor_left</code></td>
+<td>Move the cursor to the left</td>
+</tr>
+<tr>
+<td><code>cursor_right</code></td>
+<td>Move the cursor to the right</td>
+</tr>
+<tr>
+<td><code>history_previous</code></td>
+<td>Bring the previous command from the history</td>
+</tr>
+<tr>
+<td><code>history_next</code></td>
+<td>Bring the next command from the history</td>
+</tr>
+<tr>
+<td><code>copy</code></td>
+<td>Copy the selection to the clipboard</td>
+</tr>
+<tr>
+<td><code>cut</code></td>
+<td>Cut the selection to the clipboard</td>
+</tr>
+<tr>
+<td><code>paste</code></td>
+<td>Paste the content of the clipboard at the position of the cursor</td>
+</tr>
+<tr>
+<td><code>cursor_word_left</code></td>
+<td>Move the cursor to the left by one word boundary</td>
+</tr>
+<tr>
+<td><code>cursor_word_right</code></td>
+<td>Move the cursor to the right by one word boundary</td>
+</tr>
+<tr>
+<td><code>cursor_line_start</code></td>
+<td>Move the cursor to the beginning of the line</td>
+</tr>
+<tr>
+<td><code>cursor_line_end</code></td>
+<td>Move the cursor to the end of the line</td>
+</tr>
+<tr>
+<td><code>completion</code></td>
+<td>Trigger a completion at the cursor's position</td>
+</tr>
+<tr>
+<td><code>delete_left</code></td>
+<td>Delete the character to the left of the cursor</td>
+</tr>
+<tr>
+<td><code>delete_right</code></td>
+<td>Delete the character to the right of the cursor</td>
+</tr>
+<tr>
+<td><code>delete_word_left</code></td>
+<td>Delete a word to the left of the cursor</td>
+</tr>
+<tr>
+<td><code>delete_word_right</code></td>
+<td>Delete a word to the right of the cursor</td>
+</tr>
+<tr>
+<td><code>validate_line</code></td>
+<td>Validate the current line</td>
+</tr>
+<tr>
+<td><code>force_validate_line</code></td>
+<td>Validate the current line and force a new line even in case of a syntax error</td>
+</tr>
+<tr>
+<td><code>exit</code></td>
+<td>Exit the program</td>
+</tr>
+<tr>
+<td><code>copy_or_exit</code></td>
+<td>Copy the content of the selection to the clipboard or if there is no selection, exit the program</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h3 id="returns">Returns</h3>
+<p>An action object.</p>
+<h3 id="remarks">Remarks</h3>
+<p>This function is not meant to be used directly but in conjunction with the <code>shortcut</code> command.</p>
+<h3 id="example">Example</h3>
+<pre><code class="language-kalk"> &gt;&gt;&gt; shortcut(cursor_left, &quot;left, ctrl+b&quot;, action(&quot;cursor_left&quot;))
+</code></pre>
+<h2 id="alias">alias</h2>
 <p><code>alias(name,aliases)</code></p>
 <p>Creates an alias between variable names.</p>
 <ul>
 <li><code>name</code>: Name of the original alias name.</li>
 <li><code>aliases</code>: Variable names that are all equivalent to the alias name.</li>
 </ul>
-<h3 id="remarks">Remarks</h3>
+<h3 id="remarks-1">Remarks</h3>
 <p>See the command <code>aliases</code> to list the aliases currently defined. Several aliases are defined by default for common mathematical symbols (e.g <code>alias(pi, Π, π)</code>).</p>
-<h3 id="example">Example</h3>
+<h3 id="example-1">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; alias(var1, var2, var3)
 &gt;&gt;&gt; var1 = 2
 # var1 = 2
@@ -188,9 +293,9 @@ var1 = 1
 <h2 id="aliases">aliases</h2>
 <p><code>aliases</code></p>
 <p>Displays all built-in and user-defined aliases.</p>
-<h3 id="remarks-1">Remarks</h3>
+<h3 id="remarks-2">Remarks</h3>
 <p>Aliases are usually used to define equivalent variable names for equivalent mathematical symbols. To create an alias, see the command <code>alias</code>.</p>
-<h3 id="example-1">Example</h3>
+<h3 id="example-2">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; aliases
 # Builtin Aliases
 alias(alpha, Α, α)
@@ -226,11 +331,11 @@ alias(zeta, Ζ, ζ)
 <ul>
 <li>screen: to clear the screen (default if not passed)</li>
 <li>history: to clear the history</li>
-<li>shortcuts: to clear all shortcuts defined</li>
+<li>shortcuts: to clear all shortcuts defined. WARNING, clearing shortcuts is removing all common shortcuts, including basic navigation and edition mode!</li>
 </ul>
 </li>
 </ul>
-<h3 id="example-2">Example</h3>
+<h3 id="example-3">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; 1 + 2
 # 1 + 2
 out = 3
@@ -246,11 +351,11 @@ out = 3
 <ul>
 <li><code>value</code>: Value to set the clipboard to. If not set, this function returns the current content of the clipboard.</li>
 </ul>
-<h3 id="returns">Returns</h3>
+<h3 id="returns-1">Returns</h3>
 <p>Returns the content of the clipboard.</p>
-<h3 id="remarks-2">Remarks</h3>
+<h3 id="remarks-3">Remarks</h3>
 <p>On Unix platform, if you are running from WSL or from raw console, the clipboard is not supported.</p>
-<h3 id="example-3">Example</h3>
+<h3 id="example-4">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; clipboard &quot;text&quot;
 # clipboard(&quot;text&quot;)
 out = &quot;text&quot;
@@ -261,13 +366,13 @@ out = &quot;text&quot;
 <h2 id="cls">cls</h2>
 <p><code>cls</code></p>
 <p>Clears the screen.</p>
-<h3 id="example-4">Example</h3>
+<h3 id="example-5">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; cls
 </code></pre>
 <h2 id="config">config</h2>
 <p><code>config</code></p>
 <p>Gets the config object.</p>
-<h3 id="example-5">Example</h3>
+<h3 id="example-6">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; config
 # config
 out = {help_max_column: 100, limit_to_string: &quot;auto&quot;}
@@ -278,7 +383,7 @@ out = {help_max_column: 100, limit_to_string: &quot;auto&quot;}
 <ul>
 <li><code>variable</code>: Name of the variable or function to delete.</li>
 </ul>
-<h3 id="example-6">Example</h3>
+<h3 id="example-7">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; x = 5; y = 2
 # x = 5; y = 2
 x = 5
@@ -314,7 +419,7 @@ f(x) = x + 5
 <li><p><code>name</code>: An optional parameter to set the display mode. Default is <code>std</code>. If this parameter is not set, this function will display the display mode currently used.</p>
 </li>
 </ul>
-<h3 id="example-7">Example</h3>
+<h3 id="example-8">Example</h3>
 <pre><code class="language-kalk"> &gt;&gt;&gt; display
  # Display mode: std (Standard)
  &gt;&gt;&gt; display dev
@@ -341,7 +446,7 @@ f(x) = x + 5
 <ul>
 <li><code>value</code>: An optional <code>true</code>/<code>on</code> or <code>false</code>/<code>off</code> value to enable or disable the echo. A value of <code>false</code> will disable any output generated by a command except for the print commands. If this parameter is not set, this function will display the current display mode.</li>
 </ul>
-<h3 id="example-8">Example</h3>
+<h3 id="example-9">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; echo
 # Echo is on.
 &gt;&gt;&gt; 1 + 2
@@ -363,9 +468,9 @@ out = 3
 <li><code>text</code>: The text of the expression to evaluate.</li>
 <li><code>output</code>: An optional parameter to output intermediate results of nested expressions. Default is <code>false</code>.</li>
 </ul>
-<h3 id="returns-1">Returns</h3>
+<h3 id="returns-2">Returns</h3>
 <p>The result of the evaluation.</p>
-<h3 id="example-9">Example</h3>
+<h3 id="example-10">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; eval &quot;1+5&quot;
 # eval(&quot;1+5&quot;)
 out = 6
@@ -376,7 +481,7 @@ out = 6
 <h2 id="exit">exit</h2>
 <p><code>exit</code></p>
 <p>Exits kalk.</p>
-<h3 id="example-10">Example</h3>
+<h3 id="example-11">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; exit
 </code></pre>
 <h2 id="help">help</h2>
@@ -385,7 +490,7 @@ out = 6
 <ul>
 <li><code>expression</code>: An optional topic or function name. If this parameter is not set, it will display all available topics and functions.</li>
 </ul>
-<h3 id="example-11">Example</h3>
+<h3 id="example-12">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; help cls
 # cls
 #
@@ -405,7 +510,7 @@ out = 6
 </ul>
 </li>
 </ul>
-<h3 id="example-12">Example</h3>
+<h3 id="example-13">Example</h3>
 <pre><code class="language-kalk"> &gt;&gt;&gt; 1 + 5
  # 1 + 5
  out = 6
@@ -422,7 +527,7 @@ out = 6
 <ul>
 <li><code>value</code>: A value to inspect the kind</li>
 </ul>
-<h3 id="example-13">Example</h3>
+<h3 id="example-14">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; kind 1
 # kind(1)
 out = &quot;int&quot;
@@ -445,7 +550,7 @@ out = &quot;object&quot;
 <h2 id="list">list</h2>
 <p><code>list</code></p>
 <p>Lists all user-defined variables and functions.</p>
-<h3 id="example-14">Example</h3>
+<h3 id="example-15">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; x = 5; y = 2; f(x) = x + 5
 # x = 5; y = 2; f(x) = x + 5
 x = 5
@@ -465,9 +570,9 @@ y = 2
 <li><code>path</code>: The file location of the script to load and evaluate.</li>
 <li><code>output</code>: An optional parameter to output intermediate results of nested expressions. Default is <code>false</code>.</li>
 </ul>
-<h3 id="returns-2">Returns</h3>
+<h3 id="returns-3">Returns</h3>
 <p>The result of the evaluation.</p>
-<h3 id="example-15">Example</h3>
+<h3 id="example-16">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; import Files
 # 14 functions successfully imported from module `Files`.
 &gt;&gt;&gt; save_text(&quot;x = 1\ny = 2\nx + y&quot;, &quot;test.kalk&quot;)
@@ -480,9 +585,9 @@ out = 3
 <h2 id="out">out</h2>
 <p><code>out</code></p>
 <p>Returns the last evaluated result.</p>
-<h3 id="returns-3">Returns</h3>
+<h3 id="returns-4">Returns</h3>
 <p>The last evaluated result as an object.</p>
-<h3 id="example-16">Example</h3>
+<h3 id="example-17">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; 1 + 2
 # 1 + 2
 out = 3
@@ -494,7 +599,7 @@ out = 4
 <p><code>out2clipboard</code></p>
 <p>Copies the last evaluated content to the clipboard.</p>
 <p>This is equivalent to <code>out |&gt; clipboard</code>.</p>
-<h3 id="example-17">Example</h3>
+<h3 id="example-18">Example</h3>
 <pre><code class="language-kalk"> &gt;&gt;&gt; 1 + 2
  # 1 + 2
  out = 3
@@ -509,9 +614,9 @@ out = 4
 <ul>
 <li><code>value</code>: A value to print to the output.</li>
 </ul>
-<h3 id="remarks-3">Remarks</h3>
+<h3 id="remarks-4">Remarks</h3>
 <p>When the <code>echo</code> is off, this method will still output.</p>
-<h3 id="example-18">Example</h3>
+<h3 id="example-19">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; print &quot;kalk&quot;
 kalk
 &gt;&gt;&gt; echo off
@@ -524,9 +629,9 @@ kalk2
 <ul>
 <li><code>value</code>: A template string to the output. Values to format must be embraced by <code>and</code>.</li>
 </ul>
-<h3 id="remarks-4">Remarks</h3>
+<h3 id="remarks-5">Remarks</h3>
 <p>When the <code>echo</code> is off, this method will still output.</p>
-<h3 id="example-19">Example</h3>
+<h3 id="example-20">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; x = 1; y = &quot;yes&quot;
 # x = 1; y = &quot;yes&quot;
 x = 1
@@ -540,16 +645,16 @@ Hello 1 World and yes
 <ul>
 <li><code>value</code>: A value to print to the output.</li>
 </ul>
-<h3 id="remarks-5">Remarks</h3>
+<h3 id="remarks-6">Remarks</h3>
 <p>When the <code>echo</code> is off, this method will still output.</p>
-<h3 id="example-20">Example</h3>
+<h3 id="example-21">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; printh &quot;# This is a kalk comment&quot;
 # This is a kalk comment
 </code></pre>
 <h2 id="reset">reset</h2>
 <p><code>reset</code></p>
 <p>Removes all user-defined variables and functions.</p>
-<h3 id="example-21">Example</h3>
+<h3 id="example-22">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; x = 5; y = 2
 # x = 5; y = 2
 x = 5
@@ -564,35 +669,38 @@ y = 2
 </code></pre>
 <h2 id="shortcut">shortcut</h2>
 <p><code>shortcut(name,shortcuts)</code></p>
-<p>Creates a keyboard shortcut associated with an expression.</p>
+<p>Creates a keyboard shortcut associated with an expression or remove a keyboard shortcut.</p>
 <ul>
 <li><code>name</code>: Name of the shortcut</li>
-<li><code>shortcuts</code>: A collection of pair of shortcut description (e.g <code>CTRL+A</code>) and associated shortcut expression (e.g <code>1 + 2</code>).</li>
+<li><code>shortcuts</code>: A collection of pair of shortcut description (e.g <code>ctrl+a</code>) and associated shortcut expression (e.g <code>1 + 2</code>).</li>
 </ul>
-<h3 id="remarks-6">Remarks</h3>
-<p>See the command <code>shortcuts</code> to list the shortcuts currently defined. By default several shortcuts for common mathematical symbols are defined (e.g for the symbol pi: <code>shortcut(pi, &quot;CTRL+G P&quot;, &quot;Π&quot;, &quot;CTRL+G p&quot;, &quot;π&quot;)</code>).</p>
-<h3 id="example-22">Example</h3>
-<pre><code class="language-kalk">&gt;&gt;&gt; # Creates a shortcut that will print 3 when pressing CTRL+R.
-&gt;&gt;&gt; shortcut(myshortcut, &quot;CTRL+R&quot;, 1 + 2)
-&gt;&gt;&gt; # Overrides the previous shortcut that will print the text
-&gt;&gt;&gt; # `kalk` when pressing CTRL+R.
-&gt;&gt;&gt; shortcut(myshortcut, &quot;CTRL+R&quot;, &quot;kalk&quot;)
-&gt;&gt;&gt; # Overrides the previous shortcut that will print the text
-&gt;&gt;&gt; # `kalk` when pressing CTRL+R or the text `kalk2` when pressing
-&gt;&gt;&gt; # CTRL+E and r key.
-&gt;&gt;&gt; shortcut(myshortcut, &quot;CTRL+R&quot;, &quot;kalk&quot;, &quot;CTRL+E r&quot;, &quot;kalk2&quot;)
+<h3 id="remarks-7">Remarks</h3>
+<p>See the command <code>shortcuts</code> to list the shortcuts currently defined. By default several shortcuts for common mathematical symbols are defined (e.g for the symbol pi: <code>shortcut(pi, &quot;ctrl+g p&quot;, &quot;Π&quot;, &quot;ctrl+g p&quot;, &quot;π&quot;)</code>).</p>
+<p>If no shortcuts are associated to the name, the existing shortcuts for this name will be removed.</p>
+<h3 id="example-23">Example</h3>
+<pre><code class="language-kalk"> &gt;&gt;&gt; # Creates a shortcut that will print 3 when pressing ctrl+R.
+ &gt;&gt;&gt; shortcut(myshortcut, &quot;ctrl+g&quot;, 1 + 2)
+ &gt;&gt;&gt; # Overrides the previous shortcut that will print the text
+ &gt;&gt;&gt; # `kalk` when pressing ctrl+g.
+ &gt;&gt;&gt; shortcut(myshortcut, &quot;ctrl+g&quot;, &quot;kalk&quot;)
+ &gt;&gt;&gt; # Overrides the previous shortcut that will print the text
+ &gt;&gt;&gt; # `kalk` when pressing ctrl+g or the text `kalk2` when pressing
+ &gt;&gt;&gt; # ctrl+e and r key.
+ &gt;&gt;&gt; shortcut(myshortcut, &quot;ctrl+g&quot;, &quot;kalk&quot;, &quot;ctrl+e r&quot;, &quot;kalk2&quot;)
+ &gt;&gt;&gt; # Remove the previous defined shortcuts
+ &gt;&gt;&gt; shortcut(myshortcut)
 </code></pre>
 <h2 id="shortcuts">shortcuts</h2>
 <p><code>shortcuts</code></p>
 <p>Displays all built-in and user-defined keyboard shortcuts.</p>
-<h3 id="remarks-7">Remarks</h3>
+<h3 id="remarks-8">Remarks</h3>
 <p>To create an keyboard shortcut, see the command <code>shortcut</code>.</p>
-<h3 id="example-23">Example</h3>
+<h3 id="example-24">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; clear shortcuts
-&gt;&gt;&gt; shortcut(tester, &quot;CTRL+D&quot;, '&quot;' + date + '&quot;')
+&gt;&gt;&gt; shortcut(tester, &quot;ctrl+d&quot;, '&quot;' + date + '&quot;')
 &gt;&gt;&gt; shortcuts
 # User-defined Shortcuts
-shortcut(tester, &quot;CTRL+D&quot;, '&quot;' + date + '&quot;')                 # CTRL+D =&gt; '&quot;' + date + '&quot;'
+shortcut(tester, &quot;ctrl+d&quot;, '&quot;' + date + '&quot;')                 # ctrl+d =&gt; '&quot;' + date + '&quot;'
 </code></pre>
 <h2 id="sprintf">sprintf</h2>
 <p><code>sprintf(value)</code></p>
@@ -600,9 +708,9 @@ shortcut(tester, &quot;CTRL+D&quot;, '&quot;' + date + '&quot;')                
 <ul>
 <li><code>value</code>: A template string to the output. Values to format must be embraced by <code>and</code>.</li>
 </ul>
-<h3 id="returns-4">Returns</h3>
+<h3 id="returns-5">Returns</h3>
 <p>A string formatted with the specified embedded values.</p>
-<h3 id="example-24">Example</h3>
+<h3 id="example-25">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; x = 1; y = &quot;yes&quot;
 # x = 1; y = &quot;yes&quot;
 x = 1
@@ -620,9 +728,9 @@ more readable. Example: <code>105 g |&gt; to kg</code></p>
 <li><code>src</code>: The source value with units.</li>
 <li><code>dst</code>: The destination unit.</li>
 </ul>
-<h3 id="returns-5">Returns</h3>
+<h3 id="returns-6">Returns</h3>
 <p>The result of the calculation.</p>
-<h3 id="example-25">Example</h3>
+<h3 id="example-26">Example</h3>
 <pre><code class="language-kalk"> &gt;&gt;&gt; import StandardUnits
  # 1294 units successfully imported from module `StandardUnits`.
  &gt;&gt;&gt; 10 kg/s |&gt; to kg/h
@@ -686,9 +794,9 @@ Decimal prefixes:</p>
 </ul>
 </li>
 </ul>
-<h3 id="returns-6">Returns</h3>
+<h3 id="returns-7">Returns</h3>
 <p>The associated unit object.</p>
-<h3 id="example-26">Example</h3>
+<h3 id="example-27">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; unit(tomato, &quot;A tomato unit&quot;, prefix: &quot;decimal&quot;)
 # unit(tomato, &quot;A tomato unit&quot;, prefix: &quot;decimal&quot;)
 out = tomato
@@ -719,7 +827,7 @@ Otherwise it will display units in a friendly format.
 By default, no units are defined. You can define units by using the <code>unit</code> function
 and you can also import predefined units or currencies via <code>import StandardUnits</code> or
 <code>import Currencies</code>.</p>
-<h3 id="example-27">Example</h3>
+<h3 id="example-28">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; unit(tomato, &quot;A tomato unit&quot;, prefix: &quot;decimal&quot;)
 # unit(tomato, &quot;A tomato unit&quot;, prefix: &quot;decimal&quot;)
 out = tomato
@@ -744,7 +852,7 @@ unit(tomato, &quot;A tomato unit&quot;, tomato, prefix: &quot;decimal&quot;)
 <h2 id="version">version</h2>
 <p><code>version</code></p>
 <p>Prints the version of kalk.</p>
-<h3 id="example-28">Example</h3>
+<h3 id="example-29">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; version
 kalk 1.0.0 - Copyright (c) 2020 Alexandre Mutel
 </code></pre>

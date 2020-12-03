@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="lunet 0.3.1.0">
+    <meta name="generator" content="lunet 0.3.2.0">
     <title>Advanced Topics - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" type="text/javascript" ></script>
@@ -163,6 +163,7 @@ import All # We always import all modules
 <p>Depending on your OS, the HOME might be a different folder. For example, on Windows the configuration can be loaded from <code>%USERPROFILE%\.kalk\config.kalk</code>.</p>
 <h2 id="keyboard">Keyboard</h2>
 <p>You can configure new keyboard shortcuts directly within <code>kalk</code> with the <a href="/doc/api/general/#shortcut"><code>shortcut</code></a> command.</p>
+<h3 id="to-expressions">To expressions</h3>
 <p>The following will create a shortcut between <code>CTRL+R</code> and the result of the expression <code>1 + 2</code></p>
 <pre><code class="language-kalk">&gt;&gt;&gt; shortcut(myshortcut, &quot;CTRL+R&quot;, 1 + 2)
 </code></pre>
@@ -170,37 +171,24 @@ import All # We always import all modules
 <pre><code class="language-kalk">&gt;&gt;&gt; # Below we press CTRL+R 4 times
 &gt;&gt;&gt; 3333
 </code></pre>
-<p>You can list the shortcuts available with the command <a href="/doc/api/general/#shortcuts"><code>shortcuts</code></a>:</p>
-<pre><code class="language-kalk">&gt;&gt;&gt; shortcuts
-# Builtin Shortcuts
-shortcut(alpha, &quot;CTRL+G A&quot;, &quot;Α&quot;, &quot;CTRL+G a&quot;, &quot;α&quot;)            # CTRL+G A =&gt; &quot;Α&quot;, CTRL+G a =&gt; &quot;α&quot;
-shortcut(beta, &quot;CTRL+G B&quot;, &quot;Β&quot;, &quot;CTRL+G b&quot;, &quot;β&quot;)             # CTRL+G B =&gt; &quot;Β&quot;, CTRL+G b =&gt; &quot;β&quot;
-shortcut(chi, &quot;CTRL+G C&quot;, &quot;Χ&quot;, &quot;CTRL+G c&quot;, &quot;χ&quot;)              # CTRL+G C =&gt; &quot;Χ&quot;, CTRL+G c =&gt; &quot;χ&quot;
-shortcut(delta, &quot;CTRL+G D&quot;, &quot;Δ&quot;, &quot;CTRL+G d&quot;, &quot;δ&quot;)            # CTRL+G D =&gt; &quot;Δ&quot;, CTRL+G d =&gt; &quot;δ&quot;
-shortcut(epsilon, &quot;CTRL+G E&quot;, &quot;Ε&quot;, &quot;CTRL+G e&quot;, &quot;ε&quot;)          # CTRL+G E =&gt; &quot;Ε&quot;, CTRL+G e =&gt; &quot;ε&quot;
-shortcut(eta, &quot;CTRL+G H&quot;, &quot;Η&quot;, &quot;CTRL+G h&quot;, &quot;η&quot;)              # CTRL+G H =&gt; &quot;Η&quot;, CTRL+G h =&gt; &quot;η&quot;
-shortcut(gamma, &quot;CTRL+G G&quot;, &quot;Γ&quot;, &quot;CTRL+G g&quot;, &quot;γ&quot;)            # CTRL+G G =&gt; &quot;Γ&quot;, CTRL+G g =&gt; &quot;γ&quot;
-shortcut(iota, &quot;CTRL+G I&quot;, &quot;Ι&quot;, &quot;CTRL+G i&quot;, &quot;ι&quot;)             # CTRL+G I =&gt; &quot;Ι&quot;, CTRL+G i =&gt; &quot;ι&quot;
-shortcut(kappa, &quot;CTRL+G K&quot;, &quot;Κ&quot;, &quot;CTRL+G k&quot;, &quot;κ&quot;)            # CTRL+G K =&gt; &quot;Κ&quot;, CTRL+G k =&gt; &quot;κ&quot;
-shortcut(lambda, &quot;CTRL+G L&quot;, &quot;Λ&quot;, &quot;CTRL+G l&quot;, &quot;λ&quot;)           # CTRL+G L =&gt; &quot;Λ&quot;, CTRL+G l =&gt; &quot;λ&quot;
-shortcut(mu, &quot;CTRL+G M&quot;, &quot;Μ&quot;, &quot;CTRL+G m&quot;, &quot;μ&quot;)               # CTRL+G M =&gt; &quot;Μ&quot;, CTRL+G m =&gt; &quot;μ&quot;
-shortcut(nu, &quot;CTRL+G N&quot;, &quot;Ν&quot;, &quot;CTRL+G n&quot;, &quot;ν&quot;)               # CTRL+G N =&gt; &quot;Ν&quot;, CTRL+G n =&gt; &quot;ν&quot;
-shortcut(omega, &quot;CTRL+G W&quot;, &quot;Ω&quot;, &quot;CTRL+G w&quot;, &quot;ω&quot;)            # CTRL+G W =&gt; &quot;Ω&quot;, CTRL+G w =&gt; &quot;ω&quot;
-shortcut(omicron, &quot;CTRL+G O&quot;, &quot;Ο&quot;, &quot;CTRL+G o&quot;, &quot;ο&quot;)          # CTRL+G O =&gt; &quot;Ο&quot;, CTRL+G o =&gt; &quot;ο&quot;
-shortcut(phi, &quot;CTRL+G F&quot;, &quot;Φ&quot;, &quot;CTRL+G f&quot;, &quot;φ&quot;, &quot;CTRL+G j&quot;, &quot;ϕ&quot;) # CTRL+G F =&gt; &quot;Φ&quot;, CTRL+G f =&gt; &quot;φ&quot;, CTRL+G j =&gt; &quot;ϕ&quot;
-shortcut(pi, &quot;CTRL+G P&quot;, &quot;Π&quot;, &quot;CTRL+G p&quot;, &quot;π&quot;)               # CTRL+G P =&gt; &quot;Π&quot;, CTRL+G p =&gt; &quot;π&quot;
-shortcut(psi, &quot;CTRL+G Y&quot;, &quot;Ψ&quot;, &quot;CTRL+G y&quot;, &quot;ψ&quot;)              # CTRL+G Y =&gt; &quot;Ψ&quot;, CTRL+G y =&gt; &quot;ψ&quot;
-shortcut(rho, &quot;CTRL+G R&quot;, &quot;Ρ&quot;, &quot;CTRL+G r&quot;, &quot;ρ&quot;)              # CTRL+G R =&gt; &quot;Ρ&quot;, CTRL+G r =&gt; &quot;ρ&quot;
-shortcut(sigma, &quot;CTRL+G S&quot;, &quot;Σ&quot;, &quot;CTRL+G s&quot;, &quot;σ&quot;)            # CTRL+G S =&gt; &quot;Σ&quot;, CTRL+G s =&gt; &quot;σ&quot;
-shortcut(tau, &quot;CTRL+G T&quot;, &quot;Τ&quot;, &quot;CTRL+G t&quot;, &quot;τ&quot;)              # CTRL+G T =&gt; &quot;Τ&quot;, CTRL+G t =&gt; &quot;τ&quot;
-shortcut(theta, &quot;CTRL+G Q&quot;, &quot;Θ&quot;, &quot;CTRL+G q&quot;, &quot;θ&quot;, &quot;CTRL+G J&quot;, &quot;ϑ&quot;) # CTRL+G Q =&gt; &quot;Θ&quot;, CTRL+G q =&gt; &quot;θ&quot;, CTRL+G J =&gt; &quot;ϑ&quot;
-shortcut(upsilon, &quot;CTRL+G U&quot;, &quot;Υ&quot;, &quot;CTRL+G u&quot;, &quot;υ&quot;)          # CTRL+G U =&gt; &quot;Υ&quot;, CTRL+G u =&gt; &quot;υ&quot;
-shortcut(xi, &quot;CTRL+G X&quot;, &quot;Ξ&quot;, &quot;CTRL+G x&quot;, &quot;ξ&quot;)               # CTRL+G X =&gt; &quot;Ξ&quot;, CTRL+G x =&gt; &quot;ξ&quot;
-shortcut(zeta, &quot;CTRL+G Z&quot;, &quot;Ζ&quot;, &quot;CTRL+G z&quot;, &quot;ζ&quot;)             # CTRL+G Z =&gt; &quot;Ζ&quot;, CTRL+G z =&gt; &quot;ζ&quot;
+<p>You can list all the shortcuts available with the command <a href="/doc/api/general/#shortcuts"><code>shortcuts</code></a>.</p>
+<p>For example, the following shortcut is defined by default:</p>
+<pre><code class="language-kalk">shortcut(pi, &quot;CTRL+G P&quot;, &quot;Π&quot;, &quot;CTRL+G p&quot;, &quot;π&quot;)               # CTRL+G P =&gt; &quot;Π&quot;, CTRL+G p =&gt; &quot;π&quot;
 </code></pre>
-<p>For example, by default, pressing <code>CTRL+G P</code> will display the symbol <code>π</code>.</p>
+<p>For example, by default, pressing <code>CTRL+G p</code> will display the symbol <code>π</code>.</p>
+<h3 id="to-actions">To actions</h3>
+<p>It is also possible with <code>kalk</code> to map a shortcut to an action that can <strong>influence the cursor/editing experience</strong> (e.g move cursor to left, cut selection)</p>
+<p>For example, in <code>kalk</code>, the action for moving the cursor to the left or right are defined like this:</p>
+<pre><code class="language-kalk">shortcut(cursor_left, &quot;left, ctrl+b&quot;, action(&quot;cursor_left&quot;))
+shortcut(cursor_right, &quot;right, ctrl+f&quot;, action(&quot;cursor_right&quot;))
+</code></pre>
+<p>For the full list of available actions, you can consult the <a href="/doc/api/general#action">action</a> function.</p>
+<p>For the full list of all the shortcuts defined, you can consult <a href="https://github.com/xoofx/kalk/blob/master/src/Kalk.Core/core.kalk">core.kalk</a> that is loaded by default by kalk.</p>
 <div class='lunet-alert-note' role='alert'><div class='lunet-alert-note-heading'><span class='lunet-alert-note-icon'></span><span class='lunet-alert-note-heading-text'></span></div><div class='lunet-alert-note-content'>
-<p>When pressing <code>CTRL+G P</code>, you need to press <code>CTRL+G</code> and then press <code>P</code>, you should not keep the key <code>CTRL</code> pressed.</p>
+<ul>
+<li>The case (upper or lower) of the key pressed when associated with a <code>CTRL</code> or <code>ALT</code> modifier is not taken into account</li>
+<li>When pressing <code>CTRL+G p</code>, you need to press <code>CTRL+G</code> and then press <code>p</code>, you should not keep the key <code>CTRL</code> pressed.</li>
+</ul>
 </div></div>
 
       </div>
