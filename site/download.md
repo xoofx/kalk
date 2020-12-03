@@ -66,3 +66,9 @@ If you have [.NET 5.0 SDK](https://dotnet.microsoft.com/download/dotnet/5.0) alr
 ```shell-session
 $ dotnet tool install --global kalk --version {{kalk_version}}
 ```
+
+If you have already kalk installed, use the update command:
+
+```shell-session
+$ dotnet tool update --global kalk --version {{kalk_version}}
+```
