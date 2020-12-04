@@ -1048,15 +1048,325 @@ out = float8(1, 2, 3, 4, 5, 6, 7, 8)
 # float8(10, 11, 12, 13, 14, 15, 16, 17)
 out = float8(10, 11, 12, 13, 14, 15, 16, 17)
 </code></pre>
+<h2 id="half">half</h2>
+<p><code>half(value?)</code></p>
+<p>Creates a half float value (16-bit) value.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+</ul>
+<h3 id="returns-48">Returns</h3>
+<p>A half float (16-bit) value</p>
+<h3 id="example-21">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; half(1)
+# half(1)
+out = 1
+&gt;&gt;&gt; half(-1)
+# half(-1)
+out = -1
+&gt;&gt;&gt; half(1000.5)
+# half(1000.5)
+out = 1000.5
+&gt;&gt;&gt; kind out
+# kind(out)
+out = &quot;half&quot;
+</code></pre>
+<h2 id="half16">half16</h2>
+<p><code>half16(arguments)</code></p>
+<p>Creates a vector of 16 <code>half</code> items.</p>
+<ul>
+<li><code>arguments</code>: The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half16(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half16(1..16)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half4(half2(1,2), half2(3,4))</code> or <code>half4(half3(1,2,3), 4)</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-49">Returns</h3>
+<p>A half16 vector initialized with the specified arguments</p>
+<h3 id="example-22">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; half16
+# half16
+out = half16(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+&gt;&gt;&gt; half16(1..16)
+# half16(1..16)
+out = half16(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
+&gt;&gt;&gt; half16(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
+# half16(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
+out = half16(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
+</code></pre>
+<h2 id="half2">half2</h2>
+<p><code>half2(arguments)</code></p>
+<p>Creates a vector of 2 <code>half</code> items.</p>
+<ul>
+<li><code>arguments</code>: The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half2(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half2(1..2)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half4(half2(1,2), half2(3,4))</code> or <code>half4(half3(1,2,3), 4)</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-50">Returns</h3>
+<p>A half2 vector initialized with the specified arguments</p>
+<h3 id="example-23">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; half2
+# half2
+out = half2(0, 0)
+&gt;&gt;&gt; half2(1..2)
+# half2(1..2)
+out = half2(1, 2)
+&gt;&gt;&gt; half2(10, 11)
+# half2(10, 11)
+out = half2(10, 11)
+</code></pre>
+<h2 id="half2x2">half2x2</h2>
+<p><code>half2x2(arguments)</code></p>
+<p>Creates a 2 (rows) x 2 (columns) matrix of half.</p>
+<ul>
+<li><code>arguments</code>: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half2x2(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half2x2(1..4)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half3x4(half4(1), half4(2), half4(3))</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-51">Returns</h3>
+<p>A half2x2 matrix initialized with the specified arguments</p>
+<h2 id="half2x3">half2x3</h2>
+<p><code>half2x3(arguments)</code></p>
+<p>Creates a 2 (rows) x 3 (columns) matrix of half.</p>
+<ul>
+<li><code>arguments</code>: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half2x3(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half2x3(1..6)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half3x4(half4(1), half4(2), half4(3))</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-52">Returns</h3>
+<p>A half2x3 matrix initialized with the specified arguments</p>
+<h2 id="half2x4">half2x4</h2>
+<p><code>half2x4(arguments)</code></p>
+<p>Creates a 2 (rows) x 4 (columns) matrix of half.</p>
+<ul>
+<li><code>arguments</code>: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half2x4(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half2x4(1..8)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half3x4(half4(1), half4(2), half4(3))</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-53">Returns</h3>
+<p>A half2x4 matrix initialized with the specified arguments</p>
+<h2 id="half3">half3</h2>
+<p><code>half3(arguments)</code></p>
+<p>Creates a vector of 3 <code>half</code> items.</p>
+<ul>
+<li><code>arguments</code>: The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half3(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half3(1..3)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half4(half2(1,2), half2(3,4))</code> or <code>half4(half3(1,2,3), 4)</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-54">Returns</h3>
+<p>A half3 vector initialized with the specified arguments</p>
+<h3 id="example-24">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; half3
+# half3
+out = half3(0, 0, 0)
+&gt;&gt;&gt; half3(1..3)
+# half3(1..3)
+out = half3(1, 2, 3)
+&gt;&gt;&gt; half3(10, 11, 12)
+# half3(10, 11, 12)
+out = half3(10, 11, 12)
+</code></pre>
+<h2 id="half32">half32</h2>
+<p><code>half32(arguments)</code></p>
+<p>Creates a vector of 32 <code>half</code> items.</p>
+<ul>
+<li><code>arguments</code>: The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half32(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half32(1..32)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half4(half2(1,2), half2(3,4))</code> or <code>half4(half3(1,2,3), 4)</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-55">Returns</h3>
+<p>A half32 vector initialized with the specified arguments</p>
+<h3 id="example-25">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; half32
+# half32
+out = half32(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+&gt;&gt;&gt; half32(1..32)
+# half32(1..32)
+out = half32(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32)
+</code></pre>
+<h2 id="half3x2">half3x2</h2>
+<p><code>half3x2(arguments)</code></p>
+<p>Creates a 3 (rows) x 2 (columns) matrix of half.</p>
+<ul>
+<li><code>arguments</code>: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half3x2(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half3x2(1..6)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half3x4(half4(1), half4(2), half4(3))</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-56">Returns</h3>
+<p>A half3x2 matrix initialized with the specified arguments</p>
+<h2 id="half3x3">half3x3</h2>
+<p><code>half3x3(arguments)</code></p>
+<p>Creates a 3 (rows) x 3 (columns) matrix of half.</p>
+<ul>
+<li><code>arguments</code>: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half3x3(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half3x3(1..9)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half3x4(half4(1), half4(2), half4(3))</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-57">Returns</h3>
+<p>A half3x3 matrix initialized with the specified arguments</p>
+<h2 id="half3x4">half3x4</h2>
+<p><code>half3x4(arguments)</code></p>
+<p>Creates a 3 (rows) x 4 (columns) matrix of half.</p>
+<ul>
+<li><code>arguments</code>: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half3x4(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half3x4(1..12)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half3x4(half4(1), half4(2), half4(3))</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-58">Returns</h3>
+<p>A half3x4 matrix initialized with the specified arguments</p>
+<h2 id="half4">half4</h2>
+<p><code>half4(arguments)</code></p>
+<p>Creates a vector of 4 <code>half</code> items.</p>
+<ul>
+<li><code>arguments</code>: The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half4(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half4(1..4)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half4(half2(1,2), half2(3,4))</code> or <code>half4(half3(1,2,3), 4)</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-59">Returns</h3>
+<p>A half4 vector initialized with the specified arguments</p>
+<h3 id="example-26">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; half4
+# half4
+out = half4(0, 0, 0, 0)
+&gt;&gt;&gt; half4(1..4)
+# half4(1..4)
+out = half4(1, 2, 3, 4)
+&gt;&gt;&gt; half4(10, 11, 12, 13)
+# half4(10, 11, 12, 13)
+out = half4(10, 11, 12, 13)
+</code></pre>
+<h2 id="half4x2">half4x2</h2>
+<p><code>half4x2(arguments)</code></p>
+<p>Creates a 4 (rows) x 2 (columns) matrix of half.</p>
+<ul>
+<li><code>arguments</code>: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half4x2(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half4x2(1..8)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half3x4(half4(1), half4(2), half4(3))</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-60">Returns</h3>
+<p>A half4x2 matrix initialized with the specified arguments</p>
+<h2 id="half4x3">half4x3</h2>
+<p><code>half4x3(arguments)</code></p>
+<p>Creates a 4 (rows) x 3 (columns) matrix of half.</p>
+<ul>
+<li><code>arguments</code>: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half4x3(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half4x3(1..12)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half3x4(half4(1), half4(2), half4(3))</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-61">Returns</h3>
+<p>A half4x3 matrix initialized with the specified arguments</p>
+<h2 id="half4x4">half4x4</h2>
+<p><code>half4x4(arguments)</code></p>
+<p>Creates a 4 (rows) x 4 (columns) matrix of half.</p>
+<ul>
+<li><code>arguments</code>: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half4x4(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half4x4(1..16)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half3x4(half4(1), half4(2), half4(3))</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-62">Returns</h3>
+<p>A half4x4 matrix initialized with the specified arguments</p>
+<h2 id="half8">half8</h2>
+<p><code>half8(arguments)</code></p>
+<p>Creates a vector of 8 <code>half</code> items.</p>
+<ul>
+<li><code>arguments</code>: The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+<ul>
+<li>No values: All items of the vector are initialized with the value 0.</li>
+<li>a single value: <code>half8(123)</code> will initialize all elements with 123.</li>
+<li>an array value: <code>half8(1..8)</code> will initialize all elements with the array elements. The size of the array must match the size of the vector.</li>
+<li>A combination of vectors/single values (e.g <code>half4(half2(1,2), half2(3,4))</code> or <code>half4(half3(1,2,3), 4)</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-63">Returns</h3>
+<p>A half8 vector initialized with the specified arguments</p>
+<h3 id="example-27">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; half8
+# half8
+out = half8(0, 0, 0, 0, 0, 0, 0, 0)
+&gt;&gt;&gt; half8(1..8)
+# half8(1..8)
+out = half8(1, 2, 3, 4, 5, 6, 7, 8)
+&gt;&gt;&gt; half8(10, 11, 12, 13, 14, 15, 16, 17)
+# half8(10, 11, 12, 13, 14, 15, 16, 17)
+out = half8(10, 11, 12, 13, 14, 15, 16, 17)
+</code></pre>
 <h2 id="int">int</h2>
 <p><code>int(value?)</code></p>
 <p>Creates a signed-int (32-bit) value.</p>
 <ul>
 <li><code>value</code>: The input value.</li>
 </ul>
-<h3 id="returns-48">Returns</h3>
+<h3 id="returns-64">Returns</h3>
 <p>A signed-int (32-bit) value</p>
-<h3 id="example-21">Example</h3>
+<h3 id="example-28">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; int
 # int
 out = 0
@@ -1083,9 +1393,9 @@ out = -2147483648
 </ul>
 </li>
 </ul>
-<h3 id="returns-49">Returns</h3>
+<h3 id="returns-65">Returns</h3>
 <p>A int16 vector initialized with the specified arguments</p>
-<h3 id="example-22">Example</h3>
+<h3 id="example-29">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; int16
 # int16
 out = int16(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1109,9 +1419,9 @@ out = int16(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
 </ul>
 </li>
 </ul>
-<h3 id="returns-50">Returns</h3>
+<h3 id="returns-66">Returns</h3>
 <p>A int2 vector initialized with the specified arguments</p>
-<h3 id="example-23">Example</h3>
+<h3 id="example-30">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; int2
 # int2
 out = int2(0, 0)
@@ -1135,7 +1445,7 @@ out = int2(10, 11)
 </ul>
 </li>
 </ul>
-<h3 id="returns-51">Returns</h3>
+<h3 id="returns-67">Returns</h3>
 <p>A int2x2 matrix initialized with the specified arguments</p>
 <h2 id="int2x3">int2x3</h2>
 <p><code>int2x3(arguments)</code></p>
@@ -1150,7 +1460,7 @@ out = int2(10, 11)
 </ul>
 </li>
 </ul>
-<h3 id="returns-52">Returns</h3>
+<h3 id="returns-68">Returns</h3>
 <p>A int2x3 matrix initialized with the specified arguments</p>
 <h2 id="int2x4">int2x4</h2>
 <p><code>int2x4(arguments)</code></p>
@@ -1165,7 +1475,7 @@ out = int2(10, 11)
 </ul>
 </li>
 </ul>
-<h3 id="returns-53">Returns</h3>
+<h3 id="returns-69">Returns</h3>
 <p>A int2x4 matrix initialized with the specified arguments</p>
 <h2 id="int3">int3</h2>
 <p><code>int3(arguments)</code></p>
@@ -1180,9 +1490,9 @@ out = int2(10, 11)
 </ul>
 </li>
 </ul>
-<h3 id="returns-54">Returns</h3>
+<h3 id="returns-70">Returns</h3>
 <p>A int3 vector initialized with the specified arguments</p>
-<h3 id="example-24">Example</h3>
+<h3 id="example-31">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; int3
 # int3
 out = int3(0, 0, 0)
@@ -1206,7 +1516,7 @@ out = int3(10, 11, 12)
 </ul>
 </li>
 </ul>
-<h3 id="returns-55">Returns</h3>
+<h3 id="returns-71">Returns</h3>
 <p>A int3x2 matrix initialized with the specified arguments</p>
 <h2 id="int3x3">int3x3</h2>
 <p><code>int3x3(arguments)</code></p>
@@ -1221,7 +1531,7 @@ out = int3(10, 11, 12)
 </ul>
 </li>
 </ul>
-<h3 id="returns-56">Returns</h3>
+<h3 id="returns-72">Returns</h3>
 <p>A int3x3 matrix initialized with the specified arguments</p>
 <h2 id="int3x4">int3x4</h2>
 <p><code>int3x4(arguments)</code></p>
@@ -1236,7 +1546,7 @@ out = int3(10, 11, 12)
 </ul>
 </li>
 </ul>
-<h3 id="returns-57">Returns</h3>
+<h3 id="returns-73">Returns</h3>
 <p>A int3x4 matrix initialized with the specified arguments</p>
 <h2 id="int4">int4</h2>
 <p><code>int4(arguments)</code></p>
@@ -1251,9 +1561,9 @@ out = int3(10, 11, 12)
 </ul>
 </li>
 </ul>
-<h3 id="returns-58">Returns</h3>
+<h3 id="returns-74">Returns</h3>
 <p>A int4 vector initialized with the specified arguments</p>
-<h3 id="example-25">Example</h3>
+<h3 id="example-32">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; int4
 # int4
 out = int4(0, 0, 0, 0)
@@ -1277,7 +1587,7 @@ out = int4(10, 11, 12, 13)
 </ul>
 </li>
 </ul>
-<h3 id="returns-59">Returns</h3>
+<h3 id="returns-75">Returns</h3>
 <p>A int4x2 matrix initialized with the specified arguments</p>
 <h2 id="int4x3">int4x3</h2>
 <p><code>int4x3(arguments)</code></p>
@@ -1292,7 +1602,7 @@ out = int4(10, 11, 12, 13)
 </ul>
 </li>
 </ul>
-<h3 id="returns-60">Returns</h3>
+<h3 id="returns-76">Returns</h3>
 <p>A int4x3 matrix initialized with the specified arguments</p>
 <h2 id="int4x4">int4x4</h2>
 <p><code>int4x4(arguments)</code></p>
@@ -1307,7 +1617,7 @@ out = int4(10, 11, 12, 13)
 </ul>
 </li>
 </ul>
-<h3 id="returns-61">Returns</h3>
+<h3 id="returns-77">Returns</h3>
 <p>A int4x4 matrix initialized with the specified arguments</p>
 <h2 id="int8">int8</h2>
 <p><code>int8(arguments)</code></p>
@@ -1322,9 +1632,9 @@ out = int4(10, 11, 12, 13)
 </ul>
 </li>
 </ul>
-<h3 id="returns-62">Returns</h3>
+<h3 id="returns-78">Returns</h3>
 <p>A int8 vector initialized with the specified arguments</p>
-<h3 id="example-26">Example</h3>
+<h3 id="example-33">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; int8
 # int8
 out = int8(0, 0, 0, 0, 0, 0, 0, 0)
@@ -1341,9 +1651,9 @@ out = int8(10, 11, 12, 13, 14, 15, 16, 17)
 <ul>
 <li><code>value</code>: The input value.</li>
 </ul>
-<h3 id="returns-63">Returns</h3>
+<h3 id="returns-79">Returns</h3>
 <p>A signed-long (64-bit) value</p>
-<h3 id="example-27">Example</h3>
+<h3 id="example-34">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; long
 # long
 out = 0
@@ -1370,9 +1680,9 @@ out = -9223372036854775808
 </ul>
 </li>
 </ul>
-<h3 id="returns-64">Returns</h3>
+<h3 id="returns-80">Returns</h3>
 <p>A long2 vector initialized with the specified arguments</p>
-<h3 id="example-28">Example</h3>
+<h3 id="example-35">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; long2
 # long2
 out = long2(0, 0)
@@ -1396,9 +1706,9 @@ out = long2(10, 11)
 </ul>
 </li>
 </ul>
-<h3 id="returns-65">Returns</h3>
+<h3 id="returns-81">Returns</h3>
 <p>A long3 vector initialized with the specified arguments</p>
-<h3 id="example-29">Example</h3>
+<h3 id="example-36">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; long3
 # long3
 out = long3(0, 0, 0)
@@ -1422,9 +1732,9 @@ out = long3(10, 11, 12)
 </ul>
 </li>
 </ul>
-<h3 id="returns-66">Returns</h3>
+<h3 id="returns-82">Returns</h3>
 <p>A long4 vector initialized with the specified arguments</p>
-<h3 id="example-30">Example</h3>
+<h3 id="example-37">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; long4
 # long4
 out = long4(0, 0, 0, 0)
@@ -1448,9 +1758,9 @@ out = long4(10, 11, 12, 13)
 </ul>
 </li>
 </ul>
-<h3 id="returns-67">Returns</h3>
+<h3 id="returns-83">Returns</h3>
 <p>A long8 vector initialized with the specified arguments</p>
-<h3 id="example-31">Example</h3>
+<h3 id="example-38">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; long8
 # long8
 out = long8(0, 0, 0, 0, 0, 0, 0, 0)
@@ -1470,9 +1780,9 @@ out = long8(10, 11, 12, 13, 14, 15, 16, 17)
 <li><code>column</code>: The number of columns.</li>
 <li><code>arguments</code>: The optional values (must have 1 or row x column elements).</li>
 </ul>
-<h3 id="returns-68">Returns</h3>
+<h3 id="returns-84">Returns</h3>
 <p>A matrix of the specified row x column.</p>
-<h3 id="example-32">Example</h3>
+<h3 id="example-39">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; matrix(float,4,3,1..12)
 # matrix(float, 4, 3, 1..12)
 out = float4x3(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
@@ -1496,9 +1806,9 @@ out = float4x3(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
 </ul>
 </li>
 </ul>
-<h3 id="returns-69">Returns</h3>
+<h3 id="returns-85">Returns</h3>
 <p>A rgb vector initialized with the specified arguments</p>
-<h3 id="example-33">Example</h3>
+<h3 id="example-40">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; rgb(0xAABBCC)
 # rgb(11189196)
 out = rgb(170, 187, 204) ## AABBCC ##
@@ -1532,9 +1842,9 @@ out = rgb(170, 187, 204) ## AABBCC ##
 </ul>
 </li>
 </ul>
-<h3 id="returns-70">Returns</h3>
+<h3 id="returns-86">Returns</h3>
 <p>A rgb vector initialized with the specified arguments</p>
-<h3 id="example-34">Example</h3>
+<h3 id="example-41">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; rgba(0xFFAABBCC)
 # rgba(-5588020)
 out = rgba(170, 187, 204, 255) ## AABBCCFF ##
@@ -1560,9 +1870,9 @@ out = rgba(170, 187, 204, 255) ## AABBCCFF ##
 <ul>
 <li><code>value</code>: The input value.</li>
 </ul>
-<h3 id="returns-71">Returns</h3>
+<h3 id="returns-87">Returns</h3>
 <p>A signed-byte value</p>
-<h3 id="example-35">Example</h3>
+<h3 id="example-42">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; sbyte
 # sbyte
 out = 0
@@ -1589,9 +1899,9 @@ out = -128
 </ul>
 </li>
 </ul>
-<h3 id="returns-72">Returns</h3>
+<h3 id="returns-88">Returns</h3>
 <p>A sbyte16 vector initialized with the specified arguments</p>
-<h3 id="example-36">Example</h3>
+<h3 id="example-43">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; sbyte16
 # sbyte16
 out = sbyte16(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1615,9 +1925,9 @@ out = sbyte16(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
 </ul>
 </li>
 </ul>
-<h3 id="returns-73">Returns</h3>
+<h3 id="returns-89">Returns</h3>
 <p>A sbyte32 vector initialized with the specified arguments</p>
-<h3 id="example-37">Example</h3>
+<h3 id="example-44">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; sbyte32
 # sbyte32
 out = sbyte32(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1638,9 +1948,9 @@ out = sbyte32(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
 </ul>
 </li>
 </ul>
-<h3 id="returns-74">Returns</h3>
+<h3 id="returns-90">Returns</h3>
 <p>A sbyte64 vector initialized with the specified arguments</p>
-<h3 id="example-38">Example</h3>
+<h3 id="example-45">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; sbyte64
 # sbyte64
 out = sbyte64(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1654,9 +1964,9 @@ out = sbyte64(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
 <ul>
 <li><code>value</code>: The input value.</li>
 </ul>
-<h3 id="returns-75">Returns</h3>
+<h3 id="returns-91">Returns</h3>
 <p>A signed-short (16-bit) value</p>
-<h3 id="example-39">Example</h3>
+<h3 id="example-46">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; short
 # short
 out = 0
@@ -1685,9 +1995,9 @@ Unable to convert type `int` to `short`
 </ul>
 </li>
 </ul>
-<h3 id="returns-76">Returns</h3>
+<h3 id="returns-92">Returns</h3>
 <p>A short16 vector initialized with the specified arguments</p>
-<h3 id="example-40">Example</h3>
+<h3 id="example-47">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; short16
 # short16
 out = short16(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1711,9 +2021,9 @@ out = short16(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
 </ul>
 </li>
 </ul>
-<h3 id="returns-77">Returns</h3>
+<h3 id="returns-93">Returns</h3>
 <p>A short2 vector initialized with the specified arguments</p>
-<h3 id="example-41">Example</h3>
+<h3 id="example-48">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; short2
 # short2
 out = short2(0, 0)
@@ -1737,9 +2047,9 @@ out = short2(10, 11)
 </ul>
 </li>
 </ul>
-<h3 id="returns-78">Returns</h3>
+<h3 id="returns-94">Returns</h3>
 <p>A short32 vector initialized with the specified arguments</p>
-<h3 id="example-42">Example</h3>
+<h3 id="example-49">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; short32
 # short32
 out = short32(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1760,9 +2070,9 @@ out = short32(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
 </ul>
 </li>
 </ul>
-<h3 id="returns-79">Returns</h3>
+<h3 id="returns-95">Returns</h3>
 <p>A short4 vector initialized with the specified arguments</p>
-<h3 id="example-43">Example</h3>
+<h3 id="example-50">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; short4
 # short4
 out = short4(0, 0, 0, 0)
@@ -1786,9 +2096,9 @@ out = short4(10, 11, 12, 13)
 </ul>
 </li>
 </ul>
-<h3 id="returns-80">Returns</h3>
+<h3 id="returns-96">Returns</h3>
 <p>A short8 vector initialized with the specified arguments</p>
-<h3 id="example-44">Example</h3>
+<h3 id="example-51">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; short8
 # short8
 out = short8(0, 0, 0, 0, 0, 0, 0, 0)
@@ -1805,9 +2115,9 @@ out = short8(10, 11, 12, 13, 14, 15, 16, 17)
 <ul>
 <li><code>value</code>: The input value.</li>
 </ul>
-<h3 id="returns-81">Returns</h3>
+<h3 id="returns-97">Returns</h3>
 <p>An unsigned int (32-bit) value</p>
-<h3 id="example-45">Example</h3>
+<h3 id="example-52">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; uint
 # uint
 out = 0
@@ -1831,9 +2141,9 @@ out = 4294967295
 </ul>
 </li>
 </ul>
-<h3 id="returns-82">Returns</h3>
+<h3 id="returns-98">Returns</h3>
 <p>A uint16 vector initialized with the specified arguments</p>
-<h3 id="example-46">Example</h3>
+<h3 id="example-53">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; uint16
 # uint16
 out = uint16(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1857,9 +2167,9 @@ out = uint16(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
 </ul>
 </li>
 </ul>
-<h3 id="returns-83">Returns</h3>
+<h3 id="returns-99">Returns</h3>
 <p>A uint2 vector initialized with the specified arguments</p>
-<h3 id="example-47">Example</h3>
+<h3 id="example-54">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; uint2
 # uint2
 out = uint2(0, 0)
@@ -1883,9 +2193,9 @@ out = uint2(10, 11)
 </ul>
 </li>
 </ul>
-<h3 id="returns-84">Returns</h3>
+<h3 id="returns-100">Returns</h3>
 <p>A uint3 vector initialized with the specified arguments</p>
-<h3 id="example-48">Example</h3>
+<h3 id="example-55">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; uint3
 # uint3
 out = uint3(0, 0, 0)
@@ -1909,9 +2219,9 @@ out = uint3(10, 11, 12)
 </ul>
 </li>
 </ul>
-<h3 id="returns-85">Returns</h3>
+<h3 id="returns-101">Returns</h3>
 <p>A uint4 vector initialized with the specified arguments</p>
-<h3 id="example-49">Example</h3>
+<h3 id="example-56">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; uint4
 # uint4
 out = uint4(0, 0, 0, 0)
@@ -1935,9 +2245,9 @@ out = uint4(10, 11, 12, 13)
 </ul>
 </li>
 </ul>
-<h3 id="returns-86">Returns</h3>
+<h3 id="returns-102">Returns</h3>
 <p>A uint8 vector initialized with the specified arguments</p>
-<h3 id="example-50">Example</h3>
+<h3 id="example-57">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; uint8
 # uint8
 out = uint8(0, 0, 0, 0, 0, 0, 0, 0)
@@ -1954,9 +2264,9 @@ out = uint8(10, 11, 12, 13, 14, 15, 16, 17)
 <ul>
 <li><code>value</code>: The input value.</li>
 </ul>
-<h3 id="returns-87">Returns</h3>
+<h3 id="returns-103">Returns</h3>
 <p>An unsigned long (64-bit) value</p>
-<h3 id="example-51">Example</h3>
+<h3 id="example-58">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; ulong
 # ulong
 out = 0
@@ -1980,9 +2290,9 @@ out = 18446744073709551615
 </ul>
 </li>
 </ul>
-<h3 id="returns-88">Returns</h3>
+<h3 id="returns-104">Returns</h3>
 <p>A ulong2 vector initialized with the specified arguments</p>
-<h3 id="example-52">Example</h3>
+<h3 id="example-59">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; ulong2
 # ulong2
 out = ulong2(0, 0)
@@ -2006,9 +2316,9 @@ out = ulong2(10, 11)
 </ul>
 </li>
 </ul>
-<h3 id="returns-89">Returns</h3>
+<h3 id="returns-105">Returns</h3>
 <p>A ulong3 vector initialized with the specified arguments</p>
-<h3 id="example-53">Example</h3>
+<h3 id="example-60">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; ulong3
 # ulong3
 out = ulong3(0, 0, 0)
@@ -2032,9 +2342,9 @@ out = ulong3(10, 11, 12)
 </ul>
 </li>
 </ul>
-<h3 id="returns-90">Returns</h3>
+<h3 id="returns-106">Returns</h3>
 <p>A ulong4 vector initialized with the specified arguments</p>
-<h3 id="example-54">Example</h3>
+<h3 id="example-61">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; ulong4
 # ulong4
 out = ulong4(0, 0, 0, 0)
@@ -2058,9 +2368,9 @@ out = ulong4(10, 11, 12, 13)
 </ul>
 </li>
 </ul>
-<h3 id="returns-91">Returns</h3>
+<h3 id="returns-107">Returns</h3>
 <p>A ulong8 vector initialized with the specified arguments</p>
-<h3 id="example-55">Example</h3>
+<h3 id="example-62">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; ulong8
 # ulong8
 out = ulong8(0, 0, 0, 0, 0, 0, 0, 0)
@@ -2077,9 +2387,9 @@ out = ulong8(10, 11, 12, 13, 14, 15, 16, 17)
 <ul>
 <li><code>value</code>: The input value.</li>
 </ul>
-<h3 id="returns-92">Returns</h3>
+<h3 id="returns-108">Returns</h3>
 <p>An unsigned short (16-bit) value</p>
-<h3 id="example-56">Example</h3>
+<h3 id="example-63">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; ushort
 # ushort
 out = 0
@@ -2103,9 +2413,9 @@ out = 65535
 </ul>
 </li>
 </ul>
-<h3 id="returns-93">Returns</h3>
+<h3 id="returns-109">Returns</h3>
 <p>A ushort16 vector initialized with the specified arguments</p>
-<h3 id="example-57">Example</h3>
+<h3 id="example-64">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; ushort16
 # ushort16
 out = ushort16(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -2129,9 +2439,9 @@ out = ushort16(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
 </ul>
 </li>
 </ul>
-<h3 id="returns-94">Returns</h3>
+<h3 id="returns-110">Returns</h3>
 <p>A ushort2 vector initialized with the specified arguments</p>
-<h3 id="example-58">Example</h3>
+<h3 id="example-65">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; ushort2
 # ushort2
 out = ushort2(0, 0)
@@ -2155,9 +2465,9 @@ out = ushort2(10, 11)
 </ul>
 </li>
 </ul>
-<h3 id="returns-95">Returns</h3>
+<h3 id="returns-111">Returns</h3>
 <p>A ushort32 vector initialized with the specified arguments</p>
-<h3 id="example-59">Example</h3>
+<h3 id="example-66">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; ushort32
 # ushort32
 out = ushort32(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -2178,9 +2488,9 @@ out = ushort32(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 </ul>
 </li>
 </ul>
-<h3 id="returns-96">Returns</h3>
+<h3 id="returns-112">Returns</h3>
 <p>A ushort4 vector initialized with the specified arguments</p>
-<h3 id="example-60">Example</h3>
+<h3 id="example-67">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; ushort4
 # ushort4
 out = ushort4(0, 0, 0, 0)
@@ -2204,9 +2514,9 @@ out = ushort4(10, 11, 12, 13)
 </ul>
 </li>
 </ul>
-<h3 id="returns-97">Returns</h3>
+<h3 id="returns-113">Returns</h3>
 <p>A ushort8 vector initialized with the specified arguments</p>
-<h3 id="example-61">Example</h3>
+<h3 id="example-68">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; ushort8
 # ushort8
 out = ushort8(0, 0, 0, 0, 0, 0, 0, 0)
@@ -2225,9 +2535,9 @@ out = ushort8(10, 11, 12, 13, 14, 15, 16, 17)
 <li><code>dimension</code>: The dimension of the vector.</li>
 <li><code>arguments</code>: The optional values (must have 1 or dimension elements).</li>
 </ul>
-<h3 id="returns-98">Returns</h3>
+<h3 id="returns-114">Returns</h3>
 <p>A matrix of the specified row x column.</p>
-<h3 id="example-62">Example</h3>
+<h3 id="example-69">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; vector(float, 4, 5..8)
 # vector(float, 4, 5..8)
 out = float4(5, 6, 7, 8)

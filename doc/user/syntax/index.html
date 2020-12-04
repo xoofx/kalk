@@ -260,6 +260,37 @@ out = 4026531840
 </code></pre>
 <p><a href="#overview">🢁 top</a></p>
 <h3 id="floats">Floats</h3>
+<p><code>kalk</code> supports 4 kinds of float/decimal numbers:</p>
+<ul>
+<li><code>half</code>: IEEE 754 16-bit half precision float</li>
+<li><code>float</code>: IEEE 754 32-bit single precision float</li>
+<li><code>double</code>: IEEE 754 64-bit double precision float</li>
+<li><code>decimal</code>: 128-bit precision float</li>
+</ul>
+<h4 id="half">Half</h4>
+<p>Half IEEE 754 16-bit half precision float (4 digits precision). Use the constructor <code>half</code> to enforce a <code>half</code>.</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; half(1.5)
+# half(1.5)
+out = 1.5
+&gt;&gt;&gt; half(2.3e-3f)
+# half(0.0023f)
+out = 0.0023
+&gt;&gt;&gt; display dev
+# Display mode: dev (Developer)
+&gt;&gt;&gt; half(1.5)
+# half(1.5)
+out = 1.5
+    # IEEE 754 - half float - 16-bit
+    #
+    = 0x_3E00
+    = 0x____3____E____0____0
+    #    seee eeff ffff ffff
+    = 0b_0011_1110_0000_0000
+    #   15       8         0
+    #
+    #  sign     exponent    |-- fraction -|
+    =   1 * 2 ^ (15 - 15) * 0b1.1000000000f
+</code></pre>
 <h4 id="float">Float</h4>
 <p>Float IEEE 754 32-bit single precision float (6-9 digits precision). Use the postfix <code>f</code> to enforce a <code>float</code>.</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 1.5f
@@ -377,10 +408,11 @@ out = false
 <pre><code class="language-kalk"># Type Vector Constructors
     - bool16, bool2, bool3, bool4, bool8, byte16, byte32, byte64, double2,
       double3, double4, double8, float16, float2, float3, float4, float8,
-      int16, int2, int3, int4, int8, long2, long3, long4, long8, rgb, rgba,
-      sbyte16, sbyte32, sbyte64, short16, short2, short32, short4, short8,
-      uint16, uint2, uint3, uint4, uint8, ulong2, ulong3, ulong4, ulong8,
-      ushort16, ushort2, ushort32, ushort4, ushort8, vector
+      half16, half2, half3, half32, half4, half8, int16, int2, int3, int4,
+      int8, long2, long3, long4, long8, rgb, rgba, sbyte16, sbyte32, sbyte64,
+      short16, short2, short32, short4, short8, uint16, uint2, uint3, uint4,
+      uint8, ulong2, ulong3, ulong4, ulong8, ushort16, ushort2, ushort32,
+      ushort4, ushort8, vector
 </code></pre>
 <p>They can be initialized with:</p>
 <ul>
