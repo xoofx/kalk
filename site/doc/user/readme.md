@@ -219,6 +219,23 @@ mat = float4x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
 out = float4(90, 100, 110, 120)
 ```
 
+### Comments
+
+In `kalk`, you can comment your code with:
+
+- Single line comments that starts with `#` the rest of the line will be commented:
+  ```kalk
+  >>> 1 + 2 # This is a following comment
+  # 1 + 2 # This is a following comment
+  out = 3
+  ```
+- Inline comments (or multi-line when used in a config file) that starts with 2 or more `#` (e.g `##`) and are closed by the same amount of `#` (e.g `##`)
+  ```kalk
+  >>> 1 ## This is an inline comment ## + 2
+  # 1 ## This is an inline comment ## + 2
+  out = 3
+  ```
+
 ### Extras
 
 Some functions like `ascii` can display a convenient ASCII table:

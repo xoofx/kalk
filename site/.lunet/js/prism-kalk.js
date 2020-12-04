@@ -2,7 +2,7 @@ Prism.languages.kalk = {
     'error': /^\u200B.*/m,
 	'comment': [
 		{
-			pattern: /##(?:##)/,
+			pattern: /##.*(?:##|$)/,
 			lookbehind: true
 		},
 		{
