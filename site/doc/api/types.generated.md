@@ -1019,6 +1019,356 @@ out = float8(1, 2, 3, 4, 5, 6, 7, 8)
 out = float8(10, 11, 12, 13, 14, 15, 16, 17)
 ```
 
+## half
+
+`half(value?)`
+
+Creates a half float value (16-bit) value.
+
+- `value`: The input value.
+
+### Returns
+
+A half float (16-bit) value
+
+### Example
+
+```kalk
+>>> half(1)
+# half(1)
+out = 1
+>>> half(-1)
+# half(-1)
+out = -1
+>>> half(1000.5)
+# half(1000.5)
+out = 1000.5
+>>> kind out
+# kind(out)
+out = "half"
+```
+
+## half16
+
+`half16(arguments)`
+
+Creates a vector of 16 `half` items.
+
+- `arguments`: The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half16(123)` will initialize all elements with 123.
+    - an array value: `half16(1..16)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half4(half2(1,2), half2(3,4))` or `half4(half3(1,2,3), 4)`.
+
+### Returns
+
+A half16 vector initialized with the specified arguments
+
+### Example
+
+```kalk
+>>> half16
+# half16
+out = half16(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+>>> half16(1..16)
+# half16(1..16)
+out = half16(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
+>>> half16(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
+# half16(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
+out = half16(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
+```
+
+## half2
+
+`half2(arguments)`
+
+Creates a vector of 2 `half` items.
+
+- `arguments`: The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half2(123)` will initialize all elements with 123.
+    - an array value: `half2(1..2)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half4(half2(1,2), half2(3,4))` or `half4(half3(1,2,3), 4)`.
+
+### Returns
+
+A half2 vector initialized with the specified arguments
+
+### Example
+
+```kalk
+>>> half2
+# half2
+out = half2(0, 0)
+>>> half2(1..2)
+# half2(1..2)
+out = half2(1, 2)
+>>> half2(10, 11)
+# half2(10, 11)
+out = half2(10, 11)
+```
+
+## half2x2
+
+`half2x2(arguments)`
+
+Creates a 2 (rows) x 2 (columns) matrix of half.
+
+- `arguments`: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half2x2(123)` will initialize all elements with 123.
+    - an array value: `half2x2(1..4)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half3x4(half4(1), half4(2), half4(3))`.
+
+### Returns
+
+A half2x2 matrix initialized with the specified arguments
+
+## half2x3
+
+`half2x3(arguments)`
+
+Creates a 2 (rows) x 3 (columns) matrix of half.
+
+- `arguments`: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half2x3(123)` will initialize all elements with 123.
+    - an array value: `half2x3(1..6)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half3x4(half4(1), half4(2), half4(3))`.
+
+### Returns
+
+A half2x3 matrix initialized with the specified arguments
+
+## half2x4
+
+`half2x4(arguments)`
+
+Creates a 2 (rows) x 4 (columns) matrix of half.
+
+- `arguments`: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half2x4(123)` will initialize all elements with 123.
+    - an array value: `half2x4(1..8)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half3x4(half4(1), half4(2), half4(3))`.
+
+### Returns
+
+A half2x4 matrix initialized with the specified arguments
+
+## half3
+
+`half3(arguments)`
+
+Creates a vector of 3 `half` items.
+
+- `arguments`: The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half3(123)` will initialize all elements with 123.
+    - an array value: `half3(1..3)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half4(half2(1,2), half2(3,4))` or `half4(half3(1,2,3), 4)`.
+
+### Returns
+
+A half3 vector initialized with the specified arguments
+
+### Example
+
+```kalk
+>>> half3
+# half3
+out = half3(0, 0, 0)
+>>> half3(1..3)
+# half3(1..3)
+out = half3(1, 2, 3)
+>>> half3(10, 11, 12)
+# half3(10, 11, 12)
+out = half3(10, 11, 12)
+```
+
+## half32
+
+`half32(arguments)`
+
+Creates a vector of 32 `half` items.
+
+- `arguments`: The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half32(123)` will initialize all elements with 123.
+    - an array value: `half32(1..32)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half4(half2(1,2), half2(3,4))` or `half4(half3(1,2,3), 4)`.
+
+### Returns
+
+A half32 vector initialized with the specified arguments
+
+### Example
+
+```kalk
+>>> half32
+# half32
+out = half32(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+>>> half32(1..32)
+# half32(1..32)
+out = half32(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32)
+```
+
+## half3x2
+
+`half3x2(arguments)`
+
+Creates a 3 (rows) x 2 (columns) matrix of half.
+
+- `arguments`: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half3x2(123)` will initialize all elements with 123.
+    - an array value: `half3x2(1..6)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half3x4(half4(1), half4(2), half4(3))`.
+
+### Returns
+
+A half3x2 matrix initialized with the specified arguments
+
+## half3x3
+
+`half3x3(arguments)`
+
+Creates a 3 (rows) x 3 (columns) matrix of half.
+
+- `arguments`: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half3x3(123)` will initialize all elements with 123.
+    - an array value: `half3x3(1..9)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half3x4(half4(1), half4(2), half4(3))`.
+
+### Returns
+
+A half3x3 matrix initialized with the specified arguments
+
+## half3x4
+
+`half3x4(arguments)`
+
+Creates a 3 (rows) x 4 (columns) matrix of half.
+
+- `arguments`: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half3x4(123)` will initialize all elements with 123.
+    - an array value: `half3x4(1..12)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half3x4(half4(1), half4(2), half4(3))`.
+
+### Returns
+
+A half3x4 matrix initialized with the specified arguments
+
+## half4
+
+`half4(arguments)`
+
+Creates a vector of 4 `half` items.
+
+- `arguments`: The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half4(123)` will initialize all elements with 123.
+    - an array value: `half4(1..4)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half4(half2(1,2), half2(3,4))` or `half4(half3(1,2,3), 4)`.
+
+### Returns
+
+A half4 vector initialized with the specified arguments
+
+### Example
+
+```kalk
+>>> half4
+# half4
+out = half4(0, 0, 0, 0)
+>>> half4(1..4)
+# half4(1..4)
+out = half4(1, 2, 3, 4)
+>>> half4(10, 11, 12, 13)
+# half4(10, 11, 12, 13)
+out = half4(10, 11, 12, 13)
+```
+
+## half4x2
+
+`half4x2(arguments)`
+
+Creates a 4 (rows) x 2 (columns) matrix of half.
+
+- `arguments`: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half4x2(123)` will initialize all elements with 123.
+    - an array value: `half4x2(1..8)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half3x4(half4(1), half4(2), half4(3))`.
+
+### Returns
+
+A half4x2 matrix initialized with the specified arguments
+
+## half4x3
+
+`half4x3(arguments)`
+
+Creates a 4 (rows) x 3 (columns) matrix of half.
+
+- `arguments`: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half4x3(123)` will initialize all elements with 123.
+    - an array value: `half4x3(1..12)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half3x4(half4(1), half4(2), half4(3))`.
+
+### Returns
+
+A half4x3 matrix initialized with the specified arguments
+
+## half4x4
+
+`half4x4(arguments)`
+
+Creates a 4 (rows) x 4 (columns) matrix of half.
+
+- `arguments`: The matrix item values. The total number of values must equal the total dimension of the matrix. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half4x4(123)` will initialize all elements with 123.
+    - an array value: `half4x4(1..16)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half3x4(half4(1), half4(2), half4(3))`.
+
+### Returns
+
+A half4x4 matrix initialized with the specified arguments
+
+## half8
+
+`half8(arguments)`
+
+Creates a vector of 8 `half` items.
+
+- `arguments`: The vector item values. The total number of values must equal the dimension of the vector. The arguments can be:
+    - No values: All items of the vector are initialized with the value 0.
+    - a single value: `half8(123)` will initialize all elements with 123.
+    - an array value: `half8(1..8)` will initialize all elements with the array elements. The size of the array must match the size of the vector.
+    - A combination of vectors/single values (e.g `half4(half2(1,2), half2(3,4))` or `half4(half3(1,2,3), 4)`.
+
+### Returns
+
+A half8 vector initialized with the specified arguments
+
+### Example
+
+```kalk
+>>> half8
+# half8
+out = half8(0, 0, 0, 0, 0, 0, 0, 0)
+>>> half8(1..8)
+# half8(1..8)
+out = half8(1, 2, 3, 4, 5, 6, 7, 8)
+>>> half8(10, 11, 12, 13, 14, 15, 16, 17)
+# half8(10, 11, 12, 13, 14, 15, 16, 17)
+out = half8(10, 11, 12, 13, 14, 15, 16, 17)
+```
+
 ## int
 
 `int(value?)`

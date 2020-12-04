@@ -136,6 +136,40 @@ out = 4026531840
 [🢁 top](#overview)
 ### Floats
 
+`kalk` supports 4 kinds of float/decimal numbers:
+
+- `half`: IEEE 754 16-bit half precision float
+- `float`: IEEE 754 32-bit single precision float
+- `double`: IEEE 754 64-bit double precision float
+- `decimal`: 128-bit precision float
+
+#### Half
+
+Half IEEE 754 16-bit half precision float (4 digits precision). Use the constructor `half` to enforce a `half`.
+```kalk
+>>> half(1.5)
+# half(1.5)
+out = 1.5
+>>> half(2.3e-3f)
+# half(0.0023f)
+out = 0.0023
+>>> display dev
+# Display mode: dev (Developer)
+>>> half(1.5)
+# half(1.5)
+out = 1.5
+    # IEEE 754 - half float - 16-bit
+    #
+    = 0x_3E00
+    = 0x____3____E____0____0
+    #    seee eeff ffff ffff
+    = 0b_0011_1110_0000_0000
+    #   15       8         0
+    #
+    #  sign     exponent    |-- fraction -|
+    =   1 * 2 ^ (15 - 15) * 0b1.1000000000f
+```
+
 #### Float
 
 Float IEEE 754 32-bit single precision float (6-9 digits precision). Use the postfix `f` to enforce a `float`.
@@ -275,10 +309,11 @@ out = false
 # Type Vector Constructors
     - bool16, bool2, bool3, bool4, bool8, byte16, byte32, byte64, double2,
       double3, double4, double8, float16, float2, float3, float4, float8,
-      int16, int2, int3, int4, int8, long2, long3, long4, long8, rgb, rgba,
-      sbyte16, sbyte32, sbyte64, short16, short2, short32, short4, short8,
-      uint16, uint2, uint3, uint4, uint8, ulong2, ulong3, ulong4, ulong8,
-      ushort16, ushort2, ushort32, ushort4, ushort8, vector
+      half16, half2, half3, half32, half4, half8, int16, int2, int3, int4,
+      int8, long2, long3, long4, long8, rgb, rgba, sbyte16, sbyte32, sbyte64,
+      short16, short2, short32, short4, short8, uint16, uint2, uint3, uint4,
+      uint8, ulong2, ulong3, ulong4, ulong8, ushort16, ushort2, ushort32,
+      ushort4, ushort8, vector
 ```
 
 They can be initialized with:
