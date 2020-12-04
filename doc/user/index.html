@@ -375,6 +375,22 @@ mat = float4x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
 # mul(mat, x)
 out = float4(90, 100, 110, 120)
 </code></pre>
+<h3 id="comments">Comments</h3>
+<p>In <code>kalk</code>, you can comment your code with:</p>
+<ul>
+<li>Single line comments that starts with <code>#</code> the rest of the line will be commented:
+<pre><code class="language-kalk">&gt;&gt;&gt; 1 + 2 # This is a following comment
+# 1 + 2 # This is a following comment
+out = 3
+</code></pre>
+</li>
+<li>Inline comments (or multi-line when used in a config file) that starts with 2 or more <code>#</code> (e.g <code>##</code>) and are closed by the same amount of <code>#</code> (e.g <code>##</code>)
+<pre><code class="language-kalk">&gt;&gt;&gt; 1 ## This is an inline comment ## + 2
+# 1 ## This is an inline comment ## + 2
+out = 3
+</code></pre>
+</li>
+</ul>
 <h3 id="extras">Extras</h3>
 <p>Some functions like <code>ascii</code> can display a convenient ASCII table:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; ascii
