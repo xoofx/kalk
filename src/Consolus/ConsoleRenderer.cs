@@ -111,6 +111,13 @@ namespace Consolus
             Render(cursorIndex);
         }
 
+        public void Backspace() {
+            if (EditLine.Count == 0) return;
+            EditLine.RemoveAt(CursorIndex - 1);
+            CursorIndex--;
+            Render(CursorIndex);
+        }
+
         public void Reset()
         {
             AfterEditLine.Clear();

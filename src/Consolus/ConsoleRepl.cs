@@ -584,6 +584,9 @@ namespace Consolus
                     Render(cursorIndex);
                 }
             }
+            else if (key.Key == ConsoleKey.Backspace) {
+                Backspace();
+            }
             else if (key.KeyChar >= ' ')
             {
                 Write(key.KeyChar);
