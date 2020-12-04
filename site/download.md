@@ -64,6 +64,12 @@ $ brew tap xoofx/kalk
 $ brew install kalk
 ```
 
+You can upgrade `kalk` with the following brew command:
+
+```shell-session
+$ brew upgrade kalk
+```
+
 You can also download a tar.gz archive [kalk.{{kalk_version}}.osx-x64.tar.gz]({{site.github_repo_url}}/releases/download/{{kalk_version}}/kalk.{{kalk_version}}.osx-x64.tar.gz)
 
 ## Installation with .NET
