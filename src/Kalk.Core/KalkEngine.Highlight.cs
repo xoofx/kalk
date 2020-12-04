@@ -164,6 +164,22 @@ namespace Kalk.Core
                     {
                         WriteUInt32(u32);
                     }
+                    else if (value is short i16)
+                    {
+                        WriteInt16(i16);
+                    }
+                    else if (value is ushort u16)
+                    {
+                        WriteUInt16(u16);
+                    }
+                    else if (value is sbyte i8)
+                    {
+                        WriteInt8(i8);
+                    }
+                    else if (value is byte u8)
+                    {
+                        WriteUInt8(u8);
+                    }
                     else if (value is long i64)
                     {
                         WriteInt64(i64);
@@ -194,10 +210,34 @@ namespace Kalk.Core
             WriteInt32((uint)i32, false);
         }
 
+        private void WriteInt16(short i16)
+        {
+            WriteHighlightLine($"    # short - 16-bit");
+            WriteInt16((ushort)i16, false);
+        }
+
+        private void WriteUInt16(ushort u16)
+        {
+            WriteHighlightLine($"    # ushort - 16-bit");
+            WriteInt16(u16, false);
+        }
+
         private void WriteUInt32(uint u32)
         {
             WriteHighlightLine($"    # uint - 32-bit");
             WriteInt32(u32, false);
+        }
+
+        private void WriteUInt8(byte u8)
+        {
+            WriteHighlightLine($"    # byte - 8-bit");
+            WriteInt8Raw(u8);
+        }
+
+        private void WriteInt8(sbyte u8)
+        {
+            WriteHighlightLine($"    # sbyte - 8-bit");
+            WriteInt8Raw((byte)u8);
         }
 
         private void WriteInt32(uint u32, bool forFloat)
@@ -233,6 +273,80 @@ namespace Kalk.Core
                 builder.Append('_');
 
                 var v = (byte)(0xF & (u32 >> (i * 4)));
+                var leadingZero = BitOperations.LeadingZeroCount(v) - 28;
+                builder.Append('0', leadingZero);
+                if (v != 0) builder.Append(Convert.ToString(v, 2));
+            }
+            WriteHighlightLine($"    = {builder}");
+        }
+
+
+        internal void WriteInt16(uint u16, bool forHalf)
+        {
+            WriteHighlightLine($"    = 0x_{u16:X4}");
+            var builder = new StringBuilder();
+
+            // Prints the hexa version
+            // # 0x____3____F____F____8
+            builder.Append("0x");
+            for (int i = 3; i >= 0; i--)
+            {
+                builder.Append("____");
+
+                var v = (byte)(0xF & (u16 >> (i * 4)));
+                builder.Append(v.ToString("X1"));
+            }
+            WriteHighlightLine($"    = {builder}");
+
+            if (forHalf)
+            {
+                // Prints the float IEE754 mask
+                // #    seee eeff ffff ffff
+                WriteHighlightLine($"    #    seee eeff ffff ffff");
+            }
+
+            // Prints the binary version
+            // # 0b_0011_1111_1111_1000
+            builder.Length = 0;
+            builder.Append("0b");
+            for (int i = 3; i >= 0; i--)
+            {
+                builder.Append('_');
+
+                var v = (byte)(0xF & (u16 >> (i * 4)));
+                var leadingZero = BitOperations.LeadingZeroCount(v) - 28;
+                builder.Append('0', leadingZero);
+                if (v != 0) builder.Append(Convert.ToString(v, 2));
+            }
+            WriteHighlightLine($"    = {builder}");
+        }
+
+        internal void WriteInt8Raw(byte u8)
+        {
+            WriteHighlightLine($"    = 0x_{u8:X2}");
+            var builder = new StringBuilder();
+
+            // Prints the hexa version
+            // # 0x____3____F
+            builder.Append("0x");
+            for (int i = 1; i >= 0; i--)
+            {
+                builder.Append("____");
+
+                var v = (byte)(0xF & (u8 >> (i * 4)));
+                builder.Append(v.ToString("X1"));
+            }
+            WriteHighlightLine($"    = {builder}");
+
+            // Prints the binary version
+            // # 0b_0011_1111
+            builder.Length = 0;
+            builder.Append("0b");
+            for (int i = 1; i >= 0; i--)
+            {
+                builder.Append('_');
+
+                var v = (byte)(0xF & (u8 >> (i * 4)));
                 var leadingZero = BitOperations.LeadingZeroCount(v) - 28;
                 builder.Append('0', leadingZero);
                 if (v != 0) builder.Append(Convert.ToString(v, 2));

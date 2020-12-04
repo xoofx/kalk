@@ -127,7 +127,7 @@ namespace Kalk.Core
 
         public override bool CanTransform(Type transformType)
         {
-            return transformType == typeof(double) || transformType == typeof(float);
+            return transformType == typeof(double) || transformType == typeof(float) || transformType == typeof(KalkHalf);
         }
 
         protected override bool CanTransform(IScriptTransformable valuable)
@@ -144,11 +144,23 @@ namespace Kalk.Core
 
     public class KalkTrigDoubleValue : KalkDoubleValue
     {
+        public KalkTrigDoubleValue()
+        {
+        }
+
+        public KalkTrigDoubleValue(IScriptTransformable transformable) : base(transformable)
+        {
+        }
+
+        public KalkTrigDoubleValue(object value) : base(value)
+        {
+        }
+
         public override Type ElementType => typeof(double);
 
         public override bool CanTransform(Type transformType)
         {
-            return transformType == typeof(double) || transformType == typeof(float);
+            return transformType == typeof(double) || transformType == typeof(float) || transformType == typeof(KalkHalf);
         }
 
         protected override bool CanTransform(IScriptTransformable valuable)

@@ -7,12 +7,12 @@
 <# 
     var types = new List<(string, string, int, int, string)>();
 
-    foreach(var typeU in new string[] { "Bool", "Int", "Float", "Double" })
+    foreach(var typeU in new string[] { "Bool", "Int", "Float", "Double", "Half" })
     {
         var type = typeU.ToLowerInvariant();
         for(int y = 2; y <= 4; y++) {
             for(int x = 2; x <= 4; x++) {
-                var genericType = typeU == "Bool" ? "KalkBool" : type;
+                var genericType = typeU == "Bool" ? "KalkBool" : typeU == "Half" ? "KalkHalf" : type;
                 types.Add((type, $"{typeU}{y}x{x}", y, x, genericType));
             }
         }
@@ -30,6 +30,7 @@
         ("KalkBool", "Bool", "bool", new int[] {2,3,4,8,16}),
         ("float", "Float", "float", new int[] {2,3,4,8,16}),
         ("double", "Double", "double", new int[] {2,3,4,8}),
+        ("KalkHalf", "Half", "half", new int[] {2,3,4,8,16,32}),
     };
 #>
 //------------------------------------------------------------------------------

@@ -291,6 +291,31 @@ namespace Kalk.Core.Modules
         [KalkExport("float", CategoryTypeConstructors)]
         public float CreateFloat(object value = null) => value == null ? 0.0f : Engine.ToObject<float>(0, value);
 
+
+        /// <summary>
+        /// Creates a half float value (16-bit) value.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <returns>A half float (16-bit) value</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> half(1)
+        /// # half(1)
+        /// out = 1
+        /// >>> half(-1)
+        /// # half(-1)
+        /// out = -1
+        /// >>> half(1000.5)
+        /// # half(1000.5)
+        /// out = 1000.5
+        /// >>> kind out
+        /// # kind(out)
+        /// out = "half"
+        /// ```
+        /// </example>
+        [KalkExport("half", CategoryTypeConstructors)]
+        public KalkHalf CreateHalf(object value = null) => value == null ? (KalkHalf)0.0f : Engine.ToObject<KalkHalf>(0, value);
+        
         /// <summary>
         /// Creates a double value (64-bit) value.
         /// </summary>
@@ -367,6 +392,18 @@ namespace Kalk.Core.Modules
                         case 16: return CreateFloat16(arguments);
                     }
                     return new KalkVectorConstructor<float>(dimension).Invoke(Engine, arguments);
+
+                case "half":
+                    switch (dimension)
+                    {
+                        case 2: return CreateHalf2(arguments);
+                        case 3: return CreateHalf3(arguments);
+                        case 4: return CreateHalf4(arguments);
+                        case 8: return CreateHalf8(arguments);
+                        case 16: return CreateHalf16(arguments);
+                        case 32: return CreateHalf32(arguments);
+                    }
+                    return new KalkVectorConstructor<KalkHalf>(dimension).Invoke(Engine, arguments);
 
                 case "double":
                     switch (dimension)
@@ -489,11 +526,13 @@ namespace Kalk.Core.Modules
                     return new KalkMatrixConstructor<KalkBool>(row, column).Invoke(Engine, arguments);
                 case "float":
                     return new KalkMatrixConstructor<float>(row, column).Invoke(Engine, arguments);
+                case "half":
+                    return new KalkMatrixConstructor<KalkHalf>(row, column).Invoke(Engine, arguments);
                 case "double":
                     return new KalkMatrixConstructor<double>(row, column).Invoke(Engine, arguments);
             }
 
-            throw new ArgumentException($"Unsupported matrix type {name.Name}. Only bool, int, float and double are supported", nameof(name));
+            throw new ArgumentException($"Unsupported matrix type {name.Name}. Only bool, int, float, half and double are supported", nameof(name));
         }
     }
 }

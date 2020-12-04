@@ -465,6 +465,11 @@ namespace Kalk.Core
                 }
             }
 
+            if (destinationType == typeof(KalkHalf))
+            {
+                return KalkHalf.FromObject(this, span, value);
+            }
+
             return base.ToObject(span, value, destinationType);
         }
 

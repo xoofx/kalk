@@ -160,11 +160,11 @@ namespace Kalk.Core
 
         private static void VerifyElementType()
         {
-            if (typeof(T) == typeof(KalkBool) || typeof(T) == typeof(int) || typeof(T) == typeof(float) || typeof(T) == typeof(double))
+            if (typeof(T) == typeof(KalkBool) || typeof(T) == typeof(KalkHalf) || typeof(T) == typeof(int) || typeof(T) == typeof(float) || typeof(T) == typeof(double))
             {
                 return;
             }
-            throw new InvalidOperationException($"The type {typeof(T)} is not supported for matrices. Only bool, int, float and double are supported.");
+            throw new InvalidOperationException($"The type {typeof(T)} is not supported for matrices. Only bool, int, float, half and double are supported.");
         }
 
         public override Type ElementType => typeof(T);
@@ -281,7 +281,8 @@ namespace Kalk.Core
         {
             return typeof(T) == typeof(int) && (typeof(long) == transformType || typeof(int) == transformType) ||
                    (typeof(T) == typeof(float) && (typeof(double) == transformType || typeof(float) == transformType) ||
-                    typeof(T) == typeof(double) && typeof(double) == transformType);
+                    typeof(T) == typeof(double) && typeof(double) == transformType) ||
+                   (typeof(T) == typeof(KalkHalf) && (typeof(double) == transformType || typeof(float) == transformType || typeof(KalkHalf) == transformType));
         }
 
         public override Span<byte> AsSpan() => MemoryMarshal.AsBytes(new Span<T>(_values));
@@ -632,6 +633,19 @@ namespace Kalk.Core
                 return Unsafe.As<KalkVector<float>, KalkVector<T>>(ref result);
             }
 
+            if (typeof(T) == typeof(KalkHalf))
+            {
+                var matrix = Matrix<float>.Build.Dense(RowCount, ColumnCount, KalkHalf.ToFloatValues((KalkHalf[])(object)_values));
+                var vector = (Vector<float>)x.AsMathNetVector();
+                var floatResult = matrix.LeftMultiply(vector);
+                var result = new KalkVector<KalkHalf>(floatResult.Count);
+                for (int i = 0; i < result.Length; i++)
+                {
+                    result[i] = (KalkHalf)floatResult[i];
+                }
+                return Unsafe.As<KalkVector<KalkHalf>, KalkVector<T>>(ref result);
+            }
+
             if (typeof(T) == typeof(double))
             {
                 var matrix = Matrix<double>.Build.Dense(RowCount, ColumnCount, (double[])(object)_values);
@@ -643,6 +657,7 @@ namespace Kalk.Core
             throw new ArgumentException($"The type {ElementType.ScriptPrettyName()} is not supported for this mul operation", nameof(x));
         }
 
+
         protected KalkVector<T> MultiplyRight(KalkVector<T> y)
         {
             if (typeof(T) == typeof(float))
@@ -651,6 +666,19 @@ namespace Kalk.Core
                 var vector = (Vector<float>)y.AsMathNetVector();
                 var result = new KalkVector<float>(matrix.Multiply(vector));
                 return Unsafe.As<KalkVector<float>, KalkVector<T>>(ref result);
+            }
+
+            if (typeof(T) == typeof(KalkHalf))
+            {
+                var matrix = Matrix<float>.Build.Dense(RowCount, ColumnCount, KalkHalf.ToFloatValues((KalkHalf[])(object)_values));
+                var vector = (Vector<float>)y.AsMathNetVector();
+                var floatResult = matrix.Multiply(vector);
+                var result = new KalkVector<KalkHalf>(floatResult.Count);
+                for (int i = 0; i < result.Length; i++)
+                {
+                    result[i] = (KalkHalf)floatResult[i];
+                }
+                return Unsafe.As<KalkVector<KalkHalf>, KalkVector<T>>(ref result);
             }
 
             if (typeof(T) == typeof(double))
@@ -675,6 +703,15 @@ namespace Kalk.Core
                 return kalkResult;
             }
 
+            if (typeof(T) == typeof(KalkHalf))
+            {
+                var mx = Matrix<float>.Build.Dense(RowCount, ColumnCount, KalkHalf.ToFloatValues((KalkHalf[])(object)_values));
+                var my = Matrix<float>.Build.Dense(y.RowCount, y.ColumnCount, KalkHalf.ToFloatValues((KalkHalf[])(object)y._values));
+                var result = mx.Multiply(my);
+                var kalkResult = new KalkMatrix<KalkHalf>(result.RowCount, result.ColumnCount, KalkHalf.ToHalfValues(result.Storage.AsColumnMajorArray()));
+                return kalkResult;
+            }
+
             if (typeof(T) == typeof(double))
             {
                 var mx = Matrix<double>.Build.Dense(RowCount, ColumnCount, (double[])(object)_values);
@@ -694,6 +731,12 @@ namespace Kalk.Core
                 var matrix = Matrix<float>.Build.Dense(RowCount, ColumnCount, (float[])(object)_values);
                 var value = matrix.Determinant();
                 return Unsafe.As<float, T>(ref value);
+            }
+            else if (typeof(T) == typeof(KalkHalf))
+            {
+                var matrix = Matrix<float>.Build.Dense(RowCount, ColumnCount, KalkHalf.ToFloatValues((KalkHalf[])(object)_values));
+                var value = (KalkHalf)matrix.Determinant();
+                return Unsafe.As<KalkHalf, T>(ref value);
             }
             else if (typeof(T) == typeof(double))
             {
@@ -716,6 +759,15 @@ namespace Kalk.Core
                 var result = new KalkMatrix<float>(matrix.RowCount, matrix.ColumnCount, matrix.Storage.AsColumnMajorArray());
                 return Unsafe.As<KalkMatrix<float>, KalkMatrix<T>>(ref result);
             }
+            else if (typeof(T) == typeof(KalkHalf))
+            {
+                // Use float for calculation with half
+                var values = KalkHalf.ToFloatValues((KalkHalf[]) (object) _values);
+                var matrix = Matrix<float>.Build.Dense(RowCount, ColumnCount, values);
+                matrix = matrix.Inverse();
+                var result = new KalkMatrix<KalkHalf>(matrix.RowCount, matrix.ColumnCount, KalkHalf.ToHalfValues(matrix.Storage.AsColumnMajorArray()));
+                return Unsafe.As<KalkMatrix<KalkHalf>, KalkMatrix<T>>(ref result);
+            }
             else if (typeof(T) == typeof(double))
             {
                 var matrix = Matrix<double>.Build.Dense(RowCount, ColumnCount, (double[])(object)_values);
@@ -725,7 +777,7 @@ namespace Kalk.Core
             }
             else
             {
-                throw new InvalidOperationException("Determinant can only be calculated for float or double matrices.");
+                throw new InvalidOperationException("Determinant can only be calculated for float or double or half matrices.");
             }
         }
 
@@ -767,6 +819,13 @@ namespace Kalk.Core
                 int count = RowCount;
                 for (int i = 0; i < count; i++)
                     m[ColumnCount * i + i] = 1.0f;
+            }
+            else if (typeof(T) == typeof(KalkHalf))
+            {
+                var m = (KalkMatrix<KalkHalf>)(KalkMatrix)transpose;
+                int count = RowCount;
+                for (int i = 0; i < count; i++)
+                    m[ColumnCount * i + i] = (KalkHalf)1.0f;
             }
             else if (typeof(T) == typeof(double))
             {

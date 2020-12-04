@@ -111,6 +111,9 @@ namespace Kalk.Core.Modules
                     int vfloat = 0;
                     UnsafeHelpers.BitCast(ref vfloat, 4, bytes);
                     return BitConverter.Int32BitsToSingle(vfloat);
+                case KalkHalf vhalf:
+                    UnsafeHelpers.BitCast(ref vhalf, 2, bytes);
+                    return vhalf;
                 case double _:
                     long vdouble = 0;
                     UnsafeHelpers.BitCast(ref vdouble, 8, bytes);

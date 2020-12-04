@@ -132,6 +132,11 @@ namespace Kalk.Core
                 return MathNet.Numerics.LinearAlgebra.Vector<float>.Build.Dense((float[]) (object) _values);
             }
 
+            if (typeof(T) == typeof(KalkHalf))
+            {
+                return MathNet.Numerics.LinearAlgebra.Vector<float>.Build.Dense(KalkHalf.ToFloatValues((KalkHalf[])(object)_values));
+            }
+
             if (typeof(T) == typeof(double))
             {
                 return MathNet.Numerics.LinearAlgebra.Vector<double>.Build.Dense((double[])(object)_values);
@@ -224,6 +229,18 @@ namespace Kalk.Core
                 }
                 return Unsafe.As<int, T>(ref result);
             }
+            else if (typeof(T) == typeof(KalkHalf))
+            {
+                var left = (KalkVector<KalkHalf>)(KalkVector)this;
+                var right = (KalkVector<KalkHalf>)y;
+                var result = (KalkHalf)0.0f;
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result = (KalkHalf)((float)result + (float)left[i] * (float)right[i]);
+                }
+                return Unsafe.As<KalkHalf, T>(ref result);
+            }
 
             throw new InvalidOperationException("This operation is only supported with int, float and double vectors.");
         }
@@ -243,6 +260,18 @@ namespace Kalk.Core
                         case 16: return "bool16";
                         case 32: return "bool32";
                         case 64: return "bool64";
+                    }
+                }
+                else if (typeof(T) == typeof(KalkHalf))
+                {
+                    switch (Length)
+                    {
+                        case 2: return "half2";
+                        case 3: return "half3";
+                        case 4: return "half4";
+                        case 8: return "half8";
+                        case 16: return "half16";
+                        case 32: return "half32";
                     }
                 }
                 else if (typeof(T) == typeof(byte))
@@ -392,7 +421,7 @@ namespace Kalk.Core
 
         public override bool CanTransform(Type transformType)
         {
-            return (typeof(T) == typeof(int) || 
+            return (typeof(T) == typeof(int) ||
                     typeof(T) == typeof(byte) ||
                     typeof(T) == typeof(sbyte) ||
                     typeof(T) == typeof(short) ||
@@ -401,7 +430,8 @@ namespace Kalk.Core
                     typeof(T) == typeof(long) ||
                     typeof(T) == typeof(ulong)) && (typeof(long) == transformType || typeof(int) == transformType) ||
                    (typeof(T) == typeof(float) && (typeof(double) == transformType || typeof(float) == transformType) ||
-                    typeof(T) == typeof(double) && typeof(double) == transformType);
+                    typeof(T) == typeof(double) && typeof(double) == transformType) ||
+                   (typeof(T) == typeof(KalkHalf) && (typeof(double) == transformType || typeof(float) == transformType || typeof(KalkHalf) == transformType));
         }
 
         public virtual object Transform(Func<T, T> apply)
@@ -448,7 +478,6 @@ namespace Kalk.Core
                     return context.ToObject<KalkBool>(span, result);
                 });
             }
-
             return this.Transform(value =>
             {
                 var result = apply(value);
@@ -575,6 +604,18 @@ namespace Kalk.Core
                 }
                 return result;
             }
+            else if (typeof(T) == typeof(float))
+            {
+                var left = (KalkVector<KalkHalf>)(KalkVector)this;
+                var right = (KalkVector<KalkHalf>)y;
+                var result = new KalkVector<KalkHalf>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = (KalkHalf)((float)left[i] * (float)right[i]);
+                }
+                return result;
+            }
             else if (typeof(T) == typeof(double))
             {
                 var left = (KalkVector<double>)(KalkVector)this;
@@ -617,6 +658,18 @@ namespace Kalk.Core
                 for (int i = 0; i < length; i++)
                 {
                     result[i] = left[i] + right[i];
+                }
+                return result;
+            }
+            else if (typeof(T) == typeof(KalkHalf))
+            {
+                var left = (KalkVector<KalkHalf>)(KalkVector)this;
+                var right = (KalkVector<KalkHalf>)y;
+                var result = new KalkVector<KalkHalf>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = (KalkHalf)((float)left[i] + (float)right[i]);
                 }
                 return result;
             }
@@ -665,6 +718,18 @@ namespace Kalk.Core
                 }
                 return result;
             }
+            else if (typeof(T) == typeof(KalkHalf))
+            {
+                var left = (KalkVector<KalkHalf>)(KalkVector)this;
+                var right = (KalkVector<KalkHalf>)y;
+                var result = new KalkVector<KalkHalf>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = (KalkHalf)((float)left[i] - (float)right[i]);
+                }
+                return result;
+            }
             else if (typeof(T) == typeof(double))
             {
                 var left = (KalkVector<double>)(KalkVector)this;
@@ -707,6 +772,18 @@ namespace Kalk.Core
                 for (int i = 0; i < length; i++)
                 {
                     result[i] = left[i] / right[i];
+                }
+                return result;
+            }
+            else if (typeof(T) == typeof(KalkHalf))
+            {
+                var left = (KalkVector<KalkHalf>)(KalkVector)this;
+                var right = (KalkVector<KalkHalf>)y;
+                var result = new KalkVector<KalkHalf>(left.Length);
+                var length = Length;
+                for (int i = 0; i < length; i++)
+                {
+                    result[i] = (KalkHalf)((float)left[i] / (float)right[i]);
                 }
                 return result;
             }
@@ -1103,6 +1180,7 @@ namespace Kalk.Core
                 if (typeof(T) != typeof(uint)) Display<uint>(engine);
                 if (typeof(T) != typeof(short)) Display<short>(engine);
                 if (typeof(T) != typeof(ushort)) Display<ushort>(engine);
+                if (typeof(T) != typeof(KalkHalf)) Display<KalkHalf>(engine);
                 if (typeof(T) != typeof(float)) Display<float>(engine);
                 if (typeof(T) != typeof(double)) Display<double>(engine);
                 if (typeof(T) != typeof(byte)) Display<byte>(engine);
@@ -1181,6 +1259,15 @@ namespace Kalk.Core
             else if (typeof(TTarget) == typeof(float))
             {
                 builder.Append($"float{dimStr}(");
+                for (int i = 0; i < span.Length; i++)
+                {
+                    if (i > 0) builder.Append(", ");
+                    builder.Append(span[i]);
+                }
+            }
+            else if (typeof(TTarget) == typeof(KalkHalf))
+            {
+                builder.Append($"half{dimStr}(");
                 for (int i = 0; i < span.Length; i++)
                 {
                     if (i > 0) builder.Append(", ");
