@@ -1,7 +1,10 @@
 ---
 title: Download
 ---
-{{~ kalk_version = site.data.kalk.version ~}}
+{{~ 
+kalk_version = site.data.kalk.version 
+kalk_store_version = "0.1.0"
+~}}
 # Download
 
 <img align="right" width="120px" height="120px" src="/img/kalk-logo-large.png">
@@ -13,7 +16,7 @@ title: Download
 - macOS (High Sierra and higher)
 
 {{NOTE do}}
-The current stable version: **`{{ kalk_version }}`**
+The current stable version: **`{{ kalk_version }}`** ([Release notes]({{site.github_repo_url}}/releases/tag/{{kalk_version}}))
 
 - `kalk` requires a terminal that supports ANSI escape codes. 
 - On Windows, `kalk` works best on **Windows 10** which has built-in support for terminal with ANSI escape codes and with the new [Windows Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701).
@@ -24,9 +27,13 @@ The current stable version: **`{{ kalk_version }}`**
 
 The easiest and preferred way to install `kalk` is **from the Windows Store**. This version can be updated automatically. 
 
-{{WARNING do}}
-The application is being published and is not yet available via the Windows Store.
-{{end}}
+<div style="text-align: center">
+<a href='//www.microsoft.com/store/apps/9P54RK1PCSRV?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/store/badges/images/English_get_L.png' alt='English badge' style='width: 127px; height: 52px;'/></a>
+</div>
+
+The version available on the store is `{{kalk_store_version}}` ([Release notes]({{site.github_repo_url}}/releases/tag/{{kalk_store_version}}))
+
+> There is always a slight delay of availability of the latest version of `kalk` in the Windows Store.
 
 Alternatively, you can download the zip archive [kalk.{{kalk_version}}.win-x64.zip]({{site.github_repo_url}}/releases/download/{{kalk_version}}/kalk.{{kalk_version}}.win-x64.zip)
 
