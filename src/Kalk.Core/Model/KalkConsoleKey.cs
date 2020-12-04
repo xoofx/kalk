@@ -54,7 +54,8 @@ namespace Kalk.Core
             }
             else
             {
-                KeyChar = Modifiers != 0 ? (char) 0 : keyChar;
+                // We need to force char to 0 when backspace, as it is not consistent between Windows and macOS/Linux
+                KeyChar = Modifiers != 0 || key == ConsoleKey.Backspace ? (char)0 : keyChar;
             }
         }
         
@@ -170,7 +171,7 @@ namespace Kalk.Core
                                 ConsoleKey.Tab => '\t',
                                 ConsoleKey.Enter => '\r',
                                 ConsoleKey.Spacebar => ' ',
-                                ConsoleKey.Backspace => '\b',
+                                ConsoleKey.Backspace => (char)0,
                                 ConsoleKey.Escape => (char) 0x1b,
                                 _ => keyChar
                             };

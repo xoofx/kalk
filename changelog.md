@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0
+
+- Add support for half types (single, vector, matrix) (#12)
+- Fix broken backspace on macOS/Linux (#16)
+
 ## 0.2.0
 
 - Add support for configurable shortcuts with line editor actions
