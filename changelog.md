@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+
+- Fix issue with substraction without spaces (e.g 1-2 was converted to 1 * (-2)) (#19)
+
 ## 0.3.0
 
 - Add support for half types (single, vector, matrix) (#12)
