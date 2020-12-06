@@ -32,7 +32,7 @@ namespace Kalk.Core.Modules
         /// >>> length float2(1, 2)
         /// # length(float2(1, 2))
         /// out = 2.23606797749979
-        /// >>> length -5
+        /// >>> length(-5)
         /// # length(-5)
         /// out = 5
         /// ```

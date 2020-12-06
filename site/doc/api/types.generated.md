@@ -1973,7 +1973,7 @@ out = 0
 >>> sbyte 127
 # sbyte(127)
 out = 127
->>> sbyte -128
+>>> sbyte(-128)
 # sbyte(-128)
 out = -128
 ```
@@ -2086,7 +2086,7 @@ out = 0
 >>> short 32767
 # short(32767)
 out = 32767
->>> short -32768
+>>> short(-32768)
 # short(-32768)
 out = -32768
 >>> short 32768
