@@ -3,7 +3,7 @@ title: Download
 ---
 {{~ 
 kalk_version = site.data.kalk.version 
-kalk_store_version = "0.1.0"
+kalk_store_version = "0.3.1"
 ~}}
 # Download
 
