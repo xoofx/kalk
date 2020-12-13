@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="lunet 0.3.2.0">
+    <meta name="generator" content="lunet 0.4.0.0">
     <title>Advanced Topics - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" type="text/javascript" ></script>
@@ -12,7 +12,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
     <meta name="twitter:title" content="Advanced Topics - kalk">
-    <meta name="twitter:description" content="kalk - calculator app">
+    <meta name="twitter:description" content="Configuration By default, kalk will try to load a configuration file from &lt;HOME>/.kalk/config.kalk. This configuration file can contain any multi-line kalk code. For example, the following configuration will always import all modules when launching kalk: # .kalk/config.kalk import All # We always import all modules Depending on your OS, the HOME might be a different folder. For example, on Windows the configuration can be loaded from %USERPROFILE%\.kalk\config.kalk. Keyboard You can...">
     <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
     <meta name="twitter:image:alt" content="Advanced Topics - kalk">    
 
@@ -162,7 +162,7 @@ import All # We always import all modules
 </code></pre>
 <p>Depending on your OS, the HOME might be a different folder. For example, on Windows the configuration can be loaded from <code>%USERPROFILE%\.kalk\config.kalk</code>.</p>
 <h2 id="keyboard">Keyboard</h2>
-<p>You can configure new keyboard shortcuts directly within <code>kalk</code> with the <a href="/doc/api/general/#shortcut"><code>shortcut</code></a> command.</p>
+<p>You can configure new keyboard shortcuts directly within <code>kalk</code> with the <a href="/doc/api/general"><code>shortcut</code></a> command.</p>
 <h3 id="to-expressions">To expressions</h3>
 <p>The following will create a shortcut between <code>CTRL+R</code> and the result of the expression <code>1 + 2</code></p>
 <pre><code class="language-kalk">&gt;&gt;&gt; shortcut(myshortcut, &quot;CTRL+R&quot;, 1 + 2)
@@ -171,7 +171,7 @@ import All # We always import all modules
 <pre><code class="language-kalk">&gt;&gt;&gt; # Below we press CTRL+R 4 times
 &gt;&gt;&gt; 3333
 </code></pre>
-<p>You can list all the shortcuts available with the command <a href="/doc/api/general/#shortcuts"><code>shortcuts</code></a>.</p>
+<p>You can list all the shortcuts available with the command <a href="/doc/api/general"><code>shortcuts</code></a>.</p>
 <p>For example, the following shortcut is defined by default:</p>
 <pre><code class="language-kalk">shortcut(pi, &quot;CTRL+G P&quot;, &quot;Π&quot;, &quot;CTRL+G p&quot;, &quot;π&quot;)               # CTRL+G P =&gt; &quot;Π&quot;, CTRL+G p =&gt; &quot;π&quot;
 </code></pre>
@@ -182,7 +182,7 @@ import All # We always import all modules
 <pre><code class="language-kalk">shortcut(cursor_left, &quot;left, ctrl+b&quot;, action(&quot;cursor_left&quot;))
 shortcut(cursor_right, &quot;right, ctrl+f&quot;, action(&quot;cursor_right&quot;))
 </code></pre>
-<p>For the full list of available actions, you can consult the <a href="/doc/api/general#action">action</a> function.</p>
+<p>For the full list of available actions, you can consult the <a href="/doc/api/general">action</a> function.</p>
 <p>For the full list of all the shortcuts defined, you can consult <a href="https://github.com/xoofx/kalk/blob/master/src/Kalk.Core/core.kalk">core.kalk</a> that is loaded by default by kalk.</p>
 <div class='lunet-alert-note' role='alert'><div class='lunet-alert-note-heading'><span class='lunet-alert-note-icon'></span><span class='lunet-alert-note-heading-text'></span></div><div class='lunet-alert-note-content'>
 <ul>

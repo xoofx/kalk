@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="lunet 0.3.2.0">
+    <meta name="generator" content="lunet 0.4.0.0">
     <title>Language Syntax - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" type="text/javascript" ></script>
@@ -12,7 +12,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
     <meta name="twitter:title" content="Language Syntax - kalk">
-    <meta name="twitter:description" content="kalk - calculator app">
+    <meta name="twitter:description" content="Overview The language used by kalk is a full featured language with types, expressions, control flows, functions... with an easy and fluent syntax to work with. In this document, you will find more details about its language features. Types kalk supports different type of numbers and formats. All digits can be separated with the underscore _ character. Integers Integers: from a byte to large integers with any number of digits....">
     <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
     <meta name="twitter:image:alt" content="Language Syntax - kalk">    
 
@@ -210,14 +210,14 @@ out = 5
 # int(&quot;5&quot;)
 out = 5
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h4 id="big-integers">Big Integers</h4>
 <p>With any number of digits:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 1e50
 # 100000000000000000000000000000000000000000000000000
 out = 100000000000000000000000000000000000000000000000000
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h4 id="hexadecimal-integers">Hexadecimal Integers</h4>
 <p>Hexadecimal integers are prefixed by <code>0x</code> followed by hexadecimal characters <code>[0-9A-Fa-f]</code> with an optional postfix specifier for unsigned (<code>u</code> or <code>U</code>):</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 0xFC1234 # hexa
@@ -239,7 +239,7 @@ out = 2147483649
 # -5565725
 out = -5565725  
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h4 id="binary-integers">Binary Integers</h4>
 <p>Binary integers are prefixed by <code>0b</code> followed by binary characters <code>0</code> or <code>1</code> with an optional postfix specifier for unsigned (<code>u</code> or <code>U</code>):</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 0b11111010 # binary
@@ -258,7 +258,7 @@ out = -268435456
 # 4026531840
 out = 4026531840    
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="floats">Floats</h3>
 <p><code>kalk</code> supports 4 kinds of float/decimal numbers:</p>
 <ul>
@@ -315,7 +315,7 @@ out = 1.5
     #  sign   exponent            |------ fraction -----|
     =   1 * 2 ^ (127 - 127) * 0b1.10000000000000000000000f
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h4 id="double">Double</h4>
 <p>Double IEEE 754 64-bit double precision float (15-17 digits precision). This is the default when using a floating point number.</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 1.5
@@ -340,7 +340,7 @@ out = 1.5
     # sign    exponent              |-------------------- fraction --------------------|
     =   1 * 2 ^ (1023 - 1023) * 0b1.1000000000000000000000000000000000000000000000000000
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h4 id="decimal">Decimal</h4>
 <p>Decimal 128-bit precision float (28-29 digits precision). Use the postfix <code>m</code> for enforcing a <code>decimal</code>.</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 1.5m
@@ -363,7 +363,7 @@ out = 1.5678192030394059106876216683
     # sign    exponent              |-------------------- fraction --------------------|
     =   1 * 2 ^ (1023 - 1023) * 0b1.1001000101011100100110010110101100011000010101000001
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h4 id="binary-as-floats">Binary as floats</h4>
 <p>By using the binary prefix <code>0b</code> associated with a dot <code>.</code> you can express a floating point number. The postfix <code>f</code> can be applied to enforce <code>float</code> precision.</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 0b1.101f
@@ -380,7 +380,7 @@ out = 1.625
     #  sign   exponent            |------ fraction -----|
     =   1 * 2 ^ (127 - 127) * 0b1.10100000000000000000000f
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="boolean">Boolean</h3>
 <p>A boolean value is <code>true</code> or <code>false</code>.</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; true
@@ -402,7 +402,7 @@ out = true
 # bool(&quot;false&quot;)
 out = false
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="vectors">Vectors</h3>
 <p><code>kalk</code> supports multiple vector types:</p>
 <pre><code class="language-kalk"># Type Vector Constructors
@@ -467,7 +467,7 @@ out = vector(float, 11, -0.41614684, -0.9899925, -0.6536436, 0.2836622, 0.960170
 # cos(float4(1..4))
 out = float4(0.5403023, -0.41614684, -0.9899925, -0.6536436)
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="matrices">Matrices</h3>
 <p>Similar to vector, matrices can be created with a single value:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; float4x4(1)
@@ -518,7 +518,7 @@ out = float3x3(0.5403023, -0.41614684, -0.9899925, -0.6536436, 0.2836622, 0.9601
       float3(-0.6536436 ,  0.2836622 ,  0.96017027) # 1
       float3( 0.75390226, -0.14550003, -0.91113025) # 2
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="strings">Strings</h3>
 <p>You can create strings:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; &quot;This is a string&quot;
@@ -548,7 +548,7 @@ out = &quot;Hello World!&quot;
 # ascii(out)
 out = bytebuffer([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33])
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="arrays">Arrays</h3>
 <p>You can create arrays by specifying its values:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; [1, 3, 5, 7]
@@ -578,7 +578,7 @@ out = 4
 # [1, 3, 5, 7, 10, 11] |&gt; fib
 out = [1, 2, 5, 13, 55, 89]
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="ranges">Ranges</h3>
 <p>You can create an enumerator of values based on an inclusive range <code>from..to</code></p>
 <pre><code class="language-kalk">&gt;&gt;&gt; 1..10
@@ -602,7 +602,7 @@ y = 6
 out = [1, 2, 3, 4, 5, 6]
 </code></pre>
 <p>Ranges share similar behavior to arrays (size, indexing...).</p>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="objects">Objects</h3>
 <p>Objects with properties can be created:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; {a: 1, b: 2, c: &quot;yes&quot;, d: float4(1)}
@@ -644,7 +644,7 @@ out = &quot;{\&quot;a\&quot;: 1, \&quot;b\&quot;: \&quot;yes\&quot;}&quot;
 # json(out)
 out = {a: 1, b: &quot;yes&quot;}
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="bytebuffers">ByteBuffers</h3>
 <p>Byte buffers are a special kind of array that can be used with CPU intrinsics and other memory functions:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; buf = bytebuffer(1..10)
@@ -685,7 +685,7 @@ out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 # out + 4
 out = slice(bytebuffer([5, 6, 7, 8, 9, 10]), 4)
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h2 id="expressions">Expressions</h2>
 <h3 id="nested">Nested</h3>
 <p>An expression enclosed by <code>(</code> and <code>)</code></p>
@@ -693,7 +693,7 @@ out = slice(bytebuffer([5, 6, 7, 8, 9, 10]), 4)
 # (2 - 5 * (1 + 3)) / 3
 out = -6
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="with-numbers">With Numbers</h3>
 <p>The following binary operators are supported for <strong>numbers</strong>:</p>
 <table>
@@ -757,7 +757,7 @@ out = 1
 # 4 ^ 3
 out = 64
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="with-strings">With Strings</h3>
 <p>The following binary operators are supported for <strong>strings</strong>:</p>
 <table>
@@ -791,7 +791,7 @@ out = &quot;abcabc&quot;
 <li><code>true -&gt; &quot;true&quot;</code></li>
 <li><code>false -&gt; &quot;false&quot;</code></li>
 </ul>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="with-arrays">With Arrays</h3>
 <p>The following binary operators are supported for <strong>arrays</strong>:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; [1, 2, 3] + [4, 5, 6]
@@ -896,7 +896,7 @@ b = &quot;yes&quot;
 # a ?? b
 out = &quot;yes&quot;
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h2 id="control-flows">Control Flows</h2>
 <h3 id="multiple-statements">Multiple statements</h3>
 <p><code>kalk</code> supports multiple statements on the same line separated by <code>;</code></p>
@@ -906,7 +906,7 @@ x = 1
 y = 2
 out = 3
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="if-statements">If statements</h3>
 <p>Supports for if, else, and else if statements:</p>
 <blockquote>
@@ -918,7 +918,7 @@ x = 1
 y = 3
 out = 4
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="loop-statements">Loop statements</h3>
 <p>Supports for the following <code>for</code> loop syntax:</p>
 <blockquote>
@@ -955,7 +955,7 @@ x = 2
 x = 1
 x = 0
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h4 id="special-loop-variables">Special loop variables</h4>
 <p>The following variables are accessible within a <code>for</code> block:</p>
 <table>
@@ -1035,7 +1035,7 @@ x = 0
 </tr>
 </tbody>
 </table>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h4 id="break-and-continue"><code>break</code> and <code>continue</code></h4>
 <p>You can use <code>break</code> and <code>continue</code> within loops as in standard languages.</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; for x in 1..10; if x &gt; 5; break; end; x * 2; end
@@ -1046,7 +1046,7 @@ out = 6
 out = 8
 out = 10
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h2 id="functions">Functions</h2>
 <h3 id="inline-functions">Inline functions</h3>
 <p>A simple inline function can be declared with:</p>
@@ -1060,7 +1060,7 @@ f(x, y, z) = x + 2 y + 3 z
 # f(1, 2, 3)
 out = 14
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="multiline-functions">Multiline functions</h3>
 <blockquote>
 <p><code> func &lt;function_name&gt;(argName1, argName2, ...argNameN); &lt;statements&gt;; end;</code></p>
@@ -1081,7 +1081,7 @@ out = 16
 out = 18
 out = 20
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="anonymous-functions">Anonymous functions</h3>
 <p>Anonymous functions are like simple functions but can be used in expressions (e.g as the last argument of function call)</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; f = do (x,y); ret x + y; end;
@@ -1091,7 +1091,7 @@ f = do(x,y); ret x + y; end;
 # f(1, 2)
 out = 3
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 <h3 id="function-pointers">Function Pointers</h3>
 <p>A function can be passed to another function by using the operator <code>@</code> in front of the function to stop the evaluation and allow to pass the function as a &quot;pointer&quot;.</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; f(x) = x + 1
@@ -1104,7 +1104,7 @@ g(y, z) = y(z)
 # g(@f, 5)
 out = 6
 </code></pre>
-<p><a href="#overview">🢁 top</a></p>
+<p><a href="/doc/user/syntax">🢁 top</a></p>
 
       </div>
   </div>

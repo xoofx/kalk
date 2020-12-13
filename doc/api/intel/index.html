@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="lunet 0.3.2.0">
+    <meta name="generator" content="lunet 0.4.0.0">
     <title>Intel Hardware Intrinsics - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" type="text/javascript" ></script>
@@ -12,7 +12,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
     <meta name="twitter:title" content="Intel Hardware Intrinsics - kalk">
-    <meta name="twitter:description" content="kalk - calculator app">
+    <meta name="twitter:description" content="Module with Intel CPU Hardware intrinsics. In order to use the functions provided by this module, you need to import this module: >>> import HardwareIntrinsics Depending on the characteristics of your CPU (e.g AVX2, SSE3...), this module will import only the intrinsic functions supported by your CPU. Usage Let's take the example of the instruction mm_or_ps which allows to perform a OR of 4 x int32: >>> help mm_or_ps #...">
     <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
     <meta name="twitter:image:alt" content="Intel Hardware Intrinsics - kalk">    
 
@@ -163,7 +163,7 @@
 <p>Depending on the characteristics of your CPU (e.g <code>AVX2</code>, <code>SSE3</code>...), this module will import only the intrinsic functions supported by your CPU.</p>
 </div></div>
 <h2 id="usage">Usage</h2>
-<p>Let's take the example of the instruction <a href="/doc/api/intel/sse/#mm_or_ps"><code>mm_or_ps</code></a> which allows to perform a OR of 4 x int32:</p>
+<p>Let's take the example of the instruction <a href="/doc/api/intel/sse"><code>mm_or_ps</code></a> which allows to perform a OR of 4 x int32:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; help mm_or_ps
 # mm_or_ps
 #
@@ -185,12 +185,12 @@ But you can easily bitcast it to int4:</p>
 # bitcast(int4, out)
 out = int4(5, 6, 7, 12)
 </code></pre>
-<p>Let's use a similar example with <a href="/doc/api/intel/sse41/#mm_blend_ps"><code>mm_blend_ps</code></a>:</p>
+<p>Let's use a similar example with <a href="/doc/api/intel/sse41"><code>mm_blend_ps</code></a>:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; bitcast(int4, mm_blend_ps(int4(1,2,3,4), int4(5,6,7,8), 0b1010))
 # bitcast(int4, mm_blend_ps(int4(1, 2, 3, 4), int4(5, 6, 7, 8), 10))
 out = int4(1, 6, 3, 8)
 </code></pre>
-<p>Or for example using <a href="/doc/api/intel/sse41/#mm_extract_epi8"><code>mm_extract_epi8</code></a>:</p>
+<p>Or for example using <a href="/doc/api/intel/sse41"><code>mm_extract_epi8</code></a>:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; mm_extract_epi8(int4(1,2,3,4), 0)
 # mm_extract_epi8(int4(1, 2, 3, 4), 0)
 out = 1
