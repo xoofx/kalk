@@ -65,6 +65,7 @@ namespace Kalk.Releaser
         {
             bool showHelp = false;
             var _ = string.Empty;
+            bool buildOnly = false;
             string githubApiToken = null;
             string nugetApiToken = null;
             var options = new OptionSet
@@ -76,6 +77,7 @@ namespace Kalk.Releaser
                 "## Options",
                 _,
                 {"h|help", "Show this message and exit", (bool v) => showHelp = v},
+                {"b|buildonly", "Build only, no remote publish", v => buildOnly = true},
                 {"g|github=", "GitHub Api Token", v => githubApiToken = v},
                 {"n|nuget=", "NuGet Api Token", v => nugetApiToken = v},
             };
@@ -93,13 +95,17 @@ namespace Kalk.Releaser
                     return 0;
                 }
 
-                if (githubApiToken == null)
+                if (!buildOnly)
                 {
-                    throw new OptionException("Missing GitHub Api Token", "github");
-                }
-                if (nugetApiToken == null)
-                {
-                    throw new OptionException("Missing NuGet Api Token", "nuget");
+                    if (githubApiToken == null)
+                    {
+                        throw new OptionException("Missing GitHub Api Token", "github");
+                    }
+
+                    if (nugetApiToken == null)
+                    {
+                        throw new OptionException("Missing NuGet Api Token", "nuget");
+                    }
                 }
             }
             catch (OptionException exception)
@@ -137,15 +143,24 @@ namespace Kalk.Releaser
             // Build NuGet
             BuildNuGet(packageInfo);
 
-            // Build Appx
-            BuildAppx(packageInfo);
-
             // Build all archives
+            var win64Setup = PackPlatform("win-x64", version, PackageKind.Setup);
             var win64Zip =  PackPlatform("win-x64", version, PackageKind.Zip);
             var linux64DebAndRpm = PackPlatform("linux-x64", version, PackageKind.Deb, PackageKind.Rpm);
             var macOSTarGz = PackPlatform("osx-x64", version, PackageKind.TarBall);
+            
+            // Build Appx
+            BuildAppx(packageInfo);
+            
+            var entries = win64Setup.Concat(win64Zip).Concat(linux64DebAndRpm).Concat(macOSTarGz).ToList();
 
-            var entries = win64Zip.Concat(linux64DebAndRpm).Concat(macOSTarGz).ToList();
+            Info($"Build {entries.Count} items finished");
+            if (buildOnly)
+            {
+                Info("Build Only - exiting");
+                return 0;
+            }
+
 
             Info("Connecting to GitHub");
 
@@ -453,6 +468,7 @@ end
             TarBall,
             Deb,
             Rpm,
+            Setup,
         }
 
         private class PackageInfo
@@ -513,6 +529,11 @@ end
                         target = "CreateTarball";
                         ext = "tar.gz";
                         mime = "application/gzip";
+                        break;
+                    case PackageKind.Setup:
+                        target = "CreateSetup";
+                        ext = "setup.exe";
+                        mime = "application/vnd.microsoft.portable-executable";
                         break;
                     default:
                         throw new ArgumentException($"Invalid kind {kind}", nameof(kind));
