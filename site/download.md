@@ -35,7 +35,10 @@ The version available on the store is `{{kalk_store_version}}` ([Release notes](
 
 > There is always a slight delay of availability of the latest version of `kalk` in the Windows Store.
 
-Alternatively, you can download the zip archive [kalk.{{kalk_version}}.win-x64.zip]({{site.github_repo_url}}/releases/download/{{kalk_version}}/kalk.{{kalk_version}}.win-x64.zip)
+Alternatively, you can download:
+
+- A Windows Installer [kalk.{{kalk_version}}.win-x64.setup.exe]({{site.github_repo_url}}/releases/download/{{kalk_version}}/kalk.{{kalk_version}}.win-x64.setup.exe). This installer installs `kalk` into `%LOCALAPPDATA%\kalk` and doesn't require administrator privileges.
+- A simple zip archive [kalk.{{kalk_version}}.win-x64.zip]({{site.github_repo_url}}/releases/download/{{kalk_version}}/kalk.{{kalk_version}}.win-x64.zip)
 
 ## Linux
 
