@@ -6,6 +6,9 @@ description = "kalk - calculator app"
 basepath = ""
 baseurl = baseurl ?? "https://kalk.dev"
 
+# Use `base` as a default layout
+layout = "base"
+
 # Github repository
 github_user = "xoofx"
 github_repo_url = "https://github.com/xoofx/kalk"
@@ -68,3 +71,11 @@ with bundle
     concat = true
     minify = true
 end
+
+# Setup Google Analytics
+with tracking.google
+    id = "G-Z558CWX6J6"
+end
+
+# Configure some HTML defaults
+html.attributes = 'lang="en"'

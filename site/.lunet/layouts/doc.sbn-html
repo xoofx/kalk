@@ -1,5 +1,5 @@
 ---
-layout: _default
+layout: base
 ---
 <div class="container">
   <div class="row">

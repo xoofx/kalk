@@ -1,22 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-  {{~  
-    path0 = (page.url | string.downcase | string.split '/')[0] ?? "home" ## first part of the url ## 
-    case path0 
-      when 'home', 'doc', 'download'
-        pathclass = 'kalk-' + path0
-      else
-        pathclass = 'kalk-404'
-    end
-  ~}}
-  <head>
-    {{~ Head ~}}
-    {{~ if site.baseurl == "https://kalk.dev" }}
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z558CWX6J6"></script>
-    <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-Z558CWX6J6');</script>    
-    {{~ end ~}}
-  </head>
-  <body>    
+---
+layout: _default
+---
     <div id="kalk" class="container">
       <nav class="navbar navbar-expand-md navbar-light sticky-top">
         <a class="kalk-logo navbar-brand" href="/"></a>
@@ -29,8 +13,6 @@
                 kind: "nav",
               } 
           ~}}
-          <!-- d-inline w-100 -->
-          <!-- <ol class="navbar-nav" style="width: 40%;padding-right: 0.5rem;"> -->
           <ol class="navbar-nav flex-grow-1" style="padding-right: 0.5rem;">
             <li class="nav-item w-100">
                 <div class="kalk-search">
@@ -47,6 +29,15 @@
           ~}}
         </div>
       </nav>
+{{~  
+  path0 = (page.url | string.downcase | string.split '/')[0] ?? "home" ## first part of the url ## 
+  case path0 
+    when 'home', 'doc', 'download'
+      pathclass = 'kalk-' + path0
+    else
+      pathclass = 'kalk-404'
+  end
+~}}
       <div class="{{ pathclass }}">
         <section>
             {{ content }}
@@ -57,6 +48,3 @@
         </footer>
       </div>
     </div>
-  </body>
-</html>
-
