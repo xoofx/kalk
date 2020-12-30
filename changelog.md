@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+- Fix operator precedence issue with implicit function calls.
+- Fix issue with file access on Windows Store App.
+
 ## 0.3.1
 
 - Fix issue with substraction without spaces (e.g 1-2 was converted to 1 * (-2)) (#19)
