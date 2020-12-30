@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://kalk.dev/doc/api/intel/sse41x64</loc>
+    <loc>https://kalk.dev/doc/api/intel/ssex64</loc>
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
@@ -9,7 +9,15 @@
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/ssex64</loc>
+    <loc>https://kalk.dev/doc/api/intel/sse42x64</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/sse42</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/sse41x64</loc>
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
@@ -17,7 +25,19 @@
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
+    <loc>https://kalk.dev/doc/api/intel/sse41</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/sse2x64</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
     <loc>https://kalk.dev/doc/api/intel/sse2</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/sse</loc>
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
@@ -29,7 +49,19 @@
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
+    <loc>https://kalk.dev/doc/api/intel/bmi2</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
     <loc>https://kalk.dev/doc/api/intel/bmi1x64</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/bmi1</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/avx</loc>
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
@@ -37,11 +69,11 @@
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/aes</loc>
+    <loc>https://kalk.dev/doc/api/web</loc>
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/user</loc>
+    <loc>https://kalk.dev/doc/api/intel/aes</loc>
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
@@ -54,6 +86,14 @@
   </url>
   <url>
     <loc>https://kalk.dev/doc/api</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/user/syntax</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/user</loc>
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
@@ -73,7 +113,23 @@
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/download</loc>
+    <loc>https://kalk.dev/doc/api/types</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/standardunits</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/misc</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/memory</loc>
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
@@ -81,7 +137,7 @@
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc</loc>
+    <loc>https://kalk.dev/doc/api/general</loc>
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
@@ -93,63 +149,7 @@
     <lastmod>2020-12-30</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/memory</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/general</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/standardunits</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/misc</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/web</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/user/syntax</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/types</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/bmi1</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/avx</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/bmi2</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/sse2x64</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/sse</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/sse42</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/sse41</loc>
-    <lastmod>2020-12-30</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/sse42x64</loc>
+    <loc>https://kalk.dev/download</loc>
     <lastmod>2020-12-30</lastmod>
   </url>
 </urlset>
