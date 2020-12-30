@@ -1,12 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0-windows10.0.17763.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <ApplicationIcon>..\..\img\kalk.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>KALK_WINDOWS_STOREAPP</DefineConstants>
-    <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <AssemblyName>kalk</AssemblyName>
     <SignAssembly>false</SignAssembly>
     <KalkGitVersion>true</KalkGitVersion>
@@ -46,6 +43,8 @@
 			<PublishDirFullPath>$([System.IO.Path]::GetFullPath('$(PublishDir)'))</PublishDirFullPath>
       <PublishPackageName>$(AssemblyName).$(PackageVersion).$(RuntimeIdentifier).appx</PublishPackageName>
       <PublishPackagePath>$([System.IO.Path]::GetFullPath('$(PublishDirFullPath)..\..\..\$(PublishPackageName)'))</PublishPackagePath>
+      <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
+      <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
 		</PropertyGroup>
 
 		<Message Importance="High" Text="Create appx $(MSBuildProjectName) -&gt; $(PublishPackagePath) (Version $(FileVersion))" />
