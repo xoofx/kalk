@@ -723,7 +723,7 @@ namespace Kalk.Core
         public object LoadFile(string path, bool output = false)
         {
             var fullPath = FileModule.AssertReadFile(path);
-            var text = File.ReadAllText(fullPath);
+            var text = FileService.FileReadAllText(fullPath);
             return EvaluateTextImpl(text, path, output);
         }
 

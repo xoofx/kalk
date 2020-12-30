@@ -72,10 +72,10 @@ namespace Kalk.Core.Modules
         [KalkExport("load_csv", FileModule.CategoryMiscFile)]
         public ScriptRange LoadCsv(string path, bool headers = true)
         {
-            var fullPath = FileModule.AssertReadFile(path);
+            var fullPath = Engine.FileModule.AssertReadFile(path);
             return new ScriptRange(new KalkCsvReader(() =>
             {
-                var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                var stream = Engine.FileService.FileOpen(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 return new StreamReader(stream);
             }, headers));
         }

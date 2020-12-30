@@ -44,6 +44,7 @@ namespace Kalk.Core
 
         public KalkEngine() : base(new KalkObjectWithAlias())
         {
+            FileService = new DefaultFileService();
             KalkSettings.Initialize();
             KalkEngineFolder = AppContext.BaseDirectory;
 
@@ -132,6 +133,8 @@ namespace Kalk.Core
         }
 
         private ConsoleText HighlightOutput { get; }
+
+        public IFileService FileService { get; set; }
 
         public bool DisplayVersion { get; set; }
 

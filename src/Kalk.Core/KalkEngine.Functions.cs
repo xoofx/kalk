@@ -27,7 +27,8 @@ namespace Kalk.Core
 
             var allModule = GetOrCreateModule<AllModule>();
             allModule.Modules.Add(GetOrCreateModule<HardwareIntrinsicsModule>());
-            allModule.Modules.Add(GetOrCreateModule<FileModule>());
+            FileModule = GetOrCreateModule<FileModule>();
+            allModule.Modules.Add(FileModule);
             allModule.Modules.Add(GetOrCreateModule<CsvModule>());
             allModule.Modules.Add(GetOrCreateModule<StringModule>());
             allModule.Modules.Add(GetOrCreateModule<CurrencyModule>());
@@ -37,6 +38,8 @@ namespace Kalk.Core
             // Register last the system file
             LoadCoreFile();
         }
+
+        public FileModule FileModule { get; private set; }
 
         private void LoadCoreFile()
         {
@@ -51,9 +54,9 @@ namespace Kalk.Core
 
             //WriteHighlightLine($"# Try loading from {userConfigFile}");
 
-            if (!File.Exists(userConfigFile)) return;
+            if (!FileService.FileExists(userConfigFile)) return;
 
-            using var stream = new FileStream(userConfigFile, FileMode.Open, FileAccess.Read);
+            using var stream = FileService.FileOpen(userConfigFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             LoadConfigFile($".kalk/{configFileName}", stream, false);
         }
 

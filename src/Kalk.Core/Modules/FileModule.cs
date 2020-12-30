@@ -95,7 +95,7 @@ namespace Kalk.Core.Modules
         public KalkBool FileExists(string path)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
-            return File.Exists(Path.Combine(Environment.CurrentDirectory, path));
+            return Engine.FileService.FileExists(Path.Combine(Environment.CurrentDirectory, path));
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Kalk.Core.Modules
         public KalkBool DirectoryExists(string path)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
-            return Directory.Exists(Path.Combine(Environment.CurrentDirectory, path));
+            return Engine.FileService.DirectoryExists(Path.Combine(Environment.CurrentDirectory, path));
         }
 
         /// <summary>
@@ -164,13 +164,13 @@ namespace Kalk.Core.Modules
             }
 
             var fullDir = string.IsNullOrEmpty(path) ? Environment.CurrentDirectory : Path.Combine(Environment.CurrentDirectory, path);
-            if (!Directory.Exists(fullDir)) throw new ArgumentException($"Directory `{path}` not found.");
+            if (!Engine.FileService.DirectoryExists(fullDir)) throw new ArgumentException($"Directory `{path}` not found.");
 
             if (string.IsNullOrEmpty(path))
             {
                 path = ".";
             }
-            return new ScriptRange(Directory.EnumerateFileSystemEntries(path, search, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly));
+            return new ScriptRange(Engine.FileService.EnumerateFileSystemEntries(path, search, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly));
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace Kalk.Core.Modules
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (FileExists(path))
             {
-                File.Delete(Path.Combine(Environment.CurrentDirectory, path));
+                Engine.FileService.FileDelete(Path.Combine(Environment.CurrentDirectory, path));
             }
         }
 
@@ -220,7 +220,7 @@ namespace Kalk.Core.Modules
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (DirectoryExists(path)) return;
-            Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, path));
+            Engine.FileService.DirectoryCreate(Path.Combine(Environment.CurrentDirectory, path));
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace Kalk.Core.Modules
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (DirectoryExists(path))
             {
-                Directory.Delete(Path.Combine(Environment.CurrentDirectory, path), recursive);
+                Engine.FileService.DirectoryDelete(Path.Combine(Environment.CurrentDirectory, path), recursive);
             }
         }
 
@@ -267,7 +267,7 @@ namespace Kalk.Core.Modules
         {
             var fullPath = AssertReadFile(path);
             var encoder = GetEncoding(encoding);
-            using var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using var stream = Engine.FileService.FileOpen(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             return new StreamReader(stream, encoder).ReadToEnd();
         }
 
@@ -290,7 +290,7 @@ namespace Kalk.Core.Modules
         public KalkNativeBuffer LoadBytes(string path)
         {
             var fullPath = AssertReadFile(path);
-            using var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using var stream = Engine.FileService.FileOpen(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             var buffer = new KalkNativeBuffer((int)stream.Length);
             stream.Read(buffer.AsSpan());
             return buffer;
@@ -316,7 +316,7 @@ namespace Kalk.Core.Modules
             var encoder = GetEncoding(encoding);
             return new ScriptRange(new LineReader(() =>
             {
-                var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                var stream = Engine.FileService.FileOpen(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 return new StreamReader(stream, encoder);
             }));
         }
@@ -341,7 +341,7 @@ namespace Kalk.Core.Modules
             if (lines == null) throw new ArgumentNullException(nameof(lines));
             var fullPath = AssertWriteFile(path);
             var encoder = GetEncoding(encoding);
-            using var stream = new FileStream(fullPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write);
+            using var stream = Engine.FileService.FileOpen(fullPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write);
             using var writer = new StreamWriter(stream, encoder);
             foreach (var lineObj in lines)
             {
@@ -371,7 +371,7 @@ namespace Kalk.Core.Modules
         {
             var fullPath = AssertWriteFile(path);
             var encoder = GetEncoding(encoding);
-            using var stream = new FileStream(fullPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write);
+            using var stream = Engine.FileService.FileOpen(fullPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write);
             using var writer = new StreamWriter(stream, encoder);
             text ??= string.Empty;
             writer.Write(text);
@@ -402,7 +402,7 @@ namespace Kalk.Core.Modules
         public object SaveBytes(IEnumerable data, string path)
         {
             var fullPath = AssertWriteFile(path);
-            using var stream = new FileStream(fullPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write);
+            using var stream = Engine.FileService.FileOpen(fullPath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write);
 
             switch (data)
             {
@@ -438,28 +438,28 @@ namespace Kalk.Core.Modules
         }
 
 
-        public static string AssertWriteFile(string path)
+        public string AssertWriteFile(string path)
         {
             return AssertFile(path, true);
         }
 
-        public static string AssertReadFile(string path)
+        public string AssertReadFile(string path)
         {
             return AssertFile(path, false);
         }
 
-        private static string AssertFile(string path, bool toWrite)
+        private string AssertFile(string path, bool toWrite)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             var fullPath = Path.Combine(Environment.CurrentDirectory, path);
             if (toWrite)
             {
                 var directory = Path.GetDirectoryName(fullPath);
-                if (!Directory.Exists(directory))
+                if (!Engine.FileService.DirectoryExists(directory))
                 {
                     try
                     {
-                        Directory.CreateDirectory(directory);
+                        Engine.FileService.DirectoryCreate(directory);
                     }
                     catch (Exception ex)
                     {
@@ -469,7 +469,7 @@ namespace Kalk.Core.Modules
             }
             else
             {
-                if (!File.Exists(fullPath)) throw new ArgumentException($"File {path} was not found.");
+                if (!Engine.FileService.FileExists(fullPath)) throw new ArgumentException($"File {path} was not found.");
             }
             return fullPath;
         }
