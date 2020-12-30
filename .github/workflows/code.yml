@@ -42,7 +42,11 @@ jobs:
     - name: Kalk.Releaser
       run: dotnet build src\Kalk.Releaser -c Release
 
-    - name: Publish
+    - name: Build Packages - No Publish
+      if: ${{ !env.KALK_PUBLISH }}
+      run: src\Kalk.Releaser\bin\Release\net5.0\krel.exe --buildonly
+
+    - name: Build Packages - Publish
       if: env.KALK_PUBLISH
       run: src\Kalk.Releaser\bin\Release\net5.0\krel.exe --nuget=${{secrets.NUGET_TOKEN}} --github=${{secrets.APP_GITHUB_TOKEN}}
 
