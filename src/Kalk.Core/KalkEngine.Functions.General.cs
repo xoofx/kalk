@@ -21,10 +21,7 @@ namespace Kalk.Core
 
         private int _evalDepth;
 
-        private delegate object EvaluateDelegate(string text, bool output = false);
-
         public KalkDisplayMode CurrentDisplay { get; private set; }
-
 
         public Action<KalkAction> OnAction { get; set; }
         
@@ -977,7 +974,7 @@ namespace Kalk.Core
             try
             {
                 EnableEngineOutput = shouldOutput;
-                EnableOutput = Repl == null || formatted;
+                EnableOutput = formatted;
                 _formatting = formatted;
                 var evaluate = Parse(text, path, false, formatted);
                 if (evaluate.HasErrors)
