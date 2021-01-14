@@ -38,6 +38,10 @@ namespace Kalk.Core.Modules
             {
                 DynamicRegister<Sse3IntrinsicsModule>();
             }
+            if (System.Runtime.Intrinsics.X86.Ssse3.IsSupported)
+            {
+                DynamicRegister<Ssse3IntrinsicsModule>();
+            }
             if (System.Runtime.Intrinsics.X86.Sse41.IsSupported)
             {
                 DynamicRegister<Sse41IntrinsicsModule>();
