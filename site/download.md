@@ -40,6 +40,12 @@ Alternatively, you can download:
 - A Windows Installer [kalk.{{kalk_version}}.win-x64.setup.exe]({{site.github_repo_url}}/releases/download/{{kalk_version}}/kalk.{{kalk_version}}.win-x64.setup.exe). This installer installs `kalk` into `%LOCALAPPDATA%\kalk` and doesn't require administrator privileges.
 - A simple zip archive [kalk.{{kalk_version}}.win-x64.zip]({{site.github_repo_url}}/releases/download/{{kalk_version}}/kalk.{{kalk_version}}.win-x64.zip)
 
+If you're a [Scoop](https://scoop.sh) user, then you can install `kalk` from the official bucket:
+
+```shell-session
+$ scoop install kalk
+```
+
 ## Linux
 
 On Ubuntu and all Debian derivatives
