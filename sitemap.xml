@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://kalk.dev/doc/api/intel/ssex64</loc>
+    <lastmod>2022-03-06</lastmod>
+  </url>
+  <url>
     <loc>https://kalk.dev/doc/api/intel/ssse3</loc>
+    <lastmod>2022-03-06</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/download</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
@@ -17,31 +25,15 @@
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/download</loc>
-    <lastmod>2022-03-06</lastmod>
-  </url>
-  <url>
     <loc>https://kalk.dev/doc/api/intel/sse2</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc</loc>
+    <loc>https://kalk.dev/doc/api/intel/bmi2</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel</loc>
-    <lastmod>2022-03-06</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/bmi2x64</loc>
-    <lastmod>2022-03-06</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/bmi1x64</loc>
-    <lastmod>2022-03-06</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/avx2</loc>
+    <loc>https://kalk.dev/doc/api/intel/bmi1</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
@@ -57,19 +49,19 @@
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/standardunits</loc>
+    <loc>https://kalk.dev/doc/api/strings</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/misc</loc>
+    <loc>https://kalk.dev/doc/api</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/memory</loc>
+    <loc>https://kalk.dev/doc/api/math</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/general</loc>
+    <loc>https://kalk.dev/</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
@@ -81,7 +73,7 @@
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/</loc>
+    <loc>https://kalk.dev/doc</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
@@ -97,15 +89,19 @@
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/math</loc>
+    <loc>https://kalk.dev/doc/api/general</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api</loc>
+    <loc>https://kalk.dev/doc/api/memory</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/strings</loc>
+    <loc>https://kalk.dev/doc/api/misc</loc>
+    <lastmod>2022-03-06</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/standardunits</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
@@ -125,11 +121,19 @@
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/bmi1</loc>
+    <loc>https://kalk.dev/doc/api/intel/bmi1x64</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/bmi2</loc>
+    <loc>https://kalk.dev/doc/api/intel/avx2</loc>
+    <lastmod>2022-03-06</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/bmi2x64</loc>
+    <lastmod>2022-03-06</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
@@ -141,15 +145,11 @@
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/sse41</loc>
-    <lastmod>2022-03-06</lastmod>
-  </url>
-  <url>
     <loc>https://kalk.dev/doc/api/intel/sse42</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/ssex64</loc>
+    <loc>https://kalk.dev/doc/api/intel/sse41</loc>
     <lastmod>2022-03-06</lastmod>
   </url>
 </urlset>
