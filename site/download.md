@@ -3,7 +3,6 @@ title: Download
 ---
 {{~ 
 kalk_version = site.data.kalk.version 
-kalk_store_version = "0.4.0"
 ~}}
 # Download
 
@@ -11,9 +10,9 @@ kalk_store_version = "0.4.0"
 
 `kalk` is supported on the following platforms:
 
-- Windows x64
-- Linux x64 (Debian derivatives - e.g Ubuntu - and distributions supporting RPM packages)
-- macOS (High Sierra and higher)
+- Windows x64, arm, arm64
+- Linux x64, arm64 (Debian derivatives - e.g Ubuntu - and distributions supporting RPM packages)
+- macOS x64, arm64 (High Sierra and higher)
 
 {{NOTE do}}
 The current stable version: **`{{ kalk_version }}`** ([Release notes]({{site.github_repo_url}}/releases/tag/{{kalk_version}}))
@@ -25,19 +24,10 @@ The current stable version: **`{{ kalk_version }}`** ([Release notes]({{site.git
 
 ## Windows
 
-The easiest and preferred way to install `kalk` is **from the Windows Store**. This version can be updated automatically. 
-
-<div style="text-align: center">
-<a href='//www.microsoft.com/store/apps/9P54RK1PCSRV?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/store/badges/images/English_get_L.png' alt='English badge' style='width: 127px; height: 52px;'/></a>
-</div>
-
-The version available on the store is `{{kalk_store_version}}` ([Release notes]({{site.github_repo_url}}/releases/tag/{{kalk_store_version}}))
-
-> There is always a slight delay of availability of the latest version of `kalk` in the Windows Store.
+The easiest way to install `kalk` on Windows is to install it as a [.NET global tool](#installation-with-net).
 
 Alternatively, you can download:
 
-- A Windows Installer [kalk.{{kalk_version}}.win-x64.setup.exe]({{site.github_repo_url}}/releases/download/{{kalk_version}}/kalk.{{kalk_version}}.win-x64.setup.exe). This installer installs `kalk` into `%LOCALAPPDATA%\kalk` and doesn't require administrator privileges.
 - A simple zip archive [kalk.{{kalk_version}}.win-x64.zip]({{site.github_repo_url}}/releases/download/{{kalk_version}}/kalk.{{kalk_version}}.win-x64.zip)
 
 If you're a [Scoop](https://scoop.sh) user, then you can install `kalk` from the official bucket:
@@ -83,14 +73,14 @@ You can also download a tar.gz archive [kalk.{{kalk_version}}.osx-x64.tar.gz]({{
 
 ## Installation with .NET
 
-If you have [.NET 5.0 SDK](https://dotnet.microsoft.com/download/dotnet/5.0) already installed, you can then easily install `kalk` as a .NET global tool:
+If you have [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0) already installed, you can then easily install `kalk` as a .NET global tool:
 
 ```shell-session
-$ dotnet tool install --global kalk --version {{kalk_version}}
+$ dotnet tool install --global kalk
 ```
 
 If you have already kalk installed, use the update command:
 
 ```shell-session
-$ dotnet tool update --global kalk --version {{kalk_version}}
+$ dotnet tool update --global kalk
 ```
