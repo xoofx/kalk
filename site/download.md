@@ -22,9 +22,23 @@ The current stable version: **`{{ kalk_version }}`** ([Release notes]({{site.git
 - `kalk` might not work well if your terminal doesn't have the same level of support than the Windows Terminal regarding ANSI escape codes.
 {{end}}
 
+## Installation with .NET
+
+If you have [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0) already installed, you can then easily install `kalk` as a .NET global tool:
+
+```shell-session
+$ dotnet tool install --global kalk
+```
+
+If you have already kalk installed, use the update command:
+
+```shell-session
+$ dotnet tool update --global kalk
+```
+
 ## Windows
 
-The easiest way to install `kalk` on Windows is to install it as a [.NET global tool](#installation-with-net).
+The easiest way to install `kalk` on Windows is to install it as a .NET global tool as described above.
 
 Alternatively, you can download:
 
@@ -70,17 +84,3 @@ $ brew upgrade kalk
 ```
 
 You can also download a tar.gz archive [kalk.{{kalk_version}}.osx-x64.tar.gz]({{site.github_repo_url}}/releases/download/{{kalk_version}}/kalk.{{kalk_version}}.osx-x64.tar.gz)
-
-## Installation with .NET
-
-If you have [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0) already installed, you can then easily install `kalk` as a .NET global tool:
-
-```shell-session
-$ dotnet tool install --global kalk
-```
-
-If you have already kalk installed, use the update command:
-
-```shell-session
-$ dotnet tool update --global kalk
-```
