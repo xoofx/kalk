@@ -12,7 +12,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@xoofx">
     <meta name="twitter:title" content="Download - kalk">
-    <meta name="twitter:description" content="Download kalk is supported on the following platforms: Windows x64 Linux x64 (Debian derivatives - e.g Ubuntu - and distributions supporting RPM packages) macOS (High Sierra and higher) The current stable version: 0.4.0 (Release notes) kalk requires a terminal that supports ANSI escape codes. On Windows, kalk works best on Windows 10 which has built-in support for terminal with ANSI escape codes and with the new Windows Terminal...">
+    <meta name="twitter:description" content="Download kalk is supported on the following platforms: Windows x64, arm, arm64 Linux x64, arm64 (Debian derivatives - e.g Ubuntu - and distributions supporting RPM packages) macOS x64, arm64 (High Sierra and higher) The current stable version: 0.5.0 (Release notes) kalk requires a terminal that supports ANSI escape codes. On Windows, kalk works best on Windows 10 which has built-in support for terminal with ANSI escape codes and with the...">
     <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
     <meta name="twitter:image:alt" content="Download - kalk">    
     <script src="https://www.googletagmanager.com/gtag/js?id=G-Z558CWX6J6" async></script>
@@ -57,12 +57,12 @@
 <img align="right" width="120px" height="120px" src="/img/kalk-logo-large.png">
 <p><code>kalk</code> is supported on the following platforms:</p>
 <ul>
-<li>Windows x64</li>
-<li>Linux x64 (Debian derivatives - e.g Ubuntu - and distributions supporting RPM packages)</li>
-<li>macOS (High Sierra and higher)</li>
+<li>Windows x64, arm, arm64</li>
+<li>Linux x64, arm64 (Debian derivatives - e.g Ubuntu - and distributions supporting RPM packages)</li>
+<li>macOS x64, arm64 (High Sierra and higher)</li>
 </ul>
 <div class='lunet-alert-note' role='alert'><div class='lunet-alert-note-heading'><span class='lunet-alert-note-icon'></span><span class='lunet-alert-note-heading-text'></span></div><div class='lunet-alert-note-content'>
-<p>The current stable version: <strong><code>0.4.0</code></strong> (<a href="https://github.com/xoofx/kalk/releases/tag/0.4.0">Release notes</a>)</p>
+<p>The current stable version: <strong><code>0.5.0</code></strong> (<a href="https://github.com/xoofx/kalk/releases/tag/0.5.0">Release notes</a>)</p>
 <ul>
 <li><code>kalk</code> requires a terminal that supports ANSI escape codes.</li>
 <li>On Windows, <code>kalk</code> works best on <strong>Windows 10</strong> which has built-in support for terminal with ANSI escape codes and with the new <a href="https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701">Windows Terminal</a>.</li>
@@ -70,30 +70,22 @@
 </ul>
 </div></div>
 <h2 id="windows">Windows</h2>
-<p>The easiest and preferred way to install <code>kalk</code> is <strong>from the Windows Store</strong>. This version can be updated automatically.</p>
-<div style="text-align: center">
-<a href='//www.microsoft.com/store/apps/9P54RK1PCSRV?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/store/badges/images/English_get_L.png' alt='English badge' style='width: 127px; height: 52px;'/></a>
-</div>
-<p>The version available on the store is <code>0.4.0</code> (<a href="https://github.com/xoofx/kalk/releases/tag/0.4.0">Release notes</a>)</p>
-<blockquote>
-<p>There is always a slight delay of availability of the latest version of <code>kalk</code> in the Windows Store.</p>
-</blockquote>
+<p>The easiest way to install <code>kalk</code> on Windows is to install it as a <a href="/download">.NET global tool</a>.</p>
 <p>Alternatively, you can download:</p>
 <ul>
-<li>A Windows Installer <a href="https://github.com/xoofx/kalk/releases/download/0.4.0/kalk.0.4.0.win-x64.setup.exe">kalk.0.4.0.win-x64.setup.exe</a>. This installer installs <code>kalk</code> into <code>%LOCALAPPDATA%\kalk</code> and doesn't require administrator privileges.</li>
-<li>A simple zip archive <a href="https://github.com/xoofx/kalk/releases/download/0.4.0/kalk.0.4.0.win-x64.zip">kalk.0.4.0.win-x64.zip</a></li>
+<li>A simple zip archive <a href="https://github.com/xoofx/kalk/releases/download/0.5.0/kalk.0.5.0.win-x64.zip">kalk.0.5.0.win-x64.zip</a></li>
 </ul>
 <p>If you're a <a href="https://scoop.sh">Scoop</a> user, then you can install <code>kalk</code> from the official bucket:</p>
 <pre><code class="language-shell-session">$ scoop install kalk
 </code></pre>
 <h2 id="linux">Linux</h2>
 <p>On Ubuntu and all Debian derivatives</p>
-<pre><code class="language-shell-session">$ wget https://github.com/xoofx/kalk/releases/download/0.4.0/kalk.0.4.0.linux-x64.deb
-$ sudo apt install ./kalk.0.4.0.linux-x64.deb
+<pre><code class="language-shell-session">$ wget https://github.com/xoofx/kalk/releases/download/0.5.0/kalk.0.5.0.linux-x64.deb
+$ sudo apt install ./kalk.0.5.0.linux-x64.deb
 </code></pre>
 <p>On CentOS, RHEL &amp; Fedora (RPM)</p>
-<pre><code class="language-shell-session">$ wget https://github.com/xoofx/kalk/releases/download/0.4.0/kalk.0.4.0.linux-x64.rpm
-$ sudo rpm –i ./kalk.0.4.0.linux-x64.rpm
+<pre><code class="language-shell-session">$ wget https://github.com/xoofx/kalk/releases/download/0.5.0/kalk.0.5.0.linux-x64.rpm
+$ sudo rpm –i ./kalk.0.5.0.linux-x64.rpm
 </code></pre>
 <h2 id="macos">macOS</h2>
 <blockquote>
@@ -106,13 +98,13 @@ $ brew install kalk
 <p>You can upgrade <code>kalk</code> with the following brew command:</p>
 <pre><code class="language-shell-session">$ brew upgrade kalk
 </code></pre>
-<p>You can also download a tar.gz archive <a href="https://github.com/xoofx/kalk/releases/download/0.4.0/kalk.0.4.0.osx-x64.tar.gz">kalk.0.4.0.osx-x64.tar.gz</a></p>
+<p>You can also download a tar.gz archive <a href="https://github.com/xoofx/kalk/releases/download/0.5.0/kalk.0.5.0.osx-x64.tar.gz">kalk.0.5.0.osx-x64.tar.gz</a></p>
 <h2 id="installation-with.net">Installation with .NET</h2>
-<p>If you have <a href="https://dotnet.microsoft.com/download/dotnet/5.0">.NET 5.0 SDK</a> already installed, you can then easily install <code>kalk</code> as a .NET global tool:</p>
-<pre><code class="language-shell-session">$ dotnet tool install --global kalk --version 0.4.0
+<p>If you have <a href="https://dotnet.microsoft.com/download/dotnet/6.0">.NET 6.0 SDK</a> already installed, you can then easily install <code>kalk</code> as a .NET global tool:</p>
+<pre><code class="language-shell-session">$ dotnet tool install --global kalk
 </code></pre>
 <p>If you have already kalk installed, use the update command:</p>
-<pre><code class="language-shell-session">$ dotnet tool update --global kalk --version 0.4.0
+<pre><code class="language-shell-session">$ dotnet tool update --global kalk
 </code></pre>
 
         </section>
