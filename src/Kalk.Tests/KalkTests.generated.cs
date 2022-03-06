@@ -1790,6 +1790,7 @@ out = [1, 2]", Category = "Misc Functions")]
         /// Test for <see cref="M:Kalk.Core.MiscModule.Hexadecimal(System.Object,System.Boolean,System.String)"/> or `hex`.
         /// </summary>
         [TestCase(@"hex 10
+hex ""12c""
 hex ""0a""
 hex ""0xff030201""
 hex out
@@ -1800,6 +1801,8 @@ hex(""1a,2b;3c 4d-5e_6f"")
 hex out
 hex float4(1,2,3,4)", @"# hex(10)
 out = ""0A""
+# hex(""12c"")
+out = 300
 # hex(""0a"")
 out = 10
 # hex(""0xff030201"")
@@ -1831,18 +1834,21 @@ out = ""BD 61 BC 00""", Category = "Misc Functions")]
         /// <summary>
         /// Test for <see cref="M:Kalk.Core.MiscModule.Binary(System.Object,System.Boolean,System.String)"/> or `bin`.
         /// </summary>
-        [TestCase(@"bin 10
+        [TestCase(@"bin 13
 bin out
+bin ""111111111011""
 bin 0xff030201
 bin out
 bin ""11111111000000110000001000000001""
 bin(byte(5))
 bin(long(6))
 bin(out)
-kind(out)", @"# bin(10)
-out = ""00001010 00000000 00000000 00000000""
+kind(out)", @"# bin(13)
+out = ""00001101 00000000 00000000 00000000""
 # bin(out)
-out = 10
+out = 13
+# bin(""111111111011"")
+out = 4091
 # bin(-16580095)
 out = ""00000001 00000010 00000011 11111111""
 # bin(out)

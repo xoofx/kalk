@@ -6539,6 +6539,9 @@ namespace Kalk.Core
                 descriptor.Example = @"    >>> hex 10
     # hex(10)
     out = ""0A""
+    >>> hex ""12c""
+    # hex(""12c"")
+    out = 300
     >>> hex ""0a""
     # hex(""0a"")
     out = 10
@@ -6587,12 +6590,15 @@ namespace Kalk.Core
     When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
     it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
     See the following examples.";
-                descriptor.Example = @"    >>> bin 10
-    # bin(10)
-    out = ""00001010 00000000 00000000 00000000""
+                descriptor.Example = @"    >>> bin 13
+    # bin(13)
+    out = ""00001101 00000000 00000000 00000000""
     >>> bin out
     # bin(out)
-    out = 10
+    out = 13
+    >>> bin ""111111111011""
+    # bin(""111111111011"")
+    out = 4091
     >>> bin 0xff030201
     # bin(-16580095)
     out = ""00000001 00000010 00000011 11111111""

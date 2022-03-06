@@ -358,6 +358,9 @@ namespace Kalk.Core
         /// >>> hex 10
         /// # hex(10)
         /// out = "0A"
+        /// >>> hex "12c"
+        /// # hex("12c")
+        /// out = 300
         /// >>> hex "0a"
         /// # hex("0a")
         /// out = 10
@@ -423,12 +426,15 @@ namespace Kalk.Core
         /// </remarks>
         /// <example>
         /// ```kalk
-        /// >>> bin 10
-        /// # bin(10)
-        /// out = "00001010 00000000 00000000 00000000"
+        /// >>> bin 13
+        /// # bin(13)
+        /// out = "00001101 00000000 00000000 00000000"
         /// >>> bin out
         /// # bin(out)
-        /// out = 10
+        /// out = 13
+        /// >>> bin "111111111011"
+        /// # bin("111111111011")
+        /// out = 4091
         /// >>> bin 0xff030201
         /// # bin(-16580095)
         /// out = "00000001 00000010 00000011 11111111"
@@ -1001,17 +1007,31 @@ namespace Kalk.Core
 
                     void FlushBytes()
                     {
-                        if (count > 0)
+                        bool isOdd = count > 0;
+                        if (isOdd)
                         {
-                            array.Add((byte)hexa);
+                            temp.Add((byte)(hexa << 4));
                         }
                         count = 0;
 
                         if (temp.Count > 0)
                         {
-                            for (int j = temp.Count - 1; j >= 0; j--)
+                            if (isOdd)
                             {
-                                array.Add(temp[j]);
+                                for (int j = temp.Count - 1; j >= 0; j--)
+                                {
+                                    var hb  = j - 1 >= 0 ? (temp[j - 1] & 0xF) << 4 : 0;
+                                    var lb = temp[j] >> 4;
+                                    var fullByte = (byte)(hb | lb);
+                                    array.Add(fullByte);
+                                }
+                            }
+                            else
+                            {
+                                for (int j = temp.Count - 1; j >= 0; j--)
+                                {
+                                    array.Add(temp[j]);
+                                }
                             }
 
                             temp.Clear();
@@ -1197,25 +1217,41 @@ namespace Kalk.Core
 
                     void FlushBytes()
                     {
+                        bool isOdd = count > 0;
+                        var shift = 8 - count;
                         if (count > 0)
                         {
-                            array.Add((byte)bin);
+                            temp.Add((byte)(bin << shift));
                         }
                         bin = 0;
-                        count = 0;
 
                         if (temp.Count > 0)
                         {
-                            for (int j = temp.Count - 1; j >= 0; j--)
+                            if (isOdd)
                             {
-                                array.Add(temp[j]);
+                                for (int j = temp.Count - 1; j >= 0; j--)
+                                {
+                                    var hb = j - 1 >= 0 ? (byte)((temp[j - 1]) << shift) : (byte)0;
+                                    var lb = temp[j] >> count;
+                                    var fullByte = (byte)(hb | lb);
+                                    array.Add(fullByte);
+                                }
+                            }
+                            else
+                            {
+                                for (int j = temp.Count - 1; j >= 0; j--)
+                                {
+                                    array.Add(temp[j]);
+                                }
                             }
 
                             temp.Clear();
                         }
+
+                        count = 0;
                     }
 
-                    for (int i = 0; i < str.Length; i++)
+                        for (int i = 0; i < str.Length; i++)
                     {
                         var c = str[i];
                         if (char.IsWhiteSpace(c) || c == ',' || c == ':' || c == ';' || c == '_' || c == '-')
