@@ -1,12 +1,14 @@
 # Changelog
 
+> This changelog is no longer used for newer version. Please visits https://github.com/xoofx/kalk/releases
+
 ## 0.4.0
 - Fix operator precedence issue with implicit function calls.
 - Fix issue with file access on Windows Store App.
 
 ## 0.3.1
 
-- Fix issue with substraction without spaces (e.g 1-2 was converted to 1 * (-2)) (#19)
+- Fix issue with subtraction without spaces (e.g 1-2 was converted to 1 * (-2)) (#19)
 
 ## 0.3.0
 

@@ -3,15 +3,12 @@
     <Description>kalk is a command line calculator app for developers.</Description>
     <Copyright>Alexandre Mutel</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <!--<VersionSuffix>alpha</VersionSuffix>
-    <BuildNumber>9</BuildNumber>
-    <VersionSuffix Condition="'$(VersionSuffix)' != '' AND '$(BuildNumber)' != ''">$(VersionSuffix).$(BuildNumber)</VersionSuffix>-->
     <Authors>Alexandre Mutel</Authors>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>kalk</ToolCommandName>
     <PackageId>kalk</PackageId>
     <PackageTags>calculator;tool</PackageTags>
-    <PackageReleaseNotes>https://github.com/xoofx/kalk/blob/master/changelog.md</PackageReleaseNotes>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageIcon>kalk.png</PackageIcon>
     <PackageProjectUrl>https://github.com/xoofx/kalk</PackageProjectUrl>
     <PackageLicenseExpression>BSD-2-Clause</PackageLicenseExpression>
@@ -19,5 +16,6 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="../../img/kalk.png" Pack="true" PackagePath="" />
+    <None Include="../../readme.md" Pack="true" PackagePath="/"/>
   </ItemGroup>
 </Project>
