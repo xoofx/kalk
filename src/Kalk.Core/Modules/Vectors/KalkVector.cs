@@ -1106,7 +1106,7 @@ namespace Kalk.Core
                     result = leftVector.Multiply(rightVector);
                     return true;
 
-                case ScriptBinaryOperator.Substract:
+                case ScriptBinaryOperator.Subtract:
                     result = leftVector.Subtract(rightVector);
                     return true;
 

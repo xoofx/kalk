@@ -49,7 +49,7 @@ namespace Kalk.Core
                     case ScriptBinaryOperator.Add:
                         result = (KalkComplex) (leftComplex._value + rightComplex._value);
                         return true;
-                    case ScriptBinaryOperator.Substract:
+                    case ScriptBinaryOperator.Subtract:
                         result = (KalkComplex)(leftComplex._value - rightComplex._value);
                         return true;
                     case ScriptBinaryOperator.Divide:
@@ -74,7 +74,7 @@ namespace Kalk.Core
                     case ScriptBinaryOperator.Add:
                         result = (KalkComplex)(leftAsDouble + rightComplex2._value);
                         return true;
-                    case ScriptBinaryOperator.Substract:
+                    case ScriptBinaryOperator.Subtract:
                         result = (KalkComplex)(leftAsDouble - rightComplex2._value);
                         return true;
                     case ScriptBinaryOperator.Divide:
@@ -96,7 +96,7 @@ namespace Kalk.Core
                     case ScriptBinaryOperator.Add:
                         result = (KalkComplex)(leftComplex2._value + rightAsDouble);
                         return true;
-                    case ScriptBinaryOperator.Substract:
+                    case ScriptBinaryOperator.Subtract:
                         result = (KalkComplex)(leftComplex2._value - rightAsDouble);
                         return true;
                     case ScriptBinaryOperator.Divide:

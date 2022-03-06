@@ -970,7 +970,7 @@ namespace Kalk.Core
                     return true;
 
                 case ScriptBinaryOperator.Add:
-                case ScriptBinaryOperator.Substract:
+                case ScriptBinaryOperator.Subtract:
                 case ScriptBinaryOperator.Multiply:
                 case ScriptBinaryOperator.Divide:
                 case ScriptBinaryOperator.DivideRound:

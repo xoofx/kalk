@@ -423,7 +423,7 @@ namespace Kalk.Core
         /// ```
         /// </example>
         [KalkExport("reset", CategoryGeneral)]
-        public void Reset()
+        public new void Reset()
         {
             Variables.Clear();
         }

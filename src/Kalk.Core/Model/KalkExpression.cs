@@ -144,7 +144,7 @@ namespace Kalk.Core
                 }
 
                 case ScriptBinaryOperator.Add:
-                case ScriptBinaryOperator.Substract:
+                case ScriptBinaryOperator.Subtract:
 
                     if (leftExpr != null && rightExpr != null)
                     {

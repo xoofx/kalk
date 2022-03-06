@@ -31,7 +31,6 @@ namespace Kalk.Core
         private Action _showInputAction = null;
         private CancellationTokenSource _cancellationTokenSource;
         private readonly bool _isInitializing;
-        private bool _nextLetterIsSymbolShortcut;
         private int _startIndexForCompletion;
         private readonly List<string> _completionMatchingList;
         private int _currentIndexInCompletionMatchingList;
