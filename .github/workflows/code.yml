@@ -14,15 +14,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Should Publish
-      if: github.event_name == 'push'
-      run: |
-          if ( "${{github.ref}}" -match "^refs/tags/[0-9]+\.[0-9]+\.[0-9]+" ) {
-              echo "KALK_PUBLISH=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          } else {
-              echo "publish is only enabled by tagging with a release tag"
-          }
-
     - name: Checkout
       uses: actions/checkout@v2
       with:
@@ -34,23 +25,8 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    - name: Build & test (Release)
-      run: dotnet test src -c Release
-
-    - name: Kalk.Releaser
-      run: dotnet build src\Kalk.Releaser -c Release
-
-    - name: Build Packages - No Publish
-      if: ${{ !env.KALK_PUBLISH }}
-      run: src\Kalk.Releaser\bin\Release\net6.0\krel.exe --buildonly
-
-    - name: Build Packages - Publish
-      if: env.KALK_PUBLISH
-      run: src\Kalk.Releaser\bin\Release\net6.0\krel.exe --nuget=${{secrets.NUGET_TOKEN}} --github=${{secrets.APP_GITHUB_TOKEN}}
-
-    - name: Windows Store appx artifact
-      if: env.KALK_PUBLISH
-      uses: actions/upload-artifact@v2
-      with:
-        name: appx-artefact
-        path: build/*.appx
+    - name: Build, Test, Pack, Publish
+      shell: bash
+      run: |
+        dotnet tool install -g dotnet-releaser
+        dotnet-releaser run --nuget-token "${{secrets.NUGET_TOKEN}}" --github-token "${{secrets.GITHUB_TOKEN}}" --github-token-extra "${{secrets.TOKEN_GITHUB}}" src/dotnet-releaser.toml
