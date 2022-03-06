@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <ApplicationIcon>..\..\img\kalk.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>kalk</AssemblyName>
@@ -22,12 +22,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Packaging.Targets" Version="0.1.189">
+    <PackageReference Include="Packaging.Targets" Version="0.1.220">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>compile;build</IncludeAssets>
+      <IncludeAssets>compile; build</IncludeAssets>
       <ExcludeAssets>runtime;contentFiles;native</ExcludeAssets>
     </PackageReference>
-    <PackageReference Include="TextCopy" Version="4.2.0" />
+    <PackageReference Include="TextCopy" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>

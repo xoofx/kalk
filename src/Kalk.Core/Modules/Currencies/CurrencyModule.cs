@@ -13,7 +13,7 @@ namespace Kalk.Core.Modules
     public partial class CurrencyModule : KalkModuleWithFunctions
     {
         private const string ModuleName = "Currencies";
-        private const string ExchangeRatesApi = "https://api.exchangeratesapi.io/latest";
+        // private const string ExchangeRatesApi = "https://api.exchangeratesapi.io/latest";
         private const string ConfigBaseCurrencyProp = "base_currency";
         private const string DefaultBaseCurrency = "EUR";
         private const string LatestKnownRates =
@@ -270,31 +270,31 @@ namespace Kalk.Core.Modules
         private static ScriptObject DownloadExchangeRates(KalkEngine engine)
         {
             ScriptObject rates;
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    engine.WriteHighlightLine($"# Downloading rates from {ExchangeRatesApi}");
+            //try
+            //{
+            //    using (var client = new HttpClient())
+            //    {
+            //        engine.WriteHighlightLine($"# Downloading rates from {ExchangeRatesApi}");
 
-                    var task = Task.Run(async () => await client.GetStringAsync(ExchangeRatesApi));
-                    var result = task.Result;
-                    rates = ParseRates(result);
-                    var values = (ScriptObject) rates["rates"];
-                    if (values == null) throw new InvalidOperationException("Unable to find `rates` from returned JSON.");
-                    engine.WriteHighlightLine($"# {values.Count} rates successfully updated.");
+            //        var task = Task.Run(async () => await client.GetStringAsync(ExchangeRatesApi));
+            //        var result = task.Result;
+            //        rates = ParseRates(result);
+            //        var values = (ScriptObject) rates["rates"];
+            //        if (values == null) throw new InvalidOperationException("Unable to find `rates` from returned JSON.");
+            //        engine.WriteHighlightLine($"# {values.Count} rates successfully updated.");
 
-                    // If the engine is in testing, return only the latest known rates
-                    if (!engine.IsTesting)
-                    {
-                        return rates;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                engine.WriteErrorLine($"Unable to download rates. Reason: {ex.Message}");
-                // ignore
-            }
+            //        // If the engine is in testing, return only the latest known rates
+            //        if (!engine.IsTesting)
+            //        {
+            //            return rates;
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    engine.WriteErrorLine($"Unable to download rates. Reason: {ex.Message}");
+            //    // ignore
+            //}
 
             rates = ParseRates(LatestKnownRates);
             return rates;

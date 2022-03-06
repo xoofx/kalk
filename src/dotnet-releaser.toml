@@ -1,0 +1,6 @@
+# configuration file for dotnet-releaser
+[msbuild]
+project = "kalk.sln"
+[github]
+user = "xoofx"
+repo = "kalk"

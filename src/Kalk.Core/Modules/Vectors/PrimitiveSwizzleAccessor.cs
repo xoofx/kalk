@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
@@ -70,6 +71,20 @@ namespace Kalk.Core
         {
             throw new ScriptRuntimeException(span, "Cannot set a member on a primitive");
         }
+
+        public bool TryGetItem(TemplateContext context, SourceSpan span, object target, object index, out object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TrySetItem(TemplateContext context, SourceSpan span, object target, object index, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasIndexer => false;
+
+        public Type IndexType => typeof(int);
 
         private static bool IsSwizzle(string text)
         {

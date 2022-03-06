@@ -185,7 +185,7 @@ An object with the result of the request. This object contains the following mem
 ### Example
 
 ```kalk
->>> wget "https://api.exchangeratesapi.io"
-# wget("https://api.exchangeratesapi.io")
-out = {version: "1.1", code: 200, reason: "OK", headers: {"Content-Type": "application/json", "Content-Length": 41}, content: {details: "https://exchangeratesapi.io"}}
+>>> wget "https://markdig.azurewebsites.net/"
+# wget("https://markdig.azurewebsites.net/")
+out = {version: "1.1", code: 200, reason: "OK", headers: {"Content-Type": "text/plain; charset=utf-8", "Content-Length": 0}, content: ""}
 ```

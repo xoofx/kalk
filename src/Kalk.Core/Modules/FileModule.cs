@@ -164,7 +164,7 @@ namespace Kalk.Core.Modules
             }
 
             var fullDir = string.IsNullOrEmpty(path) ? Environment.CurrentDirectory : Path.Combine(Environment.CurrentDirectory, path);
-            if (!Engine.FileService.DirectoryExists(fullDir)) throw new ArgumentException($"Directory `{path}` not found.");
+            if (!Engine.FileService.DirectoryExists(fullDir)) throw new ArgumentException($"Directory `{fullDir}` not found.");
 
             if (string.IsNullOrEmpty(path))
             {

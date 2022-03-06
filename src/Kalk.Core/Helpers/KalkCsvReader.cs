@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using CsvHelper;
 using Scriban.Runtime;
@@ -46,7 +47,7 @@ namespace Kalk.Core.Helpers
                 {
                     if (_csvReader.ReadHeader())
                     {
-                        _headers = _csvReader.Context.HeaderRecord;
+                        _headers = _csvReader.Context.Reader.HeaderRecord;
                     }
                 }
             }
@@ -58,7 +59,7 @@ namespace Kalk.Core.Helpers
                     var array = new ScriptArray();
                     Current = array;
 
-                    var row = _csvReader.Context.Record;
+                    var row = _csvReader.Context.Reader.Parser.Record;
                     if (row != null)
                     {
                         int columnCount = row?.Length ?? 0;

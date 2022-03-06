@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <KalkGitVersion>true</KalkGitVersion>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,11 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="19.0.0" />
-    <PackageReference Include="MathNet.Numerics" Version="4.13.0" />
+    <PackageReference Include="CsvHelper" Version="27.2.1" />
+    <PackageReference Include="MathNet.Numerics" Version="4.15.0" />
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
-    <PackageReference Include="Scriban" Version="3.3.2" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+    <PackageReference Include="Scriban" Version="5.4.0" />
   </ItemGroup>
 
   <ItemGroup>
