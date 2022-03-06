@@ -28,7 +28,7 @@
         </button>
         <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
 <ol id='nav-id-home-0' class='navbar-nav nav-level0  '>
-  <li class='nav-item  active'>
+  <li class='nav-item '>
     <span class='nav-item-row'><a href='/' class='nav-link  '>Home</a></span>  </li>
   <li class='nav-item  active'>
     <span class='nav-item-row'><a href='/doc/' class='nav-link  '>Documentation</a></span>  </li>
@@ -206,12 +206,15 @@ When the binary input string can be converted to an integral less than or equal 
 it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
 See the following examples.</p>
 <h3 id="example-1">Example</h3>
-<pre><code class="language-kalk">&gt;&gt;&gt; bin 10
-# bin(10)
-out = &quot;00001010 00000000 00000000 00000000&quot;
+<pre><code class="language-kalk">&gt;&gt;&gt; bin 13
+# bin(13)
+out = &quot;00001101 00000000 00000000 00000000&quot;
 &gt;&gt;&gt; bin out
 # bin(out)
-out = 10
+out = 13
+&gt;&gt;&gt; bin &quot;111111111011&quot;
+# bin(&quot;111111111011&quot;)
+out = 4091
 &gt;&gt;&gt; bin 0xff030201
 # bin(-16580095)
 out = &quot;00000001 00000010 00000011 11111111&quot;
@@ -631,6 +634,9 @@ See the following examples.</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; hex 10
 # hex(10)
 out = &quot;0A&quot;
+&gt;&gt;&gt; hex &quot;12c&quot;
+# hex(&quot;12c&quot;)
+out = 300
 &gt;&gt;&gt; hex &quot;0a&quot;
 # hex(&quot;0a&quot;)
 out = 10
