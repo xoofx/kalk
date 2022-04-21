@@ -40,7 +40,7 @@ layout: _default
 ~}}
       <div class="{{ pathclass }}">
         <section>
-            {{ content }}
+{{ content }}
         </section>
         <footer>
           <hr>
