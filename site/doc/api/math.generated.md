@@ -512,7 +512,7 @@ The fibonacci number.
 ```kalk
 >>> fib 50
 # fib(50)
-out = 12586269025
+out = 12_586_269_025
 ```
 
 ## floor

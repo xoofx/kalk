@@ -513,7 +513,7 @@ out = 1.5
     #
     # sign    exponent              |-------------------- fraction --------------------|
     =   1 * 2 ^ (1023 - 1023) * 0b1.1000000000000000000000000000000000000000000000000000
-Invalid display name `invalid`. Expecting `std`, `dev` or `eng`. (Parameter 'name')", Category = "General")]
+Invalid display name `invalid`. Expecting `std`, `dev` or `raw`. (Parameter 'name')", Category = "General")]
         public static void Test_display(string input, string output) => AssertScript(input, output);
 
         /// <summary>
@@ -877,7 +877,7 @@ out = 2.718281828459045", Category = "Math Functions")]
         /// Test for <see cref="M:Kalk.Core.MathModule.Fib(Kalk.Core.KalkIntValue)"/> or `fib`.
         /// </summary>
         [TestCase(@"fib 50", @"# fib(50)
-out = 12586269025", Category = "Math Functions")]
+out = 12_586_269_025", Category = "Math Functions")]
         public static void Test_fib(string input, string output) => AssertScript(input, output);
 
         /// <summary>
@@ -1597,11 +1597,11 @@ bitcast(long, 2.5)
 bitcast(double, out)
 asbytes(float4(1..4))
 bitcast(float4, out)", @"# bitcast(int, 1.5f)
-out = 1069547520
+out = 1_069_547_520
 # bitcast(float, out)
 out = 1.5
 # bitcast(long, 2.5)
-out = 4612811918334230528
+out = 4_612_811_918_334_230_528
 # bitcast(double, out)
 out = 2.5
 # asbytes(float4(1..4))
@@ -1709,7 +1709,7 @@ reversebits byte(128)
 reversebits(out)
 reversebits(int4(1,2,3,4))
 reversebits out", @"# reversebits(128)
-out = 16777216
+out = 16_777_216
 # reversebits(out)
 out = 128
 # reversebits(byte(128))
@@ -1717,7 +1717,7 @@ out = 1
 # reversebits(out)
 out = 128
 # reversebits(int4(1, 2, 3, 4))
-out = int4(-2147483648, 1073741824, -1073741824, 536870912)
+out = int4(-2_147_483_648, 1_073_741_824, -1_073_741_824, 536_870_912)
 # reversebits(out)
 out = int4(1, 2, 3, 4)", Category = "Misc Memory Functions")]
         /// <summary>
@@ -1727,7 +1727,7 @@ out = int4(1, 2, 3, 4)", Category = "Misc Memory Functions")]
 reversebits out
 reversebits(bytebuffer([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]))
 reversebits out", @"# reversebits(long(1))
-out = -9223372036854775808
+out = -9_223_372_036_854_775_808
 # reversebits(out)
 out = 1
 # reversebits(bytebuffer([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]))
@@ -1744,7 +1744,7 @@ aslong(1.5)
 asdouble(out)", @"# asdouble(1.5)
 out = 1.5
 # aslong(1.5)
-out = 4609434218613702656
+out = 4_609_434_218_613_702_656
 # asdouble(out)
 out = 1.5", Category = "Misc Memory Functions")]
         public static void Test_asdouble(string input, string output) => AssertScript(input, output);
@@ -1757,7 +1757,7 @@ asint(1.5f)
 asfloat(out)", @"# asfloat(1.5f)
 out = 1.5
 # asint(1.5f)
-out = 1069547520
+out = 1_069_547_520
 # asfloat(out)
 out = 1.5", Category = "Misc Memory Functions")]
         public static void Test_asfloat(string input, string output) => AssertScript(input, output);
@@ -1767,7 +1767,7 @@ out = 1.5", Category = "Misc Memory Functions")]
         /// </summary>
         [TestCase(@"aslong(1.5)
 asdouble(out)", @"# aslong(1.5)
-out = 4609434218613702656
+out = 4_609_434_218_613_702_656
 # asdouble(out)
 out = 1.5", Category = "Misc Memory Functions")]
         public static void Test_aslong(string input, string output) => AssertScript(input, output);
@@ -1777,7 +1777,7 @@ out = 1.5", Category = "Misc Memory Functions")]
         /// </summary>
         [TestCase(@"asulong(-1.5)
 asdouble(out)", @"# asulong(-1.5)
-out = 13832806255468478464
+out = 13_832_806_255_468_478_464
 # asdouble(out)
 out = -1.5", Category = "Misc Memory Functions")]
         public static void Test_asulong(string input, string output) => AssertScript(input, output);
@@ -1787,7 +1787,7 @@ out = -1.5", Category = "Misc Memory Functions")]
         /// </summary>
         [TestCase(@"asint(1.5f)
 asfloat(out)", @"# asint(1.5f)
-out = 1069547520
+out = 1_069_547_520
 # asfloat(out)
 out = 1.5", Category = "Misc Memory Functions")]
         public static void Test_asint(string input, string output) => AssertScript(input, output);
@@ -1797,7 +1797,7 @@ out = 1.5", Category = "Misc Memory Functions")]
         /// </summary>
         [TestCase(@"asuint(-1.5f)
 asfloat(out)", @"# asuint(-1.5f)
-out = 3217031168
+out = 3_217_031_168
 # asfloat(out)
 out = -1.5", Category = "Misc Memory Functions")]
         public static void Test_asuint(string input, string output) => AssertScript(input, output);
@@ -1834,7 +1834,7 @@ date.format = ""%F""
 date", @"# today = date
 today = 11/22/20 10:13:00
 # today.year
-out = 2020
+out = 2_020
 # today.month
 out = 11
 # ""30 Nov 2020"" |> date
@@ -1923,7 +1923,7 @@ out = 300
 # hex(""0a"")
 out = 10
 # hex(""0xff030201"")
-out = 4278387201
+out = 4_278_387_201
 # hex(out)
 out = ""01 02 03 FF""
 # hex(""01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F"")
@@ -1933,7 +1933,7 @@ out = ""0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x
 # hex(out)
 out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
 # hex(""1a,2b;3c 4d-5e_6f"")
-out = 103832130169626
+out = 103_832_130_169_626
 # hex(out)
 out = ""1A 2B 3C 4D 6F 5E 00 00""
 # hex(float4(1, 2, 3, 4))
@@ -1965,13 +1965,13 @@ out = ""00001101 00000000 00000000 00000000""
 # bin(out)
 out = 13
 # bin(""111111111011"")
-out = 4091
+out = 4_091
 # bin(-16580095)
 out = ""00000001 00000010 00000011 11111111""
 # bin(out)
-out = 4278387201
+out = 4_278_387_201
 # bin(""11111111000000110000001000000001"")
-out = 4278387201
+out = 4_278_387_201
 # bin(byte(5))
 out = ""00000101""
 # bin(long(6))
@@ -2389,9 +2389,9 @@ out = 0
 # short(0)
 out = 0
 # short(32767)
-out = 32767
+out = 32_767
 # short(-32768)
-out = -32768
+out = -32_768
 Unable to convert type `int` to `short`", Category = "Type Constructors")]
         /// <summary>
         /// Test for <see cref="M:Kalk.Core.Modules.TypesModule.CreateShort(System.Object)"/> or `short`.
@@ -2409,7 +2409,7 @@ out = 0
 # ushort(0)
 out = 0
 # ushort(65535)
-out = 65535", Category = "Type Constructors")]
+out = 65_535", Category = "Type Constructors")]
         /// <summary>
         /// Test for <see cref="M:Kalk.Core.Modules.TypesModule.CreateUShort(System.Object)"/> or `ushort`.
         /// </summary>
@@ -2426,7 +2426,7 @@ out = 0
 # uint(0)
 out = 0
 # uint(1 << 32 - 1)
-out = 4294967295", Category = "Type Constructors")]
+out = 4_294_967_295", Category = "Type Constructors")]
         /// <summary>
         /// Test for <see cref="M:Kalk.Core.Modules.TypesModule.CreateUInt(System.Object)"/> or `uint`.
         /// </summary>
@@ -2444,9 +2444,9 @@ out = 0
 # int(0)
 out = 0
 # int(1 << 31 - 1)
-out = 2147483647
+out = 2_147_483_647
 # int(-(1 << 31))
-out = -2147483648", Category = "Type Constructors")]
+out = -2_147_483_648", Category = "Type Constructors")]
         /// <summary>
         /// Test for <see cref="M:Kalk.Core.Modules.TypesModule.CreateInt(System.Object)"/> or `int`.
         /// </summary>
@@ -2463,7 +2463,7 @@ out = 0
 # ulong(0)
 out = 0
 # ulong(1 << 64 - 1)
-out = 18446744073709551615", Category = "Type Constructors")]
+out = 18_446_744_073_709_551_615", Category = "Type Constructors")]
         /// <summary>
         /// Test for <see cref="M:Kalk.Core.Modules.TypesModule.CreateULong(System.Object)"/> or `ulong`.
         /// </summary>
@@ -2481,9 +2481,9 @@ out = 0
 # long(0)
 out = 0
 # long(1 << 63 - 1)
-out = 9223372036854775807
+out = 9_223_372_036_854_775_807
 # long(-(1 << 63))
-out = -9223372036854775808", Category = "Type Constructors")]
+out = -9_223_372_036_854_775_808", Category = "Type Constructors")]
         /// <summary>
         /// Test for <see cref="M:Kalk.Core.Modules.TypesModule.CreateLong(System.Object)"/> or `long`.
         /// </summary>
@@ -3482,13 +3482,6 @@ out = {a: 1, b: 2, c: [4, 5], d: ""Hello World""}", Category = "Web & Html Funct
         [TestCase(@"""<p>This is a paragraph</p>"" |> html_strip", @"# ""<p>This is a paragraph</p>"" |> html_strip
 out = ""This is a paragraph""", Category = "Web & Html Functions")]
         public static void Test_html_strip(string input, string output) => AssertScript(input, output, "Web");
-
-        /// <summary>
-        /// Test for <see cref="M:Kalk.Core.Modules.WebModule.WebGet(System.String)"/> or `wget`.
-        /// </summary>
-        [TestCase(@"wget ""https://markdig.azurewebsites.net/""", @"# wget(""https://markdig.azurewebsites.net/"")
-out = {version: ""1.1"", code: 200, reason: ""OK"", headers: {""Content-Type"": ""text/plain; charset=utf-8"", ""Content-Length"": 0}, content: """"}", Category = "Web & Html Functions")]
-        public static void Test_wget(string input, string output) => AssertScript(input, output, "Web");
 
     }
 }

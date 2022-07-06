@@ -52,7 +52,7 @@ The input recast as a double.
 out = 1.5
 >>> aslong(1.5)
 # aslong(1.5)
-out = 4609434218613702656
+out = 4_609_434_218_613_702_656
 >>> asdouble(out)
 # asdouble(out)
 out = 1.5
@@ -78,7 +78,7 @@ The input recast as a float.
 out = 1.5
 >>> asint(1.5f)
 # asint(1.5f)
-out = 1069547520
+out = 1_069_547_520
 >>> asfloat(out)
 # asfloat(out)
 out = 1.5
@@ -101,7 +101,7 @@ The input recast as a 32-bit int.
 ```kalk
 >>> asint(1.5f)
 # asint(1.5f)
-out = 1069547520
+out = 1_069_547_520
 >>> asfloat(out)
 # asfloat(out)
 out = 1.5
@@ -124,7 +124,7 @@ The input recast as a 64-bit long.
 ```kalk
 >>> aslong(1.5)
 # aslong(1.5)
-out = 4609434218613702656
+out = 4_609_434_218_613_702_656
 >>> asdouble(out)
 # asdouble(out)
 out = 1.5
@@ -147,7 +147,7 @@ The input recast as a 32-bit uint.
 ```kalk
 >>> asuint(-1.5f)
 # asuint(-1.5f)
-out = 3217031168
+out = 3_217_031_168
 >>> asfloat(out)
 # asfloat(out)
 out = -1.5
@@ -170,7 +170,7 @@ The input recast as a 64-bit ulong.
 ```kalk
 >>> asulong(-1.5)
 # asulong(-1.5)
-out = 13832806255468478464
+out = 13_832_806_255_468_478_464
 >>> asdouble(out)
 # asdouble(out)
 out = -1.5
@@ -198,13 +198,13 @@ The supported types are `byte`, `sbyte`, `short`, `ushort`, `int`, `uint`, `long
 ```kalk
 >>> bitcast(int, 1.5f)
 # bitcast(int, 1.5f)
-out = 1069547520
+out = 1_069_547_520
 >>> bitcast(float, out)
 # bitcast(float, out)
 out = 1.5
 >>> bitcast(long, 2.5)
 # bitcast(long, 2.5)
-out = 4612811918334230528
+out = 4_612_811_918_334_230_528
 >>> bitcast(double, out)
 # bitcast(double, out)
 out = 2.5
@@ -385,7 +385,7 @@ The input value, with the bit order reversed
 ```kalk
 >>> reversebits 128
 # reversebits(128)
-out = 16777216
+out = 16_777_216
 >>> reversebits out
 # reversebits(out)
 out = 128
@@ -397,7 +397,7 @@ out = 1
 out = 128
 >>> reversebits(int4(1,2,3,4))
 # reversebits(int4(1, 2, 3, 4))
-out = int4(-2147483648, 1073741824, -1073741824, 536870912)
+out = int4(-2_147_483_648, 1_073_741_824, -1_073_741_824, 536_870_912)
 >>> reversebits out
 # reversebits(out)
 out = int4(1, 2, 3, 4)

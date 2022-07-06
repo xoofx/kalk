@@ -55,13 +55,13 @@ namespace Kalk.Core.Modules
         /// ```kalk
         /// >>> bitcast(int, 1.5f)
         /// # bitcast(int, 1.5f)
-        /// out = 1069547520
+        /// out = 1_069_547_520
         /// >>> bitcast(float, out)
         /// # bitcast(float, out)
         /// out = 1.5
         /// >>> bitcast(long, 2.5)
         /// # bitcast(long, 2.5)
-        /// out = 4612811918334230528
+        /// out = 4_612_811_918_334_230_528
         /// >>> bitcast(double, out)
         /// # bitcast(double, out)
         /// out = 2.5
@@ -564,7 +564,7 @@ namespace Kalk.Core.Modules
         /// ```kalk
         /// >>> reversebits 128
         /// # reversebits(128)
-        /// out = 16777216
+        /// out = 16_777_216
         /// >>> reversebits out
         /// # reversebits(out)
         /// out = 128
@@ -576,7 +576,7 @@ namespace Kalk.Core.Modules
         /// out = 128
         /// >>> reversebits(int4(1,2,3,4))
         /// # reversebits(int4(1, 2, 3, 4))
-        /// out = int4(-2147483648, 1073741824, -1073741824, 536870912)
+        /// out = int4(-2_147_483_648, 1_073_741_824, -1_073_741_824, 536_870_912)
         /// >>> reversebits out
         /// # reversebits(out)
         /// out = int4(1, 2, 3, 4)
@@ -586,7 +586,7 @@ namespace Kalk.Core.Modules
         /// ```kalk
         /// >>> reversebits long(1)
         /// # reversebits(long(1))
-        /// out = -9223372036854775808
+        /// out = -9_223_372_036_854_775_808
         /// >>> reversebits out
         /// # reversebits(out)
         /// out = 1
@@ -715,7 +715,7 @@ namespace Kalk.Core.Modules
         /// out = 1.5
         /// >>> aslong(1.5)
         /// # aslong(1.5)
-        /// out = 4609434218613702656
+        /// out = 4_609_434_218_613_702_656
         /// >>> asdouble(out)
         /// # asdouble(out)
         /// out = 1.5
@@ -759,7 +759,7 @@ namespace Kalk.Core.Modules
         /// out = 1.5
         /// >>> asint(1.5f)
         /// # asint(1.5f)
-        /// out = 1069547520
+        /// out = 1_069_547_520
         /// >>> asfloat(out)
         /// # asfloat(out)
         /// out = 1.5
@@ -800,7 +800,7 @@ namespace Kalk.Core.Modules
         /// ```kalk
         /// >>> aslong(1.5)
         /// # aslong(1.5)
-        /// out = 4609434218613702656
+        /// out = 4_609_434_218_613_702_656
         /// >>> asdouble(out)
         /// # asdouble(out)
         /// out = 1.5
@@ -839,7 +839,7 @@ namespace Kalk.Core.Modules
         /// ```kalk
         /// >>> asulong(-1.5)
         /// # asulong(-1.5)
-        /// out = 13832806255468478464
+        /// out = 13_832_806_255_468_478_464
         /// >>> asdouble(out)
         /// # asdouble(out)
         /// out = -1.5
@@ -878,7 +878,7 @@ namespace Kalk.Core.Modules
         /// ```kalk
         /// >>> asint(1.5f)
         /// # asint(1.5f)
-        /// out = 1069547520
+        /// out = 1_069_547_520
         /// >>> asfloat(out)
         /// # asfloat(out)
         /// out = 1.5
@@ -917,7 +917,7 @@ namespace Kalk.Core.Modules
         /// ```kalk
         /// >>> asuint(-1.5f)
         /// # asuint(-1.5f)
-        /// out = 3217031168
+        /// out = 3_217_031_168
         /// >>> asfloat(out)
         /// # asfloat(out)
         /// out = -1.5

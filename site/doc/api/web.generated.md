@@ -182,9 +182,9 @@ An object with the result of the request. This object contains the following mem
 - `headers`: the HTTP returned headers.
 - `content`: the HTTP content. Either a string if the mime type is `text/*` or an object if the mime type is `application/json` otherwise it will return a bytebuffer.
 
-### Example
+### Remarks
 
-```kalk
+```
 >>> wget "https://markdig.azurewebsites.net/"
 # wget("https://markdig.azurewebsites.net/")
 out = {version: "1.1", code: 200, reason: "OK", headers: {"Content-Type": "text/plain; charset=utf-8", "Content-Length": 0}, content: ""}

@@ -192,13 +192,13 @@ namespace Kalk.Core.Modules
         /// - `headers`: the HTTP returned headers.
         /// - `content`: the HTTP content. Either a string if the mime type is `text/*` or an object if the mime type is `application/json` otherwise it will return a bytebuffer.
         /// </returns>
-        /// <example>
-        /// ```kalk
+        /// <remarks>
+        /// ```
         /// >>> wget "https://markdig.azurewebsites.net/"
         /// # wget("https://markdig.azurewebsites.net/")
         /// out = {version: "1.1", code: 200, reason: "OK", headers: {"Content-Type": "text/plain; charset=utf-8", "Content-Length": 0}, content: ""}
         /// ```
-        /// </example>
+        /// </remarks>
         [KalkExport("wget", CategoryWeb)]
         public ScriptObject WebGet(string url)
         {

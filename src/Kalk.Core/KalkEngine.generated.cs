@@ -4516,7 +4516,7 @@ namespace Kalk.Core
          # sign    exponent              |-------------------- fraction --------------------|
          =   1 * 2 ^ (1023 - 1023) * 0b1.1000000000000000000000000000000000000000000000000000
      >>> display invalid
-     Invalid display name `invalid`. Expecting `std`, `dev` or `eng`. (Parameter 'name')
+     Invalid display name `invalid`. Expecting `std`, `dev` or `raw`. (Parameter 'name')
 ";
             }
             {
@@ -5120,7 +5120,7 @@ namespace Kalk.Core
                 descriptor.Returns = @"The fibonacci number.";
                 descriptor.Example = @"    >>> fib 50
     # fib(50)
-    out = 12586269025
+    out = 12_586_269_025
 ";
             }
             {
@@ -6152,13 +6152,13 @@ namespace Kalk.Core.Modules
                 descriptor.Remarks = @"The supported types are `byte`, `sbyte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `float`, `double`, `rgb`, `rgba` and all vector and matrix types.";
                 descriptor.Example = @"    >>> bitcast(int, 1.5f)
     # bitcast(int, 1.5f)
-    out = 1069547520
+    out = 1_069_547_520
     >>> bitcast(float, out)
     # bitcast(float, out)
     out = 1.5
     >>> bitcast(long, 2.5)
     # bitcast(long, 2.5)
-    out = 4612811918334230528
+    out = 4_612_811_918_334_230_528
     >>> bitcast(double, out)
     # bitcast(double, out)
     out = 2.5
@@ -6269,7 +6269,7 @@ namespace Kalk.Core.Modules
                 descriptor.Returns = @"The input value, with the bit order reversed";
                 descriptor.Example = @"    >>> reversebits 128
     # reversebits(128)
-    out = 16777216
+    out = 16_777_216
     >>> reversebits out
     # reversebits(out)
     out = 128
@@ -6281,7 +6281,7 @@ namespace Kalk.Core.Modules
     out = 128
     >>> reversebits(int4(1,2,3,4))
     # reversebits(int4(1, 2, 3, 4))
-    out = int4(-2147483648, 1073741824, -1073741824, 536870912)
+    out = int4(-2_147_483_648, 1_073_741_824, -1_073_741_824, 536_870_912)
     >>> reversebits out
     # reversebits(out)
     out = int4(1, 2, 3, 4)
@@ -6299,7 +6299,7 @@ namespace Kalk.Core.Modules
     out = 1.5
     >>> aslong(1.5)
     # aslong(1.5)
-    out = 4609434218613702656
+    out = 4_609_434_218_613_702_656
     >>> asdouble(out)
     # asdouble(out)
     out = 1.5
@@ -6317,7 +6317,7 @@ namespace Kalk.Core.Modules
     out = 1.5
     >>> asint(1.5f)
     # asint(1.5f)
-    out = 1069547520
+    out = 1_069_547_520
     >>> asfloat(out)
     # asfloat(out)
     out = 1.5
@@ -6332,7 +6332,7 @@ namespace Kalk.Core.Modules
                 descriptor.Returns = @"The input recast as a 64-bit long.";
                 descriptor.Example = @"    >>> aslong(1.5)
     # aslong(1.5)
-    out = 4609434218613702656
+    out = 4_609_434_218_613_702_656
     >>> asdouble(out)
     # asdouble(out)
     out = 1.5
@@ -6347,7 +6347,7 @@ namespace Kalk.Core.Modules
                 descriptor.Returns = @"The input recast as a 64-bit ulong.";
                 descriptor.Example = @"    >>> asulong(-1.5)
     # asulong(-1.5)
-    out = 13832806255468478464
+    out = 13_832_806_255_468_478_464
     >>> asdouble(out)
     # asdouble(out)
     out = -1.5
@@ -6362,7 +6362,7 @@ namespace Kalk.Core.Modules
                 descriptor.Returns = @"The input recast as a 32-bit int.";
                 descriptor.Example = @"    >>> asint(1.5f)
     # asint(1.5f)
-    out = 1069547520
+    out = 1_069_547_520
     >>> asfloat(out)
     # asfloat(out)
     out = 1.5
@@ -6377,7 +6377,7 @@ namespace Kalk.Core.Modules
                 descriptor.Returns = @"The input recast as a 32-bit uint.";
                 descriptor.Example = @"    >>> asuint(-1.5f)
     # asuint(-1.5f)
-    out = 3217031168
+    out = 3_217_031_168
     >>> asfloat(out)
     # asfloat(out)
     out = -1.5
@@ -6532,7 +6532,7 @@ namespace Kalk.Core
      today = 11/22/20 10:13:00
      >>> today.year
      # today.year
-     out = 2020
+     out = 2_020
      >>> today.month
      # today.month
      out = 11
@@ -6664,7 +6664,7 @@ namespace Kalk.Core
     out = 10
     >>> hex ""0xff030201""
     # hex(""0xff030201"")
-    out = 4278387201
+    out = 4_278_387_201
     >>> hex out
     # hex(out)
     out = ""01 02 03 FF""
@@ -6679,7 +6679,7 @@ namespace Kalk.Core
     out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
     >>> hex(""1a,2b;3c 4d-5e_6f"")
     # hex(""1a,2b;3c 4d-5e_6f"")
-    out = 103832130169626
+    out = 103_832_130_169_626
     >>> hex out
     # hex(out)
     out = ""1A 2B 3C 4D 6F 5E 00 00""
@@ -6715,16 +6715,16 @@ namespace Kalk.Core
     out = 13
     >>> bin ""111111111011""
     # bin(""111111111011"")
-    out = 4091
+    out = 4_091
     >>> bin 0xff030201
     # bin(-16580095)
     out = ""00000001 00000010 00000011 11111111""
     >>> bin out
     # bin(out)
-    out = 4278387201
+    out = 4_278_387_201
     >>> bin ""11111111000000110000001000000001""
     # bin(""11111111000000110000001000000001"")
-    out = 4278387201
+    out = 4_278_387_201
     >>> bin(byte(5))
     # bin(byte(5))
     out = ""00000101""
@@ -11516,10 +11516,10 @@ namespace Kalk.Core.Modules
     out = 0
     >>> short 32767
     # short(32767)
-    out = 32767
+    out = 32_767
     >>> short(-32768)
     # short(-32768)
-    out = -32768
+    out = -32_768
     >>> short 32768
     Unable to convert type `int` to `short`
 ";
@@ -11539,7 +11539,7 @@ namespace Kalk.Core.Modules
     out = 0
     >>> ushort 65535
     # ushort(65535)
-    out = 65535
+    out = 65_535
 ";
             }
             {
@@ -11557,7 +11557,7 @@ namespace Kalk.Core.Modules
     out = 0
     >>> uint(1<<32 - 1)
     # uint(1 << 32 - 1)
-    out = 4294967295
+    out = 4_294_967_295
 ";
             }
             {
@@ -11575,10 +11575,10 @@ namespace Kalk.Core.Modules
     out = 0
     >>> int(1 << 31 - 1)
     # int(1 << 31 - 1)
-    out = 2147483647
+    out = 2_147_483_647
     >>> int(-(1<<31))
     # int(-(1 << 31))
-    out = -2147483648
+    out = -2_147_483_648
 ";
             }
             {
@@ -11596,7 +11596,7 @@ namespace Kalk.Core.Modules
     out = 0
     >>> ulong(1 << 64 - 1)
     # ulong(1 << 64 - 1)
-    out = 18446744073709551615
+    out = 18_446_744_073_709_551_615
 ";
             }
             {
@@ -11614,10 +11614,10 @@ namespace Kalk.Core.Modules
     out = 0
     >>> long(1 << 63 - 1)
     # long(1 << 63 - 1)
-    out = 9223372036854775807
+    out = 9_223_372_036_854_775_807
     >>> long(-(1<<63))
     # long(-(1 << 63))
-    out = -9223372036854775808
+    out = -9_223_372_036_854_775_808
 ";
             }
             {
@@ -13857,10 +13857,11 @@ namespace Kalk.Core.Modules
     - `reason`: the HTTP reason phrase.
     - `headers`: the HTTP returned headers.
     - `content`: the HTTP content. Either a string if the mime type is `text/*` or an object if the mime type is `application/json` otherwise it will return a bytebuffer.";
-                descriptor.Example = @"    >>> wget ""https://markdig.azurewebsites.net/""
+                descriptor.Remarks = @"```
+    >>> wget ""https://markdig.azurewebsites.net/""
     # wget(""https://markdig.azurewebsites.net/"")
     out = {version: ""1.1"", code: 200, reason: ""OK"", headers: {""Content-Type"": ""text/plain; charset=utf-8"", ""Content-Length"": 0}, content: """"}
-";
+    ```";
             }
         }        
     }

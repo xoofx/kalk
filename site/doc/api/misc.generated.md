@@ -77,16 +77,16 @@ out = "00001101 00000000 00000000 00000000"
 out = 13
 >>> bin "111111111011"
 # bin("111111111011")
-out = 4091
+out = 4_091
 >>> bin 0xff030201
 # bin(-16580095)
 out = "00000001 00000010 00000011 11111111"
 >>> bin out
 # bin(out)
-out = 4278387201
+out = 4_278_387_201
 >>> bin "11111111000000110000001000000001"
 # bin("11111111000000110000001000000001")
-out = 4278387201
+out = 4_278_387_201
 >>> bin(byte(5))
 # bin(byte(5))
 out = "00000101"
@@ -262,7 +262,7 @@ The current date, parse the input date or return the date object, depending on u
  today = 11/22/20 10:13:00
  >>> today.year
  # today.year
- out = 2020
+ out = 2_020
  >>> today.month
  # today.month
  out = 11
@@ -337,7 +337,7 @@ out = 300
 out = 10
 >>> hex "0xff030201"
 # hex("0xff030201")
-out = 4278387201
+out = 4_278_387_201
 >>> hex out
 # hex(out)
 out = "01 02 03 FF"
@@ -352,7 +352,7 @@ out = "0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0
 out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
 >>> hex("1a,2b;3c 4d-5e_6f")
 # hex("1a,2b;3c 4d-5e_6f")
-out = 103832130169626
+out = 103_832_130_169_626
 >>> hex out
 # hex(out)
 out = "1A 2B 3C 4D 6F 5E 00 00"

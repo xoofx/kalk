@@ -88,10 +88,10 @@ namespace Kalk.Core.Modules
         /// out = 0
         /// >>> short 32767
         /// # short(32767)
-        /// out = 32767
+        /// out = 32_767
         /// >>> short(-32768)
         /// # short(-32768)
-        /// out = -32768
+        /// out = -32_768
         /// >>> short 32768
         /// Unable to convert type `int` to `short`
         /// ```
@@ -120,7 +120,7 @@ namespace Kalk.Core.Modules
         /// out = 0
         /// >>> ushort 65535
         /// # ushort(65535)
-        /// out = 65535
+        /// out = 65_535
         /// ```
         /// </example>
         /// <test>
@@ -147,7 +147,7 @@ namespace Kalk.Core.Modules
         /// out = 0
         /// >>> uint(1&lt;&lt;32 - 1)
         /// # uint(1 &lt;&lt; 32 - 1)
-        /// out = 4294967295
+        /// out = 4_294_967_295
         /// ```
         /// </example>
         /// <test>
@@ -174,10 +174,10 @@ namespace Kalk.Core.Modules
         /// out = 0
         /// >>> int(1 &lt;&lt; 31 - 1)
         /// # int(1 &lt;&lt; 31 - 1)
-        /// out = 2147483647
+        /// out = 2_147_483_647
         /// >>> int(-(1&lt;&lt;31))
         /// # int(-(1 &lt;&lt; 31))
-        /// out = -2147483648
+        /// out = -2_147_483_648
         /// ```
         /// </example>
         /// <test>
@@ -204,7 +204,7 @@ namespace Kalk.Core.Modules
         /// out = 0
         /// >>> ulong(1 &lt;&lt; 64 - 1)
         /// # ulong(1 &lt;&lt; 64 - 1)
-        /// out = 18446744073709551615
+        /// out = 18_446_744_073_709_551_615
         /// ```
         /// </example>
         /// <test>
@@ -231,10 +231,10 @@ namespace Kalk.Core.Modules
         /// out = 0
         /// >>> long(1 &lt;&lt; 63 - 1)
         /// # long(1 &lt;&lt; 63 - 1)
-        /// out = 9223372036854775807
+        /// out = 9_223_372_036_854_775_807
         /// >>> long(-(1&lt;&lt;63))
         /// # long(-(1 &lt;&lt; 63))
-        /// out = -9223372036854775808
+        /// out = -9_223_372_036_854_775_808
         /// ```
         /// </example>
         /// <test>

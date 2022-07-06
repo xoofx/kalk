@@ -272,7 +272,7 @@ Gets or sets the display mode.
      # sign    exponent              |-------------------- fraction --------------------|
      =   1 * 2 ^ (1023 - 1023) * 0b1.1000000000000000000000000000000000000000000000000000
  >>> display invalid
- Invalid display name `invalid`. Expecting `std`, `dev` or `eng`. (Parameter 'name')
+ Invalid display name `invalid`. Expecting `std`, `dev` or `raw`. (Parameter 'name')
 ```
 
 ## echo
