@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Kalk.Core.Helpers;
+using Scriban;
 using Scriban.Functions;
 using Scriban.Helpers;
 using Scriban.Runtime;
@@ -322,12 +323,12 @@ namespace Kalk.Core
         /// ```
         /// </example>
         [KalkExport("values", CategoryMisc)]
-        public IEnumerable Values(object obj)
+        public IEnumerable Values(TemplateContext context, object obj)
         {
             switch (obj)
             {
                 case IDictionary<string, object> dict:
-                    return ObjectFunctions.Values(dict);
+                    return ObjectFunctions.Values(context, dict);
                 case IEnumerable list:
                     return new ScriptArray(list);
                 default:
