@@ -2,6 +2,8 @@
 {
     public enum KalkDisplayMode
     {
+        Raw,
+
         Standard,
 
         Developer

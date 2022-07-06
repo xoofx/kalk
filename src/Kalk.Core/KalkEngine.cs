@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -38,11 +39,21 @@ namespace Kalk.Core
         private readonly Dictionary<Type, KalkModule> _modules;
         private string _localClipboard;
         private bool _formatting;
+        private readonly CultureInfo _integersCultureInfoWithUnderscore;
         
         private KalkShortcutKeyMap _currentShortcutKeyMap;
 
         public KalkEngine() : base(new KalkObjectWithAlias())
         {
+            _integersCultureInfoWithUnderscore = new CultureInfo(CultureInfo.InvariantCulture.LCID)
+            {
+                NumberFormat =
+                {
+                    NumberGroupSeparator = "_",
+                    NumberDecimalDigits = 0
+                }
+            };
+
             FileService = new DefaultFileService();
             KalkSettings.Initialize();
             KalkEngineFolder = AppContext.BaseDirectory;
@@ -364,6 +375,11 @@ namespace Kalk.Core
             {
                 // Output DateTime only if we have the date builtin object accessible (that provides the implementation of the ToString method)
                 return _miscModule.DateObject.ToString((DateTime)value, _miscModule.DateObject.Format, CurrentCulture);
+            }
+            
+            if (CurrentDisplay != KalkDisplayMode.Raw && (value is int | value is uint || value is ulong || value is long || value is BigInteger || value is short || value is ushort))
+            {
+                return ((IFormattable)value).ToString("N", _integersCultureInfoWithUnderscore);
             }
 
             return base.ObjectToString(value, nested);

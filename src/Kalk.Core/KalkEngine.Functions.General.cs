@@ -146,9 +146,9 @@ namespace Kalk.Core
         /// <summary>
         /// Gets or sets the display mode.
         ///
-        /// - `std` for standard mode
+        /// - `raw` for raw mode, where integers are displayed as raw integers.
+        /// - `std` for standard mode, integers are displayed with _ separator every 3 digits. This is the default.
         /// - `dev` for developer mode to display advanced details about integers, vectors and floating point values.
-        /// - `eng` for engineering mode to display floating point values using 3 digits for the exponent.
         /// </summary>
         /// <param name="name">An optional parameter to set the display mode. Default is `std`. If this parameter is not set, this function will display the display mode currently used.</param>
         /// <example>
@@ -171,7 +171,7 @@ namespace Kalk.Core
         ///     # sign    exponent              |-------------------- fraction --------------------|
         ///     =   1 * 2 ^ (1023 - 1023) * 0b1.1000000000000000000000000000000000000000000000000000
         /// >>> display invalid
-        /// Invalid display name `invalid`. Expecting `std`, `dev` or `eng`. (Parameter 'name')
+        /// Invalid display name `invalid`. Expecting `std`, `dev` or `raw`. (Parameter 'name')
         /// ```
         /// </example>
         [KalkExport("display", CategoryGeneral)]
@@ -182,7 +182,7 @@ namespace Kalk.Core
             {
                 if (!KalkDisplayModeHelper.TryParse(mode, out var fullMode))
                 {
-                    throw new ArgumentException($"Invalid display name `{mode}`. Expecting `std`, `dev` or `eng`.", nameof(name));
+                    throw new ArgumentException($"Invalid display name `{mode}`. Expecting `std`, `dev` or `raw`.", nameof(name));
                 }
                 CurrentDisplay = fullMode;
             }

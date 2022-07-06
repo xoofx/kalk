@@ -153,6 +153,7 @@ namespace Kalk.Core
             // Otherwise supports the default.
             switch (CurrentDisplay)
             {
+                case KalkDisplayMode.Raw:
                 case KalkDisplayMode.Standard:
                     return;
                 case KalkDisplayMode.Developer:

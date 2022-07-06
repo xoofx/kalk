@@ -4,14 +4,19 @@ namespace Kalk.Core
 {
     public static class KalkDisplayModeHelper
     {
+        public const string Raw = "raw";
+
         public const string Standard = "std";
 
         public const string Developer = "dev";
+
 
         public static string ToText(this KalkDisplayMode mode)
         {
             switch (mode)
             {
+                case KalkDisplayMode.Raw:
+                    return Raw;
                 case KalkDisplayMode.Standard:
                     return Standard;
                 case KalkDisplayMode.Developer:
@@ -26,6 +31,9 @@ namespace Kalk.Core
             fullMode = KalkDisplayMode.Standard;
             switch (mode)
             {
+                case Raw:
+                    fullMode = KalkDisplayMode.Raw;
+                    return true;
                 case Standard:
                     fullMode = KalkDisplayMode.Standard;
                     return true;

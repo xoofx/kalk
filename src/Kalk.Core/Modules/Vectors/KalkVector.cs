@@ -1170,7 +1170,7 @@ namespace Kalk.Core
 
         public void Display(KalkEngine engine, KalkDisplayMode mode)
         {
-            if (mode == KalkDisplayMode.Standard) return;
+            if (mode == KalkDisplayMode.Standard || mode == KalkDisplayMode.Raw) return;
 
             if (Length == 2 || Length == 3 || Length == 4 || Length == 8)
             {

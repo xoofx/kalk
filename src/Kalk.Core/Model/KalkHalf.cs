@@ -111,6 +111,7 @@ namespace Kalk.Core
         {
             switch (mode)
             {
+                case KalkDisplayMode.Raw:
                 case KalkDisplayMode.Standard:
                     break;
                 case KalkDisplayMode.Developer:
