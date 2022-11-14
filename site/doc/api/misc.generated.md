@@ -507,6 +507,32 @@ out = [1, 2, 5, 4]
 out = float4(1, 2, 5, 4)
 ```
 
+## reverse
+
+`reverse(list)`
+
+Reverse a list of values.
+
+- `list`: The list to reverse.
+
+### Returns
+
+The list of values reversed.
+
+### Example
+
+```kalk
+>>> reverse([1,2,3,4,5])
+# reverse([1,2,3,4,5])
+out = [5, 4, 3, 2, 1]
+>>> reverse("abc")
+# reverse("abc")
+out = "cba"
+>>> reverse(asbytes(0x04030201))
+# reverse(asbytes(67305985))
+out = bytebuffer([4, 3, 2, 1])
+```
+
 ## size
 
 `size(obj)`

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Kalk.Core.Helpers;
@@ -791,6 +792,64 @@ namespace Kalk.Core
             });
 
             return contains;
+        }
+
+        /// <summary>
+        /// Reverse a list of values.
+        /// </summary>
+        /// <param name="list">The list to reverse.</param>
+        /// <returns>The list of values reversed.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> reverse([1,2,3,4,5])
+        /// # reverse([1,2,3,4,5])
+        /// out = [5, 4, 3, 2, 1]
+        /// >>> reverse("abc")
+        /// # reverse("abc")
+        /// out = "cba"
+        /// >>> reverse(asbytes(0x04030201))
+        /// # reverse(asbytes(67305985))
+        /// out = bytebuffer([4, 3, 2, 1])
+        /// ```
+        /// </example> remove_at(asbytes(0x04030201), 1)
+        [KalkExport("reverse", CategoryMisc)]
+        public object Reverse(object list)
+        {
+            if (list is string valueStr)
+            {
+                var builder = new StringBuilder(valueStr.Length);
+                for (var i = valueStr.Length - 1; i >= 0 ; i--)
+                {
+                    var c = valueStr[i];
+                    builder.Append(c);
+                }
+                return builder.ToString();
+            }
+
+            if (list is KalkNativeBuffer nativeBuffer)
+            {
+                var reversedNativeBuffer = new KalkNativeBuffer(nativeBuffer.Count);
+                int j = 0;
+                for (int i = nativeBuffer.Count - 1; i >= 0; i--)
+                {
+                    reversedNativeBuffer[j++] = nativeBuffer[i];
+                }
+
+                return reversedNativeBuffer;
+            }
+
+            if (list is IEnumerable it)
+            {
+                var array = new ScriptArray();
+                foreach (var b in it.Cast<object>().Reverse())
+                {
+                    array.Add(b);
+                }
+
+                return array;
+            }
+
+            return list;
         }
 
         /// <summary>
