@@ -28,7 +28,7 @@
         </button>
         <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
 <ol id='nav-id-home-0' class='navbar-nav nav-level0  '>
-  <li class='nav-item  active'>
+  <li class='nav-item '>
     <span class='nav-item-row'><a href='/' class='nav-link  '>Home</a></span>  </li>
   <li class='nav-item  active'>
     <span class='nav-item-row'><a href='/doc/' class='nav-link  '>Documentation</a></span>  </li>
@@ -772,15 +772,34 @@ out = [1, 2, 5, 4]
 # replace(float4(1, 2, 3, 4), 3, 5)
 out = float4(1, 2, 5, 4)
 </code></pre>
+<h2 id="reverse">reverse</h2>
+<p><code>reverse(list)</code></p>
+<p>Reverse a list of values.</p>
+<ul>
+<li><code>list</code>: The list to reverse.</li>
+</ul>
+<h3 id="returns-12">Returns</h3>
+<p>The list of values reversed.</p>
+<h3 id="example-12">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; reverse([1,2,3,4,5])
+# reverse([1,2,3,4,5])
+out = [5, 4, 3, 2, 1]
+&gt;&gt;&gt; reverse(&quot;abc&quot;)
+# reverse(&quot;abc&quot;)
+out = &quot;cba&quot;
+&gt;&gt;&gt; reverse(asbytes(0x04030201))
+# reverse(asbytes(67305985))
+out = bytebuffer([4, 3, 2, 1])
+</code></pre>
 <h2 id="size">size</h2>
 <p><code>size(obj)</code></p>
 <p>Returns the size of the specified object.</p>
 <ul>
 <li><code>obj</code>: The object value.</li>
 </ul>
-<h3 id="returns-12">Returns</h3>
+<h3 id="returns-13">Returns</h3>
 <p>The size of the object.</p>
-<h3 id="example-12">Example</h3>
+<h3 id="example-13">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; size 1
 # size(1)
 out = 0
@@ -802,12 +821,12 @@ out = 3
 <li><code>index</code>: The index into the object.</li>
 <li><code>length</code>: The optional length of the slice. If the length is not defined, the length will start from index with the remaining elements.</li>
 </ul>
-<h3 id="returns-13">Returns</h3>
+<h3 id="returns-14">Returns</h3>
 <p>A slice of the input object.</p>
 <h3 id="remarks-4">Remarks</h3>
 <p>The index is adjusted at the modulo of the specified length of the input object.
 If the index is &lt; 0, then the index starts from the end of the input object length. A value of -1 for the index would take a slice with the only the last element.</p>
-<h3 id="example-13">Example</h3>
+<h3 id="example-14">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; slice(&quot;kalk&quot;, 1)
 # slice(&quot;kalk&quot;, 1)
 out = &quot;alk&quot;
@@ -836,9 +855,9 @@ out = slice(bytebuffer([2, 3]), 1, 2)
 <ul>
 <li><code>value</code>: The specified input.</li>
 </ul>
-<h3 id="returns-14">Returns</h3>
+<h3 id="returns-15">Returns</h3>
 <p>The UTF16 bytebuffer representation of the input string or the string representation of the input UTF16 bytebuffer.</p>
-<h3 id="example-14">Example</h3>
+<h3 id="example-15">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; utf16 &quot;kalk&quot;
 # utf16(&quot;kalk&quot;)
 out = bytebuffer([107, 0, 97, 0, 108, 0, 107, 0])
@@ -852,9 +871,9 @@ out = &quot;kalk&quot;
 <ul>
 <li><code>value</code>: The specified input.</li>
 </ul>
-<h3 id="returns-15">Returns</h3>
+<h3 id="returns-16">Returns</h3>
 <p>The UTF32 bytebuffer representation of the input string or the string representation of the input UTF32 bytebuffer.</p>
-<h3 id="example-15">Example</h3>
+<h3 id="example-16">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; utf32 &quot;kalk&quot;
 # utf32(&quot;kalk&quot;)
 out = bytebuffer([107, 0, 0, 0, 97, 0, 0, 0, 108, 0, 0, 0, 107, 0, 0, 0])
@@ -868,9 +887,9 @@ out = &quot;kalk&quot;
 <ul>
 <li><code>value</code>: The specified input.</li>
 </ul>
-<h3 id="returns-16">Returns</h3>
+<h3 id="returns-17">Returns</h3>
 <p>The UTF8 bytebuffer representation of the input string or the string representation of the input UTF8 bytebuffer.</p>
-<h3 id="example-16">Example</h3>
+<h3 id="example-17">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; utf8 &quot;kalk&quot;
 # utf8(&quot;kalk&quot;)
 out = bytebuffer([107, 97, 108, 107])
@@ -884,9 +903,9 @@ out = &quot;kalk&quot;
 <ul>
 <li><code>obj</code>: An object to get the values from.</li>
 </ul>
-<h3 id="returns-17">Returns</h3>
+<h3 id="returns-18">Returns</h3>
 <p>The values of the parameter obj.</p>
-<h3 id="example-17">Example</h3>
+<h3 id="example-18">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; obj = {m: 1, n: 2}; values obj
 # obj = {m: 1, n: 2}; values(obj)
 obj = {m: 1, n: 2}
