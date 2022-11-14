@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -217,8 +218,11 @@ namespace Kalk.Core
                         if (x > 0) builder.Append(" ");
 
                         var index = $"{c,3}";
-
                         var valueAsString = StringFunctions.Escape(ConvertAscii(c));
+                        if (char.GetUnicodeCategory(valueAsString[0]) == UnicodeCategory.Control)
+                        {
+                            valueAsString = "?";
+                        }
                         var strValue = $"\"{valueAsString}\"";
                         var column = x == 0 ? $"{index} {strValue,-6} {$"({AsciiSpecialCodes[y]})",-27}" : $"{index} {strValue,-4}";
 
