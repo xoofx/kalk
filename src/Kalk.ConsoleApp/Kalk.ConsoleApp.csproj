@@ -20,12 +20,12 @@
     <ProjectReference Include="..\Kalk.Core\Kalk.Core.csproj" />
   </ItemGroup>
 
-  <Target Name="CreateSetup" AfterTargets="Publish">
+  <!--<Target Name="CreateSetup" AfterTargets="Publish">
     <PropertyGroup>
       <PublishDirFullPath>$([System.IO.Path]::GetFullPath('$(PublishDir)'))</PublishDirFullPath>
       <PublishSetupName>$(AssemblyName).$(PackageVersion).$(RuntimeIdentifier).setup</PublishSetupName>
       <PublishPackagePath>$([System.IO.Path]::GetFullPath('$(PublishDirFullPath)..\'))</PublishPackagePath>
     </PropertyGroup>
     <Exec Command="iscc.exe /DMyAppVersion=$(PackageVersion) /DMyAppSource=&quot;$(PublishDirFullPath)*&quot; /O&quot;$(PublishPackagePath)&quot; /F$(PublishSetupName) kalk-setup.iss" WorkingDirectory="$(MSBuildThisFileDirectory)" />
-  </Target>
+  </Target>-->
 </Project>
