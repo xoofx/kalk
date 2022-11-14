@@ -8,9 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="Broslyn" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.4.1" />
-    <PackageReference Include="Scriban" Version="5.4.6" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.2.0" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.5.5" />
+    <PackageReference Include="Scriban" Version="5.5.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.3.1" />
   </ItemGroup>
 
   <ItemGroup>

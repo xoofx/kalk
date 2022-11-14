@@ -13,12 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Packaging.Targets" Version="0.1.220">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>compile; build</IncludeAssets>
-      <ExcludeAssets>runtime;contentFiles;native</ExcludeAssets>
-    </PackageReference>
-    <PackageReference Include="TextCopy" Version="6.1.0" />
+    <PackageReference Include="TextCopy" Version="6.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,5 +28,4 @@
     </PropertyGroup>
     <Exec Command="iscc.exe /DMyAppVersion=$(PackageVersion) /DMyAppSource=&quot;$(PublishDirFullPath)*&quot; /O&quot;$(PublishPackagePath)&quot; /F$(PublishSetupName) kalk-setup.iss" WorkingDirectory="$(MSBuildThisFileDirectory)" />
   </Target>
-
 </Project>
