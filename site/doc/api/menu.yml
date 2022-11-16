@@ -12,3 +12,4 @@
 - strings.generated.md
 - web.generated.md
 - {path: intel/readme.md, folder: true}
+- {path: arm/readme.md, folder: true}

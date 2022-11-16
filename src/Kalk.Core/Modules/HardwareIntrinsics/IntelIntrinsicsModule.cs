@@ -1,4 +1,4 @@
-namespace Kalk.Core.Modules.HardwareIntrinsics
+namespace Kalk.Core.Modules.HardwareIntrinsics.X86
 {
     public partial class SseIntrinsicsModule : IntrinsicsModuleBase
     {

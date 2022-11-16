@@ -1,0 +1,7 @@
+- advsimd.generated.md
+- advsimdarm64.generated.md
+- aes.generated.md
+- crc32.generated.md
+- crc32arm64.generated.md
+- sha1.generated.md
+- sha256.generated.md

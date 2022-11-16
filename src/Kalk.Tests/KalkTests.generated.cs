@@ -12,9 +12,22 @@ using NUnit.Framework;
 
 namespace Kalk.Tests
 {
-    using Kalk.Core.Modules.HardwareIntrinsics;
+    using Kalk.Core.Modules.HardwareIntrinsics.Arm;
+    using Kalk.Core.Modules.HardwareIntrinsics.X86;
     using Kalk.Core.Modules;
     using Kalk.Core;
+
+    public partial class AdvSimdArm64IntrinsicsModuleTests : KalkTestBase
+    {
+    }
+
+    public partial class AdvSimdIntrinsicsModuleTests : KalkTestBase
+    {
+    }
+
+    public partial class AesIntrinsicsModuleTests : KalkTestBase
+    {
+    }
 
     public partial class AesIntrinsicsModuleTests : KalkTestBase
     {
@@ -45,6 +58,14 @@ namespace Kalk.Tests
     }
 
     public partial class Bmi2X64IntrinsicsModuleTests : KalkTestBase
+    {
+    }
+
+    public partial class Crc32Arm64IntrinsicsModuleTests : KalkTestBase
+    {
+    }
+
+    public partial class Crc32IntrinsicsModuleTests : KalkTestBase
     {
     }
 
@@ -2148,6 +2169,14 @@ mycolor = rgb(240, 248, 255) ## F0F8FF AliceBlue ##
 out = ""AliceBlue""", Category = "Misc Functions")]
         public static void Test_colors(string input, string output) => AssertScript(input, output);
 
+    }
+
+    public partial class Sha1IntrinsicsModuleTests : KalkTestBase
+    {
+    }
+
+    public partial class Sha256IntrinsicsModuleTests : KalkTestBase
+    {
     }
 
     public partial class Sse2IntrinsicsModuleTests : KalkTestBase

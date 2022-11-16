@@ -46,7 +46,9 @@ namespace Kalk.IntrinsicsGen
             }
 
             public string Class { get; set; }
-            
+
+            public string Cpu { get; set; }
+
             public string ReturnType { get; set; }
             
             public string RealReturnType { get; set; }
@@ -131,7 +133,7 @@ namespace Kalk.IntrinsicsGen
        
         private static List<KalkModuleToGenerate> FindIntrinsics(Compilation compilation)
         {
-            var regexName = new Regex(@"^\s*\w+\s+(_\w+)");
+            var regexName = new Regex(@"^\s*\w+\s+(\w+)\s*\(");
             int count = 0;
             
             var intelDoc = XDocument.Load("intel-intrinsics-data-latest.xml");
@@ -158,6 +160,20 @@ namespace Kalk.IntrinsicsGen
                 typeof(System.Runtime.Intrinsics.X86.Bmi1.X64),
                 typeof(System.Runtime.Intrinsics.X86.Bmi2),
                 typeof(System.Runtime.Intrinsics.X86.Bmi2.X64),
+                typeof(System.Runtime.Intrinsics.Arm.AdvSimd),
+                typeof(System.Runtime.Intrinsics.Arm.AdvSimd.Arm64),
+                typeof(System.Runtime.Intrinsics.Arm.Aes),
+                typeof(System.Runtime.Intrinsics.Arm.Aes.Arm64),
+                typeof(System.Runtime.Intrinsics.Arm.Crc32),
+                typeof(System.Runtime.Intrinsics.Arm.Crc32.Arm64),
+                typeof(System.Runtime.Intrinsics.Arm.Dp),
+                typeof(System.Runtime.Intrinsics.Arm.Dp.Arm64),
+                typeof(System.Runtime.Intrinsics.Arm.Rdm),
+                typeof(System.Runtime.Intrinsics.Arm.Rdm.Arm64),
+                typeof(System.Runtime.Intrinsics.Arm.Sha1),
+                typeof(System.Runtime.Intrinsics.Arm.Sha1.Arm64),
+                typeof(System.Runtime.Intrinsics.Arm.Sha256),
+                typeof(System.Runtime.Intrinsics.Arm.Sha256.Arm64),
             })
             {
                 var x86Sse = compilation.GetTypeByMetadataName(type.FullName);
@@ -166,7 +182,7 @@ namespace Kalk.IntrinsicsGen
                     if (method.Parameters.Length == 0) continue;
 
                     var groupName = type.FullName.Substring(type.FullName.LastIndexOf('.') + 1).Replace("+", string.Empty);
-                    var docGroupName = type.Name == "X64" ? type.DeclaringType.Name : type.Name;
+                    var docGroupName = type.Name == "X64" || type.Name == "Arm64" ? type.DeclaringType.Name : type.Name;
                     
                     var xmlDocStr = method.GetDocumentationCommentXml();
                     if (string.IsNullOrEmpty(xmlDocStr))
@@ -188,11 +204,13 @@ namespace Kalk.IntrinsicsGen
                     
                     var rawIntrinsicName = match.Groups[1].Value;
                     var intrinsicName = rawIntrinsicName.TrimStart('_');
+                    var cpu = type.FullName.StartsWith("System.Runtime.Intrinsics.X86") ? "X86" : "Arm";
 
                     var desc = new KalkIntrinsicToGenerate
                     {
                         Name = intrinsicName,
                         Class = groupName,
+                        Cpu = cpu,
                         MethodSymbol = method,
                         IsFunc = true,
                     };
@@ -210,6 +228,10 @@ namespace Kalk.IntrinsicsGen
                         
                         desc.Description = desc.Description.Replace("[round_note]", string.Empty).Trim();
                         desc.Description = desc.Description + "\n\n" + csharpSummary;
+                    }
+                    else if (cpu == "Arm")
+                    {
+                        desc.Description = $"{csharpSummary}\n\nInstruction Documentation: [{intrinsicName}](https://developer.arm.com/architectures/instruction-sets/intrinsics/{intrinsicName})";
                     }
                     else
                     {
@@ -430,10 +452,12 @@ namespace Kalk.IntrinsicsGen
                         desc.IndirectMethodDeclaration = methodDeclaration.ToString();
                     }
 
-                    desc.Category = $"Vector Hardware Intrinsics / {docGroupName.ToUpperInvariant()}";
+                    desc.Cpu = type.FullName.StartsWith("System.Runtime.Intrinsics.X86") ? "X86" : "Arm";
+
+                    desc.Category = $"Vector Hardware Intrinsics {desc.Cpu} / {docGroupName.ToUpperInvariant()}";
 
                     generatedIntrinsics.TryGetValue(desc.Name, out var existingDesc);
-
+                    
                     // TODO: handle line for comments
                     desc.Description = desc.Description.Trim().Replace("\r\n", "\n");
                     if (existingDesc == null || desc.Parameters[0].BaseNativeType == "float")
@@ -451,15 +475,15 @@ namespace Kalk.IntrinsicsGen
 
             var intrinsics = generatedIntrinsics.Values.Where(x => x.IsSupported).ToList();
 
-            var intrinsicsPerClass = intrinsics.GroupBy(x => x.Class).ToDictionary(x => x.Key, y => y.OrderBy(x => x.Name).ToList());
+            var intrinsicsPerClass = intrinsics.GroupBy(x => $"{x.Cpu}{x.Class}").ToDictionary(x => x.Key, y => y.OrderBy(x => x.Name).ToList());
 
             var modules = new List<KalkModuleToGenerate>();
             foreach (var keyPair in intrinsicsPerClass.OrderBy(x => x.Key))
             {
                 var module = new KalkModuleToGenerate
                 {
-                    Namespace = "Kalk.Core.Modules.HardwareIntrinsics",
-                    ClassName = $"{keyPair.Key}IntrinsicsModule",
+                    Namespace = $"Kalk.Core.Modules.HardwareIntrinsics.{keyPair.Value.First().Cpu}",
+                    ClassName = $"{keyPair.Value.First().Class}IntrinsicsModule",
                     Category = keyPair.Value.First().Category
                 };
                 module.Members.AddRange(keyPair.Value);

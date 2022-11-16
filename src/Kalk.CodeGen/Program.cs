@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ using Broslyn;
 using Kalk.Core;
 using Microsoft.CodeAnalysis;
 using Scriban;
+using Scriban.Parsing;
+using Scriban.Runtime;
 
 namespace Kalk.CodeGen
 {
@@ -61,14 +64,17 @@ namespace Kalk.CodeGen
 
             void GetOrCreateModule(ITypeSymbol typeSymbol, string className, AttributeData moduleAttribute, out KalkModuleToGenerate moduleToGenerate)
             {
-                if (!mapNameToModule.TryGetValue(className, out moduleToGenerate))
+                var ns = typeSymbol.ContainingNamespace.ToDisplayString();
+
+                var fullClassName = $"{ns}.{className}";
+                if (!mapNameToModule.TryGetValue(fullClassName, out moduleToGenerate))
                 {
                     moduleToGenerate = new KalkModuleToGenerate()
                     {
                         Namespace = typeSymbol.ContainingNamespace.ToDisplayString(),
                         ClassName = className,
                     };
-                    mapNameToModule.Add(className, moduleToGenerate);
+                    mapNameToModule.Add(fullClassName, moduleToGenerate);
 
                     if (moduleAttribute != null)
                     {
@@ -248,8 +254,19 @@ namespace {{ module.Namespace }}
 {{~ end ~}}
 ";
             var template = Template.Parse(templateStr);
-            
-            var result = template.Render(new {modules = modules}, x => x.Name);
+
+            var context = new TemplateContext
+            {
+                LoopLimit = 0,
+                MemberRenamer = x => x.Name
+            };
+            var scriptObject = new ScriptObject()
+            {
+                { "modules", modules }
+            };
+            context.PushGlobal(scriptObject);
+
+            var result = template.Render(context);
             File.WriteAllText(Path.Combine(srcFolder, "Kalk.Core/KalkEngine.generated.cs"), result);
 
 
@@ -295,8 +312,7 @@ namespace Kalk.Tests
 }
 ";
             var templateTests = Template.Parse(testsTemplateStr);
-
-            result = templateTests.Render(new { modules = modules }, x => x.Name);
+            result = templateTests.Render(context);
             File.WriteAllText(Path.Combine(testsFolder, "KalkTests.generated.cs"), result);
 
             // Prism templates
@@ -311,7 +327,10 @@ namespace Kalk.Tests
             allFunctionNames.AddRange(new[] {"All", "Csv", "Currencies", "Files", "HardwareIntrinsics", "StandardUnits", "Strings", "Web"});
 
             allFunctionNames = allFunctionNames.OrderByDescending(x => x.Length).ThenBy(x => x).ToList();
-            result = prismTemplate.Render(new { functions = allFunctionNames });
+
+            scriptObject.Clear();
+            scriptObject.Add("functions", allFunctionNames);
+            result = prismTemplate.Render(context);
             File.WriteAllText(Path.Combine(siteFolder, ".lunet", "js", "prism-kalk.generated.js"), result);
 
             // Generate module site documentation
@@ -361,9 +380,11 @@ namespace Kalk.Tests
 
             module.Title = $"{module.Name} {(module.IsBuiltin ? "Functions":"Module")}";
 
+            string? cpuArch = null;
             if (module.Name.EndsWith("Intrinsics"))
             {
-                module.Title = $"Intel {module.Name.Replace("Intrinsics", "")} Intrinsics";
+                cpuArch = module.Namespace.Contains(".X86") ? "Intel" : "Arm";
+                module.Title = $"{cpuArch} {module.Name.Replace("Intrinsics", "")} Intrinsics";
                 module.Name = $"{module.Name.Replace("Intrinsics", "")}";
             }
             var name = module.Name.ToLowerInvariant();
@@ -439,10 +460,10 @@ These intrinsic functions are only available if your CPU supports `{{module.Name
             var template = Template.Parse(templateText);
 
             var apiFolder = Path.Combine(siteFolder, "doc", "api");
-            if (module.Title.Contains("Intel"))
+            if (cpuArch is not null)
             {
-                apiFolder = Path.Combine(apiFolder, "intel");
-                module.Url = $"/doc/api/intel/{name}/";
+                apiFolder = Path.Combine(apiFolder, cpuArch.ToLowerInvariant());
+                module.Url = $"/doc/api/{cpuArch.ToLowerInvariant()}/{name}/";
             }
 
             // Don't generate hardware.generated.md
@@ -451,7 +472,17 @@ These intrinsic functions are only available if your CPU supports `{{module.Name
                 return;
             }
 
-            var result = template.Render(new {module = module}, x => x.Name);
+            var context = new TemplateContext
+            {
+                LoopLimit = 0
+            };
+            var scriptObject = new ScriptObject()
+            {
+                { "module", module }
+            };
+            context.PushGlobal(scriptObject);
+            context.MemberRenamer = x => x.Name;
+            var result = template.Render(context);
 
             File.WriteAllText(Path.Combine(apiFolder, $"{name}.generated.md"), result);
         }
