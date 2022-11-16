@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Kalk.Core.Helpers;
+using Scriban.Runtime;
 
 namespace Kalk.Core.Modules
 {
@@ -83,46 +84,50 @@ namespace Kalk.Core.Modules
 
             switch (type)
             {
-                case byte vbyte:
-                    UnsafeHelpers.BitCast(ref vbyte, 1, bytes);
-                    return vbyte;
-                case sbyte vsbyte:
-                    UnsafeHelpers.BitCast(ref vsbyte, 1, bytes);
-                    return vsbyte;
-                case short vshort:
-                    UnsafeHelpers.BitCast(ref vshort, 2, bytes);
-                    return vshort;
-                case ushort vushort:
-                    UnsafeHelpers.BitCast(ref vushort, 2, bytes);
-                    return vushort;
-                case int vint:
-                    UnsafeHelpers.BitCast(ref vint, 4, bytes);
-                    return vint;
-                case uint vuint:
-                    UnsafeHelpers.BitCast(ref vuint, 4, bytes);
-                    return (long) vuint;
-                case ulong vulong:
-                    UnsafeHelpers.BitCast(ref vulong, 8, bytes);
-                    return vulong;
-                case long vlong:
-                    UnsafeHelpers.BitCast(ref vlong, 8, bytes);
-                    return vlong;
-                case float _:
-                    int vfloat = 0;
-                    UnsafeHelpers.BitCast(ref vfloat, 4, bytes);
-                    return BitConverter.Int32BitsToSingle(vfloat);
-                case KalkHalf vhalf:
-                    UnsafeHelpers.BitCast(ref vhalf, 2, bytes);
-                    return vhalf;
-                case double _:
-                    long vdouble = 0;
-                    UnsafeHelpers.BitCast(ref vdouble, 8, bytes);
-                    return BitConverter.Int64BitsToDouble(vdouble);
+                case byte:
+                    return UnsafeHelpers.BitCast<byte>(bytes);
+                case sbyte:
+                    return UnsafeHelpers.BitCast<sbyte>(bytes);
+                case short:
+                    return UnsafeHelpers.BitCast<short>(bytes);
+                case ushort:
+                    return UnsafeHelpers.BitCast<ushort>(bytes);
+                case int:
+                    return UnsafeHelpers.BitCast<int>(bytes);
+                case uint:
+                    return UnsafeHelpers.BitCast<uint>(bytes);
+                case ulong:
+                    return UnsafeHelpers.BitCast<ulong>(bytes);
+                case long:
+                    return UnsafeHelpers.BitCast<long>(bytes);
+                case float:
+                    return UnsafeHelpers.BitCast<float>(bytes);
+                case KalkHalf:
+                    return UnsafeHelpers.BitCast<KalkHalf>(bytes);
+                case double:
+                    return UnsafeHelpers.BitCast<double>(bytes);
                 case KalkValue kalkValue:
                     var dest = (KalkValue)kalkValue.Clone(true);
-                    dest.BitCastFrom(bytes.AsSpan());
-                    return dest;
+                    var span = kalkValue.AsSpan();
+                    var elementCount = bytes.Count / span.Length;
+                    if (elementCount == 0) return dest;
+                    if (elementCount == 1)
+                    {
+                        dest.BitCastFrom(bytes.AsSpan());
+                        return dest;
+                    }
 
+                    var scriptArray = new ScriptArray();
+                    var nextBytes = bytes.AsSpan();
+                    for (int i = 0; i < elementCount; i++)
+                    {
+                        dest.BitCastFrom(nextBytes);
+                        scriptArray.Add(dest);
+                        nextBytes = nextBytes.Slice(span.Length);
+                        dest = (KalkValue)kalkValue.Clone(true);
+                    }
+
+                    return scriptArray;
                 default:
                     throw new ArgumentException($"The destination type `{Engine.GetTypeName(type)}` is not supported.", nameof(value));
             }
