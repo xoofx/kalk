@@ -153,6 +153,22 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
             var dimension = targetSize / baseElementSize;
             if (dimension == 1)
             {
+                // Handle Vector64
+                if (typeof(System.Runtime.Intrinsics.Vector64<long>) == typeof(T))
+                {
+                    var tValue = Engine.ToObject<long>(argIndex, value);
+                    return (T)(object)(System.Runtime.Intrinsics.Vector64.Create(tValue));
+                }
+                if (typeof(System.Runtime.Intrinsics.Vector64<ulong>) == typeof(T))
+                {
+                    var tValue = Engine.ToObject<ulong>(argIndex, value);
+                    return (T)(object)(System.Runtime.Intrinsics.Vector64.Create(tValue));
+                }
+                if (typeof(System.Runtime.Intrinsics.Vector64<double>) == typeof(T))
+                {
+                    var tValue = Engine.ToObject<double>(argIndex, value);
+                    return (T)(object)(System.Runtime.Intrinsics.Vector64.Create(tValue));
+                }
                 return Engine.ToObject<T>(argIndex, value);
             }
             else
