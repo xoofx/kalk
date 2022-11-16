@@ -252,6 +252,36 @@ namespace Kalk.Core
         }
 
         /// <summary>
+        /// Process each element of the input array with the specified function.
+        /// </summary>
+        /// <param name="list">A list of element to process.</param>
+        /// <param name="func">A reference to a function that takes 1 parameters and return a value. The function must be passed via the prefix @ to pass a function pointer.</param>
+        /// <returns>The value transformed.</returns>
+        /// <example>
+        /// ```kalk
+        /// >>> foreach([1, 2, 3, 4], @hex)
+        /// # foreach([1, 2, 3, 4], @hex)
+        /// out = ["01", "02", "03", "04"]
+        /// ```
+        /// </example>
+        [KalkExport("foreach", CategoryMisc)]
+        public object Foreach(TemplateContext context, IEnumerable list, IScriptCustomFunction func)
+        {
+            if (list is null) return null;
+            if (func is null) return list;
+            var array = new ScriptArray();
+            var args = new ScriptArray(1);
+            foreach (var item in list)
+            {
+                args[0] = item;
+                var result = ScriptFunctionCall.Call(context, context.CurrentNode, func, args);
+                array.Add(result);
+            }
+
+            return array;
+        }
+
+        /// <summary>
         /// Returns the keys of the specified object.
         /// </summary>
         /// <param name="obj">An object to get the keys from.</param>

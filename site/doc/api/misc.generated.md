@@ -278,6 +278,27 @@ The current date, parse the input date or return the date object, depending on u
  out = 2020-11-22
 ```
 
+## foreach
+
+`foreach(list,func)`
+
+Process each element of the input array with the specified function.
+
+- `list`: A list of element to process.
+- `func`: A reference to a function that takes 1 parameters and return a value. The function must be passed via the prefix @ to pass a function pointer.
+
+### Returns
+
+The value transformed.
+
+### Example
+
+```kalk
+>>> foreach([1, 2, 3, 4], @hex)
+# foreach([1, 2, 3, 4], @hex)
+out = ["01", "02", "03", "04"]
+```
+
 ## guid
 
 `guid`
