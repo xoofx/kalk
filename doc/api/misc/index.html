@@ -132,6 +132,24 @@
         <span class='menu-item-row'><a href='/doc/api/intel/sse42x64/' class='menu-link  '>Intel Sse42X64 Intrinsics</a></span>      </li>
     </ol>
     </li>
+    <li class='menu-item '>
+      <span class='menu-item-row'><a href='/doc/api/arm/' class='menu-link  '>Arm Hardware Intrinsics</a><a href='#menu-id-doc-36' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-36' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-36' class='menu menu-level2 collapse  '>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/arm/advsimd/' class='menu-link  '>Arm AdvSimd Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/arm/advsimdarm64/' class='menu-link  '>Arm AdvSimdArm64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/arm/aes/' class='menu-link  '>Arm Aes Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/arm/crc32/' class='menu-link  '>Arm Crc32 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/arm/crc32arm64/' class='menu-link  '>Arm Crc32Arm64 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/arm/sha1/' class='menu-link  '>Arm Sha1 Intrinsics</a></span>      </li>
+      <li class='menu-item '>
+        <span class='menu-item-row'><a href='/doc/api/arm/sha256/' class='menu-link  '>Arm Sha256 Intrinsics</a></span>      </li>
+    </ol>
+    </li>
   </ol>
   </li>
   <li class='menu-item '>
@@ -599,12 +617,26 @@ out = false
  # date
  out = 2020-11-22
 </code></pre>
+<h2 id="foreach">foreach</h2>
+<p><code>foreach(list,func)</code></p>
+<p>Process each element of the input array with the specified function.</p>
+<ul>
+<li><code>list</code>: A list of element to process.</li>
+<li><code>func</code>: A reference to a function that takes 1 parameters and return a value. The function must be passed via the prefix @ to pass a function pointer.</li>
+</ul>
+<h3 id="returns-5">Returns</h3>
+<p>The value transformed.</p>
+<h3 id="example-5">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; foreach([1, 2, 3, 4], @hex)
+# foreach([1, 2, 3, 4], @hex)
+out = [&quot;01&quot;, &quot;02&quot;, &quot;03&quot;, &quot;04&quot;]
+</code></pre>
 <h2 id="guid">guid</h2>
 <p><code>guid</code></p>
 <p>Returns a new GUID as a string.</p>
-<h3 id="returns-5">Returns</h3>
+<h3 id="returns-6">Returns</h3>
 <p>A new GUID as a string.</p>
-<h3 id="example-5">Example</h3>
+<h3 id="example-6">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; guid
 # guid
 out = &quot;0deafe30-de4d-47c3-9631-2d3292afbb8e&quot;
@@ -620,7 +652,7 @@ from integral to hexadecimal.</li>
 <li><code>prefix</code>: Output the prefix <code>0x</code> in front of each hexadecimal bytes when converting
 from integral to hexadecimal.</li>
 </ul>
-<h3 id="returns-6">Returns</h3>
+<h3 id="returns-7">Returns</h3>
 <p>The hexadecimal representation of the input or convert the hexadecimal input string
 to an integral representation.</p>
 <h3 id="remarks-1">Remarks</h3>
@@ -630,7 +662,7 @@ dash <code>-</code>.
 When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
 it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
 See the following examples.</p>
-<h3 id="example-6">Example</h3>
+<h3 id="example-7">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; hex 10
 # hex(10)
 out = &quot;0A&quot;
@@ -673,12 +705,12 @@ out = &quot;00 00 80 3F 00 00 00 40 00 00 40 40 00 00 80 40&quot;
 <li><code>index</code>: The index at which to insert the item.</li>
 <li><code>item</code>: The item to insert.</li>
 </ul>
-<h3 id="returns-7">Returns</h3>
+<h3 id="returns-8">Returns</h3>
 <p>A new string with the item inserted, or a new list with the item inserted at the specified index.</p>
 <h3 id="remarks-2">Remarks</h3>
 <p>The index is adjusted at the modulo of the length of the input value.
 If the index is &lt; 0, then the index starts from the end of the string/list length + 1. A value of -1 for the index would insert the item at the end, after the last element of the string or list.</p>
-<h3 id="example-7">Example</h3>
+<h3 id="example-8">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; insert_at(&quot;kalk&quot;, 0, &quot;YES&quot;)
 # insert_at(&quot;kalk&quot;, 0, &quot;YES&quot;)
 out = &quot;YESkalk&quot;
@@ -701,9 +733,9 @@ out = [1]
 <ul>
 <li><code>obj</code>: An object to get the keys from.</li>
 </ul>
-<h3 id="returns-8">Returns</h3>
+<h3 id="returns-9">Returns</h3>
 <p>The keys of the parameter obj.</p>
-<h3 id="example-8">Example</h3>
+<h3 id="example-9">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; obj = {m: 1, n: 2}; keys obj
 # obj = {m: 1, n: 2}; keys(obj)
 obj = {m: 1, n: 2}
@@ -715,9 +747,9 @@ out = [&quot;m&quot;, &quot;n&quot;]
 <ul>
 <li><code>text</code>: A string to extract lines from.</li>
 </ul>
-<h3 id="returns-9">Returns</h3>
+<h3 id="returns-10">Returns</h3>
 <p>Lines extracted from the input string.</p>
-<h3 id="example-9">Example</h3>
+<h3 id="example-10">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; lines(&quot;k\na\nl\nk&quot;)
 # lines(&quot;k\na\nl\nk&quot;)
 out = [&quot;k&quot;, &quot;a&quot;, &quot;l&quot;, &quot;k&quot;]
@@ -729,12 +761,12 @@ out = [&quot;k&quot;, &quot;a&quot;, &quot;l&quot;, &quot;k&quot;]
 <li><code>list</code>: A string or list to remove an item from.</li>
 <li><code>index</code>: The index at which to remove the item.</li>
 </ul>
-<h3 id="returns-10">Returns</h3>
+<h3 id="returns-11">Returns</h3>
 <p>A new string/list with the item at the specified index removed.</p>
 <h3 id="remarks-3">Remarks</h3>
 <p>The index is adjusted at the modulo of the length of the input value.
 If the index is &lt; 0, then the index starts from the end of the string/list length. A value of -1 for the index would remove the last element.</p>
-<h3 id="example-10">Example</h3>
+<h3 id="example-11">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; remove_at(&quot;kalk&quot;, 0)
 # remove_at(&quot;kalk&quot;, 0)
 out = &quot;alk&quot;
@@ -759,9 +791,9 @@ out = bytebuffer([1, 3, 4])
 <li><code>value</code>: The item to replace.</li>
 <li><code>by</code>: The value to replace with.</li>
 </ul>
-<h3 id="returns-11">Returns</h3>
+<h3 id="returns-12">Returns</h3>
 <p>The modified object.</p>
-<h3 id="example-11">Example</h3>
+<h3 id="example-12">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; replace(&quot;kalk&quot;, &quot;k&quot;, &quot;woo&quot;)
 # replace(&quot;kalk&quot;, &quot;k&quot;, &quot;woo&quot;)
 out = &quot;wooalwoo&quot;
@@ -778,9 +810,9 @@ out = float4(1, 2, 5, 4)
 <ul>
 <li><code>list</code>: The list to reverse.</li>
 </ul>
-<h3 id="returns-12">Returns</h3>
+<h3 id="returns-13">Returns</h3>
 <p>The list of values reversed.</p>
-<h3 id="example-12">Example</h3>
+<h3 id="example-13">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; reverse([1,2,3,4,5])
 # reverse([1,2,3,4,5])
 out = [5, 4, 3, 2, 1]
@@ -797,9 +829,9 @@ out = bytebuffer([4, 3, 2, 1])
 <ul>
 <li><code>obj</code>: The object value.</li>
 </ul>
-<h3 id="returns-13">Returns</h3>
+<h3 id="returns-14">Returns</h3>
 <p>The size of the object.</p>
-<h3 id="example-13">Example</h3>
+<h3 id="example-14">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; size 1
 # size(1)
 out = 0
@@ -821,12 +853,12 @@ out = 3
 <li><code>index</code>: The index into the object.</li>
 <li><code>length</code>: The optional length of the slice. If the length is not defined, the length will start from index with the remaining elements.</li>
 </ul>
-<h3 id="returns-14">Returns</h3>
+<h3 id="returns-15">Returns</h3>
 <p>A slice of the input object.</p>
 <h3 id="remarks-4">Remarks</h3>
 <p>The index is adjusted at the modulo of the specified length of the input object.
 If the index is &lt; 0, then the index starts from the end of the input object length. A value of -1 for the index would take a slice with the only the last element.</p>
-<h3 id="example-14">Example</h3>
+<h3 id="example-15">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; slice(&quot;kalk&quot;, 1)
 # slice(&quot;kalk&quot;, 1)
 out = &quot;alk&quot;
@@ -855,9 +887,9 @@ out = slice(bytebuffer([2, 3]), 1, 2)
 <ul>
 <li><code>value</code>: The specified input.</li>
 </ul>
-<h3 id="returns-15">Returns</h3>
+<h3 id="returns-16">Returns</h3>
 <p>The UTF16 bytebuffer representation of the input string or the string representation of the input UTF16 bytebuffer.</p>
-<h3 id="example-15">Example</h3>
+<h3 id="example-16">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; utf16 &quot;kalk&quot;
 # utf16(&quot;kalk&quot;)
 out = bytebuffer([107, 0, 97, 0, 108, 0, 107, 0])
@@ -871,9 +903,9 @@ out = &quot;kalk&quot;
 <ul>
 <li><code>value</code>: The specified input.</li>
 </ul>
-<h3 id="returns-16">Returns</h3>
+<h3 id="returns-17">Returns</h3>
 <p>The UTF32 bytebuffer representation of the input string or the string representation of the input UTF32 bytebuffer.</p>
-<h3 id="example-16">Example</h3>
+<h3 id="example-17">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; utf32 &quot;kalk&quot;
 # utf32(&quot;kalk&quot;)
 out = bytebuffer([107, 0, 0, 0, 97, 0, 0, 0, 108, 0, 0, 0, 107, 0, 0, 0])
@@ -887,9 +919,9 @@ out = &quot;kalk&quot;
 <ul>
 <li><code>value</code>: The specified input.</li>
 </ul>
-<h3 id="returns-17">Returns</h3>
+<h3 id="returns-18">Returns</h3>
 <p>The UTF8 bytebuffer representation of the input string or the string representation of the input UTF8 bytebuffer.</p>
-<h3 id="example-17">Example</h3>
+<h3 id="example-18">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; utf8 &quot;kalk&quot;
 # utf8(&quot;kalk&quot;)
 out = bytebuffer([107, 97, 108, 107])
@@ -903,9 +935,9 @@ out = &quot;kalk&quot;
 <ul>
 <li><code>obj</code>: An object to get the values from.</li>
 </ul>
-<h3 id="returns-18">Returns</h3>
+<h3 id="returns-19">Returns</h3>
 <p>The values of the parameter obj.</p>
-<h3 id="example-18">Example</h3>
+<h3 id="example-19">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; obj = {m: 1, n: 2}; values obj
 # obj = {m: 1, n: 2}; values(obj)
 obj = {m: 1, n: 2}
