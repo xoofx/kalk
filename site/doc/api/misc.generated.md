@@ -319,15 +319,15 @@ out = "0deafe30-de4d-47c3-9631-2d3292afbb8e"
 
 ## hex
 
-`hex(value,separator?,prefix?)`
+`hex(value,prefix?,separator?)`
 
 Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
 to an integral/bytebuffer representation.
 
 - `value`: The input value.
-- `separator`: The character used to separate hexadecimal bytes when converting
-    from integral to hexadecimal.
 - `prefix`: Output the prefix `0x` in front of each hexadecimal bytes when converting
+    from integral to hexadecimal.
+- `separator`: The character used to separate hexadecimal bytes when converting
     from integral to hexadecimal.
 
 ### Returns

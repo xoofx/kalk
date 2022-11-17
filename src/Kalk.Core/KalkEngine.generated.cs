@@ -28469,9 +28469,9 @@ namespace Kalk.Core
     to an integral/bytebuffer representation.";
                 descriptor.IsCommand = false;
                 descriptor.Params.Add(new KalkParamDescriptor("value", @"The input value.")  { IsOptional = false });
-                descriptor.Params.Add(new KalkParamDescriptor("separator", @"The character used to separate hexadecimal bytes when converting
-    from integral to hexadecimal.")  { IsOptional = true });
                 descriptor.Params.Add(new KalkParamDescriptor("prefix", @"Output the prefix `0x` in front of each hexadecimal bytes when converting
+    from integral to hexadecimal.")  { IsOptional = true });
+                descriptor.Params.Add(new KalkParamDescriptor("separator", @"The character used to separate hexadecimal bytes when converting
     from integral to hexadecimal.")  { IsOptional = true });
                 descriptor.Returns = @"The hexadecimal representation of the input or convert the hexadecimal input string
     to an integral representation.";

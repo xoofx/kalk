@@ -376,9 +376,9 @@ namespace Kalk.Core
         /// to an integral/bytebuffer representation.
         /// </summary>
         /// <param name="value">The input value.</param>
-        /// <param name="separator">The character used to separate hexadecimal bytes when converting
-        /// from integral to hexadecimal.</param>
         /// <param name="prefix">Output the prefix `0x` in front of each hexadecimal bytes when converting
+        /// from integral to hexadecimal.</param>
+        /// <param name="separator">The character used to separate hexadecimal bytes when converting
         /// from integral to hexadecimal.</param>
         /// <returns>The hexadecimal representation of the input or convert the hexadecimal input string
         /// to an integral representation.</returns>
