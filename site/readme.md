@@ -48,7 +48,7 @@ numbers or to get hexadecimal equivalent representation.
     <h3><i class="fa fa-h-square kalk-color-3"></i>Hardware Intrinsics</h3>
     <img src="img/kalk-fp-hwintrinsics.gif" class="rounded img-fluid img-card" alt="Hardware Intrinsics"/>
 
-Use Intel Hardware Intrinsics, from SSE to AVX2, easily accessible as functions.
+Use [Intel Hardware Intrinsics](/doc/api/intel/readme.md) (from SSE to AVX2) or [ARM Hardware intrinsics](/doc/api/arm/readme.md) (Neon, ARM64...), easily accessible as functions.
 Easily bitcast results between vector types or test memory read/write.
 
 </div>
