@@ -2,7 +2,6 @@
 {
     public enum KalkAction
     {
-        CopySelectionOrExit,
         Exit,
         CursorLeft,
         CursorRight,

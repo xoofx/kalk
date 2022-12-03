@@ -440,7 +440,7 @@ namespace Consolus
 
             Render(reset: true);
 
-            Console.Write($"{ConsoleStyle.BrightRed}^C");
+            Console.Write($"{ConsoleStyle.BrightRed}^Z");
             Console.ResetColor();
 
             if (!ConsoleHelper.IsWindows)
@@ -525,6 +525,7 @@ namespace Consolus
             var clipboard = GetClipboardText();
             if (clipboard != null)
             {
+                clipboard = clipboard.TrimEnd();
                 int previousIndex = 0;
                 while (true)
                 {
@@ -636,16 +637,6 @@ namespace Consolus
             _isStandardAction = true;
             switch (action)
             {
-                case ConsoleAction.CopySelectionOrExit:
-                    if (HasSelection)
-                    {
-                        CopySelectionToClipboard();
-                    }
-                    else
-                    {
-                        Exit();
-                    }
-                    break;
                 case ConsoleAction.Exit:
                     Exit();
                     break;
@@ -730,7 +721,6 @@ namespace Consolus
 
     public enum ConsoleAction
     {
-        CopySelectionOrExit,
         Exit,
         CursorLeft,
         CursorRight,

@@ -82,9 +82,6 @@ namespace Kalk.Core
                 case "exit":
                     run(KalkAction.Exit);
                     break;
-                case "copy_or_exit":
-                    run(KalkAction.CopySelectionOrExit);
-                    break;
                 default:
                     throw new ArgumentException($"Action `{action}` is not supported", nameof(action));
             }

@@ -36,6 +36,9 @@ namespace Kalk.Core
             allModule.Modules.Add(GetOrCreateModule<WebModule>());
 
             // Register last the system file
+            // shortcut(exit, "ctrl+z", action("exit"))
+            // Setup the exit depending on OS
+            //EvaluateTextImpl($"shortcut(exit, '{(OperatingSystem.IsWindows() ? "ctrl+z" : "ctrl+d")}', action('exit'))", string.Empty);
             LoadCoreFile();
         }
 

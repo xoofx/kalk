@@ -36,6 +36,7 @@ namespace Kalk.Core
             {
                 ShowVersion();
                 WriteHighlightLine("# Type `help` for more information and at https://github.com/xoofx/kalk");
+                WriteHighlightLine("# Type `exit` or CTRL+Z to exit from kalk");
             }
 
             // Load user config file after showing the version
@@ -72,9 +73,6 @@ namespace Kalk.Core
         {
             switch (obj)
             {
-                case KalkAction.CopySelectionOrExit:
-                    Repl.Action(ConsoleAction.CopySelectionOrExit);
-                    break;
                 case KalkAction.Exit:
                     Repl.Action(ConsoleAction.Exit);
                     break;
