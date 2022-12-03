@@ -10,6 +10,7 @@
     <AssemblyName>kalk</AssemblyName>
     <PackageId>kalk</PackageId>
     <KalkGitVersion>true</KalkGitVersion>
+    <TrimMode>partial</TrimMode>
   </PropertyGroup>
 
   <ItemGroup>
