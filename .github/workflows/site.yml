@@ -14,16 +14,16 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v3
 
-    - name: Install .NET 5.0
-      uses: actions/setup-dotnet@v1
+    - name: Install .NET 7.0
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '7.0.x'
 
     - name: Build web site
       run: |
-          dotnet tool install --global lunet
+          dotnet tool install --global lunet --version "0.5.*"
           lunet --input-dir site build 
 
     - name: Deploy web site
