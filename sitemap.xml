@@ -37,11 +37,11 @@
     <lastmod>2023-09-07</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/memory</loc>
+    <loc>https://kalk.dev/doc/api/currencies</loc>
     <lastmod>2023-09-07</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/currencies</loc>
+    <loc>https://kalk.dev/doc/api/memory</loc>
     <lastmod>2023-09-07</lastmod>
   </url>
   <url>
@@ -121,15 +121,15 @@
     <lastmod>2023-09-07</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/avx2</loc>
-    <lastmod>2023-09-07</lastmod>
-  </url>
-  <url>
     <loc>https://kalk.dev/doc/api/intel/bmi1</loc>
     <lastmod>2023-09-07</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel/bmi1x64</loc>
+    <lastmod>2023-09-07</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/avx2</loc>
     <lastmod>2023-09-07</lastmod>
   </url>
   <url>
@@ -153,11 +153,11 @@
     <lastmod>2023-09-07</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/sse2</loc>
+    <loc>https://kalk.dev/doc/api/intel/sse3</loc>
     <lastmod>2023-09-07</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/sse3</loc>
+    <loc>https://kalk.dev/doc/api/intel/sse2</loc>
     <lastmod>2023-09-07</lastmod>
   </url>
   <url>
