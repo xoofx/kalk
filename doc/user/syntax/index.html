@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="lunet 0.5.0.0">
+    <meta name="generator" content="lunet 0.5.3.0">
     <title>Language Syntax - kalk</title>
     <link rel="stylesheet" href="/css/site.css">
     <script src="/js/site.js" ></script>
@@ -540,6 +540,11 @@ out = float3x3(0.5403023, -0.41614684, -0.9899925, -0.6536436, 0.2836622, 0.9601
 <pre><code class="language-kalk">&gt;&gt;&gt; &quot;This is a string&quot;
 # &quot;This is a string&quot;
 out = &quot;This is a string&quot;
+</code></pre>
+<p>It supports also interpolated strings:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; $&quot;This is a {3 * 5} string&quot;
+# &quot;This is a {3 * 5} string&quot;
+out = &quot;This is a 15 string&quot;
 </code></pre>
 <p>You can access a single character:</p>
 <pre><code class="language-kalk">&gt;&gt;&gt; &quot;abcd&quot;[1]
