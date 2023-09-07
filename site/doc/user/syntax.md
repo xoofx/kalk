@@ -458,6 +458,14 @@ You can create strings:
 out = "This is a string"
 ```
 
+It supports also interpolated strings:
+
+```kalk
+>>> $"This is a {3 * 5} string"
+# "This is a {3 * 5} string"
+out = "This is a 15 string"
+```
+
 You can access a single character:
 
 ```kalk
