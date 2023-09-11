@@ -178,8 +178,10 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
                 if (value is KalkVector vec)
                 {
                     var span = vec.AsSpan();
-                    var minSize = Math.Min(targetSize, span.Length);
-                    span = span.Slice(0, minSize);
+                    if (span.Length != targetSize)
+                    {
+                        throw new ScriptArgumentException(argIndex, $"Invalid size ({BytesToString(span.Length)}) for input vector `{vec.TypeName}`. Expecting {dimension} elements with {BytesToString(baseElementSize)} per element (with a total size of {BytesToString(targetSize)}).");
+                    }
                     span.CopyTo(MemoryMarshal.Cast<TBase, byte>(elements));
                 }
                 else
@@ -193,6 +195,8 @@ namespace Kalk.Core.Modules.HardwareIntrinsics
                 return Unsafe.As<TBase, T>(ref elements[0]);
             }
         }
+
+        private static string BytesToString(int size) => size == 1 ? $"{size} byte" : $"{size} bytes";
         
         private object ToResult<TBase, T>(T result) where T: unmanaged where TBase: unmanaged
         {
