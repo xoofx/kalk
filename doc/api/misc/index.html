@@ -28,7 +28,7 @@
         </button>
         <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
 <ol id='nav-id-home-0' class='navbar-nav nav-level0  '>
-  <li class='nav-item '>
+  <li class='nav-item  active'>
     <span class='nav-item-row'><a href='/' class='nav-link  '>Home</a></span>  </li>
   <li class='nav-item  active'>
     <span class='nav-item-row'><a href='/doc/' class='nav-link  '>Documentation</a></span>  </li>
@@ -255,12 +255,105 @@ out = 6
 # kind(out)
 out = &quot;long&quot;
 </code></pre>
+<h2 id="bin2">bin2</h2>
+<p><code>bin2(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+to an integral/bytebuffer representation. It is similar to the function bin but operates on a group of 2 bytes.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each binary bytes when converting
+from integral to binary.</li>
+<li><code>separator</code>: The character used to separate binary bytes when converting
+from integral to binary.</li>
+</ul>
+<h3 id="returns-2">Returns</h3>
+<p>The binary representation of the input or convert the binary input string
+to an integral representation.</p>
+<h3 id="remarks-1">Remarks</h3>
+<p>When converting from a binary string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-2">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; bin2 268
+# bin2(268)
+out = &quot;00000001_00001100 00000000_00000000&quot;
+&gt;&gt;&gt; bin2 out
+# bin2(out)
+out = 268
+</code></pre>
+<h2 id="bin4">bin4</h2>
+<p><code>bin4(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+to an integral/bytebuffer representation. It is similar to the function bin but operates on a group of 4 bytes.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each binary bytes when converting
+from integral to binary.</li>
+<li><code>separator</code>: The character used to separate binary bytes when converting
+from integral to binary.</li>
+</ul>
+<h3 id="returns-3">Returns</h3>
+<p>The binary representation of the input or convert the binary input string
+to an integral representation.</p>
+<h3 id="remarks-2">Remarks</h3>
+<p>When converting from a binary string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-3">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; bin4 123456789
+# bin4(123456789)
+out = &quot;00000111_01011011_11001101_00010101&quot;
+&gt;&gt;&gt; bin4 out
+# bin4(out)
+out = 123_456_789
+&gt;&gt;&gt; bin4 [1.0f, 2.0f, 3.0f]
+# bin4([1.0f, 2.0f, 3.0f])
+out = &quot;00111111_10000000_00000000_00000000 01000000_00000000_00000000_00000000 01000000_01000000_00000000_00000000&quot;
+&gt;&gt;&gt; bin4 out
+# bin4(out)
+out = bytebuffer([0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64])
+</code></pre>
+<h2 id="bin8">bin8</h2>
+<p><code>bin8(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+to an integral/bytebuffer representation. It is similar to the function bin but operates on a group of 8 bytes.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each binary bytes when converting
+from integral to binary.</li>
+<li><code>separator</code>: The character used to separate binary bytes when converting
+from integral to binary.</li>
+</ul>
+<h3 id="returns-4">Returns</h3>
+<p>The binary representation of the input or convert the binary input string
+to an integral representation.</p>
+<h3 id="remarks-3">Remarks</h3>
+<p>When converting from a binary string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-4">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; bin8 123_456_789_000
+# bin8(123456789000)
+out = &quot;00000000_00000000_00000000_00011100_10111110_10011001_00011010_00001000&quot;
+&gt;&gt;&gt; bin8 out
+# bin8(out)
+out = 123_456_789_000
+</code></pre>
 <h2 id="colors">colors</h2>
 <p><code>colors</code></p>
 <p>Display or returns the known CSS colors.</p>
-<h3 id="returns-2">Returns</h3>
+<h3 id="returns-5">Returns</h3>
 <p>Prints known CSS colors or return a list if this function is used in an expression.</p>
-<h3 id="example-2">Example</h3>
+<h3 id="example-5">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; colors[0]
 # colors[0]
 out = rgb(240, 248, 255) ## F0F8FF AliceBlue ##
@@ -276,9 +369,9 @@ out = &quot;AliceBlue&quot;
 <li><code>list</code>: The list to search into.</li>
 <li><code>value</code>: The value to search into the list.</li>
 </ul>
-<h3 id="returns-3">Returns</h3>
+<h3 id="returns-6">Returns</h3>
 <p>true if value was found in the list input; otherwise false.</p>
-<h3 id="example-3">Example</h3>
+<h3 id="example-6">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; contains(&quot;kalk&quot;, &quot;l&quot;)
 # contains(&quot;kalk&quot;, &quot;l&quot;)
 out = true
@@ -594,9 +687,9 @@ out = false
 </ul>
 </li>
 </ul>
-<h3 id="returns-4">Returns</h3>
+<h3 id="returns-7">Returns</h3>
 <p>The current date, parse the input date or return the date object, depending on use cases.</p>
-<h3 id="example-4">Example</h3>
+<h3 id="example-7">Example</h3>
 <pre><code class="language-kalk"> &gt;&gt;&gt; today = date
  # today = date
  today = 11/22/20 10:13:00
@@ -624,9 +717,9 @@ out = false
 <li><code>list</code>: A list of element to process.</li>
 <li><code>func</code>: A reference to a function that takes 1 parameters and return a value. The function must be passed via the prefix @ to pass a function pointer.</li>
 </ul>
-<h3 id="returns-5">Returns</h3>
+<h3 id="returns-8">Returns</h3>
 <p>The value transformed.</p>
-<h3 id="example-5">Example</h3>
+<h3 id="example-8">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; foreach([1, 2, 3, 4], @hex)
 # foreach([1, 2, 3, 4], @hex)
 out = [&quot;01&quot;, &quot;02&quot;, &quot;03&quot;, &quot;04&quot;]
@@ -634,9 +727,9 @@ out = [&quot;01&quot;, &quot;02&quot;, &quot;03&quot;, &quot;04&quot;]
 <h2 id="guid">guid</h2>
 <p><code>guid</code></p>
 <p>Returns a new GUID as a string.</p>
-<h3 id="returns-6">Returns</h3>
+<h3 id="returns-9">Returns</h3>
 <p>A new GUID as a string.</p>
-<h3 id="example-6">Example</h3>
+<h3 id="example-9">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; guid
 # guid
 out = &quot;0deafe30-de4d-47c3-9631-2d3292afbb8e&quot;
@@ -652,17 +745,17 @@ from integral to hexadecimal.</li>
 <li><code>separator</code>: The character used to separate hexadecimal bytes when converting
 from integral to hexadecimal.</li>
 </ul>
-<h3 id="returns-7">Returns</h3>
+<h3 id="returns-10">Returns</h3>
 <p>The hexadecimal representation of the input or convert the hexadecimal input string
 to an integral representation.</p>
-<h3 id="remarks-1">Remarks</h3>
+<h3 id="remarks-4">Remarks</h3>
 <p>When converting from a hexadecimal string to an integral representation, this method
 will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
 dash <code>-</code>.
 When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
 it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
 See the following examples.</p>
-<h3 id="example-7">Example</h3>
+<h3 id="example-10">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; hex 10
 # hex(10)
 out = &quot;0A&quot;
@@ -697,6 +790,99 @@ out = &quot;1A 2B 3C 4D 6F 5E 00 00&quot;
 # hex(float4(1, 2, 3, 4))
 out = &quot;00 00 80 3F 00 00 00 40 00 00 40 40 00 00 80 40&quot;
 </code></pre>
+<h2 id="hex2">hex2</h2>
+<p><code>hex2(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+to an integral/bytebuffer representation. It is similar to the function hex but it operates on a group of 2 bytes.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+<li><code>separator</code>: The character used to separate hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+</ul>
+<h3 id="returns-11">Returns</h3>
+<p>The hexadecimal representation of the input or convert the hexadecimal input string
+to an integral representation.</p>
+<h3 id="remarks-5">Remarks</h3>
+<p>When converting from a hexadecimal string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-11">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; hex2 268
+# hex2(268)
+out = &quot;10C&quot;
+&gt;&gt;&gt; hex2 out
+# hex2(out)
+out = 268
+</code></pre>
+<h2 id="hex4">hex4</h2>
+<p><code>hex4(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+to an integral/bytebuffer representation. It is similar to the function hex but it operates on a group of 4 bytes.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+<li><code>separator</code>: The character used to separate hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+</ul>
+<h3 id="returns-12">Returns</h3>
+<p>The hexadecimal representation of the input or convert the hexadecimal input string
+to an integral representation.</p>
+<h3 id="remarks-6">Remarks</h3>
+<p>When converting from a hexadecimal string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-12">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; hex4 123456
+# hex4(123456)
+out = &quot;1E240&quot;
+&gt;&gt;&gt; hex4 out
+# hex4(out)
+out = 123_456
+&gt;&gt;&gt; hex4 [1.0f, 2.0f, 3.0f]
+# hex4([1.0f, 2.0f, 3.0f])
+out = &quot;3F800000 40000000 40400000&quot;
+&gt;&gt;&gt; hex4 out
+# hex4(out)
+out = bytebuffer([0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64])
+</code></pre>
+<h2 id="hex8">hex8</h2>
+<p><code>hex8(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+to an integral/bytebuffer representation. It is similar to the function hex but it operates on a group of 8 bytes.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+<li><code>separator</code>: The character used to separate hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+</ul>
+<h3 id="returns-13">Returns</h3>
+<p>The hexadecimal representation of the input or convert the hexadecimal input string
+to an integral representation.</p>
+<h3 id="remarks-7">Remarks</h3>
+<p>When converting from a hexadecimal string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-13">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; hex8 123_456_789_000
+# hex8(123456789000)
+out = &quot;1CBE991A08&quot;
+&gt;&gt;&gt; hex8 out
+# hex8(out)
+out = 123_456_789_000
+</code></pre>
 <h2 id="insert_at">insert_at</h2>
 <p><code>insert_at(list,index,item)</code></p>
 <p>Inserts an item into a string or list at the specified index.</p>
@@ -705,12 +891,12 @@ out = &quot;00 00 80 3F 00 00 00 40 00 00 40 40 00 00 80 40&quot;
 <li><code>index</code>: The index at which to insert the item.</li>
 <li><code>item</code>: The item to insert.</li>
 </ul>
-<h3 id="returns-8">Returns</h3>
+<h3 id="returns-14">Returns</h3>
 <p>A new string with the item inserted, or a new list with the item inserted at the specified index.</p>
-<h3 id="remarks-2">Remarks</h3>
+<h3 id="remarks-8">Remarks</h3>
 <p>The index is adjusted at the modulo of the length of the input value.
 If the index is &lt; 0, then the index starts from the end of the string/list length + 1. A value of -1 for the index would insert the item at the end, after the last element of the string or list.</p>
-<h3 id="example-8">Example</h3>
+<h3 id="example-14">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; insert_at(&quot;kalk&quot;, 0, &quot;YES&quot;)
 # insert_at(&quot;kalk&quot;, 0, &quot;YES&quot;)
 out = &quot;YESkalk&quot;
@@ -733,9 +919,9 @@ out = [1]
 <ul>
 <li><code>obj</code>: An object to get the keys from.</li>
 </ul>
-<h3 id="returns-9">Returns</h3>
+<h3 id="returns-15">Returns</h3>
 <p>The keys of the parameter obj.</p>
-<h3 id="example-9">Example</h3>
+<h3 id="example-15">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; obj = {m: 1, n: 2}; keys obj
 # obj = {m: 1, n: 2}; keys(obj)
 obj = {m: 1, n: 2}
@@ -747,9 +933,9 @@ out = [&quot;m&quot;, &quot;n&quot;]
 <ul>
 <li><code>text</code>: A string to extract lines from.</li>
 </ul>
-<h3 id="returns-10">Returns</h3>
+<h3 id="returns-16">Returns</h3>
 <p>Lines extracted from the input string.</p>
-<h3 id="example-10">Example</h3>
+<h3 id="example-16">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; lines(&quot;k\na\nl\nk&quot;)
 # lines(&quot;k\na\nl\nk&quot;)
 out = [&quot;k&quot;, &quot;a&quot;, &quot;l&quot;, &quot;k&quot;]
@@ -761,12 +947,12 @@ out = [&quot;k&quot;, &quot;a&quot;, &quot;l&quot;, &quot;k&quot;]
 <li><code>list</code>: A string or list to remove an item from.</li>
 <li><code>index</code>: The index at which to remove the item.</li>
 </ul>
-<h3 id="returns-11">Returns</h3>
+<h3 id="returns-17">Returns</h3>
 <p>A new string/list with the item at the specified index removed.</p>
-<h3 id="remarks-3">Remarks</h3>
+<h3 id="remarks-9">Remarks</h3>
 <p>The index is adjusted at the modulo of the length of the input value.
 If the index is &lt; 0, then the index starts from the end of the string/list length. A value of -1 for the index would remove the last element.</p>
-<h3 id="example-11">Example</h3>
+<h3 id="example-17">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; remove_at(&quot;kalk&quot;, 0)
 # remove_at(&quot;kalk&quot;, 0)
 out = &quot;alk&quot;
@@ -791,9 +977,9 @@ out = bytebuffer([1, 3, 4])
 <li><code>value</code>: The item to replace.</li>
 <li><code>by</code>: The value to replace with.</li>
 </ul>
-<h3 id="returns-12">Returns</h3>
+<h3 id="returns-18">Returns</h3>
 <p>The modified object.</p>
-<h3 id="example-12">Example</h3>
+<h3 id="example-18">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; replace(&quot;kalk&quot;, &quot;k&quot;, &quot;woo&quot;)
 # replace(&quot;kalk&quot;, &quot;k&quot;, &quot;woo&quot;)
 out = &quot;wooalwoo&quot;
@@ -810,9 +996,9 @@ out = float4(1, 2, 5, 4)
 <ul>
 <li><code>list</code>: The list to reverse.</li>
 </ul>
-<h3 id="returns-13">Returns</h3>
+<h3 id="returns-19">Returns</h3>
 <p>The list of values reversed.</p>
-<h3 id="example-13">Example</h3>
+<h3 id="example-19">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; reverse([1,2,3,4,5])
 # reverse([1,2,3,4,5])
 out = [5, 4, 3, 2, 1]
@@ -829,9 +1015,9 @@ out = bytebuffer([4, 3, 2, 1])
 <ul>
 <li><code>obj</code>: The object value.</li>
 </ul>
-<h3 id="returns-14">Returns</h3>
+<h3 id="returns-20">Returns</h3>
 <p>The size of the object.</p>
-<h3 id="example-14">Example</h3>
+<h3 id="example-20">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; size 1
 # size(1)
 out = 0
@@ -853,12 +1039,12 @@ out = 3
 <li><code>index</code>: The index into the object.</li>
 <li><code>length</code>: The optional length of the slice. If the length is not defined, the length will start from index with the remaining elements.</li>
 </ul>
-<h3 id="returns-15">Returns</h3>
+<h3 id="returns-21">Returns</h3>
 <p>A slice of the input object.</p>
-<h3 id="remarks-4">Remarks</h3>
+<h3 id="remarks-10">Remarks</h3>
 <p>The index is adjusted at the modulo of the specified length of the input object.
 If the index is &lt; 0, then the index starts from the end of the input object length. A value of -1 for the index would take a slice with the only the last element.</p>
-<h3 id="example-15">Example</h3>
+<h3 id="example-21">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; slice(&quot;kalk&quot;, 1)
 # slice(&quot;kalk&quot;, 1)
 out = &quot;alk&quot;
@@ -887,9 +1073,9 @@ out = slice(bytebuffer([2, 3]), 1, 2)
 <ul>
 <li><code>value</code>: The specified input.</li>
 </ul>
-<h3 id="returns-16">Returns</h3>
+<h3 id="returns-22">Returns</h3>
 <p>The UTF16 bytebuffer representation of the input string or the string representation of the input UTF16 bytebuffer.</p>
-<h3 id="example-16">Example</h3>
+<h3 id="example-22">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; utf16 &quot;kalk&quot;
 # utf16(&quot;kalk&quot;)
 out = bytebuffer([107, 0, 97, 0, 108, 0, 107, 0])
@@ -903,9 +1089,9 @@ out = &quot;kalk&quot;
 <ul>
 <li><code>value</code>: The specified input.</li>
 </ul>
-<h3 id="returns-17">Returns</h3>
+<h3 id="returns-23">Returns</h3>
 <p>The UTF32 bytebuffer representation of the input string or the string representation of the input UTF32 bytebuffer.</p>
-<h3 id="example-17">Example</h3>
+<h3 id="example-23">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; utf32 &quot;kalk&quot;
 # utf32(&quot;kalk&quot;)
 out = bytebuffer([107, 0, 0, 0, 97, 0, 0, 0, 108, 0, 0, 0, 107, 0, 0, 0])
@@ -919,9 +1105,9 @@ out = &quot;kalk&quot;
 <ul>
 <li><code>value</code>: The specified input.</li>
 </ul>
-<h3 id="returns-18">Returns</h3>
+<h3 id="returns-24">Returns</h3>
 <p>The UTF8 bytebuffer representation of the input string or the string representation of the input UTF8 bytebuffer.</p>
-<h3 id="example-18">Example</h3>
+<h3 id="example-24">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; utf8 &quot;kalk&quot;
 # utf8(&quot;kalk&quot;)
 out = bytebuffer([107, 97, 108, 107])
@@ -935,9 +1121,9 @@ out = &quot;kalk&quot;
 <ul>
 <li><code>obj</code>: An object to get the values from.</li>
 </ul>
-<h3 id="returns-19">Returns</h3>
+<h3 id="returns-25">Returns</h3>
 <p>The values of the parameter obj.</p>
-<h3 id="example-19">Example</h3>
+<h3 id="example-25">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; obj = {m: 1, n: 2}; values obj
 # obj = {m: 1, n: 2}; values(obj)
 obj = {m: 1, n: 2}
