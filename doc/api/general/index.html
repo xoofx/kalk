@@ -477,6 +477,11 @@ out = 3
 # 1 + 2
 out = 3
 </code></pre>
+<h2 id="env">env</h2>
+<p><code>env</code></p>
+<p>Return an environment object that provides access to os (windows, linux, macos), os_version and cpu.</p>
+<h3 id="returns-2">Returns</h3>
+<p>An object with the properties <code>os</code>, <code>os_version</code>, and <code>cpu</code>.</p>
 <h2 id="eval">eval</h2>
 <p><code>eval(text,output?)</code></p>
 <p>Evaluates dynamically the input string as an expression.</p>
@@ -484,7 +489,7 @@ out = 3
 <li><code>text</code>: The text of the expression to evaluate.</li>
 <li><code>output</code>: An optional parameter to output intermediate results of nested expressions. Default is <code>false</code>.</li>
 </ul>
-<h3 id="returns-2">Returns</h3>
+<h3 id="returns-3">Returns</h3>
 <p>The result of the evaluation.</p>
 <h3 id="example-10">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; eval &quot;1+5&quot;
@@ -586,7 +591,7 @@ y = 2
 <li><code>path</code>: The file location of the script to load and evaluate.</li>
 <li><code>output</code>: An optional parameter to output intermediate results of nested expressions. Default is <code>false</code>.</li>
 </ul>
-<h3 id="returns-3">Returns</h3>
+<h3 id="returns-4">Returns</h3>
 <p>The result of the evaluation.</p>
 <h3 id="example-16">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; import Files
@@ -601,7 +606,7 @@ out = 3
 <h2 id="out">out</h2>
 <p><code>out</code></p>
 <p>Returns the last evaluated result.</p>
-<h3 id="returns-4">Returns</h3>
+<h3 id="returns-5">Returns</h3>
 <p>The last evaluated result as an object.</p>
 <h3 id="example-17">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; 1 + 2
@@ -724,7 +729,7 @@ shortcut(tester, &quot;ctrl+d&quot;, '&quot;' + date + '&quot;')                
 <ul>
 <li><code>value</code>: A template string to the output. Values to format must be embraced by <code>and</code>.</li>
 </ul>
-<h3 id="returns-5">Returns</h3>
+<h3 id="returns-6">Returns</h3>
 <p>A string formatted with the specified embedded values.</p>
 <h3 id="example-25">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; x = 1; y = &quot;yes&quot;
@@ -744,7 +749,7 @@ more readable. Example: <code>105 g |&gt; to kg</code></p>
 <li><code>src</code>: The source value with units.</li>
 <li><code>dst</code>: The destination unit.</li>
 </ul>
-<h3 id="returns-6">Returns</h3>
+<h3 id="returns-7">Returns</h3>
 <p>The result of the calculation.</p>
 <h3 id="example-26">Example</h3>
 <pre><code class="language-kalk"> &gt;&gt;&gt; import StandardUnits
@@ -810,7 +815,7 @@ Decimal prefixes:</p>
 </ul>
 </li>
 </ul>
-<h3 id="returns-7">Returns</h3>
+<h3 id="returns-8">Returns</h3>
 <p>The associated unit object.</p>
 <h3 id="example-27">Example</h3>
 <pre><code class="language-kalk">&gt;&gt;&gt; unit(tomato, &quot;A tomato unit&quot;, prefix: &quot;decimal&quot;)

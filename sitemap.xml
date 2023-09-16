@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://kalk.dev/doc/api/all</loc>
+    <loc>https://kalk.dev/</loc>
     <lastmod>2023-09-16</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/</loc>
+    <loc>https://kalk.dev/doc</loc>
     <lastmod>2023-09-16</lastmod>
   </url>
   <url>
@@ -13,7 +13,7 @@
     <lastmod>2023-09-16</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc</loc>
+    <loc>https://kalk.dev/doc/api/all</loc>
     <lastmod>2023-09-16</lastmod>
   </url>
   <url>
@@ -121,6 +121,10 @@
     <lastmod>2023-09-16</lastmod>
   </url>
   <url>
+    <loc>https://kalk.dev/doc/api/intel/avx2</loc>
+    <lastmod>2023-09-16</lastmod>
+  </url>
+  <url>
     <loc>https://kalk.dev/doc/api/intel/bmi1</loc>
     <lastmod>2023-09-16</lastmod>
   </url>
@@ -141,11 +145,7 @@
     <lastmod>2023-09-16</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/sse</loc>
-    <lastmod>2023-09-16</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/avx2</loc>
+    <loc>https://kalk.dev/doc/api/intel/sse2</loc>
     <lastmod>2023-09-16</lastmod>
   </url>
   <url>
@@ -157,7 +157,7 @@
     <lastmod>2023-09-16</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/sse2</loc>
+    <loc>https://kalk.dev/doc/api/intel/sse</loc>
     <lastmod>2023-09-16</lastmod>
   </url>
   <url>
