@@ -440,7 +440,7 @@ namespace Consolus
 
             Render(reset: true);
 
-            Console.Write($"{ConsoleStyle.BrightRed}^Z");
+            Console.Write($"{ConsoleStyle.BrightRed}{(OperatingSystem.IsWindows()? "^Z" : "^D")}");
             Console.ResetColor();
 
             if (!ConsoleHelper.IsWindows)
