@@ -26153,6 +26153,7 @@ namespace Kalk.Core
             RegisterConstant("config", Config);
             RegisterConstant("aliases", Aliases);
             RegisterConstant("shortcuts", Shortcuts);
+            RegisterConstant("env", Env);
             RegisterFunction("action", (Func<string, Kalk.Core.KalkActionObject>)Action);
             RegisterAction("license", (Action)License);
             RegisterFunction("clipboard", (Func<object, object>)Clipboard);
@@ -26242,6 +26243,13 @@ namespace Kalk.Core
     # User-defined Shortcuts
     shortcut(tester, ""ctrl+d"", '""' + date + '""')                 # ctrl+d => '""' + date + '""'
 ";
+            }
+            {
+                var descriptor = Descriptors["env"];
+                descriptor.Category = "General";
+                descriptor.Description = @"Return an environment object that provides access to os (windows, linux, macos), os_version and cpu.";
+                descriptor.IsCommand = false;
+                descriptor.Returns = @"An object with the properties `os`, `os_version`, and `cpu`.";
             }
             {
                 var descriptor = Descriptors["action"];

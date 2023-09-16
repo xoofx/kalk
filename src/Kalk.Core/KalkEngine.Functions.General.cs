@@ -54,6 +54,32 @@ namespace Kalk.Core
         }
 
         /// <summary>
+        /// Return an environment object that provides access to os (windows, linux, macos), os_version and cpu.
+        /// </summary>
+        /// <returns>An object with the properties `os`, `os_version`, and `cpu`.</returns>
+        [KalkExport("env", CategoryGeneral)]
+        public ScriptObject Env
+        {
+            get
+            {
+                string os = OperatingSystem.IsWindows() ? "windows"
+                    : OperatingSystem.IsLinux() ? "linux"
+                    : OperatingSystem.IsMacOS() ? "macos" : "unknown";
+
+                var env = new ScriptObject
+                {
+                    ["os"] = os,
+                    ["os_version"] = System.Runtime.InteropServices.RuntimeInformation.OSDescription,
+                    ["cpu"] = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString().ToLowerInvariant()
+                };
+                env.SetReadOnly("os", true);
+                env.SetReadOnly("os_version", true);
+                env.SetReadOnly("cpu", true);
+                return env;
+            }
+        }
+
+        /// <summary>
         /// Creates an action for the command line editor experience related to
         /// cursor/text manipulation. This action can then be used by the `shortcut` command.
         /// </summary>

@@ -301,6 +301,16 @@ out = 3
 out = 3
 ```
 
+## env
+
+`env`
+
+Return an environment object that provides access to os (windows, linux, macos), os_version and cpu.
+
+### Returns
+
+An object with the properties `os`, `os_version`, and `cpu`.
+
 ## eval
 
 `eval(text,output?)`
