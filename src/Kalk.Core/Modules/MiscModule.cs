@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -439,7 +440,115 @@ namespace Kalk.Core
         [KalkExport("hex", CategoryMisc)]
         public object Hexadecimal(object value, bool prefix = false, string separator = " ")
         {
-            return Hexadecimal(value, prefix, separator, false);
+            return Hexadecimal(value, prefix, separator, false, 1);
+        }
+
+        /// <summary>
+        /// Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+        /// to an integral/bytebuffer representation. It is similar to the function hex but it operates on a group of 2 bytes.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <param name="prefix">Output the prefix `0x` in front of each hexadecimal bytes when converting
+        /// from integral to hexadecimal.</param>
+        /// <param name="separator">The character used to separate hexadecimal bytes when converting
+        /// from integral to hexadecimal.</param>
+        /// <returns>The hexadecimal representation of the input or convert the hexadecimal input string
+        /// to an integral representation.</returns>
+        /// <remarks> When converting from a hexadecimal string to an integral representation, this method
+        /// will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+        /// dash `-`.
+        /// When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+        /// it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+        /// See the following examples.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> hex2 268
+        /// # hex2(268)
+        /// out = "10C"
+        /// >>> hex2 out
+        /// # hex2(out)
+        /// out = 268
+        /// ```
+        /// </example>
+        [KalkExport("hex2", CategoryMisc)]
+        public object Hexadecimal2(object value, bool prefix = false, string separator = " ")
+        {
+            return Hexadecimal(value, prefix, separator, false, 2);
+        }
+
+        /// <summary>
+        /// Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+        /// to an integral/bytebuffer representation. It is similar to the function hex but it operates on a group of 4 bytes.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <param name="prefix">Output the prefix `0x` in front of each hexadecimal bytes when converting
+        /// from integral to hexadecimal.</param>
+        /// <param name="separator">The character used to separate hexadecimal bytes when converting
+        /// from integral to hexadecimal.</param>
+        /// <returns>The hexadecimal representation of the input or convert the hexadecimal input string
+        /// to an integral representation.</returns>
+        /// <remarks> When converting from a hexadecimal string to an integral representation, this method
+        /// will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+        /// dash `-`.
+        /// When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+        /// it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+        /// See the following examples.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> hex4 123456
+        /// # hex4(123456)
+        /// out = "1E240"
+        /// >>> hex4 out
+        /// # hex4(out)
+        /// out = 123_456
+        /// >>> hex4 [1.0f, 2.0f, 3.0f]
+        /// # hex4([1.0f, 2.0f, 3.0f])
+        /// out = "3F800000 40000000 40400000"
+        /// >>> hex4 out
+        /// # hex4(out)
+        /// out = bytebuffer([0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64])
+        /// ```
+        /// </example>
+        [KalkExport("hex4", CategoryMisc)]
+        public object Hexadecimal4(object value, bool prefix = false, string separator = " ")
+        {
+            return Hexadecimal(value, prefix, separator, false, 4);
+        }
+
+        /// <summary>
+        /// Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+        /// to an integral/bytebuffer representation. It is similar to the function hex but it operates on a group of 8 bytes.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <param name="prefix">Output the prefix `0x` in front of each hexadecimal bytes when converting
+        /// from integral to hexadecimal.</param>
+        /// <param name="separator">The character used to separate hexadecimal bytes when converting
+        /// from integral to hexadecimal.</param>
+        /// <returns>The hexadecimal representation of the input or convert the hexadecimal input string
+        /// to an integral representation.</returns>
+        /// <remarks> When converting from a hexadecimal string to an integral representation, this method
+        /// will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+        /// dash `-`.
+        /// When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+        /// it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+        /// See the following examples.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> hex8 123_456_789_000
+        /// # hex8(123456789000)
+        /// out = "1CBE991A08"
+        /// >>> hex8 out
+        /// # hex8(out)
+        /// out = 123_456_789_000
+        /// ```
+        /// </example>
+        [KalkExport("hex8", CategoryMisc)]
+        public object Hexadecimal8(object value, bool prefix = false, string separator = " ")
+        {
+            return Hexadecimal(value, prefix, separator, false, 8);
         }
 
         /// <summary>
@@ -497,7 +606,115 @@ namespace Kalk.Core
         [KalkExport("bin", CategoryMisc)]
         public object Binary(object value, bool prefix = false, string separator = " ")
         {
-            return Binary(value, prefix, separator, false);
+            return Binary(value, prefix, separator, false, 1);
+        }
+
+        /// <summary>
+        /// Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+        /// to an integral/bytebuffer representation. It is similar to the function bin but operates on a group of 2 bytes.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <param name="prefix">Output the prefix `0x` in front of each binary bytes when converting
+        ///     from integral to binary.</param>
+        /// <param name="separator">The character used to separate binary bytes when converting
+        ///     from integral to binary.</param>
+        /// <returns>The binary representation of the input or convert the binary input string
+        /// to an integral representation.</returns>
+        /// <remarks> When converting from a binary string to an integral representation, this method
+        /// will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+        /// dash `-`.
+        /// When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+        /// it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+        /// See the following examples.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> bin2 268
+        /// # bin2(268)
+        /// out = "00000001_00001100 00000000_00000000"
+        /// >>> bin2 out
+        /// # bin2(out)
+        /// out = 268
+        /// ```
+        /// </example>
+        [KalkExport("bin2", CategoryMisc)]
+        public object Binary2(object value, bool prefix = false, string separator = " ")
+        {
+            return Binary(value, prefix, separator, false, 2);
+        }
+
+        /// <summary>
+        /// Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+        /// to an integral/bytebuffer representation. It is similar to the function bin but operates on a group of 4 bytes.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <param name="prefix">Output the prefix `0x` in front of each binary bytes when converting
+        ///     from integral to binary.</param>
+        /// <param name="separator">The character used to separate binary bytes when converting
+        ///     from integral to binary.</param>
+        /// <returns>The binary representation of the input or convert the binary input string
+        /// to an integral representation.</returns>
+        /// <remarks> When converting from a binary string to an integral representation, this method
+        /// will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+        /// dash `-`.
+        /// When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+        /// it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+        /// See the following examples.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> bin4 123456789
+        /// # bin4(123456789)
+        /// out = "00000111_01011011_11001101_00010101"
+        /// >>> bin4 out
+        /// # bin4(out)
+        /// out = 123_456_789
+        /// >>> bin4 [1.0f, 2.0f, 3.0f]
+        /// # bin4([1.0f, 2.0f, 3.0f])
+        /// out = "00111111_10000000_00000000_00000000 01000000_00000000_00000000_00000000 01000000_01000000_00000000_00000000"
+        /// >>> bin4 out
+        /// # bin4(out)
+        /// out = bytebuffer([0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64])
+        /// ```
+        /// </example>
+        [KalkExport("bin4", CategoryMisc)]
+        public object Binary4(object value, bool prefix = false, string separator = " ")
+        {
+            return Binary(value, prefix, separator, false, 4);
+        }
+
+        /// <summary>
+        /// Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+        /// to an integral/bytebuffer representation. It is similar to the function bin but operates on a group of 8 bytes.
+        /// </summary>
+        /// <param name="value">The input value.</param>
+        /// <param name="prefix">Output the prefix `0x` in front of each binary bytes when converting
+        ///     from integral to binary.</param>
+        /// <param name="separator">The character used to separate binary bytes when converting
+        ///     from integral to binary.</param>
+        /// <returns>The binary representation of the input or convert the binary input string
+        /// to an integral representation.</returns>
+        /// <remarks> When converting from a binary string to an integral representation, this method
+        /// will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+        /// dash `-`.
+        /// When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+        /// it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+        /// See the following examples.
+        /// </remarks>
+        /// <example>
+        /// ```kalk
+        /// >>> bin8 123_456_789_000
+        /// # bin8(123456789000)
+        /// out = "00000000_00000000_00000000_00011100_10111110_10011001_00011010_00001000"
+        /// >>> bin8 out
+        /// # bin8(out)
+        /// out = 123_456_789_000
+        /// ```
+        /// </example>
+        [KalkExport("bin8", CategoryMisc)]
+        public object Binary8(object value, bool prefix = false, string separator = " ")
+        {
+            return Binary(value, prefix, separator, false, 8);
         }
 
         /// <summary>
@@ -1084,7 +1301,7 @@ namespace Kalk.Core
             return result ? @by : value;
         }
 
-        private object Hexadecimal(object value, bool prefix, string separator, bool returnString)
+        private object Hexadecimal(object value, bool prefix, string separator, bool returnString, int group)
         {
             Engine.CheckAbort();
             switch (value)
@@ -1194,70 +1411,75 @@ namespace Kalk.Core
                     return new KalkNativeBuffer(array);
                 }
                 case byte vbyte:
-                    return HexaFromBytes(1, vbyte, prefix, separator);
+                    return HexaFromBytes(1, vbyte, prefix, separator, group);
                 case sbyte vsbyte:
-                    return HexaFromBytes(1, vsbyte, prefix, separator);
+                    return HexaFromBytes(1, vsbyte, prefix, separator, group);
                 case short vshort:
                 {
                     int size = 2;
                     if (vshort >= sbyte.MinValue && vshort <= byte.MaxValue) size = 1;
-                    return HexaFromBytes(size, vshort, prefix, separator);
-                }
+                    return HexaFromBytes(size, vshort, prefix, separator, group);
+                    }
                 case ushort vushort:
                 {
                     int size = 2;
                     if (vushort <= byte.MaxValue) size = 1;
-                    return HexaFromBytes(size, vushort, prefix, separator);
-                }
+                    return HexaFromBytes(size, vushort, prefix, separator, group);
+                    }
                 case int vint:
                 {
                     int size = 4;
                     if (vint >= sbyte.MinValue && vint <= byte.MaxValue) size = 1;
                     else if (vint >= short.MinValue && vint <= ushort.MaxValue) size = 2;
-                    return HexaFromBytes(size, vint, prefix, separator);
-                }
+                    return HexaFromBytes(size, vint, prefix, separator, group);
+                    }
                 case uint vuint:
                 {
                     int size = 4;
                     if (vuint <= byte.MaxValue) size = 1;
                     else if (vuint <= ushort.MaxValue) size = 2;
-                    return HexaFromBytes(size, vuint, prefix, separator);
-                }
+                    return HexaFromBytes(size, vuint, prefix, separator, group);
+                    }
                 case long vlong:
                 {
                     int size = 8;
                     if (vlong >= sbyte.MinValue && vlong <= byte.MaxValue) size = 1;
                     else if (vlong >= short.MinValue && vlong <= ushort.MaxValue) size = 2;
                     else if (vlong >= int.MinValue && vlong <= uint.MaxValue) size = 4;
-                    return HexaFromBytes(size, vlong, prefix, separator);
-                }
+                    return HexaFromBytes(size, vlong, prefix, separator, group);
+                    }
                 case ulong vulong:
                 {
                     int size = 8;
                     if (vulong <= byte.MaxValue) size = 1;
                     else if (vulong <= ushort.MaxValue) size = 2;
                     else if (vulong <= uint.MaxValue) size = 4;
-                    return HexaFromBytes(size, vulong, prefix, separator);
-                }
+                    return HexaFromBytes(size, vulong, prefix, separator, group);
+                    }
                 case float vfloat:
                 {
                     var floatAsInt = BitConverter.SingleToInt32Bits(vfloat);
-                    return HexaFromBytes(4, floatAsInt, prefix, separator);
-                }
+                    return HexaFromBytes(4, floatAsInt, prefix, separator, group);
+                    }
                 case double vdouble:
                 {
                     var doubleAsLong = BitConverter.DoubleToInt64Bits(vdouble);
-                    return HexaFromBytes(8, doubleAsLong, prefix, separator);
-                }
+                    return HexaFromBytes(8, doubleAsLong, prefix, separator, group);
+                    }
                 case BigInteger bigInt:
                 {
                     var array = bigInt.ToByteArray();
-                    return HexaFromBytes(array.Length, array[0], prefix, separator);
-                }
+                    return HexaFromBytes(array.Length, array[0], prefix, separator, group);
+                    }
                 case KalkValue kalkValue:
                 {
                     var span = kalkValue.AsSpan();
-                    return HexaFromBytes(span.Length, span[0], prefix, separator);
+                    return HexaFromBytes(span.Length, span[0], prefix, separator, group);
+                    }
+                case KalkNativeBuffer buffer:
+                {
+                    var span = buffer.AsSpan();
+                    return HexaFromBytes(span.Length, span[0], prefix, separator, group);
                 }
                 case IEnumerable list:
                 {
@@ -1270,9 +1492,7 @@ namespace Kalk.Core
                             builder.Append(separator);
                         }
                         isFirst = false;
-                        byte byteItem = Engine.ToObject<byte>(0, item);
-                        if (prefix) builder.Append("0x");
-                        builder.Append(byteItem.ToString("X2"));
+                        builder.Append(Hexadecimal(item, prefix, separator, returnString, group));
                     }
                     return builder.ToString();
                 }
@@ -1281,20 +1501,57 @@ namespace Kalk.Core
             }
         }
 
-        private static string HexaFromBytes<T>(int byteCount, in T element, bool prefix, string separator)
+        private static string HexaFromBytes<T>(int byteCount, in T element, bool prefix, string separator, int group)
         {
+            Debug.Assert(group is 1 or 2 or 4 or 8);
             var builder = new StringBuilder(byteCount * 2);
-            for (int i = 0; i < byteCount; i++)
+            switch (group)
             {
-                if (i > 0) builder.Append(separator);
-                var b = Unsafe.As<T, byte>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
-                if (prefix) builder.Append("0x");
-                builder.Append(b.ToString("X2"));
+                case 1:
+                    for (int i = 0; i < byteCount; i++)
+                    {
+                        if (i > 0) builder.Append(separator);
+                        var v = Unsafe.As<T, byte>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        if (prefix && (i % 1) == 0) builder.Append("0x");
+                        builder.Append(v.ToString("X2"));
+                    }
+                    break;
+
+                case 2:
+                    for (int i = 0; i < byteCount; i += 2)
+                    {
+                        if (i > 0) builder.Append(separator);
+                        var v = Unsafe.As<T, short>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        if (prefix && (i % 2) == 0) builder.Append("0x");
+                        builder.Append(v.ToString("X2"));
+                    }
+                    break;
+
+                case 4:
+                    for (int i = 0; i < byteCount; i += 4)
+                    {
+                        if (i > 0) builder.Append(separator);
+                        var v = Unsafe.As<T, int>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        if (prefix && (i % 4) == 0) builder.Append("0x");
+                        builder.Append(v.ToString("X2"));
+                    }
+                    break;
+
+                case 8:
+                    for (int i = 0; i < byteCount; i += 8)
+                    {
+                        if (i > 0) builder.Append(separator);
+                        var v = Unsafe.As<T, long>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        if (prefix && (i % 8) == 0) builder.Append("0x");
+                        builder.Append(v.ToString("X2"));
+                    }
+                    break;
+
             }
             return builder.ToString();
         }
 
-        private object Binary(object value, bool prefix, string separator, bool returnString)
+        private object Binary(object value, bool prefix, string separator, bool returnString, int group)
         {
             Engine.CheckAbort();
             switch (value)
@@ -1405,58 +1662,63 @@ namespace Kalk.Core
                     return new KalkNativeBuffer(array);
                 }
                 case byte vbyte:
-                    return BinaryFromBytes(1, vbyte, prefix, separator);
+                    return BinaryFromBytes(1, vbyte, prefix, separator, group);
                 case sbyte vsbyte:
-                    return BinaryFromBytes(1, vsbyte, prefix, separator);
+                    return BinaryFromBytes(1, vsbyte, prefix, separator, group);
                 case short vshort:
                 {
                     int size = 2;
-                    return BinaryFromBytes(size, vshort, prefix, separator);
-                }
+                    return BinaryFromBytes(size, vshort, prefix, separator, group);
+                    }
                 case ushort vushort:
                 {
                     int size = 2;
-                    return BinaryFromBytes(size, vushort, prefix, separator);
-                }
+                    return BinaryFromBytes(size, vushort, prefix, separator, group);
+                    }
                 case int vint:
                 {
                     int size = 4;
-                    return BinaryFromBytes(size, vint, prefix, separator);
-                }
+                    return BinaryFromBytes(size, vint, prefix, separator, group);
+                    }
                 case uint vuint:
                 {
                     int size = 4;
-                    return BinaryFromBytes(size, vuint, prefix, separator);
-                }
+                    return BinaryFromBytes(size, vuint, prefix, separator, group);
+                    }
                 case long vlong:
                 {
                     int size = 8;
-                    return BinaryFromBytes(size, vlong, prefix, separator);
-                }
+                    return BinaryFromBytes(size, vlong, prefix, separator, group);
+                    }
                 case ulong vulong:
                 {
                     int size = 8;
-                    return BinaryFromBytes(size, vulong, prefix, separator);
-                }
+                    return BinaryFromBytes(size, vulong, prefix, separator, group);
+                    }
                 case float vfloat:
                 {
                     var floatAsInt = BitConverter.SingleToInt32Bits(vfloat);
-                    return BinaryFromBytes(4, floatAsInt, prefix, separator);
-                }
+                    return BinaryFromBytes(4, floatAsInt, prefix, separator, group);
+                    }
                 case double vdouble:
                 {
                     var doubleAsLong = BitConverter.DoubleToInt64Bits(vdouble);
-                    return BinaryFromBytes(8, doubleAsLong, prefix, separator);
-                }
+                    return BinaryFromBytes(8, doubleAsLong, prefix, separator, group);
+                    }
                 case BigInteger bigInt:
                 {
                     var array = bigInt.ToByteArray();
-                    return BinaryFromBytes(array.Length, array[0], prefix, separator);
-                }
+                    return BinaryFromBytes(array.Length, array[0], prefix, separator, group);
+                    }
                 case KalkValue kalkValue:
                 {
                     var span = kalkValue.AsSpan();
-                    return BinaryFromBytes(span.Length, span[0], prefix, separator);
+                    return BinaryFromBytes(span.Length, span[0], prefix, separator, group);
+                    }
+                case KalkNativeBuffer buffer:
+                {
+                    var span = buffer.AsSpan();
+                    return BinaryFromBytes(span.Length, span[0], prefix, separator, group);
                 }
                 case IEnumerable list:
                 {
@@ -1469,9 +1731,7 @@ namespace Kalk.Core
                             builder.Append(separator);
                         }
                         isFirst = false;
-                        byte byteItem = Engine.ToObject<byte>(0, item);
-                        if (prefix) builder.Append("0b");
-                        AppendBinaryByte(builder, byteItem);
+                        builder.Append(Binary(item, prefix, separator, returnString, group));
                     }
                     return builder.ToString();
                 }
@@ -1480,24 +1740,64 @@ namespace Kalk.Core
             }
         }
 
-        private static void AppendBinaryByte(StringBuilder builder, byte byteItem)
+        private static unsafe void AppendBinary<T>(StringBuilder builder, T byteItem) where T: unmanaged, INumber<T>, IShiftOperators<T, int, T>, IBinaryInteger<T>
         {
-            for (int i = 0; i < 8; i++)
+            var numberBits = sizeof(T) * 8;
+            for (int i = 0; i < numberBits; i++)
             {
-                var b = (byteItem >> (7 - i)) & 1;
-                builder.Append(b == 1 ? '1' : '0');
+                var b = (byteItem >> (numberBits - 1 - i)) & T.One;
+                if (i > 0 && (i & 7) == 0) builder.Append('_');
+                builder.Append(b == T.One ? '1' : '0');
             }
         }
 
-        private static string BinaryFromBytes<T>(int byteCount, in T element, bool prefix, string separator)
+        private static string BinaryFromBytes<T>(int byteCount, in T element, bool prefix, string separator, int group)
         {
+            Debug.Assert(group is 1 or 2 or 4 or 8);
+
             var builder = new StringBuilder(byteCount * 8);
-            for (int i = 0; i < byteCount; i++)
+            switch (group)
             {
-                if (i > 0) builder.Append(separator);
-                var b = Unsafe.As<T, byte>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
-                if (prefix) builder.Append("0b");
-                AppendBinaryByte(builder, b);
+                case 1:
+                    for (int i = 0; i < byteCount; i++)
+                    {
+                        if (i > 0) builder.Append(separator);
+                        var b = Unsafe.As<T, byte>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        if (prefix) builder.Append("0b");
+                        AppendBinary(builder, b);
+                    }
+                    break;
+
+                case 2:
+                    for (int i = 0; i < byteCount; i += 2)
+                    {
+                        if (i > 0) builder.Append(separator);
+                        var v = Unsafe.As<T, short>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        if (prefix) builder.Append("0b");
+                        AppendBinary(builder, v);
+                    }
+                    break;
+
+                case 4:
+                    for (int i = 0; i < byteCount; i += 4)
+                    {
+                        if (i > 0) builder.Append(separator);
+                        var v = Unsafe.As<T, int>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        if (prefix) builder.Append("0b");
+                        AppendBinary(builder, v);
+                    }
+                    break;
+
+                case 8:
+                    for (int i = 0; i < byteCount; i += 8)
+                    {
+                        if (i > 0) builder.Append(separator);
+                        var v = Unsafe.As<T, long>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        if (prefix) builder.Append("0b");
+                        AppendBinary(builder, v);
+                    }
+                    break;
+
             }
             return builder.ToString();
         }

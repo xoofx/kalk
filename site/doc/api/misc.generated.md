@@ -101,6 +101,126 @@ out = 6
 out = "long"
 ```
 
+## bin2
+
+`bin2(value,prefix?,separator?)`
+
+Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+to an integral/bytebuffer representation. It is similar to the function bin but operates on a group of 2 bytes.
+
+- `value`: The input value.
+- `prefix`: Output the prefix `0x` in front of each binary bytes when converting
+        from integral to binary.
+- `separator`: The character used to separate binary bytes when converting
+        from integral to binary.
+
+### Returns
+
+The binary representation of the input or convert the binary input string
+to an integral representation.
+
+### Remarks
+
+When converting from a binary string to an integral representation, this method
+will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+dash `-`.
+When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.
+
+### Example
+
+```kalk
+>>> bin2 268
+# bin2(268)
+out = "00000001_00001100 00000000_00000000"
+>>> bin2 out
+# bin2(out)
+out = 268
+```
+
+## bin4
+
+`bin4(value,prefix?,separator?)`
+
+Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+to an integral/bytebuffer representation. It is similar to the function bin but operates on a group of 4 bytes.
+
+- `value`: The input value.
+- `prefix`: Output the prefix `0x` in front of each binary bytes when converting
+        from integral to binary.
+- `separator`: The character used to separate binary bytes when converting
+        from integral to binary.
+
+### Returns
+
+The binary representation of the input or convert the binary input string
+to an integral representation.
+
+### Remarks
+
+When converting from a binary string to an integral representation, this method
+will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+dash `-`.
+When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.
+
+### Example
+
+```kalk
+>>> bin4 123456789
+# bin4(123456789)
+out = "00000111_01011011_11001101_00010101"
+>>> bin4 out
+# bin4(out)
+out = 123_456_789
+>>> bin4 [1.0f, 2.0f, 3.0f]
+# bin4([1.0f, 2.0f, 3.0f])
+out = "00111111_10000000_00000000_00000000 01000000_00000000_00000000_00000000 01000000_01000000_00000000_00000000"
+>>> bin4 out
+# bin4(out)
+out = bytebuffer([0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64])
+```
+
+## bin8
+
+`bin8(value,prefix?,separator?)`
+
+Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+to an integral/bytebuffer representation. It is similar to the function bin but operates on a group of 8 bytes.
+
+- `value`: The input value.
+- `prefix`: Output the prefix `0x` in front of each binary bytes when converting
+        from integral to binary.
+- `separator`: The character used to separate binary bytes when converting
+        from integral to binary.
+
+### Returns
+
+The binary representation of the input or convert the binary input string
+to an integral representation.
+
+### Remarks
+
+When converting from a binary string to an integral representation, this method
+will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+dash `-`.
+When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.
+
+### Example
+
+```kalk
+>>> bin8 123_456_789_000
+# bin8(123456789000)
+out = "00000000_00000000_00000000_00011100_10111110_10011001_00011010_00001000"
+>>> bin8 out
+# bin8(out)
+out = 123_456_789_000
+```
+
 ## colors
 
 `colors`
@@ -380,6 +500,126 @@ out = "1A 2B 3C 4D 6F 5E 00 00"
 >>> hex float4(1,2,3,4)
 # hex(float4(1, 2, 3, 4))
 out = "00 00 80 3F 00 00 00 40 00 00 40 40 00 00 80 40"
+```
+
+## hex2
+
+`hex2(value,prefix?,separator?)`
+
+Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+to an integral/bytebuffer representation. It is similar to the function hex but it operates on a group of 2 bytes.
+
+- `value`: The input value.
+- `prefix`: Output the prefix `0x` in front of each hexadecimal bytes when converting
+    from integral to hexadecimal.
+- `separator`: The character used to separate hexadecimal bytes when converting
+    from integral to hexadecimal.
+
+### Returns
+
+The hexadecimal representation of the input or convert the hexadecimal input string
+to an integral representation.
+
+### Remarks
+
+When converting from a hexadecimal string to an integral representation, this method
+will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+dash `-`.
+When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.
+
+### Example
+
+```kalk
+>>> hex2 268
+# hex2(268)
+out = "10C"
+>>> hex2 out
+# hex2(out)
+out = 268
+```
+
+## hex4
+
+`hex4(value,prefix?,separator?)`
+
+Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+to an integral/bytebuffer representation. It is similar to the function hex but it operates on a group of 4 bytes.
+
+- `value`: The input value.
+- `prefix`: Output the prefix `0x` in front of each hexadecimal bytes when converting
+    from integral to hexadecimal.
+- `separator`: The character used to separate hexadecimal bytes when converting
+    from integral to hexadecimal.
+
+### Returns
+
+The hexadecimal representation of the input or convert the hexadecimal input string
+to an integral representation.
+
+### Remarks
+
+When converting from a hexadecimal string to an integral representation, this method
+will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+dash `-`.
+When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.
+
+### Example
+
+```kalk
+>>> hex4 123456
+# hex4(123456)
+out = "1E240"
+>>> hex4 out
+# hex4(out)
+out = 123_456
+>>> hex4 [1.0f, 2.0f, 3.0f]
+# hex4([1.0f, 2.0f, 3.0f])
+out = "3F800000 40000000 40400000"
+>>> hex4 out
+# hex4(out)
+out = bytebuffer([0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64])
+```
+
+## hex8
+
+`hex8(value,prefix?,separator?)`
+
+Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+to an integral/bytebuffer representation. It is similar to the function hex but it operates on a group of 8 bytes.
+
+- `value`: The input value.
+- `prefix`: Output the prefix `0x` in front of each hexadecimal bytes when converting
+    from integral to hexadecimal.
+- `separator`: The character used to separate hexadecimal bytes when converting
+    from integral to hexadecimal.
+
+### Returns
+
+The hexadecimal representation of the input or convert the hexadecimal input string
+to an integral representation.
+
+### Remarks
+
+When converting from a hexadecimal string to an integral representation, this method
+will skip any white-space characters, comma `,`, colon `:`, semi-colon `;`, underscore `_` and
+dash `-`.
+When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.
+
+### Example
+
+```kalk
+>>> hex8 123_456_789_000
+# hex8(123456789000)
+out = "1CBE991A08"
+>>> hex8 out
+# hex8(out)
+out = 123_456_789_000
 ```
 
 ## insert_at

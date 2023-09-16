@@ -34,7 +34,7 @@ Creates an action for the command line editor experience related to
      | `validate_line`       | Validate the current line
      | `force_validate_line` | Validate the current line and force a new line even in case of a syntax error
      | `exit`                | Exit the program
-     | `copy_or_exit`        | Copy the content of the selection to the clipboard or if there is no selection, exit the program
+     | `copy`                | Copy the content of the selection to the clipboard
 
 ### Returns
 
