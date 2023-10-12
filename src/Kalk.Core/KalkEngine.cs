@@ -377,7 +377,7 @@ namespace Kalk.Core
                 return _miscModule.DateObject.ToString((DateTime)value, _miscModule.DateObject.Format, CurrentCulture);
             }
             
-            if (CurrentDisplay != KalkDisplayMode.Raw && (value is int | value is uint || value is ulong || value is long || value is BigInteger || value is short || value is ushort))
+            if (CurrentDisplay != KalkDisplayMode.Raw && (value is int || value is uint || value is ulong || value is long || value is BigInteger || value is short || value is ushort))
             {
                 return ((IFormattable)value).ToString("N", _integersCultureInfoWithUnderscore);
             }
