@@ -2,186 +2,186 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://kalk.dev/doc</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/</loc>
-    <lastmod>2023-09-16</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/download</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/all</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/advanced</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/csv</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/download</loc>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/files</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/general</loc>
-    <lastmod>2023-09-16</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/math</loc>
-    <lastmod>2023-09-16</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/currencies</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/memory</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/math</loc>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/standardunits</loc>
-    <lastmod>2023-09-16</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/misc</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/strings</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/misc</loc>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/vector</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/web</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/user</loc>
-    <lastmod>2023-09-16</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/types</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/user/syntax</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/arm/advsimdarm64</loc>
-    <lastmod>2023-09-16</lastmod>
+    <loc>https://kalk.dev/doc/api/types</loc>
+    <lastmod>2024-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/currencies</loc>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/arm/aes</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/arm/crc32</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/arm/crc32arm64</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/arm</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/arm/sha1</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/arm/sha256</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel/aes</loc>
-    <lastmod>2023-09-16</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/avx</loc>
-    <lastmod>2023-09-16</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/arm/advsimd</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel/bmi1</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel/bmi1x64</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/avx2</loc>
-    <lastmod>2023-09-16</lastmod>
+    <loc>https://kalk.dev/doc/api/arm/advsimdarm64</loc>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel/bmi2</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/avx</loc>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel/bmi2x64</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/avx2</loc>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel</loc>
-    <lastmod>2023-09-16</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/sse</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel/sse2x64</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
-    <loc>https://kalk.dev/doc/api/intel/sse2</loc>
-    <lastmod>2023-09-16</lastmod>
+    <loc>https://kalk.dev/doc/api/intel/sse</loc>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel/sse3</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel/sse41x64</loc>
-    <lastmod>2023-09-16</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/sse41</loc>
-    <lastmod>2023-09-16</lastmod>
-  </url>
-  <url>
-    <loc>https://kalk.dev/doc/api/intel/sse42</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel/sse42x64</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/sse2</loc>
+    <lastmod>2024-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/sse42</loc>
+    <lastmod>2024-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/intel/sse41</loc>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel/ssex64</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
   </url>
   <url>
     <loc>https://kalk.dev/doc/api/intel/ssse3</loc>
-    <lastmod>2023-09-16</lastmod>
+    <lastmod>2024-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://kalk.dev/doc/api/arm/advsimd</loc>
+    <lastmod>2024-02-13</lastmod>
   </url>
 </urlset>
