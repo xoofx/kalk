@@ -167,7 +167,7 @@ namespace Kalk.Core
 
         public Span<byte> AsSpan()
         {
-            return MemoryMarshal.CreateSpan(ref Unsafe.As<KalkComplex, byte>(ref Unsafe.AsRef(this)), Unsafe.SizeOf<KalkComplex>());
+            return MemoryMarshal.CreateSpan(ref Unsafe.As<KalkComplex, byte>(ref Unsafe.AsRef(in this)), Unsafe.SizeOf<KalkComplex>());
         }
 
         public bool TryConvertTo(TemplateContext context, SourceSpan span, Type type, out object value)

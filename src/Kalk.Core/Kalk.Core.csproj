@@ -17,11 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="30.0.1" />
+    <PackageReference Include="CsvHelper" Version="31.0.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-    <PackageReference Include="Scriban" Version="5.9.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+    <PackageReference Include="Scriban" Version="5.9.1" />
   </ItemGroup>
 
   <ItemGroup>

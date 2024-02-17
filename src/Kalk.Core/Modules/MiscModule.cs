@@ -1511,7 +1511,7 @@ namespace Kalk.Core
                     for (int i = 0; i < byteCount; i++)
                     {
                         if (i > 0) builder.Append(separator);
-                        var v = Unsafe.As<T, byte>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        var v = Unsafe.As<T, byte>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(in element), new IntPtr(i)));
                         if (prefix && (i % 1) == 0) builder.Append("0x");
                         builder.Append(v.ToString("X2"));
                     }
@@ -1521,7 +1521,7 @@ namespace Kalk.Core
                     for (int i = 0; i < byteCount; i += 2)
                     {
                         if (i > 0) builder.Append(separator);
-                        var v = Unsafe.As<T, short>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        var v = Unsafe.As<T, short>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(in element), new IntPtr(i)));
                         if (prefix && (i % 2) == 0) builder.Append("0x");
                         builder.Append(v.ToString("X2"));
                     }
@@ -1531,7 +1531,7 @@ namespace Kalk.Core
                     for (int i = 0; i < byteCount; i += 4)
                     {
                         if (i > 0) builder.Append(separator);
-                        var v = Unsafe.As<T, int>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        var v = Unsafe.As<T, int>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(in element), new IntPtr(i)));
                         if (prefix && (i % 4) == 0) builder.Append("0x");
                         builder.Append(v.ToString("X2"));
                     }
@@ -1541,7 +1541,7 @@ namespace Kalk.Core
                     for (int i = 0; i < byteCount; i += 8)
                     {
                         if (i > 0) builder.Append(separator);
-                        var v = Unsafe.As<T, long>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        var v = Unsafe.As<T, long>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(in element), new IntPtr(i)));
                         if (prefix && (i % 8) == 0) builder.Append("0x");
                         builder.Append(v.ToString("X2"));
                     }
@@ -1762,7 +1762,7 @@ namespace Kalk.Core
                     for (int i = 0; i < byteCount; i++)
                     {
                         if (i > 0) builder.Append(separator);
-                        var b = Unsafe.As<T, byte>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        var b = Unsafe.As<T, byte>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(in element), new IntPtr(i)));
                         if (prefix) builder.Append("0b");
                         AppendBinary(builder, b);
                     }
@@ -1772,7 +1772,7 @@ namespace Kalk.Core
                     for (int i = 0; i < byteCount; i += 2)
                     {
                         if (i > 0) builder.Append(separator);
-                        var v = Unsafe.As<T, short>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        var v = Unsafe.As<T, short>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(in element), new IntPtr(i)));
                         if (prefix) builder.Append("0b");
                         AppendBinary(builder, v);
                     }
@@ -1782,7 +1782,7 @@ namespace Kalk.Core
                     for (int i = 0; i < byteCount; i += 4)
                     {
                         if (i > 0) builder.Append(separator);
-                        var v = Unsafe.As<T, int>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        var v = Unsafe.As<T, int>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(in element), new IntPtr(i)));
                         if (prefix) builder.Append("0b");
                         AppendBinary(builder, v);
                     }
@@ -1792,7 +1792,7 @@ namespace Kalk.Core
                     for (int i = 0; i < byteCount; i += 8)
                     {
                         if (i > 0) builder.Append(separator);
-                        var v = Unsafe.As<T, long>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(element), new IntPtr(i)));
+                        var v = Unsafe.As<T, long>(ref Unsafe.AddByteOffset(ref Unsafe.AsRef(in element), new IntPtr(i)));
                         if (prefix) builder.Append("0b");
                         AppendBinary(builder, v);
                     }

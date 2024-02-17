@@ -64,7 +64,7 @@ namespace Kalk.Core
         public static KalkNativeBuffer AsBytes<T>(int byteCount, in T element)
         {
             var buffer = new KalkNativeBuffer(byteCount);
-            Unsafe.CopyBlockUnaligned(ref buffer.AsSpan()[0], ref Unsafe.As<T, byte>(ref Unsafe.AsRef(element)), (uint)byteCount);
+            Unsafe.CopyBlockUnaligned(ref buffer.AsSpan()[0], ref Unsafe.As<T, byte>(ref Unsafe.AsRef(in element)), (uint)byteCount);
             return buffer;
         }
 

@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Broslyn" Version="1.2.0" />
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.6.1" />
-    <PackageReference Include="Scriban" Version="5.9.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.7.1" />
+    <PackageReference Include="Scriban" Version="5.9.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" />
   </ItemGroup>
 
   <ItemGroup>

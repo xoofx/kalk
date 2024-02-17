@@ -1,14 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="nunit" Version="3.13.3" />
+    <PackageReference Include="nunit" Version="4.0.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+
+    <Using Include="NUnit.Framework" />
+    <Using Include="NUnit.Framework.Legacy.ClassicAssert" Alias="Assert" />
+    <Using Include="NUnit.Framework.Legacy.CollectionAssert" Alias="CollectionAssert" />
+    <Using Include="NUnit.Framework.Legacy.StringAssert" Alias="StringAssert" />
+    <Using Include="NUnit.Framework.Legacy.DirectoryAssert" Alias="DirectoryAssert" />
+    <Using Include="NUnit.Framework.Legacy.FileAssert" Alias="FileAssert" />
   </ItemGroup>
 
   <ItemGroup>

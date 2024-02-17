@@ -122,7 +122,7 @@ namespace Kalk.Core
 
         private void DisplayDetailed(KalkEngine engine)
         {
-            var u16 = Unsafe.As<Half, ushort>(ref Unsafe.AsRef(_value));
+            var u16 = Unsafe.As<Half, ushort>(ref Unsafe.AsRef(in _value));
             engine.WriteHighlightLine($"    # IEEE 754 - half float - 16-bit");
             engine.WriteHighlightLine($"    #");
             engine.WriteInt16(u16, true);
@@ -156,7 +156,7 @@ namespace Kalk.Core
 
         public Span<byte> AsSpan()
         {
-            return MemoryMarshal.CreateSpan(ref Unsafe.As<KalkHalf, byte>(ref Unsafe.AsRef(this)), Unsafe.SizeOf<KalkHalf>());
+            return MemoryMarshal.CreateSpan(ref Unsafe.As<KalkHalf, byte>(ref Unsafe.AsRef(in this)), Unsafe.SizeOf<KalkHalf>());
         }
 
         public bool TryConvertTo(TemplateContext context, SourceSpan span, Type type, out object value)
