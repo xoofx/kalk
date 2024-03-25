@@ -35,7 +35,7 @@ namespace Kalk.Core
 
         public double Magnitude => _value.Magnitude;
         
-        public bool HasIm => _value.Imaginary > MaxRoundToZero;
+        public bool HasIm => Math.Abs(_value.Imaginary) > MaxRoundToZero;
         
         internal Complex Value => _value;
 

@@ -624,6 +624,9 @@ A complex number.
 >>> 1 + 2i
 # 1 + 2 * i
 out = 1 + 2i
+>>> i ^ 3
+# i ^ 3
+out = i
 ```
 
 ## imag
