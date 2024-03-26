@@ -12,7 +12,7 @@ namespace Kalk.Core
 {
     public struct KalkComplex : IScriptCustomType, IKalkSpannable
     {
-        private Complex _value;
+        private readonly Complex _value;
         private const double MaxRoundToZero = 1e-14;
 
         public KalkComplex(double real, double im)
@@ -145,20 +145,35 @@ namespace Kalk.Core
             var re = Math.Round(Re, 10, MidpointRounding.AwayFromZero);
             var im = Math.Round(Im, 10, MidpointRounding.AwayFromZero);
 
-            if (Math.Abs(re) > 1e-14) builder.AppendFormat(CultureInfo.CurrentCulture, "{0}", re);
+            if (Math.Abs(re) > MaxRoundToZero) builder.AppendFormat(CultureInfo.CurrentCulture, "{0}", re);
 
             if (HasIm)
             {
-                if (builder.Length > 0) builder.Append(" + ");
-
-                if (Math.Abs(Math.Abs(im) - 1.0) < MaxRoundToZero)
+                if (builder.Length > 0)
                 {
-                    builder.Append("i");
+                    builder.Append(im < 0 ? " - " : " + ");
+
+                    if (Math.Abs(Math.Abs(im) - 1.0) < MaxRoundToZero)
+                    {
+                        builder.Append("i");
+                    }
+                    else
+                    {
+                        builder.AppendFormat(CultureInfo.CurrentCulture, "{0}i", Math.Abs(im));
+                    }
                 }
                 else
                 {
-                    builder.AppendFormat(CultureInfo.CurrentCulture, "{0}i", im);
+                    if (Math.Abs(Math.Abs(im) - 1.0) < MaxRoundToZero)
+                    {
+                        builder.Append( im <  0 ? "-i" : "i");
+                    }
+                    else
+                    {
+                        builder.AppendFormat(CultureInfo.CurrentCulture, "{0}i", im);
+                    }
                 }
+
             }
 
             if (builder.Length == 0) builder.Append("0");

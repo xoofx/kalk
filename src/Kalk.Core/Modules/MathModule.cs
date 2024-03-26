@@ -147,7 +147,10 @@ namespace Kalk.Core
         /// out = 1 + 2i
         /// >>> i ^ 3
         /// # i ^ 3
-        /// out = i
+        /// out = -i
+        /// >>> -5 + (-3i)
+        /// # -5 + (-3 * i)
+        /// out = -5 - 3i
         /// ```
         /// </example>
         [KalkExport("i", CategoryMathFunctions)]
