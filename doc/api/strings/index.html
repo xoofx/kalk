@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lunet 0.6.1.0">
+    <title>Strings Module - kalk</title>
+    <link rel="stylesheet" href="/css/site.css">
+    <script src="/js/site.js" ></script>
+    <script src="/js/site-defer.js" defer></script>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@xoofx">
+    <meta name="twitter:title" content="Strings Module - kalk">
+    <meta name="twitter:description" content="kalk - calculator app">
+    <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
+    <meta name="twitter:image:alt" content="Strings Module - kalk">    
+    <script src="https://www.googletagmanager.com/gtag/js?id=G-Z558CWX6J6" async></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Z558CWX6J6');</script>
+  </head>
+  <body>
+
+    <div id="kalk" class="container">
+      <nav class="navbar navbar-expand-md navbar-light sticky-top">
+        <a class="kalk-logo navbar-brand" href="/"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
+<ol id='nav-id-home-0' class='navbar-nav nav-level0  '>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/' class='nav-link  '>Home</a></span>  </li>
+  <li class='nav-item  active'>
+    <span class='nav-item-row'><a href='/doc/' class='nav-link  '>Documentation</a></span>  </li>
+</ol>
+          <ol class="navbar-nav flex-grow-1" style="padding-right: 0.5rem;">
+            <li class="nav-item w-100">
+                <div class="kalk-search">
+                  <label class="search-icon"><i class="fa fa-search"></i></label>
+                  <select id="search-box"></select>
+                </div>
+            </li>
+          </ol>
+<ol id='nav-id-home2-0' class='navbar-nav nav-level0  flex-shrink-0'>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/download/' class='nav-link  btn btn-success'><i class="fa fa-download"></i> Download</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/sponsors/xoofx' class='nav-link  btn btn-outline-secondary'><i class="fa fa-heart-o"></i> Sponsor</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/xoofx/kalk/' class='nav-link  btn btn-info'><i class="fa fa-github"></i> GitHub</a></span>  </li>
+</ol>
+        </div>
+      </nav>
+      <div class="kalk-doc">
+        <section>
+
+<div class="container">
+  <div class="row">
+      <div class="col-sm-3 align-self-start sticky-top menu-sidebar">
+        <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
+          </ol>
+          </li>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/math/' class='menu-link  '>Math Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/memory/' class='menu-link  '>Memory Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/misc/' class='menu-link  '>Misc Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/vector/' class='menu-link  '>Vector Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/types/' class='menu-link  '>Types Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/all/' class='menu-link  '>All Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/csv/' class='menu-link  '>Csv Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/currencies/' class='menu-link  '>Currencies Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/files/' class='menu-link  '>Files Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/standardunits/' class='menu-link  '>StandardUnits Module</a></span>    </li>
+            <li class='menu-item  active'>
+              <span class='menu-item-row'><a href='/doc/api/strings/' class='menu-link  '>Strings Module</a></span><nav class="js-toc toc"></nav>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/intel/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-18' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-18' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-18' class='menu menu-level2 collapse  '>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/aes/' class='menu-link  '>Intel Aes Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/avx/' class='menu-link  '>Intel Avx Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/avx2/' class='menu-link  '>Intel Avx2 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi1/' class='menu-link  '>Intel Bmi1 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi1x64/' class='menu-link  '>Intel Bmi1X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi2/' class='menu-link  '>Intel Bmi2 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi2x64/' class='menu-link  '>Intel Bmi2X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse/' class='menu-link  '>Intel Sse Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/ssex64/' class='menu-link  '>Intel SseX64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse2/' class='menu-link  '>Intel Sse2 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse2x64/' class='menu-link  '>Intel Sse2X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse3/' class='menu-link  '>Intel Sse3 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/ssse3/' class='menu-link  '>Intel Ssse3 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse41/' class='menu-link  '>Intel Sse41 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse41x64/' class='menu-link  '>Intel Sse41X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse42/' class='menu-link  '>Intel Sse42 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse42x64/' class='menu-link  '>Intel Sse42X64 Intrinsics</a></span>      </li>
+            </ol>
+            </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/arm/' class='menu-link  '>Arm Hardware Intrinsics</a><a href='#menu-id-doc-36' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-36' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-36' class='menu menu-level2 collapse  '>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/advsimd/' class='menu-link  '>Arm AdvSimd Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/advsimdarm64/' class='menu-link  '>Arm AdvSimdArm64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/aes/' class='menu-link  '>Arm Aes Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/crc32/' class='menu-link  '>Arm Crc32 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/crc32arm64/' class='menu-link  '>Arm Crc32Arm64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/sha1/' class='menu-link  '>Arm Sha1 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/sha256/' class='menu-link  '>Arm Sha256 Intrinsics</a></span>      </li>
+            </ol>
+            </li>
+          </ol>
+          </li>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/advanced/' class='menu-link  '>Advanced Topics</a></span>  </li>
+        </ol>
+
+      </div>
+      <div class="col-sm-9 js-toc-content">
+        <ol class='breadcrumb'>
+          <li class='breadcrumb-item '>
+            <a href='/' class='breadcrumb-link  '>Home</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
+          <li class='breadcrumb-item  active'>
+            Strings Module  </li>
+        </ol>
+
+        <p id="lunet-results"></p>
+        <h1>Strings Module</h1>
+<p>Modules that provides string functions (e.g <code>upcase</code>, <code>downcase</code>, <code>regex_escape</code>...).</p>
+<p>In order to use the functions provided by this module, you need to import this module:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; import Strings
+</code></pre>
+<h2 id="capitalize">capitalize</h2>
+<p><code>capitalize(text)</code></p>
+<p>Converts the first character of the passed string to a upper case character.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns">Returns</h3>
+<p>The capitalized input string</p>
+<h3 id="example">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;test&quot; |&gt; capitalize
+# &quot;test&quot; |&gt; capitalize
+out = &quot;Test&quot;
+</code></pre>
+<h2 id="capitalize_words">capitalize_words</h2>
+<p><code>capitalize_words(text)</code></p>
+<p>Converts the first character of each word in the passed string to a upper case character.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns-1">Returns</h3>
+<p>The capitalized input string</p>
+<h3 id="example-1">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;This is easy&quot; |&gt; capitalize_words
+# &quot;This is easy&quot; |&gt; capitalize_words
+out = &quot;This Is Easy&quot;
+</code></pre>
+<h2 id="downcase">downcase</h2>
+<p><code>downcase(text)</code></p>
+<p>Converts the string to lower case.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns-2">Returns</h3>
+<p>The input string lower case</p>
+<h3 id="example-2">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;TeSt&quot; |&gt; downcase
+# &quot;TeSt&quot; |&gt; downcase
+out = &quot;test&quot;
+</code></pre>
+<h2 id="endswith">endswith</h2>
+<p><code>endswith(text,end)</code></p>
+<p>Returns a boolean indicating whether the input string ends with the specified string <code>value</code>.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+<li><code>end</code>: The string to look for</li>
+</ul>
+<h3 id="returns-3">Returns</h3>
+<p>true if <code>text</code> ends with the specified string <code>value</code></p>
+<h3 id="example-3">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;This is easy&quot; |&gt; endswith &quot;easy&quot;
+# &quot;This is easy&quot; |&gt; endswith(&quot;easy&quot;)
+out = true
+&gt;&gt;&gt; &quot;This is easy&quot; |&gt; endswith &quot;none&quot;
+# &quot;This is easy&quot; |&gt; endswith(&quot;none&quot;)
+out = false
+</code></pre>
+<h2 id="escape">escape</h2>
+<p><code>escape(text)</code></p>
+<p>Escapes a string with escape characters.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns-4">Returns</h3>
+<p>The two strings concatenated</p>
+<h3 id="example-4">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;Hel\tlo\n\&quot;W\\orld&quot; |&gt; escape
+# &quot;Hel\tlo\n\&quot;W\\orld&quot; |&gt; escape
+out = &quot;Hel\\tlo\\n\\\&quot;W\\\\orld&quot;
+</code></pre>
+<h2 id="handleize">handleize</h2>
+<p><code>handleize(text)</code></p>
+<p>Returns a url handle from the input string.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns-5">Returns</h3>
+<p>A url handle</p>
+<h3 id="example-5">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; '100% M @ Ms!!!' |&gt; handleize
+# '100% M @ Ms!!!' |&gt; handleize
+out = &quot;100-m-ms&quot;
+</code></pre>
+<h2 id="lstrip">lstrip</h2>
+<p><code>lstrip(text)</code></p>
+<p>Removes any whitespace characters on the <strong>left</strong> side of the input string.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns-6">Returns</h3>
+<p>The input string without any left whitespace characters</p>
+<h3 id="example-6">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; '   too many spaces' |&gt; lstrip
+# '   too many spaces' |&gt; lstrip
+out = &quot;too many spaces&quot;
+</code></pre>
+<h2 id="pad_left">pad_left</h2>
+<p><code>pad_left(text,width)</code></p>
+<p>Pads a string with leading spaces to a specified total length.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+<li><code>width</code>: The number of characters in the resulting string</li>
+</ul>
+<h3 id="returns-7">Returns</h3>
+<p>The input string padded</p>
+<h3 id="example-7">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;world&quot; |&gt; pad_left 10
+# &quot;world&quot; |&gt; pad_left(10)
+out = &quot;     world&quot;
+</code></pre>
+<h2 id="pad_right">pad_right</h2>
+<p><code>pad_right(text,width)</code></p>
+<p>Pads a string with trailing spaces to a specified total length.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+<li><code>width</code>: The number of characters in the resulting string</li>
+</ul>
+<h3 id="returns-8">Returns</h3>
+<p>The input string padded</p>
+<h3 id="example-8">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;hello&quot; |&gt; pad_right 10
+# &quot;hello&quot; |&gt; pad_right(10)
+out = &quot;hello     &quot;
+</code></pre>
+<h2 id="pluralize">pluralize</h2>
+<p><code>pluralize(number,singular,plural)</code></p>
+<p>Outputs the singular or plural version of a string based on the value of a number.</p>
+<ul>
+<li><code>number</code>: The number to check</li>
+<li><code>singular</code>: The singular string to return if number is == 1</li>
+<li><code>plural</code>: The plural string to return if number is != 1</li>
+</ul>
+<h3 id="returns-9">Returns</h3>
+<p>The singular or plural string based on number</p>
+<h3 id="example-9">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; 3 |&gt; pluralize('product', 'products')
+# 3 |&gt; pluralize('product', 'products')
+out = &quot;products&quot;
+</code></pre>
+<h2 id="regex_escape">regex_escape</h2>
+<p><code>regex_escape(text)</code></p>
+<p>Escapes a minimal set of characters (<code>\</code>, <code>*</code>, <code>+</code>, <code>?</code>, <code>|</code>, <code>{</code>, <code>[</code>, <code>(</code>,<code>)</code>, <code>^</code>, <code>$</code>,<code>.</code>, <code>#</code>, and white space)
+by replacing them with their escape codes.
+This instructs the regular expression engine to interpret these characters literally rather than as metacharacters.</p>
+<ul>
+<li><code>text</code>: The input string that contains the text to convert.</li>
+</ul>
+<h3 id="returns-10">Returns</h3>
+<p>A string of characters with metacharacters converted to their escaped form.</p>
+<h3 id="example-10">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;(abc.*)&quot; |&gt; regex_escape
+# &quot;(abc.*)&quot; |&gt; regex_escape
+out = &quot;\\(abc\\.\\*\\)&quot;
+</code></pre>
+<h2 id="regex_match">regex_match</h2>
+<p><code>regex_match(text,pattern,options?)</code></p>
+<p>Searches an input string for a substring that matches a regular expression pattern and returns an array with the match occurences.</p>
+<ul>
+<li><code>text</code>: The string to search for a match.</li>
+<li><code>pattern</code>: The regular expression pattern to match.</li>
+<li><code>options</code>: A string with regex options, that can contain the following option characters (default is <code>null</code>):
+<ul>
+<li><code>i</code>: Specifies case-insensitive matching.</li>
+<li><code>m</code>: Multiline mode. Changes the meaning of <code>^</code> and <code>$</code> so they match at the beginning and end, respectively, of any line, and not just the beginning and end of the entire string.</li>
+<li><code>s</code>: Specifies single-line mode. Changes the meaning of the dot <code>.</code> so it matches every character (instead of every character except <code>\n</code>).</li>
+<li><code>x</code>: Eliminates unescaped white space from the pattern and enables comments marked with <code>#</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-11">Returns</h3>
+<p>An array that contains all the match groups. The first group contains the entire match. The other elements contain regex matched groups <code>(..)</code>. An empty array returned means no match.</p>
+<h3 id="example-11">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;this is a text123&quot; |&gt; regex_match `(\w+) a ([a-z]+\d+)`
+# &quot;this is a text123&quot; |&gt; regex_match(`(\w+) a ([a-z]+\d+)`)
+out = [&quot;is a text123&quot;, &quot;is&quot;, &quot;text123&quot;]
+</code></pre>
+<h2 id="regex_matches">regex_matches</h2>
+<p><code>regex_matches(text,pattern,options?)</code></p>
+<p>Searches an input string for multiple substrings that matches a regular expression pattern and returns an array with the match occurences.</p>
+<ul>
+<li><code>text</code>: The string to search for a match.</li>
+<li><code>pattern</code>: The regular expression pattern to match.</li>
+<li><code>options</code>: A string with regex options, that can contain the following option characters (default is <code>null</code>):
+<ul>
+<li><code>i</code>: Specifies case-insensitive matching.</li>
+<li><code>m</code>: Multiline mode. Changes the meaning of <code>^</code> and <code>$</code> so they match at the beginning and end, respectively, of any line, and not just the beginning and end of the entire string.</li>
+<li><code>s</code>: Specifies single-line mode. Changes the meaning of the dot <code>.</code> so it matches every character (instead of every character except <code>\n</code>).</li>
+<li><code>x</code>: Eliminates unescaped white space from the pattern and enables comments marked with <code>#</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-12">Returns</h3>
+<p>An array of matches that contains all the match groups. The first group contains the entire match. The other elements contain regex matched groups <code>(..)</code>. An empty array returned means no match.</p>
+<h3 id="example-12">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;this is a text123&quot; |&gt; regex_matches `(\w+)`
+# &quot;this is a text123&quot; |&gt; regex_matches(`(\w+)`)
+out = [[&quot;this&quot;, &quot;this&quot;], [&quot;is&quot;, &quot;is&quot;], [&quot;a&quot;, &quot;a&quot;], [&quot;text123&quot;, &quot;text123&quot;]]
+</code></pre>
+<h2 id="regex_replace">regex_replace</h2>
+<p><code>regex_replace(text,pattern,replace,options?)</code></p>
+<p>In a specified input string, replaces strings that match a regular expression pattern with a specified replacement string.</p>
+<ul>
+<li><code>text</code>: The string to search for a match.</li>
+<li><code>pattern</code>: The regular expression pattern to match.</li>
+<li><code>replace</code>: The replacement string.</li>
+<li><code>options</code>: A string with regex options, that can contain the following option characters (default is <code>null</code>):
+<ul>
+<li><code>i</code>: Specifies case-insensitive matching.</li>
+<li><code>m</code>: Multiline mode. Changes the meaning of <code>^</code> and <code>$</code> so they match at the beginning and end, respectively, of any line, and not just the beginning and end of the entire string.</li>
+<li><code>s</code>: Specifies single-line mode. Changes the meaning of the dot <code>.</code> so it matches every character (instead of every character except <code>\n</code>).</li>
+<li><code>x</code>: Eliminates unescaped white space from the pattern and enables comments marked with <code>#</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-13">Returns</h3>
+<p>A new string that is identical to the input string, except that the replacement string takes the place of each matched string. If pattern is not matched in the current instance, the method returns the current instance unchanged.</p>
+<h3 id="example-13">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;abbbbcccd&quot; |&gt; regex_replace(&quot;b+c+&quot;,&quot;-Yo-&quot;)
+# &quot;abbbbcccd&quot; |&gt; regex_replace(&quot;b+c+&quot;, &quot;-Yo-&quot;)
+out = &quot;a-Yo-d&quot;
+</code></pre>
+<h2 id="regex_split">regex_split</h2>
+<p><code>regex_split(text,pattern,options?)</code></p>
+<p>Splits an input string into an array of substrings at the positions defined by a regular expression match.</p>
+<ul>
+<li><code>text</code>: The string to split.</li>
+<li><code>pattern</code>: The regular expression pattern to match.</li>
+<li><code>options</code>: A string with regex options, that can contain the following option characters (default is <code>null</code>):
+<ul>
+<li><code>i</code>: Specifies case-insensitive matching.</li>
+<li><code>m</code>: Multiline mode. Changes the meaning of <code>^</code> and <code>$</code> so they match at the beginning and end, respectively, of any line, and not just the beginning and end of the entire string.</li>
+<li><code>s</code>: Specifies single-line mode. Changes the meaning of the dot <code>.</code> so it matches every character (instead of every character except <code>\n</code>).</li>
+<li><code>x</code>: Eliminates unescaped white space from the pattern and enables comments marked with <code>#</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-14">Returns</h3>
+<p>A string array.</p>
+<h3 id="example-14">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;a, b   , c,    d&quot; |&gt; regex_split `\s*,\s*`
+# &quot;a, b   , c,    d&quot; |&gt; regex_split(`\s*,\s*`)
+out = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]
+</code></pre>
+<h2 id="regex_unescape">regex_unescape</h2>
+<p><code>regex_unescape(text)</code></p>
+<p>Converts any escaped characters in the input string.</p>
+<ul>
+<li><code>text</code>: The input string containing the text to convert.</li>
+</ul>
+<h3 id="returns-15">Returns</h3>
+<p>A string of characters with any escaped characters converted to their unescaped form.</p>
+<h3 id="example-15">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;\\(abc\\.\\*\\)&quot; |&gt; regex_unescape
+# &quot;\\(abc\\.\\*\\)&quot; |&gt; regex_unescape
+out = &quot;(abc.*)&quot;
+</code></pre>
+<h2 id="rstrip">rstrip</h2>
+<p><code>rstrip(text)</code></p>
+<p>Removes any whitespace characters on the <strong>right</strong> side of the input string.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns-16">Returns</h3>
+<p>The input string without any left whitespace characters</p>
+<h3 id="example-16">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; '   too many spaces           ' |&gt; rstrip
+# '   too many spaces           ' |&gt; rstrip
+out = &quot;   too many spaces&quot;
+</code></pre>
+<h2 id="split">split</h2>
+<p><code>split(text,match)</code></p>
+<p>The <code>split</code> function takes on a substring as a parameter.
+The substring is used as a delimiter to divide a string into an array. You can output different parts of an array using <code>array</code> functions.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+<li><code>match</code>: The string used to split the input <code>text</code> string</li>
+</ul>
+<h3 id="returns-17">Returns</h3>
+<p>An enumeration of the substrings</p>
+<h3 id="example-17">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;Hi, how are you today?&quot; |&gt; split ' '
+# &quot;Hi, how are you today?&quot; |&gt; split(' ')
+out = [&quot;Hi,&quot;, &quot;how&quot;, &quot;are&quot;, &quot;you&quot;, &quot;today?&quot;]
+</code></pre>
+<h2 id="startswith">startswith</h2>
+<p><code>startswith(text,start)</code></p>
+<p>Returns a boolean indicating whether the input string starts with the specified string <code>value</code>.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+<li><code>start</code>: The string to look for</li>
+</ul>
+<h3 id="returns-18">Returns</h3>
+<p>true if <code>text</code> starts with the specified string <code>value</code></p>
+<h3 id="example-18">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;This is easy&quot; |&gt; startswith &quot;This&quot;
+# &quot;This is easy&quot; |&gt; startswith(&quot;This&quot;)
+out = true
+&gt;&gt;&gt; &quot;This is easy&quot; |&gt; startswith &quot;easy&quot;
+# &quot;This is easy&quot; |&gt; startswith(&quot;easy&quot;)
+out = false
+</code></pre>
+<h2 id="strip">strip</h2>
+<p><code>strip(text)</code></p>
+<p>Removes any whitespace characters on the <strong>left</strong> and <strong>right</strong> side of the input string.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns-19">Returns</h3>
+<p>The input string without any left and right whitespace characters</p>
+<h3 id="example-19">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; '   too many spaces           ' |&gt; strip
+# '   too many spaces           ' |&gt; strip
+out = &quot;too many spaces&quot;
+</code></pre>
+<h2 id="strip_newlines">strip_newlines</h2>
+<p><code>strip_newlines(text)</code></p>
+<p>Removes any line breaks/newlines from a string.</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns-20">Returns</h3>
+<p>The input string without any breaks/newlines characters</p>
+<h3 id="example-20">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;This is a string.\r\n With \nanother \rstring&quot; |&gt; strip_newlines
+# &quot;This is a string.\r\n With \nanother \rstring&quot; |&gt; strip_newlines
+out = &quot;This is a string. With another string&quot;
+</code></pre>
+<h2 id="upcase">upcase</h2>
+<p><code>upcase(text)</code></p>
+<p>Converts the string to uppercase</p>
+<ul>
+<li><code>text</code>: The input string</li>
+</ul>
+<h3 id="returns-21">Returns</h3>
+<p>The input string upper case</p>
+<h3 id="example-21">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; &quot;test&quot; |&gt; upcase
+# &quot;test&quot; |&gt; upcase
+out = &quot;TEST&quot;
+</code></pre>
+
+      </div>
+  </div>
+</div>
+        </section>
+        <footer>
+          <hr>
+          <p>Copyright &copy; 2025, Alexandre Mutel aka <a href="https://xoofx.github.io">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site generated by <a href="https://github.com/lunet-io/lunet">lunet</a> hosted on <a href="https://pages.github.com/">GitHub Pages</a></p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

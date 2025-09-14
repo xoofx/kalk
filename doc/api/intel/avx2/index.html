@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lunet 0.6.1.0">
+    <title>Intel Avx2 Intrinsics - kalk</title>
+    <link rel="stylesheet" href="/css/site.css">
+    <script src="/js/site.js" ></script>
+    <script src="/js/site-defer.js" defer></script>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@xoofx">
+    <meta name="twitter:title" content="Intel Avx2 Intrinsics - kalk">
+    <meta name="twitter:description" content="kalk - calculator app">
+    <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
+    <meta name="twitter:image:alt" content="Intel Avx2 Intrinsics - kalk">    
+    <script src="https://www.googletagmanager.com/gtag/js?id=G-Z558CWX6J6" async></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Z558CWX6J6');</script>
+  </head>
+  <body>
+
+    <div id="kalk" class="container">
+      <nav class="navbar navbar-expand-md navbar-light sticky-top">
+        <a class="kalk-logo navbar-brand" href="/"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
+<ol id='nav-id-home-0' class='navbar-nav nav-level0  '>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/' class='nav-link  '>Home</a></span>  </li>
+  <li class='nav-item  active'>
+    <span class='nav-item-row'><a href='/doc/' class='nav-link  '>Documentation</a></span>  </li>
+</ol>
+          <ol class="navbar-nav flex-grow-1" style="padding-right: 0.5rem;">
+            <li class="nav-item w-100">
+                <div class="kalk-search">
+                  <label class="search-icon"><i class="fa fa-search"></i></label>
+                  <select id="search-box"></select>
+                </div>
+            </li>
+          </ol>
+<ol id='nav-id-home2-0' class='navbar-nav nav-level0  flex-shrink-0'>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/download/' class='nav-link  btn btn-success'><i class="fa fa-download"></i> Download</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/sponsors/xoofx' class='nav-link  btn btn-outline-secondary'><i class="fa fa-heart-o"></i> Sponsor</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/xoofx/kalk/' class='nav-link  btn btn-info'><i class="fa fa-github"></i> GitHub</a></span>  </li>
+</ol>
+        </div>
+      </nav>
+      <div class="kalk-doc">
+        <section>
+
+<div class="container">
+  <div class="row">
+      <div class="col-sm-3 align-self-start sticky-top menu-sidebar">
+        <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
+          </ol>
+          </li>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/math/' class='menu-link  '>Math Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/memory/' class='menu-link  '>Memory Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/misc/' class='menu-link  '>Misc Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/vector/' class='menu-link  '>Vector Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/types/' class='menu-link  '>Types Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/all/' class='menu-link  '>All Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/csv/' class='menu-link  '>Csv Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/currencies/' class='menu-link  '>Currencies Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/files/' class='menu-link  '>Files Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/standardunits/' class='menu-link  '>StandardUnits Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/strings/' class='menu-link  '>Strings Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/intel/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-18' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-18' class='menu-link-show'></a></span>    <ol id='menu-id-doc-18' class='menu menu-level2 collapse  show '>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/aes/' class='menu-link  '>Intel Aes Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/avx/' class='menu-link  '>Intel Avx Intrinsics</a></span>      </li>
+              <li class='menu-item  active'>
+                <span class='menu-item-row'><a href='/doc/api/intel/avx2/' class='menu-link  '>Intel Avx2 Intrinsics</a></span><nav class="js-toc toc"></nav>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi1/' class='menu-link  '>Intel Bmi1 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi1x64/' class='menu-link  '>Intel Bmi1X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi2/' class='menu-link  '>Intel Bmi2 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi2x64/' class='menu-link  '>Intel Bmi2X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse/' class='menu-link  '>Intel Sse Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/ssex64/' class='menu-link  '>Intel SseX64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse2/' class='menu-link  '>Intel Sse2 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse2x64/' class='menu-link  '>Intel Sse2X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse3/' class='menu-link  '>Intel Sse3 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/ssse3/' class='menu-link  '>Intel Ssse3 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse41/' class='menu-link  '>Intel Sse41 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse41x64/' class='menu-link  '>Intel Sse41X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse42/' class='menu-link  '>Intel Sse42 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse42x64/' class='menu-link  '>Intel Sse42X64 Intrinsics</a></span>      </li>
+            </ol>
+            </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/arm/' class='menu-link  '>Arm Hardware Intrinsics</a><a href='#menu-id-doc-36' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-36' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-36' class='menu menu-level2 collapse  '>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/advsimd/' class='menu-link  '>Arm AdvSimd Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/advsimdarm64/' class='menu-link  '>Arm AdvSimdArm64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/aes/' class='menu-link  '>Arm Aes Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/crc32/' class='menu-link  '>Arm Crc32 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/crc32arm64/' class='menu-link  '>Arm Crc32Arm64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/sha1/' class='menu-link  '>Arm Sha1 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/sha256/' class='menu-link  '>Arm Sha256 Intrinsics</a></span>      </li>
+            </ol>
+            </li>
+          </ol>
+          </li>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/advanced/' class='menu-link  '>Advanced Topics</a></span>  </li>
+        </ol>
+
+      </div>
+      <div class="col-sm-9 js-toc-content">
+        <ol class='breadcrumb'>
+          <li class='breadcrumb-item '>
+            <a href='/' class='breadcrumb-link  '>Home</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/doc/api/intel/' class='breadcrumb-link  '>Intel Hardware Intrinsics</a>  </li>
+          <li class='breadcrumb-item  active'>
+            Intel Avx2 Intrinsics  </li>
+        </ol>
+
+        <p id="lunet-results"></p>
+        <h1>Intel Avx2 Intrinsics</h1>
+<p>In order to use the functions provided by this module, you need to import this module:</p>
+<pre><code class="language-kalk">&gt;&gt;&gt; import HardwareIntrinsics
+</code></pre>
+<div class='lunet-alert-note' role='alert'><div class='lunet-alert-note-heading'><span class='lunet-alert-note-icon'></span><span class='lunet-alert-note-heading-text'></span></div><div class='lunet-alert-note-content'>
+<p>These intrinsic functions are only available if your CPU supports <code>Avx2</code> features.</p>
+</div></div>
+<h2 id="mm256_abs_epi16">mm256_abs_epi16</h2>
+<p><code>mm256_abs_epi16</code></p>
+<p>Compute the absolute value of packed 16-bit integers in &quot;a&quot;, and store the unsigned results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_abs_epi16 (__m256i a)
+VPABSW ymm, ymm/m256</p>
+<h2 id="mm256_abs_epi32">mm256_abs_epi32</h2>
+<p><code>mm256_abs_epi32</code></p>
+<p>Compute the absolute value of packed 32-bit integers in &quot;a&quot;, and store the unsigned results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_abs_epi32 (__m256i a)
+VPABSD ymm, ymm/m256</p>
+<h2 id="mm256_abs_epi8">mm256_abs_epi8</h2>
+<p><code>mm256_abs_epi8</code></p>
+<p>Compute the absolute value of packed 8-bit integers in &quot;a&quot;, and store the unsigned results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_abs_epi8 (__m256i a)
+VPABSB ymm, ymm/m256</p>
+<h2 id="mm256_add_epi16">mm256_add_epi16</h2>
+<p><code>mm256_add_epi16</code></p>
+<p>Add packed 16-bit integers in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_add_epi16 (__m256i a, __m256i b)
+VPADDW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_add_epi32">mm256_add_epi32</h2>
+<p><code>mm256_add_epi32</code></p>
+<p>Add packed 32-bit integers in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_add_epi32 (__m256i a, __m256i b)
+VPADDD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_add_epi64">mm256_add_epi64</h2>
+<p><code>mm256_add_epi64</code></p>
+<p>Add packed 64-bit integers in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_add_epi64 (__m256i a, __m256i b)
+VPADDQ ymm, ymm, ymm/m256</p>
+<h2 id="mm256_add_epi8">mm256_add_epi8</h2>
+<p><code>mm256_add_epi8</code></p>
+<p>Add packed 8-bit integers in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_add_epi8 (__m256i a, __m256i b)
+VPADDB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_adds_epi16">mm256_adds_epi16</h2>
+<p><code>mm256_adds_epi16</code></p>
+<p>Add packed 16-bit integers in &quot;a&quot; and &quot;b&quot; using saturation, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_adds_epi16 (__m256i a, __m256i b)
+VPADDSW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_adds_epi8">mm256_adds_epi8</h2>
+<p><code>mm256_adds_epi8</code></p>
+<p>Add packed 8-bit integers in &quot;a&quot; and &quot;b&quot; using saturation, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_adds_epi8 (__m256i a, __m256i b)
+VPADDSB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_adds_epu16">mm256_adds_epu16</h2>
+<p><code>mm256_adds_epu16</code></p>
+<p>Add packed unsigned 16-bit integers in &quot;a&quot; and &quot;b&quot; using saturation, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_adds_epu16 (__m256i a, __m256i b)
+VPADDUSW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_adds_epu8">mm256_adds_epu8</h2>
+<p><code>mm256_adds_epu8</code></p>
+<p>Add packed unsigned 8-bit integers in &quot;a&quot; and &quot;b&quot; using saturation, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_adds_epu8 (__m256i a, __m256i b)
+VPADDUSB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_alignr_epi8">mm256_alignr_epi8</h2>
+<p><code>mm256_alignr_epi8</code></p>
+<p>Concatenate pairs of 16-byte blocks in &quot;a&quot; and &quot;b&quot; into a 32-byte temporary result, shift the result right by &quot;count&quot; bytes, and store the low 16 bytes in &quot;dst&quot;.</p>
+<p>__m256i _mm256_alignr_epi8 (__m256i a, __m256i b, const int count)
+VPALIGNR ymm, ymm, ymm/m256, imm8</p>
+<h2 id="mm256_and_si256">mm256_and_si256</h2>
+<p><code>mm256_and_si256</code></p>
+<p>Compute the bitwise AND of 256 bits (representing integer data) in &quot;a&quot; and &quot;b&quot;, and store the result in &quot;dst&quot;.</p>
+<p>__m256i _mm256_and_si256 (__m256i a, __m256i b)
+VPAND ymm, ymm, ymm/m256</p>
+<h2 id="mm256_andnot_si256">mm256_andnot_si256</h2>
+<p><code>mm256_andnot_si256</code></p>
+<p>Compute the bitwise NOT of 256 bits (representing integer data) in &quot;a&quot; and then AND with &quot;b&quot;, and store the result in &quot;dst&quot;.</p>
+<p>__m256i _mm256_andnot_si256 (__m256i a, __m256i b)
+VPANDN ymm, ymm, ymm/m256</p>
+<h2 id="mm256_avg_epu16">mm256_avg_epu16</h2>
+<p><code>mm256_avg_epu16</code></p>
+<p>Average packed unsigned 16-bit integers in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_avg_epu16 (__m256i a, __m256i b)
+VPAVGW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_avg_epu8">mm256_avg_epu8</h2>
+<p><code>mm256_avg_epu8</code></p>
+<p>Average packed unsigned 8-bit integers in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_avg_epu8 (__m256i a, __m256i b)
+VPAVGB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_blend_epi16">mm256_blend_epi16</h2>
+<p><code>mm256_blend_epi16</code></p>
+<p>Blend packed 16-bit integers from &quot;a&quot; and &quot;b&quot; within 128-bit lanes using control mask &quot;imm8&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_blend_epi16 (__m256i a, __m256i b, const int imm8)
+VPBLENDW ymm, ymm, ymm/m256, imm8</p>
+<h2 id="mm256_blend_epi32">mm256_blend_epi32</h2>
+<p><code>mm256_blend_epi32</code></p>
+<p>Blend packed 32-bit integers from &quot;a&quot; and &quot;b&quot; using control mask &quot;imm8&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_blend_epi32 (__m256i a, __m256i b, const int imm8)
+VPBLENDD ymm, ymm, ymm/m256, imm8</p>
+<h2 id="mm256_blendv_epi8">mm256_blendv_epi8</h2>
+<p><code>mm256_blendv_epi8</code></p>
+<p>Blend packed 8-bit integers from &quot;a&quot; and &quot;b&quot; using &quot;mask&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_blendv_epi8 (__m256i a, __m256i b, __m256i mask)
+VPBLENDVB ymm, ymm, ymm/m256, ymm</p>
+<h2 id="mm256_broadcastb_epi8">mm256_broadcastb_epi8</h2>
+<p><code>mm256_broadcastb_epi8</code></p>
+<p>Broadcast the low packed 8-bit integer from &quot;a&quot; to all elements of &quot;dst&quot;.</p>
+<p>__m256i _mm256_broadcastb_epi8 (__m128i a)
+VPBROADCASTB ymm, m8</p>
+<h2 id="mm256_broadcastd_epi32">mm256_broadcastd_epi32</h2>
+<p><code>mm256_broadcastd_epi32</code></p>
+<p>Broadcast the low packed 32-bit integer from &quot;a&quot; to all elements of &quot;dst&quot;.</p>
+<p>__m256i _mm256_broadcastd_epi32 (__m128i a)
+VPBROADCASTD ymm, m32</p>
+<h2 id="mm256_broadcastq_epi64">mm256_broadcastq_epi64</h2>
+<p><code>mm256_broadcastq_epi64</code></p>
+<p>Broadcast the low packed 64-bit integer from &quot;a&quot; to all elements of &quot;dst&quot;.</p>
+<p>__m256i _mm256_broadcastq_epi64 (__m128i a)
+VPBROADCASTQ ymm, m64</p>
+<h2 id="mm256_broadcastsd_pd">mm256_broadcastsd_pd</h2>
+<p><code>mm256_broadcastsd_pd</code></p>
+<p>Broadcast the low double-precision (64-bit) floating-point element from &quot;a&quot; to all elements of &quot;dst&quot;.</p>
+<p>__m256d _mm256_broadcastsd_pd (__m128d a)
+VBROADCASTSD ymm, xmm</p>
+<h2 id="mm256_broadcastsi128_si256">mm256_broadcastsi128_si256</h2>
+<p><code>mm256_broadcastsi128_si256</code></p>
+<p>Broadcast 128 bits of integer data from &quot;a&quot; to all 128-bit lanes in &quot;dst&quot;.</p>
+<p>__m256i _mm256_broadcastsi128_si256 (__m128i a)
+VBROADCASTI128 ymm, m128</p>
+<h2 id="mm256_broadcastss_ps">mm256_broadcastss_ps</h2>
+<p><code>mm256_broadcastss_ps</code></p>
+<p>Broadcast the low single-precision (32-bit) floating-point element from &quot;a&quot; to all elements of &quot;dst&quot;.</p>
+<p>__m256 _mm256_broadcastss_ps (__m128 a)
+VBROADCASTSS ymm, xmm</p>
+<h2 id="mm256_broadcastw_epi16">mm256_broadcastw_epi16</h2>
+<p><code>mm256_broadcastw_epi16</code></p>
+<p>Broadcast the low packed 16-bit integer from &quot;a&quot; to all elements of &quot;dst&quot;.</p>
+<p>__m256i _mm256_broadcastw_epi16 (__m128i a)
+VPBROADCASTW ymm, m16</p>
+<h2 id="mm256_bslli_epi128">mm256_bslli_epi128</h2>
+<p><code>mm256_bslli_epi128</code></p>
+<p>Shift 128-bit lanes in &quot;a&quot; left by &quot;imm8&quot; bytes while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_bslli_epi128 (__m256i a, const int imm8)
+VPSLLDQ ymm, ymm, imm8</p>
+<h2 id="mm256_bsrli_epi128">mm256_bsrli_epi128</h2>
+<p><code>mm256_bsrli_epi128</code></p>
+<p>Shift 128-bit lanes in &quot;a&quot; right by &quot;imm8&quot; bytes while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_bsrli_epi128 (__m256i a, const int imm8)
+VPSRLDQ ymm, ymm, imm8</p>
+<h2 id="mm256_cmpeq_epi16">mm256_cmpeq_epi16</h2>
+<p><code>mm256_cmpeq_epi16</code></p>
+<p>Compare packed 16-bit integers in &quot;a&quot; and &quot;b&quot; for equality, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cmpeq_epi16 (__m256i a, __m256i b)
+VPCMPEQW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_cmpeq_epi32">mm256_cmpeq_epi32</h2>
+<p><code>mm256_cmpeq_epi32</code></p>
+<p>Compare packed 32-bit integers in &quot;a&quot; and &quot;b&quot; for equality, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cmpeq_epi32 (__m256i a, __m256i b)
+VPCMPEQD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_cmpeq_epi64">mm256_cmpeq_epi64</h2>
+<p><code>mm256_cmpeq_epi64</code></p>
+<p>Compare packed 64-bit integers in &quot;a&quot; and &quot;b&quot; for equality, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cmpeq_epi64 (__m256i a, __m256i b)
+VPCMPEQQ ymm, ymm, ymm/m256</p>
+<h2 id="mm256_cmpeq_epi8">mm256_cmpeq_epi8</h2>
+<p><code>mm256_cmpeq_epi8</code></p>
+<p>Compare packed 8-bit integers in &quot;a&quot; and &quot;b&quot; for equality, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cmpeq_epi8 (__m256i a, __m256i b)
+VPCMPEQB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_cmpgt_epi16">mm256_cmpgt_epi16</h2>
+<p><code>mm256_cmpgt_epi16</code></p>
+<p>Compare packed 16-bit integers in &quot;a&quot; and &quot;b&quot; for greater-than, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cmpgt_epi16 (__m256i a, __m256i b)
+VPCMPGTW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_cmpgt_epi32">mm256_cmpgt_epi32</h2>
+<p><code>mm256_cmpgt_epi32</code></p>
+<p>Compare packed 32-bit integers in &quot;a&quot; and &quot;b&quot; for greater-than, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cmpgt_epi32 (__m256i a, __m256i b)
+VPCMPGTD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_cmpgt_epi64">mm256_cmpgt_epi64</h2>
+<p><code>mm256_cmpgt_epi64</code></p>
+<p>Compare packed 64-bit integers in &quot;a&quot; and &quot;b&quot; for greater-than, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cmpgt_epi64 (__m256i a, __m256i b)
+VPCMPGTQ ymm, ymm, ymm/m256</p>
+<h2 id="mm256_cmpgt_epi8">mm256_cmpgt_epi8</h2>
+<p><code>mm256_cmpgt_epi8</code></p>
+<p>Compare packed 8-bit integers in &quot;a&quot; and &quot;b&quot; for greater-than, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cmpgt_epi8 (__m256i a, __m256i b)
+VPCMPGTB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_cvtepi16_epi32">mm256_cvtepi16_epi32</h2>
+<p><code>mm256_cvtepi16_epi32</code></p>
+<p>Sign extend packed 16-bit integers in &quot;a&quot; to packed 32-bit integers, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cvtepi16_epi32 (__m128i a)
+VPMOVSXWD ymm, xmm/m128</p>
+<h2 id="mm256_cvtepi16_epi64">mm256_cvtepi16_epi64</h2>
+<p><code>mm256_cvtepi16_epi64</code></p>
+<p>Sign extend packed 16-bit integers in &quot;a&quot; to packed 64-bit integers, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cvtepi16_epi64 (__m128i a)
+VPMOVSXWQ ymm, xmm/m128</p>
+<h2 id="mm256_cvtepi32_epi64">mm256_cvtepi32_epi64</h2>
+<p><code>mm256_cvtepi32_epi64</code></p>
+<p>Sign extend packed 32-bit integers in &quot;a&quot; to packed 64-bit integers, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cvtepi32_epi64 (__m128i a)
+VPMOVSXDQ ymm, xmm/m128</p>
+<h2 id="mm256_cvtepi8_epi16">mm256_cvtepi8_epi16</h2>
+<p><code>mm256_cvtepi8_epi16</code></p>
+<p>Sign extend packed 8-bit integers in &quot;a&quot; to packed 16-bit integers, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cvtepi8_epi16 (__m128i a)
+VPMOVSXBW ymm, xmm/m128</p>
+<h2 id="mm256_cvtepi8_epi32">mm256_cvtepi8_epi32</h2>
+<p><code>mm256_cvtepi8_epi32</code></p>
+<p>Sign extend packed 8-bit integers in &quot;a&quot; to packed 32-bit integers, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cvtepi8_epi32 (__m128i a)
+VPMOVSXBD ymm, xmm/m128</p>
+<h2 id="mm256_cvtepi8_epi64">mm256_cvtepi8_epi64</h2>
+<p><code>mm256_cvtepi8_epi64</code></p>
+<p>Sign extend packed 8-bit integers in the low 8 bytes of &quot;a&quot; to packed 64-bit integers, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cvtepi8_epi64 (__m128i a)
+VPMOVSXBQ ymm, xmm/m128</p>
+<h2 id="mm256_cvtepu16_epi32">mm256_cvtepu16_epi32</h2>
+<p><code>mm256_cvtepu16_epi32</code></p>
+<p>Zero extend packed unsigned 16-bit integers in &quot;a&quot; to packed 32-bit integers, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cvtepu16_epi32 (__m128i a)
+VPMOVZXWD ymm, xmm</p>
+<h2 id="mm256_cvtepu16_epi64">mm256_cvtepu16_epi64</h2>
+<p><code>mm256_cvtepu16_epi64</code></p>
+<p>Zero extend packed unsigned 16-bit integers in &quot;a&quot; to packed 64-bit integers, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cvtepu16_epi64 (__m128i a)
+VPMOVZXWQ ymm, xmm</p>
+<h2 id="mm256_cvtepu32_epi64">mm256_cvtepu32_epi64</h2>
+<p><code>mm256_cvtepu32_epi64</code></p>
+<p>Zero extend packed unsigned 32-bit integers in &quot;a&quot; to packed 64-bit integers, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cvtepu32_epi64 (__m128i a)
+VPMOVZXDQ ymm, xmm</p>
+<h2 id="mm256_cvtepu8_epi16">mm256_cvtepu8_epi16</h2>
+<p><code>mm256_cvtepu8_epi16</code></p>
+<p>Zero extend packed unsigned 8-bit integers in &quot;a&quot; to packed 16-bit integers, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cvtepu8_epi16 (__m128i a)
+VPMOVZXBW ymm, xmm</p>
+<h2 id="mm256_cvtepu8_epi32">mm256_cvtepu8_epi32</h2>
+<p><code>mm256_cvtepu8_epi32</code></p>
+<p>Zero extend packed unsigned 8-bit integers in &quot;a&quot; to packed 32-bit integers, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cvtepu8_epi32 (__m128i a)
+VPMOVZXBD ymm, xmm</p>
+<h2 id="mm256_cvtepu8_epi64">mm256_cvtepu8_epi64</h2>
+<p><code>mm256_cvtepu8_epi64</code></p>
+<p>Zero extend packed unsigned 8-bit integers in the low 8 byte sof &quot;a&quot; to packed 64-bit integers, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_cvtepu8_epi64 (__m128i a)
+VPMOVZXBQ ymm, xmm</p>
+<h2 id="mm256_cvtsi256_si32">mm256_cvtsi256_si32</h2>
+<p><code>mm256_cvtsi256_si32</code></p>
+<p>Copy the lower 32-bit integer in &quot;a&quot; to &quot;dst&quot;.</p>
+<p>int _mm256_cvtsi256_si32 (__m256i a)
+MOVD reg/m32, xmm</p>
+<h2 id="mm256_extracti128_si256">mm256_extracti128_si256</h2>
+<p><code>mm256_extracti128_si256</code></p>
+<p>Extract 128 bits (composed of integer data) from &quot;a&quot;, selected with &quot;imm8&quot;, and store the result in &quot;dst&quot;.</p>
+<p>__m128i _mm256_extracti128_si256 (__m256i a, const int imm8)
+VEXTRACTI128 xmm, ymm, imm8</p>
+<h2 id="mm256_hadd_epi16">mm256_hadd_epi16</h2>
+<p><code>mm256_hadd_epi16</code></p>
+<p>Horizontally add adjacent pairs of 16-bit integers in &quot;a&quot; and &quot;b&quot;, and pack the signed 16-bit results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_hadd_epi16 (__m256i a, __m256i b)
+VPHADDW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_hadd_epi32">mm256_hadd_epi32</h2>
+<p><code>mm256_hadd_epi32</code></p>
+<p>Horizontally add adjacent pairs of 32-bit integers in &quot;a&quot; and &quot;b&quot;, and pack the signed 32-bit results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_hadd_epi32 (__m256i a, __m256i b)
+VPHADDD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_hadds_epi16">mm256_hadds_epi16</h2>
+<p><code>mm256_hadds_epi16</code></p>
+<p>Horizontally add adjacent pairs of 16-bit integers in &quot;a&quot; and &quot;b&quot; using saturation, and pack the signed 16-bit results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_hadds_epi16 (__m256i a, __m256i b)
+VPHADDSW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_hsub_epi16">mm256_hsub_epi16</h2>
+<p><code>mm256_hsub_epi16</code></p>
+<p>Horizontally subtract adjacent pairs of 16-bit integers in &quot;a&quot; and &quot;b&quot;, and pack the signed 16-bit results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_hsub_epi16 (__m256i a, __m256i b)
+VPHSUBW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_hsub_epi32">mm256_hsub_epi32</h2>
+<p><code>mm256_hsub_epi32</code></p>
+<p>Horizontally subtract adjacent pairs of 32-bit integers in &quot;a&quot; and &quot;b&quot;, and pack the signed 32-bit results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_hsub_epi32 (__m256i a, __m256i b)
+VPHSUBD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_hsubs_epi16">mm256_hsubs_epi16</h2>
+<p><code>mm256_hsubs_epi16</code></p>
+<p>Horizontally subtract adjacent pairs of 16-bit integers in &quot;a&quot; and &quot;b&quot; using saturation, and pack the signed 16-bit results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_hsubs_epi16 (__m256i a, __m256i b)
+VPHSUBSW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_i32gather_epi32">mm256_i32gather_epi32</h2>
+<p><code>mm256_i32gather_epi32</code></p>
+<p>Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m256i _mm256_i32gather_epi32 (int const* base_addr, __m256i vindex, const int scale)
+VPGATHERDD ymm, vm32y, ymm</p>
+<h2 id="mm256_i32gather_epi64">mm256_i32gather_epi64</h2>
+<p><code>mm256_i32gather_epi64</code></p>
+<p>Gather 64-bit integers from memory using 32-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m256i _mm256_i32gather_epi64 (__int64 const* base_addr, __m128i vindex, const int scale)
+VPGATHERDQ ymm, vm32y, ymm</p>
+<h2 id="mm256_i32gather_pd">mm256_i32gather_pd</h2>
+<p><code>mm256_i32gather_pd</code></p>
+<p>Gather double-precision (64-bit) floating-point elements from memory using 32-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m256d _mm256_i32gather_pd (double const* base_addr, __m128i vindex, const int scale)
+VGATHERDPD ymm, vm32y, ymm</p>
+<h2 id="mm256_i32gather_ps">mm256_i32gather_ps</h2>
+<p><code>mm256_i32gather_ps</code></p>
+<p>Gather single-precision (32-bit) floating-point elements from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m256 _mm256_i32gather_ps (float const* base_addr, __m256i vindex, const int scale)
+VGATHERDPS ymm, vm32y, ymm</p>
+<h2 id="mm256_i64gather_epi32">mm256_i64gather_epi32</h2>
+<p><code>mm256_i64gather_epi32</code></p>
+<p>Gather 32-bit integers from memory using 64-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128i _mm256_i64gather_epi32 (int const* base_addr, __m256i vindex, const int scale)
+VPGATHERQD xmm, vm64y, xmm</p>
+<h2 id="mm256_i64gather_epi64">mm256_i64gather_epi64</h2>
+<p><code>mm256_i64gather_epi64</code></p>
+<p>Gather 64-bit integers from memory using 64-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m256i _mm256_i64gather_epi64 (__int64 const* base_addr, __m256i vindex, const int scale)
+VPGATHERQQ ymm, vm64y, ymm</p>
+<h2 id="mm256_i64gather_pd">mm256_i64gather_pd</h2>
+<p><code>mm256_i64gather_pd</code></p>
+<p>Gather double-precision (64-bit) floating-point elements from memory using 64-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m256d _mm256_i64gather_pd (double const* base_addr, __m256i vindex, const int scale)
+VGATHERQPD ymm, vm64y, ymm</p>
+<h2 id="mm256_i64gather_ps">mm256_i64gather_ps</h2>
+<p><code>mm256_i64gather_ps</code></p>
+<p>Gather single-precision (32-bit) floating-point elements from memory using 64-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128 _mm256_i64gather_ps (float const* base_addr, __m256i vindex, const int scale)
+VGATHERQPS xmm, vm64y, xmm</p>
+<h2 id="mm256_inserti128_si256">mm256_inserti128_si256</h2>
+<p><code>mm256_inserti128_si256</code></p>
+<p>Copy &quot;a&quot; to &quot;dst&quot;, then insert 128 bits (composed of integer data) from &quot;b&quot; into &quot;dst&quot; at the location specified by &quot;imm8&quot;.</p>
+<p>__m256i _mm256_inserti128_si256 (__m256i a, __m128i b, const int imm8)
+VINSERTI128 ymm, ymm, xmm, imm8</p>
+<h2 id="mm256_madd_epi16">mm256_madd_epi16</h2>
+<p><code>mm256_madd_epi16</code></p>
+<p>Multiply packed signed 16-bit integers in &quot;a&quot; and &quot;b&quot;, producing intermediate signed 32-bit integers. Horizontally add adjacent pairs of intermediate 32-bit integers, and pack the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_madd_epi16 (__m256i a, __m256i b)
+VPMADDWD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_maddubs_epi16">mm256_maddubs_epi16</h2>
+<p><code>mm256_maddubs_epi16</code></p>
+<p>Vertically multiply each unsigned 8-bit integer from &quot;a&quot; with the corresponding signed 8-bit integer from &quot;b&quot;, producing intermediate signed 16-bit integers. Horizontally add adjacent pairs of intermediate signed 16-bit integers, and pack the saturated results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_maddubs_epi16 (__m256i a, __m256i b)
+VPMADDUBSW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_mask_i32gather_epi32">mm256_mask_i32gather_epi32</h2>
+<p><code>mm256_mask_i32gather_epi32</code></p>
+<p>Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m256i _mm256_mask_i32gather_epi32 (__m256i src, int const* base_addr, __m256i vindex, __m256i mask, const int scale)
+VPGATHERDD ymm, vm32y, ymm</p>
+<h2 id="mm256_mask_i32gather_epi64">mm256_mask_i32gather_epi64</h2>
+<p><code>mm256_mask_i32gather_epi64</code></p>
+<p>Gather 64-bit integers from memory using 32-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m256i _mm256_mask_i32gather_epi64 (__m256i src, __int64 const* base_addr, __m128i vindex, __m256i mask, const int scale)
+VPGATHERDQ ymm, vm32y, ymm</p>
+<h2 id="mm256_mask_i32gather_pd">mm256_mask_i32gather_pd</h2>
+<p><code>mm256_mask_i32gather_pd</code></p>
+<p>Gather double-precision (64-bit) floating-point elements from memory using 32-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m256d _mm256_mask_i32gather_pd (__m256d src, double const* base_addr, __m128i vindex, __m256d mask, const int scale)
+VPGATHERDPD ymm, vm32y, ymm</p>
+<h2 id="mm256_mask_i32gather_ps">mm256_mask_i32gather_ps</h2>
+<p><code>mm256_mask_i32gather_ps</code></p>
+<p>Gather single-precision (32-bit) floating-point elements from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m256 _mm256_mask_i32gather_ps (__m256 src, float const* base_addr, __m256i vindex, __m256 mask, const int scale)
+VPGATHERDPS ymm, vm32y, ymm</p>
+<h2 id="mm256_mask_i64gather_epi32">mm256_mask_i64gather_epi32</h2>
+<p><code>mm256_mask_i64gather_epi32</code></p>
+<p>Gather 32-bit integers from memory using 64-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128i _mm256_mask_i64gather_epi32 (__m128i src, int const* base_addr, __m256i vindex, __m128i mask, const int scale)
+VPGATHERQD xmm, vm32y, xmm</p>
+<h2 id="mm256_mask_i64gather_epi64">mm256_mask_i64gather_epi64</h2>
+<p><code>mm256_mask_i64gather_epi64</code></p>
+<p>Gather 64-bit integers from memory using 64-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m256i _mm256_mask_i64gather_epi64 (__m256i src, __int64 const* base_addr, __m256i vindex, __m256i mask, const int scale)
+VPGATHERQQ ymm, vm32y, ymm</p>
+<h2 id="mm256_mask_i64gather_pd">mm256_mask_i64gather_pd</h2>
+<p><code>mm256_mask_i64gather_pd</code></p>
+<p>Gather double-precision (64-bit) floating-point elements from memory using 64-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m256d _mm256_mask_i64gather_pd (__m256d src, double const* base_addr, __m256i vindex, __m256d mask, const int scale)
+VGATHERQPD ymm, vm32y, ymm</p>
+<h2 id="mm256_mask_i64gather_ps">mm256_mask_i64gather_ps</h2>
+<p><code>mm256_mask_i64gather_ps</code></p>
+<p>Gather single-precision (32-bit) floating-point elements from memory using 64-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128 _mm256_mask_i64gather_ps (__m128 src, float const* base_addr, __m256i vindex, __m128 mask, const int scale)
+VGATHERQPS xmm, vm32y, xmm</p>
+<h2 id="mm256_maskload_epi32">mm256_maskload_epi32</h2>
+<p><code>mm256_maskload_epi32</code></p>
+<p>Load packed 32-bit integers from memory into &quot;dst&quot; using &quot;mask&quot; (elements are zeroed out when the highest bit is not set in the corresponding element).</p>
+<p>__m256i _mm256_maskload_epi32 (int const* mem_addr, __m256i mask)
+VPMASKMOVD ymm, ymm, m256</p>
+<h2 id="mm256_maskload_epi64">mm256_maskload_epi64</h2>
+<p><code>mm256_maskload_epi64</code></p>
+<p>Load packed 64-bit integers from memory into &quot;dst&quot; using &quot;mask&quot; (elements are zeroed out when the highest bit is not set in the corresponding element).</p>
+<p>__m256i _mm256_maskload_epi64 (__int64 const* mem_addr, __m256i mask)
+VPMASKMOVQ ymm, ymm, m256</p>
+<h2 id="mm256_maskstore_epi32">mm256_maskstore_epi32</h2>
+<p><code>mm256_maskstore_epi32</code></p>
+<p>Store packed 32-bit integers from &quot;a&quot; into memory using &quot;mask&quot; (elements are not stored when the highest bit is not set in the corresponding element).</p>
+<p>void _mm256_maskstore_epi32 (int* mem_addr, __m256i mask, __m256i a)
+VPMASKMOVD m256, ymm, ymm</p>
+<h2 id="mm256_maskstore_epi64">mm256_maskstore_epi64</h2>
+<p><code>mm256_maskstore_epi64</code></p>
+<p>Store packed 64-bit integers from &quot;a&quot; into memory using &quot;mask&quot; (elements are not stored when the highest bit is not set in the corresponding element).</p>
+<p>void _mm256_maskstore_epi64 (__int64* mem_addr, __m256i mask, __m256i a)
+VPMASKMOVQ m256, ymm, ymm</p>
+<h2 id="mm256_max_epi16">mm256_max_epi16</h2>
+<p><code>mm256_max_epi16</code></p>
+<p>Compare packed 16-bit integers in &quot;a&quot; and &quot;b&quot;, and store packed maximum values in &quot;dst&quot;.</p>
+<p>__m256i _mm256_max_epi16 (__m256i a, __m256i b)
+VPMAXSW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_max_epi32">mm256_max_epi32</h2>
+<p><code>mm256_max_epi32</code></p>
+<p>Compare packed 32-bit integers in &quot;a&quot; and &quot;b&quot;, and store packed maximum values in &quot;dst&quot;.</p>
+<p>__m256i _mm256_max_epi32 (__m256i a, __m256i b)
+VPMAXSD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_max_epi8">mm256_max_epi8</h2>
+<p><code>mm256_max_epi8</code></p>
+<p>Compare packed 8-bit integers in &quot;a&quot; and &quot;b&quot;, and store packed maximum values in &quot;dst&quot;.</p>
+<p>__m256i _mm256_max_epi8 (__m256i a, __m256i b)
+VPMAXSB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_max_epu16">mm256_max_epu16</h2>
+<p><code>mm256_max_epu16</code></p>
+<p>Compare packed unsigned 16-bit integers in &quot;a&quot; and &quot;b&quot;, and store packed maximum values in &quot;dst&quot;.</p>
+<p>__m256i _mm256_max_epu16 (__m256i a, __m256i b)
+VPMAXUW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_max_epu32">mm256_max_epu32</h2>
+<p><code>mm256_max_epu32</code></p>
+<p>Compare packed unsigned 32-bit integers in &quot;a&quot; and &quot;b&quot;, and store packed maximum values in &quot;dst&quot;.</p>
+<p>__m256i _mm256_max_epu32 (__m256i a, __m256i b)
+VPMAXUD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_max_epu8">mm256_max_epu8</h2>
+<p><code>mm256_max_epu8</code></p>
+<p>Compare packed unsigned 8-bit integers in &quot;a&quot; and &quot;b&quot;, and store packed maximum values in &quot;dst&quot;.</p>
+<p>__m256i _mm256_max_epu8 (__m256i a, __m256i b)
+VPMAXUB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_min_epi16">mm256_min_epi16</h2>
+<p><code>mm256_min_epi16</code></p>
+<p>Compare packed 16-bit integers in &quot;a&quot; and &quot;b&quot;, and store packed minimum values in &quot;dst&quot;.</p>
+<p>__m256i _mm256_min_epi16 (__m256i a, __m256i b)
+VPMINSW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_min_epi32">mm256_min_epi32</h2>
+<p><code>mm256_min_epi32</code></p>
+<p>Compare packed 32-bit integers in &quot;a&quot; and &quot;b&quot;, and store packed minimum values in &quot;dst&quot;.</p>
+<p>__m256i _mm256_min_epi32 (__m256i a, __m256i b)
+VPMINSD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_min_epi8">mm256_min_epi8</h2>
+<p><code>mm256_min_epi8</code></p>
+<p>Compare packed 8-bit integers in &quot;a&quot; and &quot;b&quot;, and store packed minimum values in &quot;dst&quot;.</p>
+<p>__m256i _mm256_min_epi8 (__m256i a, __m256i b)
+VPMINSB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_min_epu16">mm256_min_epu16</h2>
+<p><code>mm256_min_epu16</code></p>
+<p>Compare packed unsigned 16-bit integers in &quot;a&quot; and &quot;b&quot;, and store packed minimum values in &quot;dst&quot;.</p>
+<p>__m256i _mm256_min_epu16 (__m256i a, __m256i b)
+VPMINUW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_min_epu32">mm256_min_epu32</h2>
+<p><code>mm256_min_epu32</code></p>
+<p>Compare packed unsigned 32-bit integers in &quot;a&quot; and &quot;b&quot;, and store packed minimum values in &quot;dst&quot;.</p>
+<p>__m256i _mm256_min_epu32 (__m256i a, __m256i b)
+VPMINUD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_min_epu8">mm256_min_epu8</h2>
+<p><code>mm256_min_epu8</code></p>
+<p>Compare packed unsigned 8-bit integers in &quot;a&quot; and &quot;b&quot;, and store packed minimum values in &quot;dst&quot;.</p>
+<p>__m256i _mm256_min_epu8 (__m256i a, __m256i b)
+VPMINUB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_movemask_epi8">mm256_movemask_epi8</h2>
+<p><code>mm256_movemask_epi8</code></p>
+<p>Create mask from the most significant bit of each 8-bit element in &quot;a&quot;, and store the result in &quot;dst&quot;.</p>
+<p>int _mm256_movemask_epi8 (__m256i a)
+VPMOVMSKB reg, ymm</p>
+<h2 id="mm256_mpsadbw_epu8">mm256_mpsadbw_epu8</h2>
+<p><code>mm256_mpsadbw_epu8</code></p>
+<p>Compute the sum of absolute differences (SADs) of quadruplets of unsigned 8-bit integers in &quot;a&quot; compared to those in &quot;b&quot;, and store the 16-bit results in &quot;dst&quot;.
+Eight SADs are performed for each 128-bit lane using one quadruplet from &quot;b&quot; and eight quadruplets from &quot;a&quot;. One quadruplet is selected from &quot;b&quot; starting at on the offset specified in &quot;imm8&quot;. Eight quadruplets are formed from sequential 8-bit integers selected from &quot;a&quot; starting at the offset specified in &quot;imm8&quot;.</p>
+<p>__m256i _mm256_mpsadbw_epu8 (__m256i a, __m256i b, const int imm8)
+VMPSADBW ymm, ymm, ymm/m256, imm8</p>
+<h2 id="mm256_mul_epi32">mm256_mul_epi32</h2>
+<p><code>mm256_mul_epi32</code></p>
+<p>Multiply the low 32-bit integers from each packed 64-bit element in &quot;a&quot; and &quot;b&quot;, and store the signed 64-bit results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_mul_epi32 (__m256i a, __m256i b)
+VPMULDQ ymm, ymm, ymm/m256</p>
+<h2 id="mm256_mul_epu32">mm256_mul_epu32</h2>
+<p><code>mm256_mul_epu32</code></p>
+<p>Multiply the low unsigned 32-bit integers from each packed 64-bit element in &quot;a&quot; and &quot;b&quot;, and store the unsigned 64-bit results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_mul_epu32 (__m256i a, __m256i b)
+VPMULUDQ ymm, ymm, ymm/m256</p>
+<h2 id="mm256_mulhi_epi16">mm256_mulhi_epi16</h2>
+<p><code>mm256_mulhi_epi16</code></p>
+<p>Multiply the packed 16-bit integers in &quot;a&quot; and &quot;b&quot;, producing intermediate 32-bit integers, and store the high 16 bits of the intermediate integers in &quot;dst&quot;.</p>
+<p>__m256i _mm256_mulhi_epi16 (__m256i a, __m256i b)
+VPMULHW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_mulhi_epu16">mm256_mulhi_epu16</h2>
+<p><code>mm256_mulhi_epu16</code></p>
+<p>Multiply the packed unsigned 16-bit integers in &quot;a&quot; and &quot;b&quot;, producing intermediate 32-bit integers, and store the high 16 bits of the intermediate integers in &quot;dst&quot;.</p>
+<p>__m256i _mm256_mulhi_epu16 (__m256i a, __m256i b)
+VPMULHUW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_mulhrs_epi16">mm256_mulhrs_epi16</h2>
+<p><code>mm256_mulhrs_epi16</code></p>
+<p>Multiply packed 16-bit integers in &quot;a&quot; and &quot;b&quot;, producing intermediate signed 32-bit integers. Truncate each intermediate integer to the 18 most significant bits, round by adding 1, and store bits [16:1] to &quot;dst&quot;.</p>
+<p>__m256i _mm256_mulhrs_epi16 (__m256i a, __m256i b)
+VPMULHRSW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_mullo_epi16">mm256_mullo_epi16</h2>
+<p><code>mm256_mullo_epi16</code></p>
+<p>Multiply the packed 16-bit integers in &quot;a&quot; and &quot;b&quot;, producing intermediate 32-bit integers, and store the low 16 bits of the intermediate integers in &quot;dst&quot;.</p>
+<p>__m256i _mm256_mullo_epi16 (__m256i a, __m256i b)
+VPMULLW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_mullo_epi32">mm256_mullo_epi32</h2>
+<p><code>mm256_mullo_epi32</code></p>
+<p>Multiply the packed 32-bit integers in &quot;a&quot; and &quot;b&quot;, producing intermediate 64-bit integers, and store the low 32 bits of the intermediate integers in &quot;dst&quot;.</p>
+<p>__m256i _mm256_mullo_epi32 (__m256i a, __m256i b)
+VPMULLD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_or_si256">mm256_or_si256</h2>
+<p><code>mm256_or_si256</code></p>
+<p>Compute the bitwise OR of 256 bits (representing integer data) in &quot;a&quot; and &quot;b&quot;, and store the result in &quot;dst&quot;.</p>
+<p>__m256i _mm256_or_si256 (__m256i a, __m256i b)
+VPOR ymm, ymm, ymm/m256</p>
+<h2 id="mm256_packs_epi16">mm256_packs_epi16</h2>
+<p><code>mm256_packs_epi16</code></p>
+<p>Convert packed 16-bit integers from &quot;a&quot; and &quot;b&quot; to packed 8-bit integers using signed saturation, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_packs_epi16 (__m256i a, __m256i b)
+VPACKSSWB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_packs_epi32">mm256_packs_epi32</h2>
+<p><code>mm256_packs_epi32</code></p>
+<p>Convert packed 32-bit integers from &quot;a&quot; and &quot;b&quot; to packed 16-bit integers using signed saturation, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_packs_epi32 (__m256i a, __m256i b)
+VPACKSSDW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_packus_epi16">mm256_packus_epi16</h2>
+<p><code>mm256_packus_epi16</code></p>
+<p>Convert packed 16-bit integers from &quot;a&quot; and &quot;b&quot; to packed 8-bit integers using unsigned saturation, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_packus_epi16 (__m256i a, __m256i b)
+VPACKUSWB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_packus_epi32">mm256_packus_epi32</h2>
+<p><code>mm256_packus_epi32</code></p>
+<p>Convert packed 32-bit integers from &quot;a&quot; and &quot;b&quot; to packed 16-bit integers using unsigned saturation, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_packus_epi32 (__m256i a, __m256i b)
+VPACKUSDW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_permute2x128_si256">mm256_permute2x128_si256</h2>
+<p><code>mm256_permute2x128_si256</code></p>
+<p>Shuffle 128-bits (composed of integer data) selected by &quot;imm8&quot; from &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_permute2x128_si256 (__m256i a, __m256i b, const int imm8)
+VPERM2I128 ymm, ymm, ymm/m256, imm8</p>
+<h2 id="mm256_permute4x64_epi64">mm256_permute4x64_epi64</h2>
+<p><code>mm256_permute4x64_epi64</code></p>
+<p>Shuffle 64-bit integers in &quot;a&quot; across lanes using the control in &quot;imm8&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_permute4x64_epi64 (__m256i a, const int imm8)
+VPERMQ ymm, ymm/m256, imm8</p>
+<h2 id="mm256_permute4x64_pd">mm256_permute4x64_pd</h2>
+<p><code>mm256_permute4x64_pd</code></p>
+<p>Shuffle double-precision (64-bit) floating-point elements in &quot;a&quot; across lanes using the control in &quot;imm8&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256d _mm256_permute4x64_pd (__m256d a, const int imm8)
+VPERMPD ymm, ymm/m256, imm8</p>
+<h2 id="mm256_permutevar8x32_epi32">mm256_permutevar8x32_epi32</h2>
+<p><code>mm256_permutevar8x32_epi32</code></p>
+<p>Shuffle 32-bit integers in &quot;a&quot; across lanes using the corresponding index in &quot;idx&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_permutevar8x32_epi32 (__m256i a, __m256i idx)
+VPERMD ymm, ymm/m256, ymm</p>
+<h2 id="mm256_permutevar8x32_ps">mm256_permutevar8x32_ps</h2>
+<p><code>mm256_permutevar8x32_ps</code></p>
+<p>Shuffle single-precision (32-bit) floating-point elements in &quot;a&quot; across lanes using the corresponding index in &quot;idx&quot;.</p>
+<p>__m256 _mm256_permutevar8x32_ps (__m256 a, __m256i idx)
+VPERMPS ymm, ymm/m256, ymm</p>
+<h2 id="mm256_sad_epu8">mm256_sad_epu8</h2>
+<p><code>mm256_sad_epu8</code></p>
+<p>Compute the absolute differences of packed unsigned 8-bit integers in &quot;a&quot; and &quot;b&quot;, then horizontally sum each consecutive 8 differences to produce four unsigned 16-bit integers, and pack these unsigned 16-bit integers in the low 16 bits of 64-bit elements in &quot;dst&quot;.</p>
+<p>__m256i _mm256_sad_epu8 (__m256i a, __m256i b)
+VPSADBW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_shuffle_epi32">mm256_shuffle_epi32</h2>
+<p><code>mm256_shuffle_epi32</code></p>
+<p>Shuffle 32-bit integers in &quot;a&quot; within 128-bit lanes using the control in &quot;imm8&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_shuffle_epi32 (__m256i a, const int imm8)
+VPSHUFD ymm, ymm/m256, imm8</p>
+<h2 id="mm256_shuffle_epi8">mm256_shuffle_epi8</h2>
+<p><code>mm256_shuffle_epi8</code></p>
+<p>Shuffle 8-bit integers in &quot;a&quot; within 128-bit lanes according to shuffle control mask in the corresponding 8-bit element of &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_shuffle_epi8 (__m256i a, __m256i b)
+VPSHUFB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_shufflehi_epi16">mm256_shufflehi_epi16</h2>
+<p><code>mm256_shufflehi_epi16</code></p>
+<p>Shuffle 16-bit integers in the high 64 bits of 128-bit lanes of &quot;a&quot; using the control in &quot;imm8&quot;. Store the results in the high 64 bits of 128-bit lanes of &quot;dst&quot;, with the low 64 bits of 128-bit lanes being copied from from &quot;a&quot; to &quot;dst&quot;.</p>
+<p>__m256i _mm256_shufflehi_epi16 (__m256i a, const int imm8)
+VPSHUFHW ymm, ymm/m256, imm8</p>
+<h2 id="mm256_shufflelo_epi16">mm256_shufflelo_epi16</h2>
+<p><code>mm256_shufflelo_epi16</code></p>
+<p>Shuffle 16-bit integers in the low 64 bits of 128-bit lanes of &quot;a&quot; using the control in &quot;imm8&quot;. Store the results in the low 64 bits of 128-bit lanes of &quot;dst&quot;, with the high 64 bits of 128-bit lanes being copied from from &quot;a&quot; to &quot;dst&quot;.</p>
+<p>__m256i _mm256_shufflelo_epi16 (__m256i a, const int imm8)
+VPSHUFLW ymm, ymm/m256, imm8</p>
+<h2 id="mm256_sign_epi16">mm256_sign_epi16</h2>
+<p><code>mm256_sign_epi16</code></p>
+<p>Negate packed 16-bit integers in &quot;a&quot; when the corresponding signed 16-bit integer in &quot;b&quot; is negative, and store the results in &quot;dst&quot;. Element in &quot;dst&quot; are zeroed out when the corresponding element in &quot;b&quot; is zero.</p>
+<p>__m256i _mm256_sign_epi16 (__m256i a, __m256i b)
+VPSIGNW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_sign_epi32">mm256_sign_epi32</h2>
+<p><code>mm256_sign_epi32</code></p>
+<p>Negate packed 32-bit integers in &quot;a&quot; when the corresponding signed 32-bit integer in &quot;b&quot; is negative, and store the results in &quot;dst&quot;. Element in &quot;dst&quot; are zeroed out when the corresponding element in &quot;b&quot; is zero.</p>
+<p>__m256i _mm256_sign_epi32 (__m256i a, __m256i b)
+VPSIGND ymm, ymm, ymm/m256</p>
+<h2 id="mm256_sign_epi8">mm256_sign_epi8</h2>
+<p><code>mm256_sign_epi8</code></p>
+<p>Negate packed 8-bit integers in &quot;a&quot; when the corresponding signed 8-bit integer in &quot;b&quot; is negative, and store the results in &quot;dst&quot;. Element in &quot;dst&quot; are zeroed out when the corresponding element in &quot;b&quot; is zero.</p>
+<p>__m256i _mm256_sign_epi8 (__m256i a, __m256i b)
+VPSIGNB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_sll_epi16">mm256_sll_epi16</h2>
+<p><code>mm256_sll_epi16</code></p>
+<p>Shift packed 16-bit integers in &quot;a&quot; left by &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_sll_epi16 (__m256i a, __m128i count)
+VPSLLW ymm, ymm, xmm/m128</p>
+<h2 id="mm256_sll_epi32">mm256_sll_epi32</h2>
+<p><code>mm256_sll_epi32</code></p>
+<p>Shift packed 32-bit integers in &quot;a&quot; left by &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_sll_epi32 (__m256i a, __m128i count)
+VPSLLD ymm, ymm, xmm/m128</p>
+<h2 id="mm256_sll_epi64">mm256_sll_epi64</h2>
+<p><code>mm256_sll_epi64</code></p>
+<p>Shift packed 64-bit integers in &quot;a&quot; left by &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_sll_epi64 (__m256i a, __m128i count)
+VPSLLQ ymm, ymm, xmm/m128</p>
+<h2 id="mm256_slli_epi16">mm256_slli_epi16</h2>
+<p><code>mm256_slli_epi16</code></p>
+<p>Shift packed 16-bit integers in &quot;a&quot; left by &quot;imm8&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_slli_epi16 (__m256i a, int imm8)
+VPSLLW ymm, ymm, imm8</p>
+<h2 id="mm256_slli_epi32">mm256_slli_epi32</h2>
+<p><code>mm256_slli_epi32</code></p>
+<p>Shift packed 32-bit integers in &quot;a&quot; left by &quot;imm8&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_slli_epi32 (__m256i a, int imm8)
+VPSLLD ymm, ymm, imm8</p>
+<h2 id="mm256_slli_epi64">mm256_slli_epi64</h2>
+<p><code>mm256_slli_epi64</code></p>
+<p>Shift packed 64-bit integers in &quot;a&quot; left by &quot;imm8&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_slli_epi64 (__m256i a, int imm8)
+VPSLLQ ymm, ymm, imm8</p>
+<h2 id="mm256_sllv_epi32">mm256_sllv_epi32</h2>
+<p><code>mm256_sllv_epi32</code></p>
+<p>Shift packed 32-bit integers in &quot;a&quot; left by the amount specified by the corresponding element in &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_sllv_epi32 (__m256i a, __m256i count)
+VPSLLVD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_sllv_epi64">mm256_sllv_epi64</h2>
+<p><code>mm256_sllv_epi64</code></p>
+<p>Shift packed 64-bit integers in &quot;a&quot; left by the amount specified by the corresponding element in &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_sllv_epi64 (__m256i a, __m256i count)
+VPSLLVQ ymm, ymm, ymm/m256</p>
+<h2 id="mm256_srai_epi16">mm256_srai_epi16</h2>
+<p><code>mm256_srai_epi16</code></p>
+<p>Shift packed 16-bit integers in &quot;a&quot; right by &quot;imm8&quot; while shifting in sign bits, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_srai_epi16 (__m256i a, int imm8)
+VPSRAW ymm, ymm, imm8</p>
+<h2 id="mm256_srai_epi32">mm256_srai_epi32</h2>
+<p><code>mm256_srai_epi32</code></p>
+<p>Shift packed 32-bit integers in &quot;a&quot; right by &quot;imm8&quot; while shifting in sign bits, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_srai_epi32 (__m256i a, int imm8)
+VPSRAD ymm, ymm, imm8</p>
+<h2 id="mm256_srav_epi32">mm256_srav_epi32</h2>
+<p><code>mm256_srav_epi32</code></p>
+<p>Shift packed 32-bit integers in &quot;a&quot; right by the amount specified by the corresponding element in &quot;count&quot; while shifting in sign bits, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_srav_epi32 (__m256i a, __m256i count)
+VPSRAVD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_srl_epi16">mm256_srl_epi16</h2>
+<p><code>mm256_srl_epi16</code></p>
+<p>Shift packed 16-bit integers in &quot;a&quot; right by &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_srl_epi16 (__m256i a, __m128i count)
+VPSRLW ymm, ymm, xmm/m128</p>
+<h2 id="mm256_srl_epi32">mm256_srl_epi32</h2>
+<p><code>mm256_srl_epi32</code></p>
+<p>Shift packed 32-bit integers in &quot;a&quot; right by &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_srl_epi32 (__m256i a, __m128i count)
+VPSRLD ymm, ymm, xmm/m128</p>
+<h2 id="mm256_srl_epi64">mm256_srl_epi64</h2>
+<p><code>mm256_srl_epi64</code></p>
+<p>Shift packed 64-bit integers in &quot;a&quot; right by &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_srl_epi64 (__m256i a, __m128i count)
+VPSRLQ ymm, ymm, xmm/m128</p>
+<h2 id="mm256_srli_epi16">mm256_srli_epi16</h2>
+<p><code>mm256_srli_epi16</code></p>
+<p>Shift packed 16-bit integers in &quot;a&quot; right by &quot;imm8&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_srli_epi16 (__m256i a, int imm8)
+VPSRLW ymm, ymm, imm8</p>
+<h2 id="mm256_srli_epi32">mm256_srli_epi32</h2>
+<p><code>mm256_srli_epi32</code></p>
+<p>Shift packed 32-bit integers in &quot;a&quot; right by &quot;imm8&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_srli_epi32 (__m256i a, int imm8)
+VPSRLD ymm, ymm, imm8</p>
+<h2 id="mm256_srli_epi64">mm256_srli_epi64</h2>
+<p><code>mm256_srli_epi64</code></p>
+<p>Shift packed 64-bit integers in &quot;a&quot; right by &quot;imm8&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_srli_epi64 (__m256i a, int imm8)
+VPSRLQ ymm, ymm, imm8</p>
+<h2 id="mm256_srlv_epi32">mm256_srlv_epi32</h2>
+<p><code>mm256_srlv_epi32</code></p>
+<p>Shift packed 32-bit integers in &quot;a&quot; right by the amount specified by the corresponding element in &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_srlv_epi32 (__m256i a, __m256i count)
+VPSRLVD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_srlv_epi64">mm256_srlv_epi64</h2>
+<p><code>mm256_srlv_epi64</code></p>
+<p>Shift packed 64-bit integers in &quot;a&quot; right by the amount specified by the corresponding element in &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_srlv_epi64 (__m256i a, __m256i count)
+VPSRLVQ ymm, ymm, ymm/m256</p>
+<h2 id="mm256_stream_load_si256">mm256_stream_load_si256</h2>
+<p><code>mm256_stream_load_si256</code></p>
+<p>Load 256-bits of integer data from memory into &quot;dst&quot; using a non-temporal memory hint.
+&quot;mem_addr&quot; must be aligned on a 32-byte boundary or a general-protection exception may be generated.</p>
+<p>__m256i _mm256_stream_load_si256 (__m256i const* mem_addr)
+VMOVNTDQA ymm, m256</p>
+<h2 id="mm256_sub_epi16">mm256_sub_epi16</h2>
+<p><code>mm256_sub_epi16</code></p>
+<p>Subtract packed 16-bit integers in &quot;b&quot; from packed 16-bit integers in &quot;a&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_sub_epi16 (__m256i a, __m256i b)
+VPSUBW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_sub_epi32">mm256_sub_epi32</h2>
+<p><code>mm256_sub_epi32</code></p>
+<p>Subtract packed 32-bit integers in &quot;b&quot; from packed 32-bit integers in &quot;a&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_sub_epi32 (__m256i a, __m256i b)
+VPSUBD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_sub_epi64">mm256_sub_epi64</h2>
+<p><code>mm256_sub_epi64</code></p>
+<p>Subtract packed 64-bit integers in &quot;b&quot; from packed 64-bit integers in &quot;a&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_sub_epi64 (__m256i a, __m256i b)
+VPSUBQ ymm, ymm, ymm/m256</p>
+<h2 id="mm256_sub_epi8">mm256_sub_epi8</h2>
+<p><code>mm256_sub_epi8</code></p>
+<p>Subtract packed 8-bit integers in &quot;b&quot; from packed 8-bit integers in &quot;a&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_sub_epi8 (__m256i a, __m256i b)
+VPSUBB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_subs_epi16">mm256_subs_epi16</h2>
+<p><code>mm256_subs_epi16</code></p>
+<p>Subtract packed 16-bit integers in &quot;b&quot; from packed 16-bit integers in &quot;a&quot; using saturation, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_subs_epi16 (__m256i a, __m256i b)
+VPSUBSW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_subs_epi8">mm256_subs_epi8</h2>
+<p><code>mm256_subs_epi8</code></p>
+<p>Subtract packed 8-bit integers in &quot;b&quot; from packed 8-bit integers in &quot;a&quot; using saturation, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_subs_epi8 (__m256i a, __m256i b)
+VPSUBSB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_subs_epu16">mm256_subs_epu16</h2>
+<p><code>mm256_subs_epu16</code></p>
+<p>Subtract packed unsigned 16-bit integers in &quot;b&quot; from packed unsigned 16-bit integers in &quot;a&quot; using saturation, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_subs_epu16 (__m256i a, __m256i b)
+VPSUBUSW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_subs_epu8">mm256_subs_epu8</h2>
+<p><code>mm256_subs_epu8</code></p>
+<p>Subtract packed unsigned 8-bit integers in &quot;b&quot; from packed unsigned 8-bit integers in &quot;a&quot; using saturation, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_subs_epu8 (__m256i a, __m256i b)
+VPSUBUSB ymm, ymm, ymm/m256</p>
+<h2 id="mm256_unpackhi_epi16">mm256_unpackhi_epi16</h2>
+<p><code>mm256_unpackhi_epi16</code></p>
+<p>Unpack and interleave 16-bit integers from the high half of each 128-bit lane in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_unpackhi_epi16 (__m256i a, __m256i b)
+VPUNPCKHWD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_unpackhi_epi32">mm256_unpackhi_epi32</h2>
+<p><code>mm256_unpackhi_epi32</code></p>
+<p>Unpack and interleave 32-bit integers from the high half of each 128-bit lane in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_unpackhi_epi32 (__m256i a, __m256i b)
+VPUNPCKHDQ ymm, ymm, ymm/m256</p>
+<h2 id="mm256_unpackhi_epi64">mm256_unpackhi_epi64</h2>
+<p><code>mm256_unpackhi_epi64</code></p>
+<p>Unpack and interleave 64-bit integers from the high half of each 128-bit lane in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_unpackhi_epi64 (__m256i a, __m256i b)
+VPUNPCKHQDQ ymm, ymm, ymm/m256</p>
+<h2 id="mm256_unpackhi_epi8">mm256_unpackhi_epi8</h2>
+<p><code>mm256_unpackhi_epi8</code></p>
+<p>Unpack and interleave 8-bit integers from the high half of each 128-bit lane in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_unpackhi_epi8 (__m256i a, __m256i b)
+VPUNPCKHBW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_unpacklo_epi16">mm256_unpacklo_epi16</h2>
+<p><code>mm256_unpacklo_epi16</code></p>
+<p>Unpack and interleave 16-bit integers from the low half of each 128-bit lane in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_unpacklo_epi16 (__m256i a, __m256i b)
+VPUNPCKLWD ymm, ymm, ymm/m256</p>
+<h2 id="mm256_unpacklo_epi32">mm256_unpacklo_epi32</h2>
+<p><code>mm256_unpacklo_epi32</code></p>
+<p>Unpack and interleave 32-bit integers from the low half of each 128-bit lane in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_unpacklo_epi32 (__m256i a, __m256i b)
+VPUNPCKLDQ ymm, ymm, ymm/m256</p>
+<h2 id="mm256_unpacklo_epi64">mm256_unpacklo_epi64</h2>
+<p><code>mm256_unpacklo_epi64</code></p>
+<p>Unpack and interleave 64-bit integers from the low half of each 128-bit lane in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_unpacklo_epi64 (__m256i a, __m256i b)
+VPUNPCKLQDQ ymm, ymm, ymm/m256</p>
+<h2 id="mm256_unpacklo_epi8">mm256_unpacklo_epi8</h2>
+<p><code>mm256_unpacklo_epi8</code></p>
+<p>Unpack and interleave 8-bit integers from the low half of each 128-bit lane in &quot;a&quot; and &quot;b&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m256i _mm256_unpacklo_epi8 (__m256i a, __m256i b)
+VPUNPCKLBW ymm, ymm, ymm/m256</p>
+<h2 id="mm256_xor_si256">mm256_xor_si256</h2>
+<p><code>mm256_xor_si256</code></p>
+<p>Compute the bitwise XOR of 256 bits (representing integer data) in &quot;a&quot; and &quot;b&quot;, and store the result in &quot;dst&quot;.</p>
+<p>__m256i _mm256_xor_si256 (__m256i a, __m256i b)
+VPXOR ymm, ymm, ymm/m256</p>
+<h2 id="mm_blend_epi32">mm_blend_epi32</h2>
+<p><code>mm_blend_epi32</code></p>
+<p>Blend packed 32-bit integers from &quot;a&quot; and &quot;b&quot; using control mask &quot;imm8&quot;, and store the results in &quot;dst&quot;.</p>
+<p>__m128i _mm_blend_epi32 (__m128i a, __m128i b, const int imm8)
+VPBLENDD xmm, xmm, xmm/m128, imm8</p>
+<h2 id="mm_broadcastb_epi8">mm_broadcastb_epi8</h2>
+<p><code>mm_broadcastb_epi8</code></p>
+<p>Broadcast the low packed 8-bit integer from &quot;a&quot; to all elements of &quot;dst&quot;.</p>
+<p>__m128i _mm_broadcastb_epi8 (__m128i a)
+VPBROADCASTB xmm, m8</p>
+<h2 id="mm_broadcastd_epi32">mm_broadcastd_epi32</h2>
+<p><code>mm_broadcastd_epi32</code></p>
+<p>Broadcast the low packed 32-bit integer from &quot;a&quot; to all elements of &quot;dst&quot;.</p>
+<p>__m128i _mm_broadcastd_epi32 (__m128i a)
+VPBROADCASTD xmm, m32</p>
+<h2 id="mm_broadcastq_epi64">mm_broadcastq_epi64</h2>
+<p><code>mm_broadcastq_epi64</code></p>
+<p>Broadcast the low packed 64-bit integer from &quot;a&quot; to all elements of &quot;dst&quot;.</p>
+<p>__m128i _mm_broadcastq_epi64 (__m128i a)
+VPBROADCASTQ xmm, m64</p>
+<h2 id="mm_broadcastsd_pd">mm_broadcastsd_pd</h2>
+<p><code>mm_broadcastsd_pd</code></p>
+<p>Broadcast the low double-precision (64-bit) floating-point element from &quot;a&quot; to all elements of &quot;dst&quot;.</p>
+<p>__m128d _mm_broadcastsd_pd (__m128d a)
+VMOVDDUP xmm, xmm</p>
+<h2 id="mm_broadcastss_ps">mm_broadcastss_ps</h2>
+<p><code>mm_broadcastss_ps</code></p>
+<p>Broadcast the low single-precision (32-bit) floating-point element from &quot;a&quot; to all elements of &quot;dst&quot;.</p>
+<p>__m128 _mm_broadcastss_ps (__m128 a)
+VBROADCASTSS xmm, xmm</p>
+<h2 id="mm_broadcastw_epi16">mm_broadcastw_epi16</h2>
+<p><code>mm_broadcastw_epi16</code></p>
+<p>Broadcast the low packed 16-bit integer from &quot;a&quot; to all elements of &quot;dst&quot;.</p>
+<p>__m128i _mm_broadcastw_epi16 (__m128i a)
+VPBROADCASTW xmm, m16</p>
+<h2 id="mm_i32gather_epi32">mm_i32gather_epi32</h2>
+<p><code>mm_i32gather_epi32</code></p>
+<p>Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128i _mm_i32gather_epi32 (int const* base_addr, __m128i vindex, const int scale)
+VPGATHERDD xmm, vm32x, xmm</p>
+<h2 id="mm_i32gather_epi64">mm_i32gather_epi64</h2>
+<p><code>mm_i32gather_epi64</code></p>
+<p>Gather 64-bit integers from memory using 32-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128i _mm_i32gather_epi64 (__int64 const* base_addr, __m128i vindex, const int scale)
+VPGATHERDQ xmm, vm32x, xmm</p>
+<h2 id="mm_i32gather_pd">mm_i32gather_pd</h2>
+<p><code>mm_i32gather_pd</code></p>
+<p>Gather double-precision (64-bit) floating-point elements from memory using 32-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128d _mm_i32gather_pd (double const* base_addr, __m128i vindex, const int scale)
+VGATHERDPD xmm, vm32x, xmm</p>
+<h2 id="mm_i32gather_ps">mm_i32gather_ps</h2>
+<p><code>mm_i32gather_ps</code></p>
+<p>Gather single-precision (32-bit) floating-point elements from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128 _mm_i32gather_ps (float const* base_addr, __m128i vindex, const int scale)
+VGATHERDPS xmm, vm32x, xmm</p>
+<h2 id="mm_i64gather_epi32">mm_i64gather_epi32</h2>
+<p><code>mm_i64gather_epi32</code></p>
+<p>Gather 32-bit integers from memory using 64-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128i _mm_i64gather_epi32 (int const* base_addr, __m128i vindex, const int scale)
+VPGATHERQD xmm, vm64x, xmm</p>
+<h2 id="mm_i64gather_epi64">mm_i64gather_epi64</h2>
+<p><code>mm_i64gather_epi64</code></p>
+<p>Gather 64-bit integers from memory using 64-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128i _mm_i64gather_epi64 (__int64 const* base_addr, __m128i vindex, const int scale)
+VPGATHERQQ xmm, vm64x, xmm</p>
+<h2 id="mm_i64gather_pd">mm_i64gather_pd</h2>
+<p><code>mm_i64gather_pd</code></p>
+<p>Gather double-precision (64-bit) floating-point elements from memory using 64-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128d _mm_i64gather_pd (double const* base_addr, __m128i vindex, const int scale)
+VGATHERQPD xmm, vm64x, xmm</p>
+<h2 id="mm_i64gather_ps">mm_i64gather_ps</h2>
+<p><code>mm_i64gather_ps</code></p>
+<p>Gather single-precision (32-bit) floating-point elements from memory using 64-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot;. &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128 _mm_i64gather_ps (float const* base_addr, __m128i vindex, const int scale)
+VGATHERQPS xmm, vm64x, xmm</p>
+<h2 id="mm_mask_i32gather_epi32">mm_mask_i32gather_epi32</h2>
+<p><code>mm_mask_i32gather_epi32</code></p>
+<p>Gather 32-bit integers from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128i _mm_mask_i32gather_epi32 (__m128i src, int const* base_addr, __m128i vindex, __m128i mask, const int scale)
+VPGATHERDD xmm, vm32x, xmm</p>
+<h2 id="mm_mask_i32gather_epi64">mm_mask_i32gather_epi64</h2>
+<p><code>mm_mask_i32gather_epi64</code></p>
+<p>Gather 64-bit integers from memory using 32-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128i _mm_mask_i32gather_epi64 (__m128i src, __int64 const* base_addr, __m128i vindex, __m128i mask, const int scale)
+VPGATHERDQ xmm, vm32x, xmm</p>
+<h2 id="mm_mask_i32gather_pd">mm_mask_i32gather_pd</h2>
+<p><code>mm_mask_i32gather_pd</code></p>
+<p>Gather double-precision (64-bit) floating-point elements from memory using 32-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128d _mm_mask_i32gather_pd (__m128d src, double const* base_addr, __m128i vindex, __m128d mask, const int scale)
+VGATHERDPD xmm, vm32x, xmm</p>
+<h2 id="mm_mask_i32gather_ps">mm_mask_i32gather_ps</h2>
+<p><code>mm_mask_i32gather_ps</code></p>
+<p>Gather single-precision (32-bit) floating-point elements from memory using 32-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 32-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128 _mm_mask_i32gather_ps (__m128 src, float const* base_addr, __m128i vindex, __m128 mask, const int scale)
+VGATHERDPS xmm, vm32x, xmm</p>
+<h2 id="mm_mask_i64gather_epi32">mm_mask_i64gather_epi32</h2>
+<p><code>mm_mask_i64gather_epi32</code></p>
+<p>Gather 32-bit integers from memory using 64-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128i _mm_mask_i64gather_epi32 (__m128i src, int const* base_addr, __m128i vindex, __m128i mask, const int scale)
+VPGATHERQD xmm, vm64x, xmm</p>
+<h2 id="mm_mask_i64gather_epi64">mm_mask_i64gather_epi64</h2>
+<p><code>mm_mask_i64gather_epi64</code></p>
+<p>Gather 64-bit integers from memory using 64-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128i _mm_mask_i64gather_epi64 (__m128i src, __int64 const* base_addr, __m128i vindex, __m128i mask, const int scale)
+VPGATHERQQ xmm, vm64x, xmm</p>
+<h2 id="mm_mask_i64gather_pd">mm_mask_i64gather_pd</h2>
+<p><code>mm_mask_i64gather_pd</code></p>
+<p>Gather double-precision (64-bit) floating-point elements from memory using 64-bit indices. 64-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128d _mm_mask_i64gather_pd (__m128d src, double const* base_addr, __m128i vindex, __m128d mask, const int scale)
+VGATHERQPD xmm, vm64x, xmm</p>
+<h2 id="mm_mask_i64gather_ps">mm_mask_i64gather_ps</h2>
+<p><code>mm_mask_i64gather_ps</code></p>
+<p>Gather single-precision (32-bit) floating-point elements from memory using 64-bit indices. 32-bit elements are loaded from addresses starting at &quot;base_addr&quot; and offset by each 64-bit element in &quot;vindex&quot; (each index is scaled by the factor in &quot;scale&quot;). Gathered elements are merged into &quot;dst&quot; using &quot;mask&quot; (elements are copied from &quot;src&quot; when the highest bit is not set in the corresponding element). &quot;scale&quot; should be 1, 2, 4 or 8.</p>
+<p>__m128 _mm_mask_i64gather_ps (__m128 src, float const* base_addr, __m128i vindex, __m128 mask, const int scale)
+VGATHERQPS xmm, vm64x, xmm</p>
+<h2 id="mm_maskload_epi32">mm_maskload_epi32</h2>
+<p><code>mm_maskload_epi32</code></p>
+<p>Load packed 32-bit integers from memory into &quot;dst&quot; using &quot;mask&quot; (elements are zeroed out when the highest bit is not set in the corresponding element).</p>
+<p>__m128i _mm_maskload_epi32 (int const* mem_addr, __m128i mask)
+VPMASKMOVD xmm, xmm, m128</p>
+<h2 id="mm_maskload_epi64">mm_maskload_epi64</h2>
+<p><code>mm_maskload_epi64</code></p>
+<p>Load packed 64-bit integers from memory into &quot;dst&quot; using &quot;mask&quot; (elements are zeroed out when the highest bit is not set in the corresponding element).</p>
+<p>__m128i _mm_maskload_epi64 (__int64 const* mem_addr, __m128i mask)
+VPMASKMOVQ xmm, xmm, m128</p>
+<h2 id="mm_maskstore_epi32">mm_maskstore_epi32</h2>
+<p><code>mm_maskstore_epi32</code></p>
+<p>Store packed 32-bit integers from &quot;a&quot; into memory using &quot;mask&quot; (elements are not stored when the highest bit is not set in the corresponding element).</p>
+<p>void _mm_maskstore_epi32 (int* mem_addr, __m128i mask, __m128i a)
+VPMASKMOVD m128, xmm, xmm</p>
+<h2 id="mm_maskstore_epi64">mm_maskstore_epi64</h2>
+<p><code>mm_maskstore_epi64</code></p>
+<p>Store packed 64-bit integers from &quot;a&quot; into memory using &quot;mask&quot; (elements are not stored when the highest bit is not set in the corresponding element).</p>
+<p>void _mm_maskstore_epi64 (__int64* mem_addr, __m128i mask, __m128i a)
+VPMASKMOVQ m128, xmm, xmm</p>
+<h2 id="mm_sllv_epi32">mm_sllv_epi32</h2>
+<p><code>mm_sllv_epi32</code></p>
+<p>Shift packed 32-bit integers in &quot;a&quot; left by the amount specified by the corresponding element in &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m128i _mm_sllv_epi32 (__m128i a, __m128i count)
+VPSLLVD xmm, ymm, xmm/m128</p>
+<h2 id="mm_sllv_epi64">mm_sllv_epi64</h2>
+<p><code>mm_sllv_epi64</code></p>
+<p>Shift packed 64-bit integers in &quot;a&quot; left by the amount specified by the corresponding element in &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m128i _mm_sllv_epi64 (__m128i a, __m128i count)
+VPSLLVQ xmm, ymm, xmm/m128</p>
+<h2 id="mm_srav_epi32">mm_srav_epi32</h2>
+<p><code>mm_srav_epi32</code></p>
+<p>Shift packed 32-bit integers in &quot;a&quot; right by the amount specified by the corresponding element in &quot;count&quot; while shifting in sign bits, and store the results in &quot;dst&quot;.</p>
+<p>__m128i _mm_srav_epi32 (__m128i a, __m128i count)
+VPSRAVD xmm, xmm, xmm/m128</p>
+<h2 id="mm_srlv_epi32">mm_srlv_epi32</h2>
+<p><code>mm_srlv_epi32</code></p>
+<p>Shift packed 32-bit integers in &quot;a&quot; right by the amount specified by the corresponding element in &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m128i _mm_srlv_epi32 (__m128i a, __m128i count)
+VPSRLVD xmm, xmm, xmm/m128</p>
+<h2 id="mm_srlv_epi64">mm_srlv_epi64</h2>
+<p><code>mm_srlv_epi64</code></p>
+<p>Shift packed 64-bit integers in &quot;a&quot; right by the amount specified by the corresponding element in &quot;count&quot; while shifting in zeros, and store the results in &quot;dst&quot;.</p>
+<p>__m128i _mm_srlv_epi64 (__m128i a, __m128i count)
+VPSRLVQ xmm, xmm, xmm/m128</p>
+
+      </div>
+  </div>
+</div>
+        </section>
+        <footer>
+          <hr>
+          <p>Copyright &copy; 2025, Alexandre Mutel aka <a href="https://xoofx.github.io">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site generated by <a href="https://github.com/lunet-io/lunet">lunet</a> hosted on <a href="https://pages.github.com/">GitHub Pages</a></p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

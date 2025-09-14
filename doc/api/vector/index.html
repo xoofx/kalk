@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lunet 0.6.1.0">
+    <title>Vector Functions - kalk</title>
+    <link rel="stylesheet" href="/css/site.css">
+    <script src="/js/site.js" ></script>
+    <script src="/js/site-defer.js" defer></script>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@xoofx">
+    <meta name="twitter:title" content="Vector Functions - kalk">
+    <meta name="twitter:description" content="kalk - calculator app">
+    <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
+    <meta name="twitter:image:alt" content="Vector Functions - kalk">    
+    <script src="https://www.googletagmanager.com/gtag/js?id=G-Z558CWX6J6" async></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Z558CWX6J6');</script>
+  </head>
+  <body>
+
+    <div id="kalk" class="container">
+      <nav class="navbar navbar-expand-md navbar-light sticky-top">
+        <a class="kalk-logo navbar-brand" href="/"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
+<ol id='nav-id-home-0' class='navbar-nav nav-level0  '>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/' class='nav-link  '>Home</a></span>  </li>
+  <li class='nav-item  active'>
+    <span class='nav-item-row'><a href='/doc/' class='nav-link  '>Documentation</a></span>  </li>
+</ol>
+          <ol class="navbar-nav flex-grow-1" style="padding-right: 0.5rem;">
+            <li class="nav-item w-100">
+                <div class="kalk-search">
+                  <label class="search-icon"><i class="fa fa-search"></i></label>
+                  <select id="search-box"></select>
+                </div>
+            </li>
+          </ol>
+<ol id='nav-id-home2-0' class='navbar-nav nav-level0  flex-shrink-0'>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/download/' class='nav-link  btn btn-success'><i class="fa fa-download"></i> Download</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/sponsors/xoofx' class='nav-link  btn btn-outline-secondary'><i class="fa fa-heart-o"></i> Sponsor</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/xoofx/kalk/' class='nav-link  btn btn-info'><i class="fa fa-github"></i> GitHub</a></span>  </li>
+</ol>
+        </div>
+      </nav>
+      <div class="kalk-doc">
+        <section>
+
+<div class="container">
+  <div class="row">
+      <div class="col-sm-3 align-self-start sticky-top menu-sidebar">
+        <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
+          </ol>
+          </li>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/math/' class='menu-link  '>Math Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/memory/' class='menu-link  '>Memory Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/misc/' class='menu-link  '>Misc Functions</a></span>    </li>
+            <li class='menu-item  active'>
+              <span class='menu-item-row'><a href='/doc/api/vector/' class='menu-link  '>Vector Functions</a></span><nav class="js-toc toc"></nav>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/types/' class='menu-link  '>Types Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/all/' class='menu-link  '>All Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/csv/' class='menu-link  '>Csv Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/currencies/' class='menu-link  '>Currencies Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/files/' class='menu-link  '>Files Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/standardunits/' class='menu-link  '>StandardUnits Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/strings/' class='menu-link  '>Strings Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/intel/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-18' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-18' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-18' class='menu menu-level2 collapse  '>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/aes/' class='menu-link  '>Intel Aes Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/avx/' class='menu-link  '>Intel Avx Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/avx2/' class='menu-link  '>Intel Avx2 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi1/' class='menu-link  '>Intel Bmi1 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi1x64/' class='menu-link  '>Intel Bmi1X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi2/' class='menu-link  '>Intel Bmi2 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi2x64/' class='menu-link  '>Intel Bmi2X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse/' class='menu-link  '>Intel Sse Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/ssex64/' class='menu-link  '>Intel SseX64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse2/' class='menu-link  '>Intel Sse2 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse2x64/' class='menu-link  '>Intel Sse2X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse3/' class='menu-link  '>Intel Sse3 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/ssse3/' class='menu-link  '>Intel Ssse3 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse41/' class='menu-link  '>Intel Sse41 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse41x64/' class='menu-link  '>Intel Sse41X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse42/' class='menu-link  '>Intel Sse42 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse42x64/' class='menu-link  '>Intel Sse42X64 Intrinsics</a></span>      </li>
+            </ol>
+            </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/arm/' class='menu-link  '>Arm Hardware Intrinsics</a><a href='#menu-id-doc-36' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-36' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-36' class='menu menu-level2 collapse  '>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/advsimd/' class='menu-link  '>Arm AdvSimd Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/advsimdarm64/' class='menu-link  '>Arm AdvSimdArm64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/aes/' class='menu-link  '>Arm Aes Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/crc32/' class='menu-link  '>Arm Crc32 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/crc32arm64/' class='menu-link  '>Arm Crc32Arm64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/sha1/' class='menu-link  '>Arm Sha1 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/sha256/' class='menu-link  '>Arm Sha256 Intrinsics</a></span>      </li>
+            </ol>
+            </li>
+          </ol>
+          </li>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/advanced/' class='menu-link  '>Advanced Topics</a></span>  </li>
+        </ol>
+
+      </div>
+      <div class="col-sm-9 js-toc-content">
+        <ol class='breadcrumb'>
+          <li class='breadcrumb-item '>
+            <a href='/' class='breadcrumb-link  '>Home</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
+          <li class='breadcrumb-item  active'>
+            Vector Functions  </li>
+        </ol>
+
+        <p id="lunet-results"></p>
+        <h1>Vector Functions</h1>
+<h2 id="col">col</h2>
+<p><code>col(x,index)</code></p>
+<p>Extract a column from the specified matrix.</p>
+<ul>
+<li><code>x</code>: The matrix to extract a column from.</li>
+<li><code>index</code>: The index of the column (zero based).</li>
+</ul>
+<h3 id="returns">Returns</h3>
+<p>A vector extracted from the matrix.</p>
+<h3 id="example">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; col(float4x4(1..16), 2)
+# col(float4x4(1..16), 2)
+out = float4(3, 7, 11, 15)
+</code></pre>
+<h2 id="cross">cross</h2>
+<p><code>cross(x,y)</code></p>
+<p>Returns the cross product of two floating-point, 3D vectors.</p>
+<ul>
+<li><code>x</code>: The first floating-point, 3D vector.</li>
+<li><code>y</code>: The second floating-point, 3D vector.</li>
+</ul>
+<h3 id="returns-1">Returns</h3>
+<p>The cross product of the x parameter and the y parameter.</p>
+<h3 id="example-1">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; cross(float3(1,2,3), float3(4,5,6))
+# cross(float3(1, 2, 3), float3(4, 5, 6))
+out = float3(-3, 6, -3)
+&gt;&gt;&gt; cross(float3(1,0,0), float3(0,1,0))
+# cross(float3(1, 0, 0), float3(0, 1, 0))
+out = float3(0, 0, 1)
+&gt;&gt;&gt; cross(float3(0,0,1), float3(0,1,0))
+# cross(float3(0, 0, 1), float3(0, 1, 0))
+out = float3(-1, 0, 0)
+</code></pre>
+<h2 id="determinant">determinant</h2>
+<p><code>determinant(m)</code></p>
+<p>Calculates the determinant of the specified matrix.</p>
+<ul>
+<li><code>m</code>: The matrix to calculate the determinant for.</li>
+</ul>
+<h3 id="returns-2">Returns</h3>
+<p>A scalar representing the determinant of the matrix.</p>
+<h3 id="example-2">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; float4x4(4,3,2,2,0,1,-3,3,0,-1,3,3,0,3,1,1)
+# float4x4(4, 3, 2, 2, 0, 1, -3, 3, 0, -1, 3, 3, 0, 3, 1, 1)
+out = float4x4(4, 3, 2, 2, 0, 1, -3, 3, 0, -1, 3, 3, 0, 3, 1, 1)
+      # col  0            1           2          3           / row
+      float4(4         ,  3        ,  2        , 2         ) # 0
+      float4(0         ,  1        , -3        , 3         ) # 1
+      float4(0         , -1        ,  3        , 3         ) # 2
+      float4(0         ,  3        ,  1        , 1         ) # 3
+&gt;&gt;&gt; determinant out
+# determinant(out)
+out = -240
+</code></pre>
+<h2 id="diag">diag</h2>
+<p><code>diag(x)</code></p>
+<p>Returns the diagonal vector of a squared matrix or a diagonal matrix from the specified vector.</p>
+<ul>
+<li><code>x</code>: A vector or matrix to return the associated diagonal for.</li>
+</ul>
+<h3 id="returns-3">Returns</h3>
+<p>A diagonal vector of a matrix or a diagonal matrix of a vector.</p>
+<h3 id="example-3">Example</h3>
+<pre><code class="language-kalk"> &gt;&gt;&gt; diag(float4x4(1..16))
+ # diag(float4x4(1..16))
+ out = float4(1, 6, 11, 16)
+ &gt;&gt;&gt; diag(float4(1,2,3,4))
+ # diag(float4(1, 2, 3, 4))
+ out = float4x4(1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 4)
+       # col  0           1           2           3           / row
+       float4(1         , 0         , 0         , 0         ) # 0
+       float4(0         , 2         , 0         , 0         ) # 1
+       float4(0         , 0         , 3         , 0         ) # 2
+       float4(0         , 0         , 0         , 4         ) # 3
+</code></pre>
+<h2 id="dot">dot</h2>
+<p><code>dot(x,y)</code></p>
+<p>Returns the dot product of two vectors.</p>
+<ul>
+<li><code>x</code>: The first vector.</li>
+<li><code>y</code>: The second vector.</li>
+</ul>
+<h3 id="returns-4">Returns</h3>
+<p>The dot product of the x parameter and the y parameter.</p>
+<h3 id="example-4">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; dot(float3(1,2,3), float3(4,5,6))
+# dot(float3(1, 2, 3), float3(4, 5, 6))
+out = 32
+&gt;&gt;&gt; dot(float3(1,2,3), 4)
+# dot(float3(1, 2, 3), 4)
+out = 24
+&gt;&gt;&gt; dot(4, float3(1,2,3))
+# dot(4, float3(1, 2, 3))
+out = 24
+&gt;&gt;&gt; dot(5,6)
+# dot(5, 6)
+out = 30
+</code></pre>
+<h2 id="identity">identity</h2>
+<p><code>identity(m)</code></p>
+<p>Creates an identity of a squared matrix.</p>
+<ul>
+<li><code>m</code>: The type of the squared matrix.</li>
+</ul>
+<h3 id="returns-5">Returns</h3>
+<p>The identity matrix of the squared matrix type.</p>
+<h3 id="example-5">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; identity(float4x4)
+# identity(float4x4)
+out = float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+      # col  0           1           2           3           / row
+      float4(1         , 0         , 0         , 0         ) # 0
+      float4(0         , 1         , 0         , 0         ) # 1
+      float4(0         , 0         , 1         , 0         ) # 2
+      float4(0         , 0         , 0         , 1         ) # 3
+</code></pre>
+<h2 id="inverse">inverse</h2>
+<p><code>inverse(m)</code></p>
+<p>Calculates the inverse of the specified matrix.</p>
+<ul>
+<li><code>m</code>: The matrix to calculate the inverse for.</li>
+</ul>
+<h3 id="returns-6">Returns</h3>
+<p>The inverse matrix of the specified matrix.</p>
+<h3 id="example-6">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; inverse(float3x3(10,20,10,4,5,6,2,3,5))
+# inverse(float3x3(10, 20, 10, 4, 5, 6, 2, 3, 5))
+out = float3x3(-0.1, 1, -1, 0.11428571, -0.42857143, 0.28571427, -0.028571427, -0.14285715, 0.42857143)
+      # col   0             1            2           / row
+      float3(-0.1        ,  1         , -1         ) # 0
+      float3( 0.11428571 , -0.42857143,  0.28571427) # 1
+      float3(-0.028571427, -0.14285715,  0.42857143) # 2
+</code></pre>
+<h2 id="length">length</h2>
+<p><code>length(x)</code></p>
+<p>Returns the length of the specified floating-point vector.</p>
+<ul>
+<li><code>x</code>: The specified floating-point vector.</li>
+</ul>
+<h3 id="returns-7">Returns</h3>
+<p>A floating-point scalar that represents the length of the x parameter.</p>
+<h3 id="example-7">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; length float2(1, 2)
+# length(float2(1, 2))
+out = 2.23606797749979
+&gt;&gt;&gt; length(-5)
+# length(-5)
+out = 5
+</code></pre>
+<h2 id="mul">mul</h2>
+<p><code>mul(x,y)</code></p>
+<p>Multiplies a vector x vector (dot product), or a vector x matrix, or a matrix x vector or a matrix x matrix.</p>
+<ul>
+<li><code>x</code>: A left vector or a matrix.</li>
+<li><code>y</code>: A right vector or matrix.</li>
+</ul>
+<h3 id="returns-8">Returns</h3>
+<p>The result of the multiplication.</p>
+<h3 id="example-8">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; mul(float4(1,2,3,4), float4(5,6,7,8))
+# mul(float4(1, 2, 3, 4), float4(5, 6, 7, 8))
+out = 70
+&gt;&gt;&gt; mul(float3(3,7,5), float3x3(2,3,-4,11,8,7,2,5,3))
+# mul(float3(3, 7, 5), float3x3(2, 3, -4, 11, 8, 7, 2, 5, 3))
+out = float3(7, 124, 56)
+&gt;&gt;&gt; mul(float3x3(2,3,-4,11,8,7,2,5,3), float3(3,7,5))
+# mul(float3x3(2, 3, -4, 11, 8, 7, 2, 5, 3), float3(3, 7, 5))
+out = float3(93, 90, 52)
+&gt;&gt;&gt; mul(float3x3(2,7,4,3,2,1,9,-1,2), float3x3(1,4,6,-1,-2,5,8,7,6))
+# mul(float3x3(2, 7, 4, 3, 2, 1, 9, -1, 2), float3x3(1, 4, 6, -1, -2, 5, 8, 7, 6))
+out = float3x3(68, 9, 20, 37, -16, 4, 91, 64, 51)
+      # col  0            1          2           / row
+      float3(68        ,  9        , 20        ) # 0
+      float3(37        , -16       , 4         ) # 1
+      float3(91        ,  64       , 51        ) # 2
+</code></pre>
+<h2 id="normalize">normalize</h2>
+<p><code>normalize(x)</code></p>
+<p>Normalizes the specified floating-point vector according to x / length(x).</p>
+<ul>
+<li><code>x</code>: he specified floating-point vector.</li>
+</ul>
+<h3 id="returns-9">Returns</h3>
+<p>The normalized x parameter. If the length of the x parameter is 0, the result is indefinite.</p>
+<h3 id="example-9">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; normalize float2(1,2)
+# normalize(float2(1, 2))
+out = float2(0.4472136, 0.8944272)
+</code></pre>
+<h2 id="row">row</h2>
+<p><code>row(x,index)</code></p>
+<p>Extract a row from the specified matrix.</p>
+<ul>
+<li><code>x</code>: The matrix to extract a row from.</li>
+<li><code>index</code>: The index of the row (zero based).</li>
+</ul>
+<h3 id="returns-10">Returns</h3>
+<p>A vector extracted from the matrix.</p>
+<h3 id="example-10">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; row(float4x4(1..16), 2)
+# row(float4x4(1..16), 2)
+out = float4(9, 10, 11, 12)
+</code></pre>
+<h2 id="transpose">transpose</h2>
+<p><code>transpose(m)</code></p>
+<p>Transposes the specified matrix.</p>
+<ul>
+<li><code>m</code>: The matrix to transpose.</li>
+</ul>
+<h3 id="returns-11">Returns</h3>
+<p>The transposed matrix.</p>
+<h3 id="example-11">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; transpose float3x4(1..12)
+# transpose(float3x4(1..12))
+out = float4x3(1, 5, 9, 2, 6, 10, 3, 7, 11, 4, 8, 12)
+      # col  0           1           2           / row
+      float3(1         , 5         , 9         ) # 0
+      float3(2         , 6         , 10        ) # 1
+      float3(3         , 7         , 11        ) # 2
+      float3(4         , 8         , 12        ) # 3
+&gt;&gt;&gt; transpose(out)
+# transpose(out)
+out = float3x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+      # col  0           1           2           3           / row
+      float4(1         , 2         , 3         , 4         ) # 0
+      float4(5         , 6         , 7         , 8         ) # 1
+      float4(9         , 10        , 11        , 12        ) # 2
+</code></pre>
+
+      </div>
+  </div>
+</div>
+        </section>
+        <footer>
+          <hr>
+          <p>Copyright &copy; 2025, Alexandre Mutel aka <a href="https://xoofx.github.io">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site generated by <a href="https://github.com/lunet-io/lunet">lunet</a> hosted on <a href="https://pages.github.com/">GitHub Pages</a></p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

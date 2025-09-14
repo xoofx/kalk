@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lunet 0.6.1.0">
+    <title>Misc Functions - kalk</title>
+    <link rel="stylesheet" href="/css/site.css">
+    <script src="/js/site.js" ></script>
+    <script src="/js/site-defer.js" defer></script>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@xoofx">
+    <meta name="twitter:title" content="Misc Functions - kalk">
+    <meta name="twitter:description" content="kalk - calculator app">
+    <meta name="twitter:image" content="https://kalk.dev/img/twitter-banner.jpg">
+    <meta name="twitter:image:alt" content="Misc Functions - kalk">    
+    <script src="https://www.googletagmanager.com/gtag/js?id=G-Z558CWX6J6" async></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Z558CWX6J6');</script>
+  </head>
+  <body>
+
+    <div id="kalk" class="container">
+      <nav class="navbar navbar-expand-md navbar-light sticky-top">
+        <a class="kalk-logo navbar-brand" href="/"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarSupportedContent" class="collapse navbar-collapse justify-content-between">
+<ol id='nav-id-home-0' class='navbar-nav nav-level0  '>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/' class='nav-link  '>Home</a></span>  </li>
+  <li class='nav-item  active'>
+    <span class='nav-item-row'><a href='/doc/' class='nav-link  '>Documentation</a></span>  </li>
+</ol>
+          <ol class="navbar-nav flex-grow-1" style="padding-right: 0.5rem;">
+            <li class="nav-item w-100">
+                <div class="kalk-search">
+                  <label class="search-icon"><i class="fa fa-search"></i></label>
+                  <select id="search-box"></select>
+                </div>
+            </li>
+          </ol>
+<ol id='nav-id-home2-0' class='navbar-nav nav-level0  flex-shrink-0'>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='/download/' class='nav-link  btn btn-success'><i class="fa fa-download"></i> Download</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/sponsors/xoofx' class='nav-link  btn btn-outline-secondary'><i class="fa fa-heart-o"></i> Sponsor</a></span>  </li>
+  <li class='nav-item '>
+    <span class='nav-item-row'><a href='https://github.com/xoofx/kalk/' class='nav-link  btn btn-info'><i class="fa fa-github"></i> GitHub</a></span>  </li>
+</ol>
+        </div>
+      </nav>
+      <div class="kalk-doc">
+        <section>
+
+<div class="container">
+  <div class="row">
+      <div class="col-sm-3 align-self-start sticky-top menu-sidebar">
+        <ol id='menu-id-doc-0' class='menu menu-level0 collapse  show '>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/' class='menu-link  '>Introduction</a></span>  </li>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/user/' class='menu-link  '>User Guide</a><a href='#menu-id-doc-2' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-2' class='menu-link-show collapsed'></a></span>  <ol id='menu-id-doc-2' class='menu menu-level1 collapse  '>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/user/syntax/' class='menu-link  '>Language Syntax</a></span>    </li>
+          </ol>
+          </li>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/api/' class='menu-link  '>API Reference</a><a href='#menu-id-doc-4' role='button'  data-toggle='collapse' aria-expanded='true' aria-controls='menu-id-doc-4' class='menu-link-show'></a></span>  <ol id='menu-id-doc-4' class='menu menu-level1 collapse  show '>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/general/' class='menu-link  '>General Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/math/' class='menu-link  '>Math Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/memory/' class='menu-link  '>Memory Functions</a></span>    </li>
+            <li class='menu-item  active'>
+              <span class='menu-item-row'><a href='/doc/api/misc/' class='menu-link  '>Misc Functions</a></span><nav class="js-toc toc"></nav>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/vector/' class='menu-link  '>Vector Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/types/' class='menu-link  '>Types Functions</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/all/' class='menu-link  '>All Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/csv/' class='menu-link  '>Csv Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/currencies/' class='menu-link  '>Currencies Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/files/' class='menu-link  '>Files Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/standardunits/' class='menu-link  '>StandardUnits Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/strings/' class='menu-link  '>Strings Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/web/' class='menu-link  '>Web Module</a></span>    </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/intel/' class='menu-link  '>Intel Hardware Intrinsics</a><a href='#menu-id-doc-18' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-18' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-18' class='menu menu-level2 collapse  '>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/aes/' class='menu-link  '>Intel Aes Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/avx/' class='menu-link  '>Intel Avx Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/avx2/' class='menu-link  '>Intel Avx2 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi1/' class='menu-link  '>Intel Bmi1 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi1x64/' class='menu-link  '>Intel Bmi1X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi2/' class='menu-link  '>Intel Bmi2 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/bmi2x64/' class='menu-link  '>Intel Bmi2X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse/' class='menu-link  '>Intel Sse Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/ssex64/' class='menu-link  '>Intel SseX64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse2/' class='menu-link  '>Intel Sse2 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse2x64/' class='menu-link  '>Intel Sse2X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse3/' class='menu-link  '>Intel Sse3 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/ssse3/' class='menu-link  '>Intel Ssse3 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse41/' class='menu-link  '>Intel Sse41 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse41x64/' class='menu-link  '>Intel Sse41X64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse42/' class='menu-link  '>Intel Sse42 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/intel/sse42x64/' class='menu-link  '>Intel Sse42X64 Intrinsics</a></span>      </li>
+            </ol>
+            </li>
+            <li class='menu-item '>
+              <span class='menu-item-row'><a href='/doc/api/arm/' class='menu-link  '>Arm Hardware Intrinsics</a><a href='#menu-id-doc-36' role='button'  data-toggle='collapse' aria-expanded='false' aria-controls='menu-id-doc-36' class='menu-link-show collapsed'></a></span>    <ol id='menu-id-doc-36' class='menu menu-level2 collapse  '>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/advsimd/' class='menu-link  '>Arm AdvSimd Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/advsimdarm64/' class='menu-link  '>Arm AdvSimdArm64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/aes/' class='menu-link  '>Arm Aes Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/crc32/' class='menu-link  '>Arm Crc32 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/crc32arm64/' class='menu-link  '>Arm Crc32Arm64 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/sha1/' class='menu-link  '>Arm Sha1 Intrinsics</a></span>      </li>
+              <li class='menu-item '>
+                <span class='menu-item-row'><a href='/doc/api/arm/sha256/' class='menu-link  '>Arm Sha256 Intrinsics</a></span>      </li>
+            </ol>
+            </li>
+          </ol>
+          </li>
+          <li class='menu-item '>
+            <span class='menu-item-row'><a href='/doc/advanced/' class='menu-link  '>Advanced Topics</a></span>  </li>
+        </ol>
+
+      </div>
+      <div class="col-sm-9 js-toc-content">
+        <ol class='breadcrumb'>
+          <li class='breadcrumb-item '>
+            <a href='/' class='breadcrumb-link  '>Home</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/doc/' class='breadcrumb-link  '>Documentation</a>  </li>
+          <li class='breadcrumb-item '>
+            <a href='/doc/api/' class='breadcrumb-link  '>API Reference</a>  </li>
+          <li class='breadcrumb-item  active'>
+            Misc Functions  </li>
+        </ol>
+
+        <p id="lunet-results"></p>
+        <h1>Misc Functions</h1>
+<h2 id="ascii">ascii</h2>
+<p><code>ascii(obj?)</code></p>
+<p>Prints the ascii table or convert an input string to an ascii array, or an ascii array to a string.</p>
+<ul>
+<li><code>obj</code>: An optional input (string or array of numbers or directly an integer).</li>
+</ul>
+<h3 id="returns">Returns</h3>
+<p>Depending on the input:</p>
+<ul>
+<li>If no input, it will display the ascii table</li>
+<li>If the input is an integer, it will convert it to the equivalent ascii char.</li>
+<li>If the input is a string, it will convert the string to a byte buffer containing the corresponding ascii bytes.</li>
+<li>If the input is an array of integer, it will convert each element to the equivalent ascii char.</li>
+</ul>
+<h3 id="example">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; ascii 65
+# ascii(65)
+out = &quot;A&quot;
+&gt;&gt;&gt; ascii 97
+# ascii(97)
+out = &quot;a&quot;
+&gt;&gt;&gt; ascii &quot;A&quot;
+# ascii(&quot;A&quot;)
+out = 65
+&gt;&gt;&gt; ascii &quot;kalk&quot;
+# ascii(&quot;kalk&quot;)
+out = bytebuffer([107, 97, 108, 107])
+&gt;&gt;&gt; ascii out
+# ascii(out)
+out = &quot;kalk&quot;
+</code></pre>
+<h2 id="bin">bin</h2>
+<p><code>bin(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+to an integral/bytebuffer representation.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each binary bytes when converting
+from integral to binary.</li>
+<li><code>separator</code>: The character used to separate binary bytes when converting
+from integral to binary.</li>
+</ul>
+<h3 id="returns-1">Returns</h3>
+<p>The binary representation of the input or convert the binary input string
+to an integral representation.</p>
+<h3 id="remarks">Remarks</h3>
+<p>When converting from a binary string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-1">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; bin 13
+# bin(13)
+out = &quot;00001101 00000000 00000000 00000000&quot;
+&gt;&gt;&gt; bin out
+# bin(out)
+out = 13
+&gt;&gt;&gt; bin &quot;111111111011&quot;
+# bin(&quot;111111111011&quot;)
+out = 4_091
+&gt;&gt;&gt; bin 0xff030201
+# bin(-16580095)
+out = &quot;00000001 00000010 00000011 11111111&quot;
+&gt;&gt;&gt; bin out
+# bin(out)
+out = 4_278_387_201
+&gt;&gt;&gt; bin &quot;11111111000000110000001000000001&quot;
+# bin(&quot;11111111000000110000001000000001&quot;)
+out = 4_278_387_201
+&gt;&gt;&gt; bin(byte(5))
+# bin(byte(5))
+out = &quot;00000101&quot;
+&gt;&gt;&gt; bin(long(6))
+# bin(long(6))
+out = &quot;00000110 00000000 00000000 00000000 00000000 00000000 00000000 00000000&quot;
+&gt;&gt;&gt; bin(out)
+# bin(out)
+out = 6
+&gt;&gt;&gt; kind(out)
+# kind(out)
+out = &quot;long&quot;
+</code></pre>
+<h2 id="bin2">bin2</h2>
+<p><code>bin2(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+to an integral/bytebuffer representation. It is similar to the function bin but operates on a group of 2 bytes.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each binary bytes when converting
+from integral to binary.</li>
+<li><code>separator</code>: The character used to separate binary bytes when converting
+from integral to binary.</li>
+</ul>
+<h3 id="returns-2">Returns</h3>
+<p>The binary representation of the input or convert the binary input string
+to an integral representation.</p>
+<h3 id="remarks-1">Remarks</h3>
+<p>When converting from a binary string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-2">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; bin2 268
+# bin2(268)
+out = &quot;00000001_00001100 00000000_00000000&quot;
+&gt;&gt;&gt; bin2 out
+# bin2(out)
+out = 268
+</code></pre>
+<h2 id="bin4">bin4</h2>
+<p><code>bin4(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+to an integral/bytebuffer representation. It is similar to the function bin but operates on a group of 4 bytes.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each binary bytes when converting
+from integral to binary.</li>
+<li><code>separator</code>: The character used to separate binary bytes when converting
+from integral to binary.</li>
+</ul>
+<h3 id="returns-3">Returns</h3>
+<p>The binary representation of the input or convert the binary input string
+to an integral representation.</p>
+<h3 id="remarks-2">Remarks</h3>
+<p>When converting from a binary string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-3">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; bin4 123456789
+# bin4(123456789)
+out = &quot;00000111_01011011_11001101_00010101&quot;
+&gt;&gt;&gt; bin4 out
+# bin4(out)
+out = 123_456_789
+&gt;&gt;&gt; bin4 [1.0f, 2.0f, 3.0f]
+# bin4([1.0f, 2.0f, 3.0f])
+out = &quot;00111111_10000000_00000000_00000000 01000000_00000000_00000000_00000000 01000000_01000000_00000000_00000000&quot;
+&gt;&gt;&gt; bin4 out
+# bin4(out)
+out = bytebuffer([0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64])
+</code></pre>
+<h2 id="bin8">bin8</h2>
+<p><code>bin8(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to a binary representation or convert a binary input string
+to an integral/bytebuffer representation. It is similar to the function bin but operates on a group of 8 bytes.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each binary bytes when converting
+from integral to binary.</li>
+<li><code>separator</code>: The character used to separate binary bytes when converting
+from integral to binary.</li>
+</ul>
+<h3 id="returns-4">Returns</h3>
+<p>The binary representation of the input or convert the binary input string
+to an integral representation.</p>
+<h3 id="remarks-3">Remarks</h3>
+<p>When converting from a binary string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the binary input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-4">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; bin8 123_456_789_000
+# bin8(123456789000)
+out = &quot;00000000_00000000_00000000_00011100_10111110_10011001_00011010_00001000&quot;
+&gt;&gt;&gt; bin8 out
+# bin8(out)
+out = 123_456_789_000
+</code></pre>
+<h2 id="colors">colors</h2>
+<p><code>colors</code></p>
+<p>Display or returns the known CSS colors.</p>
+<h3 id="returns-5">Returns</h3>
+<p>Prints known CSS colors or return a list if this function is used in an expression.</p>
+<h3 id="example-5">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; colors[0]
+# colors[0]
+out = rgb(240, 248, 255) ## F0F8FF AliceBlue ##
+&gt;&gt;&gt; mycolor = colors[&quot;AliceBlue&quot;]; mycolor.name
+# mycolor = colors[&quot;AliceBlue&quot;]; mycolor.name
+mycolor = rgb(240, 248, 255) ## F0F8FF AliceBlue ##
+out = &quot;AliceBlue&quot;
+</code></pre>
+<h2 id="contains">contains</h2>
+<p><code>contains(list,value)</code></p>
+<p>Checks if an object (string, list, vector types, bytebuffer...) is containing the specified value.</p>
+<ul>
+<li><code>list</code>: The list to search into.</li>
+<li><code>value</code>: The value to search into the list.</li>
+</ul>
+<h3 id="returns-6">Returns</h3>
+<p>true if value was found in the list input; otherwise false.</p>
+<h3 id="example-6">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; contains(&quot;kalk&quot;, &quot;l&quot;)
+# contains(&quot;kalk&quot;, &quot;l&quot;)
+out = true
+&gt;&gt;&gt; contains(&quot;kalk&quot;, &quot;e&quot;)
+# contains(&quot;kalk&quot;, &quot;e&quot;)
+out = false
+&gt;&gt;&gt; contains([1,2,3,4,5], 3)
+# contains([1,2,3,4,5], 3)
+out = true
+&gt;&gt;&gt; contains([1,2,3,4,5], 6)
+# contains([1,2,3,4,5], 6)
+out = false
+&gt;&gt;&gt; contains(float4(1,2,3,4), 3)
+# contains(float4(1, 2, 3, 4), 3)
+out = true
+&gt;&gt;&gt; contains(float4(1,2,3,4), 6)
+# contains(float4(1, 2, 3, 4), 6)
+out = false
+</code></pre>
+<h2 id="date">date</h2>
+<p><code>date</code></p>
+<p>Gets the current date, parse the input date or return the date object, depending on use cases.</p>
+<ul>
+<li><p>If this function doesn't have any parameter and is not used to index a member, it returns the current date. It is equivalent of <code>date.now</code></p>
+<p>The return date object has the following properties:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.year</code></td>
+<td>Gets the year of a date object</td>
+</tr>
+<tr>
+<td><code>.month</code></td>
+<td>Gets the month of a date object</td>
+</tr>
+<tr>
+<td><code>.day</code></td>
+<td>Gets the day in the month of a date object</td>
+</tr>
+<tr>
+<td><code>.day_of_year</code></td>
+<td>Gets the day within the year</td>
+</tr>
+<tr>
+<td><code>.hour</code></td>
+<td>Gets the hour of the date object</td>
+</tr>
+<tr>
+<td><code>.minute</code></td>
+<td>Gets the minute of the date object</td>
+</tr>
+<tr>
+<td><code>.second</code></td>
+<td>Gets the second of the date object</td>
+</tr>
+<tr>
+<td><code>.millisecond</code></td>
+<td>Gets the millisecond of the date object</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>If this function has a string parameter, it will try to parse the string as a date</p>
+</li>
+<li><p>Otherwise, if this function provides the following sub functions and members:</p>
+<ul>
+<li><p><code>date.add_days</code>: Example <code>'2016/01/05' |&gt; date |&gt; date.add_days 1</code></p>
+</li>
+<li><p><code>date.add_months</code>: Example <code>'2016/01/05' |&gt; date |&gt; date.add_months 1</code></p>
+</li>
+<li><p><code>date.add_years</code>: Example <code>'2016/01/05' |&gt; date |&gt; date.add_years 1</code></p>
+</li>
+<li><p><code>date.add_hours</code></p>
+</li>
+<li><p><code>date.add_minutes</code></p>
+</li>
+<li><p><code>date.add_seconds</code></p>
+</li>
+<li><p><code>date.add_milliseconds</code></p>
+</li>
+<li><p><code>date.to_string</code>: Converts a datetime object to a textual representation using the specified format string.</p>
+<p>By default, if you are using a date, it will use the format specified by <code>date.format</code> which defaults to <code>date.default_format</code> (readonly) which default to <code>%d %b %Y</code></p>
+<p>You can override the format used for formatting all dates by assigning the a new format: <code>date.format = '%a %b %e %T %Y';</code></p>
+<p>You can recover the default format by using <code>date.format = date.default_format;</code></p>
+<p>By default, the to_string format is using the <strong>current culture</strong>, but you can switch to an invariant culture by using the modifier <code>%g</code></p>
+<p>For example, using <code>%g %d %b %Y</code> will output the date using an invariant culture.</p>
+<p>If you are using <code>%g</code> alone, it will output the date with <code>date.format</code> using an invariant culture.</p>
+<p>Suppose that <code>date.now</code> would return the date <code>2013-09-12 22:49:27 +0530</code>, the following table explains the format modifiers:</p>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Result</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&quot;%a&quot;</code></td>
+<td><code>&quot;Thu&quot;</code></td>
+<td>Name of week day in short form of the</td>
+</tr>
+<tr>
+<td><code>&quot;%A&quot;</code></td>
+<td><code>&quot;Thursday&quot;</code></td>
+<td>Week day in full form of the time</td>
+</tr>
+<tr>
+<td><code>&quot;%b&quot;</code></td>
+<td><code>&quot;Sep&quot;</code></td>
+<td>Month in short form of the time</td>
+</tr>
+<tr>
+<td><code>&quot;%B&quot;</code></td>
+<td><code>&quot;September&quot;</code></td>
+<td>Month in full form of the time</td>
+</tr>
+<tr>
+<td><code>&quot;%c&quot;</code></td>
+<td></td>
+<td>Date and time (%a %b %e %T %Y)</td>
+</tr>
+<tr>
+<td><code>&quot;%C&quot;</code></td>
+<td><code>&quot;20&quot;</code></td>
+<td>Century of the time</td>
+</tr>
+<tr>
+<td><code>&quot;%d&quot;</code></td>
+<td><code>&quot;12&quot;</code></td>
+<td>Day of the month of the time</td>
+</tr>
+<tr>
+<td><code>&quot;%D&quot;</code></td>
+<td><code>&quot;09/12/13&quot;</code></td>
+<td>Date (%m/%d/%y)</td>
+</tr>
+<tr>
+<td><code>&quot;%e&quot;</code></td>
+<td><code>&quot;12&quot;</code></td>
+<td>Day of the month, blank-padded ( 1..31)</td>
+</tr>
+<tr>
+<td><code>&quot;%F&quot;</code></td>
+<td><code>&quot;2013-09-12&quot;</code></td>
+<td>ISO 8601 date (%Y-%m-%d)</td>
+</tr>
+<tr>
+<td><code>&quot;%h&quot;</code></td>
+<td><code>&quot;Sep&quot;</code></td>
+<td>Alias for %b</td>
+</tr>
+<tr>
+<td><code>&quot;%H&quot;</code></td>
+<td><code>&quot;22&quot;</code></td>
+<td>Hour of the time in 24 hour clock format</td>
+</tr>
+<tr>
+<td><code>&quot;%I&quot;</code></td>
+<td><code>&quot;10&quot;</code></td>
+<td>Hour of the time in 12 hour clock format</td>
+</tr>
+<tr>
+<td><code>&quot;%j&quot;</code></td>
+<td><code>&quot;255&quot;</code></td>
+<td>Day of the year (001..366) (3 digits, left padded with zero)</td>
+</tr>
+<tr>
+<td><code>&quot;%k&quot;</code></td>
+<td><code>&quot;22&quot;</code></td>
+<td>Hour of the time in 24 hour clock format, blank-padded ( 0..23)</td>
+</tr>
+<tr>
+<td><code>&quot;%l&quot;</code></td>
+<td><code>&quot;10&quot;</code></td>
+<td>Hour of the time in 12 hour clock format, blank-padded ( 0..12)</td>
+</tr>
+<tr>
+<td><code>&quot;%L&quot;</code></td>
+<td><code>&quot;000&quot;</code></td>
+<td>Millisecond of the time (3 digits, left padded with zero)</td>
+</tr>
+<tr>
+<td><code>&quot;%m&quot;</code></td>
+<td><code>&quot;09&quot;</code></td>
+<td>Month of the time</td>
+</tr>
+<tr>
+<td><code>&quot;%M&quot;</code></td>
+<td><code>&quot;49&quot;</code></td>
+<td>Minutes of the time (2 digits, left padded with zero e.g 01 02)</td>
+</tr>
+<tr>
+<td><code>&quot;%n&quot;</code></td>
+<td></td>
+<td>Newline character (\n)</td>
+</tr>
+<tr>
+<td><code>&quot;%N&quot;</code></td>
+<td><code>&quot;000000000&quot;</code></td>
+<td>Nanoseconds of the time (9 digits, left padded with zero)</td>
+</tr>
+<tr>
+<td><code>&quot;%p&quot;</code></td>
+<td><code>&quot;PM&quot;</code></td>
+<td>Gives AM / PM of the time</td>
+</tr>
+<tr>
+<td><code>&quot;%P&quot;</code></td>
+<td><code>&quot;pm&quot;</code></td>
+<td>Gives am / pm of the time</td>
+</tr>
+<tr>
+<td><code>&quot;%r&quot;</code></td>
+<td><code>&quot;10:49:27 PM&quot;</code></td>
+<td>Long time in 12 hour clock format (%I:%M:%S %p)</td>
+</tr>
+<tr>
+<td><code>&quot;%R&quot;</code></td>
+<td><code>&quot;22:49&quot;</code></td>
+<td>Short time in 24 hour clock format (%H:%M)</td>
+</tr>
+<tr>
+<td><code>&quot;%s&quot;</code></td>
+<td></td>
+<td>Number of seconds since 1970-01-01 00:00:00 +0000</td>
+</tr>
+<tr>
+<td><code>&quot;%S&quot;</code></td>
+<td><code>&quot;27&quot;</code></td>
+<td>Seconds of the time</td>
+</tr>
+<tr>
+<td><code>&quot;%t&quot;</code></td>
+<td></td>
+<td>Tab character (\t)</td>
+</tr>
+<tr>
+<td><code>&quot;%T&quot;</code></td>
+<td><code>&quot;22:49:27&quot;</code></td>
+<td>Long time in 24 hour clock format (%H:%M:%S)</td>
+</tr>
+<tr>
+<td><code>&quot;%u&quot;</code></td>
+<td><code>&quot;4&quot;</code></td>
+<td>Day of week of the time (from 1 for Monday to 7 for Sunday)</td>
+</tr>
+<tr>
+<td><code>&quot;%U&quot;</code></td>
+<td><code>&quot;36&quot;</code></td>
+<td>Week number of the current year, starting with the first Sunday as the first day of the first week (00..53)</td>
+</tr>
+<tr>
+<td><code>&quot;%v&quot;</code></td>
+<td><code>&quot;12-SEP-2013&quot;</code></td>
+<td>VMS date (%e-%b-%Y) (culture invariant)</td>
+</tr>
+<tr>
+<td><code>&quot;%V&quot;</code></td>
+<td><code>&quot;37&quot;</code></td>
+<td>Week number of the current year according to ISO 8601 (01..53)</td>
+</tr>
+<tr>
+<td><code>&quot;%W&quot;</code></td>
+<td><code>&quot;36&quot;</code></td>
+<td>Week number of the current year, starting with the first Monday as the first day of the first week (00..53)</td>
+</tr>
+<tr>
+<td><code>&quot;%w&quot;</code></td>
+<td><code>&quot;4&quot;</code></td>
+<td>Day of week of the time (from 0 for Sunday to 6 for Saturday)</td>
+</tr>
+<tr>
+<td><code>&quot;%x&quot;</code></td>
+<td></td>
+<td>Preferred representation for the date alone, no time</td>
+</tr>
+<tr>
+<td><code>&quot;%X&quot;</code></td>
+<td></td>
+<td>Preferred representation for the time alone, no date</td>
+</tr>
+<tr>
+<td><code>&quot;%y&quot;</code></td>
+<td><code>&quot;13&quot;</code></td>
+<td>Gives year without century of the time</td>
+</tr>
+<tr>
+<td><code>&quot;%Y&quot;</code></td>
+<td><code>&quot;2013&quot;</code></td>
+<td>Year of the time</td>
+</tr>
+<tr>
+<td><code>&quot;%Z&quot;</code></td>
+<td><code>&quot;IST&quot;</code></td>
+<td>Gives Time Zone of the time</td>
+</tr>
+<tr>
+<td><code>&quot;%%&quot;</code></td>
+<td><code>&quot;%&quot;</code></td>
+<td>Output the character <code>%</code></td>
+</tr>
+</tbody>
+</table>
+<p>Note that the format is using a good part of the ruby format (<a href="http://apidock.com/ruby/DateTime/strftime">source</a>)</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="returns-7">Returns</h3>
+<p>The current date, parse the input date or return the date object, depending on use cases.</p>
+<h3 id="example-7">Example</h3>
+<pre><code class="language-kalk"> &gt;&gt;&gt; today = date
+ # today = date
+ today = 11/22/20 10:13:00
+ &gt;&gt;&gt; today.year
+ # today.year
+ out = 2_020
+ &gt;&gt;&gt; today.month
+ # today.month
+ out = 11
+ &gt;&gt;&gt; &quot;30 Nov 2020&quot; |&gt; date
+ # &quot;30 Nov 2020&quot; |&gt; date
+ out = 11/30/20 00:00:00
+ &gt;&gt;&gt; out |&gt; date.add_days 4
+ # out |&gt; date.add_days(4)
+ out = 12/04/20 00:00:00
+ &gt;&gt;&gt; date.format = &quot;%F&quot;
+ &gt;&gt;&gt; date
+ # date
+ out = 2020-11-22
+</code></pre>
+<h2 id="foreach">foreach</h2>
+<p><code>foreach(list,func)</code></p>
+<p>Process each element of the input array with the specified function.</p>
+<ul>
+<li><code>list</code>: A list of element to process.</li>
+<li><code>func</code>: A reference to a function that takes 1 parameters and return a value. The function must be passed via the prefix @ to pass a function pointer.</li>
+</ul>
+<h3 id="returns-8">Returns</h3>
+<p>The value transformed.</p>
+<h3 id="example-8">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; foreach([1, 2, 3, 4], @hex)
+# foreach([1, 2, 3, 4], @hex)
+out = [&quot;01&quot;, &quot;02&quot;, &quot;03&quot;, &quot;04&quot;]
+</code></pre>
+<h2 id="guid">guid</h2>
+<p><code>guid</code></p>
+<p>Returns a new GUID as a string.</p>
+<h3 id="returns-9">Returns</h3>
+<p>A new GUID as a string.</p>
+<h3 id="example-9">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; guid
+# guid
+out = &quot;0deafe30-de4d-47c3-9631-2d3292afbb8e&quot;
+</code></pre>
+<h2 id="hex">hex</h2>
+<p><code>hex(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+to an integral/bytebuffer representation.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+<li><code>separator</code>: The character used to separate hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+</ul>
+<h3 id="returns-10">Returns</h3>
+<p>The hexadecimal representation of the input or convert the hexadecimal input string
+to an integral representation.</p>
+<h3 id="remarks-4">Remarks</h3>
+<p>When converting from a hexadecimal string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-10">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; hex 10
+# hex(10)
+out = &quot;0A&quot;
+&gt;&gt;&gt; hex &quot;12c&quot;
+# hex(&quot;12c&quot;)
+out = 300
+&gt;&gt;&gt; hex &quot;0a&quot;
+# hex(&quot;0a&quot;)
+out = 10
+&gt;&gt;&gt; hex &quot;0xff030201&quot;
+# hex(&quot;0xff030201&quot;)
+out = 4_278_387_201
+&gt;&gt;&gt; hex out
+# hex(out)
+out = &quot;01 02 03 FF&quot;
+&gt;&gt;&gt; hex &quot;01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F&quot;
+# hex(&quot;01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F&quot;)
+out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+&gt;&gt;&gt; hex(out, true, &quot;,&quot;)
+# hex(out, true, &quot;,&quot;)
+out = &quot;0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F&quot;
+&gt;&gt;&gt; hex out
+# hex(out)
+out = bytebuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+&gt;&gt;&gt; hex(&quot;1a,2b;3c 4d-5e_6f&quot;)
+# hex(&quot;1a,2b;3c 4d-5e_6f&quot;)
+out = 103_832_130_169_626
+&gt;&gt;&gt; hex out
+# hex(out)
+out = &quot;1A 2B 3C 4D 6F 5E 00 00&quot;
+&gt;&gt;&gt; hex float4(1,2,3,4)
+# hex(float4(1, 2, 3, 4))
+out = &quot;00 00 80 3F 00 00 00 40 00 00 40 40 00 00 80 40&quot;
+</code></pre>
+<h2 id="hex2">hex2</h2>
+<p><code>hex2(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+to an integral/bytebuffer representation. It is similar to the function hex but it operates on a group of 2 bytes.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+<li><code>separator</code>: The character used to separate hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+</ul>
+<h3 id="returns-11">Returns</h3>
+<p>The hexadecimal representation of the input or convert the hexadecimal input string
+to an integral representation.</p>
+<h3 id="remarks-5">Remarks</h3>
+<p>When converting from a hexadecimal string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-11">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; hex2 268
+# hex2(268)
+out = &quot;10C&quot;
+&gt;&gt;&gt; hex2 out
+# hex2(out)
+out = 268
+</code></pre>
+<h2 id="hex4">hex4</h2>
+<p><code>hex4(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+to an integral/bytebuffer representation. It is similar to the function hex but it operates on a group of 4 bytes.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+<li><code>separator</code>: The character used to separate hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+</ul>
+<h3 id="returns-12">Returns</h3>
+<p>The hexadecimal representation of the input or convert the hexadecimal input string
+to an integral representation.</p>
+<h3 id="remarks-6">Remarks</h3>
+<p>When converting from a hexadecimal string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-12">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; hex4 123456
+# hex4(123456)
+out = &quot;1E240&quot;
+&gt;&gt;&gt; hex4 out
+# hex4(out)
+out = 123_456
+&gt;&gt;&gt; hex4 [1.0f, 2.0f, 3.0f]
+# hex4([1.0f, 2.0f, 3.0f])
+out = &quot;3F800000 40000000 40400000&quot;
+&gt;&gt;&gt; hex4 out
+# hex4(out)
+out = bytebuffer([0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64])
+</code></pre>
+<h2 id="hex8">hex8</h2>
+<p><code>hex8(value,prefix?,separator?)</code></p>
+<p>Converts an integral/bytebuffer input to an hexadecimal representation or convert an hexadecimal input string
+to an integral/bytebuffer representation. It is similar to the function hex but it operates on a group of 8 bytes.</p>
+<ul>
+<li><code>value</code>: The input value.</li>
+<li><code>prefix</code>: Output the prefix <code>0x</code> in front of each hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+<li><code>separator</code>: The character used to separate hexadecimal bytes when converting
+from integral to hexadecimal.</li>
+</ul>
+<h3 id="returns-13">Returns</h3>
+<p>The hexadecimal representation of the input or convert the hexadecimal input string
+to an integral representation.</p>
+<h3 id="remarks-7">Remarks</h3>
+<p>When converting from a hexadecimal string to an integral representation, this method
+will skip any white-space characters, comma <code>,</code>, colon <code>:</code>, semi-colon <code>;</code>, underscore <code>_</code> and
+dash <code>-</code>.
+When the hexadecimal input string can be converted to an integral less than or equal 8 bytes (64 bits)
+it will convert it to a single integral result, otherwise it will convert to a bytebuffer.
+See the following examples.</p>
+<h3 id="example-13">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; hex8 123_456_789_000
+# hex8(123456789000)
+out = &quot;1CBE991A08&quot;
+&gt;&gt;&gt; hex8 out
+# hex8(out)
+out = 123_456_789_000
+</code></pre>
+<h2 id="insert_at">insert_at</h2>
+<p><code>insert_at(list,index,item)</code></p>
+<p>Inserts an item into a string or list at the specified index.</p>
+<ul>
+<li><code>list</code>: A string or list to insert an item into.</li>
+<li><code>index</code>: The index at which to insert the item.</li>
+<li><code>item</code>: The item to insert.</li>
+</ul>
+<h3 id="returns-14">Returns</h3>
+<p>A new string with the item inserted, or a new list with the item inserted at the specified index.</p>
+<h3 id="remarks-8">Remarks</h3>
+<p>The index is adjusted at the modulo of the length of the input value.
+If the index is &lt; 0, then the index starts from the end of the string/list length + 1. A value of -1 for the index would insert the item at the end, after the last element of the string or list.</p>
+<h3 id="example-14">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; insert_at(&quot;kalk&quot;, 0, &quot;YES&quot;)
+# insert_at(&quot;kalk&quot;, 0, &quot;YES&quot;)
+out = &quot;YESkalk&quot;
+&gt;&gt;&gt; insert_at(&quot;kalk&quot;, -1, &quot;YES&quot;)
+# insert_at(&quot;kalk&quot;, -1, &quot;YES&quot;)
+out = &quot;kalkYES&quot;
+&gt;&gt;&gt; insert_at(0..10, 1, 50)
+# insert_at(0..10, 1, 50)
+out = [0, 50, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+&gt;&gt;&gt; insert_at(0..9, 21, 50) # final index is 21 % 10 = 1
+# insert_at(0..9, 21, 50) # final index is 21 % 10 = 1
+out = [0, 50, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+&gt;&gt;&gt; insert_at([], 3, 1)
+# insert_at([], 3, 1)
+out = [1]
+</code></pre>
+<h2 id="keys">keys</h2>
+<p><code>keys(obj)</code></p>
+<p>Returns the keys of the specified object.</p>
+<ul>
+<li><code>obj</code>: An object to get the keys from.</li>
+</ul>
+<h3 id="returns-15">Returns</h3>
+<p>The keys of the parameter obj.</p>
+<h3 id="example-15">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; obj = {m: 1, n: 2}; keys obj
+# obj = {m: 1, n: 2}; keys(obj)
+obj = {m: 1, n: 2}
+out = [&quot;m&quot;, &quot;n&quot;]
+</code></pre>
+<h2 id="lines">lines</h2>
+<p><code>lines(text)</code></p>
+<p>Extract lines from the specified string.</p>
+<ul>
+<li><code>text</code>: A string to extract lines from.</li>
+</ul>
+<h3 id="returns-16">Returns</h3>
+<p>Lines extracted from the input string.</p>
+<h3 id="example-16">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; lines(&quot;k\na\nl\nk&quot;)
+# lines(&quot;k\na\nl\nk&quot;)
+out = [&quot;k&quot;, &quot;a&quot;, &quot;l&quot;, &quot;k&quot;]
+</code></pre>
+<h2 id="remove_at">remove_at</h2>
+<p><code>remove_at(list,index)</code></p>
+<p>Removes an item from a string or list at the specified index.</p>
+<ul>
+<li><code>list</code>: A string or list to remove an item from.</li>
+<li><code>index</code>: The index at which to remove the item.</li>
+</ul>
+<h3 id="returns-17">Returns</h3>
+<p>A new string/list with the item at the specified index removed.</p>
+<h3 id="remarks-9">Remarks</h3>
+<p>The index is adjusted at the modulo of the length of the input value.
+If the index is &lt; 0, then the index starts from the end of the string/list length. A value of -1 for the index would remove the last element.</p>
+<h3 id="example-17">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; remove_at(&quot;kalk&quot;, 0)
+# remove_at(&quot;kalk&quot;, 0)
+out = &quot;alk&quot;
+&gt;&gt;&gt; remove_at(&quot;kalk&quot;, -1)
+# remove_at(&quot;kalk&quot;, -1)
+out = &quot;kal&quot;
+&gt;&gt;&gt; remove_at(0..9, 5)
+# remove_at(0..9, 5)
+out = [0, 1, 2, 3, 4, 6, 7, 8, 9]
+&gt;&gt;&gt; remove_at(0..9, -1)
+# remove_at(0..9, -1)
+out = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+&gt;&gt;&gt; remove_at(asbytes(0x04030201), 1)
+# remove_at(asbytes(67305985), 1)
+out = bytebuffer([1, 3, 4])
+</code></pre>
+<h2 id="replace">replace</h2>
+<p><code>replace(list,value,by)</code></p>
+<p>Replaces in an object (string, list, vector types, bytebuffer...) an item of the specified value by another value.</p>
+<ul>
+<li><code>list</code>: The list to search into to replace an element.</li>
+<li><code>value</code>: The item to replace.</li>
+<li><code>by</code>: The value to replace with.</li>
+</ul>
+<h3 id="returns-18">Returns</h3>
+<p>The modified object.</p>
+<h3 id="example-18">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; replace(&quot;kalk&quot;, &quot;k&quot;, &quot;woo&quot;)
+# replace(&quot;kalk&quot;, &quot;k&quot;, &quot;woo&quot;)
+out = &quot;wooalwoo&quot;
+&gt;&gt;&gt; replace([1,2,3,4], 3, 5)
+# replace([1,2,3,4], 3, 5)
+out = [1, 2, 5, 4]
+&gt;&gt;&gt; replace(float4(1,2,3,4), 3, 5)
+# replace(float4(1, 2, 3, 4), 3, 5)
+out = float4(1, 2, 5, 4)
+</code></pre>
+<h2 id="reverse">reverse</h2>
+<p><code>reverse(list)</code></p>
+<p>Reverse a list of values.</p>
+<ul>
+<li><code>list</code>: The list to reverse.</li>
+</ul>
+<h3 id="returns-19">Returns</h3>
+<p>The list of values reversed.</p>
+<h3 id="example-19">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; reverse([1,2,3,4,5])
+# reverse([1,2,3,4,5])
+out = [5, 4, 3, 2, 1]
+&gt;&gt;&gt; reverse(&quot;abc&quot;)
+# reverse(&quot;abc&quot;)
+out = &quot;cba&quot;
+&gt;&gt;&gt; reverse(asbytes(0x04030201))
+# reverse(asbytes(67305985))
+out = bytebuffer([4, 3, 2, 1])
+</code></pre>
+<h2 id="size">size</h2>
+<p><code>size(obj)</code></p>
+<p>Returns the size of the specified object.</p>
+<ul>
+<li><code>obj</code>: The object value.</li>
+</ul>
+<h3 id="returns-20">Returns</h3>
+<p>The size of the object.</p>
+<h3 id="example-20">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; size 1
+# size(1)
+out = 0
+&gt;&gt;&gt; size &quot;kalk&quot;
+# size(&quot;kalk&quot;)
+out = 4
+&gt;&gt;&gt; size float4(1,2,3,4)
+# size(float4(1, 2, 3, 4))
+out = 4
+&gt;&gt;&gt; size [1, 2, 3]
+# size([1, 2, 3])
+out = 3
+</code></pre>
+<h2 id="slice">slice</h2>
+<p><code>slice(list,index,length?)</code></p>
+<p>Creates a slice of an object (string, list, vector types, bytebuffer...) starting at the specified index and with the specified length;</p>
+<ul>
+<li><code>list</code>: The object to create a slice from.</li>
+<li><code>index</code>: The index into the object.</li>
+<li><code>length</code>: The optional length of the slice. If the length is not defined, the length will start from index with the remaining elements.</li>
+</ul>
+<h3 id="returns-21">Returns</h3>
+<p>A slice of the input object.</p>
+<h3 id="remarks-10">Remarks</h3>
+<p>The index is adjusted at the modulo of the specified length of the input object.
+If the index is &lt; 0, then the index starts from the end of the input object length. A value of -1 for the index would take a slice with the only the last element.</p>
+<h3 id="example-21">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; slice(&quot;kalk&quot;, 1)
+# slice(&quot;kalk&quot;, 1)
+out = &quot;alk&quot;
+&gt;&gt;&gt; slice(&quot;kalk&quot;, -2)
+# slice(&quot;kalk&quot;, -2)
+out = &quot;lk&quot;
+&gt;&gt;&gt; slice(&quot;kalk&quot;, 1, 2)
+# slice(&quot;kalk&quot;, 1, 2)
+out = &quot;al&quot;
+&gt;&gt;&gt; slice([1,2,3,4], 1)
+# slice([1,2,3,4], 1)
+out = [2, 3, 4]
+&gt;&gt;&gt; slice([1,2,3,4], -1)
+# slice([1,2,3,4], -1)
+out = [4]
+&gt;&gt;&gt; slice([1,2,3,4], -1, 3) # length is bigger than expected, no errors
+# slice([1,2,3,4], -1, 3) # length is bigger than expected, no errors
+out = [4]
+&gt;&gt;&gt; slice(asbytes(0x04030201), 1, 2)
+# slice(asbytes(67305985), 1, 2)
+out = slice(bytebuffer([2, 3]), 1, 2)
+</code></pre>
+<h2 id="utf16">utf16</h2>
+<p><code>utf16(value)</code></p>
+<p>Converts a string to an UTF16 bytebuffer or convert a bytebuffer of UTF16 bytes to a string.</p>
+<ul>
+<li><code>value</code>: The specified input.</li>
+</ul>
+<h3 id="returns-22">Returns</h3>
+<p>The UTF16 bytebuffer representation of the input string or the string representation of the input UTF16 bytebuffer.</p>
+<h3 id="example-22">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; utf16 &quot;kalk&quot;
+# utf16(&quot;kalk&quot;)
+out = bytebuffer([107, 0, 97, 0, 108, 0, 107, 0])
+&gt;&gt;&gt; utf16 out
+# utf16(out)
+out = &quot;kalk&quot;
+</code></pre>
+<h2 id="utf32">utf32</h2>
+<p><code>utf32(value)</code></p>
+<p>Converts a string to an UTF32 bytebuffer or convert a bytebuffer of UTF32 bytes to a string.</p>
+<ul>
+<li><code>value</code>: The specified input.</li>
+</ul>
+<h3 id="returns-23">Returns</h3>
+<p>The UTF32 bytebuffer representation of the input string or the string representation of the input UTF32 bytebuffer.</p>
+<h3 id="example-23">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; utf32 &quot;kalk&quot;
+# utf32(&quot;kalk&quot;)
+out = bytebuffer([107, 0, 0, 0, 97, 0, 0, 0, 108, 0, 0, 0, 107, 0, 0, 0])
+&gt;&gt;&gt; utf32 out
+# utf32(out)
+out = &quot;kalk&quot;
+</code></pre>
+<h2 id="utf8">utf8</h2>
+<p><code>utf8(value)</code></p>
+<p>Converts a string to an UTF8 bytebuffer or convert a bytebuffer of UTF8 bytes to a string.</p>
+<ul>
+<li><code>value</code>: The specified input.</li>
+</ul>
+<h3 id="returns-24">Returns</h3>
+<p>The UTF8 bytebuffer representation of the input string or the string representation of the input UTF8 bytebuffer.</p>
+<h3 id="example-24">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; utf8 &quot;kalk&quot;
+# utf8(&quot;kalk&quot;)
+out = bytebuffer([107, 97, 108, 107])
+&gt;&gt;&gt; utf8 out
+# utf8(out)
+out = &quot;kalk&quot;
+</code></pre>
+<h2 id="values">values</h2>
+<p><code>values(obj)</code></p>
+<p>Returns the values of the specified object.</p>
+<ul>
+<li><code>obj</code>: An object to get the values from.</li>
+</ul>
+<h3 id="returns-25">Returns</h3>
+<p>The values of the parameter obj.</p>
+<h3 id="example-25">Example</h3>
+<pre><code class="language-kalk">&gt;&gt;&gt; obj = {m: 1, n: 2}; values obj
+# obj = {m: 1, n: 2}; values(obj)
+obj = {m: 1, n: 2}
+out = [1, 2]
+</code></pre>
+
+      </div>
+  </div>
+</div>
+        </section>
+        <footer>
+          <hr>
+          <p>Copyright &copy; 2025, Alexandre Mutel aka <a href="https://xoofx.github.io">xoofx</a> - Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a> | Site generated by <a href="https://github.com/lunet-io/lunet">lunet</a> hosted on <a href="https://pages.github.com/">GitHub Pages</a></p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
