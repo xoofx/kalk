@@ -16,7 +16,7 @@ Visit the [Download](https://kalk.dev/download) section.
 
 ## How to Build?
 
-You need to install the [.NET 7.0 SDK](https://dotnet.microsoft.com/download/dotnet/7.0).
+You need to install the [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
 
 Then from the root folder:
 
