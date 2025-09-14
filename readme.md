@@ -1,4 +1,4 @@
-# kalk [![Build Status](https://github.com/xoofx/kalk/workflows/code/badge.svg?branch=master)](https://github.com/xoofx/kalk/actions) [![Build Status](https://github.com/xoofx/kalk/workflows/site/badge.svg?branch=master)](https://github.com/xoofx/kalk/actions) [![NuGet](https://img.shields.io/nuget/v/kalk.svg)](https://www.nuget.org/packages/kalk/)
+# kalk [![code](https://github.com/xoofx/kalk/actions/workflows/code.yml/badge.svg)](https://github.com/xoofx/kalk/actions/workflows/code.yml) [![site](https://github.com/xoofx/kalk/actions/workflows/site.yml/badge.svg)](https://github.com/xoofx/kalk/actions/workflows/site.yml) [![NuGet](https://img.shields.io/nuget/v/kalk.svg)](https://www.nuget.org/packages/kalk/)
 
 <img align="right" width="160px" height="160px" src="https://raw.githubusercontent.com/xoofx/kalk/master/img/kalk.png">
 
