@@ -10,7 +10,7 @@ kalk_version = site.data.kalk.version
 
 `kalk` is supported on the following platforms:
 
-- Windows x64, arm, arm64
+- Windows x64, arm64
 - Linux x64, arm64 (Debian derivatives - e.g Ubuntu - and distributions supporting RPM packages)
 - macOS x64, arm64 (High Sierra and higher)
 
