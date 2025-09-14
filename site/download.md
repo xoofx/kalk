@@ -24,7 +24,7 @@ The current stable version: **`{{ kalk_version }}`** ([Release notes]({{site.git
 
 ## Installation with .NET
 
-If you have [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) already installed, you can then easily install `kalk` as a .NET global tool:
+If you have [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) already installed, you can then easily install `kalk` as a .NET global tool:
 
 ```shell-session
 $ dotnet tool install --global kalk
