@@ -16,14 +16,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Install .NET 7.0
+    - name: Install .NET 9.0
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 9.0.x
 
     - name: Build web site
       run: |
-          dotnet tool install --global lunet --version "0.5.*"
+          dotnet tool install --global lunet --version "0.6.*"
           lunet --input-dir site build 
 
     - name: Deploy web site
