@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -151,6 +151,8 @@ namespace Kalk.Core
         public string Version { get;  }
 
         public string KalkUserFolder { get; set; }
+
+        public bool DisableUserConfig { get; set; }
 
         /// <summary>
         /// The engine is in testing mode.

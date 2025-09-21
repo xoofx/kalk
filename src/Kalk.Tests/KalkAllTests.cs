@@ -37,6 +37,7 @@ namespace Kalk.Tests
                 DisplayVersion = false,
                 EchoInput = false,
                 IsOutputSupportHighlighting = false,
+                DisableUserConfig = true,
                 IsTesting = true // put the engine in special testing mode
             };
             kalk.Run();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Kalk.Core.Modules;
 using Scriban.Runtime;
@@ -51,7 +51,7 @@ namespace Kalk.Core
 
         private void LoadUserConfigFile()
         {
-            if (KalkUserFolder == null) return;
+            if (KalkUserFolder == null || DisableUserConfig) return;
             const string configFileName = "config.kalk";
             var userConfigFile = Path.Combine(KalkUserFolder, configFileName);
 
