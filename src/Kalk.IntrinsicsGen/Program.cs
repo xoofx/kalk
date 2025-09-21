@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -618,7 +618,19 @@ namespace {{ module.Namespace }}
 ";
 
             var template = Template.Parse(templateStr);
-            var result = template.Render(new {intrinsics = intrinsicModules}, x => x.Name);
+
+            var context = new TemplateContext
+            {
+                LoopLimit = int.MaxValue,
+                MemberRenamer = x => x.Name,
+            };
+
+            var scriptObject = new ScriptObject();
+            scriptObject.Import(new { intrinsics = intrinsicModules });
+            context.PushGlobal(scriptObject);
+
+            var result = template.Render(context);
+
             var finalPath = Path.Combine(srcFolder, "Kalk.Core/Modules/HardwareIntrinsics/Intrinsics.generated.cs");
             Console.WriteLine($"Writing intrinsics to {finalPath}");
             // Replace with platform newlines
