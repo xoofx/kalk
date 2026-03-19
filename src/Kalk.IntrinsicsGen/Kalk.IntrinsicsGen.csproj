@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Broslyn" Version="1.2.0" />
     <PackageReference Include="Microsoft.Build.Locator" Version="1.9.1" />
-    <PackageReference Include="Scriban" Version="6.3.0" />
+    <PackageReference Include="Scriban" Version="6.6.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" />
   </ItemGroup>
 
